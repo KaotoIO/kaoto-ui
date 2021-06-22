@@ -1,36 +1,35 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "isolatedModules": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "lib": [
       "dom",
       "es6"
     ],
-    "skipLibCheck": true,
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noImplicitAny": false,
     "noUnusedLocals": true,
-    "paths": {
-      "@app/*": ["src/*"],
-      "@assets/*": ["node_modules/@patternfly/react-core/dist/styles/assets/*"]
-    },
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "strict": true,
     "target": "es5",
+    "isolatedModules": true
   },
   "include": [
     "src"
   ],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
