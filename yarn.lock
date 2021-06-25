@@ -13479,25 +13479,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"monaco-editor-webpack-plugin@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "monaco-editor-webpack-plugin@npm:4.0.0"
-  dependencies:
-    loader-utils: ^2.0.0
-  peerDependencies:
-    monaco-editor: 0.25.x
-    webpack: ^4.5.0 || 5.x
-  checksum: 32112b06658c89836a42a89a6c0affab24b609ff9a252ab7fc07469794bb91cbbf21260c6ca400069c3f574127729989ecc6169ce11b3312b4898ab40c482420
-  languageName: node
-  linkType: hard
-
-"monaco-editor@npm:*":
-  version: 0.25.2
-  resolution: "monaco-editor@npm:0.25.2"
-  checksum: d173950fb3ee1c5cc5a6047684e4002c79ec81a517337d2a504558f606a2ba4b9adbea1f2e76825c9860765a364eb96f478b974f96c66acf8423cd5a8e724929
-  languageName: node
-  linkType: hard
-
 "move-concurrently@npm:^1.0.1":
   version: 1.0.1
   resolution: "move-concurrently@npm:1.0.1"
@@ -16270,19 +16251,6 @@ fsevents@^1.2.7:
   version: 3.0.4
   resolution: "react-lifecycles-compat@npm:3.0.4"
   checksum: 82176a55ef7526414d770d5e07dc1d28b4c7f20281f22c6f53f3a98df9dbbb5d70c94bebee57b4ea8ccc2eee430b907ca7b564a42fbdd0ed21e7c43bfee35404
-  languageName: node
-  linkType: hard
-
-"react-monaco-editor@npm:^0.43.0":
-  version: 0.43.0
-  resolution: "react-monaco-editor@npm:0.43.0"
-  dependencies:
-    monaco-editor: "*"
-    prop-types: ^15.7.2
-  peerDependencies:
-    "@types/react": ^17.x
-    react: ^17.x
-  checksum: 3d18242d505d2321828218abd491ff317514f354a9a1fa5fcb6ac92e01d58f4e09d7d3408141eab18b975c9d91386aea76a4c19e28196a6bf7523b7c0743803d
   languageName: node
   linkType: hard
 
@@ -20674,11 +20642,9 @@ typescript@^4.3.4:
     "@types/react-dom": ^17.0.8
     "@types/react-router-dom": ^5.1.7
     "@typescript-eslint/scope-manager": ^4.27.0
-    monaco-editor-webpack-plugin: ^4.0.0
     node-sass: ^6.0.0
     react: 17.0.1
     react-dom: 17.0.1
-    react-monaco-editor: ^0.43.0
     react-router-dom: ^5.2.0
     react-router-last-location: ^2.0.1
     react-scripts: ^4.0.3
