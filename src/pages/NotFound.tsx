@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import {
   PageSection,
@@ -10,7 +9,7 @@ import {
 } from '@patternfly/react-core';
 import { useHistory } from 'react-router-dom';
 
-const NotFound: React.FunctionComponent = () => {
+const NotFound = () => {
   function GoHomeBtn() {
     const history = useHistory();
     function handleClick() {
