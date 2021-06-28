@@ -15,9 +15,7 @@ const NotFound = () => {
     function handleClick() {
       history.push('/');
     }
-    return (
-      <Button onClick={handleClick}>Take me home</Button>
-    );
+    return <Button onClick={handleClick}>Take me home</Button>;
   }
 
   return (
@@ -33,7 +31,7 @@ const NotFound = () => {
         <GoHomeBtn />
       </EmptyState>
     </PageSection>
-  )
+  );
 };
 
 export { NotFound };

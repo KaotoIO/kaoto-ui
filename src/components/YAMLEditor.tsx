@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Editor from '@monaco-editor/react';
-import { useRef } from "react";
+import { useRef } from 'react';
 
 const YAMLEditor = () => {
   React.useEffect(() => {
@@ -21,14 +21,14 @@ const YAMLEditor = () => {
   return (
     <>
       <button onClick={showValue}>Show value</button>
-    <Editor
-      height="90vh"
-      defaultLanguage="YAML"
-      defaultValue="// edit your kamelet here"
-      onMount={handleEditorDidMount}
-    />
-      </>
+      <Editor
+        height="90vh"
+        defaultLanguage="YAML"
+        defaultValue="// edit your kamelet here"
+        onMount={handleEditorDidMount}
+      />
+    </>
   );
-}
+};
 
 export { YAMLEditor };

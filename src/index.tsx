@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ReactDOM from "react-dom";
+import ReactDOM from 'react-dom';
 import '@patternfly/react-core/dist/styles/base.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { AppLayout } from './layouts/AppLayout';
@@ -14,4 +14,4 @@ const App: React.FunctionComponent = () => (
   </Router>
 );
 
-ReactDOM.render(<App />, document.getElementById("root") as HTMLElement);
+ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
