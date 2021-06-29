@@ -20667,6 +20667,7 @@ typescript@^4.3.4:
     "@monaco-editor/react": ^4.2.1
     "@patternfly/patternfly": ^4.108.2
     "@patternfly/react-core": ^4.128.2
+    "@patternfly/react-icons": ^4.11.0
     "@storybook/addon-actions": ^6.3.0
     "@storybook/addon-essentials": ^6.3.0
     "@storybook/addon-links": ^6.3.0
@@ -20696,6 +20697,7 @@ typescript@^4.3.4:
     monaco-editor: ^0.25.2
     node-sass: ^6.0.0
     prettier: 2.3.2
+    prop-types: ^15.7.2
     react: 17.0.1
     react-dom: ^17.0.2
     react-router-dom: ^5.2.0
