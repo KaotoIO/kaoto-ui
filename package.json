@@ -11,7 +11,8 @@
     "@patternfly/react-core": "^4.128.2",
     "react": "17.0.1",
     "react-router-dom": "^5.2.0",
-    "react-router-last-location": "^2.0.1"
+    "react-router-last-location": "^2.0.1",
+    "web-vitals": "^2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",

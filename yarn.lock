@@ -10176,6 +10176,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"history@npm:*":
+  version: 5.0.0
+  resolution: "history@npm:5.0.0"
+  dependencies:
+    "@babel/runtime": ^7.7.6
+  checksum: 38a8af6f31a08ddfd6b404fa6df2fcca8bd91300aa0858bdd2bf314aca0516bd37f9835c1f628e4a9113c1be4145d8e7c58f225564d8e9708a0f49c217acb47a
+  languageName: node
+  linkType: hard
+
 "history@npm:^4.9.0":
   version: 4.10.1
   resolution: "history@npm:4.10.1"
@@ -19413,6 +19422,13 @@ typescript@^4.3.4:
   languageName: node
   linkType: hard
 
+"web-vitals@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "web-vitals@npm:2.1.0"
+  checksum: 0a588d5bf19d1fe44abe124617f1ec4acb345d6d2feeb78380a488184ba77d2a3e5c3ee6337e45fd92d1827729fd29e27afdbd955d3f0d1fa2decadd68994e1b
+  languageName: node
+  linkType: hard
+
 "webidl-conversions@npm:^5.0.0":
   version: 5.0.0
   resolution: "webidl-conversions@npm:5.0.0"
@@ -20237,6 +20253,7 @@ typescript@^4.3.4:
     react-scripts: ^4.0.3
     tslib: ^2.3.0
     typescript: ^4.3.4
+    web-vitals: ^2.1.0
     webpack: 4
     webpack-hot-middleware: ^2.25.0
     webpack-merge: ^5.8.0
