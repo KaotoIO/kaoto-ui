@@ -20112,7 +20112,17 @@ typescript@^4.3.4:
   languageName: node
   linkType: hard
 
-"yaml@npm:^1.10.0, yaml@npm:^1.7.2":
+"yaml-loader@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "yaml-loader@npm:0.6.0"
+  dependencies:
+    loader-utils: ^1.4.0
+    yaml: ^1.8.3
+  checksum: f3f5c00e531d86ea017259a010e41a5017f5797f4c129129803c5dc9ad8f7c30c913f397924d78421e5fef8ea4c3c899ca35c125b968265ba0c4b08ccdffe0b9
+  languageName: node
+  linkType: hard
+
+"yaml@npm:^1.10.0, yaml@npm:^1.7.2, yaml@npm:^1.8.3":
   version: 1.10.2
   resolution: "yaml@npm:1.10.2"
   checksum: 8d72062ea3dbfd8fae3d6ddd5b741c2aeb5835a31b0719bf14fac71dd84adde0829763d6fbac46387309da00af1440194c796da5efc349b0baf9de39d82ae69e
@@ -20257,6 +20267,7 @@ typescript@^4.3.4:
     webpack: 4
     webpack-hot-middleware: ^2.25.0
     webpack-merge: ^5.8.0
+    yaml-loader: ^0.6.0
   languageName: unknown
   linkType: soft
 

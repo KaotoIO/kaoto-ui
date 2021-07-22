@@ -1,18 +1,23 @@
 import * as React from 'react';
 import Editor from '@monaco-editor/react';
 import { useRef } from 'react';
+//let response = require('../stories/twitter-search-source-binding-res.json');
+//let data = require('../stories/twitter-search-source-binding.yaml');
 
-const YAMLEditor = () => {
+const YAMLEditor = ({ data }) => {
   React.useEffect(() => {
-    // eslint-disable-next-line no-undef
     console.log('Hello!');
   }, []);
 
   const editorRef = useRef(null);
+  //const [YAML, setYAML] = React.useState('// edit your kamelet here');
+  //const [YAML, setYAML] = React.useState(JSON.stringify(response));
+  const [YAML, setYAML] = React.useState(data);
 
   function handleEditorChange(value, event) {
     // here is the current value
     console.log("here is the current model value:", value);
+    setYAML(value);
   }
 
   function handleEditorDidMount(editor, monaco) {
@@ -21,7 +26,7 @@ const YAMLEditor = () => {
 
   function handleEditorValidation(markers) {
     // model markers
-    // markers.forEach(marker => console.log('onValidate:', marker.message));
+    markers.forEach(marker => console.log('onValidate:', marker.message));
   }
 
   function showValue() {
@@ -34,7 +39,7 @@ const YAMLEditor = () => {
       <Editor
         height="90vh"
         defaultLanguage="YAML"
-        defaultValue="// edit your kamelet here"
+        defaultValue={YAML}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
         onValidate={handleEditorValidation}

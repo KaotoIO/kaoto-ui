@@ -1,20 +1,24 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Button } from './Button';
+import { YAMLEditor } from '../components/YAMLEditor';
+//import response from './twitter-search-source-binding-res.json';
+import data from './twitter-search-source-binding.yaml';
 
 export default {
-  title: 'Example/Button',
-  component: Button,
+  title: 'YAMLEditor',
+  component: YAMLEditor,
   argTypes: {
-    backgroundColor: { control: 'color' },
+    //backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof Button>;
+} as ComponentMeta<typeof YAMLEditor>;
 
-const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
+const Template: ComponentStory<typeof YAMLEditor> = (args) => <YAMLEditor {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
-  primary: true,
-  label: 'Button',
+  //primary: true,
+  data,
+  //label: 'YAMLEditor',
+  //response
 };
 
