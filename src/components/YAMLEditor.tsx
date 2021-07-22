@@ -1,8 +1,6 @@
 import * as React from 'react';
 import Editor from '@monaco-editor/react';
 import { useRef } from 'react';
-//let response = require('../stories/twitter-search-source-binding-res.json');
-//let data = require('../stories/twitter-search-source-binding.yaml');
 
 const YAMLEditor = ({ data }) => {
   React.useEffect(() => {
