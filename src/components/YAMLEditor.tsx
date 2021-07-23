@@ -64,17 +64,12 @@ const YAMLEditor = ( initial ) => {
     markers.forEach(marker => console.log('onValidate:', marker.message));
   }
 
-  function showValue() {
-    //alert(editorRef.current!.getValue());
-  }
-
   const { jsonData } = useFetchData();
 
   console.log('Response to be used in visualizer: ' + JSON.stringify(jsonData.json));
 
   return (
     <>
-      <button onClick={showValue}>Show value</button>
       <Editor
         height="90vh"
         defaultLanguage="JSON"
