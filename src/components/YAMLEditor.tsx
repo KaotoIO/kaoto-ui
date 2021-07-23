@@ -12,7 +12,7 @@ const YAMLEditor = ( initial ) => {
    */
   function useFetchData() {
     const [status, setStatus] = React.useState('idle');
-    const [data, setData] = React.useState({json: ''});
+    const [jsonData, setJsonData] = React.useState({json: ''});
 
     React.useEffect(() => {
       setStatus('loading');
@@ -38,15 +38,15 @@ const YAMLEditor = ( initial ) => {
       .then((res) => res.json())
       .then((data) => {
         setStatus('success');
-        setData(data);
+        setJsonData(data);
       })
       .catch(() => {
         setStatus('error');
       });
     }, []);
     return {
+      jsonData,
       status,
-      data,
     };
   }
 
@@ -68,9 +68,9 @@ const YAMLEditor = ( initial ) => {
     //alert(editorRef.current!.getValue());
   }
 
-  const { data } = useFetchData();
+  const { jsonData } = useFetchData();
 
-  console.log('Response to be used in visualizer: ' + JSON.stringify(data.json));
+  console.log('Response to be used in visualizer: ' + JSON.stringify(jsonData.json));
 
   return (
     <>
