@@ -1,6 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { YAMLEditor } from '../components/YAMLEditor';
+
 const yaml = 'apiVersion: camel.apache.org/v1alpha1\n' +
     'kind: KameletBinding\n' +
     'metadata:\n' +
@@ -29,7 +30,7 @@ const yaml = 'apiVersion: camel.apache.org/v1alpha1\n' +
     '      username: "The Username"\n';
 
 export default {
-  title: 'YAMLEditor',
+  title: 'Dashboard/YAMLEditor',
   component: YAMLEditor,
 } as ComponentMeta<typeof YAMLEditor>;
 
