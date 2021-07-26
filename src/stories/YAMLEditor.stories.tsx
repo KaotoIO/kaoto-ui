@@ -1,8 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { YAMLEditor } from '../components/YAMLEditor';
-const data = {
-  yaml: 'apiVersion: camel.apache.org/v1alpha1\n' +
+const yaml = 'apiVersion: camel.apache.org/v1alpha1\n' +
     'kind: KameletBinding\n' +
     'metadata:\n' +
     '  name: twitter-search-source-binding\n' +
@@ -27,9 +26,7 @@ const data = {
     '      brokers: "The Brokers"\n' +
     '      password: "The Password"\n' +
     '      topic: "The Topic Names"\n' +
-    '      username: "The Username"\n' +
-    '\n'
-};
+    '      username: "The Username"\n';
 
 export default {
   title: 'YAMLEditor',
@@ -40,6 +37,6 @@ const Template: ComponentStory<typeof YAMLEditor> = (args) => <YAMLEditor {...ar
 
 export const Primary = Template.bind({});
 Primary.args = {
-  yaml: data.yaml
+  yaml
 };
 
