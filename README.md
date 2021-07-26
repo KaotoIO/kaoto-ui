@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/07e8b623-a94d-4686-a784-eb4a9b90dde1/deploy-status)](https://app.netlify.com/sites/zimara/deploys)
+
 # Zimara UI
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
