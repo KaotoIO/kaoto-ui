@@ -62,6 +62,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build-storybook": "build-storybook -s public",
+    "chromatic": "yarn dlx chromatic --exit-zero-on-changes",
     "eject": "react-scripts eject",
     "format": "prettier --write 'src/**/*.{js,ts,tsx,scss,css,json}'",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
