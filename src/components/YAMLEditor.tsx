@@ -65,7 +65,6 @@ const YAMLEditor = ( initial ) => {
 
   return (
     <>
-      <p>Status: {status}</p>
       <Editor
         height="90vh"
         defaultLanguage="YAML"
