@@ -1,4 +1,3 @@
-const apiURL = process.env.REACT_APP_API_URL;
 export type FetchMethod = 'GET' | 'PATCH' | 'PUT' | 'POST' | 'DELETE';
 
 export interface IFetchHeaders {
@@ -27,6 +26,8 @@ export interface IFetch {
   stringifyBody?: boolean;
 }
 
+const apiURL = process.env.REACT_APP_API_URL;
+
 const api = ({
                endpoint,
                method,
@@ -37,20 +38,23 @@ const api = ({
                stringifyBody = true,
              }: IFetch) => {
   const data = contentType?.includes('application/json') && stringifyBody ? JSON.stringify(body) : body;
+
   headers = { ...headers };
 
   return fetch(`${apiURL}${endpoint}`, {
     method,
     body: data,
     cache: 'no-cache',
-    credentials: 'include',
-    //credentials: 'same-origin',
+    /**
+     * TODO: Omit for now, reassess for prod
+     */
+    credentials: 'omit',
     headers: {
       'Accept': accept ?? 'application/json,text/plain,text/yaml,*/*',
       'Content-Type': contentType ?? 'application/json',
       ...headers,
     },
-    mode: 'no-cors',
+    mode: 'cors',
     redirect: 'follow',
     referrerPolicy: 'no-referrer'
   });
