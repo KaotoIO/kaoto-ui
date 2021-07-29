@@ -27,31 +27,39 @@ export interface IFetch {
   stringifyBody?: boolean;
 }
 
-export function request({
-                            endpoint,
-                            method,
-                            headers = {},
-                            body,
-                            contentType = 'application/json',
-                            accept = 'application/json,text/plain,text/yaml,*/*',
-                            stringifyBody = true,
-                          }: IFetch) {
-  const contentTypeId = 'Content-Type';
-  const data = headers[contentTypeId]?.includes('application/json') && stringifyBody ? JSON.stringify(body) : body;
-
+const api = ({
+               endpoint,
+               method,
+               headers = {},
+               body,
+               contentType,
+               accept,
+               stringifyBody = true,
+             }: IFetch) => {
+  const data = contentType?.includes('application/json') && stringifyBody ? JSON.stringify(body) : body;
   headers = { ...headers };
 
-  return fetch(`${apiURL}/${endpoint}`, {
+  return fetch(`${apiURL}${endpoint}`, {
     method,
     body: data,
     cache: 'no-cache',
     credentials: 'include',
+    //credentials: 'same-origin',
     headers: {
-      'Content-Type': contentType,
+      'Accept': accept ?? 'application/json,text/plain,text/yaml,*/*',
+      'Content-Type': contentType ?? 'application/json',
       ...headers,
-      accept,
     },
-    mode: 'cors',
+    mode: 'no-cors',
     redirect: 'follow',
+    referrerPolicy: 'no-referrer'
   });
-}
+};
+
+export default {
+  get: (options) => api({method: 'GET', ...options}),
+  post: (options) => api({method: 'POST', ...options}),
+  put: (options) => api({method: 'PUT', ...options}),
+  patch: (options) => api({method: 'PATCH', ...options}),
+  delete: (options) => api({method: 'DELETE', ...options}),
+};

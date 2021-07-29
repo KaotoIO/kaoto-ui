@@ -1,8 +1,9 @@
+import { action } from '@storybook/addon-actions';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { YAMLEditor } from '../components/YAMLEditor';
 
-const yaml = 'apiVersion: camel.apache.org/v1alpha1\n' +
+const yamlData = 'apiVersion: camel.apache.org/v1alpha1\n' +
     'kind: KameletBinding\n' +
     'metadata:\n' +
     '  name: twitter-search-source-binding\n' +
@@ -29,6 +30,8 @@ const yaml = 'apiVersion: camel.apache.org/v1alpha1\n' +
     '      topic: "The Topic Names"\n' +
     '      username: "The Username"\n';
 
+const handleChanges = action('YAML has changed');
+
 export default {
   title: 'Dashboard/YAMLEditor',
   component: YAMLEditor,
@@ -38,6 +41,7 @@ const Template: ComponentStory<typeof YAMLEditor> = (args) => <YAMLEditor {...ar
 
 export const Primary = Template.bind({});
 Primary.args = {
-  yaml
+  handleChanges,
+  yamlData
 };
 
