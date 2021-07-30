@@ -67,7 +67,8 @@
     "format": "prettier --write 'src/**/*.{js,ts,tsx,scss,css,json}'",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "storybook": "start-storybook -p 6006 -s public",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --watchAll=false"
   },
   "browserslist": {
     "production": [
@@ -92,5 +93,22 @@
         }
       }
     ]
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "react-app-env.d.ts",
+      "src/components/Map.tsx",
+      "src/index.tsx",
+      "src/test-utils.tsx",
+      "src/pages/App.tsx",
+      "src/.*index.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "lines": 90
+      }
+    }
   }
 }
