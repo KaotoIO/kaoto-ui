@@ -9,6 +9,8 @@
     "@monaco-editor/react": "^4.2.1",
     "@patternfly/patternfly": "^4.108.2",
     "@patternfly/react-core": "^4.128.2",
+    "@types/d3": "^7.0.0",
+    "d3": "^7.0.0",
     "react": "17.0.1",
     "react-router-dom": "^5.2.0",
     "react-router-last-location": "^2.0.1",

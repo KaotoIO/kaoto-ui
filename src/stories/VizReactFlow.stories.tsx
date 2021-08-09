@@ -1,0 +1,15 @@
+//import { action } from '@storybook/addon-actions';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
+
+import { VizReactFlow } from '../components/VizReactFlow';
+
+export default {
+  title: 'Visualization/React Flow',
+  component: VizReactFlow,
+} as ComponentMeta<typeof VizReactFlow>;
+
+const Template: ComponentStory<typeof VizReactFlow> = (args) => <VizReactFlow {...args} />;
+
+export const Primary = Template.bind({});
+Primary.args = {};
+
