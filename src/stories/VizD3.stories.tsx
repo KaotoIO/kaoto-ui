@@ -8,8 +8,7 @@ export default {
   component: VizD3,
 } as ComponentMeta<typeof VizD3>;
 
-const Template: ComponentStory<typeof VizD3> = (args) => <VizD3 {...args} />;
+const Template: ComponentStory<typeof VizD3> = (args) => <VizD3 />;
 
 export const Primary = Template.bind({});
-Primary.args = {};
-
+//Primary.args = {};

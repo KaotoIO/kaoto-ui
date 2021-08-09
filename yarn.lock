@@ -8169,7 +8169,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-scale@npm:4":
+"d3-scale@npm:4, d3-scale@npm:^4.0.0":
   version: 4.0.0
   resolution: "d3-scale@npm:4.0.0"
   dependencies:
@@ -8182,14 +8182,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-selection@npm:2 - 3, d3-selection@npm:3":
+"d3-selection@npm:2 - 3, d3-selection@npm:3, d3-selection@npm:^3.0.0":
   version: 3.0.0
   resolution: "d3-selection@npm:3.0.0"
   checksum: 2a42f67bdea46f23d37949749ebc41681887b9cd3c20083827d0184f669b743b2724d7fc29b7887a21bc4f86c8add1a9168c57dccf575ff800147b86caa5036b
   languageName: node
   linkType: hard
 
-"d3-shape@npm:3":
+"d3-shape@npm:3, d3-shape@npm:^3.0.1":
   version: 3.0.1
   resolution: "d3-shape@npm:3.0.1"
   dependencies:
@@ -8223,7 +8223,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-transition@npm:2 - 3, d3-transition@npm:3":
+"d3-transition@npm:2 - 3, d3-transition@npm:3, d3-transition@npm:^3.0.1":
   version: 3.0.1
   resolution: "d3-transition@npm:3.0.1"
   dependencies:
@@ -8238,7 +8238,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-zoom@npm:3":
+"d3-zoom@npm:3, d3-zoom@npm:^3.0.0":
   version: 3.0.0
   resolution: "d3-zoom@npm:3.0.0"
   dependencies:
@@ -21620,12 +21620,18 @@ typescript@^4.3.4:
     babel-loader: ^8.2.2
     chromatic: ^5.10.0-canary.0
     d3: ^7.0.0
+    d3-scale: ^4.0.0
+    d3-selection: ^3.0.0
+    d3-shape: ^3.0.1
+    d3-transition: ^3.0.1
+    d3-zoom: ^3.0.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-import: ^2.22.0
     eslint-plugin-jest: 24.3.6
     eslint-plugin-jsx-a11y: ^6.3.1
     eslint-plugin-react: ^7.20.3
     eslint-plugin-react-hooks: ^4.0.8
+    lodash: ^4.17.21
     monaco-editor: ^0.25.2
     node-sass: ^6.0.0
     prettier: 2.3.2
