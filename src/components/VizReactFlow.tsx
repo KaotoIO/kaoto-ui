@@ -1,4 +1,5 @@
 import ReactFlow from 'react-flow-renderer';
+import { v4 as uuidv4 } from 'uuid';
 
 interface IStepParameter {
   default?: string;
@@ -49,27 +50,28 @@ const elements = [
 
 const VizReactFlow = ({ steps }: IVizReactFlow) => {
   const stepsAsElements: IReactFlowElement[] = [];
-  const lastItemInMap = steps => Array.from(steps).pop();
-  console.log('lastItemInMap: ' + JSON.stringify(lastItemInMap));
 
   steps?.map((step: IStepProps, index) => {
-    console.log('step: ' + JSON.stringify(step));
     let inputStep:IReactFlowElement = {
-      id: '',
+      data: {label: step.name},
+      id: uuidv4(),
       type: undefined
     };
 
+    /**
+     * Determine first & last steps
+     * Label as input/output, respectively
+     */
     switch(index) {
       case 0:
+        // First item in `steps` array
         inputStep.type = 'input';
         break;
+      case steps.length - 1:
+        // Last item in `steps` array
+        inputStep.type = 'output';
+        break;
     }
-
-    /**
-    if(index === 0) {
-      inputStep.type = 'input';
-    }
-     **/
 
     stepsAsElements.push(inputStep);
 
