@@ -13412,6 +13412,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"konva@npm:^8.1.3":
+  version: 8.1.3
+  resolution: "konva@npm:8.1.3"
+  checksum: cbcee70ac942d6648c5f6e9612a77d05118f595930298289961d4dfca3f17cc07b790e41aff0034e7d1a476b562cdcc6bc2f3206abd5ad773a871e366b10c085
+  languageName: node
+  linkType: hard
+
 "language-subtag-registry@npm:~0.3.2":
   version: 0.3.21
   resolution: "language-subtag-registry@npm:0.3.21"
@@ -17267,6 +17274,20 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"react-konva@npm:^17.0.2-5":
+  version: 17.0.2-5
+  resolution: "react-konva@npm:17.0.2-5"
+  dependencies:
+    react-reconciler: ~0.26.2
+    scheduler: ^0.20.2
+  peerDependencies:
+    konva: ^8.0.1 || ^7.2.5
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 765df7a9bb2739d248ff1e651556560c11539e67e2fa359820151ecc747d31c5f9bbb04fcb237e9f31b4ca4df1920ae9ebf0af127ef84803d4a92878e885c0b3
+  languageName: node
+  linkType: hard
+
 "react-lifecycles-compat@npm:^3.0.4":
   version: 3.0.4
   resolution: "react-lifecycles-compat@npm:3.0.4"
@@ -17298,6 +17319,19 @@ fsevents@^1.2.7:
     "@popperjs/core": ^2.0.0
     react: ^16.8.0 || ^17
   checksum: 5cac009001e2a7c640ba931afedbbf33c94a672a3f7c6ef672e55561b72778c6941a09f57156962114b9e47793779728088845fc306c43477ddc645cdb8793ea
+  languageName: node
+  linkType: hard
+
+"react-reconciler@npm:~0.26.2":
+  version: 0.26.2
+  resolution: "react-reconciler@npm:0.26.2"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+    scheduler: ^0.20.2
+  peerDependencies:
+    react: ^17.0.2
+  checksum: 5abd10272cd4c57f76ba1cc8c1c3c190b3a1208434bb9bb39f90816944b6780e59021d79d9d1d46f1d05276a0db9cd66f2ccc7f8bbb51bcf970320bcd1b21f69
   languageName: node
   linkType: hard
 
@@ -21706,6 +21740,7 @@ typescript@^4.3.4:
     eslint-plugin-jsx-a11y: ^6.3.1
     eslint-plugin-react: ^7.20.3
     eslint-plugin-react-hooks: ^4.0.8
+    konva: ^8.1.3
     monaco-editor: ^0.25.2
     node-sass: ^6.0.0
     prettier: 2.3.2
@@ -21713,6 +21748,7 @@ typescript@^4.3.4:
     react: 17.0.1
     react-dom: ^17.0.2
     react-flow-renderer: ^9.6.6
+    react-konva: ^17.0.2-5
     react-router-dom: ^5.2.0
     react-router-last-location: ^2.0.1
     react-scripts: ^4.0.3
