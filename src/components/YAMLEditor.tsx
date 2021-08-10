@@ -1,7 +1,7 @@
 import Editor from '@monaco-editor/react';
 import { useRef } from 'react';
 
-export interface IYAMLEditor {
+interface IYAMLEditor {
   handleChanges: (newYaml: string) => void;
   yamlData?: string;
 }
