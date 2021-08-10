@@ -1,4 +1,8 @@
-import { PageSection } from '@patternfly/react-core';
+import {
+  Grid,
+  GridItem,
+} from '@patternfly/react-core';
+import { VizReactFlow } from '../components/VizReactFlow';
 import { YAMLEditor } from '../components/YAMLEditor';
 import request from '../utils/request';
 import * as React from 'react';
@@ -70,9 +74,16 @@ const Dashboard = () => {
   };
 
   return (
-    <PageSection>
-      <YAMLEditor yamlData={ yamlData } handleChanges={handleChanges} />
-    </PageSection>
+    <>
+      <Grid>
+        <GridItem span={6}>
+          <YAMLEditor yamlData={ yamlData } handleChanges={handleChanges} />
+        </GridItem>
+        <GridItem span={6}>
+          <VizReactFlow/>
+        </GridItem>
+      </Grid>
+    </>
   );
 };
 

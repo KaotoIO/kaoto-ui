@@ -8,7 +8,14 @@ export default {
   component: VizReactFlow,
 } as ComponentMeta<typeof VizReactFlow>;
 
-const Template: ComponentStory<typeof VizReactFlow> = (args) => <VizReactFlow />;
+const Template: ComponentStory<typeof VizReactFlow> = (args) => {
+  return (
+    <>
+      <h1>React Flow</h1>
+      <VizReactFlow />
+    </>
+  )
+};
 
 export const Primary = Template.bind({});
 //Primary.args = {};
