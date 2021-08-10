@@ -18,8 +18,8 @@ interface IAppLayout {
 }
 
 const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
-  const [isNavOpen, setIsNavOpen] = React.useState(true);
-  const [isMobileView, setIsMobileView] = React.useState(true);
+  const [isNavOpen, setIsNavOpen] = React.useState(false);
+  const [isMobileView, setIsMobileView] = React.useState(false);
   const [isNavOpenMobile, setIsNavOpenMobile] = React.useState(false);
 
   const onNavToggleMobile = () => {
