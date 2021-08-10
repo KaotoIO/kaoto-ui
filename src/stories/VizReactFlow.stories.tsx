@@ -1,4 +1,3 @@
-//import { action } from '@storybook/addon-actions';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { VizReactFlow } from '../components/VizReactFlow';
@@ -12,7 +11,9 @@ const Template: ComponentStory<typeof VizReactFlow> = (args) => {
   return (
     <>
       <h1>React Flow</h1>
-      <VizReactFlow />
+      <div style={{width: '50%', height: '500px'}}>
+        <VizReactFlow />
+      </div>
     </>
   )
 };
