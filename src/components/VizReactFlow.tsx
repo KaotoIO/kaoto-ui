@@ -1,5 +1,5 @@
-import ReactFlow from 'react-flow-renderer';
-import { v4 as uuidv4 } from 'uuid';
+import ReactFlow, { FlowElement, Node } from 'react-flow-renderer';
+//import { v4 as uuidv4 } from 'uuid';
 
 interface IStepParameter {
   default?: string;
@@ -27,36 +27,23 @@ interface IStepProps {
   type?: string // e.g. 'CONNECTOR'
 }
 
-interface IReactFlowElement {
-  id: string;
-  type?: 'input' | 'output';
-  data?: any;
-  position?: { x: number, y: number };
-  source?: string;
-  target?: string;
-  animated?: boolean;
-}
-
 interface IVizReactFlow {
   steps?: IStepProps[]
 }
 
-const elements = [
-  { id: '1', type: 'input', data: { label: 'Node 1' }, position: { x: 250, y: 5 } },
-  // you can also pass a React Node as a label
-  { id: '2', data: { label: <div>Node 2</div> }, position: { x: 100, y: 100 } },
-  { id: 'e1-2', source: '1', target: '2', animated: true },
-];
-
 const VizReactFlow = ({ steps }: IVizReactFlow) => {
-  const stepsAsElements: IReactFlowElement[] = [];
+  const stepsAsElements: FlowElement[] = [];
 
   steps?.map((step: IStepProps, index) => {
-    let inputStep:IReactFlowElement = {
-      data: {label: step.name},
-      id: uuidv4(),
+    let inputStep:FlowElement = {
+      data: { label: step.name },
+      //id: uuidv4(),
+      id: index.toString(), // ideally we would use uuid for this, but we need to access the index to calculate the
+      // node positions
+      position: { x: 100, y: 0 },
       type: undefined
     };
+
 
     /**
      * Determine first & last steps
@@ -66,14 +53,21 @@ const VizReactFlow = ({ steps }: IVizReactFlow) => {
       case 0:
         // First item in `steps` array
         inputStep.type = 'input';
+        //inputStep.position!.y = 100;
         break;
       case steps.length - 1:
         // Last item in `steps` array
         inputStep.type = 'output';
+        inputStep.position!.y = (stepsAsElements[index - 1] as Node).position?.y + 100;
         break;
+      default:
+        inputStep.position!.y = (stepsAsElements[index - 1] as Node).position!.y + 100;
     }
 
     stepsAsElements.push(inputStep);
+
+    // Add edges
+    stepsAsElements.push({id: 'e1-2', source: '0', target: '1', animated: true});
 
     return;
   });
@@ -82,7 +76,7 @@ const VizReactFlow = ({ steps }: IVizReactFlow) => {
 
   return (
     <>
-      <ReactFlow elements={elements} />
+      <ReactFlow elements={stepsAsElements} />
     </>
   );
 }
