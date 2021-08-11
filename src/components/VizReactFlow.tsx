@@ -1,5 +1,5 @@
 import ReactFlow, { FlowElement, Node } from 'react-flow-renderer';
-//import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 interface IStepParameter {
   default?: string;
@@ -35,15 +35,17 @@ const VizReactFlow = ({ steps }: IVizReactFlow) => {
   const stepsAsElements: FlowElement[] = [];
 
   steps?.map((step: IStepProps, index) => {
+    const currentStepId = uuidv4();
+
     let inputStep:FlowElement = {
       data: { label: step.name },
-      //id: uuidv4(),
-      id: index.toString(), // ideally we would use uuid for this, but we need to access the index to calculate the
-      // node positions
+      id: currentStepId,
       position: { x: 100, y: 0 },
       type: undefined
     };
 
+    // Grab the previous step to use for determining position and drawing edges
+    const previousStep = stepsAsElements[index-1] as Node ?? undefined;
 
     /**
      * Determine first & last steps
@@ -58,16 +60,22 @@ const VizReactFlow = ({ steps }: IVizReactFlow) => {
       case steps.length - 1:
         // Last item in `steps` array
         inputStep.type = 'output';
-        inputStep.position!.y = (stepsAsElements[index - 1] as Node).position?.y + 100;
+        // Extract into common area for last & middle steps
+        inputStep.position!.y = previousStep.position?.y + 100;
+
+        // Add edges
+        stepsAsElements.push({id: 'EDGE-' + previousStep.id + '--' + currentStepId, source: previousStep.id, target: currentStepId, animated: true});
         break;
       default:
-        inputStep.position!.y = (stepsAsElements[index - 1] as Node).position!.y + 100;
+        // Middle step
+        inputStep.position!.y = previousStep.position!.y + 100;
+
+        // Add edges
+        stepsAsElements.push({id: 'EDGE-' + previousStep.id + '--' + currentStepId, source: previousStep.id, target: currentStepId, animated: true});
+        break;
     }
 
     stepsAsElements.push(inputStep);
-
-    // Add edges
-    stepsAsElements.push({id: 'e1-2', source: '0', target: '1', animated: true});
 
     return;
   });
