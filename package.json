@@ -68,7 +68,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build-storybook": "build-storybook -s public",
-    "chromatic": "CHROMATIC_STORYBOOK_VERSION='@storybook/react@4.0-alpha.8' chromatic --exit-zero-on-changes",
+    "chromatic": "CHROMATIC_STORYBOOK_VERSION='@storybook/react@6.2.0' chromatic --exit-zero-on-changes",
     "eject": "react-scripts eject",
     "format": "prettier --write 'src/**/*.{js,ts,tsx,scss,css,json}'",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
