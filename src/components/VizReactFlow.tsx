@@ -1,18 +1,19 @@
 import ReactFlow, { FlowElement, Node } from 'react-flow-renderer';
 import { v4 as uuidv4 } from 'uuid';
-import { IStepProps, IViewData } from '../types';
+import { IStepProps } from '../types';
 
 interface IVizReactFlow {
-  viewData: IViewData
+  isError?: boolean;
+  isLoading?: boolean;
+  steps: IStepProps[];
 }
 
-const VizReactFlow = async ({ viewData }: IVizReactFlow) => {
+const VizReactFlow = ({ isError, isLoading, steps }: IVizReactFlow) => {
   const stepsAsElements: FlowElement[] = [];
-  const steps = await viewData.steps;
-  //console.table(viewData);
+
   console.table(steps);
 
-  steps?.map((step: IStepProps, index) => {
+  steps.map((step: IStepProps, index) => {
     const currentStepId = uuidv4();
 
     let inputStep:FlowElement = {
@@ -33,7 +34,6 @@ const VizReactFlow = async ({ viewData }: IVizReactFlow) => {
       case 0:
         // First item in `steps` array
         inputStep.type = 'input';
-        //inputStep.position!.y = 100;
         break;
       case steps.length - 1:
         // Last item in `steps` array
@@ -60,7 +60,10 @@ const VizReactFlow = async ({ viewData }: IVizReactFlow) => {
 
   return (
     <>
-      <ReactFlow elements={stepsAsElements} />
+      {isError && <div>Something went wrong ...</div>}
+      {isLoading ? (<div>Loading...</div>) : (
+        <ReactFlow elements={stepsAsElements} />
+      )}
     </>
   );
 }

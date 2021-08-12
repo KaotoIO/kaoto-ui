@@ -35,6 +35,11 @@ export interface IStepProps {
   type?: string // e.g. 'CONNECTOR'
 }
 
-export interface IViewData {
-  steps?: IStepProps[]
+export interface IViewDataResponse {
+  id?: string; // Optional since we only care about steps for now
+  name?: string; // Optional since we only care about steps for now
+  steps?: IStepProps[];
+  type?: string; // Optional since we only care about steps for now
 }
+
+export interface IViewData extends Array<IViewDataResponse> {}

@@ -4,9 +4,10 @@ import {
 } from '@patternfly/react-core';
 import { VizReactFlow } from '../components/VizReactFlow';
 import { YAMLEditor } from '../components/YAMLEditor';
+import usePrevious from '../utils/usePrevious';
 import request from '../utils/request';
 import * as React from 'react';
-import { IViewData } from "../types";
+import { IStepProps, IViewData } from '../types';
 
 /**
  * Temporarily providing initial YAML data
@@ -39,94 +40,57 @@ const exampleData = 'apiVersion: camel.apache.org/v1alpha1\n' +
   '      username: "The Username"\n';
 
 const Dashboard = () => {
-  const [jsonData, setJsonData] = React.useState<IViewData>({});
-  const [yamlData, setYamlData] = React.useState(exampleData || '');
+  const [stepData, setStepData] = React.useState<IStepProps[]>([]);
+  const [yamlData, setYamlData] = React.useState(exampleData);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isError, setIsError] = React.useState(false);
+  const previousYaml = usePrevious(yamlData);
 
-  const getData = async (incomingData) => {
-    const resp = await request.post({
-      endpoint: '/viewdefinition?' + new URLSearchParams({
-        yaml: incomingData
-      }),
-      contentType: 'text/yaml'
-    });
+  React.useEffect(() => {
+    if(previousYaml === yamlData) {
+      console.log('Previous YAML is the same as current YAML. Do not make API request. Returning...');
+      return;
+    }
 
-    const data = await resp.json();
+    const getData = async (incomingData) => {
+      setIsError(false);
+      setIsLoading(true);
 
-    //console.log('data? ' + JSON.stringify(data));
-    setJsonData(data);
-    //console.log('response.json: ' + JSON.stringify(data.json));
-    //return data;
-  }
+      try {
+        const resp = await request.post({
+          endpoint: '/viewdefinition?' + new URLSearchParams({
+            yaml: incomingData
+          }),
+          contentType: 'text/yaml'
+        });
+
+        const data: IViewData = await resp.json();
+        setStepData(data[0].steps ?? []);
+      } catch (err) {
+        console.error(err);
+        setIsError(true);
+      }
+
+      setIsLoading(false);
+    }
+
+    getData(yamlData).catch((e) => {console.error(e)});
+  }, [previousYaml, yamlData]);
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
    * Returns JSON to be displayed in the visualizer
    */
   const handleChanges = (incomingData: string) => {
-    setYamlData(incomingData);
-
-    return getData(incomingData)
-    .then(() => {
-      console.log('I am here now..');
-      return;
-    })
-    .catch((err) => {
-      console.log('Something went wrong..', err);
-      return err;
-    });
-
-    /**
-    try {
-      request.post({
-        endpoint: '/viewdefinition?' + new URLSearchParams({
-          yaml: incomingData
-        }),
-        contentType: 'text/yaml'
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log('response data: ' + JSON.stringify(data));
-        setJsonData(data);
-        //return data;
-      })
-      .catch((err) => {
-        console.log('Something went wrong..', err);
-        //return err;
-      });
-    } catch(err) {
-      // Catch error here
-      console.log(err.name + ': ' + err.message);
-    }
-     **/
-
-    /**
-    request.post({
-      endpoint: '/viewdefinition?' + new URLSearchParams({
-        yaml: incomingData
-      }),
-      contentType: 'text/yaml'
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log('response.json: ' + JSON.stringify(data.json));
-      setJsonData(data.json);
-
-      //return setJsonData(data.json);
-      //return data;
-    })
-    .catch((err) => {
-      console.log('Something went wrong..', err);
-      //return err;
-    });
-     **/
-    /**
-    try {
-
-    } catch(err) {
-      // Catch error here
-      console.log(err.name + ':' + err.message);
-    }
-     **/
+    // Wait a bit before setting data
+    setTimeout(() => {
+      // Check that the data has changed
+      if(previousYaml === incomingData) {
+        console.log('Previous YAML is the same as incoming user changes. Do not set YAML. Returning..');
+        return;
+      }
+      setYamlData(incomingData);
+    },750);
   };
 
   return (
@@ -136,7 +100,7 @@ const Dashboard = () => {
           <YAMLEditor yamlData={ yamlData } handleChanges={handleChanges} />
         </GridItem>
         <GridItem span={6}>
-          <VizReactFlow viewData={jsonData}/>
+          <VizReactFlow isError={isError} isLoading={isLoading} steps={stepData}/>
         </GridItem>
       </Grid>
     </>

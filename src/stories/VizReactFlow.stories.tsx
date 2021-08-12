@@ -131,7 +131,7 @@ const Template: ComponentStory<typeof VizReactFlow> = (args) => {
     <>
       <h1>React Flow</h1>
       <div style={{width: '50%', height: '500px'}}>
-        <VizReactFlow viewData={viewData} />
+        <VizReactFlow steps={viewData.steps} />
       </div>
     </>
   )
