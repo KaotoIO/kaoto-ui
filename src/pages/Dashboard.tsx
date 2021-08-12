@@ -6,6 +6,7 @@ import { VizReactFlow } from '../components/VizReactFlow';
 import { YAMLEditor } from '../components/YAMLEditor';
 import request from '../utils/request';
 import * as React from 'react';
+import { IViewData } from "../types";
 
 /**
  * Temporarily providing initial YAML data
@@ -38,8 +39,24 @@ const exampleData = 'apiVersion: camel.apache.org/v1alpha1\n' +
   '      username: "The Username"\n';
 
 const Dashboard = () => {
-  const [jsonData, setJsonData] = React.useState('');
+  const [jsonData, setJsonData] = React.useState<IViewData>({});
   const [yamlData, setYamlData] = React.useState(exampleData || '');
+
+  const getData = async (incomingData) => {
+    const resp = await request.post({
+      endpoint: '/viewdefinition?' + new URLSearchParams({
+        yaml: incomingData
+      }),
+      contentType: 'text/yaml'
+    });
+
+    const data = await resp.json();
+
+    //console.log('data? ' + JSON.stringify(data));
+    setJsonData(data);
+    //console.log('response.json: ' + JSON.stringify(data.json));
+    //return data;
+  }
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
@@ -48,6 +65,17 @@ const Dashboard = () => {
   const handleChanges = (incomingData: string) => {
     setYamlData(incomingData);
 
+    return getData(incomingData)
+    .then(() => {
+      console.log('I am here now..');
+      return;
+    })
+    .catch((err) => {
+      console.log('Something went wrong..', err);
+      return err;
+    });
+
+    /**
     try {
       request.post({
         endpoint: '/viewdefinition?' + new URLSearchParams({
@@ -57,10 +85,8 @@ const Dashboard = () => {
       })
       .then((res) => res.json())
       .then((data) => {
-        console.log('response.json: ' + JSON.stringify(data.json));
-        setJsonData(data.json);
-
-        console.log('jsonData: ' + JSON.stringify(jsonData));
+        console.log('response data: ' + JSON.stringify(data));
+        setJsonData(data);
         //return data;
       })
       .catch((err) => {
@@ -69,8 +95,38 @@ const Dashboard = () => {
       });
     } catch(err) {
       // Catch error here
+      console.log(err.name + ': ' + err.message);
+    }
+     **/
+
+    /**
+    request.post({
+      endpoint: '/viewdefinition?' + new URLSearchParams({
+        yaml: incomingData
+      }),
+      contentType: 'text/yaml'
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log('response.json: ' + JSON.stringify(data.json));
+      setJsonData(data.json);
+
+      //return setJsonData(data.json);
+      //return data;
+    })
+    .catch((err) => {
+      console.log('Something went wrong..', err);
+      //return err;
+    });
+     **/
+    /**
+    try {
+
+    } catch(err) {
+      // Catch error here
       console.log(err.name + ':' + err.message);
     }
+     **/
   };
 
   return (
@@ -80,7 +136,7 @@ const Dashboard = () => {
           <YAMLEditor yamlData={ yamlData } handleChanges={handleChanges} />
         </GridItem>
         <GridItem span={6}>
-          <VizReactFlow/>
+          <VizReactFlow viewData={jsonData}/>
         </GridItem>
       </Grid>
     </>

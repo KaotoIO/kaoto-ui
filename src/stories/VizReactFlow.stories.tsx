@@ -122,11 +122,16 @@ const steps = [
 ];
 
 const Template: ComponentStory<typeof VizReactFlow> = (args) => {
+  // For now the only view data we care about are steps
+  const viewData = {
+    steps
+  };
+
   return (
     <>
       <h1>React Flow</h1>
       <div style={{width: '50%', height: '500px'}}>
-        <VizReactFlow steps={steps} />
+        <VizReactFlow viewData={viewData} />
       </div>
     </>
   )

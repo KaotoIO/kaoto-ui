@@ -1,38 +1,16 @@
 import ReactFlow, { FlowElement, Node } from 'react-flow-renderer';
 import { v4 as uuidv4 } from 'uuid';
-
-interface IStepParameter {
-  default?: string;
-  description?: string;
-  id?: string;
-  label?: string;
-  type?: string;
-  value?: string;
-}
-
-/**
- * TODO: Check swagger for accurate types
- */
-interface IStepProps {
-  description?: string,
-  group?: string,
-  icon?: string,
-  id: string,
-  kameletType?: string,
-  kind?: string,
-  name?: string,
-  parameters?: IStepParameter[],
-  subType?: string, // should be 'KAMELET'
-  title?: string,
-  type?: string // e.g. 'CONNECTOR'
-}
+import { IStepProps, IViewData } from '../types';
 
 interface IVizReactFlow {
-  steps?: IStepProps[]
+  viewData: IViewData
 }
 
-const VizReactFlow = ({ steps }: IVizReactFlow) => {
+const VizReactFlow = async ({ viewData }: IVizReactFlow) => {
   const stepsAsElements: FlowElement[] = [];
+  const steps = await viewData.steps;
+  //console.table(viewData);
+  console.table(steps);
 
   steps?.map((step: IStepProps, index) => {
     const currentStepId = uuidv4();
@@ -79,8 +57,6 @@ const VizReactFlow = ({ steps }: IVizReactFlow) => {
 
     return;
   });
-
-  console.table(stepsAsElements);
 
   return (
     <>
