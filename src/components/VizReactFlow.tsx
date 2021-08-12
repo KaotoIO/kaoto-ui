@@ -19,7 +19,7 @@ const VizReactFlow = ({ isError, isLoading, steps }: IVizReactFlow) => {
     let inputStep:FlowElement = {
       data: { label: step.name },
       id: currentStepId,
-      position: { x: 100, y: 0 },
+      position: { x: 300, y: 200 },
       type: undefined
     };
 
