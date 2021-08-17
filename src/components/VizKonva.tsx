@@ -52,6 +52,8 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
     return;
   });
 
+  const onDragEnd = e => {};
+
   const createImage = (url, crossOrigin?) => {
     if (!url) return;
     const img = document.createElement('img');
@@ -74,7 +76,7 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
       <h1>Konva</h1>
       <Stage width={window.innerWidth} height={window.innerHeight}>
         <Layer>
-          <Group x={100} y={200} draggable>
+          <Group x={100} y={200} onDragEnd={onDragEnd} draggable>
             <Line
               points={[
                 100, 0,
