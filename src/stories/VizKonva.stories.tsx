@@ -1,8 +1,8 @@
-//import { action } from '@storybook/addon-actions';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { VizKonva } from '../components/VizKonva';
 
+// For now the only view data we care about are steps
 import steps from './steps';
 
 export default {
@@ -10,18 +10,14 @@ export default {
   component: VizKonva,
 } as ComponentMeta<typeof VizKonva>;
 
-//const Template: ComponentStory<typeof VizKonva> = (args) => <VizKonva {...args} />;
 const Template: ComponentStory<typeof VizKonva> = (args) => {
-  // For now the only view data we care about are steps
-  const viewData = {
-    steps
-  };
-
   return (
-    <VizKonva steps={viewData.steps} />
+    <VizKonva steps={args.steps} />
   );
 };
 
-export const Primary = Template.bind({});
-//Primary.args = {};
+export const Kamelet = Template.bind({});
+Kamelet.args = { steps };
 
+export const Integration = Template.bind({});
+Integration.args = { steps: [...steps, steps[1]] };
