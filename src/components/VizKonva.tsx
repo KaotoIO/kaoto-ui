@@ -82,7 +82,7 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
                 steps.length * incrementAmt, 0
               ]}
               stroke={'black'}
-              strokeWidth={2}
+              strokeWidth={3}
               lineCap={'round'}
               lineJoin={'round'}
             />
@@ -102,9 +102,9 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
                     y={0}
                     key={index}
                     name={`${index}`}
-                    stroke={'grey'}
+                    stroke={index === 0 ? 'rgb(0, 136, 206)' : 'rgb(204, 204, 204)'}
                     fill={'white'}
-                    strokeWidth={2}
+                    strokeWidth={3}
                     width={CIRCLE_LENGTH}
                     height={CIRCLE_LENGTH}
                 />
