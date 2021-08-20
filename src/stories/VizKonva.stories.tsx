@@ -12,7 +12,10 @@ export default {
 
 const Template: ComponentStory<typeof VizKonva> = (args) => {
   return (
-    <VizKonva steps={args.steps} />
+    <>
+      <h1>Konva</h1>
+      <VizKonva steps={args.steps} />
+    </>
   );
 };
 
