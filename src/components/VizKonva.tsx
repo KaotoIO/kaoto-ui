@@ -1,4 +1,4 @@
-import { Circle, Group, Image, Layer, Line, Stage } from 'react-konva';
+import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
 import { v4 as uuidv4 } from 'uuid';
 import { IStepProps } from '../types';
 
@@ -110,6 +110,7 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
                     height={CIRCLE_LENGTH}
                 />
                   <Image {...image} />
+                  <Text x={item.position.x - (CIRCLE_LENGTH)} y={(CIRCLE_LENGTH / 2) + 10} align={'center'} width={150} text={item.name} />
                 </Group>
               )
             })}

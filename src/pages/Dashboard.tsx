@@ -2,7 +2,8 @@ import {
   Grid,
   GridItem,
 } from '@patternfly/react-core';
-import { VizReactFlow } from '../components/VizReactFlow';
+//import { VizReactFlow } from '../components/VizReactFlow';
+import { VizKonva } from '../components/VizKonva';
 import { YAMLEditor } from '../components/YAMLEditor';
 import usePrevious from '../utils/usePrevious';
 import request from '../utils/request';
@@ -100,7 +101,7 @@ const Dashboard = () => {
           <YAMLEditor yamlData={ yamlData } handleChanges={handleChanges} />
         </GridItem>
         <GridItem span={6}>
-          <VizReactFlow isError={isError} isLoading={isLoading} steps={stepData}/>
+          <VizKonva isError={isError} isLoading={isLoading} steps={stepData}/>
         </GridItem>
       </Grid>
     </>
