@@ -7,7 +7,7 @@ export default {
   component: VizReactFlow,
 } as ComponentMeta<typeof VizReactFlow>;
 
-import steps from './steps';
+import steps from './data/steps';
 
 const Template: ComponentStory<typeof VizReactFlow> = (args) => {
   // For now the only view data we care about are steps

@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { VizKonva } from '../components/VizKonva';
 
 // For now the only view data we care about are steps
-import steps from './steps';
+import steps from './data/steps';
 
 export default {
   title: 'Visualization/Konva',
