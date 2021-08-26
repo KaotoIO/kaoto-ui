@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Catalog } from '../components/Catalog';
 
 // For now the only view data we care about are steps
-// import kamelets from './data/kamelets';
+// import catalog from './data/catalog';
 
 export default {
   title: 'Catalog',
