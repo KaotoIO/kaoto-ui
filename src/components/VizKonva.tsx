@@ -1,6 +1,7 @@
 import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
 import { v4 as uuidv4 } from 'uuid';
 import { IStepProps } from '../types';
+import createImage from '../utils/createImage';
 
 interface IVizKonva {
   isError?: boolean;
@@ -22,7 +23,7 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
 
     let inputStep = {
       ...step,
-      data: { label: step.name },
+      data: { label: step?.name },
       id: currentStepId,
       position: { x: 300, y: yAxis }
     };
@@ -53,15 +54,6 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
   });
 
   const onDragEnd = e => {};
-
-  const createImage = (url, crossOrigin?) => {
-    if (!url) return;
-    const img = document.createElement('img');
-    img.crossOrigin = crossOrigin;
-    img.src = url;
-
-    return img;
-  };
 
   const imageProps = {
     height: 40,
@@ -107,7 +99,7 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
                     strokeWidth={3}
                     width={CIRCLE_LENGTH}
                     height={CIRCLE_LENGTH}
-                />
+                  />
                   <Image {...image} />
                   <Text x={item.position.x - (CIRCLE_LENGTH)} y={(CIRCLE_LENGTH / 2) + 10} align={'center'} width={150} text={item.name} />
                 </Group>

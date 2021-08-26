@@ -1,0 +1,12 @@
+.tab-one {
+    margin: 0 auto;
+}
+
+.gallery {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.galleryItem {
+    overflow: auto;
+}

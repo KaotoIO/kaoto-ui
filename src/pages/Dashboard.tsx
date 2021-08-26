@@ -3,6 +3,7 @@ import {
   GridItem,
 } from '@patternfly/react-core';
 //import { VizReactFlow } from '../components/VizReactFlow';
+import { Catalog } from '../components/Catalog';
 import { VizKonva } from '../components/VizKonva';
 import { YAMLEditor } from '../components/YAMLEditor';
 import usePrevious from '../utils/usePrevious';
@@ -11,6 +12,7 @@ import request from '../utils/request';
 import * as React from 'react';
 import { IStepProps, IViewData } from '../types';
 import YAML from '../stories/data/yaml';
+import sortSteps from '../utils/sortSteps';
 
 /**
  * Temporarily providing initial YAML data
@@ -18,6 +20,7 @@ import YAML from '../stories/data/yaml';
 const exampleData = YAML;
 
 const Dashboard = () => {
+  const [catalogData, setCatalogData] = React.useState<{ start: IStepProps[], middle: IStepProps[], end: IStepProps[] }>({ start: [], middle: [], end: [] });
   const [stepData, setStepData] = React.useState<IStepProps[]>([]);
   const [yamlData, setYamlData] = React.useState(exampleData);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -30,7 +33,7 @@ const Dashboard = () => {
       return;
     }
 
-    const getData = async (incomingData) => {
+    const getVizData = async (incomingData) => {
       setIsError(false);
       setIsLoading(true);
 
@@ -50,9 +53,25 @@ const Dashboard = () => {
       }
 
       setIsLoading(false);
-    }
+    };
 
-    getData(yamlData).catch((e) => {console.error(e)});
+    const getCatalogData = async () => {
+      try {
+        const resp = await request.get({
+          endpoint: '/step'
+        });
+
+        const data = await resp.json();
+        const sortedData = sortSteps(data);
+
+        setCatalogData({ start: sortedData.start, middle: sortedData.middle, end: sortedData.end });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getVizData(yamlData).catch((e) => {console.error(e)});
+    getCatalogData().catch((e) => {console.error(e)});
   }, [previousYaml, yamlData]);
 
   /**
@@ -74,11 +93,14 @@ const Dashboard = () => {
   return (
     <>
       <Grid>
-        <GridItem span={6}>
+        <GridItem span={5}>
           <YAMLEditor yamlData={ yamlData } handleChanges={handleChanges} />
         </GridItem>
-        <GridItem span={6}>
+        <GridItem span={5}>
           <VizKonva isError={isError} isLoading={isLoading} steps={stepData}/>
+        </GridItem>
+        <GridItem span={2}>
+          <Catalog start={catalogData.start} middle={catalogData.middle} end={catalogData.end} />
         </GridItem>
       </Grid>
     </>
