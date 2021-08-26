@@ -1,12 +1,13 @@
 // import * as React from 'react';
+import { IStepProps } from '../types';
 
 interface ICatalog {
-  actions?: [],
-  sinks?: [],
-  sources?: []
+  end?: IStepProps[],
+  middle?: IStepProps[],
+  start?: IStepProps[]
 }
 
-const Catalog = ({ actions, sinks, sources }: ICatalog) => {
+const Catalog = ({ end, middle, start }: ICatalog) => {
   //
   return (<></>);
 };

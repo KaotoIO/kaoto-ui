@@ -7,6 +7,7 @@ import { VizKonva } from '../components/VizKonva';
 import { YAMLEditor } from '../components/YAMLEditor';
 import usePrevious from '../utils/usePrevious';
 import request from '../utils/request';
+// import sortSteps from '../utils/sortSteps';
 import * as React from 'react';
 import { IStepProps, IViewData } from '../types';
 import YAML from '../stories/data/yaml';
@@ -15,32 +16,6 @@ import YAML from '../stories/data/yaml';
  * Temporarily providing initial YAML data
  */
 const exampleData = YAML;
-
-const SortStepType = ({ steps }) => {
-  const start: IStepProps[] = [];
-  const middle: IStepProps[] = [];
-  const end: IStepProps[] = [];
-
-  steps.map((step) => {
-    switch(step.type) {
-      case 'START':
-        start.push(step);
-        break;
-      case 'MIDDLE':
-        middle.push(step);
-        break;
-      case 'END':
-        end.push(step);
-        break;
-    }
-  });
-
-  return {
-    start,
-    middle,
-    end
-  };
-};
 
 const Dashboard = () => {
   const [stepData, setStepData] = React.useState<IStepProps[]>([]);

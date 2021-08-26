@@ -9,19 +9,11 @@ declare var process : {
   }
 }
 
-export interface IStepParameter {
-  default?: string;
-  description?: string;
-  id?: string;
-  label?: string;
-  type?: string;
-  value?: string;
-}
-
 /**
  * TODO: Check swagger for accurate types
  */
 export interface IStepProps {
+  apiVersion?: string,
   description?: string,
   group?: string,
   icon?: string,
@@ -29,7 +21,7 @@ export interface IStepProps {
   kameletType?: string,
   kind?: string,
   name?: string,
-  parameters?: IStepParameter[],
+  parameters?: any[],
   subType?: string, // should be 'KAMELET'
   title?: string,
   type?: string // e.g. 'CONNECTOR'
