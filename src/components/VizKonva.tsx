@@ -101,7 +101,7 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
                     height={CIRCLE_LENGTH}
                   />
                   <Image {...image} />
-                  <Text x={item.position.x - (CIRCLE_LENGTH)} y={(CIRCLE_LENGTH / 2) + 10} align={'center'} width={150} text={item.name} />
+                  <Text x={item.position.x - (CIRCLE_LENGTH)} y={(CIRCLE_LENGTH / 2) + 10} align={'center'} width={150} fontSize={11} text={item.name} />
                 </Group>
               )
             })}
