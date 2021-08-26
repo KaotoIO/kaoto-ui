@@ -47,7 +47,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS SQS Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -102,7 +102,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Twitter Search Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -159,7 +159,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Secured HTTP Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -195,7 +195,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "JMS - AMQP 1.0 Kamelet Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -259,7 +259,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "SFTP Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -309,7 +309,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "RabbitMQ Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -366,7 +366,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS SNS FIFO Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -416,7 +416,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS S3 Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -477,7 +477,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Kafka Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -520,7 +520,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS Lambda Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -570,7 +570,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Twitter Direct Message Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -641,7 +641,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "SFTP Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -705,7 +705,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS S3 Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -718,7 +718,7 @@ export default [
     "name": "json-serialize-action",
     "subType": "KAMELET",
     "title": "Json Serialize Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -740,7 +740,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Extract Field Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -811,7 +811,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "ElasticSearch Index Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -868,7 +868,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS SQS Batch Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -890,7 +890,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Kafka Topic Name Matches Filter Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -933,7 +933,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Azure Storage Queue Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1025,7 +1025,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS S3 Streaming upload Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1075,7 +1075,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Twitter Timeline Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1132,7 +1132,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Minio Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1168,7 +1168,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "JMS - Apache Artemis Kamelet Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1190,7 +1190,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Hoist Field Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1254,7 +1254,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Microsoft SQL Server Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1318,7 +1318,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Salesforce Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1375,7 +1375,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS SQS FIFO Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1446,7 +1446,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "FTP Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1475,7 +1475,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Kafka Not Secured Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1511,7 +1511,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "MQTT Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1524,7 +1524,7 @@ export default [
     "name": "is-tombstone-filter-action",
     "subType": "KAMELET",
     "title": "Is Tombstone Filter Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1574,7 +1574,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS SNS Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1631,7 +1631,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Microsoft SQL Server Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1674,7 +1674,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS Kinesis Firehose Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1687,7 +1687,7 @@ export default [
     "name": "json-deserialize-action",
     "subType": "KAMELET",
     "title": "Json Deserialize Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1716,7 +1716,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Slack Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1752,7 +1752,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Timer Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1781,7 +1781,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Mask Fields Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1803,7 +1803,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Protobuf Deserialize Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1832,7 +1832,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Insert Field Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1868,7 +1868,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "PDF Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1890,7 +1890,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Exec Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1919,7 +1919,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "HTTP Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -1983,7 +1983,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "MySQL Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2047,7 +2047,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "PostgreSQL Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2069,7 +2069,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Mustache Template Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2105,7 +2105,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "OpenAI Completion Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2127,7 +2127,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Protobuf Serialize Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2191,7 +2191,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "MongoDB Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2213,7 +2213,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Webhook Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2270,7 +2270,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Kafka Not Secured Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2283,7 +2283,7 @@ export default [
     "name": "dns-lookup-action",
     "subType": "KAMELET",
     "title": "DNS Lookup Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2312,7 +2312,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Insert Header Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2397,7 +2397,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Google Calendar Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2426,7 +2426,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Regex Router Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2448,7 +2448,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Predicate Filter Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2477,7 +2477,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Telegram Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2541,7 +2541,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "FTPS Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2626,7 +2626,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Kafka Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2669,7 +2669,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "OpenAI Classification Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2691,7 +2691,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Value to Key Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2713,7 +2713,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Chuck Norris Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2784,7 +2784,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "FTPS Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2813,7 +2813,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Header Matches Filter Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2870,7 +2870,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "PostgreSQL Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2899,7 +2899,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "File Watch Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -2963,7 +2963,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Cassandra Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3048,7 +3048,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Google Sheets Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3084,7 +3084,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Replace Field Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3113,7 +3113,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "NATS Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3126,7 +3126,7 @@ export default [
     "name": "dns-ip-action",
     "subType": "KAMELET",
     "title": "DNS IP Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3190,7 +3190,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "ElasticSearch Index Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3219,7 +3219,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Cron Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3262,7 +3262,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS Kinesis Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3305,7 +3305,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS CloudWatch Metrics Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3327,7 +3327,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Caffeine Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3391,7 +3391,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "MongoDB Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3434,7 +3434,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Azure Storage Blob Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3491,7 +3491,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS SQS Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3527,7 +3527,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS EC2 Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3563,7 +3563,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Timestamp Router Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3620,7 +3620,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "MySQL Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3656,7 +3656,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "HTTP Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3713,7 +3713,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "SSH Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3735,7 +3735,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Telegram Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3778,7 +3778,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Jira Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3800,7 +3800,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Has Header Filter Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3843,7 +3843,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Azure Eventhubs Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3886,7 +3886,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Dropbox Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -3950,7 +3950,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "FTP Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4021,7 +4021,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Infinispan Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4064,7 +4064,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Github Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4077,7 +4077,7 @@ export default [
     "name": "kafka-manual-commit-action",
     "subType": "KAMELET",
     "title": "Kafka Manual Commit Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4127,7 +4127,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS Translate Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4163,7 +4163,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Azure Storage Queue Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4192,7 +4192,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Avro Serialize Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4228,7 +4228,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "JMS - AMQP 1.0 Kamelet Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4292,7 +4292,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "MariaDB Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4363,7 +4363,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Cassandra Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4385,7 +4385,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Bitcoin Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4428,7 +4428,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS Kinesis Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4478,7 +4478,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Dropbox Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4542,7 +4542,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Azure Eventhubs Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4578,7 +4578,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "JMS - Apache Artemis Kamelet Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4642,7 +4642,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Fhir Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4692,7 +4692,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Minio Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4756,7 +4756,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "HTTP Secured Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4785,7 +4785,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Earthquake Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4828,7 +4828,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Azure Storage Blob Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4885,7 +4885,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "MariaDB Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4914,7 +4914,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Avro Deserialize Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -4943,7 +4943,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "NATS Sink",
-    "type": "CONNECTOR"
+    "type": "END"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -5028,7 +5028,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Google Mail Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -5098,7 +5098,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "AWS DynamoDB Streams Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -5155,7 +5155,7 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Mail IMAP Source",
-    "type": "CONNECTOR"
+    "type": "START"
   },
   {
     "apiVersion": "camel.apache.org/v1alpha1",
@@ -5198,6 +5198,6 @@ export default [
     ],
     "subType": "KAMELET",
     "title": "Message Timestamp Router Action",
-    "type": "CONNECTOR"
+    "type": "MIDDLE"
   }
 ];

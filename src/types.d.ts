@@ -24,7 +24,7 @@ export interface IStepProps {
   parameters?: any[],
   subType?: string, // should be 'KAMELET'
   title?: string,
-  type?: string // e.g. 'CONNECTOR'
+  type?: string // e.g. 'START', 'MIDDLE', 'END'
 }
 
 export interface IViewDataResponse {
