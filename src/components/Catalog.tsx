@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IStepProps } from '../types';
-import { Gallery, GalleryItem, Tabs, Tab, TabTitleText } from '@patternfly/react-core';
+import { Tabs, Tab, TabTitleText } from '@patternfly/react-core';
 import './catalog.css';
 
 interface ICatalog {
@@ -8,10 +8,6 @@ interface ICatalog {
   middle: IStepProps[],
   start: IStepProps[]
 }
-
-const maxWidths = {
-  sm: '75px'
-};
 
 const Catalog = ({ end, middle, start }: ICatalog) => {
   const [activeTabKey, setActiveTabKey] = React.useState();
@@ -22,44 +18,42 @@ const Catalog = ({ end, middle, start }: ICatalog) => {
   };
 
   return (
-    <Tabs activeKey={activeTabKey} isFilled={true} onSelect={onTabSelected}>
+    <Tabs activeKey={activeTabKey} isBox={true} onSelect={onTabSelected}>
       <Tab eventKey={0} title={<TabTitleText>Start</TabTitleText>}>
-        <div className={'tab-one'}>
-        <Gallery maxWidths={{...maxWidths}} className={'gallery'}>
+        <div className={'tabContent'}>
           {start.map((step, idx) => {
             return (
-              <GalleryItem key={idx} className={'galleryItem'}>
-                <img src={step.icon} width={46} /><br/>
+              <div key={idx} className={'galleryItem'}>
+                <img src={step.icon} className={'galleryImage'}/><br/>
                 <span className={'stepName'}>{ step.name }</span>
-              </GalleryItem>
+              </div>
             );
           })}
-        </Gallery>
         </div>
       </Tab>
       <Tab eventKey={1} title={<TabTitleText>Middle</TabTitleText>}>
-        <Gallery hasGutter={true} maxWidths={{...maxWidths}} className={'gallery'}>
+        <div className={'tabContent'}>
           {middle.map((step, idx) => {
             return (
-              <GalleryItem key={idx} className={'galleryItem'}>
-                <img src={step.icon} width={46} /><br/>
+              <div key={idx} className={'galleryItem'}>
+                <img src={step.icon} className={'galleryImage'}/><br/>
                 <span className={'stepName'}>{ step.name }</span>
-              </GalleryItem>
+              </div>
             );
           })}
-        </Gallery>
+        </div>
       </Tab>
       <Tab eventKey={2} title={<TabTitleText>End</TabTitleText>}>
-        <Gallery hasGutter={true} maxWidths={{...maxWidths}} className={'gallery'}>
+        <div className={'tabContent'}>
           {end.map((step, idx) => {
             return (
-              <GalleryItem key={idx} className={'galleryItem'}>
-                <img src={step.icon} width={46} /><br/>
+              <div key={idx} className={'galleryItem'}>
+                <img src={step.icon} className={'galleryImage'}/><br/>
                 <span className={'stepName'}>{ step.name }</span>
-              </GalleryItem>
+              </div>
             );
           })}
-        </Gallery>
+        </div>
       </Tab>
     </Tabs>
 

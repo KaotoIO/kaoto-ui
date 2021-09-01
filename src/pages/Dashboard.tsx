@@ -1,6 +1,9 @@
 import {
   Grid,
   GridItem,
+  Tab,
+  Tabs,
+  TabTitleText
 } from '@patternfly/react-core';
 //import { VizReactFlow } from '../components/VizReactFlow';
 import { Catalog } from '../components/Catalog';
@@ -23,9 +26,17 @@ const Dashboard = () => {
   const [catalogData, setCatalogData] = React.useState<{ start: IStepProps[], middle: IStepProps[], end: IStepProps[] }>({ start: [], middle: [], end: [] });
   const [stepData, setStepData] = React.useState<IStepProps[]>([]);
   const [yamlData, setYamlData] = React.useState(exampleData);
+  // const [isCatalogCollapsed, setIsCatalogCollapsed] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const previousYaml = usePrevious(yamlData);
+
+  const [activeTabKey, setActiveTabKey] = React.useState();
+
+  const onTabSelected = (event, tabIndex) => {
+    setActiveTabKey(tabIndex);
+    return;
+  };
 
   React.useEffect(() => {
     if(previousYaml === yamlData) {
@@ -93,14 +104,18 @@ const Dashboard = () => {
   return (
     <>
       <Grid>
-        <GridItem span={5}>
-          <YAMLEditor yamlData={ yamlData } handleChanges={handleChanges} />
+        <GridItem span={4}>
+          <Tabs activeKey={activeTabKey} isFilled={true} onSelect={onTabSelected}>
+            <Tab eventKey={0} title={<TabTitleText>Editor</TabTitleText>}>
+              <YAMLEditor yamlData={ yamlData } handleChanges={handleChanges} />
+            </Tab>
+            <Tab eventKey={1} title={<TabTitleText>Catalog</TabTitleText>}>
+              <Catalog start={catalogData.start} middle={catalogData.middle} end={catalogData.end} />
+            </Tab>
+          </Tabs>
         </GridItem>
-        <GridItem span={5}>
+        <GridItem span={8}>
           <VizKonva isError={isError} isLoading={isLoading} steps={stepData}/>
-        </GridItem>
-        <GridItem span={2}>
-          <Catalog start={catalogData.start} middle={catalogData.middle} end={catalogData.end} />
         </GridItem>
       </Grid>
     </>

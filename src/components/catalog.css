@@ -1,8 +1,11 @@
-.tab-one {
+.tabContent {
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(160px, 1fr));
 }
 
 .gallery {
+    display: flex;
     max-height: 800px;
     overflow-y: auto;
 }
@@ -10,8 +13,25 @@
 .galleryItem {
     overflow: auto;
     padding: 5px;
+    text-align: center;
+}
+
+.galleryImage {
+    border: 3px solid rgb(204, 204, 204);
+    border-radius: 100%;
+    height: 75px;
+    width: 75px;
+    padding: 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+.step {
+    width: 45px;
 }
 
 .stepName {
     font-size: x-small;
 }
+
+
