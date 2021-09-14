@@ -6,15 +6,15 @@ import createImage from '../utils/createImage';
 // import { StepDetail } from './StepDetail';
 import {
   Drawer,
-  DrawerPanelBody,
-  DrawerPanelContent,
+  DrawerActions,
+  DrawerCloseButton,
   DrawerContent,
   DrawerContentBody,
   DrawerHead,
-  DrawerActions,
-  DrawerCloseButton,
+  DrawerPanelBody,
+  DrawerPanelContent,
 } from '@patternfly/react-core';
-import './VizKonva.css';
+import './Visualization.css';
 
 interface IVizKonva {
   isError?: boolean;
@@ -24,7 +24,7 @@ interface IVizKonva {
 
 const CIRCLE_LENGTH = 75;
 
-const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
+const Visualization = ({ isError, isLoading, steps }: IVizKonva) => {
   const yAxis = window.innerHeight / 2;
 
   const incrementAmt = 100;
@@ -45,13 +45,13 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
     };
 
     // Grab the previous step to use for determining position and drawing edges
-    const previousStep = stepsAsElements[index-1];
+    const previousStep = stepsAsElements[index - 1];
 
     /**
      * Determine first & last steps
      * Label as input/output, respectively
      */
-    switch(index) {
+    switch (index) {
       case 0:
         // First item in `steps` array
         inputStep.position.x = 100;
@@ -69,7 +69,8 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
     return;
   });
 
-  const onDragEnd = e => {};
+  const onDragEnd = e => {
+  };
 
   const imageProps = {
     height: 40,
@@ -94,21 +95,25 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
     setIsExpanded(false);
   };
 
-  const panelContent = (
-    <DrawerPanelContent>
-      <DrawerHead>
+  const panelContent = (data?: any) => {
+    console.log('hello!');
+
+    return (
+      <DrawerPanelContent>
+        <DrawerHead>
           <span tabIndex={isExpanded ? 0 : -1} ref={drawerRef}>
             Step Details
           </span>
-        <DrawerActions>
-          <DrawerCloseButton onClick={onCloseClick} />
-        </DrawerActions>
-      </DrawerHead>
-      <DrawerPanelBody>
-        <>Details go here</>
-      </DrawerPanelBody>
-    </DrawerPanelContent>
-  );
+          <DrawerActions>
+            <DrawerCloseButton onClick={onCloseClick}/>
+          </DrawerActions>
+        </DrawerHead>
+        <DrawerPanelBody>
+          <>Details go here</>
+        </DrawerPanelBody>
+      </DrawerPanelContent>
+    )
+  };
 
   // Stage is a div container
   // Layer is actual canvas element (so you may have several canvases in the stage)
@@ -118,49 +123,50 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
       <Drawer isExpanded={isExpanded} onExpand={onExpand}>
         <DrawerContent panelContent={panelContent} className={'panelCustom'}>
           <DrawerContentBody>
-          <Stage width={window.innerWidth} height={window.innerHeight}>
-            <Layer>
-              <Group x={100} y={200} onDragEnd={onDragEnd} draggable>
-                <Line
-                  points={[
-                    100, 0,
-                    steps.length * incrementAmt, 0
-                  ]}
-                  stroke={'black'}
-                  strokeWidth={3}
-                  lineCap={'round'}
-                  lineJoin={'round'}
-                />
-                {stepsAsElements.map((item, index) => {
-                  const image = {
-                    image: createImage(item.icon),
-                    x: item.position.x - (imageProps.width / 2),
-                    y: 0 - (imageProps.height / 2),
-                    height: imageProps.height,
-                    width: imageProps.width
-                  };
+            <Stage width={window.innerWidth} height={window.innerHeight}>
+              <Layer>
+                <Group x={100} y={200} onDragEnd={onDragEnd} draggable>
+                  <Line
+                    points={[
+                      100, 0,
+                      steps.length * incrementAmt, 0
+                    ]}
+                    stroke={'black'}
+                    strokeWidth={3}
+                    lineCap={'round'}
+                    lineJoin={'round'}
+                  />
+                  {stepsAsElements.map((item, index) => {
+                    const image = {
+                      image: createImage(item.icon),
+                      x: item.position.x - (imageProps.width / 2),
+                      y: 0 - (imageProps.height / 2),
+                      height: imageProps.height,
+                      width: imageProps.width
+                    };
 
-                  return (
-                    <Group key={index} onClick={handleClick}>
-                      <Circle
-                        x={item.position.x}
-                        y={0}
-                        key={index}
-                        name={`${index}`}
-                        stroke={index === 0 ? 'rgb(0, 136, 206)' : 'rgb(204, 204, 204)'}
-                        fill={'white'}
-                        strokeWidth={3}
-                        width={CIRCLE_LENGTH}
-                        height={CIRCLE_LENGTH}
-                      />
-                      <Image {...image} />
-                      <Text x={item.position.x - (CIRCLE_LENGTH)} y={(CIRCLE_LENGTH / 2) + 10} align={'center'} width={150} fontSize={11} text={item.name} />
-                    </Group>
-                  )
-                })}
-              </Group>
-            </Layer>
-          </Stage>
+                    return (
+                      <Group key={index} onClick={handleClick}>
+                        <Circle
+                          x={item.position.x}
+                          y={0}
+                          key={index}
+                          name={`${index}`}
+                          stroke={index === 0 ? 'rgb(0, 136, 206)' : 'rgb(204, 204, 204)'}
+                          fill={'white'}
+                          strokeWidth={3}
+                          width={CIRCLE_LENGTH}
+                          height={CIRCLE_LENGTH}
+                        />
+                        <Image {...image} />
+                        <Text x={item.position.x - (CIRCLE_LENGTH)} y={(CIRCLE_LENGTH / 2) + 10} align={'center'}
+                              width={150} fontSize={11} text={item.name}/>
+                      </Group>
+                    )
+                  })}
+                </Group>
+              </Layer>
+            </Stage>
           </DrawerContentBody>
         </DrawerContent>
       </Drawer>
@@ -168,4 +174,4 @@ const VizKonva = ({ isError, isLoading, steps }: IVizKonva) => {
   );
 }
 
-export { VizKonva };
+export { Visualization };
