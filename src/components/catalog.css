@@ -17,6 +17,7 @@
 }
 
 .galleryImage {
+    background-color: #FFFFFF;
     border: 3px solid rgb(204, 204, 204);
     border-radius: 100%;
     height: 75px;

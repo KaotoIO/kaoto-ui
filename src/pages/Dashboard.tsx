@@ -26,7 +26,6 @@ const Dashboard = () => {
   const [catalogData, setCatalogData] = React.useState<{ start: IStepProps[], middle: IStepProps[], end: IStepProps[] }>({ start: [], middle: [], end: [] });
   const [stepData, setStepData] = React.useState<IStepProps[]>([]);
   const [yamlData, setYamlData] = React.useState(exampleData);
-  // const [isCatalogCollapsed, setIsCatalogCollapsed] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const previousYaml = usePrevious(yamlData);
