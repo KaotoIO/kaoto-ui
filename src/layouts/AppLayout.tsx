@@ -11,7 +11,7 @@ import {
   SkipToContent,
 } from '@patternfly/react-core';
 import { routes, IAppRoute, IAppRouteGroup } from '../routes';
-import logo from '../assets/images/patternfly-logo.svg';
+import logo from '../assets/images/logo-temp.png';
 
 interface IAppLayout {
   children: React.ReactNode;
@@ -39,7 +39,7 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
     function handleClick() {
       history.push('/');
     }
-    return <img src={logo} onClick={handleClick} alt="Zimara Logo" />;
+    return <img src={logo} onClick={handleClick} alt="Zimara Logo" style={{maxWidth: '50%'}} />;
   }
 
   const Header = (
