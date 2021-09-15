@@ -5,17 +5,14 @@ import {
   Tabs,
   TabTitleText
 } from '@patternfly/react-core';
-//import { VizReactFlow } from '../components/VizReactFlow';
 import { Catalog } from '../components/Catalog';
 import { Visualization } from '../components/Visualization';
 import { YAMLEditor } from '../components/YAMLEditor';
 import usePrevious from '../utils/usePrevious';
 import request from '../utils/request';
-// import sortSteps from '../utils/sortSteps';
 import * as React from 'react';
 import { IStepProps, IViewData } from '../types';
 import YAML from '../stories/data/yaml';
-import sortSteps from '../utils/sortSteps';
 
 /**
  * Temporarily providing initial YAML data
@@ -23,7 +20,7 @@ import sortSteps from '../utils/sortSteps';
 const exampleData = YAML;
 
 const Dashboard = () => {
-  const [catalogData, setCatalogData] = React.useState<{ start: IStepProps[], middle: IStepProps[], end: IStepProps[] }>({ start: [], middle: [], end: [] });
+  const [catalogData, setCatalogData] = React.useState<IStepProps[]>([]);
   const [stepData, setStepData] = React.useState<IStepProps[]>([]);
   const [yamlData, setYamlData] = React.useState(exampleData);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -72,9 +69,7 @@ const Dashboard = () => {
         });
 
         const data = await resp.json();
-        const sortedData = sortSteps(data);
-
-        setCatalogData({ start: sortedData.start, middle: sortedData.middle, end: sortedData.end });
+        setCatalogData(data);
       } catch (err) {
         console.error(err);
       }
@@ -109,7 +104,7 @@ const Dashboard = () => {
               <YAMLEditor yamlData={ yamlData } handleChanges={handleChanges} />
             </Tab>
             <Tab eventKey={1} title={<TabTitleText>Catalog</TabTitleText>}>
-              <Catalog start={catalogData.start} middle={catalogData.middle} end={catalogData.end} />
+              <Catalog steps={catalogData} />
             </Tab>
           </Tabs>
         </GridItem>
