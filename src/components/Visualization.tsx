@@ -88,9 +88,7 @@ const Visualization = ({ isError, isLoading, steps }: IVisualization) => {
   const handleClick = (e) => {
     // TODO: Cleanup
     if((selectedStepId.current && e.target.id() && (e.target.id() !== selectedStepId.current)) || !selectedStepId.current) {
-      //console.log('e.target.id(): ' + e.target.id());
       const newSelectedStep = stepsAsElements[e.target.id()];
-      //console.table(newSelectedStep);
       selectedStepId.current = e.target.id();
       setSelectedStep(newSelectedStep);
     }
