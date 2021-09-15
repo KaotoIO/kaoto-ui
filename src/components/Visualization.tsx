@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
+import { Grid, GridItem } from '@patternfly/react-core';
 //import { v4 as uuidv4 } from 'uuid';
 import { IStepProps } from '../types';
 import createImage from '../utils/createImage';
@@ -108,19 +109,34 @@ const Visualization = ({ isError, isLoading, steps }: IVisualization) => {
   const panelContent = (
       <DrawerPanelContent isResizable
                           id={'right-resize-panel'}
-                          defaultSize={'500px'}
+                          defaultSize={'600px'}
                           minSize={'150px'}>
         <DrawerHead>
-          <span tabIndex={isExpanded ? 0 : -1} ref={drawerRef}>
+          <h3 className={'pf-c-title pf-m-2xl'} tabIndex={isExpanded ? 0 : -1} ref={drawerRef}>
             Step Details
-          </span>
+          </h3>
           <DrawerActions>
             <DrawerCloseButton onClick={onCloseClick}/>
           </DrawerActions>
         </DrawerHead>
         <DrawerPanelBody>
-          <p><b>Name</b>: {selectedStep.name} </p>
-          <p><b>Step ID</b>: {selectedStep.id}</p>
+          <Grid hasGutter>
+            <GridItem span={3}><b>Name</b></GridItem>
+            <GridItem span={6}>{selectedStep.name}</GridItem>
+            <GridItem span={3} rowSpan={2}><img src={selectedStep.icon} style={{maxWidth: '50%'}}/></GridItem>
+            <GridItem span={3}><b>Title</b></GridItem>
+            <GridItem span={6}>{selectedStep.title}</GridItem>
+            <GridItem span={3}><b>Description</b></GridItem>
+            <GridItem span={9}>{selectedStep.description}</GridItem>
+            <GridItem span={3}><b>Group</b></GridItem>
+            <GridItem span={9}>{selectedStep.group}</GridItem>
+            <GridItem span={3}><b>API Version</b></GridItem>
+            <GridItem span={9}>{selectedStep.apiVersion}</GridItem>
+            <GridItem span={3}><b>Kind</b></GridItem>
+            <GridItem span={9}>{selectedStep.kind}</GridItem>
+            <GridItem span={3}><b>Kamelet Type</b></GridItem>
+            <GridItem span={9}>{selectedStep.kameletType}</GridItem>
+          </Grid>
         </DrawerPanelBody>
       </DrawerPanelContent>
     );
