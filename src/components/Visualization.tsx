@@ -109,7 +109,7 @@ const Visualization = ({ isError, isLoading, steps }: IVisualization) => {
   const panelContent = (
       <DrawerPanelContent isResizable
                           id={'right-resize-panel'}
-                          defaultSize={'600px'}
+                          defaultSize={'500px'}
                           minSize={'150px'}>
         <DrawerHead>
           <h3 className={'pf-c-title pf-m-2xl'} tabIndex={isExpanded ? 0 : -1} ref={drawerRef}>
