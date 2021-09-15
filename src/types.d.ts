@@ -13,18 +13,18 @@ declare var process : {
  * TODO: Check swagger for accurate types
  */
 export interface IStepProps {
-  apiVersion?: string,
+  apiVersion: string,
   description?: string,
   group?: string,
-  icon?: string,
+  icon: string,
   id: string,
   kameletType?: string,
   kind?: string,
-  name?: string,
+  name: string,
   parameters?: any[],
   subType?: string, // should be 'KAMELET'
   title?: string,
-  type?: string // e.g. 'START', 'MIDDLE', 'END'
+  type: string // e.g. 'START', 'MIDDLE', 'END'
 }
 
 export interface IViewDataResponse {

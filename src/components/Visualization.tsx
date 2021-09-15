@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
-import { v4 as uuidv4 } from 'uuid';
+//import { v4 as uuidv4 } from 'uuid';
 import { IStepProps } from '../types';
 import createImage from '../utils/createImage';
 // import { StepDetail } from './StepDetail';
@@ -16,7 +16,7 @@ import {
 } from '@patternfly/react-core';
 import './Visualization.css';
 
-interface IVizKonva {
+interface IVisualization {
   isError?: boolean;
   isLoading?: boolean;
   steps: IStepProps[];
@@ -24,7 +24,7 @@ interface IVizKonva {
 
 const CIRCLE_LENGTH = 75;
 
-const Visualization = ({ isError, isLoading, steps }: IVizKonva) => {
+const Visualization = ({ isError, isLoading, steps }: IVisualization) => {
   const yAxis = window.innerHeight / 2;
 
   const incrementAmt = 100;
@@ -32,15 +32,23 @@ const Visualization = ({ isError, isLoading, steps }: IVizKonva) => {
   const stepsAsElements: any[] = [];
   const [isExpanded, setIsExpanded] = React.useState(false);
   const drawerRef = React.createRef<HTMLDivElement>();
-  // const [stepDetails, setStepDetails] = React.useState();
+  const selectedStepId = React.useRef();
+  const [selectedStep, setSelectedStep] = React.useState<IStepProps>({
+    apiVersion: '',
+    icon: '',
+    id: '',
+    name: '',
+    type: ''
+  });
 
   steps.map((step, index) => {
-    const currentStepId = uuidv4();
+    //const generateStepId = uuidv4();
 
     let inputStep = {
       ...step,
-      data: { label: step?.name },
-      id: currentStepId,
+      data: { label: step.name },
+      //id: generateStepId,
+      id: index.toString(),
       position: { x: 300, y: yAxis }
     };
 
@@ -78,12 +86,16 @@ const Visualization = ({ isError, isLoading, steps }: IVizKonva) => {
   };
 
   const handleClick = (e) => {
-    //console.log('clicked!');
-    console.log(e.target);
-    const expanded = !isExpanded;
-    // setStepDetails(e.target.parent.children[1]);
-    // console.log('stepDetail: ' + stepDetails);
-    setIsExpanded(expanded);
+    // TODO: Cleanup
+    if((selectedStepId.current && e.target.id() && (e.target.id() !== selectedStepId.current)) || !selectedStepId.current) {
+      //console.log('e.target.id(): ' + e.target.id());
+      const newSelectedStep = stepsAsElements[e.target.id()];
+      //console.table(newSelectedStep);
+      selectedStepId.current = e.target.id();
+      setSelectedStep(newSelectedStep);
+    }
+
+    setIsExpanded(!isExpanded);
   };
 
   const onExpand = () => {
@@ -95,11 +107,11 @@ const Visualization = ({ isError, isLoading, steps }: IVizKonva) => {
     setIsExpanded(false);
   };
 
-  const panelContent = (data?: any) => {
-    console.log('hello!');
-
-    return (
-      <DrawerPanelContent>
+  const panelContent = (
+      <DrawerPanelContent isResizable
+                          id={'right-resize-panel'}
+                          defaultSize={'500px'}
+                          minSize={'150px'}>
         <DrawerHead>
           <span tabIndex={isExpanded ? 0 : -1} ref={drawerRef}>
             Step Details
@@ -109,11 +121,11 @@ const Visualization = ({ isError, isLoading, steps }: IVizKonva) => {
           </DrawerActions>
         </DrawerHead>
         <DrawerPanelBody>
-          <>Details go here</>
+          <p><b>Name</b>: {selectedStep.name} </p>
+          <p><b>Step ID</b>: {selectedStep.id}</p>
         </DrawerPanelBody>
       </DrawerPanelContent>
-    )
-  };
+    );
 
   // Stage is a div container
   // Layer is actual canvas element (so you may have several canvases in the stage)
@@ -138,6 +150,7 @@ const Visualization = ({ isError, isLoading, steps }: IVizKonva) => {
                   />
                   {stepsAsElements.map((item, index) => {
                     const image = {
+                      id: item.id,
                       image: createImage(item.icon),
                       x: item.position.x - (imageProps.width / 2),
                       y: 0 - (imageProps.height / 2),
