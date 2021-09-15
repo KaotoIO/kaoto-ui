@@ -134,8 +134,12 @@ const Visualization = ({ isError, isLoading, steps }: IVisualization) => {
             <GridItem span={9}>{selectedStep.apiVersion}</GridItem>
             <GridItem span={3}><b>Kind</b></GridItem>
             <GridItem span={9}>{selectedStep.kind}</GridItem>
-            <GridItem span={3}><b>Kamelet Type</b></GridItem>
-            <GridItem span={9}>{selectedStep.kameletType}</GridItem>
+            {selectedStep.kameletType && (
+              <>
+              <GridItem span={3}><b>Kamelet Type</b></GridItem>
+              <GridItem span={9}>{selectedStep.kameletType}</GridItem>
+              </>
+            )}
           </Grid>
         </DrawerPanelBody>
       </DrawerPanelContent>
