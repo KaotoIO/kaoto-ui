@@ -98,7 +98,7 @@ const Dashboard = () => {
   return (
     <>
       <Grid>
-        <GridItem span={activeTabKey === 1 ? 2 : 4}>
+        <GridItem span={activeTabKey === 1 ? 3 : 4}>
           <Tabs activeKey={activeTabKey} isFilled={true} onSelect={onTabSelected}>
             <Tab eventKey={0} title={<TabTitleText>Editor</TabTitleText>}>
               <YAMLEditor yamlData={ yamlData } handleChanges={handleChanges} />
@@ -108,7 +108,7 @@ const Dashboard = () => {
             </Tab>
           </Tabs>
         </GridItem>
-        <GridItem span={activeTabKey === 1 ? 10 : 8}>
+        <GridItem span={activeTabKey === 1 ? 9 : 8}>
           <Visualization isError={isError} isLoading={isLoading} steps={stepData}/>
         </GridItem>
       </Grid>

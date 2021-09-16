@@ -1,34 +1,11 @@
-.tabContent {
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(160px, 1fr));
-}
 
-.gallery {
-    display: flex;
-    max-height: 800px;
-    overflow-y: auto;
-}
+.catalog {}
 
-.catalogStep {
-    overflow: auto;
-    padding: 5px;
-    text-align: center;
-    background: white;
-    margin: 5px;
+.step {
     border-radius: 15px;
 }
 
-.galleryItem {
-    overflow: auto;
-    padding: 5px;
-    text-align: center;
-}
-
-.galleryImage {
-    background-color: #FFFFFF;
-    border: 3px solid rgb(204, 204, 204);
-    border-radius: 100%;
+.stepImage {
     height: 75px;
     width: 75px;
     padding: 15px;
@@ -36,12 +13,6 @@
     justify-content: center;
 }
 
-.step {
-    width: 45px;
-}
-
-.stepName {
-    font-size: x-small;
-}
+.stepName {}
 
 
