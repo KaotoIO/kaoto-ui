@@ -1,5 +1,15 @@
 //import * as React from 'react';
-import { Bullseye, Card, CardBody, CardTitle, Gallery, Grid, GridItem, Label, PageSection } from '@patternfly/react-core';
+import {
+  Bullseye,
+  Card,
+  CardBody,
+  CardTitle,
+  Gallery,
+  Grid,
+  GridItem,
+  Label,
+  PageSection
+} from '@patternfly/react-core';
 import { IStepProps } from '../types';
 import './catalog.css';
 
