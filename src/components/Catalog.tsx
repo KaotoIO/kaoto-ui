@@ -13,23 +13,23 @@ const Catalog = (props: ICatalog) => {
       <Gallery hasGutter={true}>
       {props.steps.map((step, idx) => {
         return (
-          <Card key={idx} className={'step'}>
+          <Card key={idx} className={'step'} isCompact={true} isHoverable={true}>
             <Grid md={6}>
               <GridItem span={2}>
                 <Bullseye>
                   <img src={step.icon} className={'stepImage'}/>
                 </Bullseye>
               </GridItem>
-              <GridItem span={8}>
+              <GridItem span={7}>
                 <CardTitle>
-                  <span className={'stepName'}>{step.name}</span>
+                  <span>{step.name}</span>
                 </CardTitle>
-                <CardBody key={idx}>
+                <CardBody>
                   {step.description}
                 </CardBody>
               </GridItem>
-              <GridItem span={2}>
-                <Label color={'blue'}>SOURCE</Label>
+              <GridItem span={3}>
+                <Label color={'blue'} className={'stepLabel'}>SOURCE</Label>
               </GridItem>
             </Grid>
           </Card>

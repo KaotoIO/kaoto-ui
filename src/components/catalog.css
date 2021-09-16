@@ -1,8 +1,7 @@
 
-.catalog {}
-
 .step {
     border-radius: 15px;
+    cursor: grab;
 }
 
 .stepImage {
@@ -13,6 +12,8 @@
     justify-content: center;
 }
 
-.stepName {}
+.stepLabel {
+    margin-top: 5px;
+}
 
 
