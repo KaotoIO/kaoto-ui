@@ -11,7 +11,7 @@ import {
   PageSection
 } from '@patternfly/react-core';
 import { IStepProps } from '../types';
-import './catalog.css';
+import './Catalog.css';
 
 interface ICatalog {
   steps: IStepProps[]
