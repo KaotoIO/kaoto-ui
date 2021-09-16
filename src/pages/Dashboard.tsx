@@ -53,7 +53,7 @@ const Dashboard = () => {
         });
 
         const data: IViewData = await resp.json();
-        setStepData(data[0].steps ?? []);
+        setStepData(data.steps ?? []);
       } catch (err) {
         console.error(err);
         setIsError(true);
@@ -98,7 +98,7 @@ const Dashboard = () => {
   return (
     <>
       <Grid>
-        <GridItem span={activeTabKey === 0 ? 4 : 2}>
+        <GridItem span={activeTabKey === 1 ? 2 : 4}>
           <Tabs activeKey={activeTabKey} isFilled={true} onSelect={onTabSelected}>
             <Tab eventKey={0} title={<TabTitleText>Editor</TabTitleText>}>
               <YAMLEditor yamlData={ yamlData } handleChanges={handleChanges} />
@@ -108,7 +108,7 @@ const Dashboard = () => {
             </Tab>
           </Tabs>
         </GridItem>
-        <GridItem span={activeTabKey === 0 ? 8 : 10}>
+        <GridItem span={activeTabKey === 1 ? 10 : 8}>
           <Visualization isError={isError} isLoading={isLoading} steps={stepData}/>
         </GridItem>
       </Grid>

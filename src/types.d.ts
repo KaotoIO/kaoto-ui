@@ -27,11 +27,21 @@ export interface IStepProps {
   type: string // e.g. 'START', 'MIDDLE', 'END'
 }
 
-export interface IViewDataResponse {
-  id?: string; // Optional since we only care about steps for now
-  name?: string; // Optional since we only care about steps for now
-  steps?: IStepProps[];
-  type?: string; // Optional since we only care about steps for now
+export interface IViewConstraintsProps {
+  mandatory?: boolean;
+  operation?: string;
+  parameter?: string;
 }
 
-export interface IViewData extends Array<IViewDataResponse> {}
+export interface IViewProps {
+  id: string;
+  name: string;
+  type: 'step' | 'generic';
+  constraints?: IViewConstraintsProps[];
+}
+
+export interface IViewData {
+  steps: IStepProps[];
+  views: IViewProps[];
+}
+
