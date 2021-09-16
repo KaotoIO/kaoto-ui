@@ -1,8 +1,6 @@
 import * as React from 'react';
 
 import {
-  Button,
-  ButtonVariant,
   InputGroup,
   TextInput,
   ToggleGroup,
@@ -22,10 +20,7 @@ import {
 } from '@patternfly/react-core';
 import { IStepProps } from '../types';
 import './Catalog.css';
-import SearchIcon from '@patternfly/react-icons/dist/esm/icons/search-icon';
-import UndoIcon from '@patternfly/react-icons/dist/esm/icons/undo-icon';
-import CopyIcon from '@patternfly/react-icons/dist/esm/icons/copy-icon';
-import ShareSquareIcon from '@patternfly/react-icons/dist/esm/icons/share-square-icon';
+import CogIcon from '@patternfly/react-icons/dist/esm/icons/cog-icon';
 
 interface ICatalog {
   steps: IStepProps[]
@@ -49,7 +44,7 @@ const Catalog = (props: ICatalog) => {
     const id = event.currentTarget.id;
     setIsSelected({...isSelected, [id]: isSelected});
   };
-  
+
   function search(items) {
     return items.filter((item) => {
         return (
@@ -60,7 +55,7 @@ const Catalog = (props: ICatalog) => {
 
   return (
     <PageSection style={{backgroundColor: '#F9F9F9'}}>
-      <Toolbar id={'toolbar'}>
+      <Toolbar id={'toolbar'} style={{background: 'transparent'}}>
         <ToolbarContent>{(
           <>
             <ToolbarItem>
@@ -68,28 +63,26 @@ const Catalog = (props: ICatalog) => {
                 <TextInput name={'stepSearch'}
                            id={'stepSearch'}
                            type={'search'}
+                           placeholder={'search for a step...'}
                            aria-label={'search for a step'}
                            value={query}
                            onChange={changeSearch}/>
-                <Button variant={ButtonVariant.control} aria-label={'search button for search input'}>
-                  <SearchIcon/>
-                </Button>
               </InputGroup>
             </ToolbarItem>
             <ToolbarItem variant={'separator'}/>
             <ToolbarItem>
               <ToggleGroup aria-label={'Icon variant toggle group'}>
-                <ToggleGroupItem icon={<CopyIcon/>}
+                <ToggleGroupItem text={'start'}
                                  aria-label={'copy icon button'}
                                  buttonId={'start'}
                                  isSelected={isSelected.start}
                                  onChange={handleItemClick}/>
-                <ToggleGroupItem icon={<UndoIcon/>}
+                <ToggleGroupItem icon={<CogIcon/>}
                                  aria-label={'undo icon button'}
                                  buttonId={'middle'}
                                  isSelected={isSelected.middle}
                                  onChange={handleItemClick}/>
-                <ToggleGroupItem icon={<ShareSquareIcon/>}
+                <ToggleGroupItem text={'end'}
                                  aria-label={'share square icon button'}
                                  buttonId={'end'}
                                  isSelected={isSelected.end}
