@@ -29,7 +29,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
   const incrementAmt = 100;
   const stepsAsElements: any[] = [];
   const drawerRef = React.createRef<HTMLDivElement>();
-  const [isExpanded, setIsExpanded] = React.useState(false);
+  const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
 
   const [selectedStep, setSelectedStep] = React.useState<IStepProps>({
     apiVersion: '',
@@ -82,7 +82,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
     width: 40
   };
 
-  const handleClick = (e) => {
+  const handleClickStep = (e) => {
     if(!e.target.id()) {
       return;
     }
@@ -92,15 +92,15 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
       setSelectedStep(stepsAsElements[e.target.id()]);
     }
 
-    setIsExpanded(!isExpanded);
+    setIsPanelExpanded(!isPanelExpanded);
   };
 
-  const onExpand = () => {
+  const onExpandPanel = () => {
     drawerRef.current && drawerRef.current.focus();
   };
 
-  const onCloseClick = () => {
-    setIsExpanded(false);
+  const onClosePanelClick = () => {
+    setIsPanelExpanded(false);
   };
 
   const panelContent = (
@@ -109,11 +109,11 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                           defaultSize={'500px'}
                           minSize={'150px'}>
         <DrawerHead>
-          <h3 className={'pf-c-title pf-m-2xl'} tabIndex={isExpanded ? 0 : -1} ref={drawerRef}>
+          <h3 className={'pf-c-title pf-m-2xl'} tabIndex={isPanelExpanded ? 0 : -1} ref={drawerRef}>
             Step Details
           </h3>
           <DrawerActions>
-            <DrawerCloseButton onClick={onCloseClick}/>
+            <DrawerCloseButton onClick={onClosePanelClick}/>
           </DrawerActions>
         </DrawerHead>
         <DrawerPanelBody>
@@ -147,7 +147,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
   // And then we have canvas shapes inside the Layer
   return (
     <>
-      <Drawer isExpanded={isExpanded} onExpand={onExpand}>
+      <Drawer isExpanded={isPanelExpanded} onExpand={onExpandPanel}>
         <DrawerContent panelContent={panelContent} className={'panelCustom'}>
           <DrawerContentBody>
             <Stage width={window.innerWidth} height={window.innerHeight}>
@@ -174,7 +174,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                     };
 
                     return (
-                      <Group key={index} onClick={handleClick}>
+                      <Group key={index} onClick={handleClickStep}>
                         <Circle
                           x={item.position.x}
                           y={0}
