@@ -38,7 +38,9 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [activeTabKey, setActiveTabKey] = React.useState(0);
   const drawerRef = React.createRef<HTMLDivElement>();
-  const selectedStepId = React.useRef();
+  //const selectedStepId = React.useRef();
+  //const previousStep = usePrevious(selectedStep);
+
   const [selectedStep, setSelectedStep] = React.useState<IStepProps>({
     apiVersion: '',
     icon: '',
@@ -46,6 +48,8 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
     name: '',
     type: ''
   });
+
+  React.useEffect(() => {}, []);
 
   steps.map((step, index) => {
     //const generateStepId = uuidv4();
@@ -97,13 +101,19 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
 
   const handleClick = (e) => {
     // TODO: Cleanup
+    /*
     if((selectedStepId.current && e.target.id() && (e.target.id() !== selectedStepId.current)) || !selectedStepId.current) {
       const newSelectedStep = stepsAsElements[e.target.id()];
       selectedStepId.current = e.target.id();
       setSelectedStep(newSelectedStep);
     }
-
+     */
+    if(!e.target.id()) {
+      console.log('no event.target.id(), returning..');
+      return;
+    }
     setIsExpanded(!isExpanded);
+    setSelectedStep(stepsAsElements[e.target.id()]);
   };
 
   const onExpand = () => {
@@ -112,6 +122,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
   };
 
   const onCloseClick = () => {
+    console.log('closed');
     loadStepExtension();
     setIsExpanded(false);
   };
