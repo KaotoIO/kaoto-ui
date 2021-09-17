@@ -100,20 +100,16 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
   };
 
   const handleClick = (e) => {
-    // TODO: Cleanup
-    /*
-    if((selectedStepId.current && e.target.id() && (e.target.id() !== selectedStepId.current)) || !selectedStepId.current) {
-      const newSelectedStep = stepsAsElements[e.target.id()];
-      selectedStepId.current = e.target.id();
-      setSelectedStep(newSelectedStep);
-    }
-     */
     if(!e.target.id()) {
-      console.log('no event.target.id(), returning..');
       return;
     }
+
+    // Only set state again if the ID is not the same
+    if(selectedStep.id !== e.target.id()) {
+      setSelectedStep(stepsAsElements[e.target.id()]);
+    }
+
     setIsExpanded(!isExpanded);
-    setSelectedStep(stepsAsElements[e.target.id()]);
   };
 
   const onExpand = () => {
