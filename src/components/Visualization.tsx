@@ -3,6 +3,7 @@ import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
 import { Grid, GridItem } from '@patternfly/react-core';
 import { IStepProps, IViewProps } from '../types';
 import createImage from '../utils/createImage';
+import useImage from '../utils/useImage';
 import {
   Drawer,
   DrawerActions,
@@ -14,6 +15,7 @@ import {
   DrawerPanelContent,
 } from '@patternfly/react-core';
 import './Visualization.css';
+import Konva from "konva";
 
 interface IVisualization {
   isError?: boolean;
@@ -24,11 +26,30 @@ interface IVisualization {
 
 const CIRCLE_LENGTH = 75;
 
+const URLImage = ({ image }) => {
+  const [img]: any = useImage(image.src);
+
+  return (
+    <Image
+      image={img}
+      x={image.x}
+      y={image.y}
+      // I will use offset to set origin to the center of the image
+      offsetX={img ? img.width / 2 : 0}
+      offsetY={img ? img.height / 2 : 0}
+    />
+  );
+};
+
 const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => {
   const yAxis = window.innerHeight / 2;
   const incrementAmt = 100;
   const stepsAsElements: any[] = [];
+  const dragUrl = React.useRef();
   const drawerRef = React.createRef<HTMLDivElement>();
+  const stageRef = React.useRef<Konva.Stage>(null);
+
+  const [images, setImages]: any = React.useState([]);
   const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
 
   const [selectedStep, setSelectedStep] = React.useState<IStepProps>({
@@ -120,7 +141,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
           <Grid hasGutter>
             <GridItem span={3}><b>Name</b></GridItem>
             <GridItem span={6}>{selectedStep.name}</GridItem>
-            <GridItem span={3} rowSpan={2}><img src={selectedStep.icon} style={{maxWidth: '50%'}}/></GridItem>
+            <GridItem span={3} rowSpan={2}><img src={selectedStep.icon} style={{maxWidth: '50%'}} alt={'icon'}/></GridItem>
             <GridItem span={3}><b>Title</b></GridItem>
             <GridItem span={6}>{selectedStep.title}</GridItem>
             <GridItem span={3}><b>Description</b></GridItem>
@@ -147,11 +168,37 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
   // And then we have canvas shapes inside the Layer
   return (
     <>
+      <img
+        alt="lion"
+        src="https://konvajs.org/assets/lion.png"
+        draggable="true"
+        onDragStart={(e: any) => {
+          dragUrl.current = e.target.src;
+        }}
+      />
       <Drawer isExpanded={isPanelExpanded} onExpand={onExpandPanel}>
         <DrawerContent panelContent={panelContent} className={'panelCustom'}>
           <DrawerContentBody>
-            <Stage width={window.innerWidth} height={window.innerHeight}>
+            <div onDrop={(e: any) => {
+              e.preventDefault();
+              // register event position
+              stageRef.current?.setPointersPositions(e);
+              // add image
+              setImages(
+                images.concat([
+                  {
+                    ...stageRef.current?.getPointerPosition(),
+                    src: dragUrl.current,
+                  },
+                ])
+              );
+            }}
+                 onDragOver={(e) => e.preventDefault()}>
+            <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
               <Layer>
+                {images.map((image, idx) => {
+                  return <URLImage image={image} key={idx} />;
+                })}
                 <Group x={100} y={200} onDragEnd={onDragEnd} draggable>
                   <Line
                     points={[
@@ -195,6 +242,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                 </Group>
               </Layer>
             </Stage>
+            </div>
           </DrawerContentBody>
         </DrawerContent>
       </Drawer>
