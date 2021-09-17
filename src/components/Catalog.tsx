@@ -64,7 +64,7 @@ const Catalog = (props: ICatalog) => {
   }
 
   return (
-    <PageSection style={{ backgroundColor: '#F9F9F9', maxHeight: '750px', overflow: 'auto' }}>
+    <PageSection style={{ backgroundColor: '#F9F9F9' }}>
       <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
         <ToolbarContent>{(
           <>
@@ -102,7 +102,7 @@ const Catalog = (props: ICatalog) => {
           </>
         )}</ToolbarContent>
       </Toolbar>
-      <Gallery hasGutter={true}>
+      <Gallery hasGutter={true} style={{maxHeight: '650px', overflow: 'auto'}}>
         {steps && search(steps).map((step, idx) => {
           return (
             <Card key={idx} className={'step'} isCompact={true} isHoverable={true}>
