@@ -35,7 +35,7 @@ const Catalog = (props: ICatalog) => {
   const changeSearch = (e: any) => {
     setQuery(e);
   };
-  
+
   const handleItemClick = (newIsSelected: any, event: any) => {
     setIsSelected(event.currentTarget.id);
   };
