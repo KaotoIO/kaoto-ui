@@ -1,13 +1,6 @@
 import * as React from 'react';
 
 import {
-  InputGroup,
-  TextInput,
-  ToggleGroup,
-  ToggleGroupItem,
-  Toolbar,
-  ToolbarContent,
-  ToolbarItem,
   Bullseye,
   Card,
   CardBody,
@@ -15,8 +8,15 @@ import {
   Gallery,
   Grid,
   GridItem,
+  InputGroup,
   Label,
   PageSection,
+  TextInput,
+  ToggleGroup,
+  ToggleGroupItem,
+  Toolbar,
+  ToolbarContent,
+  ToolbarItem,
 } from '@patternfly/react-core';
 import { IStepProps } from '../types';
 import './Catalog.css';
@@ -27,11 +27,7 @@ interface ICatalog {
 }
 
 const Catalog = (props: ICatalog) => {
-  const [isSelected, setIsSelected] = React.useState({
-    start: false,
-    middle: false,
-    end: false
-  });
+  const [isSelected, setIsSelected] = React.useState('START');
   const [query, setQuery] = React.useState(``);
 
   let steps: IStepProps[] = props.steps;
@@ -39,23 +35,32 @@ const Catalog = (props: ICatalog) => {
   const changeSearch = (e: any) => {
     setQuery(e);
   };
-
-  const handleItemClick = (isSelected: any, event: any) => {
-    const id = event.currentTarget.id;
-    setIsSelected({...isSelected, [id]: isSelected});
+  
+  const handleItemClick = (newIsSelected: any, event: any) => {
+    setIsSelected(event.currentTarget.id);
   };
 
+
   function search(items) {
+    /**
+     * Returns a list of items that meet
+     * meet the condition of the `type`
+     * matching the `isSelected` value,
+     * followed by the `name` containing
+     * the characters in the search query
+     */
     return items.filter((item) => {
-        return (
-          item.name.toLowerCase().indexOf(query.toLowerCase()) > -1
-        );
+      if(isSelected === item.type) {
+        return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+      } else {
+        return false;
+      }
     });
   }
 
   return (
-    <PageSection style={{backgroundColor: '#F9F9F9'}}>
-      <Toolbar id={'toolbar'} style={{background: 'transparent'}}>
+    <PageSection style={{ backgroundColor: '#F9F9F9' }}>
+      <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
         <ToolbarContent>{(
           <>
             <ToolbarItem>
@@ -74,18 +79,18 @@ const Catalog = (props: ICatalog) => {
               <ToggleGroup aria-label={'Icon variant toggle group'}>
                 <ToggleGroupItem text={'start'}
                                  aria-label={'copy icon button'}
-                                 buttonId={'start'}
-                                 isSelected={isSelected.start}
+                                 buttonId={'START'}
+                                 isSelected={isSelected === 'START'}
                                  onChange={handleItemClick}/>
                 <ToggleGroupItem icon={<CogIcon/>}
                                  aria-label={'undo icon button'}
-                                 buttonId={'middle'}
-                                 isSelected={isSelected.middle}
+                                 buttonId={'MIDDLE'}
+                                 isSelected={isSelected === 'MIDDLE'}
                                  onChange={handleItemClick}/>
                 <ToggleGroupItem text={'end'}
                                  aria-label={'share square icon button'}
-                                 buttonId={'end'}
-                                 isSelected={isSelected.end}
+                                 buttonId={'END'}
+                                 isSelected={isSelected === 'END'}
                                  onChange={handleItemClick}/>
               </ToggleGroup>
             </ToolbarItem>
@@ -93,30 +98,30 @@ const Catalog = (props: ICatalog) => {
         )}</ToolbarContent>
       </Toolbar>
       <Gallery hasGutter={true}>
-      {steps && search(steps).map((step, idx) => {
-        return (
-          <Card key={idx} className={'step'} isCompact={true} isHoverable={true}>
-            <Grid md={6}>
-              <GridItem span={2}>
-                <Bullseye>
-                  <img src={step.icon} className={'stepImage'} alt={'Step Image'}/>
-                </Bullseye>
-              </GridItem>
-              <GridItem span={7}>
-                <CardTitle>
-                  <span>{step.name}</span>
-                </CardTitle>
-                <CardBody>
-                  {step.description}
-                </CardBody>
-              </GridItem>
-              <GridItem span={3}>
-                <Label color={'blue'} className={'stepLabel'}>SOURCE</Label>
-              </GridItem>
-            </Grid>
-          </Card>
-        );
-      })}
+        {steps && search(steps).map((step, idx) => {
+          return (
+            <Card key={idx} className={'step'} isCompact={true} isHoverable={true}>
+              <Grid md={6}>
+                <GridItem span={2}>
+                  <Bullseye>
+                    <img src={step.icon} className={'stepImage'} alt={'Step Image'}/>
+                  </Bullseye>
+                </GridItem>
+                <GridItem span={7}>
+                  <CardTitle>
+                    <span>{step.name}</span>
+                  </CardTitle>
+                  <CardBody>
+                    {step.description}
+                  </CardBody>
+                </GridItem>
+                <GridItem span={3}>
+                  <Label color={'blue'} className={'stepLabel'}>SOURCE</Label>
+                </GridItem>
+              </Grid>
+            </Card>
+          );
+        })}
       </Gallery>
     </PageSection>
   );

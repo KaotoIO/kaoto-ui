@@ -20,6 +20,7 @@ import YAML from '../stories/data/yaml';
 const exampleData = YAML;
 
 const Dashboard = () => {
+  // If the catalog data won't be changing, consider removing this state
   const [catalogData, setCatalogData] = React.useState<IStepProps[]>([]);
   const [stepData, setStepData] = React.useState<IStepProps[]>([]);
   const [yamlData, setYamlData] = React.useState(exampleData);
