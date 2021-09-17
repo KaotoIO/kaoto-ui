@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
 import { Grid, GridItem } from '@patternfly/react-core';
 //import { v4 as uuidv4 } from 'uuid';
-import { IStepProps } from '../types';
+import { IStepProps, IViewProps } from '../types';
 import createImage from '../utils/createImage';
 // import { StepDetail } from './StepDetail';
 import {
@@ -14,6 +14,9 @@ import {
   DrawerHead,
   DrawerPanelBody,
   DrawerPanelContent,
+  Tab,
+  Tabs,
+  TabTitleText
 } from '@patternfly/react-core';
 import './Visualization.css';
 
@@ -21,17 +24,19 @@ interface IVisualization {
   isError?: boolean;
   isLoading?: boolean;
   steps: IStepProps[];
+  views: IViewProps[];
 }
 
 const CIRCLE_LENGTH = 75;
 
-const Visualization = ({ isError, isLoading, steps }: IVisualization) => {
+const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => {
   const yAxis = window.innerHeight / 2;
 
   const incrementAmt = 100;
 
   const stepsAsElements: any[] = [];
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const [activeTabKey, setActiveTabKey] = React.useState(0);
   const drawerRef = React.createRef<HTMLDivElement>();
   const selectedStepId = React.useRef();
   const [selectedStep, setSelectedStep] = React.useState<IStepProps>({
@@ -78,6 +83,10 @@ const Visualization = ({ isError, isLoading, steps }: IVisualization) => {
     return;
   });
 
+  const handleTabClick = (event, tabIndex) => {
+    setActiveTabKey(tabIndex);
+  };
+
   const onDragEnd = e => {
   };
 
@@ -103,7 +112,12 @@ const Visualization = ({ isError, isLoading, steps }: IVisualization) => {
   };
 
   const onCloseClick = () => {
+    loadStepExtension();
     setIsExpanded(false);
+  };
+
+  const loadStepExtension = () => {
+    //
   };
 
   const panelContent = (
@@ -120,27 +134,35 @@ const Visualization = ({ isError, isLoading, steps }: IVisualization) => {
           </DrawerActions>
         </DrawerHead>
         <DrawerPanelBody>
-          <Grid hasGutter>
-            <GridItem span={3}><b>Name</b></GridItem>
-            <GridItem span={6}>{selectedStep.name}</GridItem>
-            <GridItem span={3} rowSpan={2}><img src={selectedStep.icon} style={{maxWidth: '50%'}}/></GridItem>
-            <GridItem span={3}><b>Title</b></GridItem>
-            <GridItem span={6}>{selectedStep.title}</GridItem>
-            <GridItem span={3}><b>Description</b></GridItem>
-            <GridItem span={9}>{selectedStep.description}</GridItem>
-            <GridItem span={3}><b>Group</b></GridItem>
-            <GridItem span={9}>{selectedStep.group}</GridItem>
-            <GridItem span={3}><b>API Version</b></GridItem>
-            <GridItem span={9}>{selectedStep.apiVersion}</GridItem>
-            <GridItem span={3}><b>Kind</b></GridItem>
-            <GridItem span={9}>{selectedStep.kind}</GridItem>
-            {selectedStep.kameletType && (
-              <>
-              <GridItem span={3}><b>Kamelet Type</b></GridItem>
-              <GridItem span={9}>{selectedStep.kameletType}</GridItem>
-              </>
-            )}
-          </Grid>
+          <Tabs activeKey={activeTabKey} onSelect={handleTabClick}>
+            <Tab eventKey={0} title={<TabTitleText>Details</TabTitleText>}>
+              <Grid hasGutter>
+                <GridItem span={3}><b>Name</b></GridItem>
+                <GridItem span={6}>{selectedStep.name}</GridItem>
+                <GridItem span={3} rowSpan={2}><img src={selectedStep.icon} style={{maxWidth: '50%'}}/></GridItem>
+                <GridItem span={3}><b>Title</b></GridItem>
+                <GridItem span={6}>{selectedStep.title}</GridItem>
+                <GridItem span={3}><b>Description</b></GridItem>
+                <GridItem span={9}>{selectedStep.description}</GridItem>
+                <GridItem span={3}><b>Group</b></GridItem>
+                <GridItem span={9}>{selectedStep.group}</GridItem>
+                <GridItem span={3}><b>API Version</b></GridItem>
+                <GridItem span={9}>{selectedStep.apiVersion}</GridItem>
+                <GridItem span={3}><b>Kind</b></GridItem>
+                <GridItem span={9}>{selectedStep.kind}</GridItem>
+                {selectedStep.kameletType && (
+                  <>
+                    <GridItem span={3}><b>Kamelet Type</b></GridItem>
+                    <GridItem span={9}>{selectedStep.kameletType}</GridItem>
+                  </>
+                )}
+              </Grid>
+            </Tab>
+            <Tab eventKey={1} title={<TabTitleText>Custom</TabTitleText>}>
+              <p>Some really fun custom tab.</p>
+            </Tab>
+          </Tabs>
+
         </DrawerPanelBody>
       </DrawerPanelContent>
     );

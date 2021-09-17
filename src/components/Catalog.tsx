@@ -26,6 +26,12 @@ interface ICatalog {
   steps: IStepProps[]
 }
 
+// Shorten a string to less than maxLen characters without truncating words.
+function shorten(str, maxLen, separator = ' ') {
+  if (str.length <= maxLen) return str;
+  return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
+}
+
 const Catalog = (props: ICatalog) => {
   const [isSelected, setIsSelected] = React.useState('START');
   const [query, setQuery] = React.useState(``);
@@ -39,7 +45,6 @@ const Catalog = (props: ICatalog) => {
   const handleItemClick = (newIsSelected: any, event: any) => {
     setIsSelected(event.currentTarget.id);
   };
-
 
   function search(items) {
     /**
@@ -112,7 +117,7 @@ const Catalog = (props: ICatalog) => {
                     <span>{step.name}</span>
                   </CardTitle>
                   <CardBody>
-                    {step.description}
+                    {shorten(step.description, 60)}
                   </CardBody>
                 </GridItem>
                 <GridItem span={3}>

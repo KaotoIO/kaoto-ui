@@ -36,7 +36,7 @@ export interface IViewConstraintsProps {
 export interface IViewProps {
   id: string;
   name: string;
-  type: 'step' | 'generic';
+  type: string;
   constraints?: IViewConstraintsProps[];
 }
 

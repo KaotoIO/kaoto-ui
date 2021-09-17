@@ -22,7 +22,7 @@ const exampleData = YAML;
 const Dashboard = () => {
   // If the catalog data won't be changing, consider removing this state
   const [catalogData, setCatalogData] = React.useState<IStepProps[]>([]);
-  const [stepData, setStepData] = React.useState<IStepProps[]>([]);
+  const [viewData, setViewData] = React.useState<IViewData>({ steps: [], views: [] });
   const [yamlData, setYamlData] = React.useState(exampleData);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
@@ -54,7 +54,7 @@ const Dashboard = () => {
         });
 
         const data: IViewData = await resp.json();
-        setStepData(data.steps ?? []);
+        setViewData(data);
       } catch (err) {
         console.error(err);
         setIsError(true);
@@ -110,7 +110,7 @@ const Dashboard = () => {
           </Tabs>
         </GridItem>
         <GridItem span={activeTabKey === 1 ? 9 : 8}>
-          <Visualization isError={isError} isLoading={isLoading} steps={stepData}/>
+          <Visualization isError={isError} isLoading={isLoading} steps={viewData.steps} views={viewData.views} />
         </GridItem>
       </Grid>
     </>
