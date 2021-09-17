@@ -221,7 +221,18 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                     };
 
                     return (
-                      <Group key={index} onClick={handleClickStep}>
+                      <Group key={index}
+                             onClick={handleClickStep}
+                             onMouseEnter={(e: any) => {
+                               // style stage container:
+                               const container = e.target.getStage().container();
+                               container.style.cursor = "pointer";
+                             }}
+                             onMouseLeave={(e: any) => {
+                               const container = e.target.getStage().container();
+                               container.style.cursor = "default";
+                             }}
+                      >
                         <Circle
                           x={item.position.x}
                           y={0}
@@ -234,8 +245,13 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                           height={CIRCLE_LENGTH}
                         />
                         <Image {...image} />
-                        <Text x={item.position.x - (CIRCLE_LENGTH)} y={(CIRCLE_LENGTH / 2) + 10} align={'center'}
-                              width={150} fontSize={11} text={item.name}/>
+                        <Text x={item.position.x - (CIRCLE_LENGTH)}
+                              y={(CIRCLE_LENGTH / 2) + 10}
+                              align={'center'}
+                              width={150}
+                              fontSize={11}
+                              text={item.name}
+                        />
                       </Group>
                     )
                   })}

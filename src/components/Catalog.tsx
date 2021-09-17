@@ -64,7 +64,7 @@ const Catalog = (props: ICatalog) => {
   }
 
   return (
-    <PageSection style={{ backgroundColor: '#F9F9F9' }}>
+    <PageSection style={{ backgroundColor: '#F9F9F9', maxHeight: '750px', overflow: 'auto' }}>
       <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
         <ToolbarContent>{(
           <>
