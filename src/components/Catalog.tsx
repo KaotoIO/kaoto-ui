@@ -103,6 +103,17 @@ const Catalog = (props: ICatalog) => {
         )}</ToolbarContent>
       </Toolbar>
       <Gallery hasGutter={true} style={{maxHeight: '650px', overflow: 'auto'}}>
+        <Card key={'lion'} className={'step'} isCompact={true} isHoverable={true}>
+          <img
+            alt="lion"
+            src="https://konvajs.org/assets/lion.png"
+            draggable="true"
+            onDragStart={(e: any) => {
+              //dragUrl.current = e.target.src;
+              e.dataTransfer.setData('text/plain', e.target.src);
+            }}
+          />
+        </Card>
         {steps && search(steps).map((step, idx) => {
           return (
             <Card key={idx} className={'step'} isCompact={true} isHoverable={true}>
