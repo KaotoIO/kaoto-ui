@@ -58,9 +58,8 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
 
     // Only set state again if the ID is not the same
     if(selectedStep.model.id !== e.target.id()) {
-      //setSelectedStep(stepsAsElements[e.target.id()]);
-      //setSelectedStep({} as IStepProps);
-      const findStep: {viz: any, model: IStepProps} = steps.find(step => step.model.id === e.target.id()) ?? selectedStep;
+      const combinedSteps = steps.concat(tempSteps);
+      const findStep: {viz: any, model: IStepProps} = combinedSteps.find(step => step.model.id === e.target.id()) ?? selectedStep;
       setSelectedStep(findStep);
     }
 
