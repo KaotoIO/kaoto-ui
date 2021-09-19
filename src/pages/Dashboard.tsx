@@ -23,6 +23,7 @@ const Dashboard = () => {
   // If the catalog data won't be changing, consider removing this state
   const [catalogData, setCatalogData] = React.useState<IStepProps[]>([]);
   const [viewData, setViewData] = React.useState<IViewData>({ steps: [], views: [] });
+  const [vizData, setVizData] = React.useState<{ viz: {}, model: IStepProps }[]>([])
   const [yamlData, setYamlData] = React.useState(exampleData);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
@@ -54,6 +55,7 @@ const Dashboard = () => {
         });
 
         const data: IViewData = await resp.json();
+        prepareVizSteps(data.steps);
         setViewData(data);
       } catch (err) {
         console.error(err);
@@ -96,6 +98,56 @@ const Dashboard = () => {
     },750);
   };
 
+  const onDropFromCatalog = (e: any) => {
+    //setViewData({...vizData, });
+  };
+
+  const prepareVizSteps = (steps: any) => {
+    const yAxis = window.innerHeight / 2;
+    const incrementAmt = 100;
+    const stepsAsElements: any[] = [];
+
+    steps.map((step, index) => {
+      // TODO: extract this into something that Visualization can use too
+      let inputStep = {
+        model: {...step},
+        viz: {
+          data: { label: step.name },
+          id: index.toString(),
+          position: { x: 300, y: yAxis }
+        }
+      };
+
+      // Grab the previous step to use for determining position and drawing edges
+      const previousStep = stepsAsElements[index - 1];
+
+      /**
+       * Determine first & last steps
+       * Label as input/output, respectively
+       */
+      switch (index) {
+        case 0:
+          // First item in `steps` array
+          inputStep.viz.position.x = 100;
+          break;
+        case steps.length - 1:
+        default:
+          // Last item & middle steps in `steps` array
+          // Extract into common area for last & middle steps
+          inputStep.viz.position.x = previousStep.viz.position?.x + incrementAmt;
+          break;
+      }
+
+      // stepsAsElements.push(inputStep);
+      // something
+      stepsAsElements.push(inputStep);
+
+      return;
+    });
+
+    setVizData(stepsAsElements);
+  };
+
   return (
     <>
       <Grid>
@@ -110,7 +162,7 @@ const Dashboard = () => {
           </Tabs>
         </GridItem>
         <GridItem span={activeTabKey === 1 ? 9 : 8}>
-          <Visualization isError={isError} isLoading={isLoading} steps={viewData.steps} views={viewData.views} />
+          <Visualization handleDrop={onDropFromCatalog} isError={isError} isLoading={isLoading} steps={vizData} views={viewData.views} />
         </GridItem>
       </Grid>
     </>

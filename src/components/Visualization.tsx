@@ -3,7 +3,7 @@ import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
 import { Grid, GridItem } from '@patternfly/react-core';
 import { IStepProps, IViewProps } from '../types';
 import createImage from '../utils/createImage';
-import useImage from '../utils/useImage';
+//import useImage from '../utils/useImage';
 import {
   Drawer,
   DrawerActions,
@@ -18,14 +18,15 @@ import './Visualization.css';
 import Konva from "konva";
 
 interface IVisualization {
+  handleDrop: (e: any) => void;
   isError?: boolean;
   isLoading?: boolean;
-  steps: IStepProps[];
+  steps: {viz: any, model: IStepProps}[];
   views: IViewProps[];
 }
 
 const CIRCLE_LENGTH = 75;
-
+/*
 const URLImage = ({ image }) => {
   const [img]: any = useImage(image.src);
 
@@ -37,60 +38,43 @@ const URLImage = ({ image }) => {
       // I will use offset to set origin to the center of the image
       offsetX={img ? img.width / 2 : 0}
       offsetY={img ? img.height / 2 : 0}
+      onMouseEnter={(e: any) => {
+        // style stage container:
+        const container = e.target.getStage().container();
+        container.style.cursor = "pointer";
+      }}
+      onMouseLeave={(e: any) => {
+        const container = e.target.getStage().container();
+        container.style.cursor = "default";
+      }}
+      draggable
     />
   );
 };
 
-const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => {
-  const yAxis = window.innerHeight / 2;
-  const incrementAmt = 100;
-  const stepsAsElements: any[] = [];
-  const stageRef = React.useRef<Konva.Stage>(null);
+ */
 
-  const [images, setImages]: any = React.useState([]);
+const Visualization = ({ handleDrop, isError, isLoading, steps, views }: IVisualization) => {
+  //const yAxis = window.innerHeight / 2;
+  const incrementAmt = 100;
+  //const stepsAsElements: any[] = [];
+  //const stepsAsElements: any[] = React.useRef([]);
+  //const [stepsAsElements, setStepsAsElements]: any[] = React.useState(tempStepsAsElements);
+  const stageRef = React.useRef<Konva.Stage>(null);
+  const [tempSteps, setTempSteps]: any = React.useState([]);
+
+  //const [images, setImages]: any = React.useState([]);
   const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
 
-  const [selectedStep, setSelectedStep] = React.useState<IStepProps>({
-    apiVersion: '',
-    icon: '',
-    id: '',
-    name: '',
-    type: ''
-  });
-
-  React.useEffect(() => {}, []);
-
-  steps.map((step, index) => {
-    let inputStep = {
-      ...step,
-      data: { label: step.name },
-      id: index.toString(),
-      position: { x: 300, y: yAxis }
-    };
-
-    // Grab the previous step to use for determining position and drawing edges
-    const previousStep = stepsAsElements[index - 1];
-
-    /**
-     * Determine first & last steps
-     * Label as input/output, respectively
-     */
-    switch (index) {
-      case 0:
-        // First item in `steps` array
-        inputStep.position.x = 100;
-        break;
-      case steps.length - 1:
-      default:
-        // Last item & middle steps in `steps` array
-        // Extract into common area for last & middle steps
-        inputStep.position.x = previousStep.position?.x + incrementAmt;
-        break;
-    }
-
-    stepsAsElements.push(inputStep);
-
-    return;
+  const [selectedStep, setSelectedStep] = React.useState<{viz: any, model: IStepProps}>({
+    model: {
+      apiVersion: '',
+      icon: '',
+      id: '',
+      name: '',
+      type: ''
+    },
+    viz: {}
   });
 
   const onDragEnd = e => {
@@ -107,8 +91,11 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
     }
 
     // Only set state again if the ID is not the same
-    if(selectedStep.id !== e.target.id()) {
-      setSelectedStep(stepsAsElements[e.target.id()]);
+    if(selectedStep.model.id !== e.target.id()) {
+      //setSelectedStep(stepsAsElements[e.target.id()]);
+      //setSelectedStep({} as IStepProps);
+      const findStep: {viz: any, model: IStepProps} = steps.find(step => step.model.id === e.target.id()) ?? selectedStep;
+      setSelectedStep(findStep);
     }
 
     setIsPanelExpanded(!isPanelExpanded);
@@ -138,22 +125,22 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
         <DrawerPanelBody>
           <Grid hasGutter>
             <GridItem span={3}><b>Name</b></GridItem>
-            <GridItem span={6}>{selectedStep.name}</GridItem>
-            <GridItem span={3} rowSpan={2}><img src={selectedStep.icon} style={{maxWidth: '50%'}} alt={'icon'}/></GridItem>
+            <GridItem span={6}>{selectedStep.model.name}</GridItem>
+            <GridItem span={3} rowSpan={2}><img src={selectedStep.model.icon} style={{maxWidth: '50%'}} alt={'icon'}/></GridItem>
             <GridItem span={3}><b>Title</b></GridItem>
-            <GridItem span={6}>{selectedStep.title}</GridItem>
+            <GridItem span={6}>{selectedStep.model.title}</GridItem>
             <GridItem span={3}><b>Description</b></GridItem>
-            <GridItem span={9}>{selectedStep.description}</GridItem>
+            <GridItem span={9}>{selectedStep.model.description}</GridItem>
             <GridItem span={3}><b>Group</b></GridItem>
-            <GridItem span={9}>{selectedStep.group}</GridItem>
+            <GridItem span={9}>{selectedStep.model.group}</GridItem>
             <GridItem span={3}><b>API Version</b></GridItem>
-            <GridItem span={9}>{selectedStep.apiVersion}</GridItem>
+            <GridItem span={9}>{selectedStep.model.apiVersion}</GridItem>
             <GridItem span={3}><b>Kind</b></GridItem>
-            <GridItem span={9}>{selectedStep.kind}</GridItem>
-            {selectedStep.kameletType && (
+            <GridItem span={9}>{selectedStep.model.kind}</GridItem>
+            {selectedStep.model.kameletType && (
               <>
                 <GridItem span={3}><b>Kamelet Type</b></GridItem>
-                <GridItem span={9}>{selectedStep.kameletType}</GridItem>
+                <GridItem span={9}>{selectedStep.model.kameletType}</GridItem>
               </>
             )}
           </Grid>
@@ -171,11 +158,14 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
           <DrawerContentBody>
             <div onDrop={(e: any) => {
               e.preventDefault();
-              const dataJSON = e.dataTransfer.getData('text/plain');
-              console.log(JSON.stringify(dataJSON));
+              const dataJSON = e.dataTransfer.getData('someStep');
+              console.log(JSON.parse(JSON.stringify((dataJSON))));
               // register event position
               stageRef.current?.setPointersPositions(e);
+              handleDrop(e);
+              //stepsAsElements.push(dataJSON)
               // add image
+              /*
               setImages(
                 images.concat([
                   {
@@ -184,12 +174,11 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                   },
                 ])
               );
+               */
+              //setStepsAsElements({...stepsAsElements, dataJSON});
             }} onDragOver={(e) => e.preventDefault()}>
             <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
               <Layer>
-                {images.map((image, idx) => {
-                  return <URLImage image={image} key={idx} />;
-                })}
                 <Group x={100} y={200} onDragEnd={onDragEnd} draggable>
                   <Line
                     points={[
@@ -201,11 +190,11 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                     lineCap={'round'}
                     lineJoin={'round'}
                   />
-                  {stepsAsElements.map((item, index) => {
+                  {steps.map((item, index) => {
                     const image = {
-                      id: item.id,
-                      image: createImage(item.icon),
-                      x: item.position.x - (imageProps.width / 2),
+                      id: item.model.id,
+                      image: createImage(item.model.icon),
+                      x: item.viz.position.x - (imageProps.width / 2),
                       y: 0 - (imageProps.height / 2),
                       height: imageProps.height,
                       width: imageProps.width
@@ -225,7 +214,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                              }}
                       >
                         <Circle
-                          x={item.position.x}
+                          x={item.viz.position.x}
                           y={0}
                           key={index}
                           name={`${index}`}
@@ -236,12 +225,12 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                           height={CIRCLE_LENGTH}
                         />
                         <Image {...image} />
-                        <Text x={item.position.x - (CIRCLE_LENGTH)}
+                        <Text x={item.viz.position.x - (CIRCLE_LENGTH)}
                               y={(CIRCLE_LENGTH / 2) + 10}
                               align={'center'}
                               width={150}
                               fontSize={11}
-                              text={item.name}
+                              text={item.model.name}
                         />
                       </Group>
                     )
