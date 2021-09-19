@@ -111,7 +111,6 @@ const Catalog = (props: ICatalog) => {
                   isHoverable={true}
                   draggable="true"
                   onDragStart={(e: any) => {
-                    //e.dataTransfer.setData('text/plain', e.target.src);
                     e.dataTransfer.setData('text/plain', JSON.stringify(step));
                   }}>
               <Grid md={6}>

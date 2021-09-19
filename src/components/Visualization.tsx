@@ -18,7 +18,6 @@ import './Visualization.css';
 import Konva from "konva";
 
 interface IVisualization {
-  handleDrop: (e: any) => void;
   isError?: boolean;
   isLoading?: boolean;
   steps: {viz: any, model: IStepProps}[];
@@ -26,44 +25,11 @@ interface IVisualization {
 }
 
 const CIRCLE_LENGTH = 75;
-/*
-const URLImage = ({ image }) => {
-  const [img]: any = useImage(image.src);
 
-  return (
-    <Image
-      image={img}
-      x={image.x}
-      y={image.y}
-      // I will use offset to set origin to the center of the image
-      offsetX={img ? img.width / 2 : 0}
-      offsetY={img ? img.height / 2 : 0}
-      onMouseEnter={(e: any) => {
-        // style stage container:
-        const container = e.target.getStage().container();
-        container.style.cursor = "pointer";
-      }}
-      onMouseLeave={(e: any) => {
-        const container = e.target.getStage().container();
-        container.style.cursor = "default";
-      }}
-      draggable
-    />
-  );
-};
-
- */
-
-const Visualization = ({ handleDrop, isError, isLoading, steps, views }: IVisualization) => {
-  //const yAxis = window.innerHeight / 2;
+const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => {
   const incrementAmt = 100;
-  //const stepsAsElements: any[] = [];
-  //const stepsAsElements: any[] = React.useRef([]);
-  //const [stepsAsElements, setStepsAsElements]: any[] = React.useState(tempStepsAsElements);
   const stageRef = React.useRef<Konva.Stage>(null);
   const [tempSteps, setTempSteps]: any = React.useState([]);
-
-  //const [images, setImages]: any = React.useState([]);
   const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
 
   const [selectedStep, setSelectedStep] = React.useState<{viz: any, model: IStepProps}>({
@@ -162,7 +128,6 @@ const Visualization = ({ handleDrop, isError, isLoading, steps, views }: IVisual
               // register event position
               stageRef.current?.setPointersPositions(e);
               //handleDrop(e);
-
               const parsed = JSON.parse(dataJSON);
 
               setTempSteps(tempSteps.concat({

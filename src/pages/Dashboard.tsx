@@ -98,10 +98,6 @@ const Dashboard = () => {
     },750);
   };
 
-  const onDropFromCatalog = (e: any) => {
-    //setViewData({...vizData, });
-  };
-
   const prepareVizSteps = (steps: any) => {
     const yAxis = window.innerHeight / 2;
     const incrementAmt = 100;
@@ -138,8 +134,6 @@ const Dashboard = () => {
           break;
       }
 
-      // stepsAsElements.push(inputStep);
-      // something
       stepsAsElements.push(inputStep);
 
       return;
