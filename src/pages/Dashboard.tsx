@@ -156,7 +156,7 @@ const Dashboard = () => {
           </Tabs>
         </GridItem>
         <GridItem span={activeTabKey === 1 ? 9 : 8}>
-          <Visualization handleDrop={onDropFromCatalog} isError={isError} isLoading={isLoading} steps={vizData} views={viewData.views} />
+          <Visualization isError={isError} isLoading={isLoading} steps={vizData} views={viewData.views} />
         </GridItem>
       </Grid>
     </>
