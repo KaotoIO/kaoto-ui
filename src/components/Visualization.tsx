@@ -158,27 +158,66 @@ const Visualization = ({ handleDrop, isError, isLoading, steps, views }: IVisual
           <DrawerContentBody>
             <div onDrop={(e: any) => {
               e.preventDefault();
-              const dataJSON = e.dataTransfer.getData('someStep');
-              console.log(JSON.parse(JSON.stringify((dataJSON))));
+              const dataJSON = e.dataTransfer.getData('text');
               // register event position
               stageRef.current?.setPointersPositions(e);
-              handleDrop(e);
-              //stepsAsElements.push(dataJSON)
-              // add image
-              /*
-              setImages(
-                images.concat([
-                  {
-                    ...stageRef.current?.getPointerPosition(),
-                    src: dataJSON
-                  },
-                ])
-              );
-               */
-              //setStepsAsElements({...stepsAsElements, dataJSON});
+              //handleDrop(e);
+
+              const parsed = JSON.parse(dataJSON);
+
+              setTempSteps(tempSteps.concat({
+                model: parsed,
+                viz: {
+                  data: { label: parsed.name },
+                  id: parsed.name,
+                  position: {...stageRef.current?.getPointerPosition()}
+                }
+              }));
             }} onDragOver={(e) => e.preventDefault()}>
             <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
               <Layer>
+                {tempSteps.map((step, idx) => {
+                  return (
+                    <Group x={step.viz.position.x}
+                           y={step.viz.position.y}
+                           onClick={handleClickStep}
+                           onDragEnd={onDragEnd}
+                           onMouseEnter={(e: any) => {
+                             // style stage container:
+                             const container = e.target.getStage().container();
+                             container.style.cursor = "pointer";
+                           }}
+                           onMouseLeave={(e: any) => {
+                             const container = e.target.getStage().container();
+                             container.style.cursor = "default";
+                           }}
+                           key={idx} draggable>
+                      <Circle
+                        key={idx}
+                        name={`${idx}`}
+                        stroke={idx === 0 ? 'rgb(0, 136, 206)' : 'rgb(204, 204, 204)'}
+                        fill={'white'}
+                        strokeWidth={3}
+                        width={CIRCLE_LENGTH}
+                        height={CIRCLE_LENGTH}
+                      />
+                      <Image id={step.model.id}
+                             image={createImage(step.model.icon)}
+                             offsetX={imageProps ? imageProps.width / 2 : 0}
+                             offsetY={imageProps ? imageProps.height / 2 : 0}
+                             height={imageProps.height}
+                             width={imageProps.width}
+                      />
+                      <Text x={-(CIRCLE_LENGTH)}
+                            y={(CIRCLE_LENGTH / 2) + 10}
+                            align={'center'}
+                            width={150}
+                            fontSize={11}
+                            text={step.model.name}
+                      />
+                    </Group>
+                  );
+                })}
                 <Group x={100} y={200} onDragEnd={onDragEnd} draggable>
                   <Line
                     points={[

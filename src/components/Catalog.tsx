@@ -112,7 +112,7 @@ const Catalog = (props: ICatalog) => {
                   draggable="true"
                   onDragStart={(e: any) => {
                     //e.dataTransfer.setData('text/plain', e.target.src);
-                    e.dataTransfer.setData('someStep', step);
+                    e.dataTransfer.setData('text/plain', JSON.stringify(step));
                   }}>
               <Grid md={6}>
                 <GridItem span={2}>
