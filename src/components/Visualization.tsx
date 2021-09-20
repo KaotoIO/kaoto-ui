@@ -1,18 +1,12 @@
 import * as React from 'react';
 import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
-import { Grid, GridItem } from '@patternfly/react-core';
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
+import { StepView } from './StepView';
 import {
-  Button,
   Drawer,
-  DrawerActions,
-  DrawerCloseButton,
   DrawerContent,
   DrawerContentBody,
-  DrawerHead,
-  DrawerPanelBody,
-  DrawerPanelContent,
 } from '@patternfly/react-core';
 import './Visualization.css';
 import Konva from 'konva';
@@ -65,10 +59,11 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
 
   const [selectedStep, setSelectedStep] = React.useState<{viz: IVizStepProps, model: IStepProps}>(placeholderStep);
 
-  const deleteStep = e => {
+  const deleteStep = (e: any) => {
+    const selectedStepVizId = selectedStep.viz.id;
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
-    stageRef.current?.findOne('#' + selectedStep.viz.id).destroy();
+    setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== selectedStepVizId));
   };
 
   const onDragEnd = e => {
@@ -102,56 +97,14 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
     setIsPanelExpanded(false);
   };
 
-  const panelContent = (
-      <DrawerPanelContent isResizable
-                          id={'right-resize-panel'}
-                          defaultSize={'500px'}
-                          minSize={'150px'}>
-        <DrawerHead>
-          <h3 className={'pf-c-title pf-m-2xl'} tabIndex={isPanelExpanded ? 0 : -1}>
-            Step Details
-          </h3>
-          <DrawerActions>
-            <DrawerCloseButton onClick={onClosePanelClick}/>
-          </DrawerActions>
-        </DrawerHead>
-        <DrawerPanelBody>
-          <Grid hasGutter>
-            <GridItem span={3}><b>Name</b></GridItem>
-            <GridItem span={6}>{selectedStep.model.name}</GridItem>
-            <GridItem span={3} rowSpan={2}><img src={selectedStep.model.icon} style={{maxWidth: '50%'}} alt={'icon'}/></GridItem>
-            <GridItem span={3}><b>Title</b></GridItem>
-            <GridItem span={6}>{selectedStep.model.title}</GridItem>
-            <GridItem span={3}><b>Description</b></GridItem>
-            <GridItem span={9}>{selectedStep.model.description}</GridItem>
-            <GridItem span={3}><b>Group</b></GridItem>
-            <GridItem span={9}>{selectedStep.model.group}</GridItem>
-            <GridItem span={3}><b>API Version</b></GridItem>
-            <GridItem span={9}>{selectedStep.model.apiVersion}</GridItem>
-            <GridItem span={3}><b>Kind</b></GridItem>
-            <GridItem span={9}>{selectedStep.model.kind}</GridItem>
-            {selectedStep.model.kameletType && (
-              <>
-                <GridItem span={3}><b>Kamelet Type</b></GridItem>
-                <GridItem span={9}>{selectedStep.model.kameletType}</GridItem>
-              </>
-            )}
-          </Grid>
-          <br/>
-          <Button variant={'danger'}
-                  isAriaDisabled={!selectedStep.viz.temporary}
-                  onClick={deleteStep}>Delete</Button>
-        </DrawerPanelBody>
-      </DrawerPanelContent>
-    );
-
   // Stage is a div container
   // Layer is actual canvas element (so you may have several canvases in the stage)
   // And then we have canvas shapes inside the Layer
   return (
     <>
       <Drawer isExpanded={isPanelExpanded} onExpand={onExpandPanel}>
-        <DrawerContent panelContent={panelContent} className={'panelCustom'}>
+        <DrawerContent panelContent={<StepView step={selectedStep} isPanelExpanded={isPanelExpanded} deleteStep={deleteStep} onClosePanelClick={onClosePanelClick}/>}
+                       className={'panelCustom'}>
           <DrawerContentBody>
             <div onDrop={(e: any) => {
               e.preventDefault();
