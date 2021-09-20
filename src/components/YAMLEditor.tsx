@@ -31,7 +31,7 @@ const YAMLEditor = ( {yamlData, handleChanges }: IYAMLEditor ) => {
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
         onValidate={handleEditorValidation}
-        //theme={'vs-dark'}
+        theme={'vs-dark'}
       />
     </>
   );
