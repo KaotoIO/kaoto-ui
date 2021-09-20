@@ -146,7 +146,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                            draggable>
                       <Circle
                         name={`${idx}`}
-                        stroke={idx === 0 ? 'rgb(0, 136, 206)' : 'rgb(204, 204, 204)'}
+                        stroke={step.model.type === 'START' ? 'rgb(0, 136, 206)' : 'rgb(204, 204, 204)'}
                         fill={'white'}
                         strokeWidth={3}
                         width={CIRCLE_LENGTH}
@@ -163,6 +163,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                             y={(CIRCLE_LENGTH / 2) + 10}
                             align={'center'}
                             width={150}
+                            fontFamily={'Ubuntu'}
                             fontSize={11}
                             text={truncateString(step.model.name, 14)}
                       />
@@ -207,7 +208,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                           x={item.viz.position.x}
                           y={0}
                           name={`${index}`}
-                          stroke={index === 0 ? 'rgb(0, 136, 206)' : 'rgb(204, 204, 204)'}
+                          stroke={item.model.type === 'START' ? 'rgb(0, 136, 206)' : 'rgb(204, 204, 204)'}
                           fill={'white'}
                           strokeWidth={3}
                           width={CIRCLE_LENGTH}
