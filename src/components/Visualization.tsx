@@ -26,6 +26,14 @@ interface IVisualization {
 
 const CIRCLE_LENGTH = 75;
 
+function truncateString(str, num) {
+  if (str.length > num) {
+    return str.slice(0, num) + '..';
+  } else {
+    return str;
+  }
+}
+
 const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => {
   const incrementAmt = 100;
   const stageRef = React.useRef<Konva.Stage>(null);
@@ -177,7 +185,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                             align={'center'}
                             width={150}
                             fontSize={11}
-                            text={step.model.name}
+                            text={truncateString(step.model.name, 14)}
                       />
                     </Group>
                   );
@@ -233,7 +241,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                               align={'center'}
                               width={150}
                               fontSize={11}
-                              text={item.model.name}
+                              text={truncateString(item.model.name, 14)}
                         />
                       </Group>
                     )
