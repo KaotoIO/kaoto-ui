@@ -218,6 +218,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                               y={(CIRCLE_LENGTH / 2) + 10}
                               align={'center'}
                               width={150}
+                              fontFamily={'Ubuntu'}
                               fontSize={11}
                               text={truncateString(item.model.name, 14)}
                         />
