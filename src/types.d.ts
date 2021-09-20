@@ -5,7 +5,7 @@ declare module '*.yaml' {
 
 declare var process : {
   env: {
-    REACT_APP_API_URL: string
+    REACT_APP_API_URL: string;
   }
 }
 
@@ -13,18 +13,20 @@ declare var process : {
  * TODO: Check swagger for accurate types
  */
 export interface IStepProps {
-  apiVersion: string,
-  description?: string,
-  group?: string,
-  icon: string,
-  id: string,
-  kameletType?: string,
-  kind?: string,
-  name: string,
-  parameters?: any[],
-  subType?: string, // should be 'KAMELET'
-  title?: string,
-  type: string // e.g. 'START', 'MIDDLE', 'END'
+  apiVersion: string;
+  description?: string;
+  group?: string;
+  icon: string;
+  id: string;
+  kameletType?: string;
+  kind?: string;
+  name: string;
+  parameters?: any[];
+  subType?: string; // should be 'KAMELET'
+  title?: string;
+  type: string; // e.g. 'START', 'MIDDLE', 'END'
+  UUID: string;
+
 }
 
 export interface IViewConstraintsProps {
@@ -43,5 +45,16 @@ export interface IViewProps {
 export interface IViewData {
   steps: IStepProps[];
   views: IViewProps[];
+}
+
+export interface IVizStepProps {
+  id: string;
+  data: {
+    label: string
+  };
+  position: {
+    x: number;
+    y: number;
+  }
 }
 

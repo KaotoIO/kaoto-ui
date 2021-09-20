@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
 import { Grid, GridItem } from '@patternfly/react-core';
-import { IStepProps, IViewProps } from '../types';
+import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
-//import useImage from '../utils/useImage';
 import {
   Drawer,
   DrawerActions,
@@ -20,7 +19,7 @@ import Konva from "konva";
 interface IVisualization {
   isError?: boolean;
   isLoading?: boolean;
-  steps: {viz: any, model: IStepProps}[];
+  steps: {viz: IVizStepProps, model: IStepProps}[];
   views: IViewProps[];
 }
 
@@ -46,7 +45,8 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
       icon: '',
       id: '',
       name: '',
-      type: ''
+      type: '',
+      UUID: ''
     },
     viz: {}
   });
@@ -157,11 +157,11 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                            onMouseEnter={(e: any) => {
                              // style stage container:
                              const container = e.target.getStage().container();
-                             container.style.cursor = "pointer";
+                             container.style.cursor = 'pointer';
                            }}
                            onMouseLeave={(e: any) => {
                              const container = e.target.getStage().container();
-                             container.style.cursor = "default";
+                             container.style.cursor = 'default';
                            }}
                            key={idx} draggable>
                       <Circle
@@ -217,11 +217,11 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                              onMouseEnter={(e: any) => {
                                // style stage container:
                                const container = e.target.getStage().container();
-                               container.style.cursor = "pointer";
+                               container.style.cursor = 'pointer';
                              }}
                              onMouseLeave={(e: any) => {
                                const container = e.target.getStage().container();
-                               container.style.cursor = "default";
+                               container.style.cursor = 'default';
                              }}
                       >
                         <Circle

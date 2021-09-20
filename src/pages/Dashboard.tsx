@@ -11,7 +11,7 @@ import { YAMLEditor } from '../components/YAMLEditor';
 import usePrevious from '../utils/usePrevious';
 import request from '../utils/request';
 import * as React from 'react';
-import { IStepProps, IViewData } from '../types';
+import { IStepProps, IViewData, IVizStepProps } from '../types';
 import YAML from '../stories/data/yaml';
 
 /**
@@ -23,7 +23,7 @@ const Dashboard = () => {
   // If the catalog data won't be changing, consider removing this state
   const [catalogData, setCatalogData] = React.useState<IStepProps[]>([]);
   const [viewData, setViewData] = React.useState<IViewData>({ steps: [], views: [] });
-  const [vizData, setVizData] = React.useState<{ viz: {}, model: IStepProps }[]>([])
+  const [vizData, setVizData] = React.useState<{ viz: IVizStepProps, model: IStepProps }[]>([])
   const [yamlData, setYamlData] = React.useState(exampleData);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
@@ -89,16 +89,15 @@ const Dashboard = () => {
   const handleChanges = (incomingData: string) => {
     // Wait a bit before setting data
     setTimeout(() => {
-      // Check that the data has changed
+      // Check that the data has changed, otherwise return
       if(previousYaml === incomingData) {
-        console.log('Previous YAML is the same as incoming user changes. Do not set YAML. Returning..');
         return;
       }
       setYamlData(incomingData);
     },750);
   };
 
-  const prepareVizSteps = (steps: any) => {
+  const prepareVizSteps = (steps: IStepProps[]) => {
     const yAxis = window.innerHeight / 2;
     const incrementAmt = 100;
     const stepsAsElements: any[] = [];
