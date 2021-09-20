@@ -99,7 +99,6 @@ const Dashboard = () => {
   };
 
   const prepareVizSteps = (steps: IStepProps[]) => {
-    const yAxis = window.innerHeight / 2;
     const incrementAmt = 100;
     const stepsAsElements: any[] = [];
 
@@ -110,7 +109,8 @@ const Dashboard = () => {
         viz: {
           data: { label: step.name },
           id: uuidv4(),
-          position: { x: 300, y: yAxis }
+          position: { x: 300, y: window.innerHeight / 2 },
+          temporary: false
         }
       };
 

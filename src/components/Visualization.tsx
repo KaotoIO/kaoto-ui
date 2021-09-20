@@ -35,32 +35,41 @@ function truncateString(str, num) {
   }
 }
 
+const placeholderStep = {
+  model: {
+    apiVersion: '',
+    icon: '',
+    id: '',
+    name: '',
+    type: '',
+    UUID: ''
+  },
+  viz: {
+    data: {
+      label: ''
+    },
+    id: '',
+    position: {
+      x: 0,
+      y: 0
+    },
+    temporary: false
+  }
+};
+
 const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => {
   const incrementAmt = 100;
   const stageRef = React.useRef<Konva.Stage>(null);
   const [tempSteps, setTempSteps] = React.useState<{model: IStepProps, viz: IVizStepProps}[]>([]);
   const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
 
-  const [selectedStep, setSelectedStep] = React.useState<{viz: IVizStepProps, model: IStepProps}>({
-    model: {
-      apiVersion: '',
-      icon: '',
-      id: '',
-      name: '',
-      type: '',
-      UUID: ''
-    },
-    viz: {
-      data: {
-        label: ''
-      },
-      id: '',
-      position: {
-        x: 0,
-        y: 0
-      }
-    }
-  });
+  const [selectedStep, setSelectedStep] = React.useState<{viz: IVizStepProps, model: IStepProps}>(placeholderStep);
+
+  const deleteStep = e => {
+    setIsPanelExpanded(false);
+    setSelectedStep(placeholderStep);
+    stageRef.current?.findOne('#' + selectedStep.viz.id).destroy();
+  };
 
   const onDragEnd = e => {
   };
@@ -129,7 +138,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
             )}
           </Grid>
           <br/>
-          <Button variant={'danger'}>Delete</Button>
+          <Button variant={'danger'} isAriaDisabled={!selectedStep.viz.temporary} onClick={deleteStep}>Delete</Button>
         </DrawerPanelBody>
       </DrawerPanelContent>
     );
@@ -155,7 +164,8 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                 viz: {
                   data: { label: parsed.name },
                   id: uuidv4(),
-                  position: {...stageRef.current?.getPointerPosition()}
+                  position: {...stageRef.current?.getPointerPosition()},
+                  temporary: true
                 }
               }));
             }} onDragOver={(e) => e.preventDefault()}>
@@ -167,6 +177,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                            y={step.viz.position.y}
                            onClick={handleClickStep}
                            onDragEnd={onDragEnd}
+                           id={step.viz.id}
                            onMouseEnter={(e: any) => {
                              // style stage container:
                              const container = e.target.getStage().container();
@@ -203,7 +214,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                     </Group>
                   );
                 })}
-                <Group x={100} y={200} onDragEnd={onDragEnd} draggable>
+                <Group x={100} y={200} id={'Integration'} onDragEnd={onDragEnd} draggable>
                   <Line
                     points={[
                       100, 0,
@@ -218,7 +229,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                     const image = {
                       id: item.viz.id,
                       image: createImage(item.model.icon),
-                      x: item.viz.position.x?? - (imageProps.width / 2),
+                      x: item.viz.position.x! - (imageProps.width / 2),
                       y: 0 - (imageProps.height / 2),
                       height: imageProps.height,
                       width: imageProps.width
@@ -248,7 +259,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                           height={CIRCLE_LENGTH}
                         />
                         <Image {...image} />
-                        <Text x={item.viz.position.x?? - (CIRCLE_LENGTH)}
+                        <Text x={item.viz.position.x! - (CIRCLE_LENGTH)}
                               y={(CIRCLE_LENGTH / 2) + 10}
                               align={'center'}
                               width={150}
