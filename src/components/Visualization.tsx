@@ -4,6 +4,7 @@ import { Grid, GridItem } from '@patternfly/react-core';
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import {
+  Button,
   Drawer,
   DrawerActions,
   DrawerCloseButton,
@@ -37,7 +38,7 @@ function truncateString(str, num) {
 const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => {
   const incrementAmt = 100;
   const stageRef = React.useRef<Konva.Stage>(null);
-  const [tempSteps, setTempSteps]: any = React.useState([]);
+  const [tempSteps, setTempSteps] = React.useState<{model: IStepProps, viz: IVizStepProps}[]>([]);
   const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
 
   const [selectedStep, setSelectedStep] = React.useState<{viz: IVizStepProps, model: IStepProps}>({
@@ -127,6 +128,8 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
               </>
             )}
           </Grid>
+          <br/>
+          <Button variant={'danger'}>Delete</Button>
         </DrawerPanelBody>
       </DrawerPanelContent>
     );
@@ -145,7 +148,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
               // register event position
               stageRef.current?.setPointersPositions(e);
               //handleDrop(e);
-              const parsed = JSON.parse(dataJSON);
+              const parsed: IStepProps = JSON.parse(dataJSON);
 
               setTempSteps(tempSteps.concat({
                 model: parsed,
@@ -215,7 +218,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                     const image = {
                       id: item.viz.id,
                       image: createImage(item.model.icon),
-                      x: item.viz.position.x - (imageProps.width / 2),
+                      x: item.viz.position.x?? - (imageProps.width / 2),
                       y: 0 - (imageProps.height / 2),
                       height: imageProps.height,
                       width: imageProps.width
@@ -245,7 +248,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                           height={CIRCLE_LENGTH}
                         />
                         <Image {...image} />
-                        <Text x={item.viz.position.x - (CIRCLE_LENGTH)}
+                        <Text x={item.viz.position.x?? - (CIRCLE_LENGTH)}
                               y={(CIRCLE_LENGTH / 2) + 10}
                               align={'center'}
                               width={150}
