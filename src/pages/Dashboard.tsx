@@ -39,7 +39,6 @@ const Dashboard = () => {
 
   React.useEffect(() => {
     if(previousYaml === yamlData) {
-      console.log('Previous YAML is the same as current YAML. Do not make API request. Returning...');
       return;
     }
 

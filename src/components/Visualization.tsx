@@ -54,10 +54,9 @@ const placeholderStep = {
 const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => {
   const incrementAmt = 100;
   const stageRef = React.useRef<Konva.Stage>(null);
-  const [tempSteps, setTempSteps] = React.useState<{model: IStepProps, viz: IVizStepProps}[]>([]);
   const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
-
-  const [selectedStep, setSelectedStep] = React.useState<{viz: IVizStepProps, model: IStepProps}>(placeholderStep);
+  const [selectedStep, setSelectedStep] = React.useState<{ viz: IVizStepProps, model: IStepProps }>(placeholderStep);
+  const [tempSteps, setTempSteps] = React.useState<{ model: IStepProps, viz: IVizStepProps }[]>([]);
 
   const deleteStep = (e: any) => {
     const selectedStepVizId = selectedStep.viz.id;
@@ -66,7 +65,15 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
     setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== selectedStepVizId));
   };
 
-  const onDragEnd = e => {
+  const onDragEndIntegration = e => {
+    //
+  };
+
+  const onDragEndTempStep = e => {
+    const newSteps = tempSteps;
+    let newStep = newSteps[e.target.attrs.index];
+    newStep.viz = { ...newStep.viz, position: { x: e.target.attrs.x, y: e.target.attrs.y } };
+    setTempSteps(newSteps);
   };
 
   const imageProps = {
@@ -131,8 +138,9 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                     <Group x={step.viz.position.x}
                            y={step.viz.position.y}
                            onClick={handleClickStep}
-                           onDragEnd={onDragEnd}
+                           onDragEnd={onDragEndTempStep}
                            id={step.viz.id}
+                           index={idx}
                            onMouseEnter={(e: any) => {
                              // style stage container:
                              const container = e.target.getStage().container();
@@ -142,11 +150,11 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                              const container = e.target.getStage().container();
                              container.style.cursor = 'default';
                            }}
-                           key={idx}
+                           key={step.viz.id}
                            draggable>
                       <Circle
                         name={`${idx}`}
-                        stroke={step.model.type === 'START' ? 'rgb(0, 136, 206)' : 'rgb(204, 204, 204)'}
+                        stroke={step.model.type === 'START' ? 'rgb(0, 136, 206)' : step.model.type === 'END' ? 'rgb(149, 213, 245)' : 'rgb(204, 204, 204)'}
                         fill={'white'}
                         strokeWidth={3}
                         width={CIRCLE_LENGTH}
@@ -170,7 +178,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                     </Group>
                   );
                 })}
-                <Group x={100} y={200} id={'Integration'} onDragEnd={onDragEnd} draggable>
+                <Group x={100} y={200} id={'Integration'} onDragEnd={onDragEndIntegration} draggable>
                   <Line
                     points={[
                       100, 0,
@@ -208,7 +216,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                           x={item.viz.position.x}
                           y={0}
                           name={`${index}`}
-                          stroke={item.model.type === 'START' ? 'rgb(0, 136, 206)' : 'rgb(204, 204, 204)'}
+                          stroke={item.model.type === 'START' ? 'rgb(0, 136, 206)' : item.model.type === 'END' ? 'rgb(149, 213, 245)' : 'rgb(204, 204, 204)'}
                           fill={'white'}
                           strokeWidth={3}
                           width={CIRCLE_LENGTH}
