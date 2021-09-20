@@ -14,7 +14,8 @@ import {
   DrawerPanelContent,
 } from '@patternfly/react-core';
 import './Visualization.css';
-import Konva from "konva";
+import Konva from 'konva';
+import { v4 as uuidv4 } from 'uuid';
 
 interface IVisualization {
   isError?: boolean;
@@ -39,7 +40,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
   const [tempSteps, setTempSteps]: any = React.useState([]);
   const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
 
-  const [selectedStep, setSelectedStep] = React.useState<{viz: any, model: IStepProps}>({
+  const [selectedStep, setSelectedStep] = React.useState<{viz: IVizStepProps, model: IStepProps}>({
     model: {
       apiVersion: '',
       icon: '',
@@ -48,7 +49,16 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
       type: '',
       UUID: ''
     },
-    viz: {}
+    viz: {
+      data: {
+        label: ''
+      },
+      id: '',
+      position: {
+        x: 0,
+        y: 0
+      }
+    }
   });
 
   const onDragEnd = e => {
@@ -67,7 +77,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
     // Only set state again if the ID is not the same
     if(selectedStep.model.id !== e.target.id()) {
       const combinedSteps = steps.concat(tempSteps);
-      const findStep: {viz: any, model: IStepProps} = combinedSteps.find(step => step.model.id === e.target.id()) ?? selectedStep;
+      const findStep: {viz: IVizStepProps, model: IStepProps} = combinedSteps.find(step => step.viz.id === e.target.id()) ?? selectedStep;
       setSelectedStep(findStep);
     }
 
@@ -141,7 +151,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                 model: parsed,
                 viz: {
                   data: { label: parsed.name },
-                  id: parsed.name,
+                  id: uuidv4(),
                   position: {...stageRef.current?.getPointerPosition()}
                 }
               }));
@@ -163,9 +173,9 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                              const container = e.target.getStage().container();
                              container.style.cursor = 'default';
                            }}
-                           key={idx} draggable>
+                           key={idx}
+                           draggable>
                       <Circle
-                        key={idx}
                         name={`${idx}`}
                         stroke={idx === 0 ? 'rgb(0, 136, 206)' : 'rgb(204, 204, 204)'}
                         fill={'white'}
@@ -173,7 +183,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                         width={CIRCLE_LENGTH}
                         height={CIRCLE_LENGTH}
                       />
-                      <Image id={step.model.id}
+                      <Image id={step.viz.id}
                              image={createImage(step.model.icon)}
                              offsetX={imageProps ? imageProps.width / 2 : 0}
                              offsetY={imageProps ? imageProps.height / 2 : 0}
@@ -203,7 +213,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                   />
                   {steps.map((item, index) => {
                     const image = {
-                      id: item.model.id,
+                      id: item.viz.id,
                       image: createImage(item.model.icon),
                       x: item.viz.position.x - (imageProps.width / 2),
                       y: 0 - (imageProps.height / 2),
@@ -227,7 +237,6 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                         <Circle
                           x={item.viz.position.x}
                           y={0}
-                          key={index}
                           name={`${index}`}
                           stroke={index === 0 ? 'rgb(0, 136, 206)' : 'rgb(204, 204, 204)'}
                           fill={'white'}

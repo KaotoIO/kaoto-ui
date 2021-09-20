@@ -13,6 +13,7 @@ import request from '../utils/request';
 import * as React from 'react';
 import { IStepProps, IViewData, IVizStepProps } from '../types';
 import YAML from '../stories/data/yaml';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Temporarily providing initial YAML data
@@ -108,7 +109,7 @@ const Dashboard = () => {
         model: {...step},
         viz: {
           data: { label: step.name },
-          id: index.toString(),
+          id: uuidv4(),
           position: { x: 300, y: yAxis }
         }
       };
