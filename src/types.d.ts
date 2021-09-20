@@ -25,8 +25,7 @@ export interface IStepProps {
   subType?: string; // should be 'KAMELET'
   title?: string;
   type: string; // e.g. 'START', 'MIDDLE', 'END'
-  UUID: string;
-
+  UUID?: string;
 }
 
 export interface IViewConstraintsProps {
