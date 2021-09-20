@@ -138,7 +138,9 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
             )}
           </Grid>
           <br/>
-          <Button variant={'danger'} isAriaDisabled={!selectedStep.viz.temporary} onClick={deleteStep}>Delete</Button>
+          <Button variant={'danger'}
+                  isAriaDisabled={!selectedStep.viz.temporary}
+                  onClick={deleteStep}>Delete</Button>
         </DrawerPanelBody>
       </DrawerPanelContent>
     );
