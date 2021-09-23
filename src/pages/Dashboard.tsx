@@ -48,10 +48,9 @@ const Dashboard = () => {
 
       try {
         const resp = await request.post({
-          endpoint: '/viewdefinition?' + new URLSearchParams({
-            yaml: incomingData
-          }),
-          contentType: 'text/yaml'
+          endpoint: '/viewdefinition',
+          contentType: 'text/yaml',
+          body: incomingData
         });
 
         const data: IViewData = await resp.json();
