@@ -48,9 +48,7 @@ export interface IViewData {
 
 export interface IVizStepProps {
   id: string;
-  data: {
-    label: string
-  };
+  label: string;
   position: {
     x?: number;
     y?: number;

@@ -40,10 +40,8 @@ const placeholderStep = {
     UUID: ''
   },
   viz: {
-    data: {
-      label: ''
-    },
     id: '',
+    label: '',
     position: {
       x: 0,
       y: 0
@@ -125,8 +123,8 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
               setTempSteps(tempSteps.concat({
                 model: parsed,
                 viz: {
-                  data: { label: parsed.name },
                   id: uuidv4(),
+                  label: parsed.name,
                   position: {...stageRef.current?.getPointerPosition()},
                   temporary: true
                 }
