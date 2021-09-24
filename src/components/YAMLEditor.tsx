@@ -26,7 +26,7 @@ const YAMLEditor = ( {yamlData, handleChanges }: IYAMLEditor ) => {
     <>
       <Editor
         height="90vh"
-        defaultLanguage="YAML"
+        defaultLanguage="yaml"
         defaultValue={yamlData}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
