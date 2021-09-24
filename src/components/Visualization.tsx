@@ -11,6 +11,7 @@ import {
 import './Visualization.css';
 import Konva from 'konva';
 import { v4 as uuidv4 } from 'uuid';
+//import { VisualizationStep } from './VisualizationStep';
 
 interface IVisualization {
   isError?: boolean;
@@ -55,7 +56,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
   const incrementAmt = 100;
   const stageRef = React.useRef<Konva.Stage>(null);
   const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
-  const [selectedStep, setSelectedStep] = React.useState<{ viz: IVizStepProps, model: IStepProps }>(placeholderStep);
+  const [selectedStep, setSelectedStep] = React.useState<{ model: IStepProps, viz: IVizStepProps }>(placeholderStep);
   const [tempSteps, setTempSteps] = React.useState<{ model: IStepProps, viz: IVizStepProps }[]>([]);
 
   const deleteStep = (e: any) => {
@@ -178,7 +179,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                     </Group>
                   );
                 })}
-                <Group x={100} y={200} id={'Integration'} onDragEnd={onDragEndIntegration} draggable>
+                <Group x={400} y={300} id={'Integration'} onDragEnd={onDragEndIntegration} draggable>
                   <Line
                     points={[
                       100, 0,
