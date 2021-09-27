@@ -43,6 +43,30 @@ const Dashboard = () => {
     return;
   };
 
+  /**
+   * Fetch all Steps for Catalog
+   */
+  React.useEffect(() => {
+    const getCatalogData = async () => {
+      try {
+        const resp = await request.get({
+          endpoint: '/step'
+        });
+
+        const data = await resp.json();
+        setCatalogData(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getCatalogData().catch((e) => {console.error(e)});
+  }, []);
+
+  /**
+   * Watch for user changes to YAML,
+   * issue request to API for Visualization JSON
+   */
   React.useEffect(() => {
     if(previousYaml === yamlData) {
       return;
@@ -69,22 +93,8 @@ const Dashboard = () => {
 
       setIsLoading(false);
     };
-
-    const getCatalogData = async () => {
-      try {
-        const resp = await request.get({
-          endpoint: '/step'
-        });
-
-        const data = await resp.json();
-        setCatalogData(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
+    
     getVizData(yamlData).catch((e) => {console.error(e)});
-    getCatalogData().catch((e) => {console.error(e)});
   }, [previousYaml, yamlData]);
 
   const deleteIntegrationStep = (stepsIndex: any) => {
