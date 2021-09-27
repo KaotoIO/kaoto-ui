@@ -20507,6 +20507,15 @@ typescript@^4.3.4:
   languageName: node
   linkType: hard
 
+"use-debounce@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "use-debounce@npm:7.0.0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: e0a10404cad3eba324416955397883c9c276df8141040377916e0e79d0d1d939e75f88acf8fe6b9bb5d10bcab6828a15b5bc42314adb967da57c9a3c517b6681
+  languageName: node
+  linkType: hard
+
 "use-isomorphic-layout-effect@npm:^1.0.0":
   version: 1.1.1
   resolution: "use-isomorphic-layout-effect@npm:1.1.1"
@@ -21703,6 +21712,7 @@ typescript@^4.3.4:
     react-scripts: ^4.0.3
     tslib: ^2.3.0
     typescript: ^4.3.4
+    use-debounce: ^7.0.0
     uuid: ^8.3.2
     web-vitals: ^2.1.0
     webpack: 4

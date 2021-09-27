@@ -15,6 +15,7 @@
     "react-konva": "^17.0.2-5",
     "react-router-dom": "^5.2.0",
     "react-router-last-location": "^2.0.1",
+    "use-debounce": "^7.0.0",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.0"
   },

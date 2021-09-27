@@ -1,5 +1,6 @@
 import Editor from '@monaco-editor/react';
 import { useRef } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 interface IYAMLEditor {
   handleChanges: (newYaml: string) => void;
@@ -10,7 +11,7 @@ const YAMLEditor = ( {yamlData, handleChanges }: IYAMLEditor ) => {
   const editorRef = useRef(null);
 
   function handleEditorChange(value, event) {
-    handleChanges(value);
+    debounced(value);
   }
 
   function handleEditorDidMount(editor, monaco) {
@@ -22,12 +23,18 @@ const YAMLEditor = ( {yamlData, handleChanges }: IYAMLEditor ) => {
     markers.forEach(marker => console.log('onValidate: ', marker.message));
   }
 
+  const debounced = useDebouncedCallback(
+    (value) => {
+      handleChanges(value);
+    },
+    1000
+  );
+
   return (
     <>
       <Editor
         height="90vh"
         defaultLanguage="yaml"
-        defaultValue={yamlData}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
         onValidate={handleEditorValidation}
