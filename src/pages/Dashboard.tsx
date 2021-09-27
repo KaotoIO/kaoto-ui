@@ -15,11 +15,6 @@ import { IStepProps, IViewData, IVizStepProps } from '../types';
 import YAML from '../stories/data/yaml';
 import { v4 as uuidv4 } from 'uuid';
 
-/**
- * Temporarily providing initial YAML data
- */
-const exampleData = YAML;
-
 const Dashboard = () => {
   // If the catalog data won't be changing, consider removing this state
   const [catalogData, setCatalogData] = React.useState<IStepProps[]>([]);
@@ -31,7 +26,7 @@ const Dashboard = () => {
   const [vizData, setVizData] = React.useState<{ viz: IVizStepProps, model: IStepProps }[]>([]);
 
   // yamlData contains the exact YAML returned by the API or specified by the user
-  const [yamlData, setYamlData] = React.useState(exampleData);
+  const [yamlData, setYamlData] = React.useState(YAML);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const previousYaml = usePrevious(yamlData);
@@ -93,7 +88,7 @@ const Dashboard = () => {
 
       setIsLoading(false);
     };
-    
+
     getVizData(yamlData).catch((e) => {console.error(e)});
   }, [previousYaml, yamlData]);
 
@@ -197,7 +192,7 @@ const Dashboard = () => {
         <GridItem span={activeTabKey === 1 ? 3 : 4}>
           <Tabs activeKey={activeTabKey} isFilled={true} onSelect={onTabSelected}>
             <Tab eventKey={0} title={<TabTitleText>Editor</TabTitleText>}>
-              <YAMLEditor yamlData={ yamlData } handleChanges={handleChanges} />
+              <YAMLEditor yamlData={yamlData} handleChanges={handleChanges} />
             </Tab>
             <Tab eventKey={1} title={<TabTitleText>Catalog</TabTitleText>}>
               <Catalog steps={catalogData} />

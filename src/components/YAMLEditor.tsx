@@ -19,7 +19,7 @@ const YAMLEditor = ( {yamlData, handleChanges }: IYAMLEditor ) => {
 
   function handleEditorValidation(markers) {
     // Model Markers
-    markers.forEach(marker => console.log('onValidate:', marker.message));
+    markers.forEach(marker => console.log('onValidate: ', marker.message));
   }
 
   return (
@@ -32,6 +32,7 @@ const YAMLEditor = ( {yamlData, handleChanges }: IYAMLEditor ) => {
         onMount={handleEditorDidMount}
         onValidate={handleEditorValidation}
         theme={'vs-dark'}
+        value={yamlData}
       />
     </>
   );
