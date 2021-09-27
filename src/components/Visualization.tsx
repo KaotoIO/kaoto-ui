@@ -11,7 +11,7 @@ import {
 import './Visualization.css';
 import Konva from 'konva';
 import { v4 as uuidv4 } from 'uuid';
-//import { VisualizationStep } from './VisualizationStep';
+import { VisualizationStep } from './VisualizationStep';
 
 interface IVisualization {
   isError?: boolean;
@@ -21,14 +21,6 @@ interface IVisualization {
 }
 
 const CIRCLE_LENGTH = 75;
-
-function truncateString(str, num) {
-  if (str.length > num) {
-    return str.slice(0, num) + '..';
-  } else {
-    return str;
-  }
-}
 
 const placeholderStep = {
   model: {
@@ -49,6 +41,14 @@ const placeholderStep = {
     temporary: false
   }
 };
+
+function truncateString(str, num) {
+  if (str.length > num) {
+    return str.slice(0, num) + '..';
+  } else {
+    return str;
+  }
+}
 
 const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => {
   const incrementAmt = 100;
@@ -75,7 +75,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
     setTempSteps(newSteps);
   };
 
-  const imageProps = {
+  const imageDimensions = {
     height: 40,
     width: 40
   };
@@ -133,48 +133,30 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
             <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
               <Layer>
                 {tempSteps.map((step, idx) => {
+                  const groupProps = {
+                    x: step.viz.position.x,
+                    y: step.viz.position.y
+                  };
+
+                  const imageProps = {
+                    offsetX: imageDimensions ? imageDimensions.width / 2 : 0,
+                    offsetY: imageDimensions ? imageDimensions.height / 2 : 0
+                  };
+
+                  const textProps = {
+                    x: -(CIRCLE_LENGTH),
+                    y: (CIRCLE_LENGTH / 2) + 10
+                  };
+
                   return (
-                    <Group x={step.viz.position.x}
-                           y={step.viz.position.y}
-                           onClick={handleClickStep}
-                           onDragEnd={onDragEndTempStep}
-                           id={step.viz.id}
-                           index={idx}
-                           onMouseEnter={(e: any) => {
-                             // style stage container:
-                             const container = e.target.getStage().container();
-                             container.style.cursor = 'pointer';
-                           }}
-                           onMouseLeave={(e: any) => {
-                             const container = e.target.getStage().container();
-                             container.style.cursor = 'default';
-                           }}
-                           key={step.viz.id}
-                           draggable>
-                      <Circle
-                        name={`${idx}`}
-                        stroke={step.model.type === 'START' ? 'rgb(0, 136, 206)' : step.model.type === 'END' ? 'rgb(149, 213, 245)' : 'rgb(204, 204, 204)'}
-                        fill={'white'}
-                        strokeWidth={3}
-                        width={CIRCLE_LENGTH}
-                        height={CIRCLE_LENGTH}
-                      />
-                      <Image id={step.viz.id}
-                             image={createImage(step.model.icon)}
-                             offsetX={imageProps ? imageProps.width / 2 : 0}
-                             offsetY={imageProps ? imageProps.height / 2 : 0}
-                             height={imageProps.height}
-                             width={imageProps.width}
-                      />
-                      <Text x={-(CIRCLE_LENGTH)}
-                            y={(CIRCLE_LENGTH / 2) + 10}
-                            align={'center'}
-                            width={150}
-                            fontFamily={'Ubuntu'}
-                            fontSize={11}
-                            text={truncateString(step.model.name, 14)}
-                      />
-                    </Group>
+                    <VisualizationStep groupProps={groupProps}
+                                       handleClickStep={handleClickStep}
+                                       idx={idx}
+                                       imageProps={imageProps}
+                                       key={idx}
+                                       onDragEndTempStep={onDragEndTempStep}
+                                       step={step}
+                                       textProps={textProps}/>
                   );
                 })}
                 <Group x={400} y={300} id={'Integration'} onDragEnd={onDragEndIntegration} draggable>
@@ -189,13 +171,23 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                     lineJoin={'round'}
                   />
                   {steps.map((item, index) => {
-                    const image = {
+                    const imageProps = {
                       id: item.viz.id,
                       image: createImage(item.model.icon),
-                      x: item.viz.position.x! - (imageProps.width / 2),
-                      y: 0 - (imageProps.height / 2),
-                      height: imageProps.height,
-                      width: imageProps.width
+                      x: item.viz.position.x! - (imageDimensions.width / 2),
+                      y: 0 - (imageDimensions.height / 2),
+                      height: imageDimensions.height,
+                      width: imageDimensions.width
+                    };
+
+                    const circleProps = {
+                      x: item.viz.position.x,
+                      y: 0
+                    };
+
+                    const textProps = {
+                      x: item.viz.position.x! - (CIRCLE_LENGTH),
+                      y: (CIRCLE_LENGTH / 2) + 10
                     };
 
                     return (
@@ -212,8 +204,7 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                              }}
                       >
                         <Circle
-                          x={item.viz.position.x}
-                          y={0}
+                          {...circleProps}
                           name={`${index}`}
                           stroke={item.model.type === 'START' ? 'rgb(0, 136, 206)' : item.model.type === 'END' ? 'rgb(149, 213, 245)' : 'rgb(204, 204, 204)'}
                           fill={'white'}
@@ -221,14 +212,13 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
                           width={CIRCLE_LENGTH}
                           height={CIRCLE_LENGTH}
                         />
-                        <Image {...image} />
-                        <Text x={item.viz.position.x! - (CIRCLE_LENGTH)}
-                              y={(CIRCLE_LENGTH / 2) + 10}
-                              align={'center'}
+                        <Image {...imageProps} />
+                        <Text align={'center'}
                               width={150}
                               fontFamily={'Ubuntu'}
                               fontSize={11}
                               text={truncateString(item.model.name, 14)}
+                              {...textProps}
                         />
                       </Group>
                     )
