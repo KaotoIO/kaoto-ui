@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
+import truncateString from '../utils/truncateName';
 import { StepView } from './StepView';
 import {
   Drawer,
@@ -41,14 +42,6 @@ const placeholderStep = {
     temporary: false
   }
 };
-
-function truncateString(str, num) {
-  if (str.length > num) {
-    return str.slice(0, num) + '..';
-  } else {
-    return str;
-  }
-}
 
 const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => {
   const incrementAmt = 100;

@@ -1,5 +1,6 @@
 import { Circle, Group, Image, Text } from 'react-konva';
 import createImage from '../utils/createImage';
+import truncateString from '../utils/truncateName';
 import { IStepProps, IVizStepProps } from '../types';
 
 export interface IVisualizationStep {
@@ -19,14 +20,6 @@ const imageDimensions = {
 };
 
 const CIRCLE_LENGTH = 75;
-
-function truncateString(str, num) {
-  if (str.length > num) {
-    return str.slice(0, num) + '..';
-  } else {
-    return str;
-  }
-}
 
 const VisualizationStep = ({circleProps, groupProps, handleClickStep, idx, imageProps, onDragEndTempStep, step, textProps}: IVisualizationStep) => {
   return (
