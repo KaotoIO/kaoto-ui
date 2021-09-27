@@ -23,8 +23,14 @@ const exampleData = YAML;
 const Dashboard = () => {
   // If the catalog data won't be changing, consider removing this state
   const [catalogData, setCatalogData] = React.useState<IStepProps[]>([]);
+
+  // viewData contains the Step model exactly as returned by the API
   const [viewData, setViewData] = React.useState<IViewData>({ steps: [], views: [] });
-  const [vizData, setVizData] = React.useState<{ viz: IVizStepProps, model: IStepProps }[]>([])
+
+  // vizData is a UI-specific mapping between the Step model and Visualization metadata
+  const [vizData, setVizData] = React.useState<{ viz: IVizStepProps, model: IStepProps }[]>([]);
+
+  // yamlData contains the exact YAML returned by the API or specified by the user
   const [yamlData, setYamlData] = React.useState(exampleData);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
@@ -54,7 +60,7 @@ const Dashboard = () => {
         });
 
         const data: IViewData = await resp.json();
-        prepareVizSteps(data.steps);
+        prepareVizDataSteps(data.steps);
         setViewData(data);
       } catch (err) {
         console.error(err);
@@ -81,6 +87,34 @@ const Dashboard = () => {
     getCatalogData().catch((e) => {console.error(e)});
   }, [previousYaml, yamlData]);
 
+  const deleteIntegrationStep = (stepsIndex: any) => {
+    // Remove Step from viewData.steps
+    const newSteps = viewData.steps.filter((step, idx) => idx !== stepsIndex);
+
+    const getVizData = async () => {
+      setIsError(false);
+      setIsLoading(true);
+
+      try {
+        const resp = await request.post({
+          endpoint: '/deployment/yaml',
+          contentType: 'application/json',
+          body: {name: 'Updated integration', steps: newSteps}
+        });
+
+        const data = await resp.text();
+        setYamlData(data);
+      } catch (err) {
+        console.error(err);
+        setIsError(true);
+      }
+
+      setIsLoading(false);
+    };
+
+    getVizData().catch((e) => {console.error(e)});
+  };
+
   /**
    * On detected changes to YAML state, issue POST to external endpoint
    * Returns JSON to be displayed in the visualizer
@@ -96,7 +130,14 @@ const Dashboard = () => {
     },750);
   };
 
-  const prepareVizSteps = (steps: IStepProps[]) => {
+  /**
+   * Creates a mapping for the Visualization by
+   * separating the Step Model from a new Viz object,
+   * which contains UI-specific metadata (e.g. position).
+   * Data is stored in the VizData hook.
+   * @param steps
+   */
+  const prepareVizDataSteps = (steps: IStepProps[]) => {
     const incrementAmt = 100;
     const stepsAsElements: any[] = [];
 
@@ -154,7 +195,7 @@ const Dashboard = () => {
           </Tabs>
         </GridItem>
         <GridItem span={activeTabKey === 1 ? 9 : 8}>
-          <Visualization isError={isError} isLoading={isLoading} steps={vizData} views={viewData.views} />
+          <Visualization deleteIntegrationStep={deleteIntegrationStep} isError={isError} isLoading={isLoading} steps={vizData} views={viewData.views} />
         </GridItem>
       </Grid>
     </>

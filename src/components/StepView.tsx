@@ -69,7 +69,7 @@ const StepView = ({deleteStep, isPanelExpanded, onClosePanelClick, step}: IStepV
               <br/>
               <Button variant={'danger'}
                       key={step.viz.id}
-                      isAriaDisabled={!step.viz.temporary}
+                      //isAriaDisabled={!step.viz.temporary}
                       onClick={deleteStep}>Delete</Button>
             </Tab>
             <Tab eventKey={1} title={<TabTitleText>Some Extension</TabTitleText>}>

@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { VisualizationStep } from './VisualizationStep';
 
 interface IVisualization {
+  deleteIntegrationStep: (e: any) => void;
   isError?: boolean;
   isLoading?: boolean;
   steps: {viz: IVizStepProps, model: IStepProps}[];
@@ -43,7 +44,7 @@ const placeholderStep = {
   }
 };
 
-const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => {
+const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views }: IVisualization) => {
   const incrementAmt = 100;
   const stageRef = React.useRef<Konva.Stage>(null);
   const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
@@ -54,7 +55,11 @@ const Visualization = ({ isError, isLoading, steps, views }: IVisualization) => 
     const selectedStepVizId = selectedStep.viz.id;
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
-    setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== selectedStepVizId));
+    const stepsIndex = steps.map((step) => {return step.viz.id}).indexOf(selectedStepVizId);
+
+    selectedStep.viz.temporary
+      ? setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== selectedStepVizId))
+      : deleteIntegrationStep(stepsIndex);
   };
 
   const onDragEndIntegration = e => {
