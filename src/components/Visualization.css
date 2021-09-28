@@ -1,3 +1,26 @@
 .panelCustom {
     background: inherit;
 }
+
+.step-creator-button {
+    position: fixed;
+    text-align: center;
+    top: 6em;
+    right: 4em;
+    z-index: 10;
+}
+
+.step-creator-button button {
+    position: relative;
+}
+
+.button-icon {
+    font-size: 1.22em;
+    height: 1.22em;
+    width: 1.22em !important;
+}
+
+.button-icon svg {
+    display: block;
+    vertical-align: -0.125em;
+}

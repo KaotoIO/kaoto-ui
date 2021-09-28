@@ -5,6 +5,7 @@ import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
 import { StepView } from './StepView';
 import {
+  Button,
   Drawer,
   DrawerContent,
   DrawerContentBody,
@@ -13,6 +14,7 @@ import './Visualization.css';
 import Konva from 'konva';
 import { v4 as uuidv4 } from 'uuid';
 import { VisualizationStep } from './VisualizationStep';
+import { PlusCircleIcon } from '@patternfly/react-icons';
 
 interface IVisualization {
   deleteIntegrationStep: (e: any) => void;
@@ -128,6 +130,11 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
                 }
               }));
             }} onDragOver={(e) => e.preventDefault()}>
+              <div className={'step-creator-button'}>
+                <Button variant={'link'} className={'button-icon'}>
+                  <PlusCircleIcon width={50} height={50} />
+                </Button>
+              </div>
             <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
               <Layer>
                 {tempSteps.map((step, idx) => {
