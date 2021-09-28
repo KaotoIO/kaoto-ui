@@ -110,6 +110,7 @@ const Dashboard = () => {
         const data = await resp.text();
         console.log(JSON.stringify(data));
         setYamlData(data);
+        console.log('Data set');
       } catch (err) {
         console.error(err);
         setIsError(true);
