@@ -1,9 +1,10 @@
 import {
+  Button,
+  Drawer,
+  DrawerContent,
+  DrawerContentBody,
   Grid,
   GridItem,
-  Tab,
-  Tabs,
-  TabTitleText
 } from '@patternfly/react-core';
 import { Catalog } from '../components/Catalog';
 import { Visualization } from '../components/Visualization';
@@ -14,6 +15,8 @@ import * as React from 'react';
 import { IStepProps, IViewData, IVizStepProps } from '../types';
 import YAML from '../stories/data/yaml';
 import { v4 as uuidv4 } from 'uuid';
+import './Dashboard.css';
+import { PlusCircleIcon } from '@patternfly/react-icons';
 
 const Dashboard = () => {
   // If the catalog data won't be changing, consider removing this state
@@ -27,15 +30,18 @@ const Dashboard = () => {
 
   // yamlData contains the exact YAML returned by the API or specified by the user
   const [yamlData, setYamlData] = React.useState(YAML);
+
+  const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const previousYaml = usePrevious(yamlData);
 
-  const [activeTabKey, setActiveTabKey] = React.useState();
+  const onExpandPanel = () => {
+    //drawerRef.current && drawerRef.current.focus();
+  };
 
-  const onTabSelected = (event, tabIndex) => {
-    setActiveTabKey(tabIndex);
-    return;
+  const onClosePanelClick = () => {
+    setIsPanelExpanded(false);
   };
 
   /**
@@ -189,23 +195,26 @@ const Dashboard = () => {
   };
 
   return (
-    <>
-      <Grid>
-        <GridItem span={activeTabKey === 1 ? 3 : 4}>
-          <Tabs activeKey={activeTabKey} isFilled={true} onSelect={onTabSelected}>
-            <Tab eventKey={0} title={<TabTitleText>Editor</TabTitleText>}>
+    <Drawer isExpanded={isPanelExpanded} onExpand={onExpandPanel} position={'left'}>
+      <DrawerContent panelContent={<Catalog isPanelExpanded={isPanelExpanded} onClosePanelClick={onClosePanelClick} steps={catalogData} />}
+                     className={'panelCustom'}>
+        <DrawerContentBody>
+          <div className={'step-creator-button'}>
+            <Button variant={'link'} className={'button-icon'} onClick={() => {setIsPanelExpanded(!isPanelExpanded)}}>
+              <PlusCircleIcon width={50} height={50} />
+            </Button>
+          </div>
+          <Grid>
+            <GridItem span={4}>
               <YAMLEditor yamlData={yamlData} handleChanges={handleChanges} />
-            </Tab>
-            <Tab eventKey={1} title={<TabTitleText>Catalog</TabTitleText>}>
-              <Catalog steps={catalogData} />
-            </Tab>
-          </Tabs>
-        </GridItem>
-        <GridItem span={activeTabKey === 1 ? 9 : 8}>
-          <Visualization deleteIntegrationStep={deleteIntegrationStep} isError={isError} isLoading={isLoading} steps={vizData} views={viewData.views} />
-        </GridItem>
-      </Grid>
-    </>
+            </GridItem>
+            <GridItem span={8}>
+              <Visualization deleteIntegrationStep={deleteIntegrationStep} isError={isError} isLoading={isLoading} steps={vizData} views={viewData.views} />
+            </GridItem>
+          </Grid>
+        </DrawerContentBody>
+      </DrawerContent>
+    </Drawer>
   );
 };
 
