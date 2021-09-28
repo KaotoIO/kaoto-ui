@@ -27,7 +27,7 @@ const YAMLEditor = ( {yamlData, handleChanges }: IYAMLEditor ) => {
     (value) => {
       handleChanges(value);
     },
-    1000
+    800
   );
 
   return (

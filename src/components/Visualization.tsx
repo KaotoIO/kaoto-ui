@@ -157,7 +157,7 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
                                        textProps={textProps}/>
                   );
                 })}
-                <Group x={400} y={300} id={'Integration'} onDragEnd={onDragEndIntegration} draggable>
+                <Group x={250} y={300} id={'Integration'} onDragEnd={onDragEndIntegration} draggable>
                   <Line
                     points={[
                       100, 0,
