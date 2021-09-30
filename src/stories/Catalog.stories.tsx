@@ -19,7 +19,7 @@ const Template: ComponentStory<typeof Catalog> = (args) => {
   return (
     <>
       <h1>Kamelet Catalog</h1>
-      <Catalog isPanelExpanded={true} onClosePanelClick={handleChanges} steps={steps} />
+      <Catalog isCatalogExpanded={true} onClosePanelClick={handleChanges} steps={steps} />
     </>
   );
 };

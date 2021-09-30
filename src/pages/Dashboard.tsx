@@ -1,11 +1,4 @@
-import {
-  Button,
-  Drawer,
-  DrawerContent,
-  DrawerContentBody,
-  Grid,
-  GridItem,
-} from '@patternfly/react-core';
+import { Button, Drawer, DrawerContent, DrawerContentBody, Grid, GridItem, Tooltip, } from '@patternfly/react-core';
 import { Catalog } from '../components/Catalog';
 import { Visualization } from '../components/Visualization';
 import { YAMLEditor } from '../components/YAMLEditor';
@@ -31,7 +24,11 @@ const Dashboard = () => {
   // yamlData contains the exact YAML returned by the API or specified by the user
   const [yamlData, setYamlData] = React.useState(YAML);
 
-  const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState({
+    catalog: false,
+    codeEditor: true
+  });
+
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const previousYaml = usePrevious(yamlData);
@@ -41,7 +38,7 @@ const Dashboard = () => {
   };
 
   const onClosePanelClick = () => {
-    setIsPanelExpanded(false);
+    setExpanded({...expanded, catalog: false});
   };
 
   /**
@@ -61,7 +58,9 @@ const Dashboard = () => {
       }
     };
 
-    getCatalogData().catch((e) => {console.error(e)});
+    getCatalogData().catch((e) => {
+      console.error(e)
+    });
   }, []);
 
   /**
@@ -69,7 +68,7 @@ const Dashboard = () => {
    * issue request to API for Visualization JSON
    */
   React.useEffect(() => {
-    if(previousYaml === yamlData) {
+    if (previousYaml === yamlData) {
       return;
     }
 
@@ -95,7 +94,9 @@ const Dashboard = () => {
       setIsLoading(false);
     };
 
-    getVizData(yamlData).catch((e) => {console.error(e)});
+    getVizData(yamlData).catch((e) => {
+      console.error(e)
+    });
   }, [previousYaml, yamlData]);
 
   const deleteIntegrationStep = (stepsIndex: any) => {
@@ -110,7 +111,7 @@ const Dashboard = () => {
         const resp = await request.post({
           endpoint: '/deployment/yaml',
           contentType: 'application/json',
-          body: {name: 'Updated integration', steps: newSteps}
+          body: { name: 'Updated integration', steps: newSteps }
         });
 
         const data = await resp.text();
@@ -125,19 +126,9 @@ const Dashboard = () => {
       setIsLoading(false);
     };
 
-    getVizData().catch((e) => {console.error(e)});
-  };
-
-  type Panel = 'catalog' | 'yamlEditor' | 'none';
-  const [panel, setIsPanel] = React.useState<Panel>('yamlEditor');
-  const handleLegendClick = (thingy: Panel) => {
-    if(thingy === panel) {
-      console.log('Panel value is the same, setting to none...');
-      setIsPanel('none');
-    } else {
-      console.log('Setting new panel value..');
-      setIsPanel(thingy);
-    }
+    getVizData().catch((e) => {
+      console.error(e)
+    });
   };
 
   /**
@@ -148,11 +139,11 @@ const Dashboard = () => {
     // Wait a bit before setting data
     setTimeout(() => {
       // Check that the data has changed, otherwise return
-      if(previousYaml === incomingData) {
+      if (previousYaml === incomingData) {
         return;
       }
       setYamlData(incomingData);
-    },750);
+    }, 750);
   };
 
   /**
@@ -169,7 +160,7 @@ const Dashboard = () => {
     steps.map((step, index) => {
       // TODO: extract this into something that Visualization can use too
       let inputStep = {
-        model: {...step},
+        model: { ...step },
         viz: {
           data: { label: step.name },
           id: uuidv4(),
@@ -207,24 +198,34 @@ const Dashboard = () => {
   };
 
   return (
-    <Drawer isExpanded={isPanelExpanded} onExpand={onExpandPanel} position={'left'}>
-      <DrawerContent panelContent={<Catalog isPanelExpanded={isPanelExpanded} onClosePanelClick={onClosePanelClick} steps={catalogData} />}
+    <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
+      <DrawerContent panelContent={<Catalog isCatalogExpanded={expanded.catalog} onClosePanelClick={onClosePanelClick}
+                                            steps={catalogData}/>}
                      className={'panelCustom'}>
         <DrawerContentBody>
           <div className={'step-creator-button'}>
-            <Button variant={'plain'} aria-label={'Connector Catalog'} onClick={() => {setIsPanelExpanded(!isPanelExpanded)}}>
-              <PlusCircleIcon width={50} height={50} />
-            </Button>
-            <Button variant={'plain'} aria-label={'Code Editor'} onClick={() => {handleLegendClick('yamlEditor')}}>
-              <CodeIcon width={50} height={50} />
-            </Button>
+            <Tooltip content={'Connector Catalog'}>
+              <Button variant={'plain'} isActive={expanded.catalog} aria-label={'Connector Catalog'} onClick={() => {
+                setExpanded({...expanded, catalog: !expanded.catalog});
+              }}>
+                <PlusCircleIcon width={50} height={50}/>
+              </Button>
+            </Tooltip>
+            <Tooltip content={'Code Editor'}>
+              <Button variant={'plain'} isActive={expanded.codeEditor} aria-label={'Code Editor'} onClick={() => {
+                setExpanded({...expanded, codeEditor: !expanded.codeEditor});
+              }}>
+                <CodeIcon width={50} height={50}/>
+              </Button>
+            </Tooltip>
           </div>
           <Grid>
-            {panel === 'yamlEditor' && (<GridItem span={4}>
-              <YAMLEditor yamlData={yamlData} handleChanges={handleChanges} />
+            {expanded.codeEditor && (<GridItem span={4}>
+              <YAMLEditor yamlData={yamlData} handleChanges={handleChanges}/>
             </GridItem>)}
-            <GridItem span={panel === 'none' ? 12 : 8} className={'visualization'}>
-              <Visualization deleteIntegrationStep={deleteIntegrationStep} isError={isError} isLoading={isLoading} steps={vizData} views={viewData.views} />
+            <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
+              <Visualization deleteIntegrationStep={deleteIntegrationStep} isError={isError} isLoading={isLoading}
+                             steps={vizData} views={viewData.views}/>
             </GridItem>
           </Grid>
         </DrawerContentBody>

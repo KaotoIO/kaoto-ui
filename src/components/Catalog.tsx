@@ -26,7 +26,7 @@ import './Catalog.css';
 import { DrawerCloseButton } from "@patternfly/react-core/dist/js";
 
 interface ICatalog {
-  isPanelExpanded: boolean,
+  isCatalogExpanded: boolean,
   onClosePanelClick: (e: any) => void,
   steps: IStepProps[]
 }
@@ -71,7 +71,7 @@ const Catalog = (props: ICatalog) => {
   return (
     <DrawerPanelContent minSize={'525px'} colorVariant={DrawerColorVariant.light200}>
       <DrawerHead>
-        <h3 className={'pf-c-title pf-m-2xl'} tabIndex={props.isPanelExpanded ? 0 : -1}>
+        <h3 className={'pf-c-title pf-m-2xl'} tabIndex={props.isCatalogExpanded ? 0 : -1}>
           Step Details
         </h3>
         <DrawerActions>
