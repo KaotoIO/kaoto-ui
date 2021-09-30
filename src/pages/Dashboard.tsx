@@ -1,10 +1,4 @@
-import {
-  Grid,
-  GridItem,
-  Tab,
-  Tabs,
-  TabTitleText
-} from '@patternfly/react-core';
+import { Button, Drawer, DrawerContent, DrawerContentBody, Grid, GridItem, Tooltip, } from '@patternfly/react-core';
 import { Catalog } from '../components/Catalog';
 import { Visualization } from '../components/Visualization';
 import { YAMLEditor } from '../components/YAMLEditor';
@@ -14,6 +8,8 @@ import * as React from 'react';
 import { IStepProps, IViewData, IVizStepProps } from '../types';
 import YAML from '../stories/data/yaml';
 import { v4 as uuidv4 } from 'uuid';
+import './Dashboard.css';
+import { CodeIcon, PlusCircleIcon } from '@patternfly/react-icons';
 
 const Dashboard = () => {
   // If the catalog data won't be changing, consider removing this state
@@ -27,15 +23,22 @@ const Dashboard = () => {
 
   // yamlData contains the exact YAML returned by the API or specified by the user
   const [yamlData, setYamlData] = React.useState(YAML);
+
+  const [expanded, setExpanded] = React.useState({
+    catalog: false,
+    codeEditor: true
+  });
+
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const previousYaml = usePrevious(yamlData);
 
-  const [activeTabKey, setActiveTabKey] = React.useState();
+  const onExpandPanel = () => {
+    //drawerRef.current && drawerRef.current.focus();
+  };
 
-  const onTabSelected = (event, tabIndex) => {
-    setActiveTabKey(tabIndex);
-    return;
+  const onClosePanelClick = () => {
+    setExpanded({...expanded, catalog: false});
   };
 
   /**
@@ -55,7 +58,9 @@ const Dashboard = () => {
       }
     };
 
-    getCatalogData().catch((e) => {console.error(e)});
+    getCatalogData().catch((e) => {
+      console.error(e)
+    });
   }, []);
 
   /**
@@ -63,7 +68,7 @@ const Dashboard = () => {
    * issue request to API for Visualization JSON
    */
   React.useEffect(() => {
-    if(previousYaml === yamlData) {
+    if (previousYaml === yamlData) {
       return;
     }
 
@@ -89,7 +94,9 @@ const Dashboard = () => {
       setIsLoading(false);
     };
 
-    getVizData(yamlData).catch((e) => {console.error(e)});
+    getVizData(yamlData).catch((e) => {
+      console.error(e)
+    });
   }, [previousYaml, yamlData]);
 
   const deleteIntegrationStep = (stepsIndex: any) => {
@@ -104,7 +111,7 @@ const Dashboard = () => {
         const resp = await request.post({
           endpoint: '/deployment/yaml',
           contentType: 'application/json',
-          body: {name: 'Updated integration', steps: newSteps}
+          body: { name: 'Updated integration', steps: newSteps }
         });
 
         const data = await resp.text();
@@ -119,7 +126,9 @@ const Dashboard = () => {
       setIsLoading(false);
     };
 
-    getVizData().catch((e) => {console.error(e)});
+    getVizData().catch((e) => {
+      console.error(e)
+    });
   };
 
   /**
@@ -130,11 +139,11 @@ const Dashboard = () => {
     // Wait a bit before setting data
     setTimeout(() => {
       // Check that the data has changed, otherwise return
-      if(previousYaml === incomingData) {
+      if (previousYaml === incomingData) {
         return;
       }
       setYamlData(incomingData);
-    },750);
+    }, 750);
   };
 
   /**
@@ -151,7 +160,7 @@ const Dashboard = () => {
     steps.map((step, index) => {
       // TODO: extract this into something that Visualization can use too
       let inputStep = {
-        model: {...step},
+        model: { ...step },
         viz: {
           data: { label: step.name },
           id: uuidv4(),
@@ -189,23 +198,39 @@ const Dashboard = () => {
   };
 
   return (
-    <>
-      <Grid>
-        <GridItem span={activeTabKey === 1 ? 3 : 4}>
-          <Tabs activeKey={activeTabKey} isFilled={true} onSelect={onTabSelected}>
-            <Tab eventKey={0} title={<TabTitleText>Editor</TabTitleText>}>
-              <YAMLEditor yamlData={yamlData} handleChanges={handleChanges} />
-            </Tab>
-            <Tab eventKey={1} title={<TabTitleText>Catalog</TabTitleText>}>
-              <Catalog steps={catalogData} />
-            </Tab>
-          </Tabs>
-        </GridItem>
-        <GridItem span={activeTabKey === 1 ? 9 : 8}>
-          <Visualization deleteIntegrationStep={deleteIntegrationStep} isError={isError} isLoading={isLoading} steps={vizData} views={viewData.views} />
-        </GridItem>
-      </Grid>
-    </>
+    <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
+      <DrawerContent panelContent={<Catalog isCatalogExpanded={expanded.catalog} onClosePanelClick={onClosePanelClick}
+                                            steps={catalogData}/>}
+                     className={'panelCustom'}>
+        <DrawerContentBody>
+          <div className={'step-creator-button'}>
+            <Tooltip content={'Connector Catalog'}>
+              <Button variant={'plain'} isActive={expanded.catalog} aria-label={'Connector Catalog'} onClick={() => {
+                setExpanded({...expanded, catalog: !expanded.catalog});
+              }}>
+                <PlusCircleIcon width={40} height={40}/>
+              </Button>
+            </Tooltip>
+            <Tooltip content={'Code Editor'}>
+              <Button variant={'plain'} isActive={expanded.codeEditor} aria-label={'Code Editor'} onClick={() => {
+                setExpanded({...expanded, codeEditor: !expanded.codeEditor});
+              }}>
+                <CodeIcon width={40} height={40}/>
+              </Button>
+            </Tooltip>
+          </div>
+          <Grid>
+            {expanded.codeEditor && (<GridItem span={4}>
+              <YAMLEditor yamlData={yamlData} handleChanges={handleChanges}/>
+            </GridItem>)}
+            <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
+              <Visualization deleteIntegrationStep={deleteIntegrationStep} isError={isError} isLoading={isLoading}
+                             steps={vizData} views={viewData.views}/>
+            </GridItem>
+          </Grid>
+        </DrawerContentBody>
+      </DrawerContent>
+    </Drawer>
   );
 };
 

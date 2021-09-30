@@ -24,7 +24,7 @@ const YAMLEditor = ( {yamlData, handleChanges }: IYAMLEditor ) => {
   }
 
   const debounced = useDebouncedCallback(
-    (value) => {
+    (value: string) => {
       handleChanges(value);
     },
     800
