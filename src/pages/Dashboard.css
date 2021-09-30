@@ -10,13 +10,6 @@
     position: relative;
 }
 
-.button-icon {
-    font-size: 1.22em;
-    height: 1.22em;
-    width: 1.22em !important;
-}
-
-.button-icon svg {
-    display: block;
-    vertical-align: -0.125em;
+.visualization {
+    position: relative;
 }

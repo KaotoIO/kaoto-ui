@@ -16,7 +16,7 @@ import { IStepProps, IViewData, IVizStepProps } from '../types';
 import YAML from '../stories/data/yaml';
 import { v4 as uuidv4 } from 'uuid';
 import './Dashboard.css';
-import { PlusCircleIcon } from '@patternfly/react-icons';
+import { CodeIcon, PlusCircleIcon } from '@patternfly/react-icons';
 
 const Dashboard = () => {
   // If the catalog data won't be changing, consider removing this state
@@ -128,6 +128,18 @@ const Dashboard = () => {
     getVizData().catch((e) => {console.error(e)});
   };
 
+  type Panel = 'catalog' | 'yamlEditor' | 'none';
+  const [panel, setIsPanel] = React.useState<Panel>('yamlEditor');
+  const handleLegendClick = (thingy: Panel) => {
+    if(thingy === panel) {
+      console.log('Panel value is the same, setting to none...');
+      setIsPanel('none');
+    } else {
+      console.log('Setting new panel value..');
+      setIsPanel(thingy);
+    }
+  };
+
   /**
    * On detected changes to YAML state, issue POST to external endpoint
    * Returns JSON to be displayed in the visualizer
@@ -200,15 +212,18 @@ const Dashboard = () => {
                      className={'panelCustom'}>
         <DrawerContentBody>
           <div className={'step-creator-button'}>
-            <Button variant={'link'} className={'button-icon'} onClick={() => {setIsPanelExpanded(!isPanelExpanded)}}>
+            <Button variant={'plain'} aria-label={'Connector Catalog'} onClick={() => {setIsPanelExpanded(!isPanelExpanded)}}>
               <PlusCircleIcon width={50} height={50} />
+            </Button>
+            <Button variant={'plain'} aria-label={'Code Editor'} onClick={() => {handleLegendClick('yamlEditor')}}>
+              <CodeIcon width={50} height={50} />
             </Button>
           </div>
           <Grid>
-            <GridItem span={4}>
+            {panel === 'yamlEditor' && (<GridItem span={4}>
               <YAMLEditor yamlData={yamlData} handleChanges={handleChanges} />
-            </GridItem>
-            <GridItem span={8}>
+            </GridItem>)}
+            <GridItem span={panel === 'none' ? 12 : 8} className={'visualization'}>
               <Visualization deleteIntegrationStep={deleteIntegrationStep} isError={isError} isLoading={isLoading} steps={vizData} views={viewData.views} />
             </GridItem>
           </Grid>

@@ -5,14 +5,21 @@ export default 'apiVersion: camel.apache.org/v1alpha1\n' +
 'spec:\n' +
 '  sink:\n' +
 '    properties:\n' +
-'      null: The Password\n' +
+'      brokers: "The Brokers"\n' +
+'      password: "The Password"\n' +
+'      topic: "The Topic Names"\n' +
+'      username: "The Username"\n' +
 '    ref:\n' +
 '      apiVersion: camel.apache.org/v1alpha1\n' +
 '      kind: Kamelet\n' +
 '      name: kafka-sink\n' +
 '  source:\n' +
 '    properties:\n' +
-'      null: your own\n' +
+'      keywords: "Apache Camel"\n' +
+'      apiKey: "your own"\n' +
+'      apiKeySecret: "your own"\n' +
+'      accessToken: "your own"\n' +
+'      accessTokenSecret: "your own"\n' +
 '    ref:\n' +
 '      apiVersion: camel.apache.org/v1alpha1\n' +
 '      kind: Kamelet\n' +
