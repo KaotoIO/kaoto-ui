@@ -1,0 +1,3 @@
+[build.environment]
+YARN_ENABLE_GLOBAL_CACHE = "true"
+YARN_GLOBAL_FOLDER = "/opt/buildhome/.yarn_cache"
