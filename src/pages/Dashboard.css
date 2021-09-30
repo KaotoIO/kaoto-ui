@@ -1,8 +1,10 @@
 .step-creator-button {
+    background: white;
+    border-radius: 1.2em;
     position: fixed;
+    right: 4em;
     text-align: center;
     top: 6em;
-    right: 4em;
     z-index: 200;
 }
 

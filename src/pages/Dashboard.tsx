@@ -208,14 +208,14 @@ const Dashboard = () => {
               <Button variant={'plain'} isActive={expanded.catalog} aria-label={'Connector Catalog'} onClick={() => {
                 setExpanded({...expanded, catalog: !expanded.catalog});
               }}>
-                <PlusCircleIcon width={50} height={50}/>
+                <PlusCircleIcon width={40} height={40}/>
               </Button>
             </Tooltip>
             <Tooltip content={'Code Editor'}>
               <Button variant={'plain'} isActive={expanded.codeEditor} aria-label={'Code Editor'} onClick={() => {
                 setExpanded({...expanded, codeEditor: !expanded.codeEditor});
               }}>
-                <CodeIcon width={50} height={50}/>
+                <CodeIcon width={40} height={40}/>
               </Button>
             </Tooltip>
           </div>
