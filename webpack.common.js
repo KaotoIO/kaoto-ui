@@ -8,5 +8,6 @@ module.exports = {
         use: 'yaml-loader'
       }
     ]
-  }
+  },
+  target: ['web', 'es5']
 };
