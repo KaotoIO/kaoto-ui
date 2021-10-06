@@ -2662,9 +2662,19 @@
     npmlog "^4.1.2"
     pretty-hrtime "^1.0.3"
 
-"@storybook/node-logger@6.4.0-beta.3", "@storybook/node-logger@^6.4.0-alpha.22":
+"@storybook/node-logger@6.4.0-beta.3":
   version "6.4.0-beta.3"
   resolved "https://registry.yarnpkg.com/@storybook/node-logger/-/node-logger-6.4.0-beta.3.tgz#d38a4bdc60692dc7a8b471e93234fa8ff720d632"
+  dependencies:
+    "@types/npmlog" "^4.1.2"
+    chalk "^4.1.0"
+    core-js "^3.8.2"
+    npmlog "^4.1.2"
+    pretty-hrtime "^1.0.3"
+
+"@storybook/node-logger@^6.4.0-beta.4":
+  version "6.4.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@storybook/node-logger/-/node-logger-6.4.0-beta.4.tgz#8643ecbe5546208da53028f3b6453ef17f740c18"
   dependencies:
     "@types/npmlog" "^4.1.2"
     chalk "^4.1.0"
@@ -6860,9 +6870,9 @@ eslint-plugin-import@^2.22.0, eslint-plugin-import@^2.22.1:
     resolve "^1.20.0"
     tsconfig-paths "^3.11.0"
 
-eslint-plugin-jest@24.5.0, eslint-plugin-jest@^24.1.0:
-  version "24.5.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-24.5.0.tgz#a223a0040a19af749a161807254f0e47f5bfdcc3"
+eslint-plugin-jest@24.5.2, eslint-plugin-jest@^24.1.0:
+  version "24.5.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-24.5.2.tgz#f71f98f27fd18b50f55246ca090f36d1730e36a6"
   dependencies:
     "@typescript-eslint/experimental-utils" "^4.0.1"
 
