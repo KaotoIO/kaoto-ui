@@ -6623,9 +6623,9 @@ d3-zoom@3:
     d3-selection "2 - 3"
     d3-transition "2 - 3"
 
-d3@^7.0.1:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/d3/-/d3-7.1.0.tgz#fcc1695799e9d6b80d31fd8513a3646f5c76ef37"
+d3@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/d3/-/d3-7.1.1.tgz#77b9a0c9893b13643b8e52316ec65dca3a6a115e"
   dependencies:
     d3-array "3"
     d3-axis "3"
