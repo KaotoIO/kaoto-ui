@@ -44,7 +44,7 @@
     "@types/react-router-dom": "^5.3.1",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
-    "@typescript-eslint/scope-manager": "^4.27.0",
+    "@typescript-eslint/scope-manager": "^5.0.0",
     "babel-loader": "^8.2.2",
     "chromatic": "^5.10.0-canary.0",
     "eslint-config-prettier": "^8.3.0",
