@@ -28,7 +28,7 @@
     "@storybook/addon-docs": "^6.4.0-beta.10",
     "@storybook/addon-links": "^6.4.0-beta.10",
     "@storybook/builder-webpack5": "^6.3.8",
-    "@storybook/manager-webpack5": "^6.3.8",
+    "@storybook/manager-webpack5": "^6.3.11",
     "@storybook/node-logger": "^6.4.0-alpha.22",
     "@storybook/preset-create-react-app": "^4.0",
     "@storybook/react": "^6.4.0-beta.10",
