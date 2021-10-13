@@ -1823,15 +1823,15 @@
     ts-dedent "^2.0.0"
     util-deprecate "^1.0.2"
 
-"@storybook/addon-links@^6.4.0-beta.9":
-  version "6.4.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-6.4.0-beta.9.tgz#3b7a0cf07af7cc18feb57c2ad48ac93a0daa7ebb"
+"@storybook/addon-links@^6.4.0-beta.10":
+  version "6.4.0-beta.10"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-6.4.0-beta.10.tgz#8e99e179fbdd9589c99d3a1a90dbe7aa78066f9c"
   dependencies:
-    "@storybook/addons" "6.4.0-beta.9"
-    "@storybook/client-logger" "6.4.0-beta.9"
-    "@storybook/core-events" "6.4.0-beta.9"
+    "@storybook/addons" "6.4.0-beta.10"
+    "@storybook/client-logger" "6.4.0-beta.10"
+    "@storybook/core-events" "6.4.0-beta.10"
     "@storybook/csf" "0.0.2--canary.6aca495.0"
-    "@storybook/router" "6.4.0-beta.9"
+    "@storybook/router" "6.4.0-beta.10"
     "@types/qs" "^6.9.5"
     core-js "^3.8.2"
     global "^4.4.0"
