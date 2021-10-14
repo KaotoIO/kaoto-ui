@@ -72,7 +72,7 @@ const Catalog = (props: ICatalog) => {
     <DrawerPanelContent minSize={'525px'} colorVariant={DrawerColorVariant.light200}>
       <DrawerHead>
         <h3 className={'pf-c-title pf-m-2xl'} tabIndex={props.isCatalogExpanded ? 0 : -1}>
-          Step Details
+          Step Catalog
         </h3>
         <DrawerActions>
           <DrawerCloseButton onClick={props.onClosePanelClick}/>
