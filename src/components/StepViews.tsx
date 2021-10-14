@@ -19,9 +19,10 @@ export interface IStepViewsProps {
   isPanelExpanded: boolean,
   onClosePanelClick: (e: any) => void,
   step: {viz: IVizStepProps, model: IStepProps};
+  views: any;
 }
 
-const StepViews = ({deleteStep, isPanelExpanded, onClosePanelClick, step}: IStepViewsProps) => {
+const StepViews = ({deleteStep, isPanelExpanded, onClosePanelClick, step, views}: IStepViewsProps) => {
   const [activeTabKey, setActiveTabKey] = React.useState(0);
 
   const handleTabClick = (event, tabIndex) => {
@@ -45,6 +46,7 @@ const StepViews = ({deleteStep, isPanelExpanded, onClosePanelClick, step}: IStep
           <Tabs activeKey={activeTabKey} onSelect={handleTabClick}>
             <Tab eventKey={0} title={<TabTitleText>Details</TabTitleText>}>
               <br/>
+              {views.map((view) => view.name === 'Detail View' && view.id === step.model.id && (<>{view.name}</>))}
               <Grid hasGutter>
                 <GridItem span={3}><b>Name</b></GridItem>
                 <GridItem span={6}>{step.model.name}</GridItem>

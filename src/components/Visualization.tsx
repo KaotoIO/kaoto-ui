@@ -107,7 +107,13 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
   return (
     <>
       <Drawer isExpanded={isPanelExpanded} onExpand={onExpandPanel}>
-        <DrawerContent panelContent={<StepViews step={selectedStep} isPanelExpanded={isPanelExpanded} deleteStep={deleteStep} onClosePanelClick={onClosePanelClick}/>}
+        <DrawerContent panelContent={
+          <StepViews step={selectedStep}
+                     isPanelExpanded={isPanelExpanded}
+                     deleteStep={deleteStep}
+                     onClosePanelClick={onClosePanelClick}
+                     views={views}/>
+        }
                        className={'panelCustom'}>
           <DrawerContentBody>
             <div onDrop={(e: any) => {
