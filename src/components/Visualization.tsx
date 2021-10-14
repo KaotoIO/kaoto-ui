@@ -3,7 +3,7 @@ import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
-import { StepView } from './StepView';
+import { StepViews } from './StepViews';
 import {
   Drawer,
   DrawerContent,
@@ -107,7 +107,7 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
   return (
     <>
       <Drawer isExpanded={isPanelExpanded} onExpand={onExpandPanel}>
-        <DrawerContent panelContent={<StepView step={selectedStep} isPanelExpanded={isPanelExpanded} deleteStep={deleteStep} onClosePanelClick={onClosePanelClick}/>}
+        <DrawerContent panelContent={<StepViews step={selectedStep} isPanelExpanded={isPanelExpanded} deleteStep={deleteStep} onClosePanelClick={onClosePanelClick}/>}
                        className={'panelCustom'}>
           <DrawerContentBody>
             <div onDrop={(e: any) => {

@@ -14,14 +14,14 @@ import {
 } from '@patternfly/react-core';
 import { IStepProps, IVizStepProps } from '../types';
 
-export interface IStepViewProps {
+export interface IStepViewsProps {
   deleteStep: (e: any) => void,
   isPanelExpanded: boolean,
   onClosePanelClick: (e: any) => void,
   step: {viz: IVizStepProps, model: IStepProps};
 }
 
-const StepView = ({deleteStep, isPanelExpanded, onClosePanelClick, step}: IStepViewProps) => {
+const StepViews = ({deleteStep, isPanelExpanded, onClosePanelClick, step}: IStepViewsProps) => {
   const [activeTabKey, setActiveTabKey] = React.useState(0);
 
   const handleTabClick = (event, tabIndex) => {
@@ -82,4 +82,4 @@ const StepView = ({deleteStep, isPanelExpanded, onClosePanelClick, step}: IStepV
   );
 }
 
-export { StepView };
+export { StepViews };
