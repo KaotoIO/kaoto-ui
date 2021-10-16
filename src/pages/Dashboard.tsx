@@ -61,7 +61,7 @@ const Dashboard = () => {
     getCatalogData().catch((e) => {
       console.error(e)
     });
-  });
+  }, [viewData]);
 
   /**
    * Watch for user changes to YAML,

@@ -1,6 +1,6 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/07e8b623-a94d-4686-a784-eb4a9b90dde1/deploy-status)](https://app.netlify.com/sites/zimara/deploys)
 
-<p align=center>
+<p align="center">
   <a href="https://github.com/ZimaraIO/zimara-ui/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/ZimaraIO/zimara-ui" alt="license"></a>
 
