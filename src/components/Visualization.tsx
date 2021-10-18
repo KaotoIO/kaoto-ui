@@ -49,7 +49,7 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
   const incrementAmt = 100;
   const stageRef = React.useRef<Konva.Stage>(null);
   const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
-  const [selectedStep, setSelectedStep] = React.useState<{ model: IStepProps, viz: IVizStepProps, views?: IViewProps[] }>(placeholderStep);
+  const [selectedStep, setSelectedStep] = React.useState<{ model: IStepProps, viz: IVizStepProps }>(placeholderStep);
   const [tempSteps, setTempSteps] = React.useState<{ model: IStepProps, viz: IVizStepProps, views?: IViewProps[] }[]>([]);
 
   const deleteStep = (e: any) => {
@@ -114,8 +114,8 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
                      isPanelExpanded={isPanelExpanded}
                      deleteStep={deleteStep}
                      onClosePanelClick={onClosePanelClick}
-                     views={views}/>
-        }
+                     views={views.filter((view, index) => (view.step === selectedStep.model.UUID))}
+          />}
                        className={'panelCustom'}>
           <DrawerContentBody>
             <div onDrop={(e: any) => {
@@ -123,7 +123,6 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
               const dataJSON = e.dataTransfer.getData('text');
               // register event position
               stageRef.current?.setPointersPositions(e);
-              //handleDrop(e);
               const parsed: IStepProps = JSON.parse(dataJSON);
 
               setTempSteps(tempSteps.concat({

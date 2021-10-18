@@ -12,20 +12,18 @@ import {
   Tabs,
   TabTitleText
 } from '@patternfly/react-core';
-import { IStepProps, IVizStepProps } from '../types';
+import { IStepProps, IViewProps, IVizStepProps } from '../types';
 
 export interface IStepViewsProps {
   deleteStep: (e: any) => void,
   isPanelExpanded: boolean,
   onClosePanelClick: (e: any) => void,
   step: { viz: IVizStepProps, model: IStepProps };
-  views: any;
+  views: IViewProps[];
 }
 
 const StepViews = ({ deleteStep, isPanelExpanded, onClosePanelClick, step, views }: IStepViewsProps) => {
   const [activeTabKey, setActiveTabKey] = React.useState(0);
-
-  //console.table(views);
 
   const handleTabClick = (event, tabIndex) => {
     console.log(tabIndex);
@@ -47,12 +45,12 @@ const StepViews = ({ deleteStep, isPanelExpanded, onClosePanelClick, step, views
       </DrawerHead>
       <DrawerPanelBody>
         <Tabs activeKey={activeTabKey} onSelect={handleTabClick}>
-          {views.length > 0 ? views.map((view, index) => (view.step === step.model.UUID && (
+          {views.length > 0 ? views.map((view, index) => (
             <Tab eventKey={index} key={index} title={<TabTitleText>{view.name}</TabTitleText>}>
               <p>Step: {view.step}</p>
               <p>URL of View: {view.url}</p>
             </Tab>
-          ))) : (
+          )) : (
             <Tab eventKey={-1} title={<TabTitleText>Details</TabTitleText>}>
               <br/>
               <Grid hasGutter>
@@ -83,7 +81,6 @@ const StepViews = ({ deleteStep, isPanelExpanded, onClosePanelClick, step, views
               <br/>
               <Button variant={'danger'}
                       key={step.viz.id}
-                //isAriaDisabled={!step.viz.temporary}
                       onClick={deleteStep}>Delete</Button>
             </Tab>
           )}
