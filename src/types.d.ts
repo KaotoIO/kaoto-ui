@@ -38,6 +38,8 @@ export interface IViewProps {
   id: string;
   name: string;
   type: string;
+  step?: string;
+  url?: string;
   constraints?: IViewConstraintsProps[];
 }
 

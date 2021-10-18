@@ -41,15 +41,16 @@ const placeholderStep = {
       y: 0
     },
     temporary: false
-  }
+  },
+  views: []
 };
 
 const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views }: IVisualization) => {
   const incrementAmt = 100;
   const stageRef = React.useRef<Konva.Stage>(null);
   const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
-  const [selectedStep, setSelectedStep] = React.useState<{ model: IStepProps, viz: IVizStepProps }>(placeholderStep);
-  const [tempSteps, setTempSteps] = React.useState<{ model: IStepProps, viz: IVizStepProps }[]>([]);
+  const [selectedStep, setSelectedStep] = React.useState<{ model: IStepProps, viz: IVizStepProps, views?: IViewProps[] }>(placeholderStep);
+  const [tempSteps, setTempSteps] = React.useState<{ model: IStepProps, viz: IVizStepProps, views?: IViewProps[] }[]>([]);
 
   const deleteStep = (e: any) => {
     const selectedStepVizId = selectedStep.viz.id;
@@ -70,6 +71,7 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
     const newSteps = tempSteps;
     let newStep = newSteps[e.target.attrs.index];
     newStep.viz = { ...newStep.viz, position: { x: e.target.attrs.x, y: e.target.attrs.y } };
+    newStep.views = views.filter((view, index) => (view.step === newStep.model.UUID));
     setTempSteps(newSteps);
   };
 
