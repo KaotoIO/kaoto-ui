@@ -26,7 +26,7 @@
     "@storybook/addon-a11y": "^6.4.0-alpha.22",
     "@storybook/addon-actions": "^6.4.0-beta.9",
     "@storybook/addon-docs": "^6.4.0-beta.10",
-    "@storybook/addon-links": "^6.4.0-beta.10",
+    "@storybook/addon-links": "^6.4.0-beta.14",
     "@storybook/builder-webpack5": "^6.3.12",
     "@storybook/manager-webpack5": "^6.3.12",
     "@storybook/node-logger": "^6.4.0-alpha.22",
