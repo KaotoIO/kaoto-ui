@@ -62,6 +62,11 @@ module.exports = {
         },
       },
       {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
+      {
         test: /\.ya?ml$/,
         use: 'yaml-loader'
       }

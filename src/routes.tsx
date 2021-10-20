@@ -5,7 +5,7 @@ import { Dashboard } from './pages/Dashboard';
 import { NotFound } from './pages/NotFound';
 import { useDocumentTitle } from './utils/useDocumentTitle';
 import { LastLocationProvider, useLastLocation } from 'react-router-last-location';
-import { Microfrontend } from './components/Microfrontend';
+import { Extension } from './components/Extension';
 import { dynamicImport } from './components/import';
 
 const ButtonApp = React.lazy(() => dynamicImport('stepextension', './Button', 'http://localhost:3002/remoteEntry.js'));
@@ -109,9 +109,9 @@ const AppRoutes = (): React.ReactElement => {
         <Route exact path="/empty" render={() => <p>Nothing here.</p>} />
         <Route render={() => (
           <section className="microfrontend">
-            <Microfrontend name="auth" loading="Loading auth..." failure="Could not load microfrontend. Is it running?">
+            <Extension name="auth" loading="Loading auth..." failure="Could not load microfrontend. Is it running?">
               <ButtonApp text="Passed from core!" onButtonClicked={onButtonClicked} path="/" />
-            </Microfrontend>
+            </Extension>
           </section>
         )} />
       </Switch>

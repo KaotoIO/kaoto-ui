@@ -1,17 +1,3 @@
-declare global {
-  interface Window {
-    init: any;
-    get: any;
-    __remotes__: Record<string, string>;
-  }
-
-  /* eslint-disable camelcase */
-  const __webpack_init_sharing__: any;
-  const __webpack_share_scopes__: any;
-  /* eslint-enable camelcase */
-}
-//declare const window: any;
-
 export async function dynamicImport (scope: string, module: string, url: string) {
   await __webpack_init_sharing__('default');
 

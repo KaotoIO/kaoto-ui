@@ -9,7 +9,7 @@ type Props = PropsWithChildren<{
   failure?: ReactNode;
 }>;
 
-export function Microfrontend (props: Props) {
+export function Extension (props: Props) {
   const { loading = 'Loading...', failure = 'Error!' } = props;
 
   const children = React.Children.map(props.children, (child) => {
@@ -41,4 +41,4 @@ export function Microfrontend (props: Props) {
   );
 }
 
-export default Microfrontend;
+export default Extension;

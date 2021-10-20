@@ -24,6 +24,7 @@
     "noUnusedLocals": true,
     "resolveJsonModule": true,
     //"skipLibCheck": true,
+    "sourceMap": false,
     //"strict": false,
     "strict": true,
     "strictNullChecks": false,
@@ -38,6 +39,7 @@
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    ".yarn"
   ]
 }
