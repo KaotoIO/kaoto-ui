@@ -108,9 +108,9 @@ const AppRoutes = (): React.ReactElement => {
       <Switch>
         <Route exact path="/empty" render={() => <p>Nothing here.</p>} />
         <Route render={() => (
-          <section className="microfrontend">
-            <Extension name="auth" loading="Loading auth..." failure="Could not load microfrontend. Is it running?">
-              <ButtonApp text="Passed from core!" onButtonClicked={onButtonClicked} path="/" />
+          <section className="extension">
+            <Extension name="extension" loading="Loading extension..." failure="Could not load extension. Is it running?">
+              <ButtonApp text="Passed from Zimara!" onButtonClicked={onButtonClicked} path="/" />
             </Extension>
           </section>
         )} />

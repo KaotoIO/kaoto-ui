@@ -8,8 +8,6 @@ window.__remotes__ = {
 };
 
 if (module.hot) {
-    /* eslint-disable @typescript-eslint/no-var-requires */
-
     module.hot.accept('./App', () => {
         const NewApp = require('./App').default;
 
@@ -17,6 +15,4 @@ if (module.hot) {
     });
 
     module.hot.accept();
-
-    /* eslint-enable @typescript-eslint/no-var-requires */
 }
