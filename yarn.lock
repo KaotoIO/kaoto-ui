@@ -5420,6 +5420,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/uuid@npm:^8.3.1":
+  version: 8.3.1
+  resolution: "@types/uuid@npm:8.3.1"
+  checksum: 5864be83031f5836be985187ecebb2769936bf223bad896dac381f1a0fdd2ae239f448263196f752d62a4ecc8563817d6d94e329eb2099a28e743ab206e7bfea
+  languageName: node
+  linkType: hard
+
 "@types/webpack-env@npm:^1.16.0":
   version: 1.16.2
   resolution: "@types/webpack-env@npm:1.16.2"
@@ -8808,6 +8815,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"css-loader@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "css-loader@npm:6.4.0"
+  dependencies:
+    icss-utils: ^5.1.0
+    postcss: ^8.2.15
+    postcss-modules-extract-imports: ^3.0.0
+    postcss-modules-local-by-default: ^4.0.0
+    postcss-modules-scope: ^3.0.0
+    postcss-modules-values: ^4.0.0
+    postcss-value-parser: ^4.1.0
+    semver: ^7.3.5
+  peerDependencies:
+    webpack: ^5.0.0
+  checksum: 3d7d84823aec500733a5521700da3d749c590f001f15c69f141dc7dae1563601fdaaefdbbf019933b3fc1d1689e2a7a98ed5615d5866c490d88c4a5d145b8235
+  languageName: node
+  linkType: hard
+
 "css-prefers-color-scheme@npm:^3.1.1":
   version: 3.1.1
   resolution: "css-prefers-color-scheme@npm:3.1.1"
@@ -9962,6 +9987,13 @@ __metadata:
   version: 8.2.0
   resolution: "dotenv@npm:8.2.0"
   checksum: 16cb89cbd7b98b053899b8aba8c5044c8fb61a2db8a81fe70360b75035fce5fed53bd7a34d772be717d0880c0321122a4c09423f518025e1b52d96791521b1a7
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "dotenv@npm:10.0.0"
+  checksum: 9c45712e213de63bdb646b8e5344749b7566e25a67bbd3f03711d54e40eff10066c1f23eff0081d0949fda7c8efcc6e9e8bf18d0f023a8274f55f5d5f97bb6db
   languageName: node
   linkType: hard
 
@@ -23263,12 +23295,15 @@ typescript@~4.3.5:
     "@types/react": ^17.0.29
     "@types/react-dom": ^17.0.8
     "@types/react-router-dom": ^5.3.1
+    "@types/uuid": ^8.3.1
     "@typescript-eslint/eslint-plugin": ^4.33.0
     "@typescript-eslint/parser": ^4.33.0
     "@typescript-eslint/scope-manager": ^5.0.0
     babel-loader: ^8.2.2
     chromatic: ^6.0.4
+    css-loader: ^6.4.0
     d3: ^7.1.1
+    dotenv: ^10.0.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-import: ^2.22.0
     eslint-plugin-jest: 25.0.5

@@ -1,6 +1,10 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 const ModuleFederationPlugin = require('webpack').container.ModuleFederationPlugin;
 const path = require('path');
+const packageJsonName = require('./package.json').name;
+const packageJsonDeps = require('./package.json').dependencies;
+require('dotenv').config();
 
 module.exports = {
   entry: './src/index.ts',
@@ -10,7 +14,6 @@ module.exports = {
       directory: path.join(__dirname, 'dist'),
     },
     port: 3001,
-    //port: 9000,
     historyApiFallback: true,
     hot: true,
     headers: {
@@ -40,6 +43,17 @@ module.exports = {
         },
       },
       {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' }
+        ]
+      },
+      {
+        test: /\.(svg|png|jpg|woff|woff2)$/,
+        type: 'asset/resource'
+      },
+      {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
@@ -55,12 +69,16 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: 'app1',
-      shared: { react: { singleton: true }, 'react-dom': { singleton: true } },
+      name: packageJsonName,
+      shared: {
+        react: { singleton: true, eager: true, requiredVersion: packageJsonDeps.react },
+        'react-dom': { singleton: true, eager: true, requiredVersion: packageJsonDeps["react-dom"] }
+      },
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),
+    new webpack.EnvironmentPlugin(['REACT_APP_API_URL'])
   ],
 };
 

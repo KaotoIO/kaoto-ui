@@ -42,7 +42,7 @@ const placeholderStep = {
     },
     temporary: false
   },
-  views: []
+  views: [{}]
 };
 
 const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views }: IVisualization) => {
@@ -52,7 +52,7 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
   const [selectedStep, setSelectedStep] = React.useState<{ model: IStepProps, viz: IVizStepProps }>(placeholderStep);
   const [tempSteps, setTempSteps] = React.useState<{ model: IStepProps, viz: IVizStepProps, views?: IViewProps[] }[]>([]);
 
-  const deleteStep = (e: any) => {
+  const deleteStep = () => {
     const selectedStepVizId = selectedStep.viz.id;
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
@@ -63,11 +63,11 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
       : deleteIntegrationStep(stepsIndex);
   };
 
-  const onDragEndIntegration = e => {
+  const onDragEndIntegration = () => {
     //
   };
 
-  const onDragEndTempStep = e => {
+  const onDragEndTempStep = (e: any) => {
     const newSteps = tempSteps;
     let newStep = newSteps[e.target.attrs.index];
     newStep.viz = { ...newStep.viz, position: { x: e.target.attrs.x, y: e.target.attrs.y } };
@@ -80,7 +80,7 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
     width: 40
   };
 
-  const handleClickStep = (e) => {
+  const handleClickStep = (e: { target: { id: () => string; }; }) => {
     if(!e.target.id()) {
       return;
     }

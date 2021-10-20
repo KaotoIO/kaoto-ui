@@ -72,7 +72,7 @@ const Dashboard = () => {
       return;
     }
 
-    const getVizData = async (incomingData) => {
+    const getVizData = async (incomingData: string) => {
       setIsError(false);
       setIsLoading(true);
 

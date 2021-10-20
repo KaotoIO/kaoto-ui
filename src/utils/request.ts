@@ -6,7 +6,7 @@ export interface IFetchHeaders {
 
 export interface IFetch {
   endpoint: string;
-  method: FetchMethod;
+  method?: FetchMethod;
   headers?: IFetchHeaders;
   body?: any;
 
@@ -41,6 +41,9 @@ const api = ({
 
   headers = { ...headers };
 
+  console.log('apiURL: ' + apiURL);
+  console.log('apiURL: ' + JSON.stringify(apiURL));
+
   return fetch(`${apiURL}${endpoint}`, {
     method,
     body: data,
@@ -61,9 +64,9 @@ const api = ({
 };
 
 export default {
-  get: (options) => api({method: 'GET', ...options}),
-  post: (options) => api({method: 'POST', ...options}),
-  put: (options) => api({method: 'PUT', ...options}),
-  patch: (options) => api({method: 'PATCH', ...options}),
-  delete: (options) => api({method: 'DELETE', ...options}),
+  get: (options: IFetch) => api({method: 'GET', ...options}),
+  post: (options: IFetch) => api({method: 'POST', ...options}),
+  put: (options: IFetch) => api({method: 'PUT', ...options}),
+  patch: (options: IFetch) => api({method: 'PATCH', ...options}),
+  delete: (options: IFetch) => api({method: 'DELETE', ...options}),
 };

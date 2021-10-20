@@ -11,6 +11,7 @@ import { dynamicImport } from './components/import';
 const ButtonApp = React.lazy(() => dynamicImport('stepextension', './Button', 'http://localhost:3002/remoteEntry.js'));
 
 let routeFocusTimer: number;
+
 export interface IAppRoute {
   label?: string; // Excluding the label will exclude the route from the nav sidebar in AppLayout
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -20,12 +21,15 @@ export interface IAppRoute {
   path: string;
   title: string;
   isAsync?: boolean;
-  routes?: undefined;
+  routes?: IAppRoute[];
 }
 
 export interface IAppRouteGroup {
-  label: string;
-  routes: IAppRoute[];
+  component: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
+  path: string;
+  title: string;
+  label?: string;
+  routes?: IAppRoute[];
 }
 
 export type AppRouteConfig = IAppRoute | IAppRouteGroup;

@@ -5,7 +5,7 @@
     "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    //"importHelpers": true,
+    "importHelpers": true,
     "isolatedModules": false,
     "jsx": "react-jsx",
     "lib": [

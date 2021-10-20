@@ -10,15 +10,15 @@ interface IYAMLEditor {
 const YAMLEditor = ( {yamlData, handleChanges }: IYAMLEditor ) => {
   const editorRef = useRef(null);
 
-  function handleEditorChange(value, event) {
+  function handleEditorChange(value: string) {
     debounced(value);
   }
 
-  function handleEditorDidMount(editor, monaco) {
+  function handleEditorDidMount(editor: any) {
     editorRef.current = editor;
   }
 
-  function handleEditorValidation(markers) {
+  function handleEditorValidation(markers: any[]) {
     // Model Markers
     markers.forEach(marker => console.log('onValidate: ', marker.message));
   }
