@@ -78,6 +78,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),
+    // The following plugin picks up any process.env vars,
+    // which dotenv has a hold of automatically on import
     new webpack.EnvironmentPlugin(['REACT_APP_API_URL'])
   ],
 };
