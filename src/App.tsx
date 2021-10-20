@@ -16,5 +16,5 @@ export const App: React.FunctionComponent = () => {
   )
 };
 
-ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
+ReactDOM.render(<App />, document.getElementById('app') as HTMLElement);
 export default App;
