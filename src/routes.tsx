@@ -5,18 +5,12 @@ import { Dashboard } from './pages/Dashboard';
 import { NotFound } from './pages/NotFound';
 import { useDocumentTitle } from './utils/useDocumentTitle';
 import { LastLocationProvider, useLastLocation } from 'react-router-last-location';
-import { Extension } from './components/Extension';
-import { dynamicImport } from './components/import';
-
-const ButtonApp = React.lazy(() => dynamicImport('stepextension', './Button', 'http://localhost:3002/remoteEntry.js'));
 
 let routeFocusTimer: number;
 
 export interface IAppRoute {
   label?: string; // Excluding the label will exclude the route from the nav sidebar in AppLayout
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   component: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
-  /* eslint-enable @typescript-eslint/no-explicit-any */
   exact?: boolean;
   path: string;
   title: string;
@@ -86,10 +80,6 @@ const flattenedRoutes: IAppRoute[] = routes.reduce(
 );
 
 const AppRoutes = (): React.ReactElement => {
-  const onButtonClicked = () => {
-    console.log('CLICKED! BANANAS!!');
-  };
-
   return (
     <LastLocationProvider>
       <Switch>
@@ -104,16 +94,6 @@ const AppRoutes = (): React.ReactElement => {
           />
         ))}
         <PageNotFound title="404 Page Not Found" />
-      </Switch>
-      <Switch>
-        <Route exact path="/empty" render={() => <p>Nothing here.</p>} />
-        <Route render={() => (
-          <section className="extension">
-            <Extension name="extension" loading="Loading extension..." failure="Could not load extension. Is it running?">
-              <ButtonApp text="Passed from Zimara!" onButtonClicked={onButtonClicked} path="/" />
-            </Extension>
-          </section>
-        )} />
       </Switch>
     </LastLocationProvider>
   )

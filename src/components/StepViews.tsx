@@ -13,6 +13,8 @@ import {
   TabTitleText
 } from '@patternfly/react-core';
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
+import { dynamicImport } from './import';
+import { Extension } from './Extension';
 
 export interface IStepViewsProps {
   deleteStep: (e: any) => void,
@@ -21,10 +23,6 @@ export interface IStepViewsProps {
   step: { viz: IVizStepProps, model: IStepProps };
   views: IViewProps[];
 }
-
-window.__remotes__ = {
-  'stepextension': 'http://localhost:3002/remoteEntry.js'
-};
 
 const StepViews = ({ deleteStep, isPanelExpanded, onClosePanelClick, step, views }: IStepViewsProps) => {
   const hasDetailStep = views.some(v => v.id === 'detail-step');
@@ -89,10 +87,23 @@ const StepViews = ({ deleteStep, isPanelExpanded, onClosePanelClick, step, views
             </Tab>
           )}
           {views.length > 0 && views.map((view, index) => {
+            const ButtonApp = React.lazy(() => dynamicImport('stepextension', './Button', 'https://step-extension.netlify.app/remoteEntry.js'));
+
+            window.__remotes__ = {
+              'stepextension': 'http://localhost:3002/remoteEntry.js'
+            };
+
+            const onButtonClicked = () => {
+              console.log('CLICKED! BANANAS!!');
+            };
+
             return (
               <Tab eventKey={index} key={index} title={<TabTitleText>{view.name}</TabTitleText>}>
                 <p>Step: {view.step}</p>
                 <p>URL of View: {view.url}</p>
+                <Extension name="extension" loading="Loading extension..." failure="Could not load extension. Is it running?">
+                  <ButtonApp text="Passed from Zimara!" onButtonClicked={onButtonClicked} path="/" />
+                </Extension>
               </Tab>
             )
           })}
