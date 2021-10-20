@@ -5,25 +5,31 @@
     "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
+    //"importHelpers": true,
+    "isolatedModules": false,
     "jsx": "react-jsx",
     "lib": [
-      "dom",
-      "es6"
+      "esnext",
+      "dom"
+      //"es6"
     ],
     "module": "esnext",
     "moduleResolution": "node",
-    "noEmit": true,
+    "noEmit": false,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false,
-    "noImplicitReturns": true,
+    //"noImplicitAny": false,
+    "noImplicitAny": true,
+    "noImplicitReturns": false,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true,
+    //"skipLibCheck": true,
+    //"strict": false,
     "strict": true,
-    "target": "es5",
-    "isolatedModules": true
+    "strictNullChecks": false,
+    "suppressImplicitAnyIndexErrors": true,
+    //"target": "es5",
+    "target": "es2019"
   },
   "include": [
     "**/src/**/*.tsx",

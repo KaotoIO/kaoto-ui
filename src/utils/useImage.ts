@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const defaultState = { image: undefined, status: 'loading' };
 
-export default function useImage(url, crossOrigin?): [
+export default function useImage(url: string, crossOrigin?: string): [
   (
     | HTMLImageElement
     | SVGImageElement

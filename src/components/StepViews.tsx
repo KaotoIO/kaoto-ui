@@ -25,7 +25,7 @@ export interface IStepViewsProps {
 const StepViews = ({ deleteStep, isPanelExpanded, onClosePanelClick, step, views }: IStepViewsProps) => {
   const [activeTabKey, setActiveTabKey] = React.useState(0);
 
-  const handleTabClick = (event, tabIndex) => {
+  const handleTabClick = (event: any, tabIndex: any) => {
     console.log(tabIndex);
     setActiveTabKey(tabIndex);
   };

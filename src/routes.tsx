@@ -5,6 +5,10 @@ import { Dashboard } from './pages/Dashboard';
 import { NotFound } from './pages/NotFound';
 import { useDocumentTitle } from './utils/useDocumentTitle';
 import { LastLocationProvider, useLastLocation } from 'react-router-last-location';
+import { Microfrontend } from './components/Microfrontend';
+import { dynamicImport } from './components/import';
+
+const ButtonApp = React.lazy(() => dynamicImport('stepextension', './Button', 'http://localhost:3002/remoteEntry.js'));
 
 let routeFocusTimer: number;
 export interface IAppRoute {
@@ -77,22 +81,38 @@ const flattenedRoutes: IAppRoute[] = routes.reduce(
   [] as IAppRoute[]
 );
 
-const AppRoutes = (): React.ReactElement => (
-  <LastLocationProvider>
-    <Switch>
-      {flattenedRoutes.map(({ path, exact, component, title, isAsync }, idx) => (
-        <RouteWithTitleUpdates
-          path={path}
-          exact={exact}
-          component={component}
-          key={idx}
-          title={title}
-          isAsync={isAsync}
-        />
-      ))}
-      <PageNotFound title="404 Page Not Found" />
-    </Switch>
-  </LastLocationProvider>
-);
+const AppRoutes = (): React.ReactElement => {
+  const onButtonClicked = () => {
+    console.log('CLICKED! BANANAS!!');
+  };
+
+  return (
+    <LastLocationProvider>
+      <Switch>
+        {flattenedRoutes.map(({ path, exact, component, title, isAsync }, idx) => (
+          <RouteWithTitleUpdates
+            path={path}
+            exact={exact}
+            component={component}
+            key={idx}
+            title={title}
+            isAsync={isAsync}
+          />
+        ))}
+        <PageNotFound title="404 Page Not Found" />
+      </Switch>
+      <Switch>
+        <Route exact path="/empty" render={() => <p>Nothing here.</p>} />
+        <Route render={() => (
+          <section className="microfrontend">
+            <Microfrontend name="auth" loading="Loading auth..." failure="Could not load microfrontend. Is it running?">
+              <ButtonApp text="Passed from core!" onButtonClicked={onButtonClicked} path="/" />
+            </Microfrontend>
+          </section>
+        )} />
+      </Switch>
+    </LastLocationProvider>
+  )
+};
 
 export { AppRoutes, routes };
