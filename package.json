@@ -23,7 +23,7 @@
     "@babel/core": "^7.14.6",
     "@mdx-js/react": "^1.6.22",
     "@patternfly/react-icons": "^4.11.0",
-    "@storybook/addon-a11y": "^6.4.0-alpha.22",
+    "@storybook/addon-a11y": "^6.4.0-beta.15",
     "@storybook/addon-actions": "^6.4.0-beta.9",
     "@storybook/addon-docs": "^6.4.0-beta.10",
     "@storybook/addon-links": "^6.4.0-beta.10",
