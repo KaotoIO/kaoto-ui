@@ -22,11 +22,20 @@ export interface IStepViewsProps {
   views: IViewProps[];
 }
 
+window.__remotes__ = {
+  'stepextension': 'http://localhost:3002/remoteEntry.js'
+};
+
 const StepViews = ({ deleteStep, isPanelExpanded, onClosePanelClick, step, views }: IStepViewsProps) => {
-  const [activeTabKey, setActiveTabKey] = React.useState(0);
+  const hasDetailStep = views.some(v => v.id === 'detail-step');
+  const defaultTabIndex = 10000;
+  const [activeTabKey, setActiveTabKey] = React.useState(defaultTabIndex);
+
+  React.useEffect(() => {
+    setActiveTabKey(views.some(v => v.id === 'detail-step') ? 0 : defaultTabIndex);
+  }, [step]);
 
   const handleTabClick = (event: any, tabIndex: any) => {
-    console.log(tabIndex);
     setActiveTabKey(tabIndex);
   };
 
@@ -45,13 +54,8 @@ const StepViews = ({ deleteStep, isPanelExpanded, onClosePanelClick, step, views
       </DrawerHead>
       <DrawerPanelBody>
         <Tabs activeKey={activeTabKey} onSelect={handleTabClick}>
-          {views.length > 0 ? views.map((view, index) => (
-            <Tab eventKey={index} key={index} title={<TabTitleText>{view.name}</TabTitleText>}>
-              <p>Step: {view.step}</p>
-              <p>URL of View: {view.url}</p>
-            </Tab>
-          )) : (
-            <Tab eventKey={-1} title={<TabTitleText>Details</TabTitleText>}>
+          {!hasDetailStep && (
+            <Tab eventKey={defaultTabIndex} title={<TabTitleText>Details</TabTitleText>}>
               <br/>
               <Grid hasGutter>
                 <GridItem span={3}><b>Name</b></GridItem>
@@ -84,6 +88,14 @@ const StepViews = ({ deleteStep, isPanelExpanded, onClosePanelClick, step, views
                       onClick={deleteStep}>Delete</Button>
             </Tab>
           )}
+          {views.length > 0 && views.map((view, index) => {
+            return (
+              <Tab eventKey={index} key={index} title={<TabTitleText>{view.name}</TabTitleText>}>
+                <p>Step: {view.step}</p>
+                <p>URL of View: {view.url}</p>
+              </Tab>
+            )
+          })}
         </Tabs>
       </DrawerPanelBody>
     </DrawerPanelContent>

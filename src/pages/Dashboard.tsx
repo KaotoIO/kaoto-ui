@@ -84,7 +84,7 @@ const Dashboard = () => {
         });
 
         const data: IViewData = await resp.json();
-        prepareVizDataSteps(data.steps);
+        prepareAndSetVizDataSteps(data.steps);
         setViewData(data);
       } catch (err) {
         console.error(err);
@@ -153,7 +153,7 @@ const Dashboard = () => {
    * Data is stored in the VizData hook.
    * @param steps
    */
-  const prepareVizDataSteps = (steps: IStepProps[]) => {
+  const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
     const incrementAmt = 100;
     const stepsAsElements: any[] = [];
 
