@@ -87,10 +87,10 @@ const StepViews = ({ deleteStep, isPanelExpanded, onClosePanelClick, step, views
             </Tab>
           )}
           {views.length > 0 && views.map((view, index) => {
-            const ButtonApp = React.lazy(() => dynamicImport('stepextension', './Button', 'https://step-extension.netlify.app/remoteEntry.js'));
+            const ButtonApp = React.lazy(() => dynamicImport('stepextension', './Button', view.url));
 
             const onButtonClicked = () => {
-              console.log('CLICKED! BANANAS!!');
+              console.log('CLICKED! BANANAS!! View ' + view.id + ' for ' + view.step);
             };
 
             return (
