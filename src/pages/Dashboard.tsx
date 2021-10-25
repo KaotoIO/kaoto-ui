@@ -61,7 +61,7 @@ const Dashboard = () => {
     getCatalogData().catch((e) => {
       console.error(e)
     });
-  }, []);
+  }, [viewData]);
 
   /**
    * Watch for user changes to YAML,
@@ -72,7 +72,7 @@ const Dashboard = () => {
       return;
     }
 
-    const getVizData = async (incomingData) => {
+    const getVizData = async (incomingData: string) => {
       setIsError(false);
       setIsLoading(true);
 
@@ -84,7 +84,7 @@ const Dashboard = () => {
         });
 
         const data: IViewData = await resp.json();
-        prepareVizDataSteps(data.steps);
+        prepareAndSetVizDataSteps(data.steps);
         setViewData(data);
       } catch (err) {
         console.error(err);
@@ -153,7 +153,7 @@ const Dashboard = () => {
    * Data is stored in the VizData hook.
    * @param steps
    */
-  const prepareVizDataSteps = (steps: IStepProps[]) => {
+  const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
     const incrementAmt = 100;
     const stepsAsElements: any[] = [];
 

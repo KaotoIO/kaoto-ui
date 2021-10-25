@@ -32,7 +32,7 @@ interface ICatalog {
 }
 
 // Shorten a string to less than maxLen characters without truncating words.
-function shorten(str, maxLen, separator = ' ') {
+function shorten(str: string, maxLen: number, separator = ' ') {
   if (str.length <= maxLen) return str;
   return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
 }
@@ -51,7 +51,7 @@ const Catalog = (props: ICatalog) => {
     setIsSelected(event.currentTarget.id);
   };
 
-  function search(items) {
+  function search(items: any[]) {
     /**
      * Returns a list of items that meet
      * meet the condition of the `type`
@@ -72,7 +72,7 @@ const Catalog = (props: ICatalog) => {
     <DrawerPanelContent minSize={'525px'} colorVariant={DrawerColorVariant.light200}>
       <DrawerHead>
         <h3 className={'pf-c-title pf-m-2xl'} tabIndex={props.isCatalogExpanded ? 0 : -1}>
-          Step Details
+          Step Catalog
         </h3>
         <DrawerActions>
           <DrawerCloseButton onClick={props.onClosePanelClick}/>

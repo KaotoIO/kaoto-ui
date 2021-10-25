@@ -7,21 +7,23 @@ import { useDocumentTitle } from './utils/useDocumentTitle';
 import { LastLocationProvider, useLastLocation } from 'react-router-last-location';
 
 let routeFocusTimer: number;
+
 export interface IAppRoute {
   label?: string; // Excluding the label will exclude the route from the nav sidebar in AppLayout
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   component: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
-  /* eslint-enable @typescript-eslint/no-explicit-any */
   exact?: boolean;
   path: string;
   title: string;
   isAsync?: boolean;
-  routes?: undefined;
+  routes?: IAppRoute[];
 }
 
 export interface IAppRouteGroup {
-  label: string;
-  routes: IAppRoute[];
+  component: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
+  path: string;
+  title: string;
+  label?: string;
+  routes?: IAppRoute[];
 }
 
 export type AppRouteConfig = IAppRoute | IAppRouteGroup;
@@ -77,22 +79,24 @@ const flattenedRoutes: IAppRoute[] = routes.reduce(
   [] as IAppRoute[]
 );
 
-const AppRoutes = (): React.ReactElement => (
-  <LastLocationProvider>
-    <Switch>
-      {flattenedRoutes.map(({ path, exact, component, title, isAsync }, idx) => (
-        <RouteWithTitleUpdates
-          path={path}
-          exact={exact}
-          component={component}
-          key={idx}
-          title={title}
-          isAsync={isAsync}
-        />
-      ))}
-      <PageNotFound title="404 Page Not Found" />
-    </Switch>
-  </LastLocationProvider>
-);
+const AppRoutes = (): React.ReactElement => {
+  return (
+    <LastLocationProvider>
+      <Switch>
+        {flattenedRoutes.map(({ path, exact, component, title, isAsync }, idx) => (
+          <RouteWithTitleUpdates
+            path={path}
+            exact={exact}
+            component={component}
+            key={idx}
+            title={title}
+            isAsync={isAsync}
+          />
+        ))}
+        <PageNotFound title="404 Page Not Found" />
+      </Switch>
+    </LastLocationProvider>
+  )
+};
 
 export { AppRoutes, routes };

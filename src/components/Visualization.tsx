@@ -3,7 +3,7 @@ import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
-import { StepView } from './StepView';
+import { StepViews } from './StepViews';
 import {
   Drawer,
   DrawerContent,
@@ -41,7 +41,8 @@ const placeholderStep = {
       y: 0
     },
     temporary: false
-  }
+  },
+  views: [{}]
 };
 
 const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views }: IVisualization) => {
@@ -49,9 +50,9 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
   const stageRef = React.useRef<Konva.Stage>(null);
   const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
   const [selectedStep, setSelectedStep] = React.useState<{ model: IStepProps, viz: IVizStepProps }>(placeholderStep);
-  const [tempSteps, setTempSteps] = React.useState<{ model: IStepProps, viz: IVizStepProps }[]>([]);
+  const [tempSteps, setTempSteps] = React.useState<{ model: IStepProps, viz: IVizStepProps, views?: IViewProps[] }[]>([]);
 
-  const deleteStep = (e: any) => {
+  const deleteStep = () => {
     const selectedStepVizId = selectedStep.viz.id;
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
@@ -62,14 +63,15 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
       : deleteIntegrationStep(stepsIndex);
   };
 
-  const onDragEndIntegration = e => {
+  const onDragEndIntegration = () => {
     //
   };
 
-  const onDragEndTempStep = e => {
+  const onDragEndTempStep = (e: any) => {
     const newSteps = tempSteps;
     let newStep = newSteps[e.target.attrs.index];
     newStep.viz = { ...newStep.viz, position: { x: e.target.attrs.x, y: e.target.attrs.y } };
+    newStep.views = views.filter((view, index) => (view.step === newStep.model.UUID));
     setTempSteps(newSteps);
   };
 
@@ -78,7 +80,7 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
     width: 40
   };
 
-  const handleClickStep = (e) => {
+  const handleClickStep = (e: { target: { id: () => string; }; }) => {
     if(!e.target.id()) {
       return;
     }
@@ -107,7 +109,13 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
   return (
     <>
       <Drawer isExpanded={isPanelExpanded} onExpand={onExpandPanel}>
-        <DrawerContent panelContent={<StepView step={selectedStep} isPanelExpanded={isPanelExpanded} deleteStep={deleteStep} onClosePanelClick={onClosePanelClick}/>}
+        <DrawerContent panelContent={
+          <StepViews step={selectedStep}
+                     isPanelExpanded={isPanelExpanded}
+                     deleteStep={deleteStep}
+                     onClosePanelClick={onClosePanelClick}
+                     views={views.filter((view, index) => (view.step === selectedStep.model.UUID))}
+          />}
                        className={'panelCustom'}>
           <DrawerContentBody>
             <div onDrop={(e: any) => {
@@ -115,7 +123,6 @@ const Visualization = ({ deleteIntegrationStep, isError, isLoading, steps, views
               const dataJSON = e.dataTransfer.getData('text');
               // register event position
               stageRef.current?.setPointersPositions(e);
-              //handleDrop(e);
               const parsed: IStepProps = JSON.parse(dataJSON);
 
               setTempSteps(tempSteps.concat({
