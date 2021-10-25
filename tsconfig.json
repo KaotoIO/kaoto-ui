@@ -6,16 +6,15 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "isolatedModules": false,
+    "isolatedModules": true,
     "jsx": "react-jsx",
     "lib": [
       "esnext",
       "dom"
-      //"es6"
     ],
     "module": "esnext",
     "moduleResolution": "node",
-    "noEmit": false,
+    "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": false,
@@ -26,7 +25,8 @@
     "strict": true,
     "strictNullChecks": false,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "es2019"
+    "target": "es2019",
+    "skipLibCheck": true
   },
   "include": [
     "**/src/**/*.tsx",

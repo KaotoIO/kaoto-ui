@@ -8,15 +8,14 @@
   "scripts": {
     "start": "webpack-cli serve",
     "build": "webpack --mode production",
-    "dev": "webpack serve --progress",
     "build-storybook": "build-storybook -s public",
+    "dev": "webpack serve --progress",
     "chromatic": "CHROMATIC_STORYBOOK_VERSION='@storybook/react@6.2.0' chromatic --exit-zero-on-changes",
-    "eject": "react-scripts eject",
     "format": "prettier --write 'src/**/*.{js,ts,tsx,scss,css,json}'",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "storybook": "start-storybook -p 6006 -s public",
-    "test": "react-scripts test",
-    "test:coverage": "react-scripts test --coverage --watchAll=false"
+    "test": "jest",
+    "test:coverage": "jest --coverage --watchAll=false"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.3.1",

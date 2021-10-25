@@ -18,20 +18,21 @@
 
 User interface for [Zimara Backend](https://github.com/ZimaraIO/zimara-backend).
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 - Node >= 14
 - Yarn Berry (2.x)
 - Storybook 6
-- Webpack 4 (support for 5 will be added [when CRA supports it](https://github.com/facebook/create-react-app/issues/9994))
+- Webpack 5
 
-## Install
+## Install & Setup
 
-Install dependencies:
+1. Install dependencies:
 
 ```bash
 yarn install
 ```
+
+2. Duplicate the `.env.example` file and name it `.env`.
+3. Update `REACT_APP_API_URL` in the file with the correct host for the API. If using Zimara API locally, this should be `http://localhost:8080`, but please check.
 
 ## Development
 
@@ -41,7 +42,7 @@ Run the app in development mode:
 yarn start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
@@ -53,7 +54,7 @@ Run all Jest and React Testing Library unit tests:
 `yarn test`
 
 Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information. Tests are colocated and live as closely to corresponding code as possible (typically in the `tests` dir of the component).
+Tests are colocated and live as closely to corresponding code as possible (typically in the `tests` dir of the component).
 
 ## Build
 
@@ -75,9 +76,3 @@ Run all [Storybook](https://storybook.js.org/) stories.
 yarn storybook
 ```
 
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
