@@ -87,18 +87,16 @@ const StepViews = ({ deleteStep, isPanelExpanded, onClosePanelClick, step, views
             </Tab>
           )}
           {views.length > 0 && views.map((view, index) => {
-            const ButtonApp = React.lazy(() => dynamicImport('stepextension', './Button', view.url));
+            const StepExtension = React.lazy(() => dynamicImport(view.scope, view.module, view.url));
 
             const onButtonClicked = () => {
-              console.log('CLICKED! BANANAS!! View ' + view.id + ' for ' + view.step);
+              console.log('Button clicked! Viewing ' + view.id + ' for the following step: ' + view.step);
             };
 
             return (
               <Tab eventKey={index} key={index} title={<TabTitleText>{view.name}</TabTitleText>}>
-                <p>Step: {view.step}</p>
-                <p>URL of View: {view.url}</p>
                 <Extension name="extension" loading="Loading extension..." failure="Could not load extension. Is it running?">
-                  <ButtonApp text="Passed from Zimara!" onButtonClicked={onButtonClicked} path="/" />
+                  <StepExtension text="Passed from Zimara!" onButtonClicked={onButtonClicked} path="/" />
                 </Extension>
               </Tab>
             )

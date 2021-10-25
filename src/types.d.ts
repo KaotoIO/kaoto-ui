@@ -47,9 +47,11 @@ export interface IViewProps {
   id: string;
   name: string;
   type: string;
+  constraints?: IViewConstraintsProps[];
+  module?: string;
+  scope?: string;
   step?: string;
   url?: string;
-  constraints?: IViewConstraintsProps[];
 }
 
 export interface IViewData {
