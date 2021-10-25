@@ -41,9 +41,6 @@ const api = ({
 
   headers = { ...headers };
 
-  console.log('apiURL: ' + apiURL);
-  console.log('apiURL: ' + JSON.stringify(apiURL));
-
   return fetch(`${apiURL}${endpoint}`, {
     method,
     body: data,
