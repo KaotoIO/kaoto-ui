@@ -15,7 +15,8 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "storybook": "start-storybook -p 6006 -s public",
     "test": "jest",
-    "test:coverage": "jest --coverage --watchAll=false"
+    "test:coverage": "jest --coverage --watchAll=false",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.3.1",
