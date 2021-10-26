@@ -6,7 +6,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "isolatedModules": true,
+    "isolatedModules": false, // keep as false, we need to evaluate files separately: https://kulshekhar.github.io/ts-jest/user/config/isolatedModules
     "jsx": "react-jsx",
     "lib": [
       "esnext",

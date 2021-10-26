@@ -18,5 +18,3 @@ const renderMocked = () => {
  */
 
 it('', () => {});
-
-export {}

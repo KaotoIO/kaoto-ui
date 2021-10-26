@@ -1,9 +1,11 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
-const ModuleFederationPlugin = require('webpack').container.ModuleFederationPlugin;
+const { EnvironmentPlugin } = require('webpack');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const { ModuleFederationPlugin } = require('webpack').container;
 const path = require('path');
 const packageJsonName = require('./package.json').name;
 const packageJsonDeps = require('./package.json').dependencies;
+const ESLintPlugin = require('eslint-webpack-plugin');
 require('dotenv').config();
 
 module.exports = {
@@ -15,7 +17,6 @@ module.exports = {
     },
     port: 3001,
     historyApiFallback: true,
-    hot: true,
     headers: {
       'Cache-Control': 'no-store'
     }
@@ -29,10 +30,16 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(j|t)sx?$/,
+        test: /\.[jt]sx?$/,
         exclude: /node_modules/,
         use: [
-          { loader: 'ts-loader' }
+          {
+            loader: 'ts-loader',
+            options: {
+              // use ForkTsCheckerWebpackPlugin instead
+              transpileOnly: true
+            }
+          },
         ]
       },
       {
@@ -73,6 +80,9 @@ module.exports = {
     ],
   },
   plugins: [
+    // The following plugin picks up any process.env vars,
+    // which dotenv has a hold of automatically on import
+    new EnvironmentPlugin(['REACT_APP_API_URL']),
     new ModuleFederationPlugin({
       name: packageJsonName,
       shared: {
@@ -83,9 +93,14 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),
-    // The following plugin picks up any process.env vars,
-    // which dotenv has a hold of automatically on import
-    new webpack.EnvironmentPlugin(['REACT_APP_API_URL'])
+    new ESLintPlugin({
+      extensions: ['.tsx', '.ts', '.js'],
+      exclude: 'node_modules',
+      context: 'src'
+    }),
+    new ForkTsCheckerWebpackPlugin({
+      async: false,
+    })
   ],
 };
 
