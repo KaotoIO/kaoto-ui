@@ -1,0 +1,19 @@
+name: Add epics to Roadmap
+
+on:
+  issues:
+    types: [opened, labeled]
+env:
+  MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+
+jobs:
+  assign_one_project:
+    runs-on: ubuntu-latest
+    name: Move to Wish List
+    steps:
+    - name: Assign issues with `user-story` label to project 3
+      uses: srggrs/assign-one-project-github-action@1.3.1
+      if: contains(github.event.issue.labels.*.name, 'user-story')
+      with:
+        project: 'https://github.com/orgs/ZimaraIO/projects/3'
+        column_name: 'WishList'
