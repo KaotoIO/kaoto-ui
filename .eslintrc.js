@@ -1,55 +1,67 @@
 module.exports = {
-  root: true,
-  ignorePatterns: ['.eslintrc.js'],
+  env: {
+    browser: true,
+    es6: true,
+    node: true,
+  },
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier', // this needs to stay last to be able to override other configs
+  ],
+  overrides: [
+    {
+      files: ['**/*.tsx'],
+      rules: {
+        'react/prop-types': 'off',
+        'react/no-unescaped-entities': 'off',
+      },
+    },
+    {
+      files: ['**/*.js', '**/*.(spec|test).(ts|tsx)'], // Allow commonjs modules for js files
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
+        'react/no-unescaped-entities': 'off',
+      },
+    },
+    {
+      files: ['**/*.stories.*'],
+      rules: {
+        'import/no-anonymous-default-export': 'off',
+      },
+    },
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: ['./tsconfig.json'],
+    ecmaVersion: 2020,
+    ecmaFeatures: {
+      jsx: true,
+    },
+    sourceType: 'module',
   },
   plugins: [
     '@typescript-eslint',
     'jest',
-    'jsx-a11y',
     'react',
-  ],
-  extends: [
-    'eslint:recommended',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-    'prettier', // this needs to stay last to be able to override other configs
+    //'react-hooks'
   ],
   rules: {
-    'no-undef': 'off',
+    // prefer spaces (2) over tabs for indentation
+    indent: ['error', 2],
+    // all lines to have semicolons to end statements
+    //semi: ['error', 'always'],
+    '@typescript-eslint/no-explicit-any': 'warn',
+    //'@typescript-eslint/ban-ts-comment': 'off',
+    //'@typescript-eslint/no-unused-vars': 'off',
     'no-unused-vars': 'off',
-    'import/default': 'off',
-    'import/named': 'off',
-    'import/namespace': 'off',
-    'import/no-duplicates': 'off',
-    'import/no-named-as-default': 'off',
-    'import/no-named-as-default-member': 'off',
-    'import/no-unresolved': 'off',
-    'jsx-a11y/accessible-emoji': 'warn',
-    'react/jsx-boolean-value': 'off',
-    'react/prop-types': 'off',
-    'react/no-unescaped-entities': 'off',
-    'react/react-in-jsx-scope': 'off',
-    'react/jsx-one-expression-per-line': 'off',
-    'react/jsx-wrap-multilines': 'off',
-    'react/destructuring-assignment': 'off',
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn'
+    'react-hooks/exhaustive-deps': 'off',
   },
   settings: {
-    'import/extensions': ['.js', '.jsx'],
-    'import/resolver': { node: { extensions: ['.js', '.jsx', '.ts', '.tsx'] } },
-    'linkComponents': [
-      // Components used as alternatives to <a> for linking, eg. <Link to={ url } />
-      'Hyperlink',
-      {'name': 'Link', 'linkAttribute': 'to'}
-    ],
     react: {
       version: 'detect',
     },
-  }
+  },
 };

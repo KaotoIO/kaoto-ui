@@ -11,6 +11,8 @@ import {
   SkipToContent,
 } from '@patternfly/react-core';
 import { routes, IAppRoute, IAppRouteGroup } from '../routes';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import logo from '../assets/images/logo-temp.png';
 
 interface IAppLayout {
@@ -39,7 +41,7 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
     function handleClick() {
       history.push('/');
     }
-    return <img src={logo} onClick={handleClick} alt="Zimara Logo" style={{maxWidth: '50%'}} />;
+    return <img src={logo} onClick={handleClick} alt="Zimara Logo" style={{ maxWidth: '50%' }} />;
   }
 
   const Header = (
@@ -65,10 +67,10 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
     <NavExpandable
       key={`${group.label}-${groupIndex}`}
       id={`${group.label}-${groupIndex}`}
-      title={group.label}
-      isActive={group.routes.some((route) => route.path === location.pathname)}
+      title={group.label!}
+      isActive={group.routes?.some((route) => route.path === location.pathname)}
     >
-      {group.routes.map((route, idx) => route.label && renderNavItem(route, idx))}
+      {group.routes?.map((route, idx) => route.label && renderNavItem(route, idx))}
     </NavExpandable>
   );
 

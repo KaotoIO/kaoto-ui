@@ -1,6 +1,9 @@
+import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
+
 declare module '*.yaml' {
-  const content: { [key: string]: any }
-  export default content
+  const content: { [key: string]: any };
+  export default content;
 }
 
 declare global {
@@ -10,12 +13,12 @@ declare global {
 
   const __webpack_init_sharing__: any;
   const __webpack_share_scopes__: any;
-}
 
-declare var process : {
-  env: {
-    REACT_APP_API_URL: string;
-  }
+  const process: {
+    env: {
+      REACT_APP_API_URL: string;
+    };
+  };
 }
 
 /**
@@ -65,7 +68,6 @@ export interface IVizStepProps {
   position: {
     x?: number;
     y?: number;
-  },
-  temporary: boolean
+  };
+  temporary: boolean;
 }
-

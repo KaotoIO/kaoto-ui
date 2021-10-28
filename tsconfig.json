@@ -3,39 +3,34 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
+    "declaration": true,
+    //"declaration": false,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "isolatedModules": false, // keep as false, we need to evaluate files separately: https://kulshekhar.github.io/ts-jest/user/config/isolatedModules
-    "jsx": "react-jsx",
-    "lib": [
-      "esnext",
-      "dom"
-    ],
+    "jsx": "react",
+    //"jsx": "react-jsx",
+    "lib": ["es6", "dom"],
+    //"lib": ["dom", "esnext"],
     "module": "esnext",
     "moduleResolution": "node",
-    "noEmit": false,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
-    "noImplicitReturns": false,
+    "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "dist",
     "resolveJsonModule": true,
-    "sourceMap": false,
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "sourceMap": true,
     "strict": true,
-    "strictNullChecks": false,
-    "suppressImplicitAnyIndexErrors": true,
-    "target": "es2019",
-    "skipLibCheck": true
+    "target": "es6"
   },
-  "include": [
-    "**/src/**/*.tsx",
-    "**/src/**/*.ts",
-    "**/src/**/*.js"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.jsx", "**/*.js"],
   "exclude": [
-    "node_modules",
     "dist",
-    ".yarn"
+    "node_modules",
+    //"**/*.stories.tsx",
+    //"**/*.(test|spec).ts*"
   ]
 }
