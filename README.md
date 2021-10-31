@@ -42,7 +42,7 @@ Run the app in development mode:
 yarn start
 ```
 
-Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
+Open [http://localhost:1337](http://localhost:1337) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
@@ -65,8 +65,6 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ## Stories
 

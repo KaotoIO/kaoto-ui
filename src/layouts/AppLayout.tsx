@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FunctionComponent, ReactNode, useState } from 'react';
 import { NavLink, useLocation, useHistory } from 'react-router-dom';
 import {
   Nav,
@@ -16,13 +16,13 @@ import { routes, IAppRoute, IAppRouteGroup } from '../routes';
 import logo from '../assets/images/logo-temp.png';
 
 interface IAppLayout {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
-  const [isNavOpen, setIsNavOpen] = React.useState(false);
-  const [isMobileView, setIsMobileView] = React.useState(false);
-  const [isNavOpenMobile, setIsNavOpenMobile] = React.useState(false);
+const AppLayout: FunctionComponent<IAppLayout> = ({ children }) => {
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
+  const [isNavOpenMobile, setIsNavOpenMobile] = useState(false);
 
   const onNavToggleMobile = () => {
     setIsNavOpenMobile(!isNavOpenMobile);

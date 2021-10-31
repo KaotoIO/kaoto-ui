@@ -6,23 +6,29 @@ module.exports = merge(common('development'), {
   mode: 'development',
   devtool: 'eval-source-map',
   devServer: {
-    static: {
-      directory: './dist',
-    },
+    allowedHosts: 'all',
+
     client: {
       overlay: true,
     },
-    historyApiFallback: true,
+
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
       'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
     },
-    allowedHosts: 'all',
+
+    historyApiFallback: true,
+
+    port: 1337,
+
+    static: {
+      directory: './dist',
+    },
   },
   plugins: [
     new webpack.DefinePlugin({
-      __BASE_PATH__: JSON.stringify(process.env.BASE_PATH || 'https://api.example.com'),
+      REACT_APP_API_URL: JSON.stringify(process.env.REACT_APP_API_URL || 'http://localhost:8080'),
     }),
   ],
 });

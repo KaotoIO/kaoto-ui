@@ -75,6 +75,10 @@ module.exports = () => {
             },
           ],
         },
+        {
+          test: /\.ya?ml$/,
+          use: 'yaml-loader',
+        },
       ],
     },
     output: {
@@ -101,7 +105,7 @@ module.exports = () => {
       new webpack.container.ModuleFederationPlugin({
         name: federatedModuleName,
         shared: {
-          ...dependencies,
+          //...dependencies,
           react: {
             eager: true,
             singleton: true,
@@ -116,10 +120,6 @@ module.exports = () => {
             singleton: true,
             eager: true,
             requiredVersion: dependencies['react-router-dom'],
-          },
-          '@patternfly/quickstarts': {
-            singleton: true,
-            requiredVersion: '*',
           },
         },
       }),

@@ -1,4 +1,8 @@
-export async function dynamicImport (scope: string, module: string, url: string) {
+export async function dynamicImport(
+  scope: string | undefined,
+  module: string | undefined,
+  url: string | undefined
+) {
   await __webpack_init_sharing__('default');
 
   await new Promise<void>((resolve, reject) => {

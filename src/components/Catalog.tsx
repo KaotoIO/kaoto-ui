@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import {
   Bullseye,
   Card,
@@ -38,8 +38,8 @@ function shorten(str: string, maxLen: number, separator = ' ') {
 }
 
 const Catalog = (props: ICatalog) => {
-  const [isSelected, setIsSelected] = React.useState('START');
-  const [query, setQuery] = React.useState(``);
+  const [isSelected, setIsSelected] = useState('START');
+  const [query, setQuery] = useState(``);
 
   const steps: IStepProps[] = props.steps;
 
