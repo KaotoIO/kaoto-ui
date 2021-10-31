@@ -1,10 +1,18 @@
-import { Button, Drawer, DrawerContent, DrawerContentBody, Grid, GridItem, Tooltip, } from '@patternfly/react-core';
+import {
+  Button,
+  Drawer,
+  DrawerContent,
+  DrawerContentBody,
+  Grid,
+  GridItem,
+  Tooltip,
+} from '@patternfly/react-core';
 import { Catalog } from '../components/Catalog';
 import { Visualization } from '../components/Visualization';
 import { YAMLEditor } from '../components/YAMLEditor';
 import usePrevious from '../utils/usePrevious';
 import request from '../utils/request';
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { IStepProps, IViewData, IVizStepProps } from '../types';
 import YAML from '../stories/data/yaml';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,24 +21,24 @@ import { CodeIcon, PlusCircleIcon } from '@patternfly/react-icons';
 
 const Dashboard = () => {
   // If the catalog data won't be changing, consider removing this state
-  const [catalogData, setCatalogData] = React.useState<IStepProps[]>([]);
+  const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
 
   // viewData contains the Step model exactly as returned by the API
-  const [viewData, setViewData] = React.useState<IViewData>({ steps: [], views: [] });
+  const [viewData, setViewData] = useState<IViewData>({ steps: [], views: [] });
 
   // vizData is a UI-specific mapping between the Step model and Visualization metadata
-  const [vizData, setVizData] = React.useState<{ viz: IVizStepProps, model: IStepProps }[]>([]);
+  const [vizData, setVizData] = useState<{ viz: IVizStepProps; model: IStepProps }[]>([]);
 
   // yamlData contains the exact YAML returned by the API or specified by the user
-  const [yamlData, setYamlData] = React.useState(YAML);
+  const [yamlData, setYamlData] = useState(YAML);
 
-  const [expanded, setExpanded] = React.useState({
+  const [expanded, setExpanded] = useState({
     catalog: false,
-    codeEditor: true
+    codeEditor: true,
   });
 
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isError, setIsError] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const previousYaml = usePrevious(yamlData);
 
   const onExpandPanel = () => {
@@ -38,17 +46,17 @@ const Dashboard = () => {
   };
 
   const onClosePanelClick = () => {
-    setExpanded({...expanded, catalog: false});
+    setExpanded({ ...expanded, catalog: false });
   };
 
   /**
    * Fetch all Steps for Catalog
    */
-  React.useEffect(() => {
+  useEffect(() => {
     const getCatalogData = async () => {
       try {
         const resp = await request.get({
-          endpoint: '/step'
+          endpoint: '/step',
         });
 
         const data = await resp.json();
@@ -59,7 +67,7 @@ const Dashboard = () => {
     };
 
     getCatalogData().catch((e) => {
-      console.error(e)
+      console.error(e);
     });
   }, [viewData]);
 
@@ -67,7 +75,7 @@ const Dashboard = () => {
    * Watch for user changes to YAML,
    * issue request to API for Visualization JSON
    */
-  React.useEffect(() => {
+  useEffect(() => {
     if (previousYaml === yamlData) {
       return;
     }
@@ -80,7 +88,7 @@ const Dashboard = () => {
         const resp = await request.post({
           endpoint: '/viewdefinition',
           contentType: 'text/yaml',
-          body: incomingData
+          body: incomingData,
         });
 
         const data: IViewData = await resp.json();
@@ -95,7 +103,7 @@ const Dashboard = () => {
     };
 
     getVizData(yamlData).catch((e) => {
-      console.error(e)
+      console.error(e);
     });
   }, [previousYaml, yamlData]);
 
@@ -111,7 +119,7 @@ const Dashboard = () => {
         const resp = await request.post({
           endpoint: '/deployment/yaml',
           contentType: 'application/json',
-          body: { name: 'Updated integration', steps: newSteps }
+          body: { name: 'Updated integration', steps: newSteps },
         });
 
         const data = await resp.text();
@@ -127,7 +135,7 @@ const Dashboard = () => {
     };
 
     getVizData().catch((e) => {
-      console.error(e)
+      console.error(e);
     });
   };
 
@@ -165,8 +173,8 @@ const Dashboard = () => {
           data: { label: step.name },
           id: uuidv4(),
           position: { x: 300, y: window.innerHeight / 2 },
-          temporary: false
-        }
+          temporary: false,
+        },
       };
 
       // Grab the previous step to use for determining position and drawing edges
@@ -199,33 +207,57 @@ const Dashboard = () => {
 
   return (
     <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
-      <DrawerContent panelContent={<Catalog isCatalogExpanded={expanded.catalog} onClosePanelClick={onClosePanelClick}
-                                            steps={catalogData}/>}
-                     className={'panelCustom'}>
+      <DrawerContent
+        panelContent={
+          <Catalog
+            isCatalogExpanded={expanded.catalog}
+            onClosePanelClick={onClosePanelClick}
+            steps={catalogData}
+          />
+        }
+        className={'panelCustom'}
+      >
         <DrawerContentBody>
           <div className={'step-creator-button'}>
             <Tooltip content={'Connector Catalog'}>
-              <Button variant={'plain'} isActive={expanded.catalog} aria-label={'Connector Catalog'} onClick={() => {
-                setExpanded({...expanded, catalog: !expanded.catalog});
-              }}>
-                <PlusCircleIcon width={40} height={40}/>
+              <Button
+                variant={'plain'}
+                isActive={expanded.catalog}
+                aria-label={'Connector Catalog'}
+                onClick={() => {
+                  setExpanded({ ...expanded, catalog: !expanded.catalog });
+                }}
+              >
+                <PlusCircleIcon width={40} height={40} />
               </Button>
             </Tooltip>
             <Tooltip content={'Code Editor'}>
-              <Button variant={'plain'} isActive={expanded.codeEditor} aria-label={'Code Editor'} onClick={() => {
-                setExpanded({...expanded, codeEditor: !expanded.codeEditor});
-              }}>
-                <CodeIcon width={40} height={40}/>
+              <Button
+                variant={'plain'}
+                isActive={expanded.codeEditor}
+                aria-label={'Code Editor'}
+                onClick={() => {
+                  setExpanded({ ...expanded, codeEditor: !expanded.codeEditor });
+                }}
+              >
+                <CodeIcon width={40} height={40} />
               </Button>
             </Tooltip>
           </div>
           <Grid>
-            {expanded.codeEditor && (<GridItem span={4}>
-              <YAMLEditor yamlData={yamlData} handleChanges={handleChanges}/>
-            </GridItem>)}
+            {expanded.codeEditor && (
+              <GridItem span={4}>
+                <YAMLEditor yamlData={yamlData} handleChanges={handleChanges} />
+              </GridItem>
+            )}
             <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
-              <Visualization deleteIntegrationStep={deleteIntegrationStep} isError={isError} isLoading={isLoading}
-                             steps={vizData} views={viewData.views}/>
+              <Visualization
+                deleteIntegrationStep={deleteIntegrationStep}
+                isError={isError}
+                isLoading={isLoading}
+                steps={vizData}
+                views={viewData.views}
+              />
             </GridItem>
           </Grid>
         </DrawerContentBody>
