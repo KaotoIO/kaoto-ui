@@ -80,6 +80,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:7.26.1"],
             ["eslint-plugin-react-hooks", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:4.2.0"],
             ["eslint-plugin-testing-library", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:4.12.4"],
+            ["file-loader", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:6.2.0"],
             ["html-webpack-plugin", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:5.5.0"],
             ["jest", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:27.3.1"],
             ["jest-environment-jsdom", "npm:27.3.1"],
@@ -13672,10 +13673,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["virtual:569212657a298ce99e0b2099e0aa90ac7f79204cfcff9df0061bfef367176f491b0221419c3fe72dee494594c038d575df67f02bda553b7ac153c4ade31c4585#npm:6.2.0", {
-          "packageLocation": "./.yarn/__virtual__/file-loader-virtual-d42b9ba96c/0/cache/file-loader-npm-6.2.0-4b02fd87d5-faf43eecf2.zip/node_modules/file-loader/",
+        ["virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:6.2.0", {
+          "packageLocation": "./.yarn/__virtual__/file-loader-virtual-981dd39df7/0/cache/file-loader-npm-6.2.0-4b02fd87d5-faf43eecf2.zip/node_modules/file-loader/",
           "packageDependencies": [
-            ["file-loader", "virtual:569212657a298ce99e0b2099e0aa90ac7f79204cfcff9df0061bfef367176f491b0221419c3fe72dee494594c038d575df67f02bda553b7ac153c4ade31c4585#npm:6.2.0"],
+            ["file-loader", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:6.2.0"],
             ["@types/webpack", null],
             ["loader-utils", "npm:2.0.0"],
             ["schema-utils", "npm:3.1.1"],
@@ -24242,7 +24243,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["svg-url-loader", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:7.1.1"],
             ["@types/webpack", null],
-            ["file-loader", "virtual:569212657a298ce99e0b2099e0aa90ac7f79204cfcff9df0061bfef367176f491b0221419c3fe72dee494594c038d575df67f02bda553b7ac153c4ade31c4585#npm:6.2.0"],
+            ["file-loader", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:6.2.0"],
             ["loader-utils", "npm:2.0.1"],
             ["webpack", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:5.60.0"]
           ],
@@ -25581,7 +25582,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["url-loader", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:4.1.1"],
             ["@types/file-loader", null],
             ["@types/webpack", null],
-            ["file-loader", null],
+            ["file-loader", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:6.2.0"],
             ["loader-utils", "npm:2.0.0"],
             ["mime-types", "npm:2.1.33"],
             ["schema-utils", "npm:3.1.1"],
@@ -26904,6 +26905,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:7.26.1"],
             ["eslint-plugin-react-hooks", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:4.2.0"],
             ["eslint-plugin-testing-library", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:4.12.4"],
+            ["file-loader", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:6.2.0"],
             ["html-webpack-plugin", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:5.5.0"],
             ["jest", "virtual:33a819c10feec1e962e040c8a376cd0eefba9fce0765654a5700236d26974ab6b78c6600cf17b8071f92b00ed61355043eee3ecdea8946bb070526bb42d432e5#npm:27.3.1"],
             ["jest-environment-jsdom", "npm:27.3.1"],
