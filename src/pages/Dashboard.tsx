@@ -109,6 +109,7 @@ const Dashboard = () => {
 
   const deleteIntegrationStep = (stepsIndex: any) => {
     // Remove Step from viewData.steps
+    // @ts-ignore
     const newSteps = viewData.steps.filter((step, idx) => idx !== stepsIndex);
 
     const getVizData = async () => {

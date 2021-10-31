@@ -1,7 +1,6 @@
 /* eslint-disable */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const { dependencies, federatedModuleName } = require('./package.json');
@@ -88,12 +87,6 @@ module.exports = () => {
       new Dotenv({
         systemvars: true,
         silent: true,
-      }),
-      new CopyPlugin({
-        patterns: [{ from: './favicon.ico', to: 'images' }],
-      }),
-      new CopyPlugin({
-        patterns: [{ from: './locales', to: 'locales' }],
       }),
       new MiniCssExtractPlugin({
         insert: (linkTag) => {
