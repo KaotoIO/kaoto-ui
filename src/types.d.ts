@@ -1,6 +1,3 @@
-import '@testing-library/jest-dom/extend-expect';
-import '@testing-library/jest-dom';
-
 declare module '*.yaml' {
   const content: { [key: string]: any };
   export default content;
@@ -13,17 +10,8 @@ declare global {
 
   const __webpack_init_sharing__: any;
   const __webpack_share_scopes__: any;
-
-  const process: {
-    env: {
-      REACT_APP_API_URL: string;
-    };
-  };
 }
 
-/**
- * TODO: Check swagger for accurate types
- */
 export interface IStepProps {
   apiVersion: string;
   description?: string;

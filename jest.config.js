@@ -1,21 +1,20 @@
-module.exports = {
-  // An array of directory names to be searched recursively up from the requiring module's location
-  moduleDirectories: ['node_modules', '<rootDir>/src'],
+const path = require('path');
 
-  // A map to module names that allow stubbing out resources with a single module
-  moduleNameMapper: {
-    '\\.(css|less)$': '<rootDir>/__mocks__/styleMock.js',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/__mocks__/fileMock.js',
+module.exports = {
+  // Automatically clear mock calls and instances between every test
+  clearMocks: true,
+
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.test.json',
+    },
   },
 
-  // Preset for our Jest configuration base
-  preset: 'ts-jest/presets/js-with-ts',
-  //preset: 'ts-jest',
+  // A preset that is used as a base for Jest's configuration
+  preset: 'ts-jest',
 
-  setupFilesAfterEnv: ['<rootDir>/setupTests.js'],
+  // The path to a module that runs some code to configure or set up the testing framework before each test
+  setupFilesAfterEnv: [path.resolve(__dirname, './setupTests.ts')],
 
-  // Environment used for testing
-  testEnvironment: 'jsdom',
-  //testEnvironment: 'jest-environment-jsdom',
+  testEnvironment: 'jest-environment-jsdom',
 };

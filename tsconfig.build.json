@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "lib": ["dom", "esnext"],
+    "importHelpers": true,
+    "declaration": true,
+    "sourceMap": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "target": "es6",
+    "noImplicitAny": true,
+    "outDir": "dist",
+  },
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/*.stories.tsx",
+    "**/*.test.ts*",
+  ]
+}

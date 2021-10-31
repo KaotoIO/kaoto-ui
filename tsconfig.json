@@ -1,36 +1,9 @@
 {
+  "extends": "./tsconfig.build.json",
+  "include": ["src", "test", "types", "webpack.config.js", "setupTests.ts"],
   "compilerOptions": {
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
+    "allowJs": false,
     "baseUrl": ".",
-    "declaration": true,
-    //"declaration": false,
-    "esModuleInterop": true,
-    "importHelpers": true,
-    "jsx": "react",
-    //"jsx": "react-jsx",
-    "lib": ["es6", "dom"],
-    //"lib": ["dom", "esnext"],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedParameters": true,
-    "outDir": "dist",
-    "resolveJsonModule": true,
-    "rootDir": ".",
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "target": "es6"
-  },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.jsx", "**/*.js"],
-  "exclude": [
-    "dist",
-    "node_modules",
-    //"**/*.stories.tsx",
-    //"**/*.(test|spec).ts*"
-  ]
+    "typeRoots": ["./node_modules/@types", "./types"],
+  }
 }
