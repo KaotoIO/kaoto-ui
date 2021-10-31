@@ -7,10 +7,6 @@ const { dependencies, federatedModuleName } = require('./package.json');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const isPatternflyStyles = (stylesheet) =>
-  stylesheet.includes('@patternfly/react-styles/css/') ||
-  stylesheet.includes('@patternfly/react-core/');
-
 module.exports = () => {
   return {
     entry: {
@@ -32,15 +28,7 @@ module.exports = () => {
         },
         {
           test: /\.css$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader'],
-          include: (stylesheet) => !isPatternflyStyles(stylesheet),
-          sideEffects: true,
-        },
-        {
-          test: /\.css$/,
-          include: isPatternflyStyles,
-          use: ['null-loader'],
-          sideEffects: true,
+          use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
         },
         {
           test: /\.(ttf|eot|woff|woff2)$/,
@@ -63,20 +51,7 @@ module.exports = () => {
           ],
         },
         {
-          test: /\.(json)$/i,
-          include: path.resolve(__dirname, 'src/locales'),
-          use: [
-            {
-              loader: 'url-loader',
-              options: {
-                limit: 5000,
-                outputPath: 'locales',
-              },
-            },
-          ],
-        },
-        {
-          test: /\.ya?ml$/,
+          test: /\.yaml$/,
           use: 'yaml-loader',
         },
       ],
@@ -105,7 +80,6 @@ module.exports = () => {
       new webpack.container.ModuleFederationPlugin({
         name: federatedModuleName,
         shared: {
-          //...dependencies,
           react: {
             eager: true,
             singleton: true,
@@ -120,6 +94,10 @@ module.exports = () => {
             singleton: true,
             eager: true,
             requiredVersion: dependencies['react-router-dom'],
+          },
+          '@patternfly/quickstarts': {
+            singleton: true,
+            requiredVersion: '*',
           },
         },
       }),
