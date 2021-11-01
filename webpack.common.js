@@ -31,15 +31,6 @@ module.exports = () => {
           use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
         },
         {
-          test: /\.(ttf|eot|woff|woff2)$/,
-          use: {
-            loader: 'file-loader',
-            options: {
-              limit: 5000,
-            },
-          },
-        },
-        {
           test: /\.(svg|jpg|jpeg|png|gif)$/i,
           use: [
             {
