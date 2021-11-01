@@ -196,7 +196,7 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
                     {steps.map((item, index) => {
                       const imageProps = {
                         id: item.viz.id,
-                        image: createImage(item.model.icon),
+                        image: createImage(item.model.icon, null),
                         x: item.viz.position.x! - imageDimensions.width / 2,
                         y: 0 - imageDimensions.height / 2,
                         height: imageDimensions.height,

@@ -68,7 +68,7 @@ const VisualizationStep = ({
       />
       <Image
         id={step.viz.id}
-        image={createImage(step.model.icon)}
+        image={createImage(step.model.icon, null)}
         height={imageProps.height ?? imageDimensions.height}
         width={imageProps.width ?? imageDimensions.width}
         {...imageProps}
