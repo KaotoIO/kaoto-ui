@@ -8,7 +8,9 @@ export async function dynamicImport(
   await new Promise<void>((resolve, reject) => {
     const element = document.createElement('script');
 
-    element.src = url;
+    if (typeof url === 'string') {
+      element.src = url;
+    }
     element.type = 'text/javascript';
     element.async = true;
 
@@ -27,6 +29,7 @@ export async function dynamicImport(
     document.head.appendChild(element);
   });
 
+  // @ts-ignore
   const container = window[scope];
   await container.init(__webpack_share_scopes__.default);
 

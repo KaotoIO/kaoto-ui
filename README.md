@@ -51,14 +51,18 @@ You will also see any lint errors in the console.
 
 Run all Jest and React Testing Library unit tests:
 
-`yarn test`
+```bash
+yarn test
+````
 
 Launches the test runner in the interactive watch mode.\
-Tests are colocated and live as closely to corresponding code as possible (typically in the `tests` dir of the component).
+Tests are colocated and live as closely to corresponding code as possible.
 
 ## Build
 
-`yarn build`
+```bash
+yarn build
+```
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -70,7 +74,7 @@ Your app is ready to be deployed!
 
 Run all [Storybook](https://storybook.js.org/) stories.
 
-```
+```bash
 yarn storybook
 ```
 

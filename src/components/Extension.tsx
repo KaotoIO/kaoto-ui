@@ -1,4 +1,12 @@
-import React, { PropsWithChildren, ReactNode, Suspense, useEffect } from 'react';
+import {
+  Children,
+  cloneElement,
+  PropsWithChildren,
+  ReactElement,
+  ReactNode,
+  Suspense,
+  useEffect,
+} from 'react';
 import root from 'react-shadow';
 
 import ErrorBoundary from './ErrorBoundary';
@@ -9,15 +17,15 @@ type Props = PropsWithChildren<{
   failure?: ReactNode;
 }>;
 
-export function Extension (props: Props) {
+export function Extension(props: Props) {
   const { loading = 'Loading...', failure = 'Error!' } = props;
 
-  const children = React.Children.map(props.children, (child) => {
-    if ([ 'string', 'number', 'boolean' ].includes(typeof child)) return child;
+  const children = Children.map(props.children, (child) => {
+    if (['string', 'number', 'boolean'].includes(typeof child)) return child;
 
     if ((child as any).type.$$typeof === Symbol.for('react.lazy')) {
-      return React.cloneElement(child as React.ReactElement, {
-        name: props.name
+      return cloneElement(child as ReactElement, {
+        name: props.name,
       });
     }
 
@@ -33,9 +41,7 @@ export function Extension (props: Props) {
   return (
     <ErrorBoundary fallback={failure}>
       <Suspense fallback={loading}>
-        <root.div>
-          {children}
-        </root.div>
+        <root.div>{children}</root.div>
       </Suspense>
     </ErrorBoundary>
   );

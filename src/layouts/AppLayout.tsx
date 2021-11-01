@@ -11,7 +11,7 @@ import {
   SkipToContent,
 } from '@patternfly/react-core';
 import { routes, IAppRoute, IAppRouteGroup } from '../routes';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
 // @ts-ignore
 import logo from '../assets/images/logo-temp.png';
 

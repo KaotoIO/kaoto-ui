@@ -5,6 +5,7 @@ import {
   CardBody,
   CardTitle,
   DrawerActions,
+  DrawerCloseButton,
   DrawerColorVariant,
   DrawerHead,
   DrawerPanelBody,
@@ -23,7 +24,6 @@ import {
 } from '@patternfly/react-core';
 import { IStepProps } from '../types';
 import './Catalog.css';
-import { DrawerCloseButton } from '@patternfly/react-core/dist/js';
 
 interface ICatalog {
   isCatalogExpanded: boolean;
