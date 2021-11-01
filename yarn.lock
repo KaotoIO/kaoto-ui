@@ -3984,7 +3984,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^8.0.0":
+"@testing-library/dom@npm:^8.0.0, @testing-library/dom@npm:^8.10.1":
   version: 8.10.1
   resolution: "@testing-library/dom@npm:8.10.1"
   dependencies:
@@ -19181,6 +19181,7 @@ __metadata:
     "@storybook/manager-webpack5": 6.3.12
     "@storybook/node-logger": 6.4.0-beta.20
     "@storybook/react": 6.4.0-beta.20
+    "@testing-library/dom": ^8.10.1
     "@testing-library/jest-dom": 5.14.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0

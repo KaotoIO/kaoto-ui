@@ -38,6 +38,7 @@ const YAMLEditor = ({ yamlData, handleChanges }: IYAMLEditor) => {
       onValidate={handleEditorValidation}
       theme={'vs-dark'}
       value={yamlData}
+      className={'code-editor'}
     />
   );
 };

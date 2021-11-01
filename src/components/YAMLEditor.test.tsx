@@ -1,14 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { YAMLEditor } from './YAMLEditor';
 
-describe('something', () => {
-  it('something else', () => {
-    //
-  });
-});
-
-test('Renders correctly', () => {
-  render(<YAMLEditor handleChanges={jest.fn()} />);
-  const editor = screen.getByAltText('Editor');
-  expect(editor).toBeInTheDocument();
+test('component renders correctly', () => {
+  const { container } = render(<YAMLEditor handleChanges={jest.fn()} />);
+  expect(container.getElementsByClassName('code-editor').length).toBe(1);
 });
