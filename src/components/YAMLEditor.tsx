@@ -30,17 +30,15 @@ const YAMLEditor = ({ yamlData, handleChanges }: IYAMLEditor) => {
   }, 800);
 
   return (
-    <>
-      <Editor
-        height="90vh"
-        defaultLanguage="yaml"
-        onChange={handleEditorChange}
-        onMount={handleEditorDidMount}
-        onValidate={handleEditorValidation}
-        theme={'vs-dark'}
-        value={yamlData}
-      />
-    </>
+    <Editor
+      height="90vh"
+      defaultLanguage="yaml"
+      onChange={handleEditorChange}
+      onMount={handleEditorDidMount}
+      onValidate={handleEditorValidation}
+      theme={'vs-dark'}
+      value={yamlData}
+    />
   );
 };
 
