@@ -19,7 +19,7 @@
 User interface for [Zimara Backend](https://github.com/ZimaraIO/zimara-backend).
 
 - Node >= 14
-- Yarn Berry (2.x)
+- Yarn Berry (3.x)
 - Storybook 6
 - Webpack 5
 
@@ -34,6 +34,8 @@ yarn install
 2. Duplicate the `.env.example` file and name it `.env`.
 3. Update `REACT_APP_API_URL` in the file with the correct host for the API. If using Zimara API locally, this should be `http://localhost:8080`, but please check.
 
+**IMPORTANT:** We are using Yarn [Zero Installs](https://yarnpkg.com/features/zero-installs), so the dependency tree is checked in via the `.pnp.cjs`. Because we are committing `.yarn/cache` and `.pnp.*`, you do NOT need to run `yarn install` each time you switch between branches. However, if you find you are having issues with dependencies on a branch, consider regenerating them. See [here](https://yarnpkg.com/getting-started/qa) for more info.
+
 ## Development
 
 Run the app in development mode:
@@ -42,7 +44,7 @@ Run the app in development mode:
 yarn start
 ```
 
-Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
+Open [http://localhost:1337](http://localhost:1337) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
@@ -51,14 +53,18 @@ You will also see any lint errors in the console.
 
 Run all Jest and React Testing Library unit tests:
 
-`yarn test`
+```bash
+yarn test
+````
 
 Launches the test runner in the interactive watch mode.\
-Tests are colocated and live as closely to corresponding code as possible (typically in the `tests` dir of the component).
+Tests are colocated and live as closely to corresponding code as possible.
 
 ## Build
 
-`yarn build`
+```bash
+yarn build
+```
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -66,13 +72,11 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
 ## Stories
 
 Run all [Storybook](https://storybook.js.org/) stories.
 
-```
+```bash
 yarn storybook
 ```
 

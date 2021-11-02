@@ -1,10 +1,16 @@
-export async function dynamicImport (scope: string, module: string, url: string) {
+export async function dynamicImport(
+  scope: string | undefined,
+  module: string | undefined,
+  url: string | undefined
+) {
   await __webpack_init_sharing__('default');
 
   await new Promise<void>((resolve, reject) => {
     const element = document.createElement('script');
 
-    element.src = url;
+    if (typeof url === 'string') {
+      element.src = url;
+    }
     element.type = 'text/javascript';
     element.async = true;
 
@@ -23,6 +29,7 @@ export async function dynamicImport (scope: string, module: string, url: string)
     document.head.appendChild(element);
   });
 
+  // @ts-ignore
   const container = window[scope];
   await container.init(__webpack_share_scopes__.default);
 

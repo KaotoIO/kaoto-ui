@@ -1,41 +1,9 @@
 {
+  "extends": "./tsconfig.build.json",
   "compilerOptions": {
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
+    "allowJs": false,
     "baseUrl": ".",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "lib": [
-      "esnext",
-      "dom"
-    ],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "noEmit": false,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": false,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "resolveJsonModule": true,
-    "sourceMap": false,
-    "strict": true,
-    "strictNullChecks": false,
-    "suppressImplicitAnyIndexErrors": true,
-    "target": "es2019",
-    "skipLibCheck": true
+    "typeRoots": ["./node_modules/@types"],
   },
-  "include": [
-    "**/src/**/*.tsx",
-    "**/src/**/*.ts",
-    "**/src/**/*.js"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    ".yarn"
-  ]
+  "include": ["src", "webpack.config.js", "setupTests.ts"]
 }

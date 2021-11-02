@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FunctionComponent, ReactNode, useState } from 'react';
 import { NavLink, useLocation, useHistory } from 'react-router-dom';
 import {
   Nav,
@@ -11,16 +11,18 @@ import {
   SkipToContent,
 } from '@patternfly/react-core';
 import { routes, IAppRoute, IAppRouteGroup } from '../routes';
+
+// @ts-ignore
 import logo from '../assets/images/logo-temp.png';
 
 interface IAppLayout {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
-  const [isNavOpen, setIsNavOpen] = React.useState(false);
-  const [isMobileView, setIsMobileView] = React.useState(false);
-  const [isNavOpenMobile, setIsNavOpenMobile] = React.useState(false);
+const AppLayout: FunctionComponent<IAppLayout> = ({ children }) => {
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
+  const [isNavOpenMobile, setIsNavOpenMobile] = useState(false);
 
   const onNavToggleMobile = () => {
     setIsNavOpenMobile(!isNavOpenMobile);
@@ -39,7 +41,7 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
     function handleClick() {
       history.push('/');
     }
-    return <img src={logo} onClick={handleClick} alt="Zimara Logo" style={{maxWidth: '50%'}} />;
+    return <img src={logo} onClick={handleClick} alt="Zimara Logo" style={{ maxWidth: '50%' }} />;
   }
 
   const Header = (
@@ -65,10 +67,10 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
     <NavExpandable
       key={`${group.label}-${groupIndex}`}
       id={`${group.label}-${groupIndex}`}
-      title={group.label}
-      isActive={group.routes.some((route) => route.path === location.pathname)}
+      title={group.label!}
+      isActive={group.routes?.some((route) => route.path === location.pathname)}
     >
-      {group.routes.map((route, idx) => route.label && renderNavItem(route, idx))}
+      {group.routes?.map((route, idx) => route.label && renderNavItem(route, idx))}
     </NavExpandable>
   );
 

@@ -1,6 +1,6 @@
 declare module '*.yaml' {
-  const content: { [key: string]: any }
-  export default content
+  const content: { [key: string]: any };
+  export default content;
 }
 
 declare global {
@@ -12,15 +12,6 @@ declare global {
   const __webpack_share_scopes__: any;
 }
 
-declare var process : {
-  env: {
-    REACT_APP_API_URL: string;
-  }
-}
-
-/**
- * TODO: Check swagger for accurate types
- */
 export interface IStepProps {
   apiVersion: string;
   description?: string;
@@ -65,7 +56,6 @@ export interface IVizStepProps {
   position: {
     x?: number;
     y?: number;
-  },
-  temporary: boolean
+  };
+  temporary: boolean;
 }
-

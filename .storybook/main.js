@@ -2,19 +2,10 @@ const path = require('path');
 
 module.exports = {
   core: {
-    builder: 'webpack5'
+    builder: 'webpack5',
   },
-  stories: [
-    "../src/**/*.stories.mdx",
-    "../src/**/*.stories.@(js|jsx|ts|tsx)"
-  ],
-  addons: [
-    "@storybook/addon-a11y",
-    "@storybook/addon-actions",
-    "@storybook/addon-docs",
-    "@storybook/addon-links",
-    "@storybook/preset-create-react-app"
-  ],
+  stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  addons: ['@storybook/addon-actions', '@storybook/addon-docs', '@storybook/addon-links'],
   typescript: {
     check: false,
     checkOptions: {},
@@ -39,4 +30,4 @@ module.exports = {
     // Return the altered config
     return config;
   },
-}
+};

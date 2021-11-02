@@ -7,10 +7,10 @@ interface IYAMLEditor {
   yamlData?: string;
 }
 
-const YAMLEditor = ( {yamlData, handleChanges }: IYAMLEditor ) => {
+const YAMLEditor = ({ yamlData, handleChanges }: IYAMLEditor) => {
   const editorRef = useRef(null);
 
-  function handleEditorChange(value: string) {
+  function handleEditorChange(value?: string) {
     debounced(value);
   }
 
@@ -20,28 +20,26 @@ const YAMLEditor = ( {yamlData, handleChanges }: IYAMLEditor ) => {
 
   function handleEditorValidation(markers: any[]) {
     // Model Markers
-    markers.forEach(marker => console.log('onValidate: ', marker.message));
+    markers.forEach((marker) => console.log('onValidate: ', marker.message));
   }
 
-  const debounced = useDebouncedCallback(
-    (value: string) => {
+  const debounced = useDebouncedCallback((value?: string) => {
+    if (value) {
       handleChanges(value);
-    },
-    800
-  );
+    }
+  }, 800);
 
   return (
-    <>
-      <Editor
-        height="90vh"
-        defaultLanguage="yaml"
-        onChange={handleEditorChange}
-        onMount={handleEditorDidMount}
-        onValidate={handleEditorValidation}
-        theme={'vs-dark'}
-        value={yamlData}
-      />
-    </>
+    <Editor
+      height="90vh"
+      defaultLanguage="yaml"
+      onChange={handleEditorChange}
+      onMount={handleEditorDidMount}
+      onValidate={handleEditorValidation}
+      theme={'vs-dark'}
+      value={yamlData}
+      className={'code-editor'}
+    />
   );
 };
 
