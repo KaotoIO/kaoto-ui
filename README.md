@@ -19,7 +19,7 @@
 User interface for [Zimara Backend](https://github.com/ZimaraIO/zimara-backend).
 
 - Node >= 14
-- Yarn Berry (2.x)
+- Yarn Berry (3.x)
 - Storybook 6
 - Webpack 5
 
@@ -33,6 +33,8 @@ yarn install
 
 2. Duplicate the `.env.example` file and name it `.env`.
 3. Update `REACT_APP_API_URL` in the file with the correct host for the API. If using Zimara API locally, this should be `http://localhost:8080`, but please check.
+
+**IMPORTANT:** We are using Yarn [Zero Installs](https://yarnpkg.com/features/zero-installs), so the dependency tree is checked in via the `.pnp.cjs`. Because we are committing `.yarn/cache` and `.pnp.*`, you do NOT need to run `yarn install` each time you switch between branches. However, if you find you are having issues with dependencies on a branch, consider regenerating them. See [here](https://yarnpkg.com/getting-started/qa) for more info.
 
 ## Development
 
