@@ -13,7 +13,7 @@ import {
 import { routes, IAppRoute, IAppRouteGroup } from '../routes';
 
 // @ts-ignore
-import logo from '../assets/images/logo-temp.png';
+import logo from '../assets/images/logo-kaoto.png';
 
 interface IAppLayout {
   children: ReactNode;
