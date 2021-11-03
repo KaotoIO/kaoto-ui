@@ -1,4 +1,4 @@
-import { Circle, Group } from 'react-konva';
+import { Circle, Group, Line } from 'react-konva';
 import { IStepProps, IVizStepProps } from '../types';
 
 export interface IVisualizationSlot {
@@ -33,6 +33,13 @@ const VisualizationSlot = ({
       }}
       {...groupProps}
     >
+      <Line
+        //points={[100, 0, steps.length * incrementAmt, 0]}
+        stroke={'black'}
+        strokeWidth={3}
+        lineCap={'round'}
+        lineJoin={'round'}
+      />
       <Circle
         name={`${idx}`}
         stroke={

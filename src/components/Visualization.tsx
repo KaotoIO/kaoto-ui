@@ -8,6 +8,7 @@ import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core
 import './Visualization.css';
 import Konva from 'konva';
 import { v4 as uuidv4 } from 'uuid';
+import { VisualizationSlot } from './VisualizationSlot';
 import { VisualizationStep } from './VisualizationStep';
 
 interface IVisualization {
@@ -251,6 +252,10 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
                             text={truncateString(item.model.name, 14)}
                             {...textProps}
                           />
+                          {/** Validation goes here **/}
+                          <Group name={'slot-group-for-' + index}>
+                            <VisualizationSlot idx={index} step={item} />
+                          </Group>
                         </Group>
                       );
                     })}
