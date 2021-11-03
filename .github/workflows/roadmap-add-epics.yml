@@ -15,5 +15,5 @@ jobs:
       uses: srggrs/assign-one-project-github-action@1.3.1
       if: contains(github.event.issue.labels.*.name, 'user-story')
       with:
-        project: 'https://github.com/orgs/ZimaraIO/projects/3'
+        project: 'https://github.com/orgs/KaotoUI/projects/3'
         column_name: 'WishList'
