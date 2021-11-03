@@ -1,22 +1,22 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/07e8b623-a94d-4686-a784-eb4a9b90dde1/deploy-status)](https://app.netlify.com/sites/zimara/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/07e8b623-a94d-4686-a784-eb4a9b90dde1/deploy-status)](https://app.netlify.com/sites/kaoto/deploys)
 
 <p align="center">
-  <a href="https://github.com/ZimaraIO/zimara-ui/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/ZimaraIO/zimara-ui" alt="license"></a>
+  <a href="https://github.com/KaotoIO/kaoto-ui/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/KaotoIO/kaoto-ui" alt="license"></a>
 
-  <img src="https://img.shields.io/github/languages/code-size/ZimaraIO/zimara-ui" alt="code size">
+  <img src="https://img.shields.io/github/languages/code-size/KaotoIO/kaoto-ui" alt="code size">
 
-  <a href="https://github.com/ZimaraIO/zimara-ui/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/ZimaraIO/zimara-ui" alt="contributors"></a>
+  <a href="https://github.com/KaotoIO/kaoto-ui/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/KaotoIO/kaoto-ui" alt="contributors"></a>
 
-  <a href="https://twitter.com/intent/follow?screen_name=ZimaraIO">
-    <img src="https://img.shields.io/twitter/follow/ZimaraIO?style=social&logo=twitter"
+  <a href="https://twitter.com/intent/follow?screen_name=KaotoIO">
+    <img src="https://img.shields.io/twitter/follow/KaotoIO?style=social&logo=twitter"
       alt="follow on Twitter"></a>
 </p>
 
-# Zimara UI
+# Kaoto UI
 
-User interface for [Zimara Backend](https://github.com/ZimaraIO/zimara-backend).
+User interface for [Kaoto Backend](https://github.com/KaotoIO/kaoto-backend).
 
 - Node >= 14
 - Yarn Berry (3.x)
@@ -32,7 +32,7 @@ yarn install
 ```
 
 2. Duplicate the `.env.example` file and name it `.env`.
-3. Update `REACT_APP_API_URL` in the file with the correct host for the API. If using Zimara API locally, this should be `http://localhost:8080`, but please check.
+3. Update `REACT_APP_API_URL` in the file with the correct host for the API. If using Kaoto API locally, this should be `http://localhost:8080`, but please check.
 
 **IMPORTANT:** We are using Yarn [Zero Installs](https://yarnpkg.com/features/zero-installs), so the dependency tree is checked in via the `.pnp.cjs`. Because we are committing `.yarn/cache` and `.pnp.*`, you do NOT need to run `yarn install` each time you switch between branches. However, if you find you are having issues with dependencies on a branch, consider regenerating them. See [here](https://yarnpkg.com/getting-started/qa) for more info.
 

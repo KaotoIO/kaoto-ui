@@ -41,7 +41,7 @@ const AppLayout: FunctionComponent<IAppLayout> = ({ children }) => {
     function handleClick() {
       history.push('/');
     }
-    return <img src={logo} onClick={handleClick} alt="Zimara Logo" style={{ maxWidth: '50%' }} />;
+    return <img src={logo} onClick={handleClick} alt="Kaoto Logo" style={{ maxWidth: '50%' }} />;
   }
 
   const Header = (

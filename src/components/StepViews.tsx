@@ -124,7 +124,7 @@ const StepViews = ({
                     failure="Could not load extension. Is it running?"
                   >
                     <StepExtension
-                      text="Passed from Zimara!"
+                      text="Passed from Kaoto!"
                       onButtonClicked={onButtonClicked}
                       path="/"
                     />

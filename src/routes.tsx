@@ -34,7 +34,7 @@ const routes: AppRouteConfig[] = [
     exact: true,
     label: 'Dashboard',
     path: '/',
-    title: 'Zimara | Main Dashboard',
+    title: 'Kaoto | Main Dashboard',
   },
 ];
 
