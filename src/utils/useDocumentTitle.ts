@@ -1,8 +1,8 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 
 // a custom hook for setting the page title
 export function useDocumentTitle(title: string) {
-  React.useEffect(() => {
+  useEffect(() => {
     const originalTitle = document.title;
     document.title = title;
 

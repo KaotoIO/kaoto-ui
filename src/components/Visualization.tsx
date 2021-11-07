@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
+import { Circle, Group, Image, Layer, Stage, Text } from 'react-konva';
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
@@ -43,7 +43,6 @@ const placeholderStep = {
 };
 
 const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) => {
-  const incrementAmt = 100;
   const stageRef = useRef<Konva.Stage>(null);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [selectedStep, setSelectedStep] =
@@ -65,10 +64,6 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
     selectedStep.viz.temporary
       ? setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== selectedStepVizId))
       : deleteIntegrationStep(stepsIndex);
-  };
-
-  const onDragEndIntegration = () => {
-    //
   };
 
   const onDragEndTempStep = (e: any) => {
@@ -151,6 +146,7 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
             >
               <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
                 <Layer>
+                  {/** Create the temporary steps **/}
                   {tempSteps.map((step, idx) => {
                     const groupProps = {
                       x: step.viz.position.x,
@@ -180,86 +176,73 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
                       />
                     );
                   })}
-                  <Group
-                    x={250}
-                    y={300}
-                    id={'Integration'}
-                    onDragEnd={onDragEndIntegration}
-                    draggable
-                  >
-                    <Line
-                      points={[100, 0, steps.length * incrementAmt, 0]}
-                      stroke={'black'}
-                      strokeWidth={3}
-                      lineCap={'round'}
-                      lineJoin={'round'}
-                    />
-                    {steps.map((item, index) => {
-                      const imageProps = {
-                        id: item.viz.id,
-                        image: createImage(item.model.icon, null),
-                        x: item.viz.position.x! - imageDimensions.width / 2,
-                        y: 0 - imageDimensions.height / 2,
-                        height: imageDimensions.height,
-                        width: imageDimensions.width,
-                      };
 
-                      const circleProps = {
-                        x: item.viz.position.x,
-                        y: 0,
-                      };
+                  {/** Create the visualization slots **/}
+                  <VisualizationSlot steps={steps} />
 
-                      const textProps = {
-                        x: item.viz.position.x! - CIRCLE_LENGTH,
-                        y: CIRCLE_LENGTH / 2 + 10,
-                      };
+                  {/** Create the visualization steps **/}
+                  {steps.map((item, index) => {
+                    const imageProps = {
+                      id: item.viz.id,
+                      image: createImage(item.model.icon, null),
+                      x: item.viz.position.x! - imageDimensions.width / 2,
+                      y: 0 - imageDimensions.height / 2,
+                      height: imageDimensions.height,
+                      width: imageDimensions.width,
+                    };
 
-                      return (
-                        <Group
-                          key={index}
-                          onClick={handleClickStep}
-                          onMouseEnter={(e: any) => {
-                            // style stage container:
-                            const container = e.target.getStage().container();
-                            container.style.cursor = 'pointer';
-                          }}
-                          onMouseLeave={(e: any) => {
-                            const container = e.target.getStage().container();
-                            container.style.cursor = 'default';
-                          }}
-                        >
-                          <Circle
-                            {...circleProps}
-                            name={`${index}`}
-                            stroke={
-                              item.model.type === 'START'
-                                ? 'rgb(0, 136, 206)'
-                                : item.model.type === 'END'
-                                ? 'rgb(149, 213, 245)'
-                                : 'rgb(204, 204, 204)'
-                            }
-                            fill={'white'}
-                            strokeWidth={3}
-                            width={CIRCLE_LENGTH}
-                            height={CIRCLE_LENGTH}
-                          />
-                          <Image {...imageProps} />
-                          <Text
-                            align={'center'}
-                            width={150}
-                            fontFamily={'Ubuntu'}
-                            fontSize={11}
-                            text={truncateString(item.model.name, 14)}
-                            {...textProps}
-                          />
-                          {/** Validation goes here **/}
-                          <Group name={'slot-group-for-' + index}>
-                            <VisualizationSlot idx={index} step={item} />
-                          </Group>
-                        </Group>
-                      );
-                    })}
-                  </Group>
+                    const circleProps = {
+                      x: item.viz.position.x,
+                      y: 0,
+                    };
+
+                    const textProps = {
+                      x: item.viz.position.x! - CIRCLE_LENGTH,
+                      y: CIRCLE_LENGTH / 2 + 10,
+                    };
+
+                    return (
+                      <Group
+                        key={index}
+                        onClick={handleClickStep}
+                        onMouseEnter={(e: any) => {
+                          // style stage container:
+                          const container = e.target.getStage().container();
+                          container.style.cursor = 'pointer';
+                        }}
+                        onMouseLeave={(e: any) => {
+                          const container = e.target.getStage().container();
+                          container.style.cursor = 'default';
+                        }}
+                        id={'visualization-step-' + index}
+                      >
+                        <Circle
+                          {...circleProps}
+                          name={`${index}`}
+                          stroke={
+                            item.model.type === 'START'
+                              ? 'rgb(0, 136, 206)'
+                              : item.model.type === 'END'
+                              ? 'rgb(149, 213, 245)'
+                              : 'rgb(204, 204, 204)'
+                          }
+                          fill={'white'}
+                          strokeWidth={3}
+                          width={CIRCLE_LENGTH}
+                          height={CIRCLE_LENGTH}
+                        />
+                        <Image {...imageProps} />
+                        <Text
+                          align={'center'}
+                          width={150}
+                          fontFamily={'Ubuntu'}
+                          fontSize={11}
+                          text={truncateString(item.model.name, 14)}
+                          {...textProps}
+                        />
+                      </Group>
+                    );
+                  })}
                 </Layer>
               </Stage>
             </div>
