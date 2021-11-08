@@ -131,28 +131,27 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
                 // Register event position
                 stageRef.current?.setPointersPositions(e);
                 const parsed: IStepProps = JSON.parse(dataJSON);
-
                 const currentPosition = stageRef.current?.getPointerPosition(); // e.g. {"x":158,"y":142}
-                console.log('currentPosition: ' + JSON.stringify(currentPosition));
-                const shapeIntersects = stageRef.current?.getIntersection(currentPosition!);
+                const intersectingShape = stageRef.current?.getIntersection(currentPosition!);
 
-                if (shapeIntersects) {
-                  console.log('intersects');
+                // Only create as a temporary step if it does not intersect with an existing step
+                if (intersectingShape) {
+                  console.log('Intersects');
                 } else {
-                  console.log('does not intersect');
-                }
+                  console.log('Does not intersect, creating temporary step..');
 
-                setTempSteps(
-                  tempSteps.concat({
-                    model: parsed,
-                    viz: {
-                      id: uuidv4(),
-                      label: parsed.name,
-                      position: { ...stageRef.current?.getPointerPosition()! },
-                      temporary: true,
-                    },
-                  })
-                );
+                  setTempSteps(
+                    tempSteps.concat({
+                      model: parsed,
+                      viz: {
+                        id: uuidv4(),
+                        label: parsed.name,
+                        position: { ...stageRef.current?.getPointerPosition()! },
+                        temporary: true,
+                      },
+                    })
+                  );
+                }
               }}
               onDragOver={(e) => {
                 e.preventDefault();
@@ -193,7 +192,7 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
 
                   <Group
                     name={'integration-and-slots'}
-                    x={window.innerWidth / 4}
+                    x={window.innerWidth / 5}
                     y={window.innerHeight / 2}
                   >
                     {/** Create the visualization slots **/}
