@@ -173,7 +173,7 @@ const Dashboard = () => {
         viz: {
           data: { label: step.name },
           id: uuidv4(),
-          position: { x: 300, y: window.innerHeight / 2 },
+          position: { x: 0, y: 0 },
           temporary: false,
         },
       };
@@ -188,7 +188,7 @@ const Dashboard = () => {
       switch (index) {
         case 0:
           // First item in `steps` array
-          inputStep.viz.position.x = 100;
+          inputStep.viz.position.x = 0; // control this in the `integration` Konva Group instead
           break;
         case steps.length - 1:
         default:

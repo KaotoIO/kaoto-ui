@@ -12,9 +12,14 @@ const VisualizationSlot = ({ children, steps }: IVisualizationSlot) => {
   const incrementAmt = 100;
 
   return (
-    <Group x={250} y={300} id={'slots'}>
+    <Group name={'slots'} id={'slots'}>
       <Line
-        points={[100, 0, steps.length * incrementAmt, 0]}
+        points={[
+          0, // x1
+          0, // y1
+          steps.length * incrementAmt - 100, // x2 (subtract 100 for first step)
+          0, // y2
+        ]}
         stroke={'black'}
         strokeWidth={3}
         lineCap={'round'}
@@ -32,11 +37,8 @@ const VisualizationSlot = ({ children, steps }: IVisualizationSlot) => {
             id={'visualization-slot-' + step.viz.id}
             index={index}
             key={index}
-            onMouseEnter={() => {
-              console.log('incoming hover!');
-            }}
-            onMouseLeave={() => {
-              console.log('outgoing hover!');
+            onDragOver={() => {
+              console.log('drag over slot');
             }}
           >
             <Circle

@@ -43,6 +43,7 @@ const placeholderStep = {
 };
 
 const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) => {
+  const layerRef = useRef<Konva.Layer>(null);
   const stageRef = useRef<Konva.Stage>(null);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [selectedStep, setSelectedStep] =
@@ -122,13 +123,24 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
           className={'panelCustom'}
         >
           <DrawerContentBody>
+            {/** Stage wrapper to handle steps (DOM elements) dropped from catalog **/}
             <div
               onDrop={(e: any) => {
                 e.preventDefault();
                 const dataJSON = e.dataTransfer.getData('text');
-                // register event position
+                // Register event position
                 stageRef.current?.setPointersPositions(e);
                 const parsed: IStepProps = JSON.parse(dataJSON);
+
+                const currentPosition = stageRef.current?.getPointerPosition(); // e.g. {"x":158,"y":142}
+                console.log('currentPosition: ' + JSON.stringify(currentPosition));
+                const shapeIntersects = stageRef.current?.getIntersection(currentPosition!);
+
+                if (shapeIntersects) {
+                  console.log('intersects');
+                } else {
+                  console.log('does not intersect');
+                }
 
                 setTempSteps(
                   tempSteps.concat({
@@ -136,16 +148,18 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
                     viz: {
                       id: uuidv4(),
                       label: parsed.name,
-                      position: { ...stageRef.current?.getPointerPosition() },
+                      position: { ...stageRef.current?.getPointerPosition()! },
                       temporary: true,
                     },
                   })
                 );
               }}
-              onDragOver={(e) => e.preventDefault()}
+              onDragOver={(e) => {
+                e.preventDefault();
+              }}
             >
               <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
-                <Layer>
+                <Layer ref={layerRef}>
                   {/** Create the temporary steps **/}
                   {tempSteps.map((step, idx) => {
                     const groupProps = {
@@ -177,72 +191,73 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
                     );
                   })}
 
-                  {/** Create the visualization slots **/}
-                  <VisualizationSlot steps={steps} />
+                  <Group name={'integration-and-slots'} x={100} y={window.innerHeight / 2}>
+                    {/** Create the visualization slots **/}
+                    <VisualizationSlot steps={steps} />
 
-                  {/** Create the visualization steps **/}
-                  {steps.map((item, index) => {
-                    const imageProps = {
-                      id: item.viz.id,
-                      image: createImage(item.model.icon, null),
-                      x: item.viz.position.x! - imageDimensions.width / 2,
-                      y: 0 - imageDimensions.height / 2,
-                      height: imageDimensions.height,
-                      width: imageDimensions.width,
-                    };
+                    {/** Create the visualization steps **/}
+                    {steps.map((item, index) => {
+                      const imageProps = {
+                        id: item.viz.id,
+                        image: createImage(item.model.icon, null),
+                        x: item.viz.position.x! - imageDimensions.width / 2,
+                        y: 0 - imageDimensions.height / 2,
+                        height: imageDimensions.height,
+                        width: imageDimensions.width,
+                      };
 
-                    const circleProps = {
-                      x: item.viz.position.x,
-                      y: 0,
-                    };
+                      const circleProps = {
+                        x: item.viz.position.x,
+                        y: 0,
+                      };
 
-                    const textProps = {
-                      x: item.viz.position.x! - CIRCLE_LENGTH,
-                      y: CIRCLE_LENGTH / 2 + 10,
-                    };
+                      const textProps = {
+                        x: item.viz.position.x! - CIRCLE_LENGTH,
+                        y: CIRCLE_LENGTH / 2 + 10,
+                      };
 
-                    return (
-                      <Group
-                        key={index}
-                        onClick={handleClickStep}
-                        onMouseEnter={(e: any) => {
-                          // style stage container:
-                          const container = e.target.getStage().container();
-                          container.style.cursor = 'pointer';
-                        }}
-                        onMouseLeave={(e: any) => {
-                          const container = e.target.getStage().container();
-                          container.style.cursor = 'default';
-                        }}
-                        id={'visualization-step-' + index}
-                      >
-                        <Circle
-                          {...circleProps}
-                          name={`${index}`}
-                          stroke={
-                            item.model.type === 'START'
-                              ? 'rgb(0, 136, 206)'
-                              : item.model.type === 'END'
-                              ? 'rgb(149, 213, 245)'
-                              : 'rgb(204, 204, 204)'
-                          }
-                          fill={'white'}
-                          strokeWidth={3}
-                          width={CIRCLE_LENGTH}
-                          height={CIRCLE_LENGTH}
-                        />
-                        <Image {...imageProps} />
-                        <Text
-                          align={'center'}
-                          width={150}
-                          fontFamily={'Ubuntu'}
-                          fontSize={11}
-                          text={truncateString(item.model.name, 14)}
-                          {...textProps}
-                        />
-                      </Group>
-                    );
-                  })}
+                      return (
+                        <Group
+                          key={index}
+                          onClick={handleClickStep}
+                          onMouseEnter={(e: any) => {
+                            const container = e.target.getStage().container();
+                            container.style.cursor = 'pointer';
+                          }}
+                          onMouseLeave={(e: any) => {
+                            const container = e.target.getStage().container();
+                            container.style.cursor = 'default';
+                          }}
+                          id={'visualization-step-' + index}
+                        >
+                          <Circle
+                            {...circleProps}
+                            name={`${index}`}
+                            stroke={
+                              item.model.type === 'START'
+                                ? 'rgb(0, 136, 206)'
+                                : item.model.type === 'END'
+                                ? 'rgb(149, 213, 245)'
+                                : 'rgb(204, 204, 204)'
+                            }
+                            fill={'white'}
+                            strokeWidth={3}
+                            width={CIRCLE_LENGTH}
+                            height={CIRCLE_LENGTH}
+                          />
+                          <Image {...imageProps} />
+                          <Text
+                            align={'center'}
+                            width={150}
+                            fontFamily={'Ubuntu'}
+                            fontSize={11}
+                            text={truncateString(item.model.name, 14)}
+                            {...textProps}
+                          />
+                        </Group>
+                      );
+                    })}
+                  </Group>
                 </Layer>
               </Stage>
             </div>
