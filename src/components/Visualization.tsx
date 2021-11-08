@@ -15,6 +15,7 @@ interface IVisualization {
   deleteIntegrationStep: (e: any) => void;
   isError?: boolean;
   isLoading?: boolean;
+  replaceIntegrationStep: (newStep: any, oldStepIndex: any) => void;
   steps: { viz: IVizStepProps; model: IStepProps }[];
   views: IViewProps[];
 }
@@ -42,7 +43,12 @@ const placeholderStep = {
   views: [{}],
 };
 
-const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) => {
+const Visualization = ({
+  deleteIntegrationStep,
+  replaceIntegrationStep,
+  steps,
+  views,
+}: IVisualization) => {
   const layerRef = useRef<Konva.Layer>(null);
   const stageRef = useRef<Konva.Stage>(null);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
@@ -134,12 +140,12 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
                 const currentPosition = stageRef.current?.getPointerPosition(); // e.g. {"x":158,"y":142}
                 const intersectingShape = stageRef.current?.getIntersection(currentPosition!);
 
-                // Only create as a temporary step if it does not intersect with an existing step
+                // Only create a temporary step if it does not intersect with an existing step
                 if (intersectingShape) {
-                  console.log('Intersects');
+                  const parentVizId = intersectingShape.getParent().attrs.id;
+                  const parentIdx = steps.map((step) => step.viz.id).indexOf(parentVizId);
+                  replaceIntegrationStep(parsed, parentIdx);
                 } else {
-                  console.log('Does not intersect, creating temporary step..');
-
                   setTempSteps(
                     tempSteps.concat({
                       model: parsed,
@@ -231,7 +237,7 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
                             const container = e.target.getStage().container();
                             container.style.cursor = 'default';
                           }}
-                          id={'visualization-step-' + index}
+                          id={item.viz.id}
                         >
                           <Circle
                             {...circleProps}
