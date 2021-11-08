@@ -191,7 +191,11 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
                     );
                   })}
 
-                  <Group name={'integration-and-slots'} x={100} y={window.innerHeight / 2}>
+                  <Group
+                    name={'integration-and-slots'}
+                    x={window.innerWidth / 4}
+                    y={window.innerHeight / 2}
+                  >
                     {/** Create the visualization slots **/}
                     <VisualizationSlot steps={steps} />
 
