@@ -1,30 +1,33 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 let defaultState: { image: undefined; status: string };
 defaultState = { image: undefined, status: 'loading' };
 
-export default function useImage(url: string, crossOrigin?: string): [
+export default function useImage(
+  url: string,
+  crossOrigin?: string
+): [
   (
     | HTMLImageElement
     | SVGImageElement
     | HTMLVideoElement
     | HTMLCanvasElement
     | ImageBitmap
-    | OffscreenCanvas
+    //| OffscreenCanvas
     | undefined
-    ),
-    string
+  ),
+  string
 ] {
-  const res = React.useState(defaultState);
+  const res = useState(defaultState);
   const image = res[0].image;
   const status = res[0].status;
 
   const setState = res[1];
 
-  React.useEffect(
+  useEffect(
     function () {
       if (!url) return;
-      const img:HTMLImageElement = document.createElement('img');
+      const img: HTMLImageElement = document.createElement('img');
 
       function onload() {
         // @ts-ignore
@@ -53,4 +56,4 @@ export default function useImage(url: string, crossOrigin?: string): [
   // const [background, backgroundStatus] = useImage(url1);
   // const [patter] = useImage(url2);
   return [image, status];
-};
+}

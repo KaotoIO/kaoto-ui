@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Circle, Group, Image, Layer, Line, Stage, Text } from 'react-konva';
+import { Circle, Group, Image, Layer, Stage, Text } from 'react-konva';
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
@@ -8,12 +8,14 @@ import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core
 import './Visualization.css';
 import Konva from 'konva';
 import { v4 as uuidv4 } from 'uuid';
+import { VisualizationSlot } from './VisualizationSlot';
 import { VisualizationStep } from './VisualizationStep';
 
 interface IVisualization {
   deleteIntegrationStep: (e: any) => void;
   isError?: boolean;
   isLoading?: boolean;
+  replaceIntegrationStep: (newStep: any, oldStepIndex: any) => void;
   steps: { viz: IVizStepProps; model: IStepProps }[];
   views: IViewProps[];
 }
@@ -41,8 +43,13 @@ const placeholderStep = {
   views: [{}],
 };
 
-const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) => {
-  const incrementAmt = 100;
+const Visualization = ({
+  deleteIntegrationStep,
+  replaceIntegrationStep,
+  steps,
+  views,
+}: IVisualization) => {
+  const layerRef = useRef<Konva.Layer>(null);
   const stageRef = useRef<Konva.Stage>(null);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [selectedStep, setSelectedStep] =
@@ -64,10 +71,6 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
     selectedStep.viz.temporary
       ? setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== selectedStepVizId))
       : deleteIntegrationStep(stepsIndex);
-  };
-
-  const onDragEndIntegration = () => {
-    //
   };
 
   const onDragEndTempStep = (e: any) => {
@@ -126,30 +129,43 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
           className={'panelCustom'}
         >
           <DrawerContentBody>
+            {/** Stage wrapper to handle steps (DOM elements) dropped from catalog **/}
             <div
               onDrop={(e: any) => {
                 e.preventDefault();
                 const dataJSON = e.dataTransfer.getData('text');
-                // register event position
+                // Register event position
                 stageRef.current?.setPointersPositions(e);
                 const parsed: IStepProps = JSON.parse(dataJSON);
+                const currentPosition = stageRef.current?.getPointerPosition(); // e.g. {"x":158,"y":142}
+                const intersectingShape = stageRef.current?.getIntersection(currentPosition!);
 
-                setTempSteps(
-                  tempSteps.concat({
-                    model: parsed,
-                    viz: {
-                      id: uuidv4(),
-                      label: parsed.name,
-                      position: { ...stageRef.current?.getPointerPosition() },
-                      temporary: true,
-                    },
-                  })
-                );
+                // Only create a temporary step if it does not intersect with an existing step
+                if (intersectingShape) {
+                  const parentVizId = intersectingShape.getParent().attrs.id;
+                  const parentIdx = steps.map((step) => step.viz.id).indexOf(parentVizId);
+                  replaceIntegrationStep(parsed, parentIdx);
+                } else {
+                  setTempSteps(
+                    tempSteps.concat({
+                      model: parsed,
+                      viz: {
+                        id: uuidv4(),
+                        label: parsed.name,
+                        position: { ...stageRef.current?.getPointerPosition()! },
+                        temporary: true,
+                      },
+                    })
+                  );
+                }
               }}
-              onDragOver={(e) => e.preventDefault()}
+              onDragOver={(e) => {
+                e.preventDefault();
+              }}
             >
               <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
-                <Layer>
+                <Layer ref={layerRef}>
+                  {/** Create the temporary steps **/}
                   {tempSteps.map((step, idx) => {
                     const groupProps = {
                       x: step.viz.position.x,
@@ -179,20 +195,16 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
                       />
                     );
                   })}
+
                   <Group
-                    x={250}
-                    y={300}
-                    id={'Integration'}
-                    onDragEnd={onDragEndIntegration}
-                    draggable
+                    name={'integration-and-slots'}
+                    x={window.innerWidth / 5}
+                    y={window.innerHeight / 2}
                   >
-                    <Line
-                      points={[100, 0, steps.length * incrementAmt, 0]}
-                      stroke={'black'}
-                      strokeWidth={3}
-                      lineCap={'round'}
-                      lineJoin={'round'}
-                    />
+                    {/** Create the visualization slots **/}
+                    <VisualizationSlot steps={steps} />
+
+                    {/** Create the visualization steps **/}
                     {steps.map((item, index) => {
                       const imageProps = {
                         id: item.viz.id,
@@ -218,7 +230,6 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
                           key={index}
                           onClick={handleClickStep}
                           onMouseEnter={(e: any) => {
-                            // style stage container:
                             const container = e.target.getStage().container();
                             container.style.cursor = 'pointer';
                           }}
@@ -226,6 +237,7 @@ const Visualization = ({ deleteIntegrationStep, steps, views }: IVisualization) 
                             const container = e.target.getStage().container();
                             container.style.cursor = 'default';
                           }}
+                          id={item.viz.id}
                         >
                           <Circle
                             {...circleProps}

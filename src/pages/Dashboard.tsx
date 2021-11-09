@@ -107,35 +107,42 @@ const Dashboard = () => {
     });
   }, [previousYaml, yamlData]);
 
+  const updateIntegration = async (newSteps: any) => {
+    setIsError(false);
+    setIsLoading(true);
+
+    try {
+      const resp = await request.post({
+        endpoint: '/deployment/yaml',
+        contentType: 'application/json',
+        body: { name: 'Updated integration', steps: newSteps },
+      });
+
+      const data = await resp.text();
+      setYamlData(data);
+    } catch (err) {
+      console.error(err);
+      setIsError(true);
+    }
+
+    setIsLoading(false);
+  };
+
   const deleteIntegrationStep = (stepsIndex: any) => {
     // Remove Step from viewData.steps
     // @ts-ignore
     const newSteps = viewData.steps.filter((step, idx) => idx !== stepsIndex);
 
-    const getVizData = async () => {
-      setIsError(false);
-      setIsLoading(true);
+    updateIntegration(newSteps).catch((e) => {
+      console.error(e);
+    });
+  };
 
-      try {
-        const resp = await request.post({
-          endpoint: '/deployment/yaml',
-          contentType: 'application/json',
-          body: { name: 'Updated integration', steps: newSteps },
-        });
+  const replaceIntegrationStep = (newStep: any, oldStepIndex: number) => {
+    const newSteps = viewData.steps;
+    newSteps[oldStepIndex] = newStep;
 
-        const data = await resp.text();
-        console.log(JSON.stringify(data));
-        setYamlData(data);
-        console.log('Data set');
-      } catch (err) {
-        console.error(err);
-        setIsError(true);
-      }
-
-      setIsLoading(false);
-    };
-
-    getVizData().catch((e) => {
+    updateIntegration(newSteps).catch((e) => {
       console.error(e);
     });
   };
@@ -173,7 +180,7 @@ const Dashboard = () => {
         viz: {
           data: { label: step.name },
           id: uuidv4(),
-          position: { x: 300, y: window.innerHeight / 2 },
+          position: { x: 0, y: 0 },
           temporary: false,
         },
       };
@@ -188,7 +195,7 @@ const Dashboard = () => {
       switch (index) {
         case 0:
           // First item in `steps` array
-          inputStep.viz.position.x = 100;
+          inputStep.viz.position.x = 0; // control this in the `integration` Konva Group instead
           break;
         case steps.length - 1:
         default:
@@ -256,6 +263,7 @@ const Dashboard = () => {
                 deleteIntegrationStep={deleteIntegrationStep}
                 isError={isError}
                 isLoading={isLoading}
+                replaceIntegrationStep={replaceIntegrationStep}
                 steps={vizData}
                 views={viewData.views}
               />

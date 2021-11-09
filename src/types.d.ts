@@ -54,8 +54,8 @@ export interface IVizStepProps {
   id: string;
   label: string;
   position: {
-    x?: number;
-    y?: number;
+    x: number;
+    y: number;
   };
   temporary: boolean;
 }
