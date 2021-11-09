@@ -5,7 +5,8 @@ import { IStepProps, IVizStepProps } from '../types';
 
 describe.skip('VisualizationSlot.tsx', () => {
   test('component renders correctly', () => {
-    const fakeStep: { viz: IVizStepProps; model: IStepProps } = {
+    const fakeSteps: { viz: IVizStepProps; model: IStepProps }[] = [];
+    const fakeStep = {
       model: {
         apiVersion: '',
         id: '',
@@ -24,7 +25,9 @@ describe.skip('VisualizationSlot.tsx', () => {
       },
     };
 
-    render(<VisualizationSlot idx={0} step={fakeStep} />);
+    fakeSteps.push(fakeStep);
+
+    render(<VisualizationSlot steps={fakeSteps} />);
     const element = screen.getByTestId('visualization-slot');
     expect(element).toBeInTheDocument();
   });
