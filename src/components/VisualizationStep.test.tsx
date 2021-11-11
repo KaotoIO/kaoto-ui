@@ -24,7 +24,15 @@ describe.skip('VisualizationStep.tsx', () => {
       },
     };
 
-    render(<VisualizationStep handleClickStep={jest.fn()} idx={0} step={fakeStep} />);
+    render(
+      <VisualizationStep
+        handleClickStep={jest.fn()}
+        idx={0}
+        onDragEndTempStep={jest.fn()}
+        onDragStartTempStep={jest.fn()}
+        step={fakeStep}
+      />
+    );
     const element = screen.getByTestId('visualization-step');
     expect(element).toBeInTheDocument();
   });

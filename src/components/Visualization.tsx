@@ -73,12 +73,51 @@ const Visualization = ({
       : deleteIntegrationStep(stepsIndex);
   };
 
+  const onDragStartTempStep = (e: any) => {
+    /*
+    const id = e.target.id();
+    const items = tempSteps.slice();
+    const item = items.find((i) => i.viz.id === id);
+    const index = items.indexOf(item!);
+    // remove from the list:
+    items.splice(index, 1);
+    // add to the top
+    items.push(item!);
+    setTempSteps(items);
+    console.table(items);
+
+     */
+  };
+
   const onDragEndTempStep = (e: any) => {
+    /*
+    const id = e.target.id();
+    const items = tempSteps.slice();
+    const item = tempSteps.find((i) => i.viz.id === id);
+    const index = tempSteps.indexOf(item!);
+    // update item position
+    items[index] = {
+      ...items[index],
+      viz: {
+        ...items[index].viz,
+        position: {
+          x: e.target.x(),
+          y: e.target.y(),
+        },
+      },
+    };
+
+    setTempSteps(items);
+    console.table(items);
+
+     */
+    /*
     const newSteps = tempSteps;
     let newStep = newSteps[e.target.attrs.index];
     newStep.viz = { ...newStep.viz, position: { x: e.target.attrs.x, y: e.target.attrs.y } };
     newStep.views = views.filter((view) => view.step === newStep.model.UUID);
     setTempSteps(newSteps);
+     */
   };
 
   const imageDimensions = {
@@ -165,37 +204,6 @@ const Visualization = ({
             >
               <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
                 <Layer ref={layerRef}>
-                  {/** Create the temporary steps **/}
-                  {tempSteps.map((step, idx) => {
-                    const groupProps = {
-                      x: step.viz.position.x,
-                      y: step.viz.position.y,
-                    };
-
-                    const imageProps = {
-                      offsetX: imageDimensions ? imageDimensions.width / 2 : 0,
-                      offsetY: imageDimensions ? imageDimensions.height / 2 : 0,
-                    };
-
-                    const textProps = {
-                      x: -CIRCLE_LENGTH,
-                      y: CIRCLE_LENGTH / 2 + 10,
-                    };
-
-                    return (
-                      <VisualizationStep
-                        groupProps={groupProps}
-                        handleClickStep={handleClickStep}
-                        idx={idx}
-                        imageProps={imageProps}
-                        key={idx}
-                        onDragEndTempStep={onDragEndTempStep}
-                        step={step}
-                        textProps={textProps}
-                      />
-                    );
-                  })}
-
                   <Group
                     name={'integration-and-slots'}
                     x={window.innerWidth / 5}

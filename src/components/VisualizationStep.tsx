@@ -9,7 +9,8 @@ export interface IVisualizationStep {
   handleClickStep: (e: any) => void;
   idx: number;
   imageProps?: any;
-  onDragEndTempStep?: (e: any) => void;
+  onDragStartTempStep: (e: any) => void;
+  onDragEndTempStep: (e: any) => void;
   step: { viz: IVizStepProps; model: IStepProps };
   textProps?: any;
 }
@@ -28,6 +29,7 @@ const VisualizationStep = ({
   idx,
   imageProps,
   onDragEndTempStep,
+  onDragStartTempStep,
   step,
   textProps,
 }: IVisualizationStep) => {
@@ -35,6 +37,7 @@ const VisualizationStep = ({
     <Group
       onClick={handleClickStep}
       onDragEnd={onDragEndTempStep}
+      onDragStart={onDragStartTempStep}
       data-testid={'visualization-step'}
       id={step.viz.id}
       index={idx}
