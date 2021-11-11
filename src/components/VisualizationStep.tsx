@@ -9,8 +9,8 @@ export interface IVisualizationStep {
   handleClickStep: (e: any) => void;
   idx: number;
   imageProps?: any;
-  onDragStartTempStep: (e: any) => void;
-  onDragEndTempStep: (e: any) => void;
+  onDragStartTempStep: () => void;
+  onDragEndTempStep: () => void;
   step: { viz: IVizStepProps; model: IStepProps };
   textProps?: any;
 }

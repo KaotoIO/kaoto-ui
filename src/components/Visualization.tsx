@@ -43,6 +43,10 @@ const placeholderStep = {
   views: [{}],
 };
 
+const findIndexWithVizId = (vizId: any, steps: any[]) => {
+  return steps.map((step: any) => step.viz.id).indexOf(vizId);
+};
+
 const Visualization = ({
   deleteIntegrationStep,
   replaceIntegrationStep,
@@ -62,63 +66,17 @@ const Visualization = ({
     const selectedStepVizId = selectedStep.viz.id;
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
-    const stepsIndex = steps
-      .map((step) => {
-        return step.viz.id;
-      })
-      .indexOf(selectedStepVizId);
+
+    const stepsIndex = findIndexWithVizId(selectedStepVizId, steps);
 
     selectedStep.viz.temporary
       ? setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== selectedStepVizId))
       : deleteIntegrationStep(stepsIndex);
   };
 
-  const onDragStartTempStep = (e: any) => {
-    /*
-    const id = e.target.id();
-    const items = tempSteps.slice();
-    const item = items.find((i) => i.viz.id === id);
-    const index = items.indexOf(item!);
-    // remove from the list:
-    items.splice(index, 1);
-    // add to the top
-    items.push(item!);
-    setTempSteps(items);
-    console.table(items);
+  const onDragStartTempStep = () => {};
 
-     */
-  };
-
-  const onDragEndTempStep = (e: any) => {
-    /*
-    const id = e.target.id();
-    const items = tempSteps.slice();
-    const item = tempSteps.find((i) => i.viz.id === id);
-    const index = tempSteps.indexOf(item!);
-    // update item position
-    items[index] = {
-      ...items[index],
-      viz: {
-        ...items[index].viz,
-        position: {
-          x: e.target.x(),
-          y: e.target.y(),
-        },
-      },
-    };
-
-    setTempSteps(items);
-    console.table(items);
-
-     */
-    /*
-    const newSteps = tempSteps;
-    let newStep = newSteps[e.target.attrs.index];
-    newStep.viz = { ...newStep.viz, position: { x: e.target.attrs.x, y: e.target.attrs.y } };
-    newStep.views = views.filter((view) => view.step === newStep.model.UUID);
-    setTempSteps(newSteps);
-     */
-  };
+  const onDragEndTempStep = () => {};
 
   const imageDimensions = {
     height: 40,
@@ -129,6 +87,7 @@ const Visualization = ({
     if (!e.target.id()) {
       return;
     }
+    console.log('selected step');
 
     // Only set state again if the ID is not the same
     if (selectedStep.model.id !== e.target.id()) {
@@ -178,6 +137,7 @@ const Visualization = ({
                 const parsed: IStepProps = JSON.parse(dataJSON);
                 const currentPosition = stageRef.current?.getPointerPosition(); // e.g. {"x":158,"y":142}
                 const intersectingShape = stageRef.current?.getIntersection(currentPosition!);
+                console.log('on drop');
 
                 // Only create a temporary step if it does not intersect with an existing step
                 if (intersectingShape) {
