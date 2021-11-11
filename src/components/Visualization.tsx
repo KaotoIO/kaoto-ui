@@ -275,6 +275,37 @@ const Visualization = ({
                       );
                     })}
                   </Group>
+                  {/** Create the temporary steps **/}
+                  {tempSteps.map((step, idx) => {
+                    const groupProps = {
+                      x: step.viz.position.x,
+                      y: step.viz.position.y,
+                    };
+
+                    const imageProps = {
+                      offsetX: imageDimensions ? imageDimensions.width / 2 : 0,
+                      offsetY: imageDimensions ? imageDimensions.height / 2 : 0,
+                    };
+
+                    const textProps = {
+                      x: -CIRCLE_LENGTH,
+                      y: CIRCLE_LENGTH / 2 + 10,
+                    };
+
+                    return (
+                      <VisualizationStep
+                        groupProps={groupProps}
+                        handleClickStep={handleClickStep}
+                        idx={idx}
+                        imageProps={imageProps}
+                        key={idx}
+                        onDragEndTempStep={onDragEndTempStep}
+                        onDragStartTempStep={onDragStartTempStep}
+                        step={step}
+                        textProps={textProps}
+                      />
+                    );
+                  })}
                 </Layer>
               </Stage>
             </div>
