@@ -46,7 +46,13 @@ const findIndexWithVizId = (vizId: any, steps: any[]) => {
   return steps.map((step: any) => step.viz.id).indexOf(vizId);
 };
 
-const haveIntersection = (
+/**
+ * Compares two areas using their dimensions and positioning
+ * to determine if there is an intersection
+ * @param r1
+ * @param r2
+ */
+const doAreasIntersect = (
   r1: { x: number; width: any; y: number; height: any },
   r2: { x: number; width: any; y: number; height: any }
 ) => {
@@ -116,8 +122,8 @@ const Visualization = ({
         return;
       }
 
-      if (haveIntersection(group.getClientRect(), targetRect)) {
-        console.log('rectangle INTERSECTING!!1');
+      if (doAreasIntersect(group.getClientRect(), targetRect)) {
+        //console.log('rectangle INTERSECTING!!1');
         /**
          * Future validation goes here
          */
@@ -134,6 +140,26 @@ const Visualization = ({
     /**
      * Check for intersection
      */
+    // Exclude self from intersection
+    const target = e.target;
+    const targetRect = e.target.getClientRect();
+
+    layerRef.current?.children?.map((group) => {
+      // do not check intersection with itself
+      if (group === target) {
+        //console.log('group and target are the same, returning..');
+        return;
+      }
+
+      if (doAreasIntersect(group.getClientRect(), targetRect)) {
+        console.log('INTERSECTING!!1');
+        /**
+         * Future validation goes here
+         */
+      } else {
+        console.log('NOT intersecting');
+      }
+    });
 
     /**
      * Update the position of the selected step
