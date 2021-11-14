@@ -105,27 +105,24 @@ const Visualization = ({
     /**
      * Check if intersects with integration steps
      */
-    //const currentPosition = e.target.position(); // e.g. {"x":158,"y":142}
-    //const intersectingShape = stageRef.current?.getIntersection(currentPosition!);
     // Exclude self from intersection
     const target = e.target;
     const targetRect = e.target.getClientRect();
 
-    // @ts-ignore
     layerRef.current?.children?.map((group) => {
       // do not check intersection with itself
       if (group === target) {
-        console.log('group and target are the same, returning..');
+        //console.log('group and target are the same, returning..');
         return;
       }
 
-      // targetRect: {"x":80,"y":222.5,"width":150,"height":98}
-      //console.log('targetRect: ' + JSON.stringify(targetRect));
-
       if (haveIntersection(group.getClientRect(), targetRect)) {
         console.log('rectangle INTERSECTING!!1');
+        /**
+         * Future validation goes here
+         */
       } else {
-        console.log('rectangle NOT intersecting');
+        //console.log('rectangle NOT intersecting');
       }
     });
   };
@@ -133,6 +130,10 @@ const Visualization = ({
   const onDragEndTempStep = (e: any) => {
     const id = e.target.id();
     const index = findIndexWithVizId(id, tempSteps);
+
+    /**
+     * Check for intersection
+     */
 
     /**
      * Update the position of the selected step
@@ -246,24 +247,7 @@ const Visualization = ({
 
                   {/** Create the visualization steps **/}
                   {steps.map((item, index) => {
-                    const imageProps = {
-                      id: item.viz.id,
-                      image: createImage(item.model.icon, null),
-                      x: item.viz.position.x! - imageDimensions.width / 2,
-                      y: 0 - imageDimensions.height / 2,
-                      height: imageDimensions.height,
-                      width: imageDimensions.width,
-                    };
-
-                    const circleProps = {
-                      x: item.viz.position.x,
-                      y: 0,
-                    };
-
-                    const textProps = {
-                      x: item.viz.position.x! - CIRCLE_LENGTH,
-                      y: CIRCLE_LENGTH / 2 + 10,
-                    };
+                    const itemImage = createImage(item.model.icon, null);
 
                     return (
                       <Group
@@ -281,7 +265,6 @@ const Visualization = ({
                         name={item.viz.id}
                       >
                         <Circle
-                          {...circleProps}
                           name={`${index}`}
                           stroke={
                             item.model.type === 'START'
@@ -294,15 +277,25 @@ const Visualization = ({
                           strokeWidth={3}
                           width={CIRCLE_LENGTH}
                           height={CIRCLE_LENGTH}
+                          x={item.viz.position.x}
+                          y={0}
                         />
-                        <Image {...imageProps} />
+                        <Image
+                          id={item.viz.id}
+                          image={itemImage}
+                          x={item.viz.position.x! - imageDimensions.width / 2}
+                          y={0 - imageDimensions.height / 2}
+                          height={imageDimensions.height}
+                          width={imageDimensions.width}
+                        />
                         <Text
                           align={'center'}
                           width={150}
                           fontFamily={'Ubuntu'}
                           fontSize={11}
                           text={truncateString(item.model.name, 14)}
-                          {...textProps}
+                          x={item.viz.position.x! - CIRCLE_LENGTH}
+                          y={CIRCLE_LENGTH / 2 + 10}
                         />
                       </Group>
                     );
