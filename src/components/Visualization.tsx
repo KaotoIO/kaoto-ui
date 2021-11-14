@@ -46,6 +46,18 @@ const findIndexWithVizId = (vizId: any, steps: any[]) => {
   return steps.map((step: any) => step.viz.id).indexOf(vizId);
 };
 
+const haveIntersection = (
+  r1: { x: number; width: any; y: number; height: any },
+  r2: { x: number; width: any; y: number; height: any }
+) => {
+  return !(
+    r2.x > r1.x + r1.width ||
+    r2.x + r2.width < r1.x ||
+    r2.y > r1.y + r1.height ||
+    r2.y + r2.height < r1.y
+  );
+};
+
 const Visualization = ({
   deleteIntegrationStep,
   replaceIntegrationStep,
@@ -79,20 +91,54 @@ const Visualization = ({
     const index = findIndexWithVizId(id, items);
     const item = items[index];
 
+    /**
+     * Ensure selected step goes above other steps
+     */
     // remove from list of steps
     items.splice(index, 1);
-
     // add to the bottom of the list
     items.push(item);
     setTempSteps(items);
   };
 
+  const onDragMoveTempStep = (e: any) => {
+    /**
+     * Check if intersects with integration steps
+     */
+    //const currentPosition = e.target.position(); // e.g. {"x":158,"y":142}
+    //const intersectingShape = stageRef.current?.getIntersection(currentPosition!);
+    // Exclude self from intersection
+    const target = e.target;
+    const targetRect = e.target.getClientRect();
+
+    // @ts-ignore
+    layerRef.current?.children?.map((group) => {
+      // do not check intersection with itself
+      if (group === target) {
+        console.log('group and target are the same, returning..');
+        return;
+      }
+
+      // targetRect: {"x":80,"y":222.5,"width":150,"height":98}
+      //console.log('targetRect: ' + JSON.stringify(targetRect));
+
+      if (haveIntersection(group.getClientRect(), targetRect)) {
+        console.log('rectangle INTERSECTING!!1');
+      } else {
+        console.log('rectangle NOT intersecting');
+      }
+    });
+  };
+
   const onDragEndTempStep = (e: any) => {
     const id = e.target.id();
     const index = findIndexWithVizId(id, tempSteps);
+
+    /**
+     * Update the position of the selected step
+     */
     const items = tempSteps.filter((tempStep) => tempStep.viz.id !== id);
     const oldItem = tempSteps[index];
-
     items.push({
       ...oldItem,
       viz: {
@@ -232,6 +278,7 @@ const Visualization = ({
                           container.style.cursor = 'default';
                         }}
                         id={item.viz.id}
+                        name={item.viz.id}
                       >
                         <Circle
                           {...circleProps}
@@ -261,6 +308,7 @@ const Visualization = ({
                     );
                   })}
                 </Group>
+
                 {/** Create the temporary steps **/}
                 {tempSteps.map((step, idx) => {
                   const textProps = {
@@ -272,6 +320,7 @@ const Visualization = ({
                     <Group
                       onClick={handleClickStep}
                       onDragEnd={onDragEndTempStep}
+                      onDragMove={onDragMoveTempStep}
                       onDragStart={onDragStartTempStep}
                       data-testid={'visualization-step'}
                       id={step.viz.id}
