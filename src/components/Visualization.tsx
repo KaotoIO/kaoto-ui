@@ -46,6 +46,24 @@ const findIndexWithVizId = (vizId: any, steps: any[]) => {
   return steps.map((step: any) => step.viz.id).indexOf(vizId);
 };
 
+/**
+ * Compares two areas using their dimensions and positioning
+ * to determine if there is an intersection
+ * @param r1
+ * @param r2
+ */
+const doAreasIntersect = (
+  r1: { x: number; width: any; y: number; height: any },
+  r2: { x: number; width: any; y: number; height: any }
+) => {
+  return !(
+    r2.x > r1.x + r1.width ||
+    r2.x + r2.width < r1.x ||
+    r2.y > r1.y + r1.height ||
+    r2.y + r2.height < r1.y
+  );
+};
+
 const Visualization = ({
   deleteIntegrationStep,
   replaceIntegrationStep,
@@ -60,6 +78,8 @@ const Visualization = ({
   const [tempSteps, setTempSteps] = useState<
     { model: IStepProps; viz: IVizStepProps; views?: IViewProps[] }[]
   >([]);
+  const integrationGroupName = 'integration-and-slots-group';
+  const integrationStepGroupName = 'integration-step-group';
 
   const deleteStep = () => {
     const selectedStepVizId = selectedStep.viz.id;
@@ -68,6 +88,10 @@ const Visualization = ({
 
     const stepsIndex = findIndexWithVizId(selectedStepVizId, steps);
 
+    /**
+     * If it's a temporary step, simply update the state.
+     * For an integration step, use the callback to remove the step.
+     */
     selectedStep.viz.temporary
       ? setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== selectedStepVizId))
       : deleteIntegrationStep(stepsIndex);
@@ -79,32 +103,82 @@ const Visualization = ({
     const index = findIndexWithVizId(id, items);
     const item = items[index];
 
+    /**
+     * Ensure selected step goes above other steps
+     */
     // remove from list of steps
     items.splice(index, 1);
-
     // add to the bottom of the list
     items.push(item);
     setTempSteps(items);
   };
 
-  const onDragEndTempStep = (e: any) => {
-    const id = e.target.id();
-    const index = findIndexWithVizId(id, tempSteps);
-    const items = tempSteps.filter((tempStep) => tempStep.viz.id !== id);
-    const oldItem = tempSteps[index];
+  const onDragMoveTempStep = (e: any) => {
+    /**
+     * Check if intersects with integration steps
+     */
+    // Exclude self from intersection
+    const target = e.target;
+    const targetRect = e.target.getClientRect();
+    const integrationGroup = layerRef.current?.findOne('.' + integrationGroupName);
 
-    items.push({
-      ...oldItem,
-      viz: {
-        ...oldItem!.viz,
-        position: {
-          x: e.target.x(),
-          y: e.target.y(),
-        },
-      },
+    // @ts-ignore
+    integrationGroup.children?.map((group) => {
+      // Exclude self from intersection
+      if (group === target) {
+        return;
+      }
+
+      if (doAreasIntersect(group.getClientRect(), targetRect)) {
+        /**
+         * Validation goes here
+         */
+      }
     });
+  };
 
-    setTempSteps(items);
+  const onDragEndTempStep = (e: any) => {
+    const draggedStepId = e.target.id();
+    // @ts-ignore
+    const targetCircle = e.target.children.find(({ className }) => className === 'Circle');
+
+    /**
+     * Check for intersection
+     */
+    const target = e.target;
+    const integrationGroup = layerRef.current?.findOne('.' + integrationGroupName);
+
+    // @ts-ignore
+    integrationGroup?.children.map(
+      (group: { attrs: { name: string; id: any }; children: any[] }) => {
+        // Exclude self from intersection
+        if (group === target) {
+          return;
+        }
+        // Exclude any group other than integration step groups
+        if (group.attrs.name !== integrationStepGroupName) {
+          return;
+        }
+
+        const groupCircleChild = group.children.find(
+          ({ className }: { className: string }) => className === 'Circle'
+        );
+
+        if (doAreasIntersect(groupCircleChild.getClientRect(), targetCircle.getClientRect())) {
+          /**
+           * Step replacement from temporary step already existing on the canvas
+           */
+          const currentStepIndex = findIndexWithVizId(draggedStepId, tempSteps);
+          const slotStepIndex = findIndexWithVizId(group.attrs.id, steps);
+
+          // Destroy node, update temporary steps
+          setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== draggedStepId));
+
+          // Update YAML
+          replaceIntegrationStep(tempSteps[currentStepIndex].model, slotStepIndex);
+        }
+      }
+    );
   };
 
   const imageDimensions = {
@@ -191,7 +265,7 @@ const Visualization = ({
             <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
               <Layer ref={layerRef}>
                 <Group
-                  name={'integration-and-slots'}
+                  name={integrationGroupName}
                   x={window.innerWidth / 5}
                   y={window.innerHeight / 2}
                 >
@@ -200,24 +274,7 @@ const Visualization = ({
 
                   {/** Create the visualization steps **/}
                   {steps.map((item, index) => {
-                    const imageProps = {
-                      id: item.viz.id,
-                      image: createImage(item.model.icon, null),
-                      x: item.viz.position.x! - imageDimensions.width / 2,
-                      y: 0 - imageDimensions.height / 2,
-                      height: imageDimensions.height,
-                      width: imageDimensions.width,
-                    };
-
-                    const circleProps = {
-                      x: item.viz.position.x,
-                      y: 0,
-                    };
-
-                    const textProps = {
-                      x: item.viz.position.x! - CIRCLE_LENGTH,
-                      y: CIRCLE_LENGTH / 2 + 10,
-                    };
+                    const itemImage = createImage(item.model.icon, null);
 
                     return (
                       <Group
@@ -232,10 +289,12 @@ const Visualization = ({
                           container.style.cursor = 'default';
                         }}
                         id={item.viz.id}
+                        name={integrationStepGroupName}
+                        width={CIRCLE_LENGTH}
+                        height={CIRCLE_LENGTH}
                       >
                         <Circle
-                          {...circleProps}
-                          name={`${index}`}
+                          name={`circle-${item.viz.id}`}
                           stroke={
                             item.model.type === 'START'
                               ? 'rgb(0, 136, 206)'
@@ -247,20 +306,32 @@ const Visualization = ({
                           strokeWidth={3}
                           width={CIRCLE_LENGTH}
                           height={CIRCLE_LENGTH}
+                          x={item.viz.position.x}
+                          y={0}
                         />
-                        <Image {...imageProps} />
+                        <Image
+                          id={item.viz.id}
+                          name={`image-${item.viz.id}`}
+                          image={itemImage}
+                          x={item.viz.position.x! - imageDimensions.width / 2}
+                          y={0 - imageDimensions.height / 2}
+                          height={imageDimensions.height}
+                          width={imageDimensions.width}
+                        />
                         <Text
                           align={'center'}
                           width={150}
                           fontFamily={'Ubuntu'}
                           fontSize={11}
                           text={truncateString(item.model.name, 14)}
-                          {...textProps}
+                          x={item.viz.position.x! - CIRCLE_LENGTH}
+                          y={CIRCLE_LENGTH / 2 + 10}
                         />
                       </Group>
                     );
                   })}
                 </Group>
+
                 {/** Create the temporary steps **/}
                 {tempSteps.map((step, idx) => {
                   const textProps = {
@@ -272,6 +343,7 @@ const Visualization = ({
                     <Group
                       onClick={handleClickStep}
                       onDragEnd={onDragEndTempStep}
+                      onDragMove={onDragMoveTempStep}
                       onDragStart={onDragStartTempStep}
                       data-testid={'visualization-step'}
                       id={step.viz.id}
@@ -288,6 +360,8 @@ const Visualization = ({
                       }}
                       x={step.viz.position.x}
                       y={step.viz.position.y}
+                      height={75}
+                      width={75}
                       draggable
                     >
                       <Circle
