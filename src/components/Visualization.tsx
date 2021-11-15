@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Circle, Group, Image, Layer, Stage, Text } from 'react-konva';
+import { Circle, Group, Image, Layer, Rect, Stage, Text } from 'react-konva';
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
@@ -78,6 +78,8 @@ const Visualization = ({
   const [tempSteps, setTempSteps] = useState<
     { model: IStepProps; viz: IVizStepProps; views?: IViewProps[] }[]
   >([]);
+  const integrationGroupName = 'integration-and-slots-group';
+  const integrationStepGroupName = 'integration-step-group';
 
   const deleteStep = () => {
     const selectedStepVizId = selectedStep.viz.id;
@@ -86,6 +88,10 @@ const Visualization = ({
 
     const stepsIndex = findIndexWithVizId(selectedStepVizId, steps);
 
+    /**
+     * If it's a temporary step, simply update the state.
+     * For an integration step, use the callback to remove the step.
+     */
     selectedStep.viz.temporary
       ? setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== selectedStepVizId))
       : deleteIntegrationStep(stepsIndex);
@@ -114,70 +120,84 @@ const Visualization = ({
     // Exclude self from intersection
     const target = e.target;
     const targetRect = e.target.getClientRect();
+    const integrationGroup = layerRef.current?.findOne('.' + integrationGroupName);
 
-    layerRef.current?.children?.map((group) => {
-      // do not check intersection with itself
+    // @ts-ignore
+    integrationGroup.children?.map((group) => {
+      // Exclude self from intersection
       if (group === target) {
-        //console.log('group and target are the same, returning..');
         return;
       }
 
       if (doAreasIntersect(group.getClientRect(), targetRect)) {
         //console.log('rectangle INTERSECTING!!1');
         /**
-         * Future validation goes here
+         * Validation goes here
          */
-      } else {
-        //console.log('rectangle NOT intersecting');
       }
     });
   };
 
   const onDragEndTempStep = (e: any) => {
-    const id = e.target.id();
-    const index = findIndexWithVizId(id, tempSteps);
+    const draggedStepId = e.target.id();
+    const draggedStepIndex = findIndexWithVizId(draggedStepId, tempSteps);
+    // @ts-ignore
+    const targetCircle = e.target.children.find(({ className }) => className === 'Circle');
 
     /**
      * Check for intersection
      */
-    // Exclude self from intersection
     const target = e.target;
-    const targetRect = e.target.getClientRect();
+    const integrationGroup = layerRef.current?.findOne('.' + integrationGroupName);
+    console.log('draggedStepId: ' + draggedStepId);
 
-    layerRef.current?.children?.map((group) => {
-      // do not check intersection with itself
+    // @ts-ignore
+    integrationGroup?.children.map((group) => {
+      // Exclude self from intersection
       if (group === target) {
-        //console.log('group and target are the same, returning..');
+        return;
+      }
+      // Exclude any group other than integration step groups
+      if (group.attrs.name !== integrationStepGroupName) {
         return;
       }
 
-      if (doAreasIntersect(group.getClientRect(), targetRect)) {
-        console.log('INTERSECTING!!1');
+      // @ts-ignore
+      const groupCircleChild = group.children.find(({ className }) => className === 'Circle');
+
+      if (doAreasIntersect(groupCircleChild.getClientRect(), targetCircle.getClientRect())) {
         /**
-         * Future validation goes here
+         * Step replacement from temporary step already existing on the canvas
          */
+        const currentStepIndex = findIndexWithVizId(draggedStepId, tempSteps);
+        const slotStepIndex = findIndexWithVizId(group.attrs.id, steps);
+
+        // Destroy node, update temporary steps
+        setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== draggedStepId));
+
+        // Update YAML
+        replaceIntegrationStep(tempSteps[currentStepIndex].model, slotStepIndex);
       } else {
-        console.log('NOT intersecting');
+        /**
+         * Update the position of the selected step
+         * Do we really even need this?
+         */
+        const items = tempSteps.filter((tempStep) => tempStep.viz.id !== draggedStepId);
+        const oldItem = tempSteps[draggedStepIndex];
+        items.push({
+          ...oldItem,
+          viz: {
+            ...oldItem!.viz,
+            position: {
+              x: e.target.x(),
+              y: e.target.y(),
+            },
+          },
+        });
+
+        setTempSteps(items);
       }
     });
-
-    /**
-     * Update the position of the selected step
-     */
-    const items = tempSteps.filter((tempStep) => tempStep.viz.id !== id);
-    const oldItem = tempSteps[index];
-    items.push({
-      ...oldItem,
-      viz: {
-        ...oldItem!.viz,
-        position: {
-          x: e.target.x(),
-          y: e.target.y(),
-        },
-      },
-    });
-
-    setTempSteps(items);
   };
 
   const imageDimensions = {
@@ -264,7 +284,7 @@ const Visualization = ({
             <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
               <Layer ref={layerRef}>
                 <Group
-                  name={'integration-and-slots'}
+                  name={integrationGroupName}
                   x={window.innerWidth / 5}
                   y={window.innerHeight / 2}
                 >
@@ -288,10 +308,12 @@ const Visualization = ({
                           container.style.cursor = 'default';
                         }}
                         id={item.viz.id}
-                        name={item.viz.id}
+                        name={integrationStepGroupName}
+                        width={CIRCLE_LENGTH}
+                        height={CIRCLE_LENGTH}
                       >
                         <Circle
-                          name={`${index}`}
+                          name={`circle-${item.viz.id}`}
                           stroke={
                             item.model.type === 'START'
                               ? 'rgb(0, 136, 206)'
@@ -308,6 +330,7 @@ const Visualization = ({
                         />
                         <Image
                           id={item.viz.id}
+                          name={`image-${item.viz.id}`}
                           image={itemImage}
                           x={item.viz.position.x! - imageDimensions.width / 2}
                           y={0 - imageDimensions.height / 2}
@@ -356,6 +379,8 @@ const Visualization = ({
                       }}
                       x={step.viz.position.x}
                       y={step.viz.position.y}
+                      height={75}
+                      width={75}
                       draggable
                     >
                       <Circle
