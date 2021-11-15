@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Circle, Group, Image, Layer, Rect, Stage, Text } from 'react-konva';
+import { Circle, Group, Image, Layer, Stage, Text } from 'react-konva';
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
@@ -130,7 +130,6 @@ const Visualization = ({
       }
 
       if (doAreasIntersect(group.getClientRect(), targetRect)) {
-        //console.log('rectangle INTERSECTING!!1');
         /**
          * Validation goes here
          */
@@ -140,7 +139,6 @@ const Visualization = ({
 
   const onDragEndTempStep = (e: any) => {
     const draggedStepId = e.target.id();
-    const draggedStepIndex = findIndexWithVizId(draggedStepId, tempSteps);
     // @ts-ignore
     const targetCircle = e.target.children.find(({ className }) => className === 'Circle');
 
@@ -149,55 +147,38 @@ const Visualization = ({
      */
     const target = e.target;
     const integrationGroup = layerRef.current?.findOne('.' + integrationGroupName);
-    console.log('draggedStepId: ' + draggedStepId);
 
     // @ts-ignore
-    integrationGroup?.children.map((group) => {
-      // Exclude self from intersection
-      if (group === target) {
-        return;
+    integrationGroup?.children.map(
+      (group: { attrs: { name: string; id: any }; children: any[] }) => {
+        // Exclude self from intersection
+        if (group === target) {
+          return;
+        }
+        // Exclude any group other than integration step groups
+        if (group.attrs.name !== integrationStepGroupName) {
+          return;
+        }
+
+        const groupCircleChild = group.children.find(
+          ({ className }: { className: string }) => className === 'Circle'
+        );
+
+        if (doAreasIntersect(groupCircleChild.getClientRect(), targetCircle.getClientRect())) {
+          /**
+           * Step replacement from temporary step already existing on the canvas
+           */
+          const currentStepIndex = findIndexWithVizId(draggedStepId, tempSteps);
+          const slotStepIndex = findIndexWithVizId(group.attrs.id, steps);
+
+          // Destroy node, update temporary steps
+          setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== draggedStepId));
+
+          // Update YAML
+          replaceIntegrationStep(tempSteps[currentStepIndex].model, slotStepIndex);
+        }
       }
-      // Exclude any group other than integration step groups
-      if (group.attrs.name !== integrationStepGroupName) {
-        return;
-      }
-
-      // @ts-ignore
-      const groupCircleChild = group.children.find(({ className }) => className === 'Circle');
-
-      if (doAreasIntersect(groupCircleChild.getClientRect(), targetCircle.getClientRect())) {
-        /**
-         * Step replacement from temporary step already existing on the canvas
-         */
-        const currentStepIndex = findIndexWithVizId(draggedStepId, tempSteps);
-        const slotStepIndex = findIndexWithVizId(group.attrs.id, steps);
-
-        // Destroy node, update temporary steps
-        setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== draggedStepId));
-
-        // Update YAML
-        replaceIntegrationStep(tempSteps[currentStepIndex].model, slotStepIndex);
-      } else {
-        /**
-         * Update the position of the selected step
-         * Do we really even need this?
-         */
-        const items = tempSteps.filter((tempStep) => tempStep.viz.id !== draggedStepId);
-        const oldItem = tempSteps[draggedStepIndex];
-        items.push({
-          ...oldItem,
-          viz: {
-            ...oldItem!.viz,
-            position: {
-              x: e.target.x(),
-              y: e.target.y(),
-            },
-          },
-        });
-
-        setTempSteps(items);
-      }
-    });
+    );
   };
 
   const imageDimensions = {
