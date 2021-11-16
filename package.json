@@ -26,7 +26,7 @@
   "dependencies": {
     "@monaco-editor/react": "4.3.1",
     "@patternfly/patternfly": "4.151.3",
-    "@patternfly/react-core": "4.166.0",
+    "@patternfly/react-core": "4.168.8",
     "konva": "8.2.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
