@@ -1,4 +1,6 @@
-import { lazy, useEffect, useState } from 'react';
+import { IStepProps, IViewProps, IVizStepProps } from '../types';
+import { Extension } from './Extension';
+import { dynamicImport } from './import';
 import {
   Button,
   DrawerActions,
@@ -12,9 +14,7 @@ import {
   Tabs,
   TabTitleText,
 } from '@patternfly/react-core';
-import { IStepProps, IViewProps, IVizStepProps } from '../types';
-import { dynamicImport } from './import';
-import { Extension } from './Extension';
+import { lazy, useEffect, useState } from 'react';
 
 export interface IStepViewsProps {
   deleteStep: (e: any) => void;
@@ -37,7 +37,7 @@ const StepViews = ({
 
   useEffect(() => {
     setActiveTabKey(views.some((v) => v.id === 'detail-step') ? 0 : defaultTabIndex);
-  }, [step]);
+  }, [step, views]);
 
   const handleTabClick = (_event: any, tabIndex: any) => {
     setActiveTabKey(tabIndex);
@@ -60,6 +60,7 @@ const StepViews = ({
       </DrawerHead>
       <DrawerPanelBody>
         <Tabs activeKey={activeTabKey} onSelect={handleTabClick}>
+          {/** If the step does not have a default view, provide one */}
           {!hasDetailStep && (
             <Tab eventKey={defaultTabIndex} title={<TabTitleText>Details</TabTitleText>}>
               <br />
@@ -106,10 +107,13 @@ const StepViews = ({
               </Button>
             </Tab>
           )}
+
+          {/** Show rest of views provided **/}
           {views.length > 0 &&
             views.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
 
+              // Example demonstrating interactivity with step extension
               const onButtonClicked = () => {
                 console.log(
                   'Button clicked! Viewing ' + view.id + ' for the following step: ' + view.step
