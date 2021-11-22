@@ -66,40 +66,28 @@ const StepViews = ({
               <br />
               <Grid hasGutter>
                 <GridItem span={3}>
-                  <b>Name</b>
+                  <b>Title</b>
                 </GridItem>
-                <GridItem span={6}>{step.model.name}</GridItem>
+                <GridItem span={6}>{step.model.title}</GridItem>
                 <GridItem span={3} rowSpan={2}>
                   <img src={step.model.icon} style={{ maxWidth: '50%' }} alt={'icon'} />
                 </GridItem>
                 <GridItem span={3}>
-                  <b>Title</b>
-                </GridItem>
-                <GridItem span={6}>{step.model.title}</GridItem>
-                <GridItem span={3}>
                   <b>Description</b>
                 </GridItem>
-                <GridItem span={9}>{step.model.description}</GridItem>
+                <GridItem span={6}>{step.model.description}</GridItem>
                 <GridItem span={3}>
-                  <b>Group</b>
+                  <b>Type</b>
                 </GridItem>
-                <GridItem span={9}>{step.model.group}</GridItem>
-                <GridItem span={3}>
-                  <b>API Version</b>
+                <GridItem span={9}>
+                  {step.model.type === 'START'
+                    ? 'Source'
+                    : step.model.type === 'MIDDLE'
+                    ? 'Action'
+                    : step.model.type === 'END'
+                    ? 'Sink'
+                    : ''}
                 </GridItem>
-                <GridItem span={9}>{step.model.apiVersion}</GridItem>
-                <GridItem span={3}>
-                  <b>Kind</b>
-                </GridItem>
-                <GridItem span={9}>{step.model.kind}</GridItem>
-                {step.model.kameletType && (
-                  <>
-                    <GridItem span={3}>
-                      <b>Kamelet Type</b>
-                    </GridItem>
-                    <GridItem span={9}>{step.model.kameletType}</GridItem>
-                  </>
-                )}
               </Grid>
               <br />
               <Button variant={'danger'} key={step.viz.id} onClick={deleteStep}>
