@@ -12023,9 +12023,9 @@ __metadata:
     tsconfig-paths-webpack-plugin: 3.5.1
     tslib: ^2.3.1
     typescript: 4.4.4
-    uniforms: 3.6.2
-    uniforms-bridge-json-schema: 3.6.2
-    uniforms-patternfly: 4.7.3
+    uniforms: ^3.6.2
+    uniforms-bridge-json-schema: ^3.6.2
+    uniforms-patternfly: ^4.7.4
     url-loader: 4.1.1
     use-debounce: 7.0.0
     uuid: 8.3.2
@@ -17885,7 +17885,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uniforms-bridge-json-schema@npm:3.6.2":
+"uniforms-bridge-json-schema@npm:^3.6.2":
   version: 3.6.2
   resolution: "uniforms-bridge-json-schema@npm:3.6.2"
   dependencies:
@@ -17897,9 +17897,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uniforms-patternfly@npm:4.7.3":
-  version: 4.7.3
-  resolution: "uniforms-patternfly@npm:4.7.3"
+"uniforms-patternfly@npm:^4.7.4":
+  version: 4.7.4
+  resolution: "uniforms-patternfly@npm:4.7.4"
   dependencies:
     classnames: ^2.0.0
     invariant: ^2.0.0
@@ -17910,11 +17910,11 @@ __metadata:
     "@patternfly/react-core": ^4.135.0
     "@patternfly/react-icons": ^4.11.0
     react: ^17.0.0 || ^16.8.0
-  checksum: 85859fdd1f27619d52eff6c58e6e4e70d5348cfb8ba058e29b59c286b64913426f4addc0976ba8063b3ef6978fff48f17e46fc013711ff5169f4f0e5b2194183
+  checksum: 1d9cc82dc2580c72e49f3359fd23c334466bfbe430fc2ce79332bc04fc61bc27f37ed8a31e4d6d2bfdfea6bf3a162e68fe1fbdcbbd42618e46d774c4076413ea
   languageName: node
   linkType: hard
 
-"uniforms@npm:3.6.2, uniforms@npm:^3.5.5, uniforms@npm:^3.6.2":
+"uniforms@npm:^3.5.5, uniforms@npm:^3.6.2":
   version: 3.6.2
   resolution: "uniforms@npm:3.6.2"
   dependencies:
