@@ -31,13 +31,13 @@ const StepViews = ({
   step,
   views,
 }: IStepViewsProps) => {
-  const hasDetailStep = views.some((v) => v.id === 'detail-step');
-  const defaultTabIndex = 10000;
-  const [activeTabKey, setActiveTabKey] = useState(defaultTabIndex);
+  const hasDetailView = views.some((v) => v.id === 'detail-step');
+  const detailsTabIndex = views.length + 1; // provide an index that won't be used by custom views
+  const [activeTabKey, setActiveTabKey] = useState(detailsTabIndex);
 
   useEffect(() => {
-    setActiveTabKey(views.some((v) => v.id === 'detail-step') ? 0 : defaultTabIndex);
-  }, [step, views]);
+    setActiveTabKey(views.some((v) => v.id === 'detail-step') ? 0 : detailsTabIndex);
+  }, [detailsTabIndex, step, views]);
 
   const handleTabClick = (_event: any, tabIndex: any) => {
     setActiveTabKey(tabIndex);
@@ -61,8 +61,8 @@ const StepViews = ({
       <DrawerPanelBody>
         <Tabs activeKey={activeTabKey} onSelect={handleTabClick}>
           {/** If the step does not have a default view, provide one */}
-          {!hasDetailStep && (
-            <Tab eventKey={defaultTabIndex} title={<TabTitleText>Details</TabTitleText>}>
+          {!hasDetailView && (
+            <Tab eventKey={detailsTabIndex} title={<TabTitleText>Details</TabTitleText>}>
               <br />
               <Grid hasGutter>
                 <GridItem span={3}>
