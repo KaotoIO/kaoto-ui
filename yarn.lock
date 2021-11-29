@@ -5138,6 +5138,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ajv@npm:^8.8.2":
+  version: 8.8.2
+  resolution: "ajv@npm:8.8.2"
+  dependencies:
+    fast-deep-equal: ^3.1.1
+    json-schema-traverse: ^1.0.0
+    require-from-string: ^2.0.2
+    uri-js: ^4.2.2
+  checksum: 90849ef03c4f4f7051d15f655120137b89e3205537d683beebd39d95f40c0ca00ea8476cd999602d2f433863e7e4bf1b81d1869d1e07f4dcf56d71b6430a605c
+  languageName: node
+  linkType: hard
+
 "alphanum-sort@npm:^1.0.2":
   version: 1.0.2
   resolution: "alphanum-sort@npm:1.0.2"
@@ -11986,6 +11998,7 @@ __metadata:
     "@types/uuid": 8.3.1
     "@typescript-eslint/eslint-plugin": 5.2.0
     "@typescript-eslint/parser": 5.2.0
+    ajv: ^8.8.2
     chromatic: 6.0.4
     css-loader: 6.4.0
     css-minimizer-webpack-plugin: 3.1.1

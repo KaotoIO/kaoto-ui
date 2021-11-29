@@ -20,6 +20,7 @@ export interface IStepViewsProps {
   deleteStep: (e: any) => void;
   isPanelExpanded: boolean;
   onClosePanelClick: (e: any) => void;
+  saveConfig: (newValues: any) => void;
   step: { viz: IVizStepProps; model: IStepProps };
   views: IViewProps[];
 }
@@ -28,11 +29,13 @@ const StepViews = ({
   deleteStep,
   isPanelExpanded,
   onClosePanelClick,
+  saveConfig,
   step,
   views,
 }: IStepViewsProps) => {
   const hasDetailView = views.some((v) => v.id === 'detail-step');
   const detailsTabIndex = views.length + 1; // provide an index that won't be used by custom views
+  const configTabIndex = views.length + 2;
   const [activeTabKey, setActiveTabKey] = useState(detailsTabIndex);
 
   useEffect(() => {
@@ -124,6 +127,32 @@ const StepViews = ({
                 </Tab>
               );
             })}
+
+          {/* only integration steps are configurable */}
+          {!step.viz.temporary && (
+            <Tab eventKey={configTabIndex} title={<TabTitleText>Config</TabTitleText>}>
+              <br />
+              <Grid hasGutter>
+                {step.model.parameters &&
+                  step.model.parameters.map((parameter) => {
+                    return (
+                      <>
+                        <GridItem span={3}>
+                          <b>{parameter.label}</b>
+                        </GridItem>
+                        <GridItem span={9}>
+                          {parameter.value ? parameter.value : parameter.default}
+                        </GridItem>
+                      </>
+                    );
+                  })}
+              </Grid>
+              <br />
+              <Button variant={'danger'} key={step.viz.id} onClick={saveConfig}>
+                Save
+              </Button>
+            </Tab>
+          )}
         </Tabs>
       </DrawerPanelBody>
     </DrawerPanelContent>

@@ -1,14 +1,14 @@
-import { useRef, useState } from 'react';
-import { Circle, Group, Image, Layer, Stage, Text } from 'react-konva';
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
 import { StepViews } from './StepViews';
-import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
 import './Visualization.css';
-import Konva from 'konva';
-import { v4 as uuidv4 } from 'uuid';
 import { VisualizationSlot } from './VisualizationSlot';
+import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
+import Konva from 'konva';
+import { useRef, useState } from 'react';
+import { Circle, Group, Image, Layer, Stage, Text } from 'react-konva';
+import { v4 as uuidv4 } from 'uuid';
 
 interface IVisualization {
   deleteIntegrationStep: (e: any) => void;
@@ -95,6 +95,21 @@ const Visualization = ({
     selectedStep.viz.temporary
       ? setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== selectedStepVizId))
       : deleteIntegrationStep(stepsIndex);
+  };
+
+  const saveConfig = (newValues: any) => {
+    const selectedStepVizId = selectedStep.viz.id;
+    setIsPanelExpanded(false);
+    setSelectedStep(placeholderStep);
+
+    const stepsIndex = findIndexWithVizId(selectedStepVizId, steps);
+
+    console.log('newValues: ' + JSON.stringify(newValues));
+
+    //const newStep = {...selectedStep, newValues};
+
+    // "old step index" is the same as the current step index
+    //replaceIntegrationStep(newStep, selectedStepVizId);
   };
 
   const onDragStartTempStep = (e: any) => {
@@ -222,6 +237,7 @@ const Visualization = ({
             isPanelExpanded={isPanelExpanded}
             deleteStep={deleteStep}
             onClosePanelClick={onClosePanelClick}
+            saveConfig={saveConfig}
             views={views.filter((view) => view.step === selectedStep.model.UUID)}
           />
         }
