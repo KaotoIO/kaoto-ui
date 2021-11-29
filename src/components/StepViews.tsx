@@ -1,5 +1,6 @@
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import { Extension } from './Extension';
+import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { dynamicImport } from './import';
 import {
   Button,
@@ -14,7 +15,7 @@ import {
   Tabs,
   TabTitleText,
 } from '@patternfly/react-core';
-import { lazy, useEffect, useState } from 'react';
+import { lazy, useEffect, useRef, useState } from 'react';
 
 export interface IStepViewsProps {
   deleteStep: (e: any) => void;
@@ -37,10 +38,25 @@ const StepViews = ({
   const detailsTabIndex = views.length + 1; // provide an index that won't be used by custom views
   const configTabIndex = views.length + 2;
   const [activeTabKey, setActiveTabKey] = useState(detailsTabIndex);
+  const stepPropertySchema = useRef<{ [label: string]: { type: string } }>({});
 
   useEffect(() => {
     setActiveTabKey(views.some((v) => v.id === 'detail-step') ? 0 : detailsTabIndex);
   }, [detailsTabIndex, step, views]);
+
+  useEffect(() => {
+    let tempObject: { [label: string]: { type: string } } = {};
+
+    const schemaProps = (parameters: { label: string; type: string }) => {
+      const propKey = parameters.label;
+      const { type } = parameters;
+      tempObject[propKey] = { type };
+    };
+
+    step.model.parameters?.map(schemaProps);
+    console.log('tempProps: ' + JSON.stringify(tempObject));
+    stepPropertySchema.current = tempObject;
+  }, [step.model.parameters]);
 
   const handleTabClick = (_event: any, tabIndex: any) => {
     setActiveTabKey(tabIndex);
@@ -133,19 +149,17 @@ const StepViews = ({
             <Tab eventKey={configTabIndex} title={<TabTitleText>Config</TabTitleText>}>
               <br />
               <Grid hasGutter>
-                {step.model.parameters &&
-                  step.model.parameters.map((parameter) => {
-                    return (
-                      <>
-                        <GridItem span={3}>
-                          <b>{parameter.label}</b>
-                        </GridItem>
-                        <GridItem span={9}>
-                          {parameter.value ? parameter.value : parameter.default}
-                        </GridItem>
-                      </>
-                    );
-                  })}
+                {step.model.parameters && (
+                  <JsonSchemaConfigurator
+                    schema={{ type: 'object', properties: stepPropertySchema.current }}
+                    configuration={{}}
+                    onChange={(configuration, isValid) => {
+                      console.log('configuration: ' + JSON.stringify(configuration));
+                      console.log('isValid: ' + isValid);
+                      //actor.send({ type: 'change', configuration, isValid })
+                    }}
+                  />
+                )}
               </Grid>
               <br />
               <Button variant={'danger'} key={step.viz.id} onClick={saveConfig}>
