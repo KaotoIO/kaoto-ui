@@ -47,9 +47,7 @@ export const JsonSchemaConfigurator: FunctionComponent<JsonSchemaConfiguratorPro
       <AutoFields />
 
       <Card isPlain>
-        <CardBody>
-          <SubmitField value={'Verify configuration'} />
-        </CardBody>
+        <CardBody>{/*<SubmitField value={'Verify configuration'} />*/}</CardBody>
       </Card>
       {/* <WizardNext onChange={onChange} /> */}
     </AutoForm>
