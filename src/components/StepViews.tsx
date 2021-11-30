@@ -54,7 +54,6 @@ const StepViews = ({
     };
 
     step.model.parameters?.map(schemaProps);
-    console.log('tempProps: ' + JSON.stringify(tempObject));
     stepPropertySchema.current = tempObject;
   }, [step.model.parameters]);
 
@@ -154,9 +153,8 @@ const StepViews = ({
                     schema={{ type: 'object', properties: stepPropertySchema.current }}
                     configuration={{}}
                     onChange={(configuration, isValid) => {
-                      console.log('configuration: ' + JSON.stringify(configuration));
-                      console.log('isValid: ' + isValid);
-                      //actor.send({ type: 'change', configuration, isValid })
+                      //console.log('configuration: ' + JSON.stringify(configuration));
+                      //console.log('isValid: ' + isValid);
                     }}
                   />
                 )}
