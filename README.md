@@ -16,7 +16,12 @@
 
 # Kaoto UI
 
-User interface for [Kaoto Backend](https://github.com/KaotoIO/kaoto-backend).
+This is the user interface for [Kaoto Backend](https://github.com/KaotoIO/kaoto-backend). Kaoto is an easy-to-use visual integration framework based on [Apache Camel](https://camel.apache.org/).
+
+![Kapture 2021-11-08 at 16 49 05](https://user-images.githubusercontent.com/3844502/144047887-ac270f49-4bd8-48cb-9de9-afe87ad4083b.gif)
+
+
+## Requirements
 
 - Node >= 14
 - Yarn Berry (3.x)
