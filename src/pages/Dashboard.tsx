@@ -1,3 +1,11 @@
+import { Catalog } from '../components/Catalog';
+import { Visualization } from '../components/Visualization';
+import { YAMLEditor } from '../components/YAMLEditor';
+import YAML from '../stories/data/yaml';
+import { IStepProps, IViewData, IVizStepProps } from '../types';
+import request from '../utils/request';
+import usePrevious from '../utils/usePrevious';
+import './Dashboard.css';
 import {
   Button,
   Drawer,
@@ -7,17 +15,9 @@ import {
   GridItem,
   Tooltip,
 } from '@patternfly/react-core';
-import { Catalog } from '../components/Catalog';
-import { Visualization } from '../components/Visualization';
-import { YAMLEditor } from '../components/YAMLEditor';
-import usePrevious from '../utils/usePrevious';
-import request from '../utils/request';
-import { useEffect, useState } from 'react';
-import { IStepProps, IViewData, IVizStepProps } from '../types';
-import YAML from '../stories/data/yaml';
-import { v4 as uuidv4 } from 'uuid';
-import './Dashboard.css';
 import { CodeIcon, PlusCircleIcon } from '@patternfly/react-icons';
+import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 const Dashboard = () => {
   // If the catalog data won't be changing, consider removing this state
@@ -113,7 +113,7 @@ const Dashboard = () => {
 
     try {
       const resp = await request.post({
-        endpoint: '/deployment/yaml',
+        endpoint: '/integrations/customResource',
         contentType: 'application/json',
         body: { name: 'Updated integration', steps: newSteps },
       });
