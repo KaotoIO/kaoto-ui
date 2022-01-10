@@ -25,31 +25,33 @@ type JsonSchemaConfiguratorProps = {
   schema: any;
   configuration: any;
   onChange: (configuration: unknown, isValid: boolean) => void;
+  onSubmit: (configuration: unknown, isValid: boolean) => void;
 };
 
 export const JsonSchemaConfigurator: FunctionComponent<JsonSchemaConfiguratorProps> = ({
   schema,
   configuration,
   onChange,
+  onSubmit,
 }) => {
   schema.type = schema.type || 'object';
   const schemaValidator = createValidator(schema);
   const bridge = new JSONSchemaBridge(schema, schemaValidator);
+  //console.table(configuration);
   return (
     <AutoForm
       schema={bridge}
       model={configuration}
       onChangeModel={(model: any) => onChange(model, false)}
-      onSubmit={(model: any) => onChange(model, true)}
+      onSubmit={(model: any) => onSubmit(model, true)}
       // autosave
       // autosaveDelay={0}
     >
       <AutoFields />
 
       <Card isPlain>
-        <CardBody>{/*<SubmitField value={'Verify configuration'} />*/}</CardBody>
+        <CardBody>{<SubmitField value={'Verify configuration'} />}</CardBody>
       </Card>
-      {/* <WizardNext onChange={onChange} /> */}
     </AutoForm>
   );
 };

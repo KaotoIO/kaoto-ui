@@ -104,12 +104,40 @@ const Visualization = ({
 
     const stepsIndex = findIndexWithVizId(selectedStepVizId, steps);
 
-    console.log('newValues: ' + JSON.stringify(newValues));
+    console.table(newValues);
+    //console.table(newValues.target);
 
-    //const newStep = {...selectedStep, newValues};
+    /*
+    const formattedParameters = {};
+
+    const mapKeys = (obj, mapper) =>
+      Object.entries(obj).reduce(
+        (acc, [key, value]) => ({
+          ...acc,
+          [mapper(value, key)]: value,
+        }),
+        {}
+      );
+
+    mapKeys({ a: 1, b: 2 }, (value, key) => {
+      // @ts-ignore
+      //const tempKey = selectedStep.model.parameters[key];
+
+    });
+    // => { 'a1': 1, 'b2': 2 }
+
+     */
+    const newStep = {
+      ...selectedStep,
+      //newValues,
+      model: {
+        ...selectedStep.model,
+        newValues,
+      },
+    };
 
     // "old step index" is the same as the current step index
-    //replaceIntegrationStep(newStep, selectedStepVizId);
+    replaceIntegrationStep(newStep, selectedStepVizId);
   };
 
   const onDragStartTempStep = (e: any) => {
