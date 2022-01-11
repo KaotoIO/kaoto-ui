@@ -1,9 +1,9 @@
-import { render } from '@testing-library/react';
-import { screen } from '@testing-library/dom';
-import { VisualizationSlot } from './VisualizationSlot';
 import { IStepProps, IVizStepProps } from '../types';
+import { VisualizationSlot } from './VisualizationSlot';
+import { screen } from '@testing-library/dom';
+import { render } from '@testing-library/react';
 
-describe.skip('VisualizationSlot.tsx', () => {
+describe('VisualizationSlot.tsx', () => {
   test('component renders correctly', () => {
     const fakeSteps: { viz: IVizStepProps; model: IStepProps }[] = [];
     const fakeStep = {

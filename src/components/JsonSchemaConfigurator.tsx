@@ -1,9 +1,10 @@
 import { Card, CardBody } from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core';
 import Ajv from 'ajv';
 import { FunctionComponent } from 'react';
 import { AutoForm } from 'uniforms';
 import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
-import { AutoFields, SubmitField } from 'uniforms-patternfly';
+import { AutoFields } from 'uniforms-patternfly';
 
 const ajv = new Ajv({
   allErrors: true,
@@ -41,13 +42,14 @@ export const JsonSchemaConfigurator: FunctionComponent<JsonSchemaConfiguratorPro
     <AutoForm
       schema={bridge}
       model={configuration}
-      onChangeModel={(model: any) => onChange(model, false)}
+      onChangeModel={(model: any) => (onChange ? onChange(model, false) : null)}
       onSubmit={(model: any) => onSubmit(model, true)}
+      data-testid={'json-schema-configurator'}
     >
       <AutoFields />
 
       <Card isPlain>
-        <CardBody>{<SubmitField value={'Verify configuration'} />}</CardBody>
+        <CardBody>{<Button variant={'primary'}>Verify Configuration</Button>}</CardBody>
       </Card>
     </AutoForm>
   );
