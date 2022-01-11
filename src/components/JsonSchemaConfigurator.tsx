@@ -1,7 +1,7 @@
 import { Card, CardBody } from '@patternfly/react-core';
-import Ajv, { ValidateFunction } from 'ajv';
+import Ajv from 'ajv';
 import { FunctionComponent } from 'react';
-import { AutoForm, ValidatedQuickForm } from 'uniforms';
+import { AutoForm } from 'uniforms';
 import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
 import { AutoFields, SubmitField } from 'uniforms-patternfly';
 
@@ -37,15 +37,12 @@ export const JsonSchemaConfigurator: FunctionComponent<JsonSchemaConfiguratorPro
   schema.type = schema.type || 'object';
   const schemaValidator = createValidator(schema);
   const bridge = new JSONSchemaBridge(schema, schemaValidator);
-  //console.table(configuration);
   return (
     <AutoForm
       schema={bridge}
       model={configuration}
       onChangeModel={(model: any) => onChange(model, false)}
       onSubmit={(model: any) => onSubmit(model, true)}
-      // autosave
-      // autosaveDelay={0}
     >
       <AutoFields />
 
