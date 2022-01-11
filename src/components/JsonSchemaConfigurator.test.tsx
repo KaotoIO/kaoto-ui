@@ -1,11 +1,24 @@
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
+import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
 
 describe('JsonSchemaConfigurator.tsx', () => {
   test('component renders correctly', () => {
     const stepPropertySchema = {
-      type: 'string',
+      type: 'object',
+      properties: {
+        keywords: {
+          label: 'keywords',
+          type: 'string',
+          value: '',
+        },
+        type: {
+          label: 'type',
+          type: 'string',
+          value: '',
+        },
+      },
     };
 
     const stepPropertyModel = {
@@ -18,9 +31,12 @@ describe('JsonSchemaConfigurator.tsx', () => {
       type: 'string',
     };
 
+    const validator = jest.fn();
+    const bridge = new JSONSchemaBridge(stepPropertySchema, validator);
+
     render(
       <JsonSchemaConfigurator
-        schema={{ type: 'object', properties: stepPropertySchema }}
+        schema={bridge}
         configuration={stepPropertyModel}
         onSubmit={jest.fn()}
       />

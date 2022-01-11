@@ -3,7 +3,7 @@ import { VisualizationSlot } from './VisualizationSlot';
 import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 
-describe('VisualizationSlot.tsx', () => {
+describe.skip('VisualizationSlot.tsx', () => {
   test('component renders correctly', () => {
     const fakeSteps: { viz: IVizStepProps; model: IStepProps }[] = [];
     const fakeStep = {
