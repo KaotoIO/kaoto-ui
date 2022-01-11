@@ -1,10 +1,9 @@
-import { Card, CardBody } from '@patternfly/react-core';
-import { Button } from '@patternfly/react-core';
+import { ActionGroup, Button } from '@patternfly/react-core';
 import Ajv from 'ajv';
 import { FunctionComponent } from 'react';
 import { AutoForm } from 'uniforms';
 import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
-import { AutoFields } from 'uniforms-patternfly';
+import { AutoFields, ErrorsField } from 'uniforms-patternfly';
 
 const ajv = new Ajv({
   allErrors: true,
@@ -47,10 +46,13 @@ export const JsonSchemaConfigurator: FunctionComponent<JsonSchemaConfiguratorPro
       data-testid={'json-schema-configurator'}
     >
       <AutoFields />
-
-      <Card isPlain>
-        <CardBody>{<Button variant={'primary'}>Verify Configuration</Button>}</CardBody>
-      </Card>
+      <ErrorsField />
+      <br />
+      <ActionGroup>
+        <Button variant={'primary'} type={'submit'}>
+          Verify Configuration
+        </Button>
+      </ActionGroup>
     </AutoForm>
   );
 };

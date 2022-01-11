@@ -108,11 +108,11 @@ const Dashboard = () => {
   }, [previousYaml, yamlData]);
 
   const updateIntegration = async (newSteps: any) => {
-    setIsError(false);
-    setIsLoading(true);
     //console.table(newSteps);
 
     try {
+      setIsLoading(true);
+
       const resp = await request.post({
         endpoint: '/integrations/customResource',
         contentType: 'application/json',
@@ -121,12 +121,15 @@ const Dashboard = () => {
 
       const data = await resp.text();
       setYamlData(data);
+      setIsError(false);
     } catch (err) {
       console.error(err);
       setIsError(true);
     }
 
-    setIsLoading(false);
+    if (isLoading) {
+      setIsLoading(false);
+    }
   };
 
   const deleteIntegrationStep = (stepsIndex: any) => {
