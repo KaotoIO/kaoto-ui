@@ -1,4 +1,4 @@
-import { IStepProps, IViewProps, IVizStepProps } from '../types';
+import { IStepProps, IModelVizProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
 import { StepViews } from './StepViews';
@@ -27,6 +27,7 @@ const placeholderStep = {
     icon: '',
     id: '',
     name: '',
+    parameters: [],
     type: '',
     UUID: '',
   },
@@ -99,17 +100,15 @@ const Visualization = ({
 
   const saveConfig = (newValues: any) => {
     const selectedStepVizId = selectedStep.viz.id;
-    setIsPanelExpanded(false);
-    setSelectedStep(placeholderStep);
+    let newStep: IModelVizProps = selectedStep;
 
-    const stepsIndex = findIndexWithVizId(selectedStepVizId, steps);
-
-    console.log('newValues: ' + JSON.stringify(newValues));
-
-    //const newStep = {...selectedStep, newValues};
+    Object.entries(newValues).map(([key, value]) => {
+      const paramIndex = newStep.model.parameters.findIndex((p) => p.id === key);
+      newStep.model.parameters[paramIndex].value = value;
+    });
 
     // "old step index" is the same as the current step index
-    //replaceIntegrationStep(newStep, selectedStepVizId);
+    replaceIntegrationStep(newStep, selectedStepVizId);
   };
 
   const onDragStartTempStep = (e: any) => {

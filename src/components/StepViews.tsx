@@ -39,22 +39,27 @@ const StepViews = ({
   const configTabIndex = views.length + 2;
   const [activeTabKey, setActiveTabKey] = useState(detailsTabIndex);
   const stepPropertySchema = useRef<{ [label: string]: { type: string } }>({});
+  const stepPropertyModel = useRef<{ [label: string]: any }>({});
 
   useEffect(() => {
     setActiveTabKey(views.some((v) => v.id === 'detail-step') ? 0 : detailsTabIndex);
   }, [detailsTabIndex, step, views]);
 
   useEffect(() => {
-    let tempObject: { [label: string]: { type: string } } = {};
+    let tempSchemaObject: { [label: string]: { type: string; value?: any } } = {};
+    let tempModelObject: { [label: string]: any } = {};
 
-    const schemaProps = (parameters: { label: string; type: string }) => {
-      const propKey = parameters.label;
-      const { type } = parameters;
-      tempObject[propKey] = { type };
+    const schemaProps = (parameter: { value?: any; label: string; type: string }) => {
+      const propKey = parameter.label;
+      const { type } = parameter;
+      tempSchemaObject[propKey] = { type };
+      tempModelObject[propKey] = parameter.value;
     };
 
     step.model.parameters?.map(schemaProps);
-    stepPropertySchema.current = tempObject;
+
+    stepPropertySchema.current = tempSchemaObject;
+    stepPropertyModel.current = tempModelObject;
   }, [step.model.parameters]);
 
   const handleTabClick = (_event: any, tabIndex: any) => {
@@ -151,18 +156,23 @@ const StepViews = ({
                 {step.model.parameters && (
                   <JsonSchemaConfigurator
                     schema={{ type: 'object', properties: stepPropertySchema.current }}
-                    configuration={{}}
+                    configuration={stepPropertyModel.current}
                     onChange={(configuration, isValid) => {
-                      //console.log('configuration: ' + JSON.stringify(configuration));
-                      //console.log('isValid: ' + isValid);
+                      //saveConfig(configuration);
+                    }}
+                    onSubmit={(configuration, isValid) => {
+                      if (isValid) {
+                        saveConfig(configuration);
+                      }
                     }}
                   />
                 )}
               </Grid>
               <br />
+              {/**
               <Button variant={'danger'} key={step.viz.id} onClick={saveConfig}>
                 Save
-              </Button>
+              </Button>**/}
             </Tab>
           )}
         </Tabs>
