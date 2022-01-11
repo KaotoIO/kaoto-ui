@@ -1,4 +1,4 @@
-import { IStepProps, IViewProps, IVizStepProps } from '../types';
+import { IStepProps, IModelVizProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
 import { StepViews } from './StepViews';
@@ -27,6 +27,7 @@ const placeholderStep = {
     icon: '',
     id: '',
     name: '',
+    parameters: [],
     type: '',
     UUID: '',
   },
@@ -99,42 +100,12 @@ const Visualization = ({
 
   const saveConfig = (newValues: any) => {
     const selectedStepVizId = selectedStep.viz.id;
-    setIsPanelExpanded(false);
-    setSelectedStep(placeholderStep);
+    let newStep: IModelVizProps = selectedStep;
 
-    const stepsIndex = findIndexWithVizId(selectedStepVizId, steps);
-
-    console.table(newValues);
-    //console.table(newValues.target);
-
-    /*
-    const formattedParameters = {};
-
-    const mapKeys = (obj, mapper) =>
-      Object.entries(obj).reduce(
-        (acc, [key, value]) => ({
-          ...acc,
-          [mapper(value, key)]: value,
-        }),
-        {}
-      );
-
-    mapKeys({ a: 1, b: 2 }, (value, key) => {
-      // @ts-ignore
-      //const tempKey = selectedStep.model.parameters[key];
-
+    Object.entries(newValues).map(([key, value]) => {
+      const paramIndex = newStep.model.parameters.findIndex((p) => p.id === key);
+      newStep.model.parameters[paramIndex].value = value;
     });
-    // => { 'a1': 1, 'b2': 2 }
-
-     */
-    const newStep = {
-      ...selectedStep,
-      //newValues,
-      model: {
-        ...selectedStep.model,
-        newValues,
-      },
-    };
 
     // "old step index" is the same as the current step index
     replaceIntegrationStep(newStep, selectedStepVizId);

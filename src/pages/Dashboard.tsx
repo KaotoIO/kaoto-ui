@@ -110,6 +110,7 @@ const Dashboard = () => {
   const updateIntegration = async (newSteps: any) => {
     setIsError(false);
     setIsLoading(true);
+    //console.table(newSteps);
 
     try {
       const resp = await request.post({

@@ -46,19 +46,14 @@ const StepViews = ({
   }, [detailsTabIndex, step, views]);
 
   useEffect(() => {
-    let tempSchemaObject: { [label: string]: { defaultValue?: any; type: string } } = {};
+    let tempSchemaObject: { [label: string]: { type: string; value?: any } } = {};
     let tempModelObject: { [label: string]: any } = {};
 
-    const schemaProps = (parameters: {
-      defaultValue?: any;
-      label: string;
-      type: string;
-      value?: any;
-    }) => {
+    const schemaProps = (parameters: { value?: any; label: string; type: string }) => {
       const propKey = parameters.label;
-      const { defaultValue, type, value } = parameters;
-      tempSchemaObject[propKey] = { defaultValue, type };
-      tempModelObject[propKey] = value;
+      const { type } = parameters;
+      tempSchemaObject[propKey] = { type };
+      tempModelObject[propKey] = parameters.value;
     };
 
     step.model.parameters?.map(schemaProps);
@@ -166,8 +161,6 @@ const StepViews = ({
                       //saveConfig(configuration);
                     }}
                     onSubmit={(configuration, isValid) => {
-                      //console.table(configuration);
-                      //console.log('isValid: ' + isValid);
                       if (isValid) {
                         saveConfig(configuration);
                       }
