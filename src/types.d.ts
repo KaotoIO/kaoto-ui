@@ -30,7 +30,7 @@ export interface IStepProps {
   kameletType?: string;
   kind?: string;
   name: string;
-  parameters: any[];
+  parameters?: any[];
   subType?: string; // should be 'KAMELET'
   title?: string;
   type: string; // e.g. 'START', 'MIDDLE', 'END'

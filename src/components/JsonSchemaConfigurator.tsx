@@ -24,7 +24,7 @@ export function createValidator(schema: object) {
 type JsonSchemaConfiguratorProps = {
   schema: any;
   configuration: any;
-  onChange: (configuration: unknown, isValid: boolean) => void;
+  onChange?: (configuration: unknown, isValid: boolean) => void;
   onSubmit: (configuration: unknown, isValid: boolean) => void;
 };
 
