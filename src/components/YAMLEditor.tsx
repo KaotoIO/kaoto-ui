@@ -1,3 +1,4 @@
+import { StepErrorBoundary } from './StepErrorBoundary';
 import Editor from '@monaco-editor/react';
 import { useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
@@ -30,16 +31,18 @@ const YAMLEditor = ({ yamlData, handleChanges }: IYAMLEditor) => {
   }, 800);
 
   return (
-    <Editor
-      height="90vh"
-      defaultLanguage="yaml"
-      onChange={handleEditorChange}
-      onMount={handleEditorDidMount}
-      onValidate={handleEditorValidation}
-      theme={'vs-dark'}
-      value={yamlData}
-      className={'code-editor'}
-    />
+    <StepErrorBoundary>
+      <Editor
+        height="90vh"
+        defaultLanguage="yaml"
+        onChange={handleEditorChange}
+        onMount={handleEditorDidMount}
+        onValidate={handleEditorValidation}
+        theme={'vs-dark'}
+        value={yamlData}
+        className={'code-editor'}
+      />
+    </StepErrorBoundary>
   );
 };
 

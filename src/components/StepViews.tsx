@@ -1,6 +1,7 @@
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
+import { StepErrorBoundary } from './StepErrorBoundary';
 import { dynamicImport } from './import';
 import {
   Button,
@@ -86,36 +87,38 @@ const StepViews = ({
           {/** If the step does not have a default view, provide one */}
           {!hasDetailView && (
             <Tab eventKey={detailsTabIndex} title={<TabTitleText>Details</TabTitleText>}>
-              <br />
-              <Grid hasGutter>
-                <GridItem span={3}>
-                  <b>Title</b>
-                </GridItem>
-                <GridItem span={6}>{step.model.title}</GridItem>
-                <GridItem span={3} rowSpan={2}>
-                  <img src={step.model.icon} style={{ maxWidth: '50%' }} alt={'icon'} />
-                </GridItem>
-                <GridItem span={3}>
-                  <b>Description</b>
-                </GridItem>
-                <GridItem span={6}>{step.model.description}</GridItem>
-                <GridItem span={3}>
-                  <b>Type</b>
-                </GridItem>
-                <GridItem span={9}>
-                  {step.model.type === 'START'
-                    ? 'Source'
-                    : step.model.type === 'MIDDLE'
-                    ? 'Action'
-                    : step.model.type === 'END'
-                    ? 'Sink'
-                    : ''}
-                </GridItem>
-              </Grid>
-              <br />
-              <Button variant={'danger'} key={step.viz.id} onClick={deleteStep}>
-                Delete
-              </Button>
+              <StepErrorBoundary>
+                <br />
+                <Grid hasGutter>
+                  <GridItem span={3}>
+                    <b>Title</b>
+                  </GridItem>
+                  <GridItem span={6}>{step.model.title}</GridItem>
+                  <GridItem span={3} rowSpan={2}>
+                    <img src={step.model.icon} style={{ maxWidth: '50%' }} alt={'icon'} />
+                  </GridItem>
+                  <GridItem span={3}>
+                    <b>Description</b>
+                  </GridItem>
+                  <GridItem span={6}>{step.model.description}</GridItem>
+                  <GridItem span={3}>
+                    <b>Type</b>
+                  </GridItem>
+                  <GridItem span={9}>
+                    {step.model.type === 'START'
+                      ? 'Source'
+                      : step.model.type === 'MIDDLE'
+                      ? 'Action'
+                      : step.model.type === 'END'
+                      ? 'Sink'
+                      : ''}
+                  </GridItem>
+                </Grid>
+                <br />
+                <Button variant={'danger'} key={step.viz.id} onClick={deleteStep}>
+                  Delete
+                </Button>
+              </StepErrorBoundary>
             </Tab>
           )}
 
@@ -133,17 +136,19 @@ const StepViews = ({
 
               return (
                 <Tab eventKey={index} key={index} title={<TabTitleText>{view.name}</TabTitleText>}>
-                  <Extension
-                    name="extension"
-                    loading="Loading extension..."
-                    failure="Could not load extension. Is it running?"
-                  >
-                    <StepExtension
-                      text="Passed from Kaoto!"
-                      onButtonClicked={onButtonClicked}
-                      path="/"
-                    />
-                  </Extension>
+                  <StepErrorBoundary>
+                    <Extension
+                      name="extension"
+                      loading="Loading extension..."
+                      //failure="Could not load extension. Is it running?"
+                    >
+                      <StepExtension
+                        text="Passed from Kaoto!"
+                        onButtonClicked={onButtonClicked}
+                        path="/"
+                      />
+                    </Extension>
+                  </StepErrorBoundary>
                 </Tab>
               );
             })}
@@ -152,27 +157,26 @@ const StepViews = ({
           {!step.viz.temporary && (
             <Tab eventKey={configTabIndex} title={<TabTitleText>Config</TabTitleText>}>
               <br />
-              <Grid hasGutter>
-                {step.model.parameters && (
-                  <JsonSchemaConfigurator
-                    schema={{ type: 'object', properties: stepPropertySchema.current }}
-                    configuration={stepPropertyModel.current}
-                    onChange={(configuration, isValid) => {
-                      //saveConfig(configuration);
-                    }}
-                    onSubmit={(configuration, isValid) => {
-                      if (isValid) {
-                        saveConfig(configuration);
-                      }
-                    }}
-                  />
-                )}
-              </Grid>
-              <br />
-              {/**
+              <StepErrorBoundary>
+                <Grid hasGutter>
+                  {step.model.parameters && (
+                    <JsonSchemaConfigurator
+                      schema={{ type: 'object', properties: stepPropertySchema.current }}
+                      configuration={stepPropertyModel.current}
+                      onSubmit={(configuration, isValid) => {
+                        if (isValid) {
+                          saveConfig(configuration);
+                        }
+                      }}
+                    />
+                  )}
+                </Grid>
+                <br />
+                {/**
               <Button variant={'danger'} key={step.viz.id} onClick={saveConfig}>
                 Save
               </Button>**/}
+              </StepErrorBoundary>
             </Tab>
           )}
         </Tabs>
