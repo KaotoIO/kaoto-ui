@@ -1,4 +1,4 @@
-import { IStepProps, IModelVizProps, IViewProps, IVizStepProps } from '../types';
+import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
 import { StepErrorBoundary } from './StepErrorBoundary';
@@ -99,17 +99,22 @@ const Visualization = ({
       : deleteIntegrationStep(stepsIndex);
   };
 
-  const saveConfig = (newValues: any) => {
+  const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
     const selectedStepVizId = selectedStep.viz.id;
-    let newStep: IModelVizProps = selectedStep;
+    let newStep: { model: IStepProps; viz: IVizStepProps } = selectedStep;
+    const newStepParameters = newStep.model.parameters;
 
-    Object.entries(newValues).map(([key, value]) => {
-      const paramIndex = newStep.model.parameters.findIndex((p) => p.id === key);
-      newStep.model.parameters[paramIndex].value = value;
-    });
+    if (newStepParameters && newStepParameters.length > 0) {
+      Object.entries(newValues).map(([key, value]) => {
+        const paramIndex = newStepParameters.findIndex((p) => p.id === key);
+        newStepParameters[paramIndex!].value = value;
+      });
 
-    // "old step index" is the same as the current step index
-    replaceIntegrationStep(newStep, selectedStepVizId);
+      // "old step index" is the same as the current step index
+      replaceIntegrationStep(newStep, selectedStepVizId);
+    } else {
+      return;
+    }
   };
 
   const onDragStartTempStep = (e: any) => {
@@ -201,7 +206,7 @@ const Visualization = ({
     width: 40,
   };
 
-  const handleClickStep = (e: { target: { id: () => string } }) => {
+  const handleClickStep = (e: any) => {
     if (!e.target.id()) {
       return;
     }
