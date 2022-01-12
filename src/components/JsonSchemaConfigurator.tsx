@@ -24,14 +24,12 @@ export function createValidator(schema: object) {
 type JsonSchemaConfiguratorProps = {
   schema: any;
   configuration: any;
-  onChange?: (configuration: unknown, isValid: boolean) => void;
   onSubmit: (configuration: unknown, isValid: boolean) => void;
 };
 
 export const JsonSchemaConfigurator: FunctionComponent<JsonSchemaConfiguratorProps> = ({
   schema,
   configuration,
-  onChange,
   onSubmit,
 }) => {
   schema.type = schema.type || 'object';
@@ -41,7 +39,6 @@ export const JsonSchemaConfigurator: FunctionComponent<JsonSchemaConfiguratorPro
     <AutoForm
       schema={bridge}
       model={configuration}
-      onChangeModel={(model: any) => (onChange ? onChange(model, false) : null)}
       onSubmit={(model: any) => onSubmit(model, true)}
       data-testid={'json-schema-configurator'}
     >

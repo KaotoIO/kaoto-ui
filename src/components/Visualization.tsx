@@ -1,6 +1,7 @@
-import { IStepProps, IModelVizProps, IViewProps, IVizStepProps } from '../types';
+import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
+import { StepErrorBoundary } from './StepErrorBoundary';
 import { StepViews } from './StepViews';
 import './Visualization.css';
 import { VisualizationSlot } from './VisualizationSlot';
@@ -98,17 +99,22 @@ const Visualization = ({
       : deleteIntegrationStep(stepsIndex);
   };
 
-  const saveConfig = (newValues: any) => {
+  const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
     const selectedStepVizId = selectedStep.viz.id;
-    let newStep: IModelVizProps = selectedStep;
+    let newStep: { model: IStepProps; viz: IVizStepProps } = selectedStep;
+    const newStepParameters = newStep.model.parameters;
 
-    Object.entries(newValues).map(([key, value]) => {
-      const paramIndex = newStep.model.parameters.findIndex((p) => p.id === key);
-      newStep.model.parameters[paramIndex].value = value;
-    });
+    if (newStepParameters && newStepParameters.length > 0) {
+      Object.entries(newValues).map(([key, value]) => {
+        const paramIndex = newStepParameters.findIndex((p) => p.id === key);
+        newStepParameters[paramIndex!].value = value;
+      });
 
-    // "old step index" is the same as the current step index
-    replaceIntegrationStep(newStep, selectedStepVizId);
+      // "old step index" is the same as the current step index
+      replaceIntegrationStep(newStep, selectedStepVizId);
+    } else {
+      return;
+    }
   };
 
   const onDragStartTempStep = (e: any) => {
@@ -200,7 +206,7 @@ const Visualization = ({
     width: 40,
   };
 
-  const handleClickStep = (e: { target: { id: () => string } }) => {
+  const handleClickStep = (e: any) => {
     if (!e.target.id()) {
       return;
     }
@@ -228,74 +234,145 @@ const Visualization = ({
   // Layer is actual canvas element (so you may have several canvases in the stage)
   // And then we have canvas shapes inside the Layer
   return (
-    <Drawer isExpanded={isPanelExpanded} onExpand={onExpandPanel}>
-      <DrawerContent
-        panelContent={
-          <StepViews
-            step={selectedStep}
-            isPanelExpanded={isPanelExpanded}
-            deleteStep={deleteStep}
-            onClosePanelClick={onClosePanelClick}
-            saveConfig={saveConfig}
-            views={views.filter((view) => view.step === selectedStep.model.UUID)}
-          />
-        }
-        className={'panelCustom'}
-      >
-        <DrawerContentBody>
-          {/** Stage wrapper to handle steps (DOM elements) dropped from catalog **/}
-          <div
-            onDrop={(e: any) => {
-              e.preventDefault();
-              const dataJSON = e.dataTransfer.getData('text');
-              // Register event position
-              stageRef.current?.setPointersPositions(e);
-              const parsed: IStepProps = JSON.parse(dataJSON);
-              const currentPosition = stageRef.current?.getPointerPosition(); // e.g. {"x":158,"y":142}
-              const intersectingShape = stageRef.current?.getIntersection(currentPosition!);
+    <StepErrorBoundary>
+      <Drawer isExpanded={isPanelExpanded} onExpand={onExpandPanel}>
+        <DrawerContent
+          panelContent={
+            <StepViews
+              step={selectedStep}
+              isPanelExpanded={isPanelExpanded}
+              deleteStep={deleteStep}
+              onClosePanelClick={onClosePanelClick}
+              saveConfig={saveConfig}
+              views={views.filter((view) => view.step === selectedStep.model.UUID)}
+            />
+          }
+          className={'panelCustom'}
+        >
+          <DrawerContentBody>
+            {/** Stage wrapper to handle steps (DOM elements) dropped from catalog **/}
+            <div
+              onDrop={(e: any) => {
+                e.preventDefault();
+                const dataJSON = e.dataTransfer.getData('text');
+                // Register event position
+                stageRef.current?.setPointersPositions(e);
+                const parsed: IStepProps = JSON.parse(dataJSON);
+                const currentPosition = stageRef.current?.getPointerPosition(); // e.g. {"x":158,"y":142}
+                const intersectingShape = stageRef.current?.getIntersection(currentPosition!);
 
-              // Only create a temporary step if it does not intersect with an existing step
-              if (intersectingShape) {
-                const parentVizId = intersectingShape.getParent().attrs.id;
-                const parentIdx = steps.map((step) => step.viz.id).indexOf(parentVizId);
-                replaceIntegrationStep(parsed, parentIdx);
-              } else {
-                setTempSteps(
-                  tempSteps.concat({
-                    model: parsed,
-                    viz: {
-                      id: uuidv4(),
-                      label: parsed.name,
-                      position: { ...stageRef.current?.getPointerPosition()! },
-                      temporary: true,
-                    },
-                  })
-                );
-              }
-            }}
-            onDragOver={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
-              <Layer ref={layerRef}>
-                <Group
-                  name={integrationGroupName}
-                  x={window.innerWidth / 5}
-                  y={window.innerHeight / 2}
-                >
-                  {/** Create the visualization slots **/}
-                  <VisualizationSlot steps={steps} />
+                // Only create a temporary step if it does not intersect with an existing step
+                if (intersectingShape) {
+                  const parentVizId = intersectingShape.getParent().attrs.id;
+                  const parentIdx = steps.map((step) => step.viz.id).indexOf(parentVizId);
+                  replaceIntegrationStep(parsed, parentIdx);
+                } else {
+                  setTempSteps(
+                    tempSteps.concat({
+                      model: parsed,
+                      viz: {
+                        id: uuidv4(),
+                        label: parsed.name,
+                        position: { ...stageRef.current?.getPointerPosition()! },
+                        temporary: true,
+                      },
+                    })
+                  );
+                }
+              }}
+              onDragOver={(e) => {
+                e.preventDefault();
+              }}
+            >
+              <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
+                <Layer ref={layerRef}>
+                  <Group
+                    name={integrationGroupName}
+                    x={window.innerWidth / 5}
+                    y={window.innerHeight / 2}
+                  >
+                    {/** Create the visualization slots **/}
+                    <VisualizationSlot steps={steps} />
 
-                  {/** Create the visualization steps **/}
-                  {steps.map((item, index) => {
-                    const itemImage = createImage(item.model.icon, null);
+                    {/** Create the visualization steps **/}
+                    {steps.map((item, index) => {
+                      const itemImage = createImage(item.model.icon, null);
+
+                      return (
+                        <Group
+                          key={index}
+                          onClick={handleClickStep}
+                          onMouseEnter={(e: any) => {
+                            const container = e.target.getStage().container();
+                            container.style.cursor = 'pointer';
+                          }}
+                          onMouseLeave={(e: any) => {
+                            const container = e.target.getStage().container();
+                            container.style.cursor = 'default';
+                          }}
+                          id={item.viz.id}
+                          name={integrationStepGroupName}
+                          width={CIRCLE_LENGTH}
+                          height={CIRCLE_LENGTH}
+                        >
+                          <Circle
+                            name={`circle-${item.viz.id}`}
+                            stroke={
+                              item.model.type === 'START'
+                                ? 'rgb(0, 136, 206)'
+                                : item.model.type === 'END'
+                                ? 'rgb(149, 213, 245)'
+                                : 'rgb(204, 204, 204)'
+                            }
+                            fill={'white'}
+                            strokeWidth={3}
+                            width={CIRCLE_LENGTH}
+                            height={CIRCLE_LENGTH}
+                            x={item.viz.position.x}
+                            y={0}
+                          />
+                          <Image
+                            id={item.viz.id}
+                            name={`image-${item.viz.id}`}
+                            image={itemImage}
+                            x={item.viz.position.x! - imageDimensions.width / 2}
+                            y={0 - imageDimensions.height / 2}
+                            height={imageDimensions.height}
+                            width={imageDimensions.width}
+                          />
+                          <Text
+                            align={'center'}
+                            width={150}
+                            fontFamily={'Ubuntu'}
+                            fontSize={11}
+                            text={truncateString(item.model.name, 14)}
+                            x={item.viz.position.x! - CIRCLE_LENGTH}
+                            y={CIRCLE_LENGTH / 2 + 10}
+                          />
+                        </Group>
+                      );
+                    })}
+                  </Group>
+
+                  {/** Create the temporary steps **/}
+                  {tempSteps.map((step, idx) => {
+                    const textProps = {
+                      x: -CIRCLE_LENGTH,
+                      y: CIRCLE_LENGTH / 2 + 10,
+                    };
 
                     return (
                       <Group
-                        key={index}
                         onClick={handleClickStep}
+                        onDragEnd={onDragEndTempStep}
+                        onDragMove={onDragMoveTempStep}
+                        onDragStart={onDragStartTempStep}
+                        data-testid={'visualization-step'}
+                        id={step.viz.id}
+                        index={idx}
+                        key={step.viz.id}
                         onMouseEnter={(e: any) => {
+                          // style stage container:
                           const container = e.target.getStage().container();
                           container.style.cursor = 'pointer';
                         }}
@@ -303,17 +380,18 @@ const Visualization = ({
                           const container = e.target.getStage().container();
                           container.style.cursor = 'default';
                         }}
-                        id={item.viz.id}
-                        name={integrationStepGroupName}
-                        width={CIRCLE_LENGTH}
-                        height={CIRCLE_LENGTH}
+                        x={step.viz.position.x}
+                        y={step.viz.position.y}
+                        height={75}
+                        width={75}
+                        draggable
                       >
                         <Circle
-                          name={`circle-${item.viz.id}`}
+                          name={`${idx}`}
                           stroke={
-                            item.model.type === 'START'
+                            step.model.type === 'START'
                               ? 'rgb(0, 136, 206)'
-                              : item.model.type === 'END'
+                              : step.model.type === 'END'
                               ? 'rgb(149, 213, 245)'
                               : 'rgb(204, 204, 204)'
                           }
@@ -321,103 +399,33 @@ const Visualization = ({
                           strokeWidth={3}
                           width={CIRCLE_LENGTH}
                           height={CIRCLE_LENGTH}
-                          x={item.viz.position.x}
-                          y={0}
                         />
                         <Image
-                          id={item.viz.id}
-                          name={`image-${item.viz.id}`}
-                          image={itemImage}
-                          x={item.viz.position.x! - imageDimensions.width / 2}
-                          y={0 - imageDimensions.height / 2}
+                          id={step.viz.id}
+                          image={createImage(step.model.icon, null)}
                           height={imageDimensions.height}
                           width={imageDimensions.width}
+                          offsetX={imageDimensions ? imageDimensions.width / 2 : 0}
+                          offsetY={imageDimensions ? imageDimensions.height / 2 : 0}
                         />
                         <Text
                           align={'center'}
                           width={150}
                           fontFamily={'Ubuntu'}
                           fontSize={11}
-                          text={truncateString(item.model.name, 14)}
-                          x={item.viz.position.x! - CIRCLE_LENGTH}
-                          y={CIRCLE_LENGTH / 2 + 10}
+                          text={truncateString(step.model.name, 14)}
+                          {...textProps}
                         />
                       </Group>
                     );
                   })}
-                </Group>
-
-                {/** Create the temporary steps **/}
-                {tempSteps.map((step, idx) => {
-                  const textProps = {
-                    x: -CIRCLE_LENGTH,
-                    y: CIRCLE_LENGTH / 2 + 10,
-                  };
-
-                  return (
-                    <Group
-                      onClick={handleClickStep}
-                      onDragEnd={onDragEndTempStep}
-                      onDragMove={onDragMoveTempStep}
-                      onDragStart={onDragStartTempStep}
-                      data-testid={'visualization-step'}
-                      id={step.viz.id}
-                      index={idx}
-                      key={step.viz.id}
-                      onMouseEnter={(e: any) => {
-                        // style stage container:
-                        const container = e.target.getStage().container();
-                        container.style.cursor = 'pointer';
-                      }}
-                      onMouseLeave={(e: any) => {
-                        const container = e.target.getStage().container();
-                        container.style.cursor = 'default';
-                      }}
-                      x={step.viz.position.x}
-                      y={step.viz.position.y}
-                      height={75}
-                      width={75}
-                      draggable
-                    >
-                      <Circle
-                        name={`${idx}`}
-                        stroke={
-                          step.model.type === 'START'
-                            ? 'rgb(0, 136, 206)'
-                            : step.model.type === 'END'
-                            ? 'rgb(149, 213, 245)'
-                            : 'rgb(204, 204, 204)'
-                        }
-                        fill={'white'}
-                        strokeWidth={3}
-                        width={CIRCLE_LENGTH}
-                        height={CIRCLE_LENGTH}
-                      />
-                      <Image
-                        id={step.viz.id}
-                        image={createImage(step.model.icon, null)}
-                        height={imageDimensions.height}
-                        width={imageDimensions.width}
-                        offsetX={imageDimensions ? imageDimensions.width / 2 : 0}
-                        offsetY={imageDimensions ? imageDimensions.height / 2 : 0}
-                      />
-                      <Text
-                        align={'center'}
-                        width={150}
-                        fontFamily={'Ubuntu'}
-                        fontSize={11}
-                        text={truncateString(step.model.name, 14)}
-                        {...textProps}
-                      />
-                    </Group>
-                  );
-                })}
-              </Layer>
-            </Stage>
-          </div>
-        </DrawerContentBody>
-      </DrawerContent>
-    </Drawer>
+                </Layer>
+              </Stage>
+            </div>
+          </DrawerContentBody>
+        </DrawerContent>
+      </Drawer>
+    </StepErrorBoundary>
   );
 };
 

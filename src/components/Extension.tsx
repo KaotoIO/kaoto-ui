@@ -1,3 +1,4 @@
+import { StepErrorBoundary } from './StepErrorBoundary';
 import {
   Children,
   cloneElement,
@@ -9,8 +10,6 @@ import {
 } from 'react';
 import root from 'react-shadow';
 
-import ErrorBoundary from './ErrorBoundary';
-
 type Props = PropsWithChildren<{
   name: string;
   loading?: ReactNode;
@@ -18,7 +17,7 @@ type Props = PropsWithChildren<{
 }>;
 
 export function Extension(props: Props) {
-  const { loading = 'Loading...', failure = 'Error!' } = props;
+  const { loading = 'Loading...' } = props;
 
   const children = Children.map(props.children, (child) => {
     if (['string', 'number', 'boolean'].includes(typeof child)) return child;
@@ -39,11 +38,11 @@ export function Extension(props: Props) {
   }, [props.name]);
 
   return (
-    <ErrorBoundary fallback={failure}>
+    <StepErrorBoundary>
       <Suspense fallback={loading}>
         <root.div>{children}</root.div>
       </Suspense>
-    </ErrorBoundary>
+    </StepErrorBoundary>
   );
 }
 
