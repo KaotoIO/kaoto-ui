@@ -99,6 +99,11 @@ module.exports = () => {
             eager: true,
             requiredVersion: dependencies['react-router-dom'],
           },
+          '@rhoas/app-services-ui-shared': {
+            eager: true,
+            singleton: true,
+            requiredVersion: dependencies['@rhoas/app-services-ui-shared'],
+          },
           '@patternfly/quickstarts': {
             singleton: true,
             requiredVersion: '*',
