@@ -2346,6 +2346,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rhoas/app-services-ui-shared@npm:^0.15.4":
+  version: 0.15.4
+  resolution: "@rhoas/app-services-ui-shared@npm:0.15.4"
+  dependencies:
+    tslib: 2.3.1
+  peerDependencies:
+    react: 17.0.2
+  checksum: 8e481bb3a0f0c7321bfdd3ddfb6c04b5b0e2516d072e5f9c925399b677e504c1facc72a78b707ed9982f355a1bd7c0dea456eb1c5e9b7abb74b40fb3ea8d34e1
+  languageName: node
+  linkType: hard
+
 "@sinonjs/commons@npm:^1.7.0":
   version: 1.8.3
   resolution: "@sinonjs/commons@npm:1.8.3"
@@ -11978,6 +11989,7 @@ __metadata:
     "@patternfly/patternfly": 4.151.4
     "@patternfly/react-core": 4.168.8
     "@patternfly/react-icons": 4.19.8
+    "@rhoas/app-services-ui-shared": ^0.15.4
     "@storybook/addon-actions": 6.4.0-beta.20
     "@storybook/addon-docs": 6.4.0-beta.20
     "@storybook/addon-links": 6.4.0-beta.20
@@ -17677,17 +17689,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tslib@npm:2.3.1, tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.2.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "tslib@npm:2.3.1"
+  checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9
+  languageName: node
+  linkType: hard
+
 "tslib@npm:^1.8.1":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
-  languageName: node
-  linkType: hard
-
-"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.2.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "tslib@npm:2.3.1"
-  checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9
   languageName: node
   linkType: hard
 
