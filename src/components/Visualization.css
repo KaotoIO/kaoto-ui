@@ -1,7 +1,3 @@
-.panelCustom {
-    background: inherit;
-}
-
-.pf-c-drawer__content {
-    background-color: inherit;
+.pf-c-drawer__content.panelCustom {
+    background-color: var(--pf-global--BackgroundColor--200);
 }
