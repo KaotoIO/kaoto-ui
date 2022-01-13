@@ -109,8 +109,6 @@ const Dashboard = () => {
   }, [previousYaml, yamlData]);
 
   const updateIntegration = async (newSteps: any) => {
-    //console.table(newSteps);
-
     try {
       setIsLoading(true);
 
@@ -121,10 +119,23 @@ const Dashboard = () => {
       });
 
       const data = await resp.text();
+
+      addAlert &&
+        addAlert({
+          title: 'Integration updated successfully',
+          variant: AlertVariant.success,
+        });
+
       setYamlData(data);
       setIsError(false);
     } catch (err) {
       console.error(err);
+      addAlert &&
+        addAlert({
+          title: 'Something went wrong',
+          variant: AlertVariant.danger,
+          description: 'There was a problem updating the integration. Please try again later.',
+        });
       setIsError(true);
     }
 
@@ -147,17 +158,9 @@ const Dashboard = () => {
     const newSteps = viewData.steps;
     newSteps[oldStepIndex] = newStep;
 
-    updateIntegration(newSteps)
-      .then(() => {
-        addAlert &&
-          addAlert({
-            title: 'Step replaced',
-            variant: AlertVariant.success,
-          });
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+    updateIntegration(newSteps).catch((e) => {
+      console.error(e);
+    });
   };
 
   /**
