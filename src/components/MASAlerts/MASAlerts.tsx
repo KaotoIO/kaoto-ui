@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { MASAlertToastGroup } from '@app/common';
+import { MASAlertToastGroup } from './MASAlertToastGroup';
 import { AlertContext, AlertProps } from '@rhoas/app-services-ui-shared';
+import { useEffect, useState, ReactNode } from 'react';
 
 type TimeOut = {
   key: string | undefined;
   timeOut: ReturnType<typeof setTimeout> | undefined;
 };
 
-export const AlertProvider: React.FunctionComponent = ({ children }) => {
+export const AlertProvider = ({ children }: { children: ReactNode }) => {
   const [alerts, setAlerts] = useState<AlertProps[]>([]);
   const [timers, setTimers] = useState<TimeOut[]>([]);
 
@@ -17,15 +17,11 @@ export const AlertProvider: React.FunctionComponent = ({ children }) => {
       .filter((alert) => !timersKeys.includes(alert?.id))
       .map((alert) => {
         const { id = '' } = alert;
-        const timeOut: ReturnType<typeof setTimeout> = setTimeout(
-          () => hideAlert(id),
-          8000
-        );
+        const timeOut: ReturnType<typeof setTimeout> = setTimeout(() => hideAlert(id), 8000);
         return { key: alert.id, timeOut } as TimeOut;
       });
     setTimers([...timers, ...timeOuts]);
-    return () =>
-      timers.forEach((timer) => timer?.timeOut && clearTimeout(timer.timeOut));
+    return () => timers.forEach((timer) => timer?.timeOut && clearTimeout(timer.timeOut));
   }, [alerts]);
 
   const createId = () => new Date().getTime();
