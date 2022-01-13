@@ -4,6 +4,7 @@ import { IStepProps, IViewData, IVizStepProps } from '../types';
 import request from '../utils/request';
 import usePrevious from '../utils/usePrevious';
 import './Dashboard.css';
+import { AlertVariant } from '@patternfly/react-core';
 import {
   Button,
   Drawer,
@@ -14,6 +15,7 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { CodeIcon, PlusCircleIcon } from '@patternfly/react-icons';
+import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -38,6 +40,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const previousYaml = usePrevious(yamlData);
+  const { addAlert } = useAlert() || {};
 
   const onExpandPanel = () => {
     //drawerRef.current && drawerRef.current.focus();
@@ -144,9 +147,17 @@ const Dashboard = () => {
     const newSteps = viewData.steps;
     newSteps[oldStepIndex] = newStep;
 
-    updateIntegration(newSteps).catch((e) => {
-      console.error(e);
-    });
+    updateIntegration(newSteps)
+      .then(() => {
+        addAlert &&
+          addAlert({
+            title: 'Step replaced',
+            variant: AlertVariant.success,
+          });
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
   /**

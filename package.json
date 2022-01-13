@@ -87,6 +87,7 @@
     "lint-staged": "11.2.5",
     "mini-css-extract-plugin": "2.4.3",
     "monaco-editor": "0.29.1",
+    "null-loader": "^4.0.1",
     "prettier": "2.4.1",
     "prop-types": "15.7.2",
     "rimraf": "3.0.2",

@@ -32,7 +32,7 @@ module.exports = () => {
         },
         {
           test: /\.css$/,
-          use: [MiniCssExtractPlugin.loader, { loader: 'style-loader' }, { loader: 'css-loader' }],
+          use: [MiniCssExtractPlugin.loader, { loader: 'css-loader' }],
           include: (stylesheet) => !isPatternflyStyles(stylesheet),
           sideEffects: true,
         },
@@ -84,6 +84,7 @@ module.exports = () => {
       new webpack.container.ModuleFederationPlugin({
         name: federatedModuleName,
         shared: {
+          ...dependencies,
           react: {
             eager: true,
             singleton: true,
