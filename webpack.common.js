@@ -7,6 +7,10 @@ const { dependencies, federatedModuleName } = require('./package.json');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const isPatternflyStyles = (stylesheet) =>
+  stylesheet.includes('@patternfly/react-styles/css/') ||
+  stylesheet.includes('@patternfly/react-core/');
+
 module.exports = () => {
   return {
     entry: {
@@ -28,7 +32,15 @@ module.exports = () => {
         },
         {
           test: /\.css$/,
-          use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+          use: [MiniCssExtractPlugin.loader, { loader: 'style-loader' }, { loader: 'css-loader' }],
+          include: (stylesheet) => !isPatternflyStyles(stylesheet),
+          sideEffects: true,
+        },
+        {
+          test: /\.css$/,
+          include: isPatternflyStyles,
+          use: ['null-loader'],
+          sideEffects: true,
         },
         {
           test: /\.(svg|jpg|jpeg|png|gif)$/i,
@@ -86,6 +98,10 @@ module.exports = () => {
             singleton: true,
             eager: true,
             requiredVersion: dependencies['react-router-dom'],
+          },
+          '@rhoas/app-services-ui-shared': {
+            singleton: true,
+            requiredVersion: dependencies['@rhoas/app-services-ui-shared'],
           },
           '@patternfly/quickstarts': {
             singleton: true,
