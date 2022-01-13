@@ -1,6 +1,4 @@
-import { Catalog } from '../components/Catalog';
-import { Visualization } from '../components/Visualization';
-import { YAMLEditor } from '../components/YAMLEditor';
+import { Catalog, Visualization, YAMLEditor } from '../components';
 import YAML from '../stories/data/yaml';
 import { IStepProps, IViewData, IVizStepProps } from '../types';
 import request from '../utils/request';
