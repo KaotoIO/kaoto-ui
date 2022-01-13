@@ -32,7 +32,7 @@ module.exports = () => {
         },
         {
           test: /\.css$/,
-          use: [MiniCssExtractPlugin.loader, { loader: 'css-loader' }],
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
           include: (stylesheet) => !isPatternflyStyles(stylesheet),
           sideEffects: true,
         },
@@ -84,7 +84,6 @@ module.exports = () => {
       new webpack.container.ModuleFederationPlugin({
         name: federatedModuleName,
         shared: {
-          ...dependencies,
           react: {
             eager: true,
             singleton: true,
@@ -99,10 +98,6 @@ module.exports = () => {
             singleton: true,
             eager: true,
             requiredVersion: dependencies['react-router-dom'],
-          },
-          '@rhoas/app-services-ui-shared': {
-            singleton: true,
-            requiredVersion: dependencies['@rhoas/app-services-ui-shared'],
           },
           '@patternfly/quickstarts': {
             singleton: true,
