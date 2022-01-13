@@ -1,5 +1,6 @@
-import { FunctionComponent, ReactNode, useState } from 'react';
-import { NavLink, useLocation, useHistory } from 'react-router-dom';
+// @ts-ignore
+import logo from '../assets/images/logo-kaoto.png';
+import { routes, IAppRoute, IAppRouteGroup } from '../routes';
 import {
   Nav,
   NavList,
@@ -10,16 +11,14 @@ import {
   PageSidebar,
   SkipToContent,
 } from '@patternfly/react-core';
-import { routes, IAppRoute, IAppRouteGroup } from '../routes';
-
-// @ts-ignore
-import logo from '../assets/images/logo-kaoto.png';
+import { ReactNode, useState } from 'react';
+import { NavLink, useLocation, useHistory } from 'react-router-dom';
 
 interface IAppLayout {
   children: ReactNode;
 }
 
-const AppLayout: FunctionComponent<IAppLayout> = ({ children }) => {
+const AppLayout = ({ children }: IAppLayout) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const [isNavOpenMobile, setIsNavOpenMobile] = useState(false);
