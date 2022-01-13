@@ -1,11 +1,10 @@
-import { Catalog } from '../components/Catalog';
-import { Visualization } from '../components/Visualization';
-import { YAMLEditor } from '../components/YAMLEditor';
+import { Catalog, Visualization, YAMLEditor } from '../components';
 import YAML from '../stories/data/yaml';
 import { IStepProps, IViewData, IVizStepProps } from '../types';
 import request from '../utils/request';
 import usePrevious from '../utils/usePrevious';
 import './Dashboard.css';
+import { AlertVariant } from '@patternfly/react-core';
 import {
   Button,
   Drawer,
@@ -16,6 +15,7 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { CodeIcon, PlusCircleIcon } from '@patternfly/react-icons';
+import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -40,6 +40,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const previousYaml = usePrevious(yamlData);
+  const { addAlert } = useAlert() || {};
 
   const onExpandPanel = () => {
     //drawerRef.current && drawerRef.current.focus();
@@ -108,8 +109,6 @@ const Dashboard = () => {
   }, [previousYaml, yamlData]);
 
   const updateIntegration = async (newSteps: any) => {
-    //console.table(newSteps);
-
     try {
       setIsLoading(true);
 
@@ -120,10 +119,23 @@ const Dashboard = () => {
       });
 
       const data = await resp.text();
+
+      addAlert &&
+        addAlert({
+          title: 'Integration updated successfully',
+          variant: AlertVariant.success,
+        });
+
       setYamlData(data);
       setIsError(false);
     } catch (err) {
       console.error(err);
+      addAlert &&
+        addAlert({
+          title: 'Something went wrong',
+          variant: AlertVariant.danger,
+          description: 'There was a problem updating the integration. Please try again later.',
+        });
       setIsError(true);
     }
 

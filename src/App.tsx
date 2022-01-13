@@ -1,18 +1,28 @@
-import { FunctionComponent } from 'react';
-import ReactDOM from 'react-dom';
-import '@patternfly/react-core/dist/styles/base.css';
-import { BrowserRouter as Router } from 'react-router-dom';
+import './App.css';
+import { AlertProvider, MASLoading } from './components';
 import { AppLayout } from './layouts/AppLayout';
 import { AppRoutes } from './routes';
-import './App.css';
+import '@patternfly/patternfly/patternfly.css';
+import '@patternfly/patternfly/utilities/Accessibility/accessibility.css';
+import '@patternfly/patternfly/utilities/Display/display.css';
+import '@patternfly/patternfly/utilities/Flex/flex.css';
+import '@patternfly/patternfly/utilities/Sizing/sizing.css';
+import '@patternfly/patternfly/utilities/Spacing/spacing.css';
+import { Suspense } from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-export const App: FunctionComponent = () => {
+export const App = () => {
   return (
-    <Router>
-      <AppLayout>
-        <AppRoutes />
-      </AppLayout>
-    </Router>
+    <AlertProvider>
+      <Router>
+        <Suspense fallback={<MASLoading />}>
+          <AppLayout>
+            <AppRoutes />
+          </AppLayout>
+        </Suspense>
+      </Router>
+    </AlertProvider>
   );
 };
 

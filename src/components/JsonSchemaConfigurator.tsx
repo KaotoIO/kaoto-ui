@@ -1,6 +1,5 @@
 import { ActionGroup, Button } from '@patternfly/react-core';
 import Ajv from 'ajv';
-import { FunctionComponent } from 'react';
 import { AutoForm } from 'uniforms';
 import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
 import { AutoFields, ErrorsField } from 'uniforms-patternfly';
@@ -27,11 +26,11 @@ type JsonSchemaConfiguratorProps = {
   onSubmit: (configuration: unknown, isValid: boolean) => void;
 };
 
-export const JsonSchemaConfigurator: FunctionComponent<JsonSchemaConfiguratorProps> = ({
+export const JsonSchemaConfigurator = ({
   schema,
   configuration,
   onSubmit,
-}) => {
+}: JsonSchemaConfiguratorProps) => {
   schema.type = schema.type || 'object';
   const schemaValidator = createValidator(schema);
   const bridge = new JSONSchemaBridge(schema, schemaValidator);

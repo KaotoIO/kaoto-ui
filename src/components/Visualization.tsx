@@ -1,10 +1,8 @@
 import { IStepProps, IViewProps, IVizStepProps } from '../types';
 import createImage from '../utils/createImage';
 import truncateString from '../utils/truncateName';
-import { StepErrorBoundary } from './StepErrorBoundary';
-import { StepViews } from './StepViews';
+import { StepErrorBoundary, StepViews, VisualizationSlot } from './';
 import './Visualization.css';
-import { VisualizationSlot } from './VisualizationSlot';
 import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
 import Konva from 'konva';
 import { useRef, useState } from 'react';
