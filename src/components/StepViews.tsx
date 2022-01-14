@@ -155,7 +155,11 @@ const StepViews = ({
 
           {/* only integration steps are configurable */}
           {!step.viz.temporary && (
-            <Tab eventKey={configTabIndex} title={<TabTitleText>Config</TabTitleText>}>
+            <Tab
+              eventKey={configTabIndex}
+              title={<TabTitleText>Config</TabTitleText>}
+              data-testid={'configuration-tab'}
+            >
               <br />
               <StepErrorBoundary>
                 <Grid hasGutter>
