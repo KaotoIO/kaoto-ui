@@ -86,7 +86,11 @@ const StepViews = ({
         <Tabs activeKey={activeTabKey} onSelect={handleTabClick}>
           {/** If the step does not have a default view, provide one */}
           {!hasDetailView && (
-            <Tab eventKey={detailsTabIndex} title={<TabTitleText>Details</TabTitleText>}>
+            <Tab
+              eventKey={detailsTabIndex}
+              title={<TabTitleText>Details</TabTitleText>}
+              data-testid={'detailsTab'}
+            >
               <StepErrorBoundary>
                 <br />
                 <Grid hasGutter>
@@ -135,7 +139,12 @@ const StepViews = ({
               };
 
               return (
-                <Tab eventKey={index} key={index} title={<TabTitleText>{view.name}</TabTitleText>}>
+                <Tab
+                  eventKey={index}
+                  key={index}
+                  title={<TabTitleText>{view.name}</TabTitleText>}
+                  data-testid={'stepExtensionTab'}
+                >
                   <StepErrorBoundary>
                     <Extension
                       name="extension"
@@ -158,7 +167,7 @@ const StepViews = ({
             <Tab
               eventKey={configTabIndex}
               title={<TabTitleText>Config</TabTitleText>}
-              data-testid={'configuration-tab'}
+              data-testid={'configurationTab'}
             >
               <br />
               <StepErrorBoundary>
