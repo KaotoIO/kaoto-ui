@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { IStepProps } from '../types';
+import './Catalog.css';
 import {
   Bullseye,
   Card,
@@ -22,8 +23,7 @@ import {
   ToolbarContent,
   ToolbarItem,
 } from '@patternfly/react-core';
-import { IStepProps } from '../types';
-import './Catalog.css';
+import { useState } from 'react';
 
 interface ICatalog {
   isCatalogExpanded: boolean;
@@ -69,7 +69,11 @@ const Catalog = (props: ICatalog) => {
   }
 
   return (
-    <DrawerPanelContent minSize={'525px'} colorVariant={DrawerColorVariant.light200}>
+    <DrawerPanelContent
+      minSize={'525px'}
+      colorVariant={DrawerColorVariant.light200}
+      data-testid={'stepCatalog'}
+    >
       <DrawerHead>
         <h3 className={'pf-c-title pf-m-2xl'} tabIndex={props.isCatalogExpanded ? 0 : -1}>
           Step Catalog

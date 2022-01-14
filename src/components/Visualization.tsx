@@ -282,7 +282,12 @@ const Visualization = ({
                 e.preventDefault();
               }}
             >
-              <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
+              <Stage
+                width={window.innerWidth}
+                height={window.innerHeight}
+                ref={stageRef}
+                data-testid={'visualization'}
+              >
                 <Layer ref={layerRef}>
                   <Group
                     name={integrationGroupName}

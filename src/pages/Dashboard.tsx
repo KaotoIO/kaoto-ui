@@ -246,6 +246,7 @@ const Dashboard = () => {
             <Tooltip content={'Connector Catalog'}>
               <Button
                 variant={'plain'}
+                data-testid={'openCatalogButton'}
                 isActive={expanded.catalog}
                 aria-label={'Connector Catalog'}
                 onClick={() => {
@@ -259,6 +260,7 @@ const Dashboard = () => {
               <Button
                 variant={'plain'}
                 isActive={expanded.codeEditor}
+                data-testid={'openEditorButton'}
                 aria-label={'Code Editor'}
                 onClick={() => {
                   setExpanded({ ...expanded, codeEditor: !expanded.codeEditor });
