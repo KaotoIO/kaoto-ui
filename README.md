@@ -56,7 +56,9 @@ You will also see any lint errors in the console.
 
 ## Tests
 
-Run all Jest and React Testing Library unit tests:
+### Unit Tests
+
+Run all [Jest](https://testing-library.com/docs/react-testing-library/intro) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) unit tests:
 
 ```bash
 yarn test
@@ -64,6 +66,16 @@ yarn test
 
 Launches the test runner in the interactive watch mode.\
 Tests are colocated and live as closely to corresponding code as possible.
+
+### E2E Tests
+
+Run all [Cypress](https://docs.cypress.io/guides/overview/why-cypress) E2E tests:
+
+```bash
+yarn cypress
+```
+
+There are also GitHub Actions workflows that run the tests automatically in `.github/workflows`.
 
 ## Build
 
