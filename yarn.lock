@@ -6844,14 +6844,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chromatic@npm:6.0.4":
-  version: 6.0.4
-  resolution: "chromatic@npm:6.0.4"
+"chromatic@npm:^6.4.1":
+  version: 6.4.1
+  resolution: "chromatic@npm:6.4.1"
   bin:
     chroma: bin/main.cjs
     chromatic: bin/main.cjs
     chromatic-cli: bin/main.cjs
-  checksum: 5f59af090834c2bcf3853a0b9dc18300331bc571a6fc87b393141e1c4626acf5b8aa1d9ce8fe72f9c3e92d10dcbe111ef274136fc960e12bf157942033e40410
+  checksum: 10146329a78e4d16d091840be369428e5e4d6ad441ac112c7778ef37799156cf7bdc04b58f53a45cff4385645b028da3db9304631b9f92d5f260f64cd10fab04
   languageName: node
   linkType: hard
 
@@ -12637,7 +12637,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.2.0
     "@typescript-eslint/parser": 5.2.0
     ajv: ^8.8.2
-    chromatic: 6.0.4
+    chromatic: ^6.4.1
     css-loader: 6.4.0
     css-minimizer-webpack-plugin: 3.1.1
     cypress: ^9.2.1
