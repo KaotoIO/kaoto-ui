@@ -1,1 +1,4 @@
-{}
+{
+  "baseUrl": "http://localhost:1337",
+  "projectId": "zfop6s"
+}
