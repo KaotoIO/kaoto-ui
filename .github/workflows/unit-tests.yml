@@ -1,5 +1,7 @@
-name: CI
-on: push
+name: Unit Tests (Jest)
+
+on: [push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
