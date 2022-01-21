@@ -1,17 +1,23 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/07e8b623-a94d-4686-a784-eb4a9b90dde1/deploy-status)](https://app.netlify.com/sites/kaoto/deploys)
-
 <p align="center">
   <a href="https://github.com/KaotoIO/kaoto-ui/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/KaotoIO/kaoto-ui" alt="license"></a>
+    <img src="https://img.shields.io/github/license/KaotoIO/kaoto-ui" alt="license"/></a>
 
-  <img src="https://img.shields.io/github/languages/code-size/KaotoIO/kaoto-ui" alt="code size">
+  <img src="https://img.shields.io/github/languages/code-size/KaotoIO/kaoto-ui" alt="code size"/>
 
   <a href="https://github.com/KaotoIO/kaoto-ui/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/KaotoIO/kaoto-ui" alt="contributors"></a>
+    <img src="https://img.shields.io/github/contributors/KaotoIO/kaoto-ui" alt="contributors"/></a>
 
   <a href="https://twitter.com/intent/follow?screen_name=KaotoIO">
     <img src="https://img.shields.io/twitter/follow/KaotoIO?style=social&logo=twitter"
-      alt="follow on Twitter"></a>
+      alt="follow on Twitter"/></a>
+</p>
+
+<p align="center">
+  <a href="https://app.netlify.com/sites/kaoto/deploys">
+    <img src="https://api.netlify.com/api/v1/badges/07e8b623-a94d-4686-a784-eb4a9b90dde1/deploy-status" alt="Netlify Status"/></a>
+  
+  <a href="https://dashboard.cypress.io/projects/zfop6s/runs">
+    <img src="https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/simple/zfop6s&style=flat&logo=cypress" alt="Cypress Runs"/></a>
 </p>
 
 # Kaoto UI
