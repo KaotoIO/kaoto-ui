@@ -69,7 +69,7 @@ Tests are colocated and live as closely to corresponding code as possible.
 
 ### E2E Tests
 
-Run all [Cypress](https://docs.cypress.io/guides/overview/why-cypress) E2E tests:
+E2E tests are located in the `/cypress` directory. Run all [Cypress](https://docs.cypress.io/guides/overview/why-cypress) E2E tests:
 
 ```bash
 yarn cypress
