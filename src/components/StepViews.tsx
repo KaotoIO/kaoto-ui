@@ -51,7 +51,7 @@ const StepViews = ({
     let tempModelObject: { [label: string]: any } = {};
 
     const schemaProps = (parameter: { [label: string]: any }) => {
-      const propKey = parameter.label;
+      const propKey = parameter.title;
       const { type } = parameter;
       tempSchemaObject[propKey] = { type };
       tempModelObject[propKey] = parameter.value;
