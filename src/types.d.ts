@@ -1,3 +1,6 @@
+import { CSSProperties, ReactNode } from 'react';
+import { ArrowHeadType, Edge, ElementId, FlowElement, Node } from 'react-flow-renderer/dist/types';
+
 declare module '*.yaml' {
   const content: { [key: string]: any };
   export default content;
@@ -59,12 +62,10 @@ export interface IViewData {
   views: IViewProps[];
 }
 
-export interface IVizStepProps {
-  id: string;
-  label: string;
-  position: {
-    x: number;
-    y: number;
-  };
-  temporary: boolean;
+export interface IVizStepProps extends Node, Omit<Edge, 'source' | 'target'> {
+  source?: string; // make optional as a workaround
+  target?: string; // make optional as a workaround
+  temporary?: boolean;
 }
+
+export interface IVizStepPropsEdge extends Edge {}

@@ -1,6 +1,6 @@
 import { Catalog, Visualization, YAMLEditor } from '../components';
 import YAML from '../stories/data/yaml';
-import { IStepProps, IViewData, IVizStepProps } from '../types';
+import { IModelVizProps, IStepProps, IViewData, IVizStepProps } from '../types';
 import request from '../utils/request';
 import usePrevious from '../utils/usePrevious';
 import './Dashboard.css';
@@ -188,22 +188,23 @@ const Dashboard = () => {
    */
   const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
     const incrementAmt = 100;
-    const stepsAsElements: any[] = [];
+    const stepsAsElements: IModelVizProps[] = [];
 
     steps.map((step, index) => {
       // TODO: extract this into something that Visualization can use too
-      let inputStep = {
+      let inputStep: IModelVizProps = {
         model: { ...step },
         viz: {
           data: { label: step.name },
           id: uuidv4(),
           position: { x: 0, y: 0 },
-          temporary: false,
         },
       };
 
       // Grab the previous step to use for determining position and drawing edges
       const previousStep = stepsAsElements[index - 1];
+
+      // Check with localStorage to see if positions already exist
 
       /**
        * Determine first & last steps
@@ -212,7 +213,8 @@ const Dashboard = () => {
       switch (index) {
         case 0:
           // First item in `steps` array
-          inputStep.viz.position.x = 0; // control this in the `integration` Konva Group instead
+          inputStep.viz.position.x = 250;
+          inputStep.viz.type = 'input';
           break;
         case steps.length - 1:
         default:

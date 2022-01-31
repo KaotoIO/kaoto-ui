@@ -1,4 +1,4 @@
-import { IStepProps, IViewProps, IVizStepProps } from '../types';
+import { IModelVizProps, IStepProps, IViewProps, IVizStepProps } from '../types';
 import { StepErrorBoundary, StepViews } from './';
 import './Visualization.css';
 // @ts-ignore
@@ -24,7 +24,7 @@ interface IVisualization {
   views: IViewProps[];
 }
 
-const placeholderStep = {
+const placeholderStep: IModelVizProps = {
   model: {
     apiVersion: '',
     icon: '',
@@ -36,11 +36,11 @@ const placeholderStep = {
   },
   viz: {
     id: '',
-    label: '',
     position: {
       x: 0,
       y: 0,
     },
+    stepId: '',
     temporary: false,
   },
   views: [{}],
