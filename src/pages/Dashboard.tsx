@@ -106,6 +106,10 @@ const Dashboard = () => {
     });
   }, [previousYaml, yamlData]);
 
+  /**
+   * Update the integration. Requires a list of all new steps.
+   * @param newSteps
+   */
   const updateIntegration = async (newSteps: any) => {
     try {
       setIsLoading(true);
@@ -142,6 +146,10 @@ const Dashboard = () => {
     }
   };
 
+  /**
+   * Delete an integration step. Requires the step index.
+   * @param stepsIndex
+   */
   const deleteIntegrationStep = (stepsIndex: number) => {
     const newSteps = viewData.steps.filter((_step, idx) => idx !== stepsIndex);
 
@@ -150,6 +158,11 @@ const Dashboard = () => {
     });
   };
 
+  /**
+   * Replace an integration step. Requires the new step and old step index.
+   * @param newStep
+   * @param oldStepIndex
+   */
   const replaceIntegrationStep = (newStep: any, oldStepIndex: number) => {
     const newSteps = viewData.steps;
     newSteps[oldStepIndex] = newStep;
