@@ -1,107 +1,57 @@
 export default [
   {
-    id: '1',
-    type: 'input',
     data: {
-      label: (
-        <>
-          Welcome to <strong>React Flow!</strong>
-        </>
-      ),
+      label: {
+        key: null,
+        ref: null,
+        props: {
+          children: {
+            type: 'strong',
+            key: null,
+            ref: null,
+            props: { children: 'twitter-search-source' },
+            _owner: null,
+            _store: {},
+          },
+        },
+        _owner: null,
+        _store: {},
+      },
     },
+    id: '0twitter-search-source',
     position: { x: 250, y: 0 },
+    style: { background: '#D6D5E6', color: '#333', border: '1px solid #222138', width: 180 },
+    type: 'input',
   },
+  { data: { label: 'pdf-action' }, id: '1pdf-action', position: { x: 0, y: 100 } },
+  { data: { label: 'caffeine-action' }, id: '2caffeine-action', position: { x: 0, y: 200 } },
+  { data: { label: 'kafka-sink' }, id: '3kafka-sink', position: { x: 0, y: 300 }, type: 'output' },
   {
-    id: '2',
-    data: {
-      label: (
-        <>
-          This is a <strong>default node</strong>
-        </>
-      ),
-    },
-    position: { x: 100, y: 100 },
-  },
-  {
-    id: '3',
-    data: {
-      label: (
-        <>
-          This one has a <strong>custom style</strong>
-        </>
-      ),
-    },
-    position: { x: 400, y: 100 },
-    style: {
-      background: '#D6D5E6',
-      color: '#333',
-      border: '1px solid #222138',
-      width: 180,
-    },
-  },
-  {
-    id: '4',
-    position: { x: 250, y: 200 },
-    data: {
-      label: 'Another default node',
-    },
-  },
-  {
-    id: '5',
-    data: {
-      label: 'Node id: 5',
-    },
-    position: { x: 250, y: 325 },
-  },
-  {
-    id: '6',
-    type: 'output',
-    data: {
-      label: (
-        <>
-          An <strong>output node</strong>
-        </>
-      ),
-    },
-    position: { x: 100, y: 480 },
-  },
-  {
-    id: '7',
-    type: 'output',
-    data: { label: 'Another output node' },
-    position: { x: 400, y: 450 },
-  },
-  { id: 'e1-2', source: '1', target: '2', label: 'this is an edge label' },
-  { id: 'e1-3', source: '1', target: '3' },
-  {
-    id: 'e3-4',
-    source: '3',
-    target: '4',
-    animated: true,
-    label: 'animated edge',
-  },
-  {
-    id: 'e4-5',
-    source: '4',
-    target: '5',
+    id: 'e0twitter-search-source-1pdf-action',
     arrowHeadType: 'arrowclosed',
-    label: 'edge with arrow head',
+    source: '0twitter-search-source',
+    target: '1pdf-action',
+    label: 'cheese',
+    labelBgPadding: [8, 4],
+    labelBgBorderRadius: 4,
+    labelBgStyle: { fill: '#FFCC00', color: '#fff', fillOpacity: 0.7 },
   },
   {
-    id: 'e5-6',
-    source: '5',
-    target: '6',
-    type: 'smoothstep',
-    label: 'smooth step edge',
+    id: 'e1pdf-action-2caffeine-action',
+    arrowHeadType: 'arrowclosed',
+    source: '1pdf-action',
+    target: '2caffeine-action',
+    label: 'cheese',
+    labelBgPadding: [8, 4],
+    labelBgBorderRadius: 4,
+    labelBgStyle: { fill: '#FFCC00', color: '#fff', fillOpacity: 0.7 },
   },
   {
-    id: 'e5-7',
-    source: '5',
-    target: '7',
-    type: 'step',
-    style: { stroke: '#f6ab6c' },
-    label: 'a step edge',
+    id: 'e2caffeine-action-3kafka-sink',
+    arrowHeadType: 'arrowclosed',
+    source: '2caffeine-action',
+    target: '3kafka-sink',
     animated: true,
-    labelStyle: { fill: '#f6ab6c', fontWeight: 700 },
+    style: { stroke: 'red' },
   },
 ];

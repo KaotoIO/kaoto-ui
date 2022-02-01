@@ -15,11 +15,6 @@ declare global {
   const __webpack_share_scopes__: any;
 }
 
-export interface IModelVizProps {
-  model: IStepProps;
-  viz: IVizStepProps;
-}
-
 export interface IStepPropsParameters {
   [key: string]: any;
 }
@@ -62,9 +57,7 @@ export interface IViewData {
   views: IViewProps[];
 }
 
-export interface IVizStepProps extends IVizStepPropsNode, IVizStepPropsEdge {
-  temporary?: boolean;
-}
+export interface IVizStepProps extends IVizStepPropsNode, IVizStepPropsEdge {}
 
 export interface IVizStepPropsNode extends Node {}
 

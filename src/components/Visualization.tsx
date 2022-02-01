@@ -1,10 +1,8 @@
-import { IModelVizProps, IStepProps, IViewProps, IVizStepProps, IVizStepPropsEdge } from '../types';
+import { IStepProps, IViewProps, IVizStepProps, IVizStepPropsEdge } from '../types';
 import { StepErrorBoundary, StepViews } from './';
 import './Visualization.css';
 // @ts-ignore
 import initialElements from './initial-elements';
-//import initialElementsKaoto from './initial-elements-kaoto';
-//import initialElementsKaoto from './initial-elements-kaoto-2';
 import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
 import { useEffect, useState } from 'react';
 import ReactFlow, {
@@ -14,15 +12,15 @@ import ReactFlow, {
   Controls,
   Background,
   Elements,
+  Connection,
+  Edge,
 } from 'react-flow-renderer';
 
-//import { v4 as uuidv4 } from 'uuid';
-
 interface IVisualization {
-  deleteIntegrationStep: (e: any) => void;
+  deleteIntegrationStep: (stepsIndex: number) => void;
   isError?: boolean;
   isLoading?: boolean;
-  replaceIntegrationStep: (newStep: any, oldStepIndex: any) => void;
+  replaceIntegrationStep: (newStep: IStepProps, oldStepIndex: number) => void;
   steps: IStepProps[];
   views: IViewProps[];
 }
@@ -37,12 +35,7 @@ const placeholderStep: IStepProps = {
   UUID: '',
 };
 
-const findIndexWithVizId = (vizId: any, steps: any[]) => {
-  return steps.map((step: any) => step.viz.id).indexOf(vizId);
-};
-
 const onLoad = (reactFlowInstance: { fitView: () => void }) => {
-  console.log('flow loaded:', reactFlowInstance);
   reactFlowInstance.fitView();
 };
 
@@ -55,17 +48,15 @@ const Visualization = ({
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
 
-  // vizData is a UI-specific mapping between the Step model and Visualization metadata
-  const [vizData, setVizData] = useState<IVizStepProps[]>([]);
+  // elements is an array of UI-specific objects that represent the Step model visually
+  const [elements, setElements] = useState<IVizStepProps[]>([]);
 
-  const [elements, setElements] = useState(initialElements);
-  // @ts-ignore
-  const onElementsRemove = (elementsToRemove: Elements<any>) =>
-    // @ts-ignore
+  const onElementsRemove = (elementsToRemove: Elements<IVizStepProps[]>) =>
     setElements((els) => removeElements(elementsToRemove, els));
-  // @ts-ignore
-  const onConnect = (params) => setElements((els) => addEdge(params, els));
 
+  const onConnect = (params: Edge<any> | Connection) => setElements((els) => addEdge(params, els));
+
+  // Update visualization data when Steps change
   useEffect(() => {
     prepareAndSetVizDataSteps(steps);
   }, [steps]);
@@ -80,10 +71,18 @@ const Visualization = ({
   };
 
   /**
-   * Creates a mapping for the Visualization by
-   * separating the Step Model from a new Viz object,
-   * which contains UI-specific metadata (e.g. position).
-   * Data is stored in the VizData hook.
+   * Returns a Step index when provided with the `vizId`.
+   * `vizId` is originally set using the Step UUID.
+   * @param vizId
+   */
+  const findStepIdxWithVizId = (vizId: string) => {
+    return steps.map((s) => s.id).indexOf(vizId);
+  };
+
+  /**
+   * Creates an object for the Visualization from the Step model.
+   * Contains UI-specific metadata (e.g. position).
+   * Data is stored in the Elements hook.
    * @param steps
    */
   const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
@@ -98,7 +97,6 @@ const Visualization = ({
       // Build the default parameters
       let inputStep: IVizStepProps = {
         data: { label: step.name },
-        //id: uuidv4(),
         id: step.UUID,
         position: { x: 0, y: 0 },
       };
@@ -192,11 +190,7 @@ const Visualization = ({
 
     // combine steps and step edges before setting hook state
     const combined = stepsAsElements.concat(stepEdges);
-    setVizData(combined);
-    console.log(JSON.stringify(combined));
-    //console.table(combined);
-    //console.table(stepsAsElements);
-    //console.table(stepEdges);
+    setElements(combined);
   };
 
   const deleteStep = () => {
@@ -204,7 +198,7 @@ const Visualization = ({
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
 
-    const stepsIndex = findIndexWithVizId(selectedStepVizId, steps);
+    const stepsIndex = findStepIdxWithVizId(selectedStepVizId);
     deleteIntegrationStep(stepsIndex);
   };
 
@@ -219,8 +213,8 @@ const Visualization = ({
         newStepParameters[paramIndex!].value = value;
       });
 
-      // "old step index" is the same as the current step index
-      replaceIntegrationStep(newStep, selectedStepUUID);
+      const selectedStepIdx = findStepIdxWithVizId(selectedStepUUID);
+      replaceIntegrationStep(newStep, selectedStepIdx);
     } else {
       return;
     }
@@ -263,7 +257,6 @@ const Visualization = ({
               style={{ width: window.innerWidth, height: window.innerHeight }}
             >
               <ReactFlow
-                //elements={steps}
                 elements={elements}
                 onElementsRemove={onElementsRemove}
                 onConnect={onConnect}
