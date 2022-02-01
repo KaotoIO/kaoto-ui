@@ -110,7 +110,7 @@ const Dashboard = () => {
    * Update the integration. Requires a list of all new steps.
    * @param newSteps
    */
-  const updateIntegration = async (newSteps: any) => {
+  const updateIntegration = async (newSteps: IStepProps[]) => {
     try {
       setIsLoading(true);
 
@@ -163,7 +163,7 @@ const Dashboard = () => {
    * @param newStep
    * @param oldStepIndex
    */
-  const replaceIntegrationStep = (newStep: any, oldStepIndex: number) => {
+  const replaceIntegrationStep = (newStep: IStepProps, oldStepIndex: number) => {
     const newSteps = viewData.steps;
     newSteps[oldStepIndex] = newStep;
 
