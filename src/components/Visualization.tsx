@@ -1,8 +1,6 @@
 import { IStepProps, IViewProps, IVizStepProps, IVizStepPropsEdge } from '../types';
 import { StepErrorBoundary, StepViews } from './';
 import './Visualization.css';
-// @ts-ignore
-import initialElements from './initial-elements';
 import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
 import { useEffect, useState } from 'react';
 import ReactFlow, {
