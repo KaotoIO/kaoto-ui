@@ -1,6 +1,6 @@
 import { Catalog, Visualization, YAMLEditor } from '../components';
 import YAML from '../stories/data/yaml';
-import { IModelVizProps, IStepProps, IViewData, IVizStepProps, IVizStepPropsEdge } from '../types';
+import { IStepProps, IViewData } from '../types';
 import request from '../utils/request';
 import usePrevious from '../utils/usePrevious';
 import './Dashboard.css';
@@ -17,7 +17,8 @@ import {
 import { CodeIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+
+//import { v4 as uuidv4 } from 'uuid';
 
 const Dashboard = () => {
   // If the catalog data won't be changing, consider removing this state
@@ -141,10 +142,8 @@ const Dashboard = () => {
     }
   };
 
-  const deleteIntegrationStep = (stepsIndex: any) => {
-    // Remove Step from viewData.steps
-    // @ts-ignore
-    const newSteps = viewData.steps.filter((step, idx) => idx !== stepsIndex);
+  const deleteIntegrationStep = (stepsIndex: number) => {
+    const newSteps = viewData.steps.filter((_step, idx) => idx !== stepsIndex);
 
     updateIntegration(newSteps).catch((e) => {
       console.error(e);

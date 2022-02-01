@@ -15,7 +15,6 @@ import ReactFlow, {
   Background,
   Elements,
 } from 'react-flow-renderer';
-import { v4 as uuidv4 } from 'uuid';
 
 //import { v4 as uuidv4 } from 'uuid';
 
@@ -201,7 +200,7 @@ const Visualization = ({
   };
 
   const deleteStep = () => {
-    const selectedStepVizId = selectedStep.id;
+    const selectedStepVizId = selectedStep.UUID;
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
 
@@ -210,7 +209,7 @@ const Visualization = ({
   };
 
   const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
-    const selectedStepVizId = selectedStep.id;
+    const selectedStepUUID = selectedStep.UUID;
     let newStep: IStepProps = selectedStep;
     const newStepParameters = newStep.parameters;
 
@@ -221,7 +220,7 @@ const Visualization = ({
       });
 
       // "old step index" is the same as the current step index
-      replaceIntegrationStep(newStep, selectedStepVizId);
+      replaceIntegrationStep(newStep, selectedStepUUID);
     } else {
       return;
     }
@@ -246,7 +245,7 @@ const Visualization = ({
               deleteStep={deleteStep}
               onClosePanelClick={onClosePanelClick}
               saveConfig={saveConfig}
-              views={views.filter((view) => view.step === selectedStep.model.UUID)}
+              views={views.filter((view) => view.step === selectedStep.UUID)}
             />
           }
           className={'panelCustom'}

@@ -119,7 +119,7 @@ const StepViews = ({
                   </GridItem>
                 </Grid>
                 <br />
-                <Button variant={'danger'} key={step.id} onClick={deleteStep}>
+                <Button variant={'danger'} key={step.UUID} onClick={deleteStep}>
                   Delete
                 </Button>
               </StepErrorBoundary>
@@ -182,27 +182,28 @@ const StepViews = ({
                   />
                 )}
               </Grid>
+            </StepErrorBoundary>
+            <br />
+            <StepErrorBoundary>
+              <Grid hasGutter>
+                {step.model.parameters && (
+                  <JsonSchemaConfigurator
+                    schema={{ type: 'object', properties: stepPropertySchema.current }}
+                    configuration={stepPropertyModel.current}
+                    onSubmit={(configuration, isValid) => {
+                      if (isValid) {
+                        saveConfig(configuration);
+                      }
+                    }}
+                  />
+                )}
+              </Grid>
               <br />
-              <StepErrorBoundary>
-                <Grid hasGutter>
-                  {step.model.parameters && (
-                    <JsonSchemaConfigurator
-                      schema={{ type: 'object', properties: stepPropertySchema.current }}
-                      configuration={stepPropertyModel.current}
-                      onSubmit={(configuration, isValid) => {
-                        if (isValid) {
-                          saveConfig(configuration);
-                        }
-                      }}
-                    />
-                  )}
-                </Grid>
-                <br />
-                <Button variant={'danger'} key={step.id} onClick={deleteStep}>
+              <Button variant={'danger'} key={step.UUID} onClick={deleteStep}>
                 Delete
               </Button>
-              </StepErrorBoundary>
-            </Tab>
+            </StepErrorBoundary>
+          </Tab>
         </Tabs>
       </DrawerPanelBody>
     </DrawerPanelContent>
