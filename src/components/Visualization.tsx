@@ -49,11 +49,6 @@ const Visualization = ({
   // elements is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<IVizStepProps[]>([]);
 
-  const onElementsRemove = (elementsToRemove: Elements<IVizStepProps[]>) =>
-    setElements((els) => removeElements(elementsToRemove, els));
-
-  const onConnect = (params: Edge<any> | Connection) => setElements((els) => addEdge(params, els));
-
   // Update visualization data when Steps change
   useEffect(() => {
     prepareAndSetVizDataSteps(steps);
@@ -75,6 +70,42 @@ const Visualization = ({
    */
   const findStepIdxWithVizId = (vizId: string) => {
     return steps.map((s) => s.id).indexOf(vizId);
+  };
+
+  const deleteStep = () => {
+    const selectedStepVizId = selectedStep.UUID;
+    setIsPanelExpanded(false);
+    setSelectedStep(placeholderStep);
+
+    const stepsIndex = findStepIdxWithVizId(selectedStepVizId);
+    deleteIntegrationStep(stepsIndex);
+  };
+
+  const onClosePanelClick = () => {
+    setIsPanelExpanded(false);
+  };
+
+  const onConnect = (params: Edge<any> | Connection) => setElements((els) => addEdge(params, els));
+
+  const onElementClick = (_e: any, element: any) => {
+    if (!element.id) {
+      return;
+    }
+
+    // Only set state again if the ID is not the same
+    if (selectedStep.UUID !== element.id) {
+      const findStep: IStepProps = steps.find((step) => step.UUID === element.id) ?? selectedStep;
+      setSelectedStep(findStep);
+    }
+
+    setIsPanelExpanded(!isPanelExpanded);
+  };
+
+  const onElementsRemove = (elementsToRemove: Elements<IVizStepProps[]>) =>
+    setElements((els) => removeElements(elementsToRemove, els));
+
+  const onExpandPanel = () => {
+    //drawerRef.current && drawerRef.current.focus();
   };
 
   /**
@@ -191,15 +222,6 @@ const Visualization = ({
     setElements(combined);
   };
 
-  const deleteStep = () => {
-    const selectedStepVizId = selectedStep.UUID;
-    setIsPanelExpanded(false);
-    setSelectedStep(placeholderStep);
-
-    const stepsIndex = findStepIdxWithVizId(selectedStepVizId);
-    deleteIntegrationStep(stepsIndex);
-  };
-
   const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
     const selectedStepUUID = selectedStep.UUID;
     let newStep: IStepProps = selectedStep;
@@ -216,14 +238,6 @@ const Visualization = ({
     } else {
       return;
     }
-  };
-
-  const onExpandPanel = () => {
-    //drawerRef.current && drawerRef.current.focus();
-  };
-
-  const onClosePanelClick = () => {
-    setIsPanelExpanded(false);
   };
 
   return (
@@ -256,6 +270,7 @@ const Visualization = ({
             >
               <ReactFlow
                 elements={elements}
+                onElementClick={onElementClick}
                 onElementsRemove={onElementsRemove}
                 onConnect={onConnect}
                 onLoad={onLoad}
