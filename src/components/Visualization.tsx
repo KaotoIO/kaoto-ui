@@ -2,7 +2,7 @@ import { IStepProps, IViewProps, IVizStepProps, IVizStepPropsEdge } from '../typ
 import { StepErrorBoundary, StepViews } from './';
 import './Visualization.css';
 import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
 import ReactFlow, {
   removeElements,
   addEdge,
@@ -12,6 +12,7 @@ import ReactFlow, {
   Elements,
   Connection,
   Edge,
+  ReactFlowProvider,
 } from 'react-flow-renderer';
 
 interface IVisualization {
@@ -33,21 +34,18 @@ const placeholderStep: IStepProps = {
   UUID: '',
 };
 
-const onLoad = (reactFlowInstance: { fitView: () => void }) => {
-  reactFlowInstance.fitView();
-};
-
 const Visualization = ({
   deleteIntegrationStep,
   replaceIntegrationStep,
   steps,
   views,
 }: IVisualization) => {
-  const [isPanelExpanded, setIsPanelExpanded] = useState(false);
-  const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
-
   // elements is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<IVizStepProps[]>([]);
+  const [isPanelExpanded, setIsPanelExpanded] = useState(false);
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const reactFlowWrapper = useRef(null);
+  const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
 
   // Update visualization data when Steps change
   useEffect(() => {
@@ -87,8 +85,47 @@ const Visualization = ({
 
   const onConnect = (params: Edge<any> | Connection) => setElements((els) => addEdge(params, els));
 
+  const onDragOver = (event: {
+    preventDefault: () => void;
+    dataTransfer: { dropEffect: string };
+  }) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  };
+
+  const onDrop = (event: {
+    preventDefault: () => void;
+    dataTransfer: { getData: (arg0: string) => any };
+    clientX: number;
+    clientY: number;
+  }) => {
+    event.preventDefault();
+
+    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+    //const type = event.dataTransfer.getData('application/reactflow');
+
+    const dataJSON = event.dataTransfer.getData('text');
+    const parsed: IStepProps = JSON.parse(dataJSON);
+
+    const position = reactFlowInstance.project({
+      x: event.clientX - reactFlowBounds.left,
+      y: event.clientY - reactFlowBounds.top,
+    });
+
+    /**
+    const newNode = {
+      id: parsed.UUID,
+      type,
+      position,
+      data: { label: `${type} node` },
+    };
+     **/
+
+    //setElements((es) => es.concat(newNode));
+  };
+
   const onElementClick = (_e: any, element: any) => {
-    if (!element.id) {
+    if (!element.UUID) {
       return;
     }
 
@@ -107,6 +144,9 @@ const Visualization = ({
   const onExpandPanel = () => {
     //drawerRef.current && drawerRef.current.focus();
   };
+
+  const onLoad = (_reactFlowInstance: SetStateAction<null>) =>
+    setReactFlowInstance(_reactFlowInstance);
 
   /**
    * Creates an object for the Visualization from the Step model.
@@ -258,45 +298,54 @@ const Visualization = ({
         >
           <DrawerContentBody>
             {/** Wrapper to handle steps (DOM elements) dropped from catalog **/}
-            <div
-              onDrop={(e: any) => {
-                e.preventDefault();
-                //const dataJSON = e.dataTransfer.getData('text');
-              }}
-              onDragOver={(e) => {
-                e.preventDefault();
-              }}
-              style={{ width: window.innerWidth, height: window.innerHeight }}
-            >
-              <ReactFlow
-                elements={elements}
-                onElementClick={onElementClick}
-                onElementsRemove={onElementsRemove}
-                onConnect={onConnect}
-                onLoad={onLoad}
-                snapToGrid={true}
-                snapGrid={[15, 15]}
+            <ReactFlowProvider>
+              <div
+                className="reactflow-wrapper"
+                ref={reactFlowWrapper}
+                onDrop={(e: any) => {
+                  e.preventDefault();
+                  const dataJSON = e.dataTransfer.getData('text');
+                  const parsed: IStepProps = JSON.parse(dataJSON);
+                  // how to get current position?
+                  console.log(e);
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                }}
+                style={{ width: window.innerWidth, height: window.innerHeight }}
               >
-                <MiniMap
-                  nodeStrokeColor={(n) => {
-                    if (n.style?.background) return n.style.background;
-                    if (n.type === 'input') return '#0041d0';
-                    if (n.type === 'output') return '#ff0072';
-                    if (n.type === 'default') return '#1a192b';
+                <ReactFlow
+                  elements={elements}
+                  onConnect={onConnect}
+                  onDrop={onDrop}
+                  onDragOver={onDragOver}
+                  onElementClick={onElementClick}
+                  onElementsRemove={onElementsRemove}
+                  onLoad={onLoad}
+                  snapToGrid={true}
+                  snapGrid={[15, 15]}
+                >
+                  <MiniMap
+                    nodeStrokeColor={(n) => {
+                      if (n.style?.background) return n.style.background;
+                      if (n.type === 'input') return '#0041d0';
+                      if (n.type === 'output') return '#ff0072';
+                      if (n.type === 'default') return '#1a192b';
 
-                    return '#eee';
-                  }}
-                  nodeColor={(n) => {
-                    if (n.style?.background) return n.style.background;
+                      return '#eee';
+                    }}
+                    nodeColor={(n) => {
+                      if (n.style?.background) return n.style.background;
 
-                    return '#fff';
-                  }}
-                  nodeBorderRadius={2}
-                />
-                <Controls />
-                <Background color="#aaa" gap={16} />
-              </ReactFlow>
-            </div>
+                      return '#fff';
+                    }}
+                    nodeBorderRadius={2}
+                  />
+                  <Controls />
+                  <Background color="#aaa" gap={16} />
+                </ReactFlow>
+              </div>
+            </ReactFlowProvider>
           </DrawerContentBody>
         </DrawerContent>
       </Drawer>
