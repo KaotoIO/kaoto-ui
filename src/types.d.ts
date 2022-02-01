@@ -37,7 +37,7 @@ export interface IStepProps {
   subType?: string; // should be 'KAMELET'
   title?: string;
   type: string; // e.g. 'START', 'MIDDLE', 'END'
-  UUID?: string;
+  UUID: string;
 }
 
 export interface IViewConstraintsProps {
@@ -62,10 +62,14 @@ export interface IViewData {
   views: IViewProps[];
 }
 
-export interface IVizStepProps extends Node, Omit<Edge, 'source' | 'target'> {
-  source?: string; // make optional as a workaround
-  target?: string; // make optional as a workaround
+export interface IVizStepProps extends IVizStepPropsNode, IVizStepPropsEdge {
   temporary?: boolean;
 }
 
-export interface IVizStepPropsEdge extends Edge {}
+export interface IVizStepPropsNode extends Node {}
+
+export interface IVizStepPropsEdge extends Omit<Edge, 'arrowHeadType' | 'source' | 'target'> {
+  arrowHeadType?: string;
+  source?: string;
+  target?: string;
+}

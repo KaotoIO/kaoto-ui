@@ -1,6 +1,6 @@
 import { Catalog, Visualization, YAMLEditor } from '../components';
 import YAML from '../stories/data/yaml';
-import { IModelVizProps, IStepProps, IViewData, IVizStepProps } from '../types';
+import { IModelVizProps, IStepProps, IViewData, IVizStepProps, IVizStepPropsEdge } from '../types';
 import request from '../utils/request';
 import usePrevious from '../utils/usePrevious';
 import './Dashboard.css';
@@ -25,9 +25,6 @@ const Dashboard = () => {
 
   // viewData contains the Step model exactly as returned by the API
   const [viewData, setViewData] = useState<IViewData>({ steps: [], views: [] });
-
-  // vizData is a UI-specific mapping between the Step model and Visualization metadata
-  const [vizData, setVizData] = useState<{ viz: IVizStepProps; model: IStepProps }[]>([]);
 
   // yamlData contains the exact YAML returned by the API or specified by the user
   const [yamlData, setYamlData] = useState(YAML);
@@ -94,7 +91,6 @@ const Dashboard = () => {
         });
 
         const data: IViewData = await resp.json();
-        prepareAndSetVizDataSteps(data.steps);
         setViewData(data);
       } catch (err) {
         console.error(err);
@@ -179,59 +175,6 @@ const Dashboard = () => {
     }, 750);
   };
 
-  /**
-   * Creates a mapping for the Visualization by
-   * separating the Step Model from a new Viz object,
-   * which contains UI-specific metadata (e.g. position).
-   * Data is stored in the VizData hook.
-   * @param steps
-   */
-  const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
-    const incrementAmt = 100;
-    const stepsAsElements: IModelVizProps[] = [];
-
-    steps.map((step, index) => {
-      // TODO: extract this into something that Visualization can use too
-      let inputStep: IModelVizProps = {
-        model: { ...step },
-        viz: {
-          data: { label: step.name },
-          id: uuidv4(),
-          position: { x: 0, y: 0 },
-        },
-      };
-
-      // Grab the previous step to use for determining position and drawing edges
-      const previousStep = stepsAsElements[index - 1];
-
-      // Check with localStorage to see if positions already exist
-
-      /**
-       * Determine first & last steps
-       * Label as input/output, respectively
-       */
-      switch (index) {
-        case 0:
-          // First item in `steps` array
-          inputStep.viz.position.x = 250;
-          inputStep.viz.type = 'input';
-          break;
-        case steps.length - 1:
-        default:
-          // Last item & middle steps in `steps` array
-          // Extract into common area for last & middle steps
-          inputStep.viz.position.x = previousStep.viz.position?.x + incrementAmt;
-          break;
-      }
-
-      stepsAsElements.push(inputStep);
-
-      return;
-    });
-
-    setVizData(stepsAsElements);
-  };
-
   return (
     <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
       <DrawerContent
@@ -285,7 +228,7 @@ const Dashboard = () => {
                 isError={isError}
                 isLoading={isLoading}
                 replaceIntegrationStep={replaceIntegrationStep}
-                steps={vizData}
+                steps={viewData.steps}
                 views={viewData.views}
               />
             </GridItem>
