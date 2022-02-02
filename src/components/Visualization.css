@@ -5,8 +5,6 @@
 .stepNode {
     align-items: center;
     background: white;
-    border: 2px solid rgb(0, 136, 206);
-    border-radius: 50%;
     display: block;
     font-family: Ubuntu, serif;
     font-size: small;

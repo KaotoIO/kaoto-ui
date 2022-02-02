@@ -39,16 +39,26 @@ const placeholderStep: IStepProps = {
   UUID: '',
 };
 
+// Custom Node type and component for React Flow
 const CustomNodeComponent = ({ data }) => {
+  const borderColor =
+    data.connectorType === 'START'
+      ? 'rgb(0, 136, 206)'
+      : data.connectorType === 'END'
+      ? 'rgb(149, 213, 245)'
+      : 'rgb(204, 204, 204)';
+
+  console.table(data.data);
+
   return (
-    <div className={'stepNode'}>
-      {!(data.data?.connectorType === 'START') && (
+    <div className={'stepNode'} style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}>
+      {!(data.connectorType === 'START') && (
         <Handle type="target" position={Position.Top} style={{ borderRadius: 0 }} />
       )}
       <div className={'stepNode__Icon'}>
         <img src={data.icon} />
       </div>
-      {!(data.data?.connectorType === 'END') && (
+      {!(data.connectorType === 'END') && (
         <Handle type="source" position={Position.Bottom} id="b" style={{ borderRadius: 0 }} />
       )}
       <div className={'stepNode__Label'}>{data.label}</div>
@@ -66,7 +76,7 @@ const Visualization = ({
   steps,
   views,
 }: IVisualization) => {
-  // elements is an array of UI-specific objects that represent the Step model visually
+  // `elements` is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<IVizStepProps[]>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -92,6 +102,7 @@ const Visualization = ({
     steps.map((step, index) => {
       // Grab the previous step to use for determining position and drawing edges
       const previousStep = stepsAsElements[index - 1];
+      let stepEdge: IVizStepPropsEdge = { id: '' };
 
       // Build the default parameters
       let inputStep: IVizStepProps = {
@@ -99,10 +110,6 @@ const Visualization = ({
         id: step.UUID,
         position: { x: window.innerWidth / 2, y: 0 },
         type: 'special',
-      };
-
-      let stepEdge: IVizStepPropsEdge = {
-        id: '',
       };
 
       // Add edge properties if more than one step, and not on first step
@@ -115,7 +122,7 @@ const Visualization = ({
         stepEdge.target = inputStep.id;
       }
 
-      // Check with localStorage to see if positions already exist
+      // TODO: Check with localStorage to see if positions already exist
 
       /**
        * Determine position of Step,
