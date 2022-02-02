@@ -5,19 +5,34 @@
 .stepNode {
     align-items: center;
     background: white;
-    border: 1px solid rgb(0, 136, 206);
+    border: 2px solid rgb(0, 136, 206);
     border-radius: 50%;
     display: block;
     font-family: Ubuntu, serif;
-    font-size: x-small;
-    height: 75px;
+    font-size: small;
+    height: 80px;
     justify-content: center;
     padding: 10px;
     text-align: center;
-    width: 75px;
+    width: 80px;
+}
+
+.stepNode__Icon {
+    position: relative;
+    top: 55%;
+    transform: translateY(-50%);
 }
 
 .stepNode img {
     height: 40px;
+    left: 0;
+    right: 0;
     width: 40px;
+}
+
+.stepNode__Label {
+    bottom: -30px;
+    left: -75%;
+    position: relative;
+    width: 250%;
 }

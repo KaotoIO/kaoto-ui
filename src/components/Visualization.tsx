@@ -45,13 +45,13 @@ const CustomNodeComponent = ({ data }) => {
       {!(data.data?.connectorType === 'START') && (
         <Handle type="target" position={Position.Top} style={{ borderRadius: 0 }} />
       )}
-      <div>
+      <div className={'stepNode__Icon'}>
         <img src={data.icon} />
       </div>
-      <div>{data.label}</div>
       {!(data.data?.connectorType === 'END') && (
         <Handle type="source" position={Position.Bottom} id="b" style={{ borderRadius: 0 }} />
       )}
+      <div className={'stepNode__Label'}>{data.label}</div>
     </div>
   );
 };
@@ -85,7 +85,7 @@ const Visualization = ({
    * @param steps
    */
   const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
-    const incrementAmt = 100;
+    const incrementAmt = 160;
     const stepsAsElements: any[] = [];
     const stepEdges: any[] = [];
 
@@ -95,10 +95,9 @@ const Visualization = ({
 
       // Build the default parameters
       let inputStep: IVizStepProps = {
-        className: 'stepNode',
         data: { connectorType: step.type, icon: step.icon, label: step.name },
         id: step.UUID,
-        position: { x: 0, y: 0 },
+        position: { x: window.innerWidth / 2, y: 0 },
         type: 'special',
       };
 
@@ -119,58 +118,25 @@ const Visualization = ({
       // Check with localStorage to see if positions already exist
 
       /**
-       * Determine position of step,
+       * Determine position of Step,
        * add properties accordingly
        */
       switch (index) {
         case 0:
           // First item in `steps` array
-          inputStep = {
-            ...inputStep,
-            position: {
-              x: window.innerWidth / 2,
-              y: window.innerHeight / 2,
-            },
-            style: {
-              //background: '#D6D5E6',
-              //color: '#333',
-              //border: '1px solid #222138',
-              //width: 180,
-            },
-            type: 'special',
-          };
-
-          inputStep.data.label = (
-            <>
-              <strong>{step.name}</strong>
-            </>
-          );
-
+          inputStep.position.y = window.innerHeight / 2;
           break;
         case steps.length - 1:
           // Last item in `steps` array
-          inputStep = {
-            ...inputStep,
-            position: {
-              x: previousStep.position?.x,
-              y: previousStep.position?.y + incrementAmt,
-            },
-            type: 'output',
-          };
+          inputStep.position.y = previousStep.position?.y + incrementAmt;
 
           // Build edges
           stepEdge.animated = true;
           stepEdge.style = { stroke: 'red' };
-
           break;
         default:
           // Middle steps in `steps` array
-          inputStep.position = {
-            x: previousStep.position?.x,
-            y: previousStep.position?.y + incrementAmt,
-          };
-
-          // Build edges
+          inputStep.position.y = previousStep.position?.y + incrementAmt;
           stepEdge = {
             ...stepEdge,
             label: 'cheese',
@@ -178,7 +144,6 @@ const Visualization = ({
             labelBgBorderRadius: 4,
             labelBgStyle: { fill: '#FFCC00', color: '#fff', fillOpacity: 0.7 },
           };
-
           break;
       }
 
