@@ -1,5 +1,5 @@
 import { IStepProps, IViewProps, IVizStepProps, IVizStepPropsEdge } from '../types';
-import truncateString from '../utils/truncateName';
+//import truncateString from '../utils/truncateName';
 import { StepErrorBoundary, StepViews } from './';
 import './Visualization.css';
 import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
@@ -163,15 +163,6 @@ const Visualization = ({
   };
 
   /**
-   * Returns a Step when provided with the `vizId`.
-   * `vizId` is originally set using the Step UUID.
-   * @param vizId
-   */
-  const findStepWithVizId = (vizId: string) => {
-    return steps.find((s) => s.id === vizId);
-  };
-
-  /**
    * Returns a Step index when provided with the `vizId`.
    * `vizId` is originally set using the Step UUID.
    * @param vizId
@@ -211,13 +202,13 @@ const Visualization = ({
   }) => {
     event.preventDefault();
 
-    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+    const reactFlowBounds = reactFlowWrapper?.current?.getBoundingClientRect();
     const type = event.dataTransfer.getData('application/reactflow');
 
     const dataJSON = event.dataTransfer.getData('text');
     const parsed: IStepProps = JSON.parse(dataJSON);
 
-    const position = reactFlowInstance.project({
+    const position = reactFlowInstance?.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
