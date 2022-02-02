@@ -1,3 +1,23 @@
 .pf-c-drawer__content.panelCustom {
     background-color: var(--pf-global--BackgroundColor--200);
 }
+
+.stepNode {
+    align-items: center;
+    background: white;
+    border: 1px solid rgb(0, 136, 206);
+    border-radius: 50%;
+    display: block;
+    font-family: Ubuntu, serif;
+    font-size: x-small;
+    height: 75px;
+    justify-content: center;
+    padding: 10px;
+    text-align: center;
+    width: 75px;
+}
+
+.stepNode img {
+    height: 40px;
+    width: 40px;
+}

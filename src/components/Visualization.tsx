@@ -1,19 +1,24 @@
 import { IStepProps, IViewProps, IVizStepProps, IVizStepPropsEdge } from '../types';
+import truncateString from '../utils/truncateName';
 import { StepErrorBoundary, StepViews } from './';
 import './Visualization.css';
 import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
-import { SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactFlow, {
-  removeElements,
   addEdge,
-  MiniMap,
-  Controls,
   Background,
-  Elements,
   Connection,
+  Controls,
   Edge,
+  Elements,
+  Handle,
+  MiniMap,
+  Position,
   ReactFlowProvider,
+  removeElements,
 } from 'react-flow-renderer';
+import 'react-flow-renderer/dist/style.css';
+import 'react-flow-renderer/dist/theme-default.css';
 
 interface IVisualization {
   deleteIntegrationStep: (stepsIndex: number) => void;
@@ -34,6 +39,27 @@ const placeholderStep: IStepProps = {
   UUID: '',
 };
 
+const CustomNodeComponent = ({ data }) => {
+  return (
+    <div className={'stepNode'}>
+      {!(data.data?.connectorType === 'START') && (
+        <Handle type="target" position={Position.Top} style={{ borderRadius: 0 }} />
+      )}
+      <div>
+        <img src={data.icon} />
+      </div>
+      <div>{data.label}</div>
+      {!(data.data?.connectorType === 'END') && (
+        <Handle type="source" position={Position.Bottom} id="b" style={{ borderRadius: 0 }} />
+      )}
+    </div>
+  );
+};
+
+const nodeTypes = {
+  special: CustomNodeComponent,
+};
+
 const Visualization = ({
   deleteIntegrationStep,
   replaceIntegrationStep,
@@ -51,6 +77,125 @@ const Visualization = ({
   useEffect(() => {
     prepareAndSetVizDataSteps(steps);
   }, [steps]);
+
+  /**
+   * Creates an object for the Visualization from the Step model.
+   * Contains UI-specific metadata (e.g. position).
+   * Data is stored in the Elements hook.
+   * @param steps
+   */
+  const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
+    const incrementAmt = 100;
+    const stepsAsElements: any[] = [];
+    const stepEdges: any[] = [];
+
+    steps.map((step, index) => {
+      // Grab the previous step to use for determining position and drawing edges
+      const previousStep = stepsAsElements[index - 1];
+
+      // Build the default parameters
+      let inputStep: IVizStepProps = {
+        className: 'stepNode',
+        data: { connectorType: step.type, icon: step.icon, label: step.name },
+        id: step.UUID,
+        position: { x: 0, y: 0 },
+        type: 'special',
+      };
+
+      let stepEdge: IVizStepPropsEdge = {
+        id: '',
+      };
+
+      // Add edge properties if more than one step, and not on first step
+      if (steps.length > 1 && index !== 0) {
+        stepEdge.arrowHeadType = 'arrowclosed';
+        stepEdge.id = 'e' + previousStep.id + '-' + inputStep.id;
+        stepEdge.source = previousStep.id;
+
+        // even the last step needs to build the step edge above it, with itself as the target
+        stepEdge.target = inputStep.id;
+      }
+
+      // Check with localStorage to see if positions already exist
+
+      /**
+       * Determine position of step,
+       * add properties accordingly
+       */
+      switch (index) {
+        case 0:
+          // First item in `steps` array
+          inputStep = {
+            ...inputStep,
+            position: {
+              x: window.innerWidth / 2,
+              y: window.innerHeight / 2,
+            },
+            style: {
+              //background: '#D6D5E6',
+              //color: '#333',
+              //border: '1px solid #222138',
+              //width: 180,
+            },
+            type: 'special',
+          };
+
+          inputStep.data.label = (
+            <>
+              <strong>{step.name}</strong>
+            </>
+          );
+
+          break;
+        case steps.length - 1:
+          // Last item in `steps` array
+          inputStep = {
+            ...inputStep,
+            position: {
+              x: previousStep.position?.x,
+              y: previousStep.position?.y + incrementAmt,
+            },
+            type: 'output',
+          };
+
+          // Build edges
+          stepEdge.animated = true;
+          stepEdge.style = { stroke: 'red' };
+
+          break;
+        default:
+          // Middle steps in `steps` array
+          inputStep.position = {
+            x: previousStep.position?.x,
+            y: previousStep.position?.y + incrementAmt,
+          };
+
+          // Build edges
+          stepEdge = {
+            ...stepEdge,
+            label: 'cheese',
+            labelBgPadding: [8, 4],
+            labelBgBorderRadius: 4,
+            labelBgStyle: { fill: '#FFCC00', color: '#fff', fillOpacity: 0.7 },
+          };
+
+          break;
+      }
+
+      stepsAsElements.push(inputStep);
+
+      // Only add step edge if there is more than one step and not on the first step
+      if (steps.length > 1 && index !== 0) {
+        stepEdges.push(stepEdge);
+      }
+
+      return;
+    });
+
+    // combine steps and step edges before setting hook state
+    const combined = stepsAsElements.concat(stepEdges);
+    setElements(combined);
+  };
 
   /**
    * Returns a Step when provided with the `vizId`.
@@ -123,7 +268,8 @@ const Visualization = ({
   };
 
   const onElementClick = (_e: any, element: any) => {
-    if (!element.UUID) {
+    //console.table(element);
+    if (!element.id) {
       return;
     }
 
@@ -143,121 +289,9 @@ const Visualization = ({
     //drawerRef.current && drawerRef.current.focus();
   };
 
-  const onLoad = (_reactFlowInstance: SetStateAction<null>) =>
+  const onLoad = (_reactFlowInstance: any) => {
+    _reactFlowInstance.fitView();
     setReactFlowInstance(_reactFlowInstance);
-
-  /**
-   * Creates an object for the Visualization from the Step model.
-   * Contains UI-specific metadata (e.g. position).
-   * Data is stored in the Elements hook.
-   * @param steps
-   */
-  const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
-    const incrementAmt = 100;
-    const stepsAsElements: any[] = [];
-    const stepEdges: any[] = [];
-
-    steps.map((step, index) => {
-      // Grab the previous step to use for determining position and drawing edges
-      const previousStep = stepsAsElements[index - 1];
-
-      // Build the default parameters
-      let inputStep: IVizStepProps = {
-        data: { label: step.name },
-        id: step.UUID,
-        position: { x: 0, y: 0 },
-      };
-
-      let stepEdge: IVizStepPropsEdge = {
-        id: '',
-      };
-
-      // Add edge properties if more than one step, and not on first step
-      if (steps.length > 1 && index !== 0) {
-        stepEdge.arrowHeadType = 'arrowclosed';
-        stepEdge.id = 'e' + previousStep.id + '-' + inputStep.id;
-        stepEdge.source = previousStep.id;
-
-        // even the last step needs to build the step edge above it, with itself as the target
-        stepEdge.target = inputStep.id;
-      }
-
-      // Check with localStorage to see if positions already exist
-
-      /**
-       * Determine position of step,
-       * add properties accordingly
-       */
-      switch (index) {
-        case 0:
-          // First item in `steps` array
-          inputStep = {
-            ...inputStep,
-            position: {
-              x: 250,
-              y: 0,
-            },
-            style: {
-              background: '#D6D5E6',
-              color: '#333',
-              border: '1px solid #222138',
-              width: 180,
-            },
-            type: 'input',
-          };
-
-          inputStep.data.label = (
-            <>
-              <strong>{step.name}</strong>
-            </>
-          );
-
-          break;
-        case steps.length - 1:
-          // Last item in `steps` array
-          inputStep = {
-            ...inputStep,
-            position: {
-              x: 0,
-              y: previousStep.position?.y + incrementAmt,
-            },
-            type: 'output',
-          };
-
-          // Build edges
-          stepEdge.animated = true;
-          stepEdge.style = { stroke: 'red' };
-
-          break;
-        default:
-          // Middle steps in `steps` array
-          inputStep.position.y = previousStep.position?.y + incrementAmt;
-
-          // Build edges
-          stepEdge = {
-            ...stepEdge,
-            label: 'cheese',
-            labelBgPadding: [8, 4],
-            labelBgBorderRadius: 4,
-            labelBgStyle: { fill: '#FFCC00', color: '#fff', fillOpacity: 0.7 },
-          };
-
-          break;
-      }
-
-      stepsAsElements.push(inputStep);
-
-      // Only add step edge if there is more than one step and not on the first step
-      if (steps.length > 1 && index !== 0) {
-        stepEdges.push(stepEdge);
-      }
-
-      return;
-    });
-
-    // combine steps and step edges before setting hook state
-    const combined = stepsAsElements.concat(stepEdges);
-    setElements(combined);
   };
 
   const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
@@ -304,6 +338,7 @@ const Visualization = ({
               >
                 <ReactFlow
                   elements={elements}
+                  nodeTypes={nodeTypes}
                   onConnect={onConnect}
                   onDrop={onDrop}
                   onDragOver={onDragOver}
