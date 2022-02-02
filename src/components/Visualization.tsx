@@ -102,7 +102,7 @@ const Visualization = ({
     event.preventDefault();
 
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-    //const type = event.dataTransfer.getData('application/reactflow');
+    const type = event.dataTransfer.getData('application/reactflow');
 
     const dataJSON = event.dataTransfer.getData('text');
     const parsed: IStepProps = JSON.parse(dataJSON);
@@ -112,16 +112,14 @@ const Visualization = ({
       y: event.clientY - reactFlowBounds.top,
     });
 
-    /**
     const newNode = {
       id: parsed.UUID,
       type,
       position,
-      data: { label: `${type} node` },
+      data: { label: `${parsed.title} node` },
     };
-     **/
 
-    //setElements((es) => es.concat(newNode));
+    setElements((es) => es.concat(newNode));
   };
 
   const onElementClick = (_e: any, element: any) => {
@@ -302,16 +300,6 @@ const Visualization = ({
               <div
                 className="reactflow-wrapper"
                 ref={reactFlowWrapper}
-                onDrop={(e: any) => {
-                  e.preventDefault();
-                  const dataJSON = e.dataTransfer.getData('text');
-                  const parsed: IStepProps = JSON.parse(dataJSON);
-                  // how to get current position?
-                  console.log(e);
-                }}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                }}
                 style={{ width: window.innerWidth, height: window.innerHeight }}
               >
                 <ReactFlow
