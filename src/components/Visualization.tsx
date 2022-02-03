@@ -1,5 +1,5 @@
 import { IStepProps, IViewProps, IVizStepProps, IVizStepPropsEdge } from '../types';
-//import truncateString from '../utils/truncateName';
+import truncateString from '../utils/truncateName';
 import { StepErrorBoundary, StepViews } from './';
 import './Visualization.css';
 import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
@@ -109,7 +109,12 @@ const Visualization = ({
 
       // Build the default parameters
       let inputStep: IVizStepProps = {
-        data: { connectorType: step.type, icon: step.icon, id: step.UUID, label: step.name },
+        data: {
+          connectorType: step.type,
+          icon: step.icon,
+          id: step.UUID,
+          label: truncateString(step.name, 14),
+        },
         id: step.UUID,
         position: { x: 0, y: window.innerHeight / 2 },
         type: 'special',
@@ -223,7 +228,7 @@ const Visualization = ({
         connectorType: step.type,
         icon: step.icon,
         id: step.UUID,
-        label: `${step.name} node`,
+        label: `${truncateString(step.name, 14)}`,
       },
     };
 
@@ -231,7 +236,6 @@ const Visualization = ({
   };
 
   const onElementClick = (_e: any, element: any) => {
-    //console.table(element);
     if (!element.id) {
       return;
     }
@@ -253,7 +257,6 @@ const Visualization = ({
   };
 
   const onLoad = (_reactFlowInstance: any) => {
-    //_reactFlowInstance.fitView();
     setReactFlowInstance(_reactFlowInstance);
   };
 
