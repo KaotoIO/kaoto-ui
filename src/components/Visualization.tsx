@@ -40,7 +40,7 @@ const placeholderStep: IStepProps = {
 };
 
 // Custom Node type and component for React Flow
-const CustomNodeComponent = ({ data }) => {
+const CustomNodeComponent = ({ data }: IVizStepProps) => {
   const borderColor =
     data.connectorType === 'START'
       ? 'rgb(0, 136, 206)'
