@@ -141,7 +141,10 @@ const Catalog = (props: ICatalog) => {
                   isHoverable={true}
                   draggable={'true'}
                   onDragStart={(e: any) => {
+                    e.dataTransfer.setData('application/reactflow', 'special');
                     e.dataTransfer.setData('text/plain', JSON.stringify(step));
+
+                    e.dataTransfer.effectAllowed = 'move';
                   }}
                 >
                   <Grid md={6}>

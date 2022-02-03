@@ -48,14 +48,14 @@ const CustomNodeComponent = ({ data }) => {
       ? 'rgb(149, 213, 245)'
       : 'rgb(204, 204, 204)';
 
-  console.table(data);
+  //console.table(data);
 
   return (
     <div className={'stepNode'} style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}>
       {!(data.connectorType === 'START') && (
-        <Handle type="target" position={Position.Left} style={{ borderRadius: 0 }} />
+        <Handle type="target" position={Position.Left} id="a" style={{ borderRadius: 0 }} />
       )}
-      <div className={'stepNode__Icon'}>
+      <div className={'stepNode__Icon nodrag'}>
         <img src={data.icon} />
       </div>
       {!(data.connectorType === 'END') && (
@@ -69,6 +69,9 @@ const CustomNodeComponent = ({ data }) => {
 const nodeTypes = {
   special: CustomNodeComponent,
 };
+
+let id = 0;
+const getId = () => `dndnode_${id++}`;
 
 const Visualization = ({
   deleteIntegrationStep,
@@ -202,19 +205,18 @@ const Visualization = ({
   }) => {
     event.preventDefault();
 
-    const reactFlowBounds = reactFlowWrapper?.current?.getBoundingClientRect();
+    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
     const type = event.dataTransfer.getData('application/reactflow');
-
     const dataJSON = event.dataTransfer.getData('text');
     const step: IStepProps = JSON.parse(dataJSON);
 
-    const position = reactFlowInstance?.project({
+    const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
 
     const newNode = {
-      id: step.UUID,
+      id: getId(),
       type,
       position,
       data: {
@@ -251,7 +253,7 @@ const Visualization = ({
   };
 
   const onLoad = (_reactFlowInstance: any) => {
-    _reactFlowInstance.fitView();
+    //_reactFlowInstance.fitView();
     setReactFlowInstance(_reactFlowInstance);
   };
 
