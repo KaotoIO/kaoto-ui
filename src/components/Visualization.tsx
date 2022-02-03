@@ -53,13 +53,13 @@ const CustomNodeComponent = ({ data }) => {
   return (
     <div className={'stepNode'} style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}>
       {!(data.connectorType === 'START') && (
-        <Handle type="target" position={Position.Top} style={{ borderRadius: 0 }} />
+        <Handle type="target" position={Position.Left} style={{ borderRadius: 0 }} />
       )}
       <div className={'stepNode__Icon'}>
         <img src={data.icon} />
       </div>
       {!(data.connectorType === 'END') && (
-        <Handle type="source" position={Position.Bottom} id="b" style={{ borderRadius: 0 }} />
+        <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
       )}
       <div className={'stepNode__Label'}>{data.label}</div>
     </div>
@@ -108,7 +108,7 @@ const Visualization = ({
       let inputStep: IVizStepProps = {
         data: { connectorType: step.type, icon: step.icon, label: step.name },
         id: step.UUID,
-        position: { x: window.innerWidth / 2, y: 0 },
+        position: { x: 0, y: window.innerHeight / 2 },
         type: 'special',
       };
 
@@ -131,11 +131,11 @@ const Visualization = ({
       switch (index) {
         case 0:
           // First item in `steps` array
-          inputStep.position.y = window.innerHeight / 2;
+          inputStep.position.x = window.innerWidth / 5;
           break;
         case steps.length - 1:
           // Last item in `steps` array
-          inputStep.position.y = previousStep.position?.y + incrementAmt;
+          inputStep.position.x = previousStep.position?.x + incrementAmt;
 
           // Build edges
           stepEdge.animated = true;
@@ -143,14 +143,7 @@ const Visualization = ({
           break;
         default:
           // Middle steps in `steps` array
-          inputStep.position.y = previousStep.position?.y + incrementAmt;
-          stepEdge = {
-            ...stepEdge,
-            label: 'cheese',
-            labelBgPadding: [8, 4],
-            labelBgBorderRadius: 4,
-            labelBgStyle: { fill: '#FFCC00', color: '#fff', fillOpacity: 0.7 },
-          };
+          inputStep.position.x = previousStep.position?.x + incrementAmt;
           break;
       }
 
