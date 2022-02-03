@@ -39,6 +39,16 @@ const placeholderStep: IStepProps = {
   UUID: '',
 };
 
+/**
+ * Returns a Step index when provided with the `vizId`.
+ * `vizId` is originally set using the Step UUID.
+ * @param vizId
+ * @param steps
+ */
+const findStepIdxWithVizId = (vizId: string, steps: IStepProps[]) => {
+  return steps.map((s) => s.UUID).indexOf(vizId);
+};
+
 // Custom Node type and component for React Flow
 const CustomNodeComponent = ({ data }: IVizStepProps) => {
   const borderColor =
@@ -48,8 +58,16 @@ const CustomNodeComponent = ({ data }: IVizStepProps) => {
       ? 'rgb(149, 213, 245)'
       : 'rgb(204, 204, 204)';
 
+  const onDrop = (e: any) => {
+    console.log('something has dropped ', e);
+  };
+
   return (
-    <div className={'stepNode'} style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}>
+    <div
+      className={'stepNode'}
+      style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}
+      onDrop={onDrop}
+    >
       {!(data.connectorType === 'START') && (
         <Handle type="target" position={Position.Left} id="a" style={{ borderRadius: 0 }} />
       )}
@@ -86,6 +104,7 @@ const Visualization = ({
 
   // Update visualization data when Steps change
   useEffect(() => {
+    // TODO: Not every step update should rebuild the whole visualization
     prepareAndSetVizDataSteps(steps);
   }, [steps]);
 
@@ -168,21 +187,12 @@ const Visualization = ({
     setElements(combined);
   };
 
-  /**
-   * Returns a Step index when provided with the `vizId`.
-   * `vizId` is originally set using the Step UUID.
-   * @param vizId
-   */
-  const findStepIdxWithVizId = (vizId: string) => {
-    return steps.map((s) => s.UUID).indexOf(vizId);
-  };
-
   const deleteStep = () => {
     const selectedStepVizId = selectedStep.UUID;
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
 
-    const stepsIndex = findStepIdxWithVizId(selectedStepVizId);
+    const stepsIndex = findStepIdxWithVizId(selectedStepVizId, steps);
     deleteIntegrationStep(stepsIndex);
   };
 
@@ -190,7 +200,10 @@ const Visualization = ({
     setIsPanelExpanded(false);
   };
 
-  const onConnect = (params: Edge<any> | Connection) => setElements((els) => addEdge(params, els));
+  const onConnect = (params: Edge<any> | Connection) => {
+    // update elements, but do we need this if we will update based on changes to the YAML?
+    setElements((els) => addEdge(params, els));
+  };
 
   const onDragOver = (event: {
     preventDefault: () => void;
@@ -269,7 +282,7 @@ const Visualization = ({
         newStepParameters[paramIndex!].value = value;
       });
 
-      const selectedStepIdx = findStepIdxWithVizId(selectedStepUUID);
+      const selectedStepIdx = findStepIdxWithVizId(selectedStepUUID, steps);
       replaceIntegrationStep(newStep, selectedStepIdx);
     } else {
       return;
