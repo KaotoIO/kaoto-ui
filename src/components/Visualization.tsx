@@ -50,7 +50,7 @@ const findStepIdxWithVizId = (vizId: string, steps: IStepProps[]) => {
 };
 
 // Custom Node type and component for React Flow
-const CustomNodeComponent = ({ data }: IVizStepProps) => {
+const CustomNodeComponent = ({ data }: any) => {
   const borderColor =
     data.connectorType === 'START'
       ? 'rgb(0, 136, 206)'
@@ -59,7 +59,10 @@ const CustomNodeComponent = ({ data }: IVizStepProps) => {
       : 'rgb(204, 204, 204)';
 
   const onDrop = (e: any) => {
-    console.log('something has dropped ', e);
+    const dataJSON = e.dataTransfer.getData('text');
+    const step: IStepProps = JSON.parse(dataJSON);
+    // TODO: replace step here
+    console.log('something dropped on an existing step node ,', e);
   };
 
   return (
@@ -82,8 +85,23 @@ const CustomNodeComponent = ({ data }: IVizStepProps) => {
   );
 };
 
-const nodeTypes = {
-  special: CustomNodeComponent,
+const SlotNodeComponent = ({ data }: any) => {
+  const onDrop = (e: any) => {
+    const dataJSON = e.dataTransfer.getData('text');
+    const step: IStepProps = JSON.parse(dataJSON);
+    // TODO: add step here
+    console.log('something dropped on a slot node ,', e);
+  };
+
+  return (
+    <div
+      className={'stepNode'}
+      style={{ border: '2px dashed rgb(204, 204, 204)', borderRadius: '50%' }}
+      onDrop={onDrop}
+    >
+      <p>Add a Step</p>
+    </div>
+  );
 };
 
 let id = 0;
@@ -108,6 +126,11 @@ const Visualization = ({
     prepareAndSetVizDataSteps(steps);
   }, [steps]);
 
+  const nodeTypes = {
+    special: CustomNodeComponent,
+    slot: SlotNodeComponent,
+  };
+
   /**
    * Creates an object for the Visualization from the Step model.
    * Contains UI-specific metadata (e.g. position).
@@ -118,6 +141,30 @@ const Visualization = ({
     const incrementAmt = 160;
     const stepsAsElements: any[] = [];
     const stepEdges: any[] = [];
+
+    if (steps.length === 0) {
+      // create a slot step
+      //let stepEdge: IVizStepPropsEdge = { id: '' };
+
+      // Build the default parameters
+      let inputStep: IVizStepProps = {
+        data: {
+          label: 'Add a Step',
+        },
+        id: '0-slot',
+        position: { x: 0, y: window.innerHeight / 2 },
+        type: 'slot',
+      };
+
+      stepsAsElements.push(inputStep);
+      //stepEdges.push(stepEdge);
+
+      // combine steps and step edges before setting hook state
+      const combined = stepsAsElements.concat(stepEdges);
+      setElements(combined);
+
+      return;
+    }
 
     steps.map((step, index) => {
       // Grab the previous step to use for determining position and drawing edges
@@ -130,6 +177,7 @@ const Visualization = ({
           connectorType: step.type,
           icon: step.icon,
           id: step.UUID,
+          index: index,
           label: truncateString(step.name, 14),
         },
         id: step.UUID,
@@ -219,6 +267,7 @@ const Visualization = ({
     clientX: number;
     clientY: number;
   }) => {
+    // TODO: Check if there is an existing node??
     event.preventDefault();
 
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();

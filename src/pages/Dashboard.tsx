@@ -159,13 +159,24 @@ const Dashboard = () => {
   };
 
   /**
-   * Replace an integration step. Requires the new step and old step index.
+   * Replace an integration step. Requires the new step and EITHER the old step index or vizId.
    * @param newStep
    * @param oldStepIndex
+   * @param vizId
    */
-  const replaceIntegrationStep = (newStep: IStepProps, oldStepIndex: number) => {
+  const replaceIntegrationStep = (newStep: IStepProps, oldStepIndex?: number, vizId?: string) => {
     const newSteps = viewData.steps;
-    newSteps[oldStepIndex] = newStep;
+    let stepIdx: number;
+
+    if (oldStepIndex) {
+      stepIdx = oldStepIndex;
+      newSteps[stepIdx] = newStep;
+    }
+
+    if (vizId) {
+      stepIdx = newSteps.map((s) => s.UUID).indexOf(vizId);
+      newSteps[stepIdx] = newStep;
+    }
 
     updateIntegration(newSteps).catch((e) => {
       console.error(e);
