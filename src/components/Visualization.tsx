@@ -48,7 +48,7 @@ const CustomNodeComponent = ({ data }) => {
       ? 'rgb(149, 213, 245)'
       : 'rgb(204, 204, 204)';
 
-  console.table(data.data);
+  console.table(data);
 
   return (
     <div className={'stepNode'} style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}>
@@ -106,7 +106,7 @@ const Visualization = ({
 
       // Build the default parameters
       let inputStep: IVizStepProps = {
-        data: { connectorType: step.type, icon: step.icon, label: step.name },
+        data: { connectorType: step.type, icon: step.icon, id: step.UUID, label: step.name },
         id: step.UUID,
         position: { x: 0, y: window.innerHeight / 2 },
         type: 'special',
@@ -206,7 +206,7 @@ const Visualization = ({
     const type = event.dataTransfer.getData('application/reactflow');
 
     const dataJSON = event.dataTransfer.getData('text');
-    const parsed: IStepProps = JSON.parse(dataJSON);
+    const step: IStepProps = JSON.parse(dataJSON);
 
     const position = reactFlowInstance?.project({
       x: event.clientX - reactFlowBounds.left,
@@ -214,10 +214,15 @@ const Visualization = ({
     });
 
     const newNode = {
-      id: parsed.UUID,
+      id: step.UUID,
       type,
       position,
-      data: { label: `${parsed.title} node` },
+      data: {
+        connectorType: step.type,
+        icon: step.icon,
+        id: step.UUID,
+        label: `${step.name} node`,
+      },
     };
 
     setElements((es) => es.concat(newNode));
