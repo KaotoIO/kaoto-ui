@@ -48,15 +48,13 @@ const CustomNodeComponent = ({ data }: IVizStepProps) => {
       ? 'rgb(149, 213, 245)'
       : 'rgb(204, 204, 204)';
 
-  //console.table(data);
-
   return (
     <div className={'stepNode'} style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}>
       {!(data.connectorType === 'START') && (
         <Handle type="target" position={Position.Left} id="a" style={{ borderRadius: 0 }} />
       )}
-      <div className={'stepNode__Icon nodrag'}>
-        <img src={data.icon} />
+      <div className={'stepNode__Icon'}>
+        <img src={data.icon} className="nodrag" />
       </div>
       {!(data.connectorType === 'END') && (
         <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
@@ -176,7 +174,7 @@ const Visualization = ({
    * @param vizId
    */
   const findStepIdxWithVizId = (vizId: string) => {
-    return steps.map((s) => s.id).indexOf(vizId);
+    return steps.map((s) => s.UUID).indexOf(vizId);
   };
 
   const deleteStep = () => {
