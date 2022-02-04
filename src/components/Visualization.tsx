@@ -85,25 +85,6 @@ const CustomNodeComponent = ({ data }: any) => {
   );
 };
 
-const SlotNodeComponent = ({ data }: any) => {
-  const onDrop = (e: any) => {
-    const dataJSON = e.dataTransfer.getData('text');
-    const step: IStepProps = JSON.parse(dataJSON);
-    // TODO: add step here
-    console.log('something dropped on a slot node ,', e);
-  };
-
-  return (
-    <div
-      className={'stepNode'}
-      style={{ border: '2px dashed rgb(204, 204, 204)', borderRadius: '50%' }}
-      onDrop={onDrop}
-    >
-      <p>Add a Step</p>
-    </div>
-  );
-};
-
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
@@ -128,7 +109,6 @@ const Visualization = ({
 
   const nodeTypes = {
     special: CustomNodeComponent,
-    slot: SlotNodeComponent,
   };
 
   /**
@@ -141,30 +121,6 @@ const Visualization = ({
     const incrementAmt = 160;
     const stepsAsElements: any[] = [];
     const stepEdges: any[] = [];
-
-    if (steps.length === 0) {
-      // create a slot step
-      //let stepEdge: IVizStepPropsEdge = { id: '' };
-
-      // Build the default parameters
-      let inputStep: IVizStepProps = {
-        data: {
-          label: 'Add a Step',
-        },
-        id: '0-slot',
-        position: { x: 0, y: window.innerHeight / 2 },
-        type: 'slot',
-      };
-
-      stepsAsElements.push(inputStep);
-      //stepEdges.push(stepEdge);
-
-      // combine steps and step edges before setting hook state
-      const combined = stepsAsElements.concat(stepEdges);
-      setElements(combined);
-
-      return;
-    }
 
     steps.map((step, index) => {
       // Grab the previous step to use for determining position and drawing edges

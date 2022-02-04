@@ -1,7 +1,8 @@
+import { StepsAndViewsProvider, YAMLProvider } from '../api';
+import request from '../api/request';
 import { Catalog, Visualization, YAMLEditor } from '../components';
 import YAML from '../stories/data/yaml';
 import { IStepProps, IViewData } from '../types';
-import request from '../utils/request';
 import usePrevious from '../utils/usePrevious';
 import './Dashboard.css';
 import { AlertVariant } from '@patternfly/react-core';
@@ -17,8 +18,6 @@ import {
 import { CodeIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
-
-//import { v4 as uuidv4 } from 'uuid';
 
 const Dashboard = () => {
   // If the catalog data won't be changing, consider removing this state
@@ -75,6 +74,7 @@ const Dashboard = () => {
    * Watch for user changes to YAML,
    * issue request to API for Visualization JSON
    */
+  // Should this `useEffect` be moved to the Visualization?
   useEffect(() => {
     if (previousYaml === yamlData) {
       return;
@@ -162,103 +162,81 @@ const Dashboard = () => {
    * Replace an integration step. Requires the new step and EITHER the old step index or vizId.
    * @param newStep
    * @param oldStepIndex
-   * @param vizId
    */
-  const replaceIntegrationStep = (newStep: IStepProps, oldStepIndex?: number, vizId?: string) => {
-    const newSteps = viewData.steps;
-    let stepIdx: number;
-
-    if (oldStepIndex) {
-      stepIdx = oldStepIndex;
-      newSteps[stepIdx] = newStep;
-    }
-
-    if (vizId) {
-      stepIdx = newSteps.map((s) => s.UUID).indexOf(vizId);
-      newSteps[stepIdx] = newStep;
-    }
+  const replaceIntegrationStep = (newStep: IStepProps, oldStepIndex: number) => {
+    let newSteps = viewData.steps;
+    newSteps[oldStepIndex] = newStep;
 
     updateIntegration(newSteps).catch((e) => {
       console.error(e);
     });
   };
 
-  /**
-   * On detected changes to YAML state, issue POST to external endpoint
-   * Returns JSON to be displayed in the visualizer
-   */
-  const handleChanges = (incomingData: string) => {
-    // Wait a bit before setting data
-    setTimeout(() => {
-      // Check that the data has changed, otherwise return
-      if (previousYaml === incomingData) {
-        return;
-      }
-      setYamlData(incomingData);
-    }, 750);
-  };
-
   return (
-    <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
-      <DrawerContent
-        panelContent={
-          <Catalog
-            isCatalogExpanded={expanded.catalog}
-            onClosePanelClick={onClosePanelClick}
-            steps={catalogData}
-          />
-        }
-        className={'panelCustom'}
-      >
-        <DrawerContentBody>
-          <div className={'step-creator-button'}>
-            <Tooltip content={'Connector Catalog'}>
-              <Button
-                variant={'plain'}
-                data-testid={'openCatalogButton'}
-                isActive={expanded.catalog}
-                aria-label={'Connector Catalog'}
-                onClick={() => {
-                  setExpanded({ ...expanded, catalog: !expanded.catalog });
-                }}
-              >
-                <PlusCircleIcon width={40} height={40} />
-              </Button>
-            </Tooltip>
-            <Tooltip content={'Code Editor'}>
-              <Button
-                variant={'plain'}
-                isActive={expanded.codeEditor}
-                data-testid={'openEditorButton'}
-                aria-label={'Code Editor'}
-                onClick={() => {
-                  setExpanded({ ...expanded, codeEditor: !expanded.codeEditor });
-                }}
-              >
-                <CodeIcon width={40} height={40} />
-              </Button>
-            </Tooltip>
-          </div>
-          <Grid>
-            {expanded.codeEditor && (
-              <GridItem span={4}>
-                <YAMLEditor yamlData={yamlData} handleChanges={handleChanges} />
-              </GridItem>
-            )}
-            <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
-              <Visualization
-                deleteIntegrationStep={deleteIntegrationStep}
-                isError={isError}
-                isLoading={isLoading}
-                replaceIntegrationStep={replaceIntegrationStep}
-                steps={viewData.steps}
-                views={viewData.views}
+    <StepsAndViewsProvider>
+      <YAMLProvider>
+        <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
+          <DrawerContent
+            panelContent={
+              <Catalog
+                isCatalogExpanded={expanded.catalog}
+                onClosePanelClick={onClosePanelClick}
+                steps={catalogData}
               />
-            </GridItem>
-          </Grid>
-        </DrawerContentBody>
-      </DrawerContent>
-    </Drawer>
+            }
+            className={'panelCustom'}
+          >
+            <DrawerContentBody>
+              <div className={'step-creator-button'}>
+                <Tooltip content={'Connector Catalog'}>
+                  <Button
+                    variant={'plain'}
+                    data-testid={'openCatalogButton'}
+                    isActive={expanded.catalog}
+                    aria-label={'Connector Catalog'}
+                    onClick={() => {
+                      setExpanded({ ...expanded, catalog: !expanded.catalog });
+                    }}
+                  >
+                    <PlusCircleIcon width={40} height={40} />
+                  </Button>
+                </Tooltip>
+                <Tooltip content={'Code Editor'}>
+                  <Button
+                    variant={'plain'}
+                    isActive={expanded.codeEditor}
+                    data-testid={'openEditorButton'}
+                    aria-label={'Code Editor'}
+                    onClick={() => {
+                      setExpanded({ ...expanded, codeEditor: !expanded.codeEditor });
+                    }}
+                  >
+                    <CodeIcon width={40} height={40} />
+                  </Button>
+                </Tooltip>
+              </div>
+              <Grid>
+                {expanded.codeEditor && (
+                  <GridItem span={4}>
+                    <YAMLEditor />
+                  </GridItem>
+                )}
+                <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
+                  <Visualization
+                    deleteIntegrationStep={deleteIntegrationStep}
+                    isError={isError}
+                    isLoading={isLoading}
+                    replaceIntegrationStep={replaceIntegrationStep}
+                    steps={viewData.steps}
+                    views={viewData.views}
+                  />
+                </GridItem>
+              </Grid>
+            </DrawerContentBody>
+          </DrawerContent>
+        </Drawer>
+      </YAMLProvider>
+    </StepsAndViewsProvider>
   );
 };
 
