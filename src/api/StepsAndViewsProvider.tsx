@@ -7,9 +7,10 @@ interface IStepsAndViewsProvider {
 
 export type IUseStepsAndViews = [IViewData, Dispatch<SetStateAction<IViewData>>];
 
-export const useStepsAndViews = ({}: IViewData): IUseStepsAndViews => {
+export const useStepsAndViews = (): IUseStepsAndViews => {
   const [viewData, setViewData] = useState<IViewData>({ steps: [], views: [] });
 
+  // handle from the component directly instead
   // useEffect(() => {
   //   setViewData(newStepsViews);
   // }, [newStepsViews]);
@@ -19,7 +20,7 @@ export const useStepsAndViews = ({}: IViewData): IUseStepsAndViews => {
 
 function StepsAndViewsProvider({ children }: IStepsAndViewsProvider) {
   // viewData contains the Step model exactly as returned by the API
-  const [viewData, setViewData] = useStepsAndViews(undefined!);
+  const [viewData, setViewData] = useStepsAndViews();
 
   return (
     <StepsAndViewsContext.Provider value={[viewData, setViewData]}>

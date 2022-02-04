@@ -1,6 +1,6 @@
 import { useStepsAndViewsContext, useYAMLContext } from '../api';
 import request from '../api/request';
-import { IStepProps, IViewProps, IVizStepProps, IVizStepPropsEdge } from '../types';
+import { IStepProps, IVizStepProps, IVizStepPropsEdge } from '../types';
 import truncateString from '../utils/truncateName';
 import usePrevious from '../utils/usePrevious';
 import { StepErrorBoundary, StepViews } from './';
@@ -23,13 +23,6 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import 'react-flow-renderer/dist/theme-default.css';
-
-interface IVisualization {
-  deleteIntegrationStep?: (stepsIndex: number) => void;
-  replaceIntegrationStep?: (newStep: IStepProps, oldStepIndex: number) => void;
-  steps?: IStepProps[];
-  views?: IViewProps[];
-}
 
 const placeholderStep: IStepProps = {
   apiVersion: '',
@@ -90,7 +83,7 @@ const CustomNodeComponent = ({ data }: any) => {
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
-const Visualization = ({}: IVisualization) => {
+const Visualization = () => {
   // `elements` is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<IVizStepProps[]>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
