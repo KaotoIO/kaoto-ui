@@ -1,3 +1,4 @@
+import YAML from '../stories/data/yaml';
 import {
   createContext,
   Dispatch,
@@ -15,7 +16,7 @@ interface IYAMLDataProvider {
 export type IUseYAMLData = [string, Dispatch<SetStateAction<string>>];
 
 export const useYAMLData = (newYAMLData: string): IUseYAMLData => {
-  const [YAMLData, setYAMLData] = useState<string>('');
+  const [YAMLData, setYAMLData] = useState<string>(YAML);
 
   useEffect(() => {
     setYAMLData(newYAMLData);
@@ -25,15 +26,14 @@ export const useYAMLData = (newYAMLData: string): IUseYAMLData => {
 };
 
 function YAMLProvider({ children }: IYAMLDataProvider) {
-  // viewData contains the Step model exactly as returned by the API
-  const [YAMLData, setYAMLData] = useYAMLData('');
+  const [YAMLData, setYAMLData] = useYAMLData(YAML);
 
   return (
     <YAMLDataContext.Provider value={[YAMLData, setYAMLData]}>{children}</YAMLDataContext.Provider>
   );
 }
 
-const YAMLDataContext = createContext<IUseYAMLData>(['', () => null]);
+const YAMLDataContext = createContext<IUseYAMLData>([YAML, () => null]);
 
 function useYAMLContext() {
   const context = useContext(YAMLDataContext);

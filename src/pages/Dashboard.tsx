@@ -1,7 +1,6 @@
 import { StepsAndViewsProvider, YAMLProvider } from '../api';
 import request from '../api/request';
 import { Catalog, Visualization, YAMLEditor } from '../components';
-import YAML from '../stories/data/yaml';
 import { IStepProps, IViewData } from '../types';
 import usePrevious from '../utils/usePrevious';
 import './Dashboard.css';
