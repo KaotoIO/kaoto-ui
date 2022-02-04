@@ -1,8 +1,11 @@
+import { useStepsAndViewsContext, useYAMLContext } from '../api';
+import request from '../api/request';
 import { IStepProps, IViewProps, IVizStepProps, IVizStepPropsEdge } from '../types';
 import truncateString from '../utils/truncateName';
 import { StepErrorBoundary, StepViews } from './';
 import './Visualization.css';
-import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
+import { AlertVariant, Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
+import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useRef, useState } from 'react';
 import ReactFlow, {
   addEdge,
@@ -21,12 +24,10 @@ import 'react-flow-renderer/dist/style.css';
 import 'react-flow-renderer/dist/theme-default.css';
 
 interface IVisualization {
-  deleteIntegrationStep: (stepsIndex: number) => void;
-  isError?: boolean;
-  isLoading?: boolean;
-  replaceIntegrationStep: (newStep: IStepProps, oldStepIndex: number) => void;
-  steps: IStepProps[];
-  views: IViewProps[];
+  deleteIntegrationStep?: (stepsIndex: number) => void;
+  replaceIntegrationStep?: (newStep: IStepProps, oldStepIndex: number) => void;
+  steps?: IStepProps[];
+  views?: IViewProps[];
 }
 
 const placeholderStep: IStepProps = {
@@ -59,8 +60,8 @@ const CustomNodeComponent = ({ data }: any) => {
       : 'rgb(204, 204, 204)';
 
   const onDrop = (e: any) => {
-    const dataJSON = e.dataTransfer.getData('text');
-    const step: IStepProps = JSON.parse(dataJSON);
+    //const dataJSON = e.dataTransfer.getData('text');
+    //const step: IStepProps = JSON.parse(dataJSON);
     // TODO: replace step here
     console.log('something dropped on an existing step node ,', e);
   };
@@ -88,12 +89,7 @@ const CustomNodeComponent = ({ data }: any) => {
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
-const Visualization = ({
-  deleteIntegrationStep,
-  replaceIntegrationStep,
-  steps,
-  views,
-}: IVisualization) => {
+const Visualization = ({}: IVisualization) => {
   // `elements` is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<IVizStepProps[]>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
@@ -101,11 +97,74 @@ const Visualization = ({
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
 
+  const [, setYAMLData] = useYAMLContext();
+  const [viewData] = useStepsAndViewsContext();
+
+  const { addAlert } = useAlert() || {};
+
   // Update visualization data when Steps change
   useEffect(() => {
     // TODO: Not every step update should rebuild the whole visualization
-    prepareAndSetVizDataSteps(steps);
-  }, [steps]);
+    prepareAndSetVizDataSteps(viewData.steps);
+  }, [viewData.steps]);
+
+  /**
+   * Update the integration. Requires a list of all new steps.
+   * @param newSteps
+   */
+  const updateIntegration = async (newSteps: IStepProps[]) => {
+    try {
+      const resp = await request.post({
+        endpoint: '/integrations/customResource',
+        contentType: 'application/json',
+        body: { name: 'Updated integration', steps: newSteps },
+      });
+
+      const data = await resp.text();
+
+      addAlert &&
+        addAlert({
+          title: 'Integration updated successfully',
+          variant: AlertVariant.success,
+        });
+
+      setYAMLData(data);
+    } catch (err) {
+      console.error(err);
+      addAlert &&
+        addAlert({
+          title: 'Something went wrong',
+          variant: AlertVariant.danger,
+          description: 'There was a problem updating the integration. Please try again later.',
+        });
+    }
+  };
+
+  /**
+   * Delete an integration step. Requires the step index.
+   * @param stepsIndex
+   */
+  const deleteIntegrationStep = (stepsIndex: number) => {
+    const newSteps = viewData.steps.filter((_step, idx) => idx !== stepsIndex);
+
+    updateIntegration(newSteps).catch((e) => {
+      console.error(e);
+    });
+  };
+
+  /**
+   * Replace an integration step. Requires the new step and EITHER the old step index or vizId.
+   * @param newStep
+   * @param oldStepIndex
+   */
+  const replaceIntegrationStep = (newStep: IStepProps, oldStepIndex: number) => {
+    let newSteps = viewData.steps;
+    newSteps[oldStepIndex] = newStep;
+
+    updateIntegration(newSteps).catch((e) => {
+      console.error(e);
+    });
+  };
 
   const nodeTypes = {
     special: CustomNodeComponent,
@@ -196,7 +255,7 @@ const Visualization = ({
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
 
-    const stepsIndex = findStepIdxWithVizId(selectedStepVizId, steps);
+    const stepsIndex = findStepIdxWithVizId(selectedStepVizId, viewData.steps);
     deleteIntegrationStep(stepsIndex);
   };
 
@@ -206,6 +265,7 @@ const Visualization = ({
 
   const onConnect = (params: Edge<any> | Connection) => {
     // update elements, but do we need this if we will update based on changes to the YAML?
+    // @ts-ignore
     setElements((els) => addEdge(params, els));
   };
 
@@ -226,11 +286,13 @@ const Visualization = ({
     // TODO: Check if there is an existing node??
     event.preventDefault();
 
+    // @ts-ignore
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
     const type = event.dataTransfer.getData('application/reactflow');
     const dataJSON = event.dataTransfer.getData('text');
     const step: IStepProps = JSON.parse(dataJSON);
 
+    // @ts-ignore
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
@@ -258,7 +320,8 @@ const Visualization = ({
 
     // Only set state again if the ID is not the same
     if (selectedStep.UUID !== element.id) {
-      const findStep: IStepProps = steps.find((step) => step.UUID === element.id) ?? selectedStep;
+      const findStep: IStepProps =
+        viewData.steps.find((step) => step.UUID === element.id) ?? selectedStep;
       setSelectedStep(findStep);
     }
 
@@ -287,7 +350,7 @@ const Visualization = ({
         newStepParameters[paramIndex!].value = value;
       });
 
-      const selectedStepIdx = findStepIdxWithVizId(selectedStepUUID, steps);
+      const selectedStepIdx = findStepIdxWithVizId(selectedStepUUID, viewData.steps);
       replaceIntegrationStep(newStep, selectedStepIdx);
     } else {
       return;
@@ -305,7 +368,7 @@ const Visualization = ({
               deleteStep={deleteStep}
               onClosePanelClick={onClosePanelClick}
               saveConfig={saveConfig}
-              views={views.filter((view) => view.step === selectedStep.UUID)}
+              views={viewData.views.filter((view) => view.step === selectedStep.UUID)}
             />
           }
           className={'panelCustom'}

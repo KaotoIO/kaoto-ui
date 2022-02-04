@@ -1,3 +1,5 @@
+import { useStepsAndViewsContext } from '../api';
+import request from '../api/request';
 import { IStepProps } from '../types';
 import './Catalog.css';
 import {
@@ -23,12 +25,12 @@ import {
   ToolbarContent,
   ToolbarItem,
 } from '@patternfly/react-core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ICatalog {
   isCatalogExpanded: boolean;
   onClosePanelClick: (e: any) => void;
-  steps: IStepProps[];
+  steps?: IStepProps[];
 }
 
 // Shorten a string to less than maxLen characters without truncating words.
@@ -38,10 +40,34 @@ function shorten(str: string, maxLen: number, separator = ' ') {
 }
 
 const Catalog = (props: ICatalog) => {
+  // If the catalog data won't be changing, consider removing this state
+  const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
+  const [viewData] = useStepsAndViewsContext();
 
-  const steps: IStepProps[] = props.steps;
+  /**
+   * Sort & fetch all Steps for the Catalog
+   */
+  useEffect(() => {
+    const getCatalogData = async () => {
+      try {
+        const resp = await request.get({
+          endpoint: '/step',
+        });
+
+        const data = await resp.json();
+        data.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
+        setCatalogData(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getCatalogData().catch((e) => {
+      console.error(e);
+    });
+  }, [viewData]);
 
   const changeSearch = (e: any) => {
     setQuery(e);
@@ -131,8 +157,8 @@ const Catalog = (props: ICatalog) => {
           </ToolbarContent>
         </Toolbar>
         <Gallery hasGutter={true} style={{ maxHeight: '650px', overflow: 'auto' }}>
-          {steps &&
-            search(steps).map((step, idx) => {
+          {catalogData &&
+            search(catalogData).map((step, idx) => {
               return (
                 <Card
                   key={idx}
