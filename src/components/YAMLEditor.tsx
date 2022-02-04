@@ -7,12 +7,7 @@ import Editor from '@monaco-editor/react';
 import { useEffect, useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
-interface IYAMLEditor {
-  //handleChanges: (newYaml: string) => void;
-  //yamlData?: string;
-}
-
-const YAMLEditor = ({}: IYAMLEditor) => {
+const YAMLEditor = () => {
   const editorRef = useRef(null);
   const [YAMLData, setYAMLData] = useYAMLContext();
   const [, setViewData] = useStepsAndViewsContext();
@@ -28,9 +23,6 @@ const YAMLEditor = ({}: IYAMLEditor) => {
     }
 
     const getVizData = async (incomingData: string) => {
-      //setIsError(false);
-      //setIsLoading(true);
-
       try {
         const resp = await request.post({
           endpoint: '/viewdefinition',
@@ -42,10 +34,7 @@ const YAMLEditor = ({}: IYAMLEditor) => {
         setViewData(data);
       } catch (err) {
         console.error(err);
-        //setIsError(true);
       }
-
-      //setIsLoading(false);
     };
 
     getVizData(YAMLData).catch((e) => {

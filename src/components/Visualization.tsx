@@ -2,6 +2,7 @@ import { useStepsAndViewsContext, useYAMLContext } from '../api';
 import request from '../api/request';
 import { IStepProps, IViewProps, IVizStepProps, IVizStepPropsEdge } from '../types';
 import truncateString from '../utils/truncateName';
+import usePrevious from '../utils/usePrevious';
 import { StepErrorBoundary, StepViews } from './';
 import './Visualization.css';
 import { AlertVariant, Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
@@ -96,17 +97,21 @@ const Visualization = ({}: IVisualization) => {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
-
   const [, setYAMLData] = useYAMLContext();
   const [viewData] = useStepsAndViewsContext();
+  const previousViewData = usePrevious(viewData);
 
   const { addAlert } = useAlert() || {};
 
   // Update visualization data when Steps change
   useEffect(() => {
     // TODO: Not every step update should rebuild the whole visualization
+    if (previousViewData === viewData) {
+      return;
+    }
+
     prepareAndSetVizDataSteps(viewData.steps);
-  }, [viewData.steps]);
+  }, [previousViewData, viewData]);
 
   /**
    * Update the integration. Requires a list of all new steps.
@@ -368,7 +373,7 @@ const Visualization = ({}: IVisualization) => {
               deleteStep={deleteStep}
               onClosePanelClick={onClosePanelClick}
               saveConfig={saveConfig}
-              views={viewData.views.filter((view) => view.step === selectedStep.UUID)}
+              views={viewData?.views.filter((view) => view.step === selectedStep.UUID)}
             />
           }
           className={'panelCustom'}

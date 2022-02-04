@@ -1,13 +1,5 @@
 import { IViewData } from '../types';
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 
 interface IStepsAndViewsProvider {
   children: ReactNode;
@@ -15,19 +7,19 @@ interface IStepsAndViewsProvider {
 
 export type IUseStepsAndViews = [IViewData, Dispatch<SetStateAction<IViewData>>];
 
-export const useStepsAndViews = (newStepsViews: IViewData): IUseStepsAndViews => {
+export const useStepsAndViews = ({}: IViewData): IUseStepsAndViews => {
   const [viewData, setViewData] = useState<IViewData>({ steps: [], views: [] });
 
-  useEffect(() => {
-    setViewData(newStepsViews);
-  }, [newStepsViews]);
+  // useEffect(() => {
+  //   setViewData(newStepsViews);
+  // }, [newStepsViews]);
 
   return [viewData, setViewData];
 };
 
 function StepsAndViewsProvider({ children }: IStepsAndViewsProvider) {
   // viewData contains the Step model exactly as returned by the API
-  const [viewData, setViewData] = useStepsAndViews({ steps: [], views: [] });
+  const [viewData, setViewData] = useStepsAndViews(undefined!);
 
   return (
     <StepsAndViewsContext.Provider value={[viewData, setViewData]}>
