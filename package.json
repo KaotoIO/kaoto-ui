@@ -7,7 +7,7 @@
     "node": ">=14.x"
   },
   "scripts": {
-    "start": "webpack serve --mode development --hot --progress --config webpack.dev.js",
+    "start": "webpack serve --mode development --hot --host 0.0.0.0 --progress --config webpack.dev.js ",
     "build": "webpack --mode production --config webpack.prod.js",
     "build-storybook": "build-storybook -s public",
     "chromatic": "npx chromatic",
