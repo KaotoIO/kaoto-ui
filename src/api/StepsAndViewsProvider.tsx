@@ -5,7 +5,10 @@ interface IStepsAndViewsProvider {
   children: ReactNode;
 }
 
-export type IUseStepsAndViews = [IViewData, Dispatch<SetStateAction<IViewData>>];
+export type IUseStepsAndViews = {
+  viewData: IViewData;
+  setViewData: Dispatch<SetStateAction<IViewData>>;
+};
 
 export const useStepsAndViews = (): IUseStepsAndViews => {
   const [viewData, setViewData] = useState<IViewData>({ steps: [], views: [] });
@@ -15,24 +18,24 @@ export const useStepsAndViews = (): IUseStepsAndViews => {
   //   setViewData(newStepsViews);
   // }, [newStepsViews]);
 
-  return [viewData, setViewData];
+  return { viewData, setViewData };
 };
 
 function StepsAndViewsProvider({ children }: IStepsAndViewsProvider) {
   // viewData contains the Step model exactly as returned by the API
-  const [viewData, setViewData] = useStepsAndViews();
+  const { viewData, setViewData } = useStepsAndViews();
 
   return (
-    <StepsAndViewsContext.Provider value={[viewData, setViewData]}>
+    <StepsAndViewsContext.Provider value={{ viewData, setViewData }}>
       {children}
     </StepsAndViewsContext.Provider>
   );
 }
 
-const StepsAndViewsContext = createContext<IUseStepsAndViews>([
-  { steps: [], views: [] },
-  () => null,
-]);
+const StepsAndViewsContext = createContext<IUseStepsAndViews>({
+  viewData: { steps: [], views: [] },
+  setViewData: () => null,
+});
 
 function useStepsAndViewsContext() {
   const context = useContext(StepsAndViewsContext);

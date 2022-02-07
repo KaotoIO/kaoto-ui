@@ -10,7 +10,7 @@ import { useDebouncedCallback } from 'use-debounce';
 const YAMLEditor = () => {
   const editorRef = useRef(null);
   const [YAMLData, setYAMLData] = useYAMLContext();
-  const [, setViewData] = useStepsAndViewsContext();
+  const { setViewData } = useStepsAndViewsContext();
   const previousYaml = usePrevious(YAMLData);
 
   /**

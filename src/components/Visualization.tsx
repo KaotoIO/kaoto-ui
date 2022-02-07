@@ -91,7 +91,7 @@ const Visualization = () => {
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
   const [, setYAMLData] = useYAMLContext();
-  const [viewData] = useStepsAndViewsContext();
+  const { viewData } = useStepsAndViewsContext();
   const previousViewData = usePrevious(viewData);
 
   const { addAlert } = useAlert() || {};
@@ -348,8 +348,8 @@ const Visualization = () => {
         newStepParameters[paramIndex!].value = value;
       });
 
-      const selectedStepIdx = findStepIdxWithVizId(selectedStepUUID, viewData.steps);
-      replaceIntegrationStep(newStep, selectedStepIdx);
+      const oldStepIdx = findStepIdxWithVizId(selectedStepUUID, viewData.steps);
+      replaceIntegrationStep(newStep, oldStepIdx);
     } else {
       return;
     }
@@ -372,7 +372,6 @@ const Visualization = () => {
           className={'panelCustom'}
         >
           <DrawerContentBody>
-            {/** Wrapper to handle steps (DOM elements) dropped from catalog **/}
             <ReactFlowProvider>
               <div
                 className="reactflow-wrapper"
