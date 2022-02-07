@@ -111,7 +111,6 @@ const Visualization = () => {
 
         // update state of YAML editor
         if (value) {
-          console.log('value: ' + value);
           setYAMLData(value);
         }
       })
