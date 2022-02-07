@@ -91,7 +91,7 @@ const Visualization = () => {
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
   const [, setYAMLData] = useYAMLContext();
-  const { viewData } = useStepsAndViewsContext();
+  const { dispatch, viewData } = useStepsAndViewsContext();
   const previousViewData = usePrevious(viewData);
 
   const { addAlert } = useAlert() || {};
@@ -136,32 +136,6 @@ const Visualization = () => {
           description: 'There was a problem updating the integration. Please try again later.',
         });
     }
-  };
-
-  /**
-   * Delete an integration step. Requires the step index.
-   * @param stepsIndex
-   */
-  const deleteIntegrationStep = (stepsIndex: number) => {
-    const newSteps = viewData.steps.filter((_step, idx) => idx !== stepsIndex);
-
-    updateIntegration(newSteps).catch((e) => {
-      console.error(e);
-    });
-  };
-
-  /**
-   * Replace an integration step. Requires the new step and EITHER the old step index or vizId.
-   * @param newStep
-   * @param oldStepIndex
-   */
-  const replaceIntegrationStep = (newStep: IStepProps, oldStepIndex: number) => {
-    let newSteps = viewData.steps;
-    newSteps[oldStepIndex] = newStep;
-
-    updateIntegration(newSteps).catch((e) => {
-      console.error(e);
-    });
   };
 
   const nodeTypes = {
@@ -248,13 +222,16 @@ const Visualization = () => {
     setElements(combined);
   };
 
+  /**
+   * Delete an integration step
+   */
   const deleteStep = () => {
     const selectedStepVizId = selectedStep.UUID;
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
 
     const stepsIndex = findStepIdxWithVizId(selectedStepVizId, viewData.steps);
-    deleteIntegrationStep(stepsIndex);
+    dispatch({ type: 'DELETE_STEP', payload: { index: stepsIndex } });
   };
 
   const onClosePanelClick = () => {
@@ -349,7 +326,8 @@ const Visualization = () => {
       });
 
       const oldStepIdx = findStepIdxWithVizId(selectedStepUUID, viewData.steps);
-      replaceIntegrationStep(newStep, oldStepIdx);
+      // Replace step with new step
+      dispatch({ type: 'REPLACE_STEP', payload: { newStep, oldStepIndex: oldStepIdx } });
     } else {
       return;
     }

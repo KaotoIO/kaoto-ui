@@ -1,32 +1,69 @@
-import { IViewData } from '../types';
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
+import { IStepProps, IViewData } from '../types';
+import { createContext, ReactNode, useContext, useReducer } from 'react';
 
 interface IStepsAndViewsProvider {
   children: ReactNode;
 }
 
+type StepsAndViewsAction =
+  | { type: 'DELETE_STEP'; payload: { index: number } }
+  | { type: 'GET_STEPS'; payload: undefined }
+  | { type: 'GET_VIEWS'; payload: any }
+  | { type: 'REPLACE_STEP'; payload: { newStep: IStepProps; oldStepIndex: number } }
+  | { type: 'UPDATE_INTEGRATION'; payload: IStepProps[] };
+
 export type IUseStepsAndViews = {
   viewData: IViewData;
-  setViewData: Dispatch<SetStateAction<IViewData>>;
+  dispatch: (action: StepsAndViewsAction) => void;
 };
 
+function stepsAndViewsReducer(state: { steps: any[]; views: any[] }, action: StepsAndViewsAction) {
+  const { type, payload } = action;
+
+  switch (type) {
+    case 'DELETE_STEP': {
+      return {
+        ...state,
+        steps: state.steps.filter((_step: any, idx: any) => idx !== payload.index),
+      };
+    }
+    case 'GET_STEPS': {
+      return state.steps;
+    }
+    case 'GET_VIEWS': {
+      return state.views;
+    }
+    case 'REPLACE_STEP': {
+      let newSteps = state.steps;
+      newSteps[payload.oldStepIndex] = payload.newStep;
+      return { ...state, steps: newSteps };
+    }
+    case 'UPDATE_INTEGRATION': {
+      return { ...state, ...payload };
+    }
+    default: {
+      throw new Error(`Unhandled action type: ${type}`);
+    }
+  }
+}
+
 export const useStepsAndViews = (): IUseStepsAndViews => {
-  const [viewData, setViewData] = useState<IViewData>({ steps: [], views: [] });
+  const [viewData, dispatch] = useReducer(stepsAndViewsReducer, { steps: [], views: [] });
 
   // handle from the component directly instead
   // useEffect(() => {
   //   setViewData(newStepsViews);
   // }, [newStepsViews]);
 
-  return { viewData, setViewData };
+  return { viewData, dispatch };
 };
 
 function StepsAndViewsProvider({ children }: IStepsAndViewsProvider) {
   // viewData contains the Step model exactly as returned by the API
-  const { viewData, setViewData } = useStepsAndViews();
+  const { viewData, dispatch } = useStepsAndViews();
 
   return (
-    <StepsAndViewsContext.Provider value={{ viewData, setViewData }}>
+    <StepsAndViewsContext.Provider value={{ viewData, dispatch }}>
       {children}
     </StepsAndViewsContext.Provider>
   );
@@ -34,7 +71,7 @@ function StepsAndViewsProvider({ children }: IStepsAndViewsProvider) {
 
 const StepsAndViewsContext = createContext<IUseStepsAndViews>({
   viewData: { steps: [], views: [] },
-  setViewData: () => null,
+  dispatch: () => null,
 });
 
 function useStepsAndViewsContext() {

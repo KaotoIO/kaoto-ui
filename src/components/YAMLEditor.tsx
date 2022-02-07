@@ -10,7 +10,8 @@ import { useDebouncedCallback } from 'use-debounce';
 const YAMLEditor = () => {
   const editorRef = useRef(null);
   const [YAMLData, setYAMLData] = useYAMLContext();
-  const { setViewData } = useStepsAndViewsContext();
+  // const { setViewData } = useStepsAndViewsContext();
+  const { dispatch } = useStepsAndViewsContext();
   const previousYaml = usePrevious(YAMLData);
 
   /**
@@ -31,7 +32,8 @@ const YAMLEditor = () => {
         });
 
         const data: IViewData = await resp.json();
-        setViewData(data);
+        //setViewData(data);
+        dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
       } catch (err) {
         console.error(err);
       }
@@ -40,7 +42,8 @@ const YAMLEditor = () => {
     getVizData(YAMLData).catch((e) => {
       console.error(e);
     });
-  }, [previousYaml, setViewData, YAMLData]);
+    // }, [previousYaml, setViewData, YAMLData]);
+  }, [previousYaml, dispatch, YAMLData]);
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
