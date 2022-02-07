@@ -96,17 +96,11 @@ const Visualization = () => {
 
   const { addAlert } = useAlert() || {};
 
-  // Update visualization data when Steps change
   useEffect(() => {
-    // // TODO: Not every step update should rebuild the whole visualization
     if (previousViewData === viewData) {
       return;
     }
 
-    console.log('viewData changed');
-    console.table(viewData);
-
-    // viewData.steps is old data
     updateIntegrationFromViz(viewData.steps)
       .then((value: string | void) => {
         // addAlert &&
@@ -235,7 +229,6 @@ const Visualization = () => {
   };
 
   const onConnect = (params: Edge<any> | Connection) => {
-    // update elements, but do we need this if we will update based on changes to the YAML?
     // @ts-ignore
     setElements((els) => addEdge(params, els));
   };
