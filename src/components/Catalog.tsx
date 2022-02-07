@@ -44,7 +44,7 @@ const Catalog = (props: ICatalog) => {
   const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
-  const { viewData } = useStepsAndViewsContext();
+  const [viewData] = useStepsAndViewsContext();
 
   /**
    * Sort & fetch all Steps for the Catalog

@@ -1,5 +1,4 @@
-import { useStepsAndViewsContext, useYAMLContext } from '../api';
-import request from '../api/request';
+import { updateIntegrationFromViz, useStepsAndViewsContext, useYAMLContext } from '../api';
 import { IStepProps, IVizStepProps, IVizStepPropsEdge } from '../types';
 import truncateString from '../utils/truncateName';
 import usePrevious from '../utils/usePrevious';
@@ -91,52 +90,49 @@ const Visualization = () => {
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
   const [, setYAMLData] = useYAMLContext();
-  const { dispatch, viewData } = useStepsAndViewsContext();
+  //const { dispatch, viewData } = useStepsAndViewsContext();
+  const [viewData, dispatch] = useStepsAndViewsContext();
   const previousViewData = usePrevious(viewData);
 
   const { addAlert } = useAlert() || {};
 
   // Update visualization data when Steps change
   useEffect(() => {
-    // TODO: Not every step update should rebuild the whole visualization
+    // // TODO: Not every step update should rebuild the whole visualization
     if (previousViewData === viewData) {
       return;
     }
 
-    prepareAndSetVizDataSteps(viewData.steps);
-  }, [previousViewData, viewData]);
+    console.log('viewData changed');
+    console.table(viewData);
 
-  /**
-   * Update the integration. Requires a list of all new steps.
-   * @param newSteps
-   */
-  const updateIntegration = async (newSteps: IStepProps[]) => {
-    try {
-      const resp = await request.post({
-        endpoint: '/integrations/customResource',
-        contentType: 'application/json',
-        body: { name: 'Updated integration', steps: newSteps },
+    // viewData.steps is old data
+    updateIntegrationFromViz(viewData.steps)
+      .then((value: string | void) => {
+        // addAlert &&
+        //   addAlert({
+        //     title: 'Integration updated successfully',
+        //     variant: AlertVariant.success,
+        //   });
+
+        // update state of YAML editor
+        if (value) {
+          console.log('value: ' + value);
+          setYAMLData(value);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        addAlert &&
+          addAlert({
+            title: 'Something went wrong',
+            variant: AlertVariant.danger,
+            description: 'There was a problem updating the integration. Please try again later.',
+          });
       });
 
-      const data = await resp.text();
-
-      addAlert &&
-        addAlert({
-          title: 'Integration updated successfully',
-          variant: AlertVariant.success,
-        });
-
-      setYAMLData(data);
-    } catch (err) {
-      console.error(err);
-      addAlert &&
-        addAlert({
-          title: 'Something went wrong',
-          variant: AlertVariant.danger,
-          description: 'There was a problem updating the integration. Please try again later.',
-        });
-    }
-  };
+    prepareAndSetVizDataSteps(viewData.steps);
+  }, [addAlert, previousViewData, setYAMLData, viewData]);
 
   const nodeTypes = {
     special: CustomNodeComponent,

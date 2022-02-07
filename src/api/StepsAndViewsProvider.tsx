@@ -7,15 +7,13 @@ interface IStepsAndViewsProvider {
 
 type StepsAndViewsAction =
   | { type: 'DELETE_STEP'; payload: { index: number } }
-  | { type: 'GET_STEPS'; payload: undefined }
-  | { type: 'GET_VIEWS'; payload: any }
   | { type: 'REPLACE_STEP'; payload: { newStep: IStepProps; oldStepIndex: number } }
-  | { type: 'UPDATE_INTEGRATION'; payload: IStepProps[] };
+  | { type: 'UPDATE_INTEGRATION'; payload: any };
 
-export type IUseStepsAndViews = {
-  viewData: IViewData;
-  dispatch: (action: StepsAndViewsAction) => void;
-};
+export type IUseStepsAndViews = [
+  viewData: IViewData,
+  dispatch: (action: StepsAndViewsAction) => void
+];
 
 function stepsAndViewsReducer(state: { steps: any[]; views: any[] }, action: StepsAndViewsAction) {
   const { type, payload } = action;
@@ -26,12 +24,6 @@ function stepsAndViewsReducer(state: { steps: any[]; views: any[] }, action: Ste
         ...state,
         steps: state.steps.filter((_step: any, idx: any) => idx !== payload.index),
       };
-    }
-    case 'GET_STEPS': {
-      return state.steps;
-    }
-    case 'GET_VIEWS': {
-      return state.views;
     }
     case 'REPLACE_STEP': {
       let newSteps = state.steps;
@@ -55,24 +47,24 @@ export const useStepsAndViews = (): IUseStepsAndViews => {
   //   setViewData(newStepsViews);
   // }, [newStepsViews]);
 
-  return { viewData, dispatch };
+  return [viewData, dispatch];
 };
 
 function StepsAndViewsProvider({ children }: IStepsAndViewsProvider) {
   // viewData contains the Step model exactly as returned by the API
-  const { viewData, dispatch } = useStepsAndViews();
+  const [viewData, dispatch] = useStepsAndViews();
 
   return (
-    <StepsAndViewsContext.Provider value={{ viewData, dispatch }}>
+    <StepsAndViewsContext.Provider value={[viewData, dispatch]}>
       {children}
     </StepsAndViewsContext.Provider>
   );
 }
 
-const StepsAndViewsContext = createContext<IUseStepsAndViews>({
-  viewData: { steps: [], views: [] },
-  dispatch: () => null,
-});
+const StepsAndViewsContext = createContext<IUseStepsAndViews>([
+  { steps: [], views: [] },
+  () => null,
+]);
 
 function useStepsAndViewsContext() {
   const context = useContext(StepsAndViewsContext);

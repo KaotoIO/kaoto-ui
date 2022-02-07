@@ -1,6 +1,4 @@
-import { useStepsAndViewsContext, useYAMLContext } from '../api';
-import request from '../api/request';
-import { IViewData } from '../types';
+import { updateYAML, useStepsAndViewsContext, useYAMLContext } from '../api';
 import usePrevious from '../utils/usePrevious';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import Editor from '@monaco-editor/react';
@@ -10,12 +8,11 @@ import { useDebouncedCallback } from 'use-debounce';
 const YAMLEditor = () => {
   const editorRef = useRef(null);
   const [YAMLData, setYAMLData] = useYAMLContext();
-  // const { setViewData } = useStepsAndViewsContext();
-  const { dispatch } = useStepsAndViewsContext();
+  const [, dispatch] = useStepsAndViewsContext();
   const previousYaml = usePrevious(YAMLData);
 
   /**
-   * Watch for user changes to YAML,
+   * On first page load
    * issue request to API for Visualization JSON
    */
   useEffect(() => {
@@ -23,27 +20,16 @@ const YAMLEditor = () => {
       return;
     }
 
-    const getVizData = async (incomingData: string) => {
-      try {
-        const resp = await request.post({
-          endpoint: '/viewdefinition',
-          contentType: 'text/yaml',
-          body: incomingData,
-        });
-
-        const data: IViewData = await resp.json();
-        //setViewData(data);
-        dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getVizData(YAMLData).catch((e) => {
-      console.error(e);
-    });
-    // }, [previousYaml, setViewData, YAMLData]);
-  }, [previousYaml, dispatch, YAMLData]);
+    // TODO: This is a temporary measure to initially load YAML data
+    updateYAML(YAMLData)
+      .then((res) => {
+        // update Visualization with new data
+        dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }, []);
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
@@ -56,7 +42,17 @@ const YAMLEditor = () => {
       if (previousYaml === incomingData) {
         return;
       }
+
       setYAMLData(incomingData);
+
+      updateYAML(incomingData)
+        .then((res) => {
+          // update Visualization with new data
+          dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     }, 750);
   };
 
