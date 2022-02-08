@@ -186,7 +186,7 @@ const StepViews = ({
             <br />
             <StepErrorBoundary>
               <Grid hasGutter>
-                {step.model.parameters && (
+                {step.parameters && (
                   <JsonSchemaConfigurator
                     schema={{ type: 'object', properties: stepPropertySchema.current }}
                     configuration={stepPropertyModel.current}
