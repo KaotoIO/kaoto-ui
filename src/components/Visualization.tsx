@@ -38,13 +38,13 @@ let id = 0;
 const getId = () => `dndnode_${id++}`;
 
 /**
- * Returns a Step index when provided with the `vizId`.
- * `vizId` is originally set using the Step UUID.
- * @param vizId
+ * Returns a Step index when provided with the `UUID`.
+ * `UUID` is originally set using the Step UUID.
+ * @param UUID
  * @param steps
  */
-const findStepIdxWithVizId = (vizId: string, steps: IStepProps[]) => {
-  return steps.map((s) => s.UUID).indexOf(vizId);
+const findStepIdxWithUUID = (UUID: string, steps: IStepProps[]) => {
+  return steps.map((s) => s.UUID).indexOf(UUID);
 };
 
 // Custom Node type and component for React Flow
@@ -150,10 +150,12 @@ const Visualization = () => {
         data: {
           connectorType: step.type,
           icon: step.icon,
-          id: step.UUID,
+          // custom generated uuid as a reference fallback
+          id: uuidv4(),
           index: index,
           label: truncateString(step.name, 14),
           temporary: false,
+          UUID: step.UUID,
         },
         id: getId(),
         position: { x: 0, y: window.innerHeight / 2 },
@@ -214,11 +216,10 @@ const Visualization = () => {
    * Delete an integration step
    */
   const deleteStep = () => {
-    const selectedStepVizId = selectedStep.UUID;
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
 
-    const stepsIndex = findStepIdxWithVizId(selectedStepVizId, viewData.steps);
+    const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, viewData.steps);
     dispatch({ type: 'DELETE_STEP', payload: { index: stepsIndex } });
   };
 
@@ -267,28 +268,28 @@ const Visualization = () => {
       data: {
         connectorType: step.type,
         icon: step.icon,
-        id: step.UUID ?? uuidv4(),
+        // custom generated uuid as a reference fallback
+        id: uuidv4(),
         label: `${truncateString(step.name, 14)}`,
         temporary: true,
+        // generated from the backend
+        UUID: step.UUID,
       },
     };
 
     setElements((es) => es.concat(newNode));
   };
 
-  const onElementClick = (e: any, element: any) => {
-    if (!element.id) {
-      console.log('no element.data.id: ', e);
-      console.log(JSON.stringify(element));
+  const onElementClick = (_e: any, element: any) => {
+    // prevent temporary steps from being selected for now
+    if (!element.data.UUID) {
       return;
     }
-    console.table(element);
 
     // Only set state again if the ID is not the same
-    if (selectedStep.UUID !== element.data.id) {
-      console.log('not the same, setting it as a selected step...');
+    if (selectedStep.UUID !== element.data.UUID) {
       const findStep: IStepProps =
-        viewData.steps.find((step) => step.UUID === element.data.id) ?? selectedStep;
+        viewData.steps.find((step) => step.UUID === element.data.UUID) ?? selectedStep;
       setSelectedStep(findStep);
     }
 
@@ -307,7 +308,6 @@ const Visualization = () => {
   };
 
   const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
-    const selectedStepUUID = selectedStep.UUID;
     let newStep: IStepProps = selectedStep;
     const newStepParameters = newStep.parameters;
 
@@ -317,7 +317,8 @@ const Visualization = () => {
         newStepParameters[paramIndex!].value = value;
       });
 
-      const oldStepIdx = findStepIdxWithVizId(selectedStepUUID, viewData.steps);
+      // TODO: this won't work for temporary steps because they don't have a UUID
+      const oldStepIdx = findStepIdxWithUUID(selectedStep.UUID, viewData.steps);
       // Replace step with new step
       dispatch({ type: 'REPLACE_STEP', payload: { newStep, oldStepIndex: oldStepIdx } });
     } else {
