@@ -106,6 +106,7 @@
     "webpack-cli": "4.9.1",
     "webpack-dev-server": "^4.7.3",
     "webpack-merge": "^5.8.0",
+    "whatwg-fetch": "^3.6.2",
     "yaml-loader": "0.6.0"
   },
   "lint-staged": {
