@@ -185,10 +185,9 @@ const StepViews = ({
                   )}
                 </Grid>
                 <br />
-                {/**
-              <Button variant={'danger'} key={step.viz.id} onClick={saveConfig}>
-                Save
-              </Button>**/}
+                <Button variant={'danger'} key={step.viz.id} onClick={deleteStep}>
+                Delete
+              </Button>
               </StepErrorBoundary>
             </Tab>
           )}
