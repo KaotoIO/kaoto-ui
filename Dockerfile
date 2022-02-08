@@ -11,11 +11,11 @@ COPY . ./
 
 RUN yarn install
 
-RUN echo "REACT_APP_API_URL=http://localhost:80" > .env
+RUN echo "REACT_APP_API_URL=http://localhost:8081" > ./.env
 
 EXPOSE 80
 
-HEALTHCHECK --interval=3s --start-period=10s CMD curl --fail http://localhost:80/ || exit 1
+HEALTHCHECK --interval=3s --start-period=10s CMD curl --fail http://localhost:8080/ || exit 1
 
 # start app
 CMD ["yarn", "prod"]
