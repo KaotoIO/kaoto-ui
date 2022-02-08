@@ -17,9 +17,9 @@ module.exports = {
   },
 
   moduleNameMapper: {
-    '\\.(css|less)$': path.resolve(__dirname, './src/mocks/__mocks__/styleMock.js'),
+    '\\.(css|less)$': path.resolve(__dirname, './src/__mocks__/styleMock.js'),
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      path.resolve(__dirname, './src/mocks/__mocks__/fileMock.js'),
+      path.resolve(__dirname, './src/__mocks__/fileMock.js'),
   },
 
   // A preset that is used as a base for Jest's configuration
