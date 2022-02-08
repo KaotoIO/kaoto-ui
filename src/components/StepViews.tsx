@@ -188,22 +188,6 @@ const StepViews = ({
                   />
                 )}
               </Grid>
-            </StepErrorBoundary>
-            <br />
-            <StepErrorBoundary>
-              <Grid hasGutter>
-                {step.parameters && (
-                  <JsonSchemaConfigurator
-                    schema={{ type: 'object', properties: stepPropertySchema.current }}
-                    configuration={stepPropertyModel.current}
-                    onSubmit={(configuration, isValid) => {
-                      if (isValid) {
-                        saveConfig(configuration);
-                      }
-                    }}
-                  />
-                )}
-              </Grid>
               <br />
               <Button variant={'danger'} key={step.UUID} onClick={deleteStep}>
                 Delete

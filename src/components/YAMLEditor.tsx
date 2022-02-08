@@ -2,7 +2,7 @@ import { updateYAML, useStepsAndViewsContext, useYAMLContext } from '../api';
 import usePrevious from '../utils/usePrevious';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import Editor from '@monaco-editor/react';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 const YAMLEditor = () => {
@@ -10,21 +10,6 @@ const YAMLEditor = () => {
   const [YAMLData, setYAMLData] = useYAMLContext();
   const [, dispatch] = useStepsAndViewsContext();
   const previousYaml = usePrevious(YAMLData);
-
-  useEffect(() => {
-    if (previousYaml === YAMLData) {
-      return;
-    }
-
-    updateYAML(YAMLData)
-      .then((res) => {
-        // update Visualization with new data
-        dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  }, []);
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
