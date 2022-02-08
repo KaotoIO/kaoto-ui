@@ -280,6 +280,7 @@ const Visualization = () => {
 
   const onElementClick = (_e: any, element: any) => {
     // prevent temporary steps from being selected for now
+    //console.table(element.data);
     if (!element.data.UUID) {
       return;
     }

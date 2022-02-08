@@ -12,7 +12,7 @@ const YAMLEditor = () => {
   const previousYaml = usePrevious(YAMLData);
 
   /**
-   * On first page load
+   * Watch for changes to YAMLData,
    * issue request to API for Visualization JSON
    */
   useEffect(() => {
@@ -20,7 +20,6 @@ const YAMLEditor = () => {
       return;
     }
 
-    // TODO: This is a temporary measure to initially load YAML data
     updateYAML(YAMLData)
       .then((res) => {
         // update Visualization with new data
@@ -29,7 +28,7 @@ const YAMLEditor = () => {
       .catch((e) => {
         console.error(e);
       });
-  }, []);
+  }, [YAMLData]);
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
