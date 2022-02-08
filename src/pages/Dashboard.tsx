@@ -51,7 +51,7 @@ const Dashboard = () => {
   };
 
   /**
-   * Fetch all Steps for Catalog
+   * Sort & fetch all Steps for the Catalog
    */
   useEffect(() => {
     const getCatalogData = async () => {
@@ -61,6 +61,7 @@ const Dashboard = () => {
         });
 
         const data = await resp.json();
+        data.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
         setCatalogData(data);
       } catch (err) {
         console.error(err);
