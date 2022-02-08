@@ -22,6 +22,7 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import 'react-flow-renderer/dist/theme-default.css';
+import { v4 as uuidv4 } from 'uuid';
 
 const placeholderStep: IStepProps = {
   apiVersion: '',
@@ -32,6 +33,9 @@ const placeholderStep: IStepProps = {
   type: '',
   UUID: '',
 };
+
+let id = 0;
+const getId = () => `dndnode_${id++}`;
 
 /**
  * Returns a Step index when provided with the `vizId`.
@@ -81,9 +85,6 @@ const CustomNodeComponent = ({ data }: any) => {
   );
 };
 
-let id = 0;
-const getId = () => `dndnode_${id++}`;
-
 const Visualization = () => {
   // `elements` is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<IVizStepProps[]>([]);
@@ -101,6 +102,8 @@ const Visualization = () => {
     if (previousViewData === viewData) {
       return;
     }
+
+    console.log('viewData has updated again, preparing viz data steps..');
 
     updateIntegrationFromViz(viewData.steps)
       .then((value: string | void) => {
@@ -150,6 +153,7 @@ const Visualization = () => {
           id: step.UUID,
           index: index,
           label: truncateString(step.name, 14),
+          temporary: false,
         },
         id: getId(),
         position: { x: 0, y: window.innerHeight / 2 },
@@ -263,21 +267,26 @@ const Visualization = () => {
       data: {
         connectorType: step.type,
         icon: step.icon,
-        id: step.UUID,
+        id: step.UUID ?? uuidv4(),
         label: `${truncateString(step.name, 14)}`,
+        temporary: true,
       },
     };
 
     setElements((es) => es.concat(newNode));
   };
 
-  const onElementClick = (_e: any, element: any) => {
-    if (!element.data.id) {
+  const onElementClick = (e: any, element: any) => {
+    if (!element.id) {
+      console.log('no element.data.id: ', e);
+      console.log(JSON.stringify(element));
       return;
     }
+    console.table(element);
 
     // Only set state again if the ID is not the same
     if (selectedStep.UUID !== element.data.id) {
+      console.log('not the same, setting it as a selected step...');
       const findStep: IStepProps =
         viewData.steps.find((step) => step.UUID === element.data.id) ?? selectedStep;
       setSelectedStep(findStep);

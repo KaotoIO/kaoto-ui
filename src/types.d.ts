@@ -29,9 +29,15 @@ export interface IStepProps {
   kind?: string;
   name: string;
   parameters?: IStepPropsParameters[];
-  subType?: string; // should be 'KAMELET'
+
+  // should be 'KAMELET' for now
+  subType?: string;
   title?: string;
-  type: string; // e.g. 'START', 'MIDDLE', 'END'
+
+  // e.g. 'START', 'MIDDLE', 'END'
+  type: string;
+
+  // generated only for integration steps
   UUID: string;
 }
 
