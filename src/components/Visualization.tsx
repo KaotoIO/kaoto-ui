@@ -45,6 +45,8 @@ const findStepIdxWithVizId = (vizId: string, steps: IStepProps[]) => {
 
 // Custom Node type and component for React Flow
 const CustomNodeComponent = ({ data }: any) => {
+  const [, dispatch] = useStepsAndViewsContext();
+
   const borderColor =
     data.connectorType === 'START'
       ? 'rgb(0, 136, 206)'
@@ -53,10 +55,10 @@ const CustomNodeComponent = ({ data }: any) => {
       : 'rgb(204, 204, 204)';
 
   const onDrop = (e: any) => {
-    //const dataJSON = e.dataTransfer.getData('text');
-    //const step: IStepProps = JSON.parse(dataJSON);
-    // TODO: replace step here
-    console.log('something dropped on an existing step node ,', e);
+    const dataJSON = e.dataTransfer.getData('text');
+    const step: IStepProps = JSON.parse(dataJSON);
+    // Replace step
+    dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
   };
 
   return (
@@ -90,7 +92,6 @@ const Visualization = () => {
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
   const [, setYAMLData] = useYAMLContext();
-  //const { dispatch, viewData } = useStepsAndViewsContext();
   const [viewData, dispatch] = useStepsAndViewsContext();
   const previousViewData = usePrevious(viewData);
 
@@ -103,12 +104,6 @@ const Visualization = () => {
 
     updateIntegrationFromViz(viewData.steps)
       .then((value: string | void) => {
-        // addAlert &&
-        //   addAlert({
-        //     title: 'Integration updated successfully',
-        //     variant: AlertVariant.success,
-        //   });
-
         // update state of YAML editor
         if (value) {
           setYAMLData(value);
@@ -156,7 +151,7 @@ const Visualization = () => {
           index: index,
           label: truncateString(step.name, 14),
         },
-        id: step.UUID,
+        id: getId(),
         position: { x: 0, y: window.innerHeight / 2 },
         type: 'special',
       };
@@ -277,14 +272,14 @@ const Visualization = () => {
   };
 
   const onElementClick = (_e: any, element: any) => {
-    if (!element.id) {
+    if (!element.data.id) {
       return;
     }
 
     // Only set state again if the ID is not the same
-    if (selectedStep.UUID !== element.id) {
+    if (selectedStep.UUID !== element.data.id) {
       const findStep: IStepProps =
-        viewData.steps.find((step) => step.UUID === element.id) ?? selectedStep;
+        viewData.steps.find((step) => step.UUID === element.data.id) ?? selectedStep;
       setSelectedStep(findStep);
     }
 
