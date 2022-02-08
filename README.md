@@ -26,6 +26,10 @@ This is the user interface for [Kaoto Backend](https://github.com/KaotoIO/kaoto-
 
 ![Kapture 2021-11-08 at 16 49 05](https://user-images.githubusercontent.com/3844502/144047887-ac270f49-4bd8-48cb-9de9-afe87ad4083b.gif)
 
+## Running it with Docker
+
+For trial purposes, there is a docker image that can be run as described on [the quickstarter](https://kaoto.io/quickstart/).
+
 
 ## Requirements
 
