@@ -103,8 +103,6 @@ const Visualization = () => {
       return;
     }
 
-    console.log('viewData has updated again, preparing viz data steps..');
-
     updateIntegrationFromViz(viewData.steps)
       .then((value: string | void) => {
         // update state of YAML editor
