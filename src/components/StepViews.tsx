@@ -1,4 +1,5 @@
 import { IStepProps, IViewProps } from '../types';
+import usePrevious from '../utils/usePrevious';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
@@ -41,10 +42,15 @@ const StepViews = ({
   const [activeTabKey, setActiveTabKey] = useState(detailsTabIndex);
   const stepPropertySchema = useRef<{ [label: string]: { type: string } }>({});
   const stepPropertyModel = useRef<{ [label: string]: any }>({});
+  const previousTabIndex = usePrevious(detailsTabIndex);
 
   useEffect(() => {
+    if (previousTabIndex === detailsTabIndex) {
+      return;
+    }
+
     setActiveTabKey(views.some((v) => v.id === 'detail-step') ? 0 : detailsTabIndex);
-  }, [detailsTabIndex, step, views]);
+  }, [detailsTabIndex, previousTabIndex, views]);
 
   useEffect(() => {
     let tempSchemaObject: { [label: string]: { type: string; value?: any } } = {};

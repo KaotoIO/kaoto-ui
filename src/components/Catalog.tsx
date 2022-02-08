@@ -1,4 +1,3 @@
-import { useStepsAndViewsContext } from '../api';
 import request from '../api/request';
 import { IStepProps } from '../types';
 import './Catalog.css';
@@ -44,7 +43,6 @@ const Catalog = (props: ICatalog) => {
   const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
-  const [viewData] = useStepsAndViewsContext();
 
   /**
    * Sort & fetch all Steps for the Catalog
@@ -67,7 +65,7 @@ const Catalog = (props: ICatalog) => {
     getCatalogData().catch((e) => {
       console.error(e);
     });
-  }, [viewData]);
+  }, []);
 
   const changeSearch = (e: any) => {
     setQuery(e);

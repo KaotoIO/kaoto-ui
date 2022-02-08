@@ -121,7 +121,7 @@ const Visualization = () => {
       });
 
     prepareAndSetVizDataSteps(viewData.steps);
-  }, [addAlert, previousViewData, setYAMLData, viewData]);
+  }, [viewData]);
 
   const nodeTypes = {
     special: CustomNodeComponent,

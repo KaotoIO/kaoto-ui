@@ -11,10 +11,6 @@ const YAMLEditor = () => {
   const [, dispatch] = useStepsAndViewsContext();
   const previousYaml = usePrevious(YAMLData);
 
-  /**
-   * Watch for changes to YAMLData,
-   * issue request to API for Visualization JSON
-   */
   useEffect(() => {
     if (previousYaml === YAMLData) {
       return;
@@ -28,7 +24,7 @@ const YAMLEditor = () => {
       .catch((e) => {
         console.error(e);
       });
-  }, [YAMLData]);
+  }, []);
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
