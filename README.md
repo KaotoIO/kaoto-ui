@@ -24,7 +24,7 @@
 
 This is the user interface for [Kaoto Backend](https://github.com/KaotoIO/kaoto-backend). Kaoto is an easy-to-use visual integration framework based on [Apache Camel](https://camel.apache.org/).
 
-![Kapture 2021-11-08 at 16 49 05](https://user-images.githubusercontent.com/3844502/144047887-ac270f49-4bd8-48cb-9de9-afe87ad4083b.gif)
+![Kaoto UI Screencapture](https://user-images.githubusercontent.com/3844502/144047887-ac270f49-4bd8-48cb-9de9-afe87ad4083b.gif)
 
 ## Running it with Docker
 
@@ -47,7 +47,7 @@ yarn install
 ```
 
 2. Duplicate the `.env.example` file and name it `.env`.
-3. Update `REACT_APP_API_URL` in the file with the correct host for the API. If using Kaoto API locally, this should be `http://localhost:8080`, but please check.
+3. Update `REACT_APP_API_URL` in the file with the correct host for the API. If using Kaoto API locally, this should be `http://localhost:8081`, but please check.
 
 **IMPORTANT:** We are using Yarn [Zero Installs](https://yarnpkg.com/features/zero-installs), so the dependency tree is checked in via the `.pnp.cjs`. Because we are committing `.yarn/cache` and `.pnp.*`, you do NOT need to run `yarn install` each time you switch between branches. However, if you find you are having issues with dependencies on a branch, consider regenerating them. See [here](https://yarnpkg.com/getting-started/qa) for more info.
 
