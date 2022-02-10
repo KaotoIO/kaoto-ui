@@ -7,4 +7,5 @@ export * from './MASLoading';
 export * from './StepErrorBoundary';
 export * from './StepViews';
 export * from './Visualization';
+export * from './VisualizationStep';
 export * from './YAMLEditor';

@@ -1,13 +1,8 @@
-import {
-  fetchCustomResource,
-  fetchViewDefinitions,
-  useStepsAndViewsContext,
-  useYAMLContext,
-} from '../api';
+import { fetchCustomResource, useStepsAndViewsContext, useYAMLContext } from '../api';
 import { IStepProps, IVizStepProps, IVizStepPropsEdge } from '../types';
 import truncateString from '../utils/truncateName';
 import usePrevious from '../utils/usePrevious';
-import { StepErrorBoundary, StepViews } from './';
+import { StepErrorBoundary, StepViews, VisualizationStep } from './';
 import './Visualization.css';
 import { AlertVariant, Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
@@ -19,9 +14,7 @@ import ReactFlow, {
   Controls,
   Edge,
   Elements,
-  Handle,
   MiniMap,
-  Position,
   ReactFlowProvider,
   removeElements,
 } from 'react-flow-renderer';
@@ -52,52 +45,6 @@ const findStepIdxWithUUID = (UUID: string, steps: IStepProps[]) => {
   return steps.map((s) => s.UUID).indexOf(UUID);
 };
 
-// Custom Node type and component for React Flow
-const CustomNodeComponent = ({ data }: any) => {
-  const [viewData, dispatch] = useStepsAndViewsContext();
-
-  const borderColor =
-    data.connectorType === 'START'
-      ? 'rgb(0, 136, 206)'
-      : data.connectorType === 'END'
-      ? 'rgb(149, 213, 245)'
-      : 'rgb(204, 204, 204)';
-
-  /**
-   * Step replacement onto existing integration step
-   * @param e
-   */
-  const onDrop = (e: { dataTransfer: { getData: (arg0: string) => any } }) => {
-    const dataJSON = e.dataTransfer.getData('text');
-    const step: IStepProps = JSON.parse(dataJSON);
-    // Replace step
-    dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
-    // fetch the updated view definitions again with new views
-    fetchViewDefinitions(viewData.steps).then((data: any) => {
-      dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
-    });
-  };
-
-  return (
-    <div
-      className={'stepNode'}
-      style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}
-      onDrop={onDrop}
-    >
-      {!(data.connectorType === 'START') && (
-        <Handle type="target" position={Position.Left} id="a" style={{ borderRadius: 0 }} />
-      )}
-      <div className={'stepNode__Icon'}>
-        <img src={data.icon} className="nodrag" />
-      </div>
-      {!(data.connectorType === 'END') && (
-        <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
-      )}
-      <div className={'stepNode__Label'}>{data.label}</div>
-    </div>
-  );
-};
-
 const Visualization = () => {
   // `elements` is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<IVizStepProps[]>([]);
@@ -118,7 +65,6 @@ const Visualization = () => {
 
     fetchCustomResource(viewData.steps)
       .then((value: string | void) => {
-        // update state of YAML editor
         if (value) {
           // update the state of the YAML editor with the custom resource
           setYAMLData(value);
@@ -138,7 +84,7 @@ const Visualization = () => {
   }, [viewData]);
 
   const nodeTypes = {
-    special: CustomNodeComponent,
+    step: VisualizationStep,
   };
 
   /**
@@ -171,7 +117,7 @@ const Visualization = () => {
         },
         id: getId(),
         position: { x: 0, y: window.innerHeight / 2 },
-        type: 'special',
+        type: 'step',
       };
 
       // Add edge properties if more than one step, and not on first step
@@ -183,8 +129,6 @@ const Visualization = () => {
         // even the last step needs to build the step edge above it, with itself as the target
         stepEdge.target = inputStep.id;
       }
-
-      // TODO: Check with localStorage to see if positions already exist
 
       /**
        * Determine position of Step,
@@ -294,7 +238,6 @@ const Visualization = () => {
 
   const onElementClick = (_e: any, element: any) => {
     // prevent temporary steps from being selected for now
-    //console.table(element.data);
     if (!element.data.UUID) {
       return;
     }
