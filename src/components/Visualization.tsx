@@ -63,20 +63,18 @@ const CustomNodeComponent = ({ data }: any) => {
       ? 'rgb(149, 213, 245)'
       : 'rgb(204, 204, 204)';
 
-  const onDrop = (e: any) => {
+  /**
+   * Step replacement onto existing integration step
+   * @param e
+   */
+  const onDrop = (e: { dataTransfer: { getData: (arg0: string) => any } }) => {
     const dataJSON = e.dataTransfer.getData('text');
     const step: IStepProps = JSON.parse(dataJSON);
     // Replace step
     dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
-    // should I hold off on this dispatch?
-    // TODO: fetch the updated view definitions again with new views
-    // only really necessary for step replacement though..
-    // hopefully this is up-to-date. EDIT: it is, but not the views or UUID..
-    // console.table(viewData);
+    // fetch the updated view definitions again with new views
     fetchViewDefinitions(viewData.steps).then((data: any) => {
-      console.log('fetched view definitions again..');
-      console.table(data);
-      // dispatch({ type: "UPDATE_INTEGRATION", payload:  });
+      dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
     });
   };
 
