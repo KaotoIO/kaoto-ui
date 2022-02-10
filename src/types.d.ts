@@ -20,11 +20,11 @@ export interface IStepPropsParameters {
 }
 
 export interface IStepProps {
-  apiVersion: string;
+  apiVersion?: string;
   description?: string;
   group?: string;
-  icon: string;
-  id: string;
+  icon?: string;
+  id?: string;
   kameletType?: string;
   kind?: string;
   name: string;
@@ -35,7 +35,7 @@ export interface IStepProps {
   title?: string;
 
   // e.g. 'START', 'MIDDLE', 'END'
-  type: string;
+  type?: string;
 
   // generated only for integration steps
   UUID?: string;

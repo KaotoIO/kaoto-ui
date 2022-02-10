@@ -100,8 +100,8 @@ const Visualization = () => {
 
     // TODO: If it's not a 'source', create a temporary node
     if (steps.length > 0 && steps[0].type !== 'START') {
-      alert('The first step is not a START step.');
-      steps.unshift({ apiVersion: '', icon: '', id: '', name: '', type: '' });
+      // alert('The first step is not a START step.');
+      steps.unshift({ name: 'ADD A STEP' });
     }
 
     steps.map((step, index) => {
@@ -144,6 +144,8 @@ const Visualization = () => {
         case 0:
           // First item in `steps` array
           inputStep.position.x = window.innerWidth / 5;
+          // mark as a slot if it's first in the array and not a START step
+          inputStep.type = step.type !== 'START' ? 'slot' : inputStep.type;
           break;
         case steps.length - 1:
           // Last item in `steps` array

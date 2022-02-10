@@ -21,7 +21,7 @@
     transform: translateY(-50%);
 }
 
-.stepNode img {
+.stepNode img, .stepNode svg {
     height: 40px;
     left: 0;
     pointer-events: none;
