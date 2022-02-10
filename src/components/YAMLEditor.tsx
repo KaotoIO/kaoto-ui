@@ -1,15 +1,40 @@
+import { fetchViewDefinitions, useStepsAndViewsContext, useYAMLContext } from '../api';
+import usePrevious from '../utils/usePrevious';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import Editor from '@monaco-editor/react';
 import { useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
-interface IYAMLEditor {
-  handleChanges: (newYaml: string) => void;
-  yamlData?: string;
-}
-
-const YAMLEditor = ({ yamlData, handleChanges }: IYAMLEditor) => {
+const YAMLEditor = () => {
   const editorRef = useRef(null);
+  const [YAMLData, setYAMLData] = useYAMLContext();
+  const [, dispatch] = useStepsAndViewsContext();
+  const previousYaml = usePrevious(YAMLData);
+
+  /**
+   * On detected changes to YAML state, issue POST to external endpoint
+   * Returns JSON to be displayed in the visualizer
+   */
+  const handleChanges = (incomingData: string) => {
+    // Wait a bit before setting data
+    setTimeout(() => {
+      // Check that the data has changed, otherwise return
+      if (previousYaml === incomingData) {
+        return;
+      }
+
+      setYAMLData(incomingData);
+
+      fetchViewDefinitions(incomingData)
+        .then((res) => {
+          // update Visualization with new data
+          dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }, 750);
+  };
 
   function handleEditorChange(value?: string) {
     debounced(value);
@@ -39,7 +64,7 @@ const YAMLEditor = ({ yamlData, handleChanges }: IYAMLEditor) => {
         onMount={handleEditorDidMount}
         onValidate={handleEditorValidation}
         theme={'vs-dark'}
-        value={yamlData}
+        value={YAMLData}
         className={'code-editor'}
       />
     </StepErrorBoundary>

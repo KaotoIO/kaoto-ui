@@ -1,4 +1,5 @@
-import { IStepProps, IViewProps, IVizStepProps } from '../types';
+import { IStepProps, IViewProps } from '../types';
+import usePrevious from '../utils/usePrevious';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
@@ -23,7 +24,7 @@ export interface IStepViewsProps {
   isPanelExpanded: boolean;
   onClosePanelClick: (e: any) => void;
   saveConfig: (newValues: any) => void;
-  step: { viz: IVizStepProps; model: IStepProps };
+  step: IStepProps;
   views: IViewProps[];
 }
 
@@ -41,10 +42,15 @@ const StepViews = ({
   const [activeTabKey, setActiveTabKey] = useState(detailsTabIndex);
   const stepPropertySchema = useRef<{ [label: string]: { type: string } }>({});
   const stepPropertyModel = useRef<{ [label: string]: any }>({});
+  const previousTabIndex = usePrevious(detailsTabIndex);
 
   useEffect(() => {
+    if (previousTabIndex === detailsTabIndex) {
+      return;
+    }
+
     setActiveTabKey(views.some((v) => v.id === 'detail-step') ? 0 : detailsTabIndex);
-  }, [detailsTabIndex, step, views]);
+  }, [detailsTabIndex, previousTabIndex, views]);
 
   useEffect(() => {
     let tempSchemaObject: { [label: string]: { type: string; value?: any } } = {};
@@ -57,11 +63,11 @@ const StepViews = ({
       tempModelObject[propKey] = parameter.value;
     };
 
-    step.model.parameters?.map(schemaProps);
+    step.parameters?.map(schemaProps);
 
     stepPropertySchema.current = tempSchemaObject;
     stepPropertyModel.current = tempModelObject;
-  }, [step.model.parameters]);
+  }, [step.parameters]);
 
   const handleTabClick = (_event: any, tabIndex: any) => {
     setActiveTabKey(tabIndex);
@@ -97,29 +103,29 @@ const StepViews = ({
                   <GridItem span={3}>
                     <b>Title</b>
                   </GridItem>
-                  <GridItem span={6}>{step.model.title}</GridItem>
+                  <GridItem span={6}>{step.title}</GridItem>
                   <GridItem span={3} rowSpan={2}>
-                    <img src={step.model.icon} style={{ maxWidth: '50%' }} alt={'icon'} />
+                    <img src={step.icon} style={{ maxWidth: '50%' }} alt={'icon'} />
                   </GridItem>
                   <GridItem span={3}>
                     <b>Description</b>
                   </GridItem>
-                  <GridItem span={6}>{step.model.description}</GridItem>
+                  <GridItem span={6}>{step.description}</GridItem>
                   <GridItem span={3}>
                     <b>Type</b>
                   </GridItem>
                   <GridItem span={9}>
-                    {step.model.type === 'START'
+                    {step.type === 'START'
                       ? 'Source'
-                      : step.model.type === 'MIDDLE'
+                      : step.type === 'MIDDLE'
                       ? 'Action'
-                      : step.model.type === 'END'
+                      : step.type === 'END'
                       ? 'Sink'
                       : ''}
                   </GridItem>
                 </Grid>
                 <br />
-                <Button variant={'danger'} key={step.viz.id} onClick={deleteStep}>
+                <Button variant={'danger'} key={step.UUID} onClick={deleteStep}>
                   Delete
                 </Button>
               </StepErrorBoundary>
@@ -162,35 +168,32 @@ const StepViews = ({
               );
             })}
 
-          {/* only integration steps are configurable */}
-          {!step.viz.temporary && (
-            <Tab
-              eventKey={configTabIndex}
-              title={<TabTitleText>Config</TabTitleText>}
-              data-testid={'configurationTab'}
-            >
+          <Tab
+            eventKey={configTabIndex}
+            title={<TabTitleText>Config</TabTitleText>}
+            data-testid={'configurationTab'}
+          >
+            <br />
+            <StepErrorBoundary>
+              <Grid hasGutter>
+                {step.parameters && (
+                  <JsonSchemaConfigurator
+                    schema={{ type: 'object', properties: stepPropertySchema.current }}
+                    configuration={stepPropertyModel.current}
+                    onSubmit={(configuration, isValid) => {
+                      if (isValid) {
+                        saveConfig(configuration);
+                      }
+                    }}
+                  />
+                )}
+              </Grid>
               <br />
-              <StepErrorBoundary>
-                <Grid hasGutter>
-                  {step.model.parameters && (
-                    <JsonSchemaConfigurator
-                      schema={{ type: 'object', properties: stepPropertySchema.current }}
-                      configuration={stepPropertyModel.current}
-                      onSubmit={(configuration, isValid) => {
-                        if (isValid) {
-                          saveConfig(configuration);
-                        }
-                      }}
-                    />
-                  )}
-                </Grid>
-                <br />
-                <Button variant={'danger'} key={step.viz.id} onClick={deleteStep}>
+              <Button variant={'danger'} key={step.UUID} onClick={deleteStep}>
                 Delete
               </Button>
-              </StepErrorBoundary>
-            </Tab>
-          )}
+            </StepErrorBoundary>
+          </Tab>
         </Tabs>
       </DrawerPanelBody>
     </DrawerPanelContent>

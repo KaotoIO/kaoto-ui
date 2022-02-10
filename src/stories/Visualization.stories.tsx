@@ -1,6 +1,5 @@
+import { Visualization } from '../components';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-
-import { Visualization } from '../components/Visualization';
 
 // For now the only view data we care about are steps
 //import steps from './data/steps';
@@ -11,10 +10,10 @@ export default {
   component: Visualization,
 } as ComponentMeta<typeof Visualization>;
 
-const Template: ComponentStory<typeof Visualization> = (args) => {
+const Template: ComponentStory<typeof Visualization> = () => {
   return (
     <>
-      <h1>Konva</h1>
+      <h1>Visualization</h1>
     </>
   );
 };

@@ -1,3 +1,6 @@
+import { CSSProperties, ReactNode } from 'react';
+import { ArrowHeadType, Edge, ElementId, FlowElement, Node } from 'react-flow-renderer/dist/types';
+
 declare module '*.yaml' {
   const content: { [key: string]: any };
   export default content;
@@ -10,11 +13,6 @@ declare global {
 
   const __webpack_init_sharing__: any;
   const __webpack_share_scopes__: any;
-}
-
-export interface IModelVizProps {
-  model: IStepProps;
-  viz: IVizStepProps;
 }
 
 export interface IStepPropsParameters {
@@ -31,10 +29,16 @@ export interface IStepProps {
   kind?: string;
   name: string;
   parameters?: IStepPropsParameters[];
-  subType?: string; // should be 'KAMELET'
+
+  // should be 'KAMELET' for now
+  subType?: string;
   title?: string;
-  type: string; // e.g. 'START', 'MIDDLE', 'END'
-  UUID?: string;
+
+  // e.g. 'START', 'MIDDLE', 'END'
+  type: string;
+
+  // generated only for integration steps
+  UUID: string;
 }
 
 export interface IViewConstraintsProps {
@@ -59,12 +63,12 @@ export interface IViewData {
   views: IViewProps[];
 }
 
-export interface IVizStepProps {
-  id: string;
-  label: string;
-  position: {
-    x: number;
-    y: number;
-  };
-  temporary: boolean;
+export interface IVizStepProps extends IVizStepPropsNode, IVizStepPropsEdge {}
+
+export interface IVizStepPropsNode extends Node {}
+
+export interface IVizStepPropsEdge extends Omit<Edge, 'arrowHeadType' | 'source' | 'target'> {
+  arrowHeadType?: string;
+  source?: string;
+  target?: string;
 }

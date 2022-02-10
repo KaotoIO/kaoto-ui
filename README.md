@@ -24,7 +24,7 @@
 
 This is the user interface for [Kaoto Backend](https://github.com/KaotoIO/kaoto-backend). Kaoto is an easy-to-use visual integration framework based on [Apache Camel](https://camel.apache.org/).
 
-![Kapture 2021-11-08 at 16 49 05](https://user-images.githubusercontent.com/3844502/144047887-ac270f49-4bd8-48cb-9de9-afe87ad4083b.gif)
+![Kaoto UI Screencapture](https://user-images.githubusercontent.com/3844502/144047887-ac270f49-4bd8-48cb-9de9-afe87ad4083b.gif)
 
 ## Running it with Docker
 
@@ -47,7 +47,7 @@ yarn install
 ```
 
 2. Duplicate the `.env.example` file and name it `.env`.
-3. Update `REACT_APP_API_URL` in the file with the correct host for the API. If using Kaoto API locally, this should be `http://localhost:8080`, but please check.
+3. Update `REACT_APP_API_URL` in the file with the correct host for the API. If using Kaoto API locally, this should be `http://localhost:8081`, but please check.
 
 **IMPORTANT:** We are using Yarn [Zero Installs](https://yarnpkg.com/features/zero-installs), so the dependency tree is checked in via the `.pnp.cjs`. Because we are committing `.yarn/cache` and `.pnp.*`, you do NOT need to run `yarn install` each time you switch between branches. However, if you find you are having issues with dependencies on a branch, consider regenerating them. See [here](https://yarnpkg.com/getting-started/qa) for more info.
 
@@ -77,15 +77,24 @@ yarn test
 Launches the test runner in the interactive watch mode.\
 Tests are colocated and live as closely to corresponding code as possible.
 
-### E2E Tests
+### End-to-End (E2E) Tests
 
-E2E tests are located in the `/cypress` directory. Run all [Cypress](https://docs.cypress.io/guides/overview/why-cypress) E2E tests:
+E2E tests are located in the `/cypress` directory. Run all [Cypress](https://docs.cypress.io/guides/overview/why-cypress) E2E tests headlessly:
 
 ```bash
+// headlessly
 yarn cypress
+
+// with a specific browser
+// optons: chrome, chromium, edge, electron, firefox
+// or specify a path: /usr/bin/chromium
+yarn cypress --browser firefox
+
+// in the browser
+yarn cypress:open
 ```
 
-There are also GitHub Actions workflows that run the tests automatically in `.github/workflows`.
+See the [Cypress docs](https://docs.cypress.io) for more information. There are also GitHub Actions workflows in `.github/workflows` that run the tests automatically on opening a pull request.
 
 ## Build
 

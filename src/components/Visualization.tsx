@@ -1,106 +1,328 @@
-import { IStepProps, IViewProps, IVizStepProps } from '../types';
-import createImage from '../utils/createImage';
+import {
+  fetchCustomResource,
+  fetchViewDefinitions,
+  useStepsAndViewsContext,
+  useYAMLContext,
+} from '../api';
+import { IStepProps, IVizStepProps, IVizStepPropsEdge } from '../types';
 import truncateString from '../utils/truncateName';
-import { StepErrorBoundary, StepViews, VisualizationSlot } from './';
+import usePrevious from '../utils/usePrevious';
+import { StepErrorBoundary, StepViews } from './';
 import './Visualization.css';
-import { Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
-import Konva from 'konva';
-import { useRef, useState } from 'react';
-import { Circle, Group, Image, Layer, Stage, Text } from 'react-konva';
+import { AlertVariant, Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
+import { useAlert } from '@rhoas/app-services-ui-shared';
+import { useEffect, useRef, useState } from 'react';
+import ReactFlow, {
+  addEdge,
+  Background,
+  Connection,
+  Controls,
+  Edge,
+  Elements,
+  Handle,
+  MiniMap,
+  Position,
+  ReactFlowProvider,
+  removeElements,
+} from 'react-flow-renderer';
+import 'react-flow-renderer/dist/style.css';
+import 'react-flow-renderer/dist/theme-default.css';
 import { v4 as uuidv4 } from 'uuid';
 
-interface IVisualization {
-  deleteIntegrationStep: (e: any) => void;
-  isError?: boolean;
-  isLoading?: boolean;
-  replaceIntegrationStep: (newStep: any, oldStepIndex: any) => void;
-  steps: { viz: IVizStepProps; model: IStepProps }[];
-  views: IViewProps[];
-}
-
-const CIRCLE_LENGTH = 75;
-
-const placeholderStep = {
-  model: {
-    apiVersion: '',
-    icon: '',
-    id: '',
-    name: '',
-    parameters: [],
-    type: '',
-    UUID: '',
-  },
-  viz: {
-    id: '',
-    label: '',
-    position: {
-      x: 0,
-      y: 0,
-    },
-    temporary: false,
-  },
-  views: [{}],
+const placeholderStep: IStepProps = {
+  apiVersion: '',
+  icon: '',
+  id: '',
+  name: '',
+  parameters: [],
+  type: '',
+  UUID: '',
 };
 
-const findIndexWithVizId = (vizId: any, steps: any[]) => {
-  return steps.map((step: any) => step.viz.id).indexOf(vizId);
-};
+let id = 0;
+const getId = () => `dndnode_${id++}`;
 
 /**
- * Compares two areas using their dimensions and positioning
- * to determine if there is an intersection
- * @param r1
- * @param r2
+ * Returns a Step index when provided with the `UUID`.
+ * `UUID` is originally set using the Step UUID.
+ * @param UUID
+ * @param steps
  */
-const doAreasIntersect = (
-  r1: { x: number; width: any; y: number; height: any },
-  r2: { x: number; width: any; y: number; height: any }
-) => {
-  return !(
-    r2.x > r1.x + r1.width ||
-    r2.x + r2.width < r1.x ||
-    r2.y > r1.y + r1.height ||
-    r2.y + r2.height < r1.y
+const findStepIdxWithUUID = (UUID: string, steps: IStepProps[]) => {
+  return steps.map((s) => s.UUID).indexOf(UUID);
+};
+
+// Custom Node type and component for React Flow
+const CustomNodeComponent = ({ data }: any) => {
+  const [viewData, dispatch] = useStepsAndViewsContext();
+
+  const borderColor =
+    data.connectorType === 'START'
+      ? 'rgb(0, 136, 206)'
+      : data.connectorType === 'END'
+      ? 'rgb(149, 213, 245)'
+      : 'rgb(204, 204, 204)';
+
+  /**
+   * Step replacement onto existing integration step
+   * @param e
+   */
+  const onDrop = (e: { dataTransfer: { getData: (arg0: string) => any } }) => {
+    const dataJSON = e.dataTransfer.getData('text');
+    const step: IStepProps = JSON.parse(dataJSON);
+    // Replace step
+    dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
+    // fetch the updated view definitions again with new views
+    fetchViewDefinitions(viewData.steps).then((data: any) => {
+      dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+    });
+  };
+
+  return (
+    <div
+      className={'stepNode'}
+      style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}
+      onDrop={onDrop}
+    >
+      {!(data.connectorType === 'START') && (
+        <Handle type="target" position={Position.Left} id="a" style={{ borderRadius: 0 }} />
+      )}
+      <div className={'stepNode__Icon'}>
+        <img src={data.icon} className="nodrag" />
+      </div>
+      {!(data.connectorType === 'END') && (
+        <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
+      )}
+      <div className={'stepNode__Label'}>{data.label}</div>
+    </div>
   );
 };
 
-const Visualization = ({
-  deleteIntegrationStep,
-  replaceIntegrationStep,
-  steps,
-  views,
-}: IVisualization) => {
-  const layerRef = useRef<Konva.Layer>(null);
-  const stageRef = useRef<Konva.Stage>(null);
+const Visualization = () => {
+  // `elements` is an array of UI-specific objects that represent the Step model visually
+  const [elements, setElements] = useState<IVizStepProps[]>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
-  const [selectedStep, setSelectedStep] =
-    useState<{ model: IStepProps; viz: IVizStepProps }>(placeholderStep);
-  const [tempSteps, setTempSteps] = useState<
-    { model: IStepProps; viz: IVizStepProps; views?: IViewProps[] }[]
-  >([]);
-  const integrationGroupName = 'integration-and-slots-group';
-  const integrationStepGroupName = 'integration-step-group';
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const reactFlowWrapper = useRef(null);
+  const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
+  const [, setYAMLData] = useYAMLContext();
+  const [viewData, dispatch] = useStepsAndViewsContext();
+  const previousViewData = usePrevious(viewData);
 
+  const { addAlert } = useAlert() || {};
+
+  useEffect(() => {
+    if (previousViewData === viewData) {
+      return;
+    }
+
+    fetchCustomResource(viewData.steps)
+      .then((value: string | void) => {
+        // update state of YAML editor
+        if (value) {
+          // update the state of the YAML editor with the custom resource
+          setYAMLData(value);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        addAlert &&
+          addAlert({
+            title: 'Something went wrong',
+            variant: AlertVariant.danger,
+            description: 'There was a problem updating the integration. Please try again later.',
+          });
+      });
+
+    prepareAndSetVizDataSteps(viewData.steps);
+  }, [viewData]);
+
+  const nodeTypes = {
+    special: CustomNodeComponent,
+  };
+
+  /**
+   * Creates an object for the Visualization from the Step model.
+   * Contains UI-specific metadata (e.g. position).
+   * Data is stored in the Elements hook.
+   * @param steps
+   */
+  const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
+    const incrementAmt = 160;
+    const stepsAsElements: any[] = [];
+    const stepEdges: any[] = [];
+
+    steps.map((step, index) => {
+      // Grab the previous step to use for determining position and drawing edges
+      const previousStep = stepsAsElements[index - 1];
+      let stepEdge: IVizStepPropsEdge = { id: '' };
+
+      // Build the default parameters
+      let inputStep: IVizStepProps = {
+        data: {
+          connectorType: step.type,
+          icon: step.icon,
+          // custom generated uuid as a reference fallback
+          id: uuidv4(),
+          index: index,
+          label: truncateString(step.name, 14),
+          temporary: false,
+          UUID: step.UUID,
+        },
+        id: getId(),
+        position: { x: 0, y: window.innerHeight / 2 },
+        type: 'special',
+      };
+
+      // Add edge properties if more than one step, and not on first step
+      if (steps.length > 1 && index !== 0) {
+        stepEdge.arrowHeadType = 'arrowclosed';
+        stepEdge.id = 'e' + previousStep.id + '-' + inputStep.id;
+        stepEdge.source = previousStep.id;
+
+        // even the last step needs to build the step edge above it, with itself as the target
+        stepEdge.target = inputStep.id;
+      }
+
+      // TODO: Check with localStorage to see if positions already exist
+
+      /**
+       * Determine position of Step,
+       * add properties accordingly
+       */
+      switch (index) {
+        case 0:
+          // First item in `steps` array
+          inputStep.position.x = window.innerWidth / 5;
+          break;
+        case steps.length - 1:
+          // Last item in `steps` array
+          inputStep.position.x = previousStep.position?.x + incrementAmt;
+
+          // Build edges
+          stepEdge.animated = true;
+          stepEdge.style = { stroke: 'red' };
+          break;
+        default:
+          // Middle steps in `steps` array
+          inputStep.position.x = previousStep.position?.x + incrementAmt;
+          break;
+      }
+
+      stepsAsElements.push(inputStep);
+
+      // Only add step edge if there is more than one step and not on the first step
+      if (steps.length > 1 && index !== 0) {
+        stepEdges.push(stepEdge);
+      }
+
+      return;
+    });
+
+    // combine steps and step edges before setting hook state
+    const combined = stepsAsElements.concat(stepEdges);
+    setElements(combined);
+  };
+
+  /**
+   * Delete an integration step
+   */
   const deleteStep = () => {
-    const selectedStepVizId = selectedStep.viz.id;
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
 
-    const stepsIndex = findIndexWithVizId(selectedStepVizId, steps);
+    const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, viewData.steps);
+    dispatch({ type: 'DELETE_STEP', payload: { index: stepsIndex } });
+  };
 
-    /**
-     * If it's a temporary step, simply update the state.
-     * For an integration step, use the callback to remove the step.
-     */
-    selectedStep.viz.temporary
-      ? setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== selectedStepVizId))
-      : deleteIntegrationStep(stepsIndex);
+  const onClosePanelClick = () => {
+    setIsPanelExpanded(false);
+  };
+
+  const onConnect = (params: Edge<any> | Connection) => {
+    // @ts-ignore
+    setElements((els) => addEdge(params, els));
+  };
+
+  const onDragOver = (event: {
+    preventDefault: () => void;
+    dataTransfer: { dropEffect: string };
+  }) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  };
+
+  const onDrop = (event: {
+    preventDefault: () => void;
+    dataTransfer: { getData: (arg0: string) => any };
+    clientX: number;
+    clientY: number;
+  }) => {
+    // TODO: Check if there is an existing node??
+    event.preventDefault();
+
+    // @ts-ignore
+    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+    const type = event.dataTransfer.getData('application/reactflow');
+    const dataJSON = event.dataTransfer.getData('text');
+    const step: IStepProps = JSON.parse(dataJSON);
+
+    // @ts-ignore
+    const position = reactFlowInstance.project({
+      x: event.clientX - reactFlowBounds.left,
+      y: event.clientY - reactFlowBounds.top,
+    });
+
+    const newNode = {
+      id: getId(),
+      type,
+      position,
+      data: {
+        connectorType: step.type,
+        icon: step.icon,
+        // custom generated uuid as a reference fallback
+        id: uuidv4(),
+        label: `${truncateString(step.name, 14)}`,
+        temporary: true,
+        // generated from the backend
+        UUID: step.UUID,
+      },
+    };
+
+    setElements((es) => es.concat(newNode));
+  };
+
+  const onElementClick = (_e: any, element: any) => {
+    // prevent temporary steps from being selected for now
+    //console.table(element.data);
+    if (!element.data.UUID) {
+      return;
+    }
+
+    // Only set state again if the ID is not the same
+    if (selectedStep.UUID !== element.data.UUID) {
+      const findStep: IStepProps =
+        viewData.steps.find((step) => step.UUID === element.data.UUID) ?? selectedStep;
+      setSelectedStep(findStep);
+    }
+
+    setIsPanelExpanded(!isPanelExpanded);
+  };
+
+  const onElementsRemove = (elementsToRemove: Elements<IVizStepProps[]>) =>
+    setElements((els) => removeElements(elementsToRemove, els));
+
+  const onExpandPanel = () => {
+    //drawerRef.current && drawerRef.current.focus();
+  };
+
+  const onLoad = (_reactFlowInstance: any) => {
+    setReactFlowInstance(_reactFlowInstance);
   };
 
   const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
-    const selectedStepVizId = selectedStep.viz.id;
-    let newStep: { model: IStepProps; viz: IVizStepProps } = selectedStep;
-    const newStepParameters = newStep.model.parameters;
+    let newStep: IStepProps = selectedStep;
+    const newStepParameters = newStep.parameters;
 
     if (newStepParameters && newStepParameters.length > 0) {
       Object.entries(newValues).map(([key, value]) => {
@@ -108,129 +330,15 @@ const Visualization = ({
         newStepParameters[paramIndex!].value = value;
       });
 
-      // "old step index" is the same as the current step index
-      replaceIntegrationStep(newStep, selectedStepVizId);
+      // TODO: this won't work for temporary steps because they don't have a UUID
+      const oldStepIdx = findStepIdxWithUUID(selectedStep.UUID, viewData.steps);
+      // Replace step with new step
+      dispatch({ type: 'REPLACE_STEP', payload: { newStep, oldStepIndex: oldStepIdx } });
     } else {
       return;
     }
   };
 
-  const onDragStartTempStep = (e: any) => {
-    const id = e.target.id();
-    const items = tempSteps.slice();
-    const index = findIndexWithVizId(id, items);
-    const item = items[index];
-
-    /**
-     * Ensure selected step goes above other steps
-     */
-    // remove from list of steps
-    items.splice(index, 1);
-    // add to the bottom of the list
-    items.push(item);
-    setTempSteps(items);
-  };
-
-  const onDragMoveTempStep = (e: any) => {
-    /**
-     * Check if intersects with integration steps
-     */
-    // Exclude self from intersection
-    const target = e.target;
-    const targetRect = e.target.getClientRect();
-    const integrationGroup = layerRef.current?.findOne('.' + integrationGroupName);
-
-    // @ts-ignore
-    integrationGroup.children?.map((group) => {
-      // Exclude self from intersection
-      if (group === target) {
-        return;
-      }
-
-      if (doAreasIntersect(group.getClientRect(), targetRect)) {
-        /**
-         * Validation goes here
-         */
-      }
-    });
-  };
-
-  const onDragEndTempStep = (e: any) => {
-    const draggedStepId = e.target.id();
-    // @ts-ignore
-    const targetCircle = e.target.children.find(({ className }) => className === 'Circle');
-
-    /**
-     * Check for intersection
-     */
-    const target = e.target;
-    const integrationGroup = layerRef.current?.findOne('.' + integrationGroupName);
-
-    // @ts-ignore
-    integrationGroup?.children.map(
-      (group: { attrs: { name: string; id: any }; children: any[] }) => {
-        // Exclude self from intersection
-        if (group === target) {
-          return;
-        }
-        // Exclude any group other than integration step groups
-        if (group.attrs.name !== integrationStepGroupName) {
-          return;
-        }
-
-        const groupCircleChild = group.children.find(
-          ({ className }: { className: string }) => className === 'Circle'
-        );
-
-        if (doAreasIntersect(groupCircleChild.getClientRect(), targetCircle.getClientRect())) {
-          /**
-           * Step replacement from temporary step already existing on the canvas
-           */
-          const currentStepIndex = findIndexWithVizId(draggedStepId, tempSteps);
-          const slotStepIndex = findIndexWithVizId(group.attrs.id, steps);
-
-          // Destroy node, update temporary steps
-          setTempSteps(tempSteps.filter((tempStep) => tempStep.viz.id !== draggedStepId));
-
-          // Update YAML
-          replaceIntegrationStep(tempSteps[currentStepIndex].model, slotStepIndex);
-        }
-      }
-    );
-  };
-
-  const imageDimensions = {
-    height: 40,
-    width: 40,
-  };
-
-  const handleClickStep = (e: any) => {
-    if (!e.target.id()) {
-      return;
-    }
-
-    // Only set state again if the ID is not the same
-    if (selectedStep.model.id !== e.target.id()) {
-      const combinedSteps = steps.concat(tempSteps);
-      const findStep: { viz: IVizStepProps; model: IStepProps } =
-        combinedSteps.find((step) => step.viz.id === e.target.id()) ?? selectedStep;
-      setSelectedStep(findStep);
-    }
-
-    setIsPanelExpanded(!isPanelExpanded);
-  };
-
-  const onExpandPanel = () => {
-    //drawerRef.current && drawerRef.current.focus();
-  };
-
-  const onClosePanelClick = () => {
-    setIsPanelExpanded(false);
-  };
-
-  // Stage is a div container
-  // Layer is actual canvas element (so you may have several canvases in the stage)
-  // And then we have canvas shapes inside the Layer
   return (
     <StepErrorBoundary>
       <Drawer isExpanded={isPanelExpanded} onExpand={onExpandPanel}>
@@ -242,189 +350,51 @@ const Visualization = ({
               deleteStep={deleteStep}
               onClosePanelClick={onClosePanelClick}
               saveConfig={saveConfig}
-              views={views.filter((view) => view.step === selectedStep.model.UUID)}
+              views={viewData?.views.filter((view) => view.step === selectedStep.UUID)}
             />
           }
           className={'panelCustom'}
         >
           <DrawerContentBody>
-            {/** Stage wrapper to handle steps (DOM elements) dropped from catalog **/}
-            <div
-              onDrop={(e: any) => {
-                e.preventDefault();
-                const dataJSON = e.dataTransfer.getData('text');
-                // Register event position
-                stageRef.current?.setPointersPositions(e);
-                const parsed: IStepProps = JSON.parse(dataJSON);
-                const currentPosition = stageRef.current?.getPointerPosition(); // e.g. {"x":158,"y":142}
-                const intersectingShape = stageRef.current?.getIntersection(currentPosition!);
-
-                // Only create a temporary step if it does not intersect with an existing step
-                if (intersectingShape) {
-                  const parentVizId = intersectingShape.getParent().attrs.id;
-                  const parentIdx = steps.map((step) => step.viz.id).indexOf(parentVizId);
-                  replaceIntegrationStep(parsed, parentIdx);
-                } else {
-                  setTempSteps(
-                    tempSteps.concat({
-                      model: parsed,
-                      viz: {
-                        id: uuidv4(),
-                        label: parsed.name,
-                        position: { ...stageRef.current?.getPointerPosition()! },
-                        temporary: true,
-                      },
-                    })
-                  );
-                }
-              }}
-              onDragOver={(e) => {
-                e.preventDefault();
-              }}
-            >
-              <Stage
-                width={window.innerWidth}
-                height={window.innerHeight}
-                ref={stageRef}
-                data-testid={'visualization'}
+            <ReactFlowProvider>
+              <div
+                className="reactflow-wrapper"
+                ref={reactFlowWrapper}
+                style={{ width: window.innerWidth, height: window.innerHeight }}
               >
-                <Layer ref={layerRef}>
-                  <Group
-                    name={integrationGroupName}
-                    x={window.innerWidth / 5}
-                    y={window.innerHeight / 2}
-                  >
-                    {/** Create the visualization slots **/}
-                    <VisualizationSlot steps={steps} />
+                <ReactFlow
+                  elements={elements}
+                  nodeTypes={nodeTypes}
+                  onConnect={onConnect}
+                  onDrop={onDrop}
+                  onDragOver={onDragOver}
+                  onElementClick={onElementClick}
+                  onElementsRemove={onElementsRemove}
+                  onLoad={onLoad}
+                  snapToGrid={true}
+                  snapGrid={[15, 15]}
+                >
+                  <MiniMap
+                    nodeStrokeColor={(n) => {
+                      if (n.style?.background) return n.style.background;
+                      if (n.type === 'input') return '#0041d0';
+                      if (n.type === 'output') return '#ff0072';
+                      if (n.type === 'default') return '#1a192b';
 
-                    {/** Create the visualization steps **/}
-                    {steps.map((item, index) => {
-                      const itemImage = createImage(item.model.icon, null);
+                      return '#eee';
+                    }}
+                    nodeColor={(n) => {
+                      if (n.style?.background) return n.style.background;
 
-                      return (
-                        <Group
-                          key={index}
-                          onClick={handleClickStep}
-                          onMouseEnter={(e: any) => {
-                            const container = e.target.getStage().container();
-                            container.style.cursor = 'pointer';
-                          }}
-                          onMouseLeave={(e: any) => {
-                            const container = e.target.getStage().container();
-                            container.style.cursor = 'default';
-                          }}
-                          id={item.viz.id}
-                          name={integrationStepGroupName}
-                          width={CIRCLE_LENGTH}
-                          height={CIRCLE_LENGTH}
-                        >
-                          <Circle
-                            name={`circle-${item.viz.id}`}
-                            stroke={
-                              item.model.type === 'START'
-                                ? 'rgb(0, 136, 206)'
-                                : item.model.type === 'END'
-                                ? 'rgb(149, 213, 245)'
-                                : 'rgb(204, 204, 204)'
-                            }
-                            fill={'white'}
-                            strokeWidth={3}
-                            width={CIRCLE_LENGTH}
-                            height={CIRCLE_LENGTH}
-                            x={item.viz.position.x}
-                            y={0}
-                          />
-                          <Image
-                            id={item.viz.id}
-                            name={`image-${item.viz.id}`}
-                            image={itemImage}
-                            x={item.viz.position.x! - imageDimensions.width / 2}
-                            y={0 - imageDimensions.height / 2}
-                            height={imageDimensions.height}
-                            width={imageDimensions.width}
-                          />
-                          <Text
-                            align={'center'}
-                            width={150}
-                            fontFamily={'Ubuntu'}
-                            fontSize={11}
-                            text={truncateString(item.model.name, 14)}
-                            x={item.viz.position.x! - CIRCLE_LENGTH}
-                            y={CIRCLE_LENGTH / 2 + 10}
-                          />
-                        </Group>
-                      );
-                    })}
-                  </Group>
-
-                  {/** Create the temporary steps **/}
-                  {tempSteps.map((step, idx) => {
-                    const textProps = {
-                      x: -CIRCLE_LENGTH,
-                      y: CIRCLE_LENGTH / 2 + 10,
-                    };
-
-                    return (
-                      <Group
-                        onClick={handleClickStep}
-                        onDragEnd={onDragEndTempStep}
-                        onDragMove={onDragMoveTempStep}
-                        onDragStart={onDragStartTempStep}
-                        data-testid={'visualization-step'}
-                        id={step.viz.id}
-                        index={idx}
-                        key={step.viz.id}
-                        onMouseEnter={(e: any) => {
-                          // style stage container:
-                          const container = e.target.getStage().container();
-                          container.style.cursor = 'pointer';
-                        }}
-                        onMouseLeave={(e: any) => {
-                          const container = e.target.getStage().container();
-                          container.style.cursor = 'default';
-                        }}
-                        x={step.viz.position.x}
-                        y={step.viz.position.y}
-                        height={75}
-                        width={75}
-                        draggable
-                      >
-                        <Circle
-                          name={`${idx}`}
-                          stroke={
-                            step.model.type === 'START'
-                              ? 'rgb(0, 136, 206)'
-                              : step.model.type === 'END'
-                              ? 'rgb(149, 213, 245)'
-                              : 'rgb(204, 204, 204)'
-                          }
-                          fill={'white'}
-                          strokeWidth={3}
-                          width={CIRCLE_LENGTH}
-                          height={CIRCLE_LENGTH}
-                        />
-                        <Image
-                          id={step.viz.id}
-                          image={createImage(step.model.icon, null)}
-                          height={imageDimensions.height}
-                          width={imageDimensions.width}
-                          offsetX={imageDimensions ? imageDimensions.width / 2 : 0}
-                          offsetY={imageDimensions ? imageDimensions.height / 2 : 0}
-                        />
-                        <Text
-                          align={'center'}
-                          width={150}
-                          fontFamily={'Ubuntu'}
-                          fontSize={11}
-                          text={truncateString(step.model.name, 14)}
-                          {...textProps}
-                        />
-                      </Group>
-                    );
-                  })}
-                </Layer>
-              </Stage>
-            </div>
+                      return '#fff';
+                    }}
+                    nodeBorderRadius={2}
+                  />
+                  <Controls />
+                  <Background color="#aaa" gap={16} />
+                </ReactFlow>
+              </div>
+            </ReactFlowProvider>
           </DrawerContentBody>
         </DrawerContent>
       </Drawer>
