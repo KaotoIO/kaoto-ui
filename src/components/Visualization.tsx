@@ -83,6 +83,7 @@ const Visualization = () => {
   }, [viewData]);
 
   const nodeTypes = {
+    slot: VisualizationSlot,
     step: VisualizationStep,
   };
 
@@ -96,6 +97,12 @@ const Visualization = () => {
     const incrementAmt = 160;
     const stepsAsElements: any[] = [];
     const stepEdges: any[] = [];
+
+    // TODO: If it's not a 'source', create a temporary node
+    if (steps.length > 0 && steps[0].type !== 'START') {
+      alert('The first step is not a START step.');
+      steps.unshift({ apiVersion: '', icon: '', id: '', name: '', type: '' });
+    }
 
     steps.map((step, index) => {
       // Grab the previous step to use for determining position and drawing edges
@@ -137,8 +144,6 @@ const Visualization = () => {
         case 0:
           // First item in `steps` array
           inputStep.position.x = window.innerWidth / 5;
-
-          // TODO: If it's not a 'source', create a temporary node
           break;
         case steps.length - 1:
           // Last item in `steps` array

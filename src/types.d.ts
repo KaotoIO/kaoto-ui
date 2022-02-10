@@ -38,7 +38,7 @@ export interface IStepProps {
   type: string;
 
   // generated only for integration steps
-  UUID: string;
+  UUID?: string;
 }
 
 export interface IViewConstraintsProps {
