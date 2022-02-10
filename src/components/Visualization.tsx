@@ -302,6 +302,7 @@ const Visualization = () => {
             <ReactFlowProvider>
               <div
                 className="reactflow-wrapper"
+                data-testid={'react-flow-wrapper'}
                 ref={reactFlowWrapper}
                 style={{ width: window.innerWidth, height: window.innerHeight }}
               >
