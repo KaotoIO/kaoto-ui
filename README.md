@@ -77,15 +77,24 @@ yarn test
 Launches the test runner in the interactive watch mode.\
 Tests are colocated and live as closely to corresponding code as possible.
 
-### E2E Tests
+### End-to-End (E2E) Tests
 
-E2E tests are located in the `/cypress` directory. Run all [Cypress](https://docs.cypress.io/guides/overview/why-cypress) E2E tests:
+E2E tests are located in the `/cypress` directory. Run all [Cypress](https://docs.cypress.io/guides/overview/why-cypress) E2E tests headlessly:
 
 ```bash
+// headlessly
 yarn cypress
+
+// with a specific browser
+// optons: chrome, chromium, edge, electron, firefox
+// or specify a path: /usr/bin/chromium
+yarn cypress --browser firefox
+
+// in the browser
+yarn cypress:open
 ```
 
-There are also GitHub Actions workflows that run the tests automatically in `.github/workflows`.
+See the [Cypress docs](https://docs.cypress.io) for more information. There are also GitHub Actions workflows in `.github/workflows` that run the tests automatically on opening a pull request.
 
 ## Build
 
