@@ -1,4 +1,4 @@
-import { Visualization } from '../components';
+import { AlertProvider, Visualization } from '../components';
 // For now the only view data we care about are steps
 import steps from './data/steps';
 import views from './data/views';
@@ -11,11 +11,11 @@ export default {
 
 const Template: ComponentStory<typeof Visualization> = () => {
   return (
-    <>
+    <AlertProvider>
       <h1>Visualization</h1>
       <br />
       {/*<Visualization />*/}
-    </>
+    </AlertProvider>
   );
 };
 
