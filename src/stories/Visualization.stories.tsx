@@ -1,9 +1,8 @@
 import { Visualization } from '../components';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-
 // For now the only view data we care about are steps
-//import steps from './data/steps';
-//import views from './data/views';
+import steps from './data/steps';
+import views from './data/views';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {
   title: 'Visualization',
@@ -14,12 +13,14 @@ const Template: ComponentStory<typeof Visualization> = () => {
   return (
     <>
       <h1>Visualization</h1>
+      <br />
+      {/*<Visualization />*/}
     </>
   );
 };
 
 export const Kamelet = Template.bind({});
-//Kamelet.args = { steps, views };
+Kamelet.args = { steps, views };
 
 export const Integration = Template.bind({});
-//Integration.args = { steps: [...steps, steps[1]] };
+Integration.args = { steps: [...steps, steps[1]] };
