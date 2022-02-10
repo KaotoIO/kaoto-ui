@@ -1,7 +1,7 @@
 import YAML from '../stories/data/yaml';
 import usePrevious from '../utils/usePrevious';
 import { useStepsAndViewsContext } from './StepsAndViewsProvider';
-import { updateYAML } from './apiService';
+import { fetchViewDefinitions } from './apiService';
 import {
   createContext,
   Dispatch,
@@ -23,14 +23,17 @@ export const useYAMLData = (newYAMLData: string): IUseYAMLData => {
   const previousYaml = usePrevious(YAMLData);
   const [, dispatch] = useStepsAndViewsContext();
 
+  // useEffect(() => {
+  //   console.table(newData);
+  // }, [YAMLData]);
+
   useEffect(() => {
     if (previousYaml === YAMLData) {
       return;
     }
 
-    updateYAML(YAMLData)
+    fetchViewDefinitions(YAMLData)
       .then((res) => {
-        // update Visualization with new data
         dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
       })
       .catch((e) => {

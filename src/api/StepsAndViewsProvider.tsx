@@ -31,8 +31,6 @@ function stepsAndViewsReducer(state: { steps: any[]; views: any[] }, action: Ste
       return { ...state, steps: newSteps };
     }
     case 'UPDATE_INTEGRATION': {
-      console.log('viz told to update integration');
-      console.table({ ...state, ...payload });
       return { ...state, ...payload };
     }
     default: {

@@ -1,4 +1,4 @@
-import { updateYAML, useStepsAndViewsContext, useYAMLContext } from '../api';
+import { fetchViewDefinitions, useStepsAndViewsContext, useYAMLContext } from '../api';
 import usePrevious from '../utils/usePrevious';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import Editor from '@monaco-editor/react';
@@ -25,7 +25,7 @@ const YAMLEditor = () => {
 
       setYAMLData(incomingData);
 
-      updateYAML(incomingData)
+      fetchViewDefinitions(incomingData)
         .then((res) => {
           // update Visualization with new data
           dispatch({ type: 'UPDATE_INTEGRATION', payload: res });

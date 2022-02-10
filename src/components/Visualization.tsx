@@ -1,4 +1,9 @@
-import { updateIntegrationFromViz, useStepsAndViewsContext, useYAMLContext } from '../api';
+import {
+  fetchCustomResource,
+  fetchViewDefinitions,
+  useStepsAndViewsContext,
+  useYAMLContext,
+} from '../api';
 import { IStepProps, IVizStepProps, IVizStepPropsEdge } from '../types';
 import truncateString from '../utils/truncateName';
 import usePrevious from '../utils/usePrevious';
@@ -49,7 +54,7 @@ const findStepIdxWithUUID = (UUID: string, steps: IStepProps[]) => {
 
 // Custom Node type and component for React Flow
 const CustomNodeComponent = ({ data }: any) => {
-  const [, dispatch] = useStepsAndViewsContext();
+  const [viewData, dispatch] = useStepsAndViewsContext();
 
   const borderColor =
     data.connectorType === 'START'
@@ -63,6 +68,16 @@ const CustomNodeComponent = ({ data }: any) => {
     const step: IStepProps = JSON.parse(dataJSON);
     // Replace step
     dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
+    // should I hold off on this dispatch?
+    // TODO: fetch the updated view definitions again with new views
+    // only really necessary for step replacement though..
+    // hopefully this is up-to-date. EDIT: it is, but not the views or UUID..
+    // console.table(viewData);
+    fetchViewDefinitions(viewData.steps).then((data: any) => {
+      console.log('fetched view definitions again..');
+      console.table(data);
+      // dispatch({ type: "UPDATE_INTEGRATION", payload:  });
+    });
   };
 
   return (
@@ -103,10 +118,11 @@ const Visualization = () => {
       return;
     }
 
-    updateIntegrationFromViz(viewData.steps)
+    fetchCustomResource(viewData.steps)
       .then((value: string | void) => {
         // update state of YAML editor
         if (value) {
+          // update the state of the YAML editor with the custom resource
           setYAMLData(value);
         }
       })

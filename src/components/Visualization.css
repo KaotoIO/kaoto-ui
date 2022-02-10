@@ -24,9 +24,9 @@
 .stepNode img {
     height: 40px;
     left: 0;
+    pointer-events: none;
     right: 0;
     width: 40px;
-    pointer-events: none;
 }
 
 .stepNode__Label {
