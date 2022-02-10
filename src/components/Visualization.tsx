@@ -2,7 +2,7 @@ import { fetchCustomResource, useStepsAndViewsContext, useYAMLContext } from '..
 import { IStepProps, IVizStepProps, IVizStepPropsEdge } from '../types';
 import truncateString from '../utils/truncateName';
 import usePrevious from '../utils/usePrevious';
-import { StepErrorBoundary, StepViews, VisualizationStep } from './';
+import { StepErrorBoundary, StepViews, VisualizationSlot, VisualizationStep } from './';
 import './Visualization.css';
 import { AlertVariant, Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
@@ -66,7 +66,6 @@ const Visualization = () => {
     fetchCustomResource(viewData.steps)
       .then((value: string | void) => {
         if (value) {
-          // update the state of the YAML editor with the custom resource
           setYAMLData(value);
         }
       })
@@ -138,6 +137,8 @@ const Visualization = () => {
         case 0:
           // First item in `steps` array
           inputStep.position.x = window.innerWidth / 5;
+
+          // TODO: If it's not a 'source', create a temporary node
           break;
         case steps.length - 1:
           // Last item in `steps` array
@@ -202,7 +203,6 @@ const Visualization = () => {
     clientX: number;
     clientY: number;
   }) => {
-    // TODO: Check if there is an existing node??
     event.preventDefault();
 
     // @ts-ignore
