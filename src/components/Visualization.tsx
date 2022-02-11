@@ -150,8 +150,9 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           // First item in `steps` array
           inputStep.position.x = window.innerWidth / 5;
           // mark as a slot if it's first in the array and not a START step
-          inputStep.type = step.type !== 'START' ? 'slot' : inputStep.type;
-          // if()
+          if (steps.length > 0 && steps[0].type !== 'START') {
+            inputStep.type = 'slot';
+          }
           inputStep.data.connectorType = 'START';
           break;
         case steps.length - 1:
