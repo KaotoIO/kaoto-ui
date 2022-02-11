@@ -98,9 +98,9 @@ const Visualization = () => {
     const stepsAsElements: any[] = [];
     const stepEdges: any[] = [];
 
-    // TODO: If it's not a 'source', create a temporary node
-    if (steps.length > 0 && steps[0].type !== 'START') {
-      // alert('The first step is not a START step.');
+    // if the first step isn't a source, or if there are no steps,
+    // create a dummy placeholder step
+    if (!steps.length || (steps.length > 0 && steps[0].type !== 'START')) {
       steps.unshift({ name: 'ADD A STEP' });
     }
 
