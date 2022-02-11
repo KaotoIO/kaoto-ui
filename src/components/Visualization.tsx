@@ -146,6 +146,7 @@ const Visualization = () => {
           inputStep.position.x = window.innerWidth / 5;
           // mark as a slot if it's first in the array and not a START step
           inputStep.type = step.type !== 'START' ? 'slot' : inputStep.type;
+          inputStep.data.connectorType = 'START';
           break;
         case steps.length - 1:
           // Last item in `steps` array
