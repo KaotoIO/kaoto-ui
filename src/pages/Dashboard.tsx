@@ -73,7 +73,9 @@ const Dashboard = () => {
                   </GridItem>
                 )}
                 <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
-                  <Visualization />
+                  <Visualization
+                    toggleCatalog={() => setExpanded({ ...expanded, catalog: !expanded.catalog })}
+                  />
                 </GridItem>
               </YAMLProvider>
             </StepsAndViewsProvider>

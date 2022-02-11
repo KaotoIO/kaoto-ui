@@ -19,8 +19,8 @@ interface IYAMLDataProvider {
 export type IUseYAMLData = [string, Dispatch<SetStateAction<string>>];
 
 export const useYAMLData = (newYAMLData: string): IUseYAMLData => {
-  // const [YAMLData, setYAMLData] = useState<string>(YAML);
-  const [YAMLData, setYAMLData] = useState<string>();
+  const [YAMLData, setYAMLData] = useState<string>(YAML);
+  // const [YAMLData, setYAMLData] = useState<string>();
   const previousYaml = usePrevious(YAMLData);
   const [, dispatch] = useStepsAndViewsContext();
 

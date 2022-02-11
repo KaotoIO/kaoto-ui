@@ -45,7 +45,11 @@ const findStepIdxWithUUID = (UUID: string, steps: IStepProps[]) => {
   return steps.map((s) => s.UUID).indexOf(UUID);
 };
 
-const Visualization = () => {
+interface IVisualization {
+  toggleCatalog?: () => void;
+}
+
+const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `elements` is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<IVizStepProps[]>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
@@ -101,6 +105,7 @@ const Visualization = () => {
     // if the first step isn't a source, or if there are no steps,
     // create a dummy placeholder step
     if (!steps.length || (steps.length > 0 && steps[0].type !== 'START')) {
+      // @ts-ignore
       steps.unshift({ name: 'ADD A STEP' });
     }
 
@@ -146,6 +151,7 @@ const Visualization = () => {
           inputStep.position.x = window.innerWidth / 5;
           // mark as a slot if it's first in the array and not a START step
           inputStep.type = step.type !== 'START' ? 'slot' : inputStep.type;
+          // if()
           inputStep.data.connectorType = 'START';
           break;
         case steps.length - 1:
@@ -181,6 +187,7 @@ const Visualization = () => {
    * Delete an integration step
    */
   const deleteStep = () => {
+    if (!selectedStep.UUID) return;
     setIsPanelExpanded(false);
     setSelectedStep(placeholderStep);
 
@@ -245,8 +252,15 @@ const Visualization = () => {
   };
 
   const onElementClick = (_e: any, element: any) => {
+    // prevent slots from being selected,
+    // passive-aggressively open the steps catalog
+    if (element.type === 'slot') {
+      if (toggleCatalog) toggleCatalog();
+      return;
+    }
     // prevent temporary steps from being selected for now
-    if (!element.data.UUID) {
+    // if (!element.data.UUID) {
+    if (element.data.temporary) {
       return;
     }
 
@@ -282,7 +296,7 @@ const Visualization = () => {
       });
 
       // TODO: this won't work for temporary steps because they don't have a UUID
-      const oldStepIdx = findStepIdxWithUUID(selectedStep.UUID, viewData.steps);
+      const oldStepIdx = findStepIdxWithUUID(selectedStep.UUID!, viewData.steps);
       // Replace step with new step
       dispatch({ type: 'REPLACE_STEP', payload: { newStep, oldStepIndex: oldStepIdx } });
     } else {
