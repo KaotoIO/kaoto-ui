@@ -1,5 +1,6 @@
 import { fetchViewDefinitions, useStepsAndViewsContext } from '../api';
 import { IStepProps } from '../types';
+import { canStepBeReplaced } from '../utils/validationService';
 import './Visualization.css';
 import { Handle, Position } from 'react-flow-renderer';
 
@@ -22,6 +23,11 @@ const VisualizationStep = ({ data }: any) => {
     const dataJSON = e.dataTransfer.getData('text');
     const step: IStepProps = JSON.parse(dataJSON);
     // Replace step
+    if (!canStepBeReplaced(data, step)) {
+      return console.log('step CANNOT be replaced');
+    } else {
+      console.log('step CAN be replaced');
+    }
     dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
     // fetch the updated view definitions again with new views
     fetchViewDefinitions(viewData.steps).then((data: any) => {

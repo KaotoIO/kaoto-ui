@@ -1,5 +1,6 @@
 import { fetchViewDefinitions, useStepsAndViewsContext } from '../api';
 import { IStepProps } from '../types';
+import { canStepBeDropped } from '../utils/validationService';
 import './Visualization.css';
 // import {
 //   Title,
@@ -24,6 +25,9 @@ const VisualizationSlot = ({ data }: any) => {
   const onDrop = (e: { dataTransfer: { getData: (arg0: string) => any } }) => {
     const dataJSON = e.dataTransfer.getData('text');
     const step: IStepProps = JSON.parse(dataJSON);
+    // Check with validation first
+    // canStepBeDropped(existingStep, proposedStep)
+
     // Replace step
     dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
     // fetch the updated view definitions again with new views
