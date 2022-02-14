@@ -1,4 +1,4 @@
-name: Add epics to Roadmap
+name: ✨ Add epics to Roadmap ✨
 
 on:
   issues:
@@ -9,7 +9,7 @@ env:
 jobs:
   assign_one_project:
     runs-on: ubuntu-latest
-    name: Move to Wish List
+    name: 🎯 Move to Wish List 🎯
     steps:
     - name: Assign issues with `user-story` label to project 3
       uses: srggrs/assign-one-project-github-action@1.3.1
@@ -17,3 +17,20 @@ jobs:
       with:
         project: 'https://github.com/orgs/KaotoUI/projects/3'
         column_name: 'WishList'
+
+  assign_to_newcomers_list:
+    runs-on: ubuntu-latest
+    name: 🎯 Move to Newcomers List 🎯
+    steps:
+    - name: Assign issues with `good first issue` label to project 4
+      uses: srggrs/assign-one-project-github-action@1.3.1
+      if: contains(github.event.issue.labels.*.name, 'good first issue')
+      with:
+        project: 'https://github.com/orgs/KaotoIO/projects/4'
+        column_name: 'What To Do'
+    - name: Assign issues with `help wanted` label to project 4
+      uses: srggrs/assign-one-project-github-action@1.3.1
+      if: contains(github.event.issue.labels.*.name, 'help wanted')
+      with:
+        project: 'https://github.com/orgs/KaotoIO/projects/4'
+        column_name: 'What To Do'
