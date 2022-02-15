@@ -1,6 +1,6 @@
 import { fetchViewDefinitions, useStepsAndViewsContext } from '../api';
 import { IStepProps } from '../types';
-import { canStepBeDropped } from '../utils/validationService';
+import { canStepBeReplaced } from '../utils/validationService';
 import './Visualization.css';
 import CubesIcon from '@patternfly/react-icons/dist/esm/icons/cubes-icon';
 import { Handle, Position } from 'react-flow-renderer';
@@ -10,21 +10,28 @@ const VisualizationSlot = ({ data }: any) => {
   const [viewData, dispatch] = useStepsAndViewsContext();
 
   /**
-   * Step replacement onto existing integration step
+   * Handles dropping a step onto a slot
    * @param e
    */
   const onDrop = (e: { dataTransfer: { getData: (arg0: string) => any } }) => {
     const dataJSON = e.dataTransfer.getData('text');
     const step: IStepProps = JSON.parse(dataJSON);
-    // Check with validation first
-    // canStepBeDropped(existingStep, proposedStep)
 
     // Replace step
-    dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
-    // fetch the updated view definitions again with new views
-    fetchViewDefinitions(viewData.steps).then((data: any) => {
-      dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
-    });
+    if (canStepBeReplaced(data, step, viewData.steps)) {
+      // the step CAN be replaced
+      // you don't even need to create the node, just update the steps state
+      // and it will do it automatically
+      dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
+      // fetch the updated view definitions again with new views
+      fetchViewDefinitions(viewData.steps).then((data: any) => {
+        dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+      });
+    } else {
+      // the step CANNOT be replaced
+      // the proposed step is invalid
+      console.log('step CANNOT be replaced');
+    }
   };
 
   return (

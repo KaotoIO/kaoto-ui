@@ -114,6 +114,11 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       steps.unshift({ name: 'ADD A STEP' });
     }
 
+    /**
+     * Handles dropping a step onto an existing step (i.e. step replacement)
+     * @param event
+     * @param data
+     */
     const onDropChange = (
       event: { preventDefault: () => void; dataTransfer: { getData: (arg0: string) => any } },
       data: { index: any }
@@ -159,7 +164,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         type: 'step',
       };
 
-      // Add edge properties if more than one step, and not on first step
+      // add edge properties if more than one step, and not on first step
       if (steps.length > 1 && index !== 0) {
         stepEdge.arrowHeadType = 'arrowclosed';
         stepEdge.id = 'e' + previousStep.id + '-' + inputStep.id;
@@ -169,13 +174,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         stepEdge.target = inputStep.id;
       }
 
-      /**
-       * Determine position of Step,
-       * add properties accordingly
-       */
+      // determine position of Step, add properties
       switch (index) {
         case 0:
-          // First item in `steps` array
+          // first item in `steps` array
           inputStep.position.x = window.innerWidth / 5;
           // mark as a slot if it's first in the array and not a START step
           if (steps.length > 0 && steps[0].type !== 'START') {
@@ -199,7 +201,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
       stepsAsElements.push(inputStep);
 
-      // Only add step edge if there is more than one step and not on the first step
+      // only add step edge if there is more than one step and not on the first step
       if (steps.length > 1 && index !== 0) {
         stepEdges.push(stepEdge);
       }
@@ -212,9 +214,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     setElements(combined);
   };
 
-  /**
-   * Delete an integration step
-   */
+  // Delete an integration step
   const deleteStep = () => {
     if (!selectedStep.UUID) return;
     setIsPanelExpanded(false);
