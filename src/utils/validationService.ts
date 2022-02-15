@@ -1,4 +1,3 @@
-import { useStepsAndViewsContext } from '../api';
 import { IStepProps } from '../types';
 
 /**
@@ -8,9 +7,7 @@ import { IStepProps } from '../types';
  */
 export function canStepBeAppended(connectingStep: any, appendedStep: any): boolean {
   let isValid = false;
-  // initial shallow check of step type, where the
-  // existing step is treated as a first class citizen,
-  // regardless if it's a slot or not
+
   switch (connectingStep.connectorType) {
     case 'START':
       if (appendedStep.connectorType === 'START') {

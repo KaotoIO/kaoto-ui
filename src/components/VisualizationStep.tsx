@@ -1,22 +1,9 @@
-import { fetchViewDefinitions, useStepsAndViewsContext } from '../api';
-import { IStepProps } from '../types';
-import { canStepBeReplaced } from '../utils/validationService';
 import './Visualization.css';
-import {
-  Handle,
-  Position,
-  removeElements,
-  useStoreActions,
-  useStoreState,
-} from 'react-flow-renderer';
+import { memo, useCallback } from 'react';
+import { Handle, Position } from 'react-flow-renderer';
 
 // Custom Node type and component for React Flow
-const VisualizationStep = ({ data }: any) => {
-  // const elements = useStoreState((state) => state.nodes);
-  const elements = useStoreState((state) => state.elements);
-  const setElements = useStoreActions((actions) => actions.setElements);
-  const [viewData, dispatch] = useStepsAndViewsContext();
-
+const VisualizationStep = memo(({ data }: any) => {
   const borderColor =
     data.connectorType === 'START'
       ? 'rgb(0, 136, 206)'
@@ -24,44 +11,19 @@ const VisualizationStep = ({ data }: any) => {
       ? 'rgb(149, 213, 245)'
       : 'rgb(204, 204, 204)';
 
-  /**
-   * Step replacement onto existing integration step
-   * @param e
-   */
-  const onDrop = (e: { dataTransfer: { getData: (arg0: string) => any } }) => {
-    const dataJSON = e.dataTransfer.getData('text');
-    const step: IStepProps = JSON.parse(dataJSON);
-    console.log(elements);
-
-    // Replace step
-    if (!canStepBeReplaced(data, step, viewData.steps)) {
-      console.log('step CANNOT be replaced');
-      //setElements();
-      // dispatch({ type: 'DELETE_STEP', payload: { index: data.index } });
-      setElements((els) => removeElements(step, els));
-      // data.onRemoveChild(elements, step);
-    } else {
-      console.log('step CAN be replaced');
-
-      dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
-      // fetch the updated view definitions again with new views
-      fetchViewDefinitions(viewData.steps).then((data: any) => {
-        dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
-      });
-    }
-  };
+  const onDropChange = useCallback((event) => data.onDropChange(event, data), [data]);
 
   return (
     <div
       className={'stepNode'}
       style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}
-      onDrop={onDrop}
+      onDrop={onDropChange}
     >
       {!(data.connectorType === 'START') && (
         <Handle type="target" position={Position.Left} id="a" style={{ borderRadius: 0 }} />
       )}
       <div className={'stepNode__Icon'}>
-        <img src={data.icon} className="nodrag" />
+        <img src={data.icon} className="nodrag" alt={data.label} />
       </div>
       {!(data.connectorType === 'END') && (
         <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
@@ -69,6 +31,6 @@ const VisualizationStep = ({ data }: any) => {
       <div className={'stepNode__Label'}>{data.label}</div>
     </div>
   );
-};
+});
 
 export { VisualizationStep };

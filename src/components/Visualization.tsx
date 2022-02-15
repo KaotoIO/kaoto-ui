@@ -1,7 +1,13 @@
-import { fetchCustomResource, useStepsAndViewsContext, useYAMLContext } from '../api';
+import {
+  fetchCustomResource,
+  fetchViewDefinitions,
+  useStepsAndViewsContext,
+  useYAMLContext,
+} from '../api';
 import { IStepProps, IVizStepProps, IVizStepPropsEdge } from '../types';
 import truncateString from '../utils/truncateName';
 import usePrevious from '../utils/usePrevious';
+import { canStepBeReplaced } from '../utils/validationService';
 import { StepErrorBoundary, StepViews, VisualizationSlot, VisualizationStep } from './';
 import './Visualization.css';
 import { AlertVariant, Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
@@ -53,7 +59,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `elements` is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<Elements<IStepProps>>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
-  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
   const [, setYAMLData] = useYAMLContext();
@@ -109,6 +115,31 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       steps.unshift({ name: 'ADD A STEP' });
     }
 
+    const onDropChange = (
+      event: { preventDefault: () => void; dataTransfer: { getData: (arg0: string) => any } },
+      data: { index: any }
+    ) => {
+      event.preventDefault();
+
+      const dataJSON = event.dataTransfer.getData('text');
+      const step: IStepProps = JSON.parse(dataJSON);
+      // Replace step
+      if (canStepBeReplaced(data, step, viewData.steps)) {
+        // the step CAN be replaced
+        // you don't even need to create the node, just update the steps state
+        // and it will do it automatically
+        dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
+        // fetch the updated view definitions again with new views
+        fetchViewDefinitions(viewData.steps).then((data: any) => {
+          dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+        });
+      } else {
+        // the step CANNOT be replaced
+        // the proposed step is invalid
+        console.log('step CANNOT be replaced');
+      }
+    };
+
     steps.map((step, index) => {
       // Grab the previous step to use for determining position and drawing edges
       const previousStep = stepsAsElements[index - 1];
@@ -125,6 +156,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           label: truncateString(step.name, 14),
           temporary: false,
           UUID: step.UUID,
+          onDropChange,
         },
         id: getId(),
         position: { x: 0, y: window.innerHeight / 2 },
@@ -201,7 +233,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   };
 
   const onConnect = (params: Edge<any> | Connection) => {
-    // @ts-ignore
     setElements((els) => addEdge(params, els));
   };
 
@@ -220,37 +251,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     clientY: number;
   }) => {
     event.preventDefault();
-
-    // @ts-ignore
-    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-    const type = event.dataTransfer.getData('application/reactflow');
-    const dataJSON = event.dataTransfer.getData('text');
-    const step: IStepProps = JSON.parse(dataJSON);
-
-    // @ts-ignore
-    const position = reactFlowInstance.project({
-      x: event.clientX - reactFlowBounds.left,
-      y: event.clientY - reactFlowBounds.top,
-    });
-
-    const newNode = {
-      id: getId(),
-      type,
-      position,
-      data: {
-        connectorType: step.type,
-        icon: step.icon,
-        // custom generated uuid as a reference fallback
-        id: uuidv4(),
-        label: `${truncateString(step.name, 14)}`,
-        name: step.name,
-        temporary: true,
-        // generated from the backend
-        UUID: step.UUID,
-      },
-    };
-
-    setElements((es) => es.concat(newNode));
   };
 
   const onElementClick = (_e: any, element: any) => {
