@@ -19,17 +19,14 @@ const VisualizationSlot = ({ data }: any) => {
 
     // Replace step
     if (canStepBeReplaced(data, step, viewData.steps)) {
-      // the step CAN be replaced
-      // you don't even need to create the node, just update the steps state
-      // and it will do it automatically
+      // update the steps, the new node will be created automatically
       dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
       // fetch the updated view definitions again with new views
       fetchViewDefinitions(viewData.steps).then((data: any) => {
         dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
       });
     } else {
-      // the step CANNOT be replaced
-      // the proposed step is invalid
+      // the step CANNOT be replaced, the proposed step is invalid
       console.log('step CANNOT be replaced');
     }
   };
