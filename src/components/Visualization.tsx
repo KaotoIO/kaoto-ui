@@ -127,8 +127,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
       const dataJSON = event.dataTransfer.getData('text');
       const step: IStepProps = JSON.parse(dataJSON);
+      const validation = canStepBeReplaced(data, step, viewData.steps);
+
       // Replace step
-      if (canStepBeReplaced(data, step, viewData.steps).isValid) {
+      if (validation.isValid) {
         // update the steps, the new node will be created automatically
         dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
         // fetch the updated view definitions again with new views
@@ -138,6 +140,12 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       } else {
         // the step CANNOT be replaced, the proposed step is invalid
         console.log('step CANNOT be replaced');
+        addAlert &&
+          addAlert({
+            title: 'Replace Step Unsuccessful',
+            variant: AlertVariant.danger,
+            description: validation.message ?? 'Something went wrong, please try again later.',
+          });
       }
     };
 

@@ -68,6 +68,7 @@ export function canStepBeReplaced(
   switch (existingStep.connectorType) {
     case 'START':
       isValid = proposedStep.type === 'START';
+      message = 'First step must be a start step.';
       break;
     case 'MIDDLE':
     case 'END':
@@ -76,8 +77,13 @@ export function canStepBeReplaced(
       // middle step, and now uses that for validation, meaning you
       // cannot replace it wih a sink
       if (steps[steps.length - 1].UUID === existingStep.UUID) {
+        message = 'Last step must be a middle or end step.';
         isValid = proposedStep.type === 'MIDDLE' || proposedStep.type === 'END';
+      } else if (existingStep.connectorType === 'MIDDLE' && proposedStep.type === 'END') {
+        // not the last step, but trying to replace a middle step with an end step
+        message = 'You cannot replace a middle step with an end step.';
       }
+
       break;
   }
 
