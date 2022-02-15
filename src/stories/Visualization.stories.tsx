@@ -1,7 +1,7 @@
 import { AlertProvider, Visualization } from '../components';
 // For now the only view data we care about are steps
-import steps from './data/steps';
-import views from './data/views';
+// import steps from './data/steps';
+// import views from './data/views';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {
@@ -14,13 +14,13 @@ const Template: ComponentStory<typeof Visualization> = () => {
     <AlertProvider>
       <h1>Visualization</h1>
       <br />
-      {/*<Visualization />*/}
+      {<Visualization />}
     </AlertProvider>
   );
 };
 
 export const Kamelet = Template.bind({});
-Kamelet.args = { steps, views };
+Kamelet.args = {};
 
 export const Integration = Template.bind({});
-Integration.args = { steps: [...steps, steps[1]] };
+Integration.args = {};
