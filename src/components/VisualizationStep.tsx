@@ -2,10 +2,19 @@ import { fetchViewDefinitions, useStepsAndViewsContext } from '../api';
 import { IStepProps } from '../types';
 import { canStepBeReplaced } from '../utils/validationService';
 import './Visualization.css';
-import { Handle, Position } from 'react-flow-renderer';
+import {
+  Handle,
+  Position,
+  removeElements,
+  useStoreActions,
+  useStoreState,
+} from 'react-flow-renderer';
 
 // Custom Node type and component for React Flow
 const VisualizationStep = ({ data }: any) => {
+  // const elements = useStoreState((state) => state.nodes);
+  const elements = useStoreState((state) => state.elements);
+  const setElements = useStoreActions((actions) => actions.setElements);
   const [viewData, dispatch] = useStepsAndViewsContext();
 
   const borderColor =
@@ -22,17 +31,24 @@ const VisualizationStep = ({ data }: any) => {
   const onDrop = (e: { dataTransfer: { getData: (arg0: string) => any } }) => {
     const dataJSON = e.dataTransfer.getData('text');
     const step: IStepProps = JSON.parse(dataJSON);
+    console.log(elements);
+
     // Replace step
-    if (!canStepBeReplaced(data, step)) {
-      return console.log('step CANNOT be replaced');
+    if (!canStepBeReplaced(data, step, viewData.steps)) {
+      console.log('step CANNOT be replaced');
+      //setElements();
+      // dispatch({ type: 'DELETE_STEP', payload: { index: data.index } });
+      setElements((els) => removeElements(step, els));
+      // data.onRemoveChild(elements, step);
     } else {
       console.log('step CAN be replaced');
+
+      dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
+      // fetch the updated view definitions again with new views
+      fetchViewDefinitions(viewData.steps).then((data: any) => {
+        dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+      });
     }
-    dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
-    // fetch the updated view definitions again with new views
-    fetchViewDefinitions(viewData.steps).then((data: any) => {
-      dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
-    });
   };
 
   return (

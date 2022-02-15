@@ -1,3 +1,6 @@
+import { useStepsAndViewsContext } from '../api';
+import { IStepProps } from '../types';
+
 /**
  * Validation for appending a step
  * @param connectingStep
@@ -30,36 +33,35 @@ export function canStepBeAppended(connectingStep: any, appendedStep: any): boole
  * Validation for step replacement
  * @param existingStep
  * @param proposedStep
+ * @param steps
  */
-export function canStepBeReplaced(existingStep: any, proposedStep: any): boolean {
+export function canStepBeReplaced(
+  existingStep: any,
+  proposedStep: any,
+  steps: IStepProps[]
+): boolean {
   let isValid = false;
   // initial shallow check of step type, where the
   // existing step is treated as a first class citizen,
   // regardless if it's a slot or not
   if (existingStep.connectorType === proposedStep.type) {
     isValid = true;
-    console.log('they are equal, should be valid...');
     return isValid;
   }
 
   switch (existingStep.connectorType) {
     case 'START':
-      // console.log('existingStep.connectorType: ' + existingStep.connectorType);
-      // console.log('proposedStep.type: ' + proposedStep.type);
       isValid = proposedStep.type === 'START';
-      // console.log('isValid: ' + proposedStep.type === 'START');
       break;
     case 'MIDDLE':
-      // console.log('existingStep.connectorType: ' + existingStep.connectorType);
-      // console.log('proposedStep.connectorType: ' + proposedStep.type);
-      // isValid = proposedStep.type !== ('START' || 'END');
-      // console.log('isValid: ' + proposedStep.type !== ('START' || 'END'));
-      break;
     case 'END':
-      console.log('existingStep.connectorType: ' + existingStep.connectorType);
-      console.log('proposedStep.connectorType: ' + proposedStep.type);
-      isValid = proposedStep.type === 'MIDDLE' || proposedStep.type === 'END';
-      console.log('isValid: ' + proposedStep.type === 'MIDDLE' || proposedStep.type === 'END');
+      // check first that it's actually at the end of the steps array
+      // to handle edge cases where the end step has been replaced by a
+      // middle step, and now uses that for validation, meaning you
+      // cannot replace it wih a sink
+      if (steps[steps.length - 1].UUID === existingStep.UUID) {
+        isValid = proposedStep.type === 'MIDDLE' || proposedStep.type === 'END';
+      }
       break;
   }
 

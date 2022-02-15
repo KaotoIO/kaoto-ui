@@ -51,7 +51,7 @@ interface IVisualization {
 
 const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `elements` is an array of UI-specific objects that represent the Step model visually
-  const [elements, setElements] = useState<IVizStepProps[]>([]);
+  const [elements, setElements] = useState<Elements<IStepProps>>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
@@ -243,6 +243,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         // custom generated uuid as a reference fallback
         id: uuidv4(),
         label: `${truncateString(step.name, 14)}`,
+        name: step.name,
         temporary: true,
         // generated from the backend
         UUID: step.UUID,
