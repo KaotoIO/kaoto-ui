@@ -1,7 +1,7 @@
 import { IStepProps } from '../types';
 
 /**
- * Validation for appending a step
+ * Checks whether a step can be appended onto an existing step.
  * @param connectingStep
  * @param appendedStep
  */
@@ -27,14 +27,25 @@ export function canStepBeAppended(connectingStep: any, appendedStep: any): boole
 }
 
 /**
- * Validation for step replacement
+ * Checks whether a proposed step can be inserted between two existing steps.
+ * @param previousStep
+ * @param insertedStep
+ * @param nextStep
+ */
+export function canStepBeInserted(previousStep: any, insertedStep: any, nextStep: any): boolean {
+  let isValid = false;
+  return isValid;
+}
+
+/**
+ * Checks whether a step can replace an existing step.
  * @param existingStep
  * @param proposedStep
  * @param steps
  */
 export function canStepBeReplaced(
   existingStep: any,
-  proposedStep: any,
+  proposedStep: IStepProps,
   steps: IStepProps[]
 ): boolean {
   let isValid = false;
