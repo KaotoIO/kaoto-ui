@@ -1,7 +1,13 @@
-import { fetchCustomResource, useStepsAndViewsContext, useYAMLContext } from '../api';
+import {
+  fetchCustomResource,
+  fetchViewDefinitions,
+  useStepsAndViewsContext,
+  useYAMLContext,
+} from '../api';
 import { IStepProps, IVizStepProps, IVizStepPropsEdge } from '../types';
 import truncateString from '../utils/truncateName';
 import usePrevious from '../utils/usePrevious';
+import { canStepBeReplaced } from '../utils/validationService';
 import { StepErrorBoundary, StepViews, VisualizationSlot, VisualizationStep } from './';
 import './Visualization.css';
 import { AlertVariant, Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
@@ -20,7 +26,6 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import 'react-flow-renderer/dist/theme-default.css';
-import { v4 as uuidv4 } from 'uuid';
 
 const placeholderStep: IStepProps = {
   apiVersion: '',
@@ -51,9 +56,9 @@ interface IVisualization {
 
 const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `elements` is an array of UI-specific objects that represent the Step model visually
-  const [elements, setElements] = useState<IVizStepProps[]>([]);
+  const [elements, setElements] = useState<Elements<IStepProps>>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
-  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
   const [, setYAMLData] = useYAMLContext();
@@ -109,6 +114,41 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       steps.unshift({ name: 'ADD A STEP' });
     }
 
+    /**
+     * Handles dropping a step onto an existing step (i.e. step replacement)
+     * @param event
+     * @param data
+     */
+    const onDropChange = (
+      event: { preventDefault: () => void; dataTransfer: { getData: (arg0: string) => any } },
+      data: { index: any }
+    ) => {
+      event.preventDefault();
+
+      const dataJSON = event.dataTransfer.getData('text');
+      const step: IStepProps = JSON.parse(dataJSON);
+      const validation = canStepBeReplaced(data, step, viewData.steps);
+
+      // Replace step
+      if (validation.isValid) {
+        // update the steps, the new node will be created automatically
+        dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
+        // fetch the updated view definitions again with new views
+        fetchViewDefinitions(viewData.steps).then((data: any) => {
+          dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+        });
+      } else {
+        // the step CANNOT be replaced, the proposed step is invalid
+        console.log('step CANNOT be replaced');
+        addAlert &&
+          addAlert({
+            title: 'Replace Step Unsuccessful',
+            variant: AlertVariant.danger,
+            description: validation.message ?? 'Something went wrong, please try again later.',
+          });
+      }
+    };
+
     steps.map((step, index) => {
       // Grab the previous step to use for determining position and drawing edges
       const previousStep = stepsAsElements[index - 1];
@@ -119,19 +159,17 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         data: {
           connectorType: step.type,
           icon: step.icon,
-          // custom generated uuid as a reference fallback
-          id: uuidv4(),
           index: index,
           label: truncateString(step.name, 14),
-          temporary: false,
           UUID: step.UUID,
+          onDropChange,
         },
         id: getId(),
         position: { x: 0, y: window.innerHeight / 2 },
         type: 'step',
       };
 
-      // Add edge properties if more than one step, and not on first step
+      // add edge properties if more than one step, and not on first step
       if (steps.length > 1 && index !== 0) {
         stepEdge.arrowHeadType = 'arrowclosed';
         stepEdge.id = 'e' + previousStep.id + '-' + inputStep.id;
@@ -141,17 +179,15 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         stepEdge.target = inputStep.id;
       }
 
-      /**
-       * Determine position of Step,
-       * add properties accordingly
-       */
+      // determine position of Step, add properties
       switch (index) {
         case 0:
-          // First item in `steps` array
+          // first item in `steps` array
           inputStep.position.x = window.innerWidth / 5;
           // mark as a slot if it's first in the array and not a START step
-          inputStep.type = step.type !== 'START' ? 'slot' : inputStep.type;
-          // if()
+          if (steps.length > 0 && steps[0].type !== 'START') {
+            inputStep.type = 'slot';
+          }
           inputStep.data.connectorType = 'START';
           break;
         case steps.length - 1:
@@ -170,7 +206,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
       stepsAsElements.push(inputStep);
 
-      // Only add step edge if there is more than one step and not on the first step
+      // only add step edge if there is more than one step and not on the first step
       if (steps.length > 1 && index !== 0) {
         stepEdges.push(stepEdge);
       }
@@ -183,9 +219,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     setElements(combined);
   };
 
-  /**
-   * Delete an integration step
-   */
+  // Delete an integration step
   const deleteStep = () => {
     if (!selectedStep.UUID) return;
     setIsPanelExpanded(false);
@@ -200,7 +234,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   };
 
   const onConnect = (params: Edge<any> | Connection) => {
-    // @ts-ignore
     setElements((els) => addEdge(params, els));
   };
 
@@ -219,36 +252,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     clientY: number;
   }) => {
     event.preventDefault();
-
-    // @ts-ignore
-    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-    const type = event.dataTransfer.getData('application/reactflow');
-    const dataJSON = event.dataTransfer.getData('text');
-    const step: IStepProps = JSON.parse(dataJSON);
-
-    // @ts-ignore
-    const position = reactFlowInstance.project({
-      x: event.clientX - reactFlowBounds.left,
-      y: event.clientY - reactFlowBounds.top,
-    });
-
-    const newNode = {
-      id: getId(),
-      type,
-      position,
-      data: {
-        connectorType: step.type,
-        icon: step.icon,
-        // custom generated uuid as a reference fallback
-        id: uuidv4(),
-        label: `${truncateString(step.name, 14)}`,
-        temporary: true,
-        // generated from the backend
-        UUID: step.UUID,
-      },
-    };
-
-    setElements((es) => es.concat(newNode));
   };
 
   const onElementClick = (_e: any, element: any) => {
@@ -256,11 +259,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     // passive-aggressively open the steps catalog
     if (element.type === 'slot') {
       if (toggleCatalog) toggleCatalog();
-      return;
-    }
-    // prevent temporary steps from being selected for now
-    // if (!element.data.UUID) {
-    if (element.data.temporary) {
       return;
     }
 
@@ -295,7 +293,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         newStepParameters[paramIndex!].value = value;
       });
 
-      // TODO: this won't work for temporary steps because they don't have a UUID
       const oldStepIdx = findStepIdxWithUUID(selectedStep.UUID!, viewData.steps);
       // Replace step with new step
       dispatch({ type: 'REPLACE_STEP', payload: { newStep, oldStepIndex: oldStepIdx } });
