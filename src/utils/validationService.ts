@@ -5,8 +5,12 @@ import { IStepProps } from '../types';
  * @param existingStep
  * @param appendedStep
  */
-export function canStepBeAppended(existingStep: any, appendedStep: any): boolean {
+export function canStepBeAppended(
+  existingStep: any,
+  appendedStep: any
+): { isValid: boolean; message?: string } {
   let isValid = false;
+  let message = undefined;
 
   switch (existingStep.connectorType) {
     case 'START':
@@ -20,7 +24,7 @@ export function canStepBeAppended(existingStep: any, appendedStep: any): boolean
       break;
   }
 
-  return isValid;
+  return { isValid, message };
 }
 
 /**
@@ -29,8 +33,14 @@ export function canStepBeAppended(existingStep: any, appendedStep: any): boolean
  * @param _insertedStep
  * @param _nextStep
  */
-export function canStepBeInserted(_previousStep: any, _insertedStep: any, _nextStep: any): boolean {
-  return false;
+export function canStepBeInserted(
+  _previousStep: any,
+  _insertedStep: any,
+  _nextStep: any
+): { isValid: boolean; message?: string } {
+  let message = undefined;
+
+  return { isValid: false, message };
 }
 
 /**
@@ -43,14 +53,16 @@ export function canStepBeReplaced(
   existingStep: any,
   proposedStep: IStepProps,
   steps: IStepProps[]
-): boolean {
+): { isValid: boolean; message?: string } {
   let isValid = false;
+  let message = undefined;
+
   // initial shallow check of step type, where the
   // existing step is treated as a first class citizen,
   // regardless if it's a slot or not
   if (existingStep.connectorType === proposedStep.type) {
     isValid = true;
-    return isValid;
+    return { isValid, message: '' };
   }
 
   switch (existingStep.connectorType) {
@@ -69,5 +81,5 @@ export function canStepBeReplaced(
       break;
   }
 
-  return isValid;
+  return { isValid, message };
 }

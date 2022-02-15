@@ -128,7 +128,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       const dataJSON = event.dataTransfer.getData('text');
       const step: IStepProps = JSON.parse(dataJSON);
       // Replace step
-      if (canStepBeReplaced(data, step, viewData.steps)) {
+      if (canStepBeReplaced(data, step, viewData.steps).isValid) {
         // update the steps, the new node will be created automatically
         dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
         // fetch the updated view definitions again with new views
