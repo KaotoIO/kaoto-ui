@@ -2,15 +2,6 @@ import { fetchViewDefinitions, useStepsAndViewsContext } from '../api';
 import { IStepProps } from '../types';
 import { canStepBeDropped } from '../utils/validationService';
 import './Visualization.css';
-// import {
-//   Title,
-//   Button,
-//   EmptyState,
-//   EmptyStateVariant,
-//   EmptyStateIcon,
-//   EmptyStateBody,
-//   EmptyStateSecondaryActions,
-// } from '@patternfly/react-core';
 import CubesIcon from '@patternfly/react-icons/dist/esm/icons/cubes-icon';
 import { Handle, Position } from 'react-flow-renderer';
 

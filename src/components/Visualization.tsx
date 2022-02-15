@@ -26,7 +26,6 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import 'react-flow-renderer/dist/theme-default.css';
-import { v4 as uuidv4 } from 'uuid';
 
 const placeholderStep: IStepProps = {
   apiVersion: '',
@@ -150,11 +149,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         data: {
           connectorType: step.type,
           icon: step.icon,
-          // custom generated uuid as a reference fallback
-          id: uuidv4(),
           index: index,
           label: truncateString(step.name, 14),
-          temporary: false,
           UUID: step.UUID,
           onDropChange,
         },
@@ -260,11 +256,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       if (toggleCatalog) toggleCatalog();
       return;
     }
-    // prevent temporary steps from being selected for now
-    // if (!element.data.UUID) {
-    if (element.data.temporary) {
-      return;
-    }
 
     // Only set state again if the ID is not the same
     if (selectedStep.UUID !== element.data.UUID) {
@@ -297,7 +288,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         newStepParameters[paramIndex!].value = value;
       });
 
-      // TODO: this won't work for temporary steps because they don't have a UUID
       const oldStepIdx = findStepIdxWithUUID(selectedStep.UUID!, viewData.steps);
       // Replace step with new step
       dispatch({ type: 'REPLACE_STEP', payload: { newStep, oldStepIndex: oldStepIdx } });
