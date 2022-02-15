@@ -2396,7 +2396,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-actions@npm:^6.4.18":
+"@storybook/addon-actions@npm:6.4.18":
   version: 6.4.18
   resolution: "@storybook/addon-actions@npm:6.4.18"
   dependencies:
@@ -2430,7 +2430,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-docs@npm:^6.4.18":
+"@storybook/addon-docs@npm:6.4.18":
   version: 6.4.18
   resolution: "@storybook/addon-docs@npm:6.4.18"
   dependencies:
@@ -2528,7 +2528,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-links@npm:^6.4.18":
+"@storybook/addon-links@npm:6.4.18":
   version: 6.4.18
   resolution: "@storybook/addon-links@npm:6.4.18"
   dependencies:
@@ -2689,7 +2689,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/builder-webpack5@npm:^6.4.18":
+"@storybook/builder-webpack5@npm:6.4.18":
   version: 6.4.18
   resolution: "@storybook/builder-webpack5@npm:6.4.18"
   dependencies:
@@ -3148,7 +3148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/manager-webpack5@npm:^6.4.18":
+"@storybook/manager-webpack5@npm:6.4.18":
   version: 6.4.18
   resolution: "@storybook/manager-webpack5@npm:6.4.18"
   dependencies:
@@ -3195,7 +3195,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/node-logger@npm:6.4.18, @storybook/node-logger@npm:^6.4.18":
+"@storybook/node-logger@npm:6.4.18":
   version: 6.4.18
   resolution: "@storybook/node-logger@npm:6.4.18"
   dependencies:
@@ -3262,7 +3262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:^6.4.18":
+"@storybook/react@npm:6.4.18":
   version: 6.4.18
   resolution: "@storybook/react@npm:6.4.18"
   dependencies:
@@ -12243,13 +12243,13 @@ __metadata:
     "@patternfly/react-core": 4.168.8
     "@patternfly/react-icons": 4.19.8
     "@rhoas/app-services-ui-shared": ^0.15.4
-    "@storybook/addon-actions": ^6.4.18
-    "@storybook/addon-docs": ^6.4.18
-    "@storybook/addon-links": ^6.4.18
-    "@storybook/builder-webpack5": ^6.4.18
-    "@storybook/manager-webpack5": ^6.4.18
-    "@storybook/node-logger": ^6.4.18
-    "@storybook/react": ^6.4.18
+    "@storybook/addon-actions": 6.4.18
+    "@storybook/addon-docs": 6.4.18
+    "@storybook/addon-links": 6.4.18
+    "@storybook/builder-webpack5": 6.4.18
+    "@storybook/manager-webpack5": 6.4.18
+    "@storybook/node-logger": 6.4.18
+    "@storybook/react": 6.4.18
     "@testing-library/dom": ^8.10.1
     "@testing-library/jest-dom": 5.14.1
     "@testing-library/react": 12.1.2
