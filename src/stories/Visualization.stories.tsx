@@ -3,7 +3,11 @@ import { AlertProvider, Visualization } from '../components';
 import steps from './data/steps';
 import views from './data/views';
 import initialYAML from './data/yaml';
-import { Page } from '@patternfly/react-core';
+import '@patternfly/patternfly/patternfly.css';
+import '@patternfly/patternfly/utilities/Display/display.css';
+import '@patternfly/patternfly/utilities/Flex/flex.css';
+import '@patternfly/patternfly/utilities/Sizing/sizing.css';
+import '@patternfly/patternfly/utilities/Spacing/spacing.css';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {
@@ -13,13 +17,11 @@ export default {
     (Story, context) => {
       return (
         <AlertProvider>
-          <Page>
-            <StepsAndViewsProvider initialState={context.args.initialState}>
-              <YAMLProvider initialState={initialYAML}>
-                <Story />
-              </YAMLProvider>
-            </StepsAndViewsProvider>
-          </Page>
+          <StepsAndViewsProvider initialState={context.args.initialState}>
+            <YAMLProvider initialState={initialYAML}>
+              <Story />
+            </YAMLProvider>
+          </StepsAndViewsProvider>
         </AlertProvider>
       );
     },
