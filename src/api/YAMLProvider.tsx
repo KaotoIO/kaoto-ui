@@ -20,13 +20,8 @@ export type IUseYAMLData = [string, Dispatch<SetStateAction<string>>];
 
 export const useYAMLData = (newYAMLData: string): IUseYAMLData => {
   const [YAMLData, setYAMLData] = useState<string>(newYAMLData);
-  // const [YAMLData, setYAMLData] = useState<string>();
   const previousYaml = usePrevious(YAMLData);
   const [, dispatch] = useStepsAndViewsContext();
-
-  // useEffect(() => {
-  //   console.table(newData);
-  // }, [YAMLData]);
 
   useEffect(() => {
     if (previousYaml === YAMLData) {

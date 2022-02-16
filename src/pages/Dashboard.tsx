@@ -66,7 +66,7 @@ const Dashboard = () => {
             </Tooltip>
           </div>
           <Grid>
-            <StepsAndViewsProvider>
+            <StepsAndViewsProvider initialState={{ steps: [], views: [] }}>
               <YAMLProvider initialState={YAML}>
                 {expanded.codeEditor && (
                   <GridItem span={4}>

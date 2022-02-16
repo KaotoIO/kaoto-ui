@@ -3,6 +3,10 @@ import { createContext, ReactNode, useContext, useReducer } from 'react';
 
 interface IStepsAndViewsProvider {
   children: ReactNode;
+  initialState: {
+    steps: IStepProps[];
+    views: IViewData[];
+  };
 }
 
 type StepsAndViewsAction =
@@ -15,7 +19,10 @@ export type IUseStepsAndViews = [
   dispatch: (action: StepsAndViewsAction) => void
 ];
 
-function stepsAndViewsReducer(state: { steps: any[]; views: any[] }, action: StepsAndViewsAction) {
+function stepsAndViewsReducer(
+  state: { steps: IStepProps[]; views: IViewData[] },
+  action: StepsAndViewsAction
+) {
   const { type, payload } = action;
 
   switch (type) {
@@ -39,8 +46,11 @@ function stepsAndViewsReducer(state: { steps: any[]; views: any[] }, action: Ste
   }
 }
 
-export const useStepsAndViews = (): IUseStepsAndViews => {
-  const [viewData, dispatch] = useReducer(stepsAndViewsReducer, { steps: [], views: [] });
+export const useStepsAndViews = (initialState: {
+  steps: IStepProps[];
+  views: IViewData[];
+}): IUseStepsAndViews => {
+  const [viewData, dispatch] = useReducer(stepsAndViewsReducer, initialState);
 
   // handle from the component directly instead
   // useEffect(() => {
@@ -50,9 +60,9 @@ export const useStepsAndViews = (): IUseStepsAndViews => {
   return [viewData, dispatch];
 };
 
-function StepsAndViewsProvider({ children }: IStepsAndViewsProvider) {
+function StepsAndViewsProvider({ initialState, children }: IStepsAndViewsProvider) {
   // viewData contains the Step model exactly as returned by the API
-  const [viewData, dispatch] = useStepsAndViews();
+  const [viewData, dispatch] = useStepsAndViews(initialState);
 
   return (
     <StepsAndViewsContext.Provider value={[viewData, dispatch]}>
