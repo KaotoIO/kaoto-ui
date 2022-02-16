@@ -1,22 +1,21 @@
 import { StepsAndViewsProvider, YAMLProvider } from '../api';
 import { AlertProvider, Visualization } from '../components';
+import steps from './data/steps';
+import views from './data/views';
+import initialYAML from './data/yaml';
 import { Page } from '@patternfly/react-core';
-// For now the only view data we care about are steps
-// import steps from './data/steps';
-// import views from './data/views';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {
   title: 'Visualization',
   component: Visualization,
-  // decorators: [(story) => <Provider store={store}>{story()}</Provider>],
   decorators: [
-    (Story) => {
+    (Story, context) => {
       return (
         <AlertProvider>
           <Page>
-            <StepsAndViewsProvider>
-              <YAMLProvider>
+            <StepsAndViewsProvider initialState={context.args.initialState}>
+              <YAMLProvider initialState={initialYAML}>
                 <Story />
               </YAMLProvider>
             </StepsAndViewsProvider>
@@ -27,18 +26,30 @@ export default {
   ],
 } as ComponentMeta<typeof Visualization>;
 
-const Template: ComponentStory<typeof Visualization> = () => {
+const Template: ComponentStory<typeof Visualization> = (args) => {
   return (
     <>
       <h1>Visualization</h1>
       <br />
-      {<Visualization />}
+      {<Visualization {...args} />}
     </>
   );
 };
 
 export const Kamelet = Template.bind({});
-Kamelet.args = {};
+Kamelet.args = {
+  initialState: {
+    steps: steps,
+    views: views,
+  },
+  toggleCatalog: () => {},
+};
 
 export const Integration = Template.bind({});
-Integration.args = {};
+Integration.args = {
+  initialState: {
+    steps: steps,
+    views: views,
+  },
+  toggleCatalog: () => {},
+};

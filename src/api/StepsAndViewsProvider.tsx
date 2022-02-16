@@ -3,10 +3,7 @@ import { createContext, ReactNode, useContext, useReducer } from 'react';
 
 interface IStepsAndViewsProvider {
   children: ReactNode;
-  initialState: {
-    steps: IStepProps[];
-    views: IViewData[];
-  };
+  initialState?: IViewData;
 }
 
 type StepsAndViewsAction =
@@ -19,10 +16,7 @@ export type IUseStepsAndViews = [
   dispatch: (action: StepsAndViewsAction) => void
 ];
 
-function stepsAndViewsReducer(
-  state: { steps: IStepProps[]; views: IViewData[] },
-  action: StepsAndViewsAction
-) {
+function stepsAndViewsReducer(state: IViewData, action: StepsAndViewsAction) {
   const { type, payload } = action;
 
   switch (type) {
@@ -46,10 +40,7 @@ function stepsAndViewsReducer(
   }
 }
 
-export const useStepsAndViews = (initialState: {
-  steps: IStepProps[];
-  views: IViewData[];
-}): IUseStepsAndViews => {
+export const useStepsAndViews = (initialState?: IViewData): IUseStepsAndViews => {
   const [viewData, dispatch] = useReducer(stepsAndViewsReducer, initialState);
 
   // handle from the component directly instead

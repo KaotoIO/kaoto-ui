@@ -4,7 +4,7 @@ import {
   useStepsAndViewsContext,
   useYAMLContext,
 } from '../api';
-import { IStepProps, IVizStepProps, IVizStepPropsEdge } from '../types';
+import { IStepProps, IViewData, IVizStepProps, IVizStepPropsEdge } from '../types';
 import truncateString from '../utils/truncateName';
 import usePrevious from '../utils/usePrevious';
 import { canStepBeReplaced } from '../utils/validationService';
@@ -51,6 +51,7 @@ const findStepIdxWithUUID = (UUID: string, steps: IStepProps[]) => {
 };
 
 interface IVisualization {
+  initialState?: IViewData;
   toggleCatalog?: () => void;
 }
 
