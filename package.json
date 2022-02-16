@@ -48,7 +48,6 @@
     "yarn": "2.4.3"
   },
   "devDependencies": {
-    "@mdx-js/react": "^2.0.0",
     "@patternfly/react-icons": "4.19.8",
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-docs": "^6.4.19",
