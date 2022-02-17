@@ -108,11 +108,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     const stepsAsElements: any[] = [];
     const stepEdges: any[] = [];
 
-    // if the first step isn't a source, or if there are no steps,
+    // if there are no steps, or if the first step isn't a source,
     // create a dummy placeholder step
-    if (!steps.length || (steps.length > 0 && steps[0].type !== 'START')) {
-      // @ts-ignore
-      steps.unshift({ name: 'ADD A STEP' });
+    if (steps.length === 0 || (steps.length > 0 && steps[0].type !== 'START')) {
+      steps[0] = { name: 'ADD A STEP' };
     }
 
     /**
