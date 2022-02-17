@@ -5,7 +5,7 @@ import { AlertProvider, Visualization } from './index';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {
-  title: 'Visualization',
+  title: 'Components/Visualization',
   component: Visualization,
   decorators: [
     (Story, context) => {

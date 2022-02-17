@@ -7,11 +7,11 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 const handleChanges = action('Catalog opened');
 
 export default {
-  title: 'Catalog',
+  title: 'Components/Catalog',
   component: Catalog,
 } as ComponentMeta<typeof Catalog>;
 
-const Template: ComponentStory<typeof Catalog> = (args) => {
+const Template: ComponentStory<typeof Catalog> = () => {
   const steps = catalog;
 
   return (

@@ -3,7 +3,7 @@ import { YAMLEditor } from './index';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {
-  title: 'YAMLEditor',
+  title: 'Components/YAMLEditor',
   component: YAMLEditor,
 } as ComponentMeta<typeof YAMLEditor>;
 
