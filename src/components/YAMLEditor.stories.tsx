@@ -1,5 +1,5 @@
-import { YAMLEditor } from '../components';
-import initialYAML from './data/yaml';
+import initialYAML from '../data/yaml';
+import { YAMLEditor } from './index';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {

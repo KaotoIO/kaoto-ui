@@ -1,8 +1,7 @@
-import { StepsAndViewsProvider, YAMLProvider } from '../api';
-import { AlertProvider, Visualization } from '../components';
-import steps from './data/steps';
-import views from './data/views';
-import initialYAML from './data/yaml';
+import { StepsAndViewsProvider } from '../api';
+import steps from '../data/steps';
+import views from '../data/views';
+import { AlertProvider, Visualization } from './index';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {
@@ -13,9 +12,7 @@ export default {
       return (
         <AlertProvider>
           <StepsAndViewsProvider initialState={context.args.initialState}>
-            <YAMLProvider initialState={initialYAML}>
-              <Story />
-            </YAMLProvider>
+            <Story />
           </StepsAndViewsProvider>
         </AlertProvider>
       );

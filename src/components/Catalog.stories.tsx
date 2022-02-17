@@ -1,10 +1,8 @@
+// For now the only view data we care about are steps
+import catalog from '../data/catalog';
+import { Catalog } from './Catalog';
 import { action } from '@storybook/addon-actions';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-
-import { Catalog } from '../components/Catalog';
-
-// For now the only view data we care about are steps
-import catalog from './data/catalog';
 
 const handleChanges = action('Catalog opened');
 

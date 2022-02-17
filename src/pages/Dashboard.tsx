@@ -1,6 +1,6 @@
 import { StepsAndViewsProvider, YAMLProvider } from '../api';
 import { Catalog, Visualization, YAMLEditor } from '../components';
-import YAML from '../stories/data/yaml';
+import YAML from '../data/yaml';
 import './Dashboard.css';
 import {
   Button,
