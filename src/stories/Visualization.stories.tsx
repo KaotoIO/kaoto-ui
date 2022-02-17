@@ -3,11 +3,6 @@ import { AlertProvider, Visualization } from '../components';
 import steps from './data/steps';
 import views from './data/views';
 import initialYAML from './data/yaml';
-import '@patternfly/patternfly/patternfly.css';
-import '@patternfly/patternfly/utilities/Display/display.css';
-import '@patternfly/patternfly/utilities/Flex/flex.css';
-import '@patternfly/patternfly/utilities/Sizing/sizing.css';
-import '@patternfly/patternfly/utilities/Spacing/spacing.css';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {
