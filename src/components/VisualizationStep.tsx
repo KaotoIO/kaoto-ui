@@ -1,4 +1,5 @@
 import './Visualization.css';
+import { PlusCircleIcon } from '@patternfly/react-icons';
 import { memo, useCallback } from 'react';
 import { Handle, Position, useStoreState } from 'react-flow-renderer';
 
@@ -26,7 +27,13 @@ const VisualizationStep = memo(({ data }: any) => {
         <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
       )}
       {data.connectorType !== 'END' && isLastNode && (
-        <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
+        <div className={'stepNode__Add'}>
+          <PlusCircleIcon
+            onClick={() => {
+              console.log('clicked!');
+            }}
+          />
+        </div>
       )}
       <div className={'stepNode__Icon'}>
         <img src={data.icon} className="nodrag" alt={data.label} />
