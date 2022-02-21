@@ -159,7 +159,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         data: {
           connectorType: step.type,
           icon: step.icon,
-          index: index,
           label: truncateString(step.name, 14),
           UUID: step.UUID,
           onDropChange,
