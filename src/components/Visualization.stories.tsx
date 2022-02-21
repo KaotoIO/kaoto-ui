@@ -2,6 +2,7 @@ import { StepsAndViewsProvider } from '../api';
 import steps from '../data/steps';
 import views from '../data/views';
 import { AlertProvider, Visualization } from './index';
+import { action } from '@storybook/addon-actions';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {
@@ -30,22 +31,22 @@ const Template: ComponentStory<typeof Visualization> = (args) => {
   );
 };
 
+export const Primary = Template.bind({});
+Primary.args = {
+  initialState: {
+    steps: steps,
+    views: views,
+  },
+  toggleCatalog: action('Catalog toggled'),
+};
+
 export const EmptyState = Template.bind({});
 EmptyState.args = {
   initialState: {
     steps: [],
     views: [],
   },
-  toggleCatalog: () => {},
-};
-
-export const Integration = Template.bind({});
-Integration.args = {
-  initialState: {
-    steps: steps,
-    views: views,
-  },
-  toggleCatalog: () => {},
+  toggleCatalog: action('Catalog toggled'),
 };
 
 export const WithoutStartStep = Template.bind({});
@@ -121,5 +122,71 @@ WithoutStartStep.args = {
       },
     ],
   },
-  toggleCatalog: () => {},
+  toggleCatalog: action('Catalog toggled'),
+};
+
+export const AppendStep = Template.bind({});
+AppendStep.args = {
+  initialState: {
+    steps: [
+      {
+        id: 'rabbitmq-source',
+        name: 'rabbitmq-source',
+        type: 'START',
+        description: 'Receive data from an RabbitMQ Brokers.',
+        icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjcxcHgiIGhlaWdodD0iMjcxcHgiIHZpZXdCb3g9Ii03LjUgMCAyNzEgMjcxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj48cGF0aCBkPSJNMjQ1LjQ0IDEwOC4zMDhoLTg1LjA5YTcuNzM4IDcuNzM4IDAgMCAxLTcuNzM1LTcuNzM0di04OC42OEMxNTIuNjE1IDUuMzI3IDE0Ny4yOSAwIDE0MC43MjYgMGgtMzAuMzc1Yy02LjU2OCAwLTExLjg5IDUuMzI3LTExLjg5IDExLjg5NHY4OC4xNDNjMCA0LjU3My0zLjY5NyA4LjI5LTguMjcgOC4zMWwtMjcuODg1LjEzM2MtNC42MTIuMDI1LTguMzU5LTMuNzE3LTguMzUtOC4zMjVsLjE3My04OC4yNDFDNTQuMTQ0IDUuMzM3IDQ4LjgxNyAwIDQyLjI0IDBIMTEuODlDNS4zMjEgMCAwIDUuMzI3IDAgMTEuODk0VjI2MC4yMWMwIDUuODM0IDQuNzI2IDEwLjU2IDEwLjU1NSAxMC41NkgyNDUuNDRjNS44MzQgMCAxMC41Ni00LjcyNiAxMC41Ni0xMC41NlYxMTguODY4YzAtNS44MzQtNC43MjYtMTAuNTYtMTAuNTYtMTAuNTZ6bS0zOS45MDIgOTMuMjMzYzAgNy42NDUtNi4xOTggMTMuODQ0LTEzLjg0MyAxMy44NDRIMTY3LjY5Yy03LjY0NiAwLTEzLjg0NC02LjE5OS0xMy44NDQtMTMuODQ0di0yNC4wMDVjMC03LjY0NiA2LjE5OC0xMy44NDQgMTMuODQ0LTEzLjg0NGgyNC4wMDVjNy42NDUgMCAxMy44NDMgNi4xOTggMTMuODQzIDEzLjg0NHYyNC4wMDV6IiBmaWxsPSIjRjYwIi8+PC9zdmc+',
+        parameters: [
+          {
+            default: '',
+            description: 'Comma separated list of RabbitMQ broker addresses',
+            id: 'addresses',
+            label: 'addresses',
+            type: 'string',
+          },
+          {
+            default: '5672',
+            description: 'Port of the RabbitMQ server',
+            id: 'port',
+            label: 'port',
+            type: 'string',
+          },
+          {
+            default: '',
+            description: 'The username to access the RabbitMQ server',
+            id: 'username',
+            label: 'username',
+            type: 'string',
+          },
+          {
+            default: '',
+            description: 'The password to access the RabbitMQ server',
+            id: 'password',
+            label: 'password',
+            type: 'string',
+          },
+          {
+            default: '',
+            description: 'The exchange name determines the exchange the queue will be bound to',
+            id: 'exchangeName',
+            label: 'exchangeName',
+            type: 'string',
+          },
+        ],
+        subType: 'KAMELET',
+        title: 'RabbitMQ Source',
+        apiVersion: 'camel.apache.org/v1alpha1',
+        group: 'RabbitMQ',
+        kameletType: 'source',
+        kind: 'Kamelet',
+      },
+    ],
+    views: [
+      {
+        id: 'detail-step',
+        name: 'Detail View',
+        type: 'step',
+      },
+    ],
+  },
+  toggleCatalog: action('Catalog toggled'),
 };
