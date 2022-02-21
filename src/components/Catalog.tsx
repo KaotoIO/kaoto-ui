@@ -26,7 +26,7 @@ import {
 } from '@patternfly/react-core';
 import { useEffect, useState } from 'react';
 
-interface ICatalog {
+export interface ICatalog {
   isCatalogExpanded: boolean;
   onClosePanelClick: (e: any) => void;
   steps?: IStepProps[];
