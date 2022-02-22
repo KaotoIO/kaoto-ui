@@ -121,7 +121,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
      */
     const onDropChange = (
       event: { preventDefault: () => void; dataTransfer: { getData: (arg0: string) => any } },
-      data: { index: any }
+      data: any
     ) => {
       event.preventDefault();
 
@@ -132,7 +132,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       // Replace step
       if (validation.isValid) {
         // update the steps, the new node will be created automatically
-        dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
+        dispatch({
+          type: 'REPLACE_STEP',
+          payload: { newStep: step, oldStepIndex: findStepIdxWithUUID(data.UUID, viewData.steps) },
+        });
         // fetch the updated view definitions again with new views
         fetchViewDefinitions(viewData.steps).then((data: any) => {
           dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
@@ -162,7 +165,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           label: truncateString(step.name, 14),
           UUID: step.UUID,
           onDropChange,
-          //onElementClick,
+          onElementClick,
         },
         id: getId(),
         position: { x: 0, y: window.innerHeight / 2 },
@@ -255,13 +258,18 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   };
 
   const onElementClick = (_e: any, element: any) => {
-    console.log(_e);
-    console.table(element);
+    if (element.type === 'slot') {
+      // prevent slots from being selected,
+      // passive-aggressively open the steps catalog
+      if (toggleCatalog) toggleCatalog();
+
+      return;
+    }
+
     // Only set state again if the ID is not the same
-    // if (selectedStep.UUID !== element.UUID) {
-    if (selectedStep.UUID !== element.data.UUID) {
+    if (selectedStep.UUID !== element.UUID) {
       const findStep: IStepProps =
-        viewData.steps.find((step) => step.UUID === element.data.UUID) ?? selectedStep;
+        viewData.steps.find((step) => step.UUID === element.UUID) ?? selectedStep;
       setSelectedStep(findStep);
     }
 
@@ -327,16 +335,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
                   onConnect={onConnect}
                   onDrop={onDrop}
                   onDragOver={onDragOver}
-                  onElementClick={onElementClick}
-                  // onElementClick={(_e, element) => {
-                  //   if (element.type !== 'slot') {
-                  //     //setIsPanelExpanded(!isPanelExpanded);
-                  //   } else {
-                  //     // prevent slots from being selected,
-                  //     // passive-aggressively open the steps catalog
-                  //     if (toggleCatalog) toggleCatalog();
-                  //   }
-                  // }}
+                  // onElementClick={onElementClick}
                   onElementsRemove={onElementsRemove}
                   onLoad={onLoad}
                   snapToGrid={true}

@@ -25,7 +25,7 @@ export interface IStepViewsProps {
   onClosePanelClick: (e: any) => void;
   saveConfig: (newValues: any) => void;
   step: IStepProps;
-  views: IViewProps[];
+  views?: IViewProps[];
 }
 
 const StepViews = ({
@@ -36,9 +36,9 @@ const StepViews = ({
   step,
   views,
 }: IStepViewsProps) => {
-  const hasDetailView = views.some((v) => v.id === 'detail-step');
-  const detailsTabIndex = views.length + 1; // provide an index that won't be used by custom views
-  const configTabIndex = views.length + 2;
+  const hasDetailView = views?.some((v) => v.id === 'detail-step');
+  const detailsTabIndex = views?.length! + 1; // provide an index that won't be used by custom views
+  const configTabIndex = views?.length! + 2;
   const [activeTabKey, setActiveTabKey] = useState(detailsTabIndex);
   const stepPropertySchema = useRef<{ [label: string]: { type: string } }>({});
   const stepPropertyModel = useRef<{ [label: string]: any }>({});
@@ -49,7 +49,7 @@ const StepViews = ({
       return;
     }
 
-    setActiveTabKey(views.some((v) => v.id === 'detail-step') ? 0 : detailsTabIndex);
+    setActiveTabKey(views?.some((v) => v.id === 'detail-step') ? 0 : detailsTabIndex);
   }, [detailsTabIndex, previousTabIndex, views]);
 
   useEffect(() => {
@@ -133,8 +133,8 @@ const StepViews = ({
           )}
 
           {/** Show rest of views provided **/}
-          {views.length > 0 &&
-            views.map((view, index) => {
+          {views?.length! > 0 &&
+            views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
 
               // Example demonstrating interactivity with step extension
