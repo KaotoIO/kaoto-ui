@@ -322,8 +322,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
                   onConnect={onConnect}
                   onDrop={onDrop}
                   onDragOver={onDragOver}
-                  onElementClick={() => {
-                    if (selectedStep.type !== 'slot') {
+                  onElementClick={(_e, element) => {
+                    if (element.type !== 'slot') {
                       setIsPanelExpanded(!isPanelExpanded);
                     } else {
                       // prevent slots from being selected,
