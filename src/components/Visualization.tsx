@@ -162,7 +162,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           label: truncateString(step.name, 14),
           UUID: step.UUID,
           onDropChange,
-          onElementClick,
+          //onElementClick,
         },
         id: getId(),
         position: { x: 0, y: window.innerHeight / 2 },
@@ -255,12 +255,17 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   };
 
   const onElementClick = (_e: any, element: any) => {
+    console.log(_e);
+    console.table(element);
     // Only set state again if the ID is not the same
-    if (selectedStep.UUID !== element.UUID) {
+    // if (selectedStep.UUID !== element.UUID) {
+    if (selectedStep.UUID !== element.data.UUID) {
       const findStep: IStepProps =
-        viewData.steps.find((step) => step.UUID === element.UUID) ?? selectedStep;
+        viewData.steps.find((step) => step.UUID === element.data.UUID) ?? selectedStep;
       setSelectedStep(findStep);
     }
+
+    setIsPanelExpanded(!isPanelExpanded);
   };
 
   const onElementsRemove = (elementsToRemove: Elements<IVizStepProps[]>) =>
@@ -322,15 +327,16 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
                   onConnect={onConnect}
                   onDrop={onDrop}
                   onDragOver={onDragOver}
-                  onElementClick={(_e, element) => {
-                    if (element.type !== 'slot') {
-                      setIsPanelExpanded(!isPanelExpanded);
-                    } else {
-                      // prevent slots from being selected,
-                      // passive-aggressively open the steps catalog
-                      if (toggleCatalog) toggleCatalog();
-                    }
-                  }}
+                  onElementClick={onElementClick}
+                  // onElementClick={(_e, element) => {
+                  //   if (element.type !== 'slot') {
+                  //     //setIsPanelExpanded(!isPanelExpanded);
+                  //   } else {
+                  //     // prevent slots from being selected,
+                  //     // passive-aggressively open the steps catalog
+                  //     if (toggleCatalog) toggleCatalog();
+                  //   }
+                  // }}
                   onElementsRemove={onElementsRemove}
                   onLoad={onLoad}
                   snapToGrid={true}

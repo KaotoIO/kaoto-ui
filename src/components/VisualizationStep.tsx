@@ -16,25 +16,26 @@ const VisualizationStep = memo(({ data }: any) => {
       : 'rgb(204, 204, 204)';
 
   const onDropChange = useCallback((event) => data.onDropChange(event, data), [data]);
-  const onElementClick = useCallback((event) => data.onElementClick(event, data), [data]);
+  // const onElementClick = useCallback((event) => data.onElementClick(event, data), [data]);
+  // const onElementClick = (event: any) => data.onElementClick(event, data);
 
   return (
     <div
       className={'stepNode'}
       style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}
-      onClick={onElementClick}
       onDrop={onDropChange}
     >
       {data.connectorType !== 'END' && !isLastNode && (
         <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
       )}
       {data.connectorType !== 'END' && isLastNode && (
-        <div className={'stepNode__Add'}>
-          <PlusCircleIcon
-            onClick={() => {
-              console.log('clicked!');
-            }}
-          />
+        <div
+          className={'stepNode__Add'}
+          onClick={() => {
+            console.log('clicked!');
+          }}
+        >
+          <PlusCircleIcon />
         </div>
       )}
       <div className={'stepNode__Icon'}>
