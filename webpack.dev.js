@@ -28,7 +28,7 @@ module.exports = merge(common('development'), {
   },
   plugins: [
     new webpack.DefinePlugin({
-      REACT_APP_API_URL: JSON.stringify(process.env.REACT_APP_API_URL || 'http://localhost:8080'),
+      KAOTO_API: JSON.stringify(process.env.KAOTO_API || 'http://localhost:8080'),
     }),
   ],
 });

@@ -11,7 +11,7 @@ COPY . ./
 
 RUN yarn install
 
-RUN echo "REACT_APP_API_URL=http://localhost:8081" > ./.env
+RUN echo "KAOTO_API=http://localhost:8081" > ./.env
 
 EXPOSE 80
 

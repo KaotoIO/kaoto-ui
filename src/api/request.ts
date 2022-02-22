@@ -26,7 +26,7 @@ export interface IFetch {
   stringifyBody?: boolean;
 }
 
-const apiURL = process.env.REACT_APP_API_URL;
+const apiURL = process.env.KAOTO_API;
 
 const api = ({
                endpoint,
