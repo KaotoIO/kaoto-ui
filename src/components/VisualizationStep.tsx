@@ -16,11 +16,13 @@ const VisualizationStep = memo(({ data }: any) => {
       : 'rgb(204, 204, 204)';
 
   const onDropChange = useCallback((event) => data.onDropChange(event, data), [data]);
+  const onElementClick = useCallback((event) => data.onElementClick(event, data), [data]);
 
   return (
     <div
       className={'stepNode'}
       style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}
+      onClick={onElementClick}
       onDrop={onDropChange}
     >
       {data.connectorType !== 'END' && !isLastNode && (

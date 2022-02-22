@@ -162,6 +162,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           label: truncateString(step.name, 14),
           UUID: step.UUID,
           onDropChange,
+          onElementClick,
         },
         id: getId(),
         position: { x: 0, y: window.innerHeight / 2 },
@@ -254,21 +255,12 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   };
 
   const onElementClick = (_e: any, element: any) => {
-    // prevent slots from being selected,
-    // passive-aggressively open the steps catalog
-    if (element.type === 'slot') {
-      if (toggleCatalog) toggleCatalog();
-      return;
-    }
-
     // Only set state again if the ID is not the same
-    if (selectedStep.UUID !== element.data.UUID) {
+    if (selectedStep.UUID !== element.UUID) {
       const findStep: IStepProps =
-        viewData.steps.find((step) => step.UUID === element.data.UUID) ?? selectedStep;
+        viewData.steps.find((step) => step.UUID === element.UUID) ?? selectedStep;
       setSelectedStep(findStep);
     }
-
-    setIsPanelExpanded(!isPanelExpanded);
   };
 
   const onElementsRemove = (elementsToRemove: Elements<IVizStepProps[]>) =>
@@ -330,7 +322,15 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
                   onConnect={onConnect}
                   onDrop={onDrop}
                   onDragOver={onDragOver}
-                  onElementClick={onElementClick}
+                  onElementClick={() => {
+                    if (selectedStep.type !== 'slot') {
+                      setIsPanelExpanded(!isPanelExpanded);
+                    } else {
+                      // prevent slots from being selected,
+                      // passive-aggressively open the steps catalog
+                      if (toggleCatalog) toggleCatalog();
+                    }
+                  }}
                   onElementsRemove={onElementsRemove}
                   onLoad={onLoad}
                   snapToGrid={true}
