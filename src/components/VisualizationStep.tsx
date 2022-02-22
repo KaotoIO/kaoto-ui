@@ -1,10 +1,9 @@
 import './Visualization.css';
 import { PlusCircleIcon } from '@patternfly/react-icons';
-import { memo, useCallback } from 'react';
 import { Handle, Position, useStoreState } from 'react-flow-renderer';
 
 // Custom Node type and component for React Flow
-const VisualizationStep = memo(({ data }: any) => {
+const VisualizationStep = ({ data }: any) => {
   const nodes = useStoreState((state) => state.nodes);
   const isLastNode = nodes[nodes.length - 1].data.UUID === data.UUID;
 
@@ -15,8 +14,7 @@ const VisualizationStep = memo(({ data }: any) => {
       ? 'rgb(149, 213, 245)'
       : 'rgb(204, 204, 204)';
 
-  const onDropChange = useCallback((event) => data.onDropChange(event, data), [data]);
-  // const onElementClick = useCallback((event) => data.onElementClick(event, data), [data]);
+  const onDropChange = (event: any) => data.onDropChange(event, data);
   const onElementClick = (event: any) => data.onElementClick(event, data);
 
   return (
@@ -48,6 +46,6 @@ const VisualizationStep = memo(({ data }: any) => {
       <div className={'stepNode__Label'}>{data.label}</div>
     </div>
   );
-});
+};
 
 export { VisualizationStep };
