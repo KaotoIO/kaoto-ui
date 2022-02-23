@@ -4,6 +4,7 @@ export * from './Extension';
 export * from './JsonSchemaConfigurator';
 export * from './MASAlerts';
 export * from './MASLoading';
+export * from './MiniCatalog';
 export * from './StepErrorBoundary';
 export * from './StepViews';
 export * from './Visualization';
