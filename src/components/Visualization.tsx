@@ -110,10 +110,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
     // if there are no steps, or if the first step isn't a source,
     // create a dummy placeholder step
-    // if (steps.length === 0 || (steps.length > 0 && steps[0].type !== 'START')) {
-    //   steps[0] = { name: 'ADD A STEP' };
-    // }
-    if (!steps.length || (steps.length > 0 && steps[0].type !== 'START')) {
+    if (steps.length === 0 || (steps.length > 0 && steps[0].type !== 'START')) {
       // @ts-ignore
       steps.unshift({ name: 'ADD A STEP' });
     }
@@ -170,6 +167,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           UUID: step.UUID,
           onDropChange,
           onElementClick,
+          onElementClickAdd,
         },
         id: getId(),
         position: { x: 0, y: window.innerHeight / 2 },
@@ -182,7 +180,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         stepEdge.id = 'e' + previousStep.id + '-' + inputStep.id;
         stepEdge.source = previousStep.id;
 
-        // even the last step needs to build the step edge above it, with itself as the target
+        // even the last step needs to build the step edge before it, with itself as the target
         stepEdge.target = inputStep.id;
       }
 
@@ -278,6 +276,11 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     }
 
     setIsPanelExpanded(!isPanelExpanded);
+  };
+
+  const onElementClickAdd = (_e: any, element: any) => {
+    console.log('clicked!', element);
+    // add mini catalog
   };
 
   const onElementsRemove = (elementsToRemove: Elements<IVizStepProps[]>) =>

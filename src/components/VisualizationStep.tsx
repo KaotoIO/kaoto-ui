@@ -16,34 +16,31 @@ const VisualizationStep = ({ data }: any) => {
 
   const onDropChange = (event: any) => data.onDropChange(event, data);
   const onElementClick = (event: any) => data.onElementClick(event, data);
+  const onElementClickAdd = (event: any) => data.onElementClickAdd(event, data);
 
   return (
     <div
       className={'stepNode'}
       style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}
-      onClick={onElementClick}
       onDrop={onDropChange}
     >
       {data.connectorType !== 'END' && !isLastNode && (
         <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
       )}
       {data.connectorType !== 'END' && isLastNode && (
-        <div
-          className={'stepNode__Add'}
-          onClick={() => {
-            console.log('clicked!');
-          }}
-        >
+        <div className={'stepNode__Add'} onClick={onElementClickAdd}>
           <PlusCircleIcon />
         </div>
       )}
-      <div className={'stepNode__Icon'}>
+      <div className={'stepNode__Icon'} onClick={onElementClick}>
         <img src={data.icon} className="nodrag" alt={data.label} />
       </div>
       {data.connectorType !== 'START' && (
         <Handle type="target" position={Position.Left} id="a" style={{ borderRadius: 0 }} />
       )}
-      <div className={'stepNode__Label'}>{data.label}</div>
+      <div className={'stepNode__Label'} onClick={onElementClick}>
+        {data.label}
+      </div>
     </div>
   );
 };
