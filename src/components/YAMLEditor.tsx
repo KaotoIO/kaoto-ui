@@ -5,7 +5,14 @@ import Editor from '@monaco-editor/react';
 import { useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
-const YAMLEditor = () => {
+interface IYAMLEditor {
+  // Used to mock data for stories
+  initialData?: string;
+  language?: string;
+  theme?: string;
+}
+
+const YAMLEditor = (props: IYAMLEditor) => {
   const editorRef = useRef(null);
   const [YAMLData, setYAMLData] = useYAMLContext();
   const [, dispatch] = useStepsAndViewsContext();
@@ -59,12 +66,12 @@ const YAMLEditor = () => {
     <StepErrorBoundary>
       <Editor
         height="90vh"
-        defaultLanguage="yaml"
+        defaultLanguage={props.language ?? 'yaml'}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
         onValidate={handleEditorValidation}
-        theme={'vs-dark'}
-        value={YAMLData}
+        theme={props.theme ?? 'vs-dark'}
+        value={props.initialData ?? YAMLData}
         className={'code-editor'}
       />
     </StepErrorBoundary>

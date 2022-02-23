@@ -26,7 +26,7 @@ import {
 } from '@patternfly/react-core';
 import { useEffect, useState } from 'react';
 
-interface ICatalog {
+export interface ICatalog {
   isCatalogExpanded: boolean;
   onClosePanelClick: (e: any) => void;
   steps?: IStepProps[];
@@ -40,7 +40,7 @@ function shorten(str: string, maxLen: number, separator = ' ') {
 
 const Catalog = (props: ICatalog) => {
   // If the catalog data won't be changing, consider removing this state
-  const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
+  const [catalogData, setCatalogData] = useState<IStepProps[]>(props.steps ?? []);
   const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
 
@@ -48,23 +48,25 @@ const Catalog = (props: ICatalog) => {
    * Sort & fetch all Steps for the Catalog
    */
   useEffect(() => {
-    const getCatalogData = async () => {
-      try {
-        const resp = await request.get({
-          endpoint: '/step',
-        });
+    if (!props.steps) {
+      const getCatalogData = async () => {
+        try {
+          const resp = await request.get({
+            endpoint: '/step',
+          });
 
-        const data = await resp.json();
-        data.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
-        setCatalogData(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+          const data = await resp.json();
+          data.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
+          setCatalogData(data);
+        } catch (err) {
+          console.error(err);
+        }
+      };
 
-    getCatalogData().catch((e) => {
-      console.error(e);
-    });
+      getCatalogData().catch((e) => {
+        console.error(e);
+      });
+    }
   }, []);
 
   const changeSearch = (e: any) => {

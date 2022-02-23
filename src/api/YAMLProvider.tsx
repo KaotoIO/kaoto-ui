@@ -1,4 +1,3 @@
-import YAML from '../stories/data/yaml';
 import usePrevious from '../utils/usePrevious';
 import { useStepsAndViewsContext } from './StepsAndViewsProvider';
 import { fetchViewDefinitions } from './apiService';
@@ -13,20 +12,16 @@ import {
 } from 'react';
 
 interface IYAMLDataProvider {
+  initialState: string;
   children: ReactNode;
 }
 
 export type IUseYAMLData = [string, Dispatch<SetStateAction<string>>];
 
 export const useYAMLData = (newYAMLData: string): IUseYAMLData => {
-  const [YAMLData, setYAMLData] = useState<string>(YAML);
-  // const [YAMLData, setYAMLData] = useState<string>();
+  const [YAMLData, setYAMLData] = useState<string>(newYAMLData);
   const previousYaml = usePrevious(YAMLData);
   const [, dispatch] = useStepsAndViewsContext();
-
-  // useEffect(() => {
-  //   console.table(newData);
-  // }, [YAMLData]);
 
   useEffect(() => {
     if (previousYaml === YAMLData) {
@@ -47,15 +42,15 @@ export const useYAMLData = (newYAMLData: string): IUseYAMLData => {
   return [YAMLData, setYAMLData];
 };
 
-function YAMLProvider({ children }: IYAMLDataProvider) {
-  const [YAMLData, setYAMLData] = useYAMLData(YAML);
+function YAMLProvider({ initialState, children }: IYAMLDataProvider) {
+  const [YAMLData, setYAMLData] = useYAMLData(initialState);
 
   return (
     <YAMLDataContext.Provider value={[YAMLData, setYAMLData]}>{children}</YAMLDataContext.Provider>
   );
 }
 
-const YAMLDataContext = createContext<IUseYAMLData>([YAML, () => null]);
+const YAMLDataContext = createContext<IUseYAMLData>(['', () => null]);
 
 function useYAMLContext() {
   const context = useContext(YAMLDataContext);

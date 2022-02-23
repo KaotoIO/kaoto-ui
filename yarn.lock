@@ -2216,18 +2216,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdx-js/react@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@mdx-js/react@npm:2.0.0"
-  dependencies:
-    "@types/mdx": ^2.0.0
-    "@types/react": ">=16"
-  peerDependencies:
-    react: ">=16"
-  checksum: 4d47ac0418eb9820527829838aaf508a2cdea82f7be8c62b4f739bb2a439f98556360dcdf4cef74f7db615f3e0c05e28353c4b5b182bc36e1b920893f54670f4
-  languageName: node
-  linkType: hard
-
 "@mdx-js/util@npm:1.6.22":
   version: 1.6.22
   resolution: "@mdx-js/util@npm:1.6.22"
@@ -3925,13 +3913,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mdx@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "@types/mdx@npm:2.0.1"
-  checksum: 521ee9f976af45859a4dd60b159e1cc09109de49ec5570fe70f34cddb0a7b5472b87c1bea743429270398207a997821dec34fd7bd63cbc2a1e5f2f6c701dd1c2
-  languageName: node
-  linkType: hard
-
 "@types/mime@npm:^1":
   version: 1.3.2
   resolution: "@types/mime@npm:1.3.2"
@@ -4100,7 +4081,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:>=16, @types/react@npm:^17.0.33":
+"@types/react@npm:*, @types/react@npm:^17.0.33":
   version: 17.0.39
   resolution: "@types/react@npm:17.0.39"
   dependencies:
@@ -12207,7 +12188,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "kaoto-ui@workspace:."
   dependencies:
-    "@mdx-js/react": ^2.0.0
     "@monaco-editor/react": 4.3.1
     "@patternfly/patternfly": 4.151.4
     "@patternfly/react-core": 4.168.8

@@ -4,7 +4,7 @@ import {
   useStepsAndViewsContext,
   useYAMLContext,
 } from '../api';
-import { IStepProps, IVizStepProps, IVizStepPropsEdge } from '../types';
+import { IStepProps, IViewData, IVizStepProps, IVizStepPropsEdge } from '../types';
 import truncateString from '../utils/truncateName';
 import usePrevious from '../utils/usePrevious';
 import { canStepBeReplaced } from '../utils/validationService';
@@ -51,6 +51,7 @@ const findStepIdxWithUUID = (UUID: string, steps: IStepProps[]) => {
 };
 
 interface IVisualization {
+  initialState?: IViewData;
   toggleCatalog?: () => void;
 }
 
@@ -107,9 +108,9 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     const stepsAsElements: any[] = [];
     const stepEdges: any[] = [];
 
-    // if the first step isn't a source, or if there are no steps,
+    // if there are no steps, or if the first step isn't a source,
     // create a dummy placeholder step
-    if (!steps.length || (steps.length > 0 && steps[0].type !== 'START')) {
+    if (steps.length === 0 || (steps.length > 0 && steps[0].type !== 'START')) {
       // @ts-ignore
       steps.unshift({ name: 'ADD A STEP' });
     }
@@ -121,7 +122,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
      */
     const onDropChange = (
       event: { preventDefault: () => void; dataTransfer: { getData: (arg0: string) => any } },
-      data: { index: any }
+      data: any
     ) => {
       event.preventDefault();
 
@@ -132,7 +133,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       // Replace step
       if (validation.isValid) {
         // update the steps, the new node will be created automatically
-        dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
+        dispatch({
+          type: 'REPLACE_STEP',
+          payload: { newStep: step, oldStepIndex: findStepIdxWithUUID(data.UUID, viewData.steps) },
+        });
         // fetch the updated view definitions again with new views
         fetchViewDefinitions(viewData.steps).then((data: any) => {
           dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
@@ -159,10 +163,11 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         data: {
           connectorType: step.type,
           icon: step.icon,
-          index: index,
           label: truncateString(step.name, 14),
           UUID: step.UUID,
           onDropChange,
+          onElementClick,
+          onElementClickAdd,
         },
         id: getId(),
         position: { x: 0, y: window.innerHeight / 2 },
@@ -175,7 +180,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         stepEdge.id = 'e' + previousStep.id + '-' + inputStep.id;
         stepEdge.source = previousStep.id;
 
-        // even the last step needs to build the step edge above it, with itself as the target
+        // even the last step needs to build the step edge before it, with itself as the target
         stepEdge.target = inputStep.id;
       }
 
@@ -255,21 +260,27 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   };
 
   const onElementClick = (_e: any, element: any) => {
-    // prevent slots from being selected,
-    // passive-aggressively open the steps catalog
     if (element.type === 'slot') {
+      // prevent slots from being selected,
+      // passive-aggressively open the steps catalog
       if (toggleCatalog) toggleCatalog();
+
       return;
     }
 
     // Only set state again if the ID is not the same
-    if (selectedStep.UUID !== element.data.UUID) {
+    if (selectedStep.UUID !== element.UUID) {
       const findStep: IStepProps =
-        viewData.steps.find((step) => step.UUID === element.data.UUID) ?? selectedStep;
+        viewData.steps.find((step) => step.UUID === element.UUID) ?? selectedStep;
       setSelectedStep(findStep);
     }
 
     setIsPanelExpanded(!isPanelExpanded);
+  };
+
+  const onElementClickAdd = (_e: any, element: any) => {
+    console.log('clicked!', element);
+    // add mini catalog
   };
 
   const onElementsRemove = (elementsToRemove: Elements<IVizStepProps[]>) =>
@@ -331,7 +342,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
                   onConnect={onConnect}
                   onDrop={onDrop}
                   onDragOver={onDragOver}
-                  onElementClick={onElementClick}
+                  // onElementClick={onElementClick}
                   onElementsRemove={onElementsRemove}
                   onLoad={onLoad}
                   snapToGrid={true}
