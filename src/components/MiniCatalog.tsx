@@ -1,5 +1,6 @@
 import request from '../api/request';
 import { IStepProps } from '../types';
+import { Popover, PopoverPosition } from '@patternfly/react-core';
 import { useEffect, useState } from 'react';
 
 export interface IMiniCatalog {
