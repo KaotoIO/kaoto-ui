@@ -36,7 +36,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
 
           const data = await resp.json();
           data.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
-          setCatalogData(data.slice(0, 3));
+          setCatalogData(data);
         } catch (err) {
           console.error(err);
         }
@@ -79,24 +79,26 @@ export const MiniCatalog = (props: IMiniCatalog) => {
       </Toolbar>
       <Gallery hasGutter={true} style={{ maxHeight: '650px', overflow: 'auto' }}>
         {catalogData &&
-          search(catalogData).map((step, idx) => {
-            return (
-              <Card key={idx} className={'step'} isCompact={true} isHoverable={true}>
-                <Grid md={6}>
-                  <GridItem span={3}>
-                    <Bullseye>
-                      <img src={step.icon} className={'stepImage'} alt={'Step Image'} />
-                    </Bullseye>
-                  </GridItem>
-                  <GridItem span={9}>
-                    <CardBody>
-                      <span>{step.name}</span>
-                    </CardBody>
-                  </GridItem>
-                </Grid>
-              </Card>
-            );
-          })}
+          search(catalogData)
+            .slice(0, 5)
+            .map((step, idx) => {
+              return (
+                <Card key={idx} className={'step'} isCompact={true} isHoverable={true}>
+                  <Grid md={6}>
+                    <GridItem span={3}>
+                      <Bullseye>
+                        <img src={step.icon} className={'stepImage'} alt={'Step Image'} />
+                      </Bullseye>
+                    </GridItem>
+                    <GridItem span={9}>
+                      <CardBody>
+                        <span>{step.name}</span>
+                      </CardBody>
+                    </GridItem>
+                  </Grid>
+                </Card>
+              );
+            })}
       </Gallery>
     </>
   );
