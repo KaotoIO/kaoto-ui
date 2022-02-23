@@ -34,12 +34,11 @@ const VisualizationStep = ({ data }: any) => {
         )}
         {data.connectorType !== 'END' && isLastNode && (
           <Popover
-            aria-label="Advanced popover usages example"
-            position={'auto'}
-            hideOnOutsideClick={true}
-            enableFlip={true}
             appendTo={() => document.body}
+            aria-label="Search for a step"
             bodyContent={<MiniCatalog />}
+            hideOnOutsideClick={true}
+            position={'auto'}
           >
             <div className={'stepNode__Add'} onClick={onElementClickAdd}>
               <Button variant="plain" aria-label="Action">

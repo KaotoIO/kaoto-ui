@@ -1,6 +1,18 @@
 import request from '../api/request';
 import { IStepProps } from '../types';
-import { Popover, PopoverPosition } from '@patternfly/react-core';
+import {
+  Bullseye,
+  Card,
+  CardBody,
+  Gallery,
+  Grid,
+  GridItem,
+  InputGroup,
+  TextInput,
+  Toolbar,
+  ToolbarContent,
+  ToolbarItem,
+} from '@patternfly/react-core';
 import { useEffect, useState } from 'react';
 
 export interface IMiniCatalog {
@@ -9,7 +21,6 @@ export interface IMiniCatalog {
 
 export const MiniCatalog = (props: IMiniCatalog) => {
   const [catalogData, setCatalogData] = useState<IStepProps[]>(props.steps ?? []);
-  const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
 
   /**
@@ -25,7 +36,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
 
           const data = await resp.json();
           data.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
-          setCatalogData(data);
+          setCatalogData(data.slice(0, 3));
         } catch (err) {
           console.error(err);
         }
@@ -41,26 +52,52 @@ export const MiniCatalog = (props: IMiniCatalog) => {
     setQuery(e);
   };
 
-  const handleItemClick = (_newIsSelected: any, event: any) => {
-    setIsSelected(event.currentTarget.id);
-  };
-
   function search(items: any[]) {
-    /**
-     * Returns a list of items that meet
-     * meet the condition of the `type`
-     * matching the `isSelected` value,
-     * followed by the `name` containing
-     * the characters in the search query
-     */
-    return items.filter((item) => {
-      if (isSelected === item.type) {
-        return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-      } else {
-        return false;
-      }
-    });
+    return items.filter((item) => item.name.toLowerCase().indexOf(query.toLowerCase()) > -1);
   }
 
-  return <></>;
+  return (
+    <>
+      <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
+        <ToolbarContent>
+          {
+            <ToolbarItem>
+              <InputGroup>
+                <TextInput
+                  name={'stepSearch'}
+                  id={'stepSearch'}
+                  type={'search'}
+                  placeholder={'search for a step...'}
+                  aria-label={'search for a step'}
+                  value={query}
+                  onChange={changeSearch}
+                />
+              </InputGroup>
+            </ToolbarItem>
+          }
+        </ToolbarContent>
+      </Toolbar>
+      <Gallery hasGutter={true} style={{ maxHeight: '650px', overflow: 'auto' }}>
+        {catalogData &&
+          search(catalogData).map((step, idx) => {
+            return (
+              <Card key={idx} className={'step'} isCompact={true} isHoverable={true}>
+                <Grid md={6}>
+                  <GridItem span={3}>
+                    <Bullseye>
+                      <img src={step.icon} className={'stepImage'} alt={'Step Image'} />
+                    </Bullseye>
+                  </GridItem>
+                  <GridItem span={9}>
+                    <CardBody>
+                      <span>{step.name}</span>
+                    </CardBody>
+                  </GridItem>
+                </Grid>
+              </Card>
+            );
+          })}
+      </Gallery>
+    </>
+  );
 };
