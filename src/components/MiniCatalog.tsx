@@ -54,7 +54,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
   }
 
   return (
-    <>
+    <section data-testid={'miniCatalog'}>
       <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
         <ToolbarContent>
           {
@@ -89,6 +89,6 @@ export const MiniCatalog = (props: IMiniCatalog) => {
               </Grid>
             );
           })}
-    </>
+    </section>
   );
 };

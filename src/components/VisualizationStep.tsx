@@ -37,6 +37,7 @@ const VisualizationStep = ({ data }: any) => {
             appendTo={() => document.body}
             aria-label="Search for a step"
             bodyContent={<MiniCatalog />}
+            hasAutoWidth={true}
             hideOnOutsideClick={true}
             position={'auto'}
           >
