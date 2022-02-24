@@ -1,10 +1,10 @@
 
-.step {
+.catalog--step {
     border-radius: 15px;
     cursor: grab;
 }
 
-.stepImage {
+.catalog--stepImage {
     height: 75px;
     width: 75px;
     align-items: center;
@@ -14,8 +14,11 @@
     position: relative;
 }
 
-.stepLabel {
+.catalog--stepLabel {
     margin-top: 5px !important;
 }
 
+.miniCatalog--step {
+    cursor: pointer;
+}
 

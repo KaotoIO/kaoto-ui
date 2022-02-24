@@ -2,12 +2,11 @@ import request from '../api/request';
 import { IStepProps } from '../types';
 import {
   Bullseye,
-  Card,
-  CardBody,
-  Gallery,
   Grid,
   GridItem,
   InputGroup,
+  List,
+  ListItem,
   TextInput,
   Toolbar,
   ToolbarContent,
@@ -77,29 +76,34 @@ export const MiniCatalog = (props: IMiniCatalog) => {
           }
         </ToolbarContent>
       </Toolbar>
-      <Gallery hasGutter={true} style={{ maxHeight: '650px', overflow: 'auto' }}>
+      <List isPlain={true} style={{ maxHeight: '650px', overflow: 'auto' }}>
         {catalogData &&
           search(catalogData)
             .slice(0, 5)
             .map((step, idx) => {
               return (
-                <Card key={idx} className={'step'} isCompact={true} isHoverable={true}>
+                <ListItem
+                  key={idx}
+                  className={'miniCatalog--step'}
+                  icon={<img src={step.icon} className={'catalog--stepImage'} alt={'Step Image'} />}
+                >
+                  {step.name}
+                  {/*}
                   <Grid md={6}>
                     <GridItem span={3}>
                       <Bullseye>
-                        <img src={step.icon} className={'stepImage'} alt={'Step Image'} />
+                        <img src={step.icon} className={'catalog--stepImage'} alt={'Step Image'} />
                       </Bullseye>
                     </GridItem>
                     <GridItem span={9}>
-                      <CardBody>
-                        <span>{step.name}</span>
-                      </CardBody>
+                      <span>{step.name}</span>
                     </GridItem>
                   </Grid>
-                </Card>
+                  {*/}
+                </ListItem>
               );
             })}
-      </Gallery>
+      </List>
     </>
   );
 };

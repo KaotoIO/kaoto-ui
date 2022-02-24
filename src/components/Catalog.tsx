@@ -176,7 +176,7 @@ const Catalog = (props: ICatalog) => {
                   <Grid md={6}>
                     <GridItem span={2}>
                       <Bullseye>
-                        <img src={step.icon} className={'stepImage'} alt={'Step Image'} />
+                        <img src={step.icon} className={'catalog--stepImage'} alt={'Step Image'} />
                       </Bullseye>
                     </GridItem>
                     <GridItem span={7}>
@@ -186,7 +186,7 @@ const Catalog = (props: ICatalog) => {
                       <CardBody>{shorten(step.description, 60)}</CardBody>
                     </GridItem>
                     <GridItem span={3}>
-                      <Label color={'blue'} className={'stepLabel'}>
+                      <Label color={'blue'} className={'catalog--stepLabel'}>
                         SOURCE
                       </Label>
                     </GridItem>
