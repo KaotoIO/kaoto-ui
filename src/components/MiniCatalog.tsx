@@ -13,6 +13,7 @@ import {
 import { useEffect, useState } from 'react';
 
 export interface IMiniCatalog {
+  handleSelectStep?: (e: any) => void;
   steps?: IStepProps[];
 }
 
@@ -79,7 +80,12 @@ export const MiniCatalog = (props: IMiniCatalog) => {
           .slice(0, 5)
           .map((step, idx) => {
             return (
-              <Grid md={6} key={idx} className={'miniCatalog--stepItem'}>
+              <Grid
+                md={6}
+                key={idx}
+                className={'miniCatalog--stepItem'}
+                onClick={props.handleSelectStep}
+              >
                 <GridItem span={3}>
                   <Bullseye>
                     <img src={step.icon} className={'miniCatalog--stepImage'} alt={'Step Image'} />

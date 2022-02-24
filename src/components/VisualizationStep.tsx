@@ -19,6 +19,7 @@ const VisualizationStep = ({ data }: any) => {
   const onDropChange = (event: any) => data.onDropChange(event, data);
   const onElementClick = (event: any) => data.onElementClick(event, data);
   const onElementClickAdd = (event: any) => {
+    console.log('event: ', event);
     data.onElementClickAdd(event, data);
   };
 
@@ -36,12 +37,12 @@ const VisualizationStep = ({ data }: any) => {
           <Popover
             appendTo={() => document.body}
             aria-label="Search for a step"
-            bodyContent={<MiniCatalog />}
+            bodyContent={<MiniCatalog handleSelectStep={onElementClickAdd} />}
             hasAutoWidth={true}
             hideOnOutsideClick={true}
             position={'auto'}
           >
-            <div className={'stepNode__Add'} onClick={onElementClickAdd}>
+            <div className={'stepNode__Add'}>
               <Button variant="plain" aria-label="Action">
                 <PlusCircleIcon />
               </Button>
