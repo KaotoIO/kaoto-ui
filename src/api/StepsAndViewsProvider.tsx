@@ -7,6 +7,7 @@ interface IStepsAndViewsProvider {
 }
 
 type StepsAndViewsAction =
+  | { type: 'ADD_STEP'; payload: { newStep: IStepProps } }
   | { type: 'DELETE_STEP'; payload: { index: number } }
   | { type: 'REPLACE_STEP'; payload: { newStep: IStepProps; oldStepIndex: number } }
   | { type: 'UPDATE_INTEGRATION'; payload: any };
@@ -20,6 +21,11 @@ function stepsAndViewsReducer(state: IViewData, action: StepsAndViewsAction) {
   const { type, payload } = action;
 
   switch (type) {
+    case 'ADD_STEP': {
+      let newSteps = state.steps;
+      newSteps.push(payload.newStep);
+      return { ...state, steps: newSteps };
+    }
     case 'DELETE_STEP': {
       return {
         ...state,

@@ -18,10 +18,7 @@ const VisualizationStep = ({ data }: any) => {
 
   const onDropChange = (event: any) => data.onDropChange(event, data);
   const onElementClick = (event: any) => data.onElementClick(event, data);
-  const onElementClickAdd = (event: any) => {
-    console.log('event: ', event);
-    data.onElementClickAdd(event, data);
-  };
+  const onElementClickAdd = (selectedStep: any) => data.onElementClickAdd(selectedStep);
 
   return (
     <>
@@ -38,7 +35,6 @@ const VisualizationStep = ({ data }: any) => {
             appendTo={() => document.body}
             aria-label="Search for a step"
             bodyContent={<MiniCatalog handleSelectStep={onElementClickAdd} />}
-            hasAutoWidth={true}
             hideOnOutsideClick={true}
             position={'auto'}
           >

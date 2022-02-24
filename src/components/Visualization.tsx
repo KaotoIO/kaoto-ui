@@ -278,9 +278,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     setIsPanelExpanded(!isPanelExpanded);
   };
 
-  const onSelectNewStep = (_e: any, element: any) => {
-    console.log('clicked!', element);
-    // add mini catalog
+  const onSelectNewStep = (selectedStep: IStepProps) => {
+    dispatch({ type: 'ADD_STEP', payload: { newStep: selectedStep } });
   };
 
   const onElementsRemove = (elementsToRemove: Elements<IVizStepProps[]>) =>

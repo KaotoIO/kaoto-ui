@@ -2,6 +2,7 @@ import request from '../api/request';
 import { IStepProps } from '../types';
 import {
   Bullseye,
+  Button,
   Grid,
   GridItem,
   InputGroup,
@@ -13,7 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 
 export interface IMiniCatalog {
-  handleSelectStep?: (e: any) => void;
+  handleSelectStep?: (selectedStep: any) => void;
   steps?: IStepProps[];
 }
 
@@ -54,6 +55,12 @@ export const MiniCatalog = (props: IMiniCatalog) => {
     return items.filter((item) => item.name.toLowerCase().indexOf(query.toLowerCase()) > -1);
   }
 
+  function handleSelectStep(selectedStep: any) {
+    if (props.handleSelectStep) {
+      props.handleSelectStep(selectedStep);
+    }
+  }
+
   return (
     <section data-testid={'miniCatalog'}>
       <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
@@ -80,19 +87,26 @@ export const MiniCatalog = (props: IMiniCatalog) => {
           .slice(0, 5)
           .map((step, idx) => {
             return (
-              <Grid
-                md={6}
+              <Button
                 key={idx}
-                className={'miniCatalog--stepItem'}
-                onClick={props.handleSelectStep}
+                variant={'tertiary'}
+                onClick={() => {
+                  handleSelectStep(step);
+                }}
               >
-                <GridItem span={3}>
-                  <Bullseye>
-                    <img src={step.icon} className={'miniCatalog--stepImage'} alt={'Step Image'} />
-                  </Bullseye>
-                </GridItem>
-                <GridItem span={9}>{step.name}</GridItem>
-              </Grid>
+                <Grid md={6} className={'miniCatalog--stepItem'}>
+                  <GridItem span={3}>
+                    <Bullseye>
+                      <img
+                        src={step.icon}
+                        className={'miniCatalog--stepImage'}
+                        alt={'Step Image'}
+                      />
+                    </Bullseye>
+                  </GridItem>
+                  <GridItem span={9}>{step.name}</GridItem>
+                </Grid>
+              </Button>
             );
           })}
     </section>
