@@ -66,7 +66,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
       <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
         <ToolbarContent>
           {
-            <ToolbarItem>
+            <ToolbarItem className={'miniCatalog--search'}>
               <InputGroup>
                 <TextInput
                   name={'stepSearch'}
@@ -93,8 +93,9 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                 onClick={() => {
                   handleSelectStep(step);
                 }}
+                className={'miniCatalog--stepItem'}
               >
-                <Grid md={6} className={'miniCatalog--stepItem'}>
+                <Grid md={6} className={'miniCatalog--stepItem__grid'}>
                   <GridItem span={3}>
                     <Bullseye>
                       <img

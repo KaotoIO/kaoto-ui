@@ -18,15 +18,26 @@
     margin-top: 5px !important;
 }
 
-.miniCatalog--stepItem {
-    border-radius: 15px;
-    cursor: pointer;
-    line-height: 40px;
-    padding: 2px;
+/* MINI CATALOG */
+
+/* Mini Catalog Search */
+.miniCatalog--search.pf-c-toolbar__item {
+    width: 100%;
 }
 
-.miniCatalog--stepItem:hover {
+/* Mini Catalog Step (from list) */
+button.miniCatalog--stepItem.pf-c-button.pf-m-tertiary {
+    --pf-c-button--after--BorderColor: transparent;
+    width: 100%;
+}
+
+button.miniCatalog--stepItem:hover {
     background: #F5F5F5;
+}
+
+.miniCatalog--stepItem__grid {
+    line-height: 40px;
+    padding: 2px;
 }
 
 .miniCatalog--stepImage {

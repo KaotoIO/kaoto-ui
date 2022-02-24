@@ -8,7 +8,11 @@ export default {
 } as ComponentMeta<typeof MiniCatalog>;
 
 const Template: ComponentStory<typeof MiniCatalog> = (props: IMiniCatalog) => {
-  return <MiniCatalog {...props} />;
+  return (
+    <div style={{ maxWidth: '20%' }}>
+      <MiniCatalog {...props} />
+    </div>
+  );
 };
 
 export const Primary = Template.bind({});
