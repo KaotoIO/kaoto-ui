@@ -5,8 +5,6 @@ import {
   Grid,
   GridItem,
   InputGroup,
-  List,
-  ListItem,
   TextInput,
   Toolbar,
   ToolbarContent,
@@ -76,34 +74,21 @@ export const MiniCatalog = (props: IMiniCatalog) => {
           }
         </ToolbarContent>
       </Toolbar>
-      <List isPlain={true} style={{ maxHeight: '650px', overflow: 'auto' }}>
-        {catalogData &&
-          search(catalogData)
-            .slice(0, 5)
-            .map((step, idx) => {
-              return (
-                <ListItem
-                  key={idx}
-                  className={'miniCatalog--step'}
-                  icon={<img src={step.icon} className={'catalog--stepImage'} alt={'Step Image'} />}
-                >
-                  {step.name}
-                  {/*}
-                  <Grid md={6}>
-                    <GridItem span={3}>
-                      <Bullseye>
-                        <img src={step.icon} className={'catalog--stepImage'} alt={'Step Image'} />
-                      </Bullseye>
-                    </GridItem>
-                    <GridItem span={9}>
-                      <span>{step.name}</span>
-                    </GridItem>
-                  </Grid>
-                  {*/}
-                </ListItem>
-              );
-            })}
-      </List>
+      {catalogData &&
+        search(catalogData)
+          .slice(0, 5)
+          .map((step, idx) => {
+            return (
+              <Grid md={6} key={idx} className={'miniCatalog--stepItem'}>
+                <GridItem span={3}>
+                  <Bullseye>
+                    <img src={step.icon} className={'miniCatalog--stepImage'} alt={'Step Image'} />
+                  </Bullseye>
+                </GridItem>
+                <GridItem span={9}>{step.name}</GridItem>
+              </Grid>
+            );
+          })}
     </>
   );
 };

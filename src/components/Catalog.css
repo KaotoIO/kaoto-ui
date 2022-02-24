@@ -18,7 +18,20 @@
     margin-top: 5px !important;
 }
 
-.miniCatalog--step {
+.miniCatalog--stepItem {
+    border-radius: 15px;
     cursor: pointer;
+    line-height: 40px;
+    padding: 2px;
+}
+
+.miniCatalog--stepItem:hover {
+    background: #F5F5F5;
+}
+
+.miniCatalog--stepImage {
+    height: 40px;
+    width: 40px;
+    padding: 0 5px;
 }
 
