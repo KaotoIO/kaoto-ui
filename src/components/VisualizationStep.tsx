@@ -1,4 +1,6 @@
+import { MiniCatalog } from './MiniCatalog';
 import './Visualization.css';
+import { Button, Popover } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import { Handle, Position, useStoreState } from 'react-flow-renderer';
 
@@ -16,32 +18,44 @@ const VisualizationStep = ({ data }: any) => {
 
   const onDropChange = (event: any) => data.onDropChange(event, data);
   const onElementClick = (event: any) => data.onElementClick(event, data);
-  const onElementClickAdd = (event: any) => data.onElementClickAdd(event, data);
+  const onElementClickAdd = (selectedStep: any) => data.onElementClickAdd(selectedStep);
 
   return (
-    <div
-      className={'stepNode'}
-      style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}
-      onDrop={onDropChange}
-    >
-      {data.connectorType !== 'END' && !isLastNode && (
-        <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
-      )}
-      {data.connectorType !== 'END' && isLastNode && (
-        <div className={'stepNode__Add'} onClick={onElementClickAdd}>
-          <PlusCircleIcon />
+    <>
+      <div
+        className={'stepNode'}
+        style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}
+        onDrop={onDropChange}
+      >
+        {data.connectorType !== 'END' && !isLastNode && (
+          <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
+        )}
+        {data.connectorType !== 'END' && isLastNode && (
+          <Popover
+            appendTo={() => document.body}
+            aria-label="Search for a step"
+            bodyContent={<MiniCatalog handleSelectStep={onElementClickAdd} />}
+            hideOnOutsideClick={true}
+            position={'auto'}
+          >
+            <div className={'stepNode__Add'}>
+              <Button variant="plain" aria-label="Action">
+                <PlusCircleIcon />
+              </Button>
+            </div>
+          </Popover>
+        )}
+        <div className={'stepNode__Icon'} onClick={onElementClick}>
+          <img src={data.icon} className="nodrag" alt={data.label} />
         </div>
-      )}
-      <div className={'stepNode__Icon'} onClick={onElementClick}>
-        <img src={data.icon} className="nodrag" alt={data.label} />
+        {data.connectorType !== 'START' && (
+          <Handle type="target" position={Position.Left} id="a" style={{ borderRadius: 0 }} />
+        )}
+        <div className={'stepNode__Label'} onClick={onElementClick}>
+          {data.label}
+        </div>
       </div>
-      {data.connectorType !== 'START' && (
-        <Handle type="target" position={Position.Left} id="a" style={{ borderRadius: 0 }} />
-      )}
-      <div className={'stepNode__Label'} onClick={onElementClick}>
-        {data.label}
-      </div>
-    </div>
+    </>
   );
 };
 

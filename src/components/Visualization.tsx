@@ -167,7 +167,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           UUID: step.UUID,
           onDropChange,
           onElementClick,
-          onElementClickAdd,
+          onElementClickAdd: onSelectNewStep,
         },
         id: getId(),
         position: { x: 0, y: window.innerHeight / 2 },
@@ -278,9 +278,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     setIsPanelExpanded(!isPanelExpanded);
   };
 
-  const onElementClickAdd = (_e: any, element: any) => {
-    console.log('clicked!', element);
-    // add mini catalog
+  const onSelectNewStep = (selectedStep: IStepProps) => {
+    dispatch({ type: 'ADD_STEP', payload: { newStep: selectedStep } });
   };
 
   const onElementsRemove = (elementsToRemove: Elements<IVizStepProps[]>) =>
@@ -342,7 +341,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
                   onConnect={onConnect}
                   onDrop={onDrop}
                   onDragOver={onDragOver}
-                  // onElementClick={onElementClick}
                   onElementsRemove={onElementsRemove}
                   onLoad={onLoad}
                   snapToGrid={true}
