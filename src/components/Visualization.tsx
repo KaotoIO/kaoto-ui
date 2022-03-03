@@ -280,6 +280,11 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
   const onSelectNewStep = (selectedStep: IStepProps) => {
     dispatch({ type: 'ADD_STEP', payload: { newStep: selectedStep } });
+
+    // fetch the updated view definitions again with new views
+    fetchViewDefinitions(viewData.steps).then((data: any) => {
+      dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+    });
   };
 
   const onElementsRemove = (elementsToRemove: Elements<IVizStepProps[]>) =>
