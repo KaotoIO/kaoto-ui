@@ -14,11 +14,8 @@ import { AlertVariant, Drawer, DrawerContent, DrawerContentBody } from '@pattern
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useRef, useState } from 'react';
 import ReactFlow, {
-  addEdge,
   Background,
-  Connection,
   Controls,
-  Edge,
   Elements,
   MiniMap,
   ReactFlowProvider,
@@ -110,7 +107,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
     // if there are no steps, or if the first step isn't a source,
     // create a dummy placeholder step
-    if (steps.length === 0 || (steps.length > 0 && steps[0].type !== 'START')) {
+    if (steps.length === 0 || (steps.length > 0 && steps[0].type && steps[0].type !== 'START')) {
       // @ts-ignore
       steps.unshift({ name: 'ADD A STEP' });
     }
@@ -239,10 +236,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     setIsPanelExpanded(false);
   };
 
-  const onConnect = (params: Edge<any> | Connection) => {
-    setElements((els) => addEdge(params, els));
-  };
-
   const onDragOver = (event: {
     preventDefault: () => void;
     dataTransfer: { dropEffect: string };
@@ -344,7 +337,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
                 <ReactFlow
                   elements={elements}
                   nodeTypes={nodeTypes}
-                  onConnect={onConnect}
                   onDrop={onDrop}
                   onDragOver={onDragOver}
                   onElementsRemove={onElementsRemove}
