@@ -1,3 +1,4 @@
+import { appendableStepTypes } from '../utils/validationService';
 import { MiniCatalog } from './MiniCatalog';
 import './Visualization.css';
 import { Button, Popover } from '@patternfly/react-core';
@@ -20,8 +21,6 @@ const VisualizationStep = ({ data }: any) => {
   const onElementClick = (event: any) => data.onElementClick(event, data);
   const onElementClickAdd = (selectedStep: any) => data.onElementClickAdd(selectedStep);
 
-  console.table(data);
-
   return (
     <>
       <div
@@ -42,7 +41,7 @@ const VisualizationStep = ({ data }: any) => {
                 queryParams={{
                   kind: data.kind,
                   integrationType: 'KameletBinding',
-                  type: data.connectorType,
+                  type: appendableStepTypes(data.connectorType),
                 }}
               />
             }

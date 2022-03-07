@@ -23,7 +23,7 @@ export interface IMiniCatalog {
     // e.g. 'Kamelet'
     kind?: string;
     // e.g. 'START', 'END', 'MIDDLE'
-    type?: 'START' | 'END' | 'MIDDLE';
+    type?: string;
   };
   steps?: IStepProps[];
 }

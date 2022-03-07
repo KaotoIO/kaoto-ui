@@ -55,7 +55,7 @@ const api = ({
 
   let options: RequestInit = {
     method,
-    body: undefined,
+    body: contentType?.includes('application/json') && stringifyBody ? JSON.stringify(body) : body,
     // cache: 'no-cache',
     /**
      * TODO: Omit for now, reassess for prod
@@ -73,14 +73,8 @@ const api = ({
 
   // if params exists and method is GET, add query string to url
   // otherwise, add query params as a "body" property to the options object
-  if (queryParams) {
-    if (method === 'GET') {
-      endpoint += '?' + objectToQueryString(queryParams);
-    } else {
-      // stringify body for JSON, leave plain for YAML text and everything else
-      options.body =
-        contentType?.includes('application/json') && stringifyBody ? JSON.stringify(body) : body; // body should match Content-Type in headers option
-    }
+  if (queryParams && method === 'GET') {
+    endpoint += '?' + objectToQueryString(queryParams);
   }
 
   return fetch(`${apiURL}${endpoint}`, options);
