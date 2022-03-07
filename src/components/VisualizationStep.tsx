@@ -20,6 +20,8 @@ const VisualizationStep = ({ data }: any) => {
   const onElementClick = (event: any) => data.onElementClick(event, data);
   const onElementClickAdd = (selectedStep: any) => data.onElementClickAdd(selectedStep);
 
+  console.table(data);
+
   return (
     <>
       <div
@@ -34,7 +36,16 @@ const VisualizationStep = ({ data }: any) => {
           <Popover
             appendTo={() => document.body}
             aria-label="Search for a step"
-            bodyContent={<MiniCatalog handleSelectStep={onElementClickAdd} />}
+            bodyContent={
+              <MiniCatalog
+                handleSelectStep={onElementClickAdd}
+                queryParams={{
+                  kind: data.kind,
+                  integrationType: 'KameletBinding',
+                  type: data.connectorType,
+                }}
+              />
+            }
             hideOnOutsideClick={true}
             position={'auto'}
           >
