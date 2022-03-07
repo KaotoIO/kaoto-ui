@@ -70,7 +70,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       return;
     }
 
-    fetchCustomResource(viewData.steps)
+    // Remove all "Add Step" placeholders before updating the API
+    fetchCustomResource(viewData.steps.filter((step) => step.type))
       .then((value: string | void) => {
         if (value) {
           setYAMLData(value);
@@ -105,7 +106,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     const stepsAsElements: any[] = [];
     const stepEdges: any[] = [];
 
-    // if there are no steps, or if the first step isn't a source,
+    // if there are no steps or if the first step has a `type`,
+    // but it isn't a source,
     // create a dummy placeholder step
     if (steps.length === 0 || (steps.length > 0 && steps[0].type && steps[0].type !== 'START')) {
       // @ts-ignore
