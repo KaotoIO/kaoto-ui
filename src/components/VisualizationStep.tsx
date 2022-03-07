@@ -28,7 +28,13 @@ const VisualizationStep = ({ data }: any) => {
         onDrop={onDropChange}
       >
         {data.connectorType !== 'END' && !isLastNode && (
-          <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
+          <Handle
+            isConnectable={false}
+            type="source"
+            position={Position.Right}
+            id="b"
+            style={{ borderRadius: 0 }}
+          />
         )}
         {data.connectorType !== 'END' && isLastNode && (
           <Popover
@@ -49,7 +55,13 @@ const VisualizationStep = ({ data }: any) => {
           <img src={data.icon} className="nodrag" alt={data.label} />
         </div>
         {data.connectorType !== 'START' && (
-          <Handle type="target" position={Position.Left} id="a" style={{ borderRadius: 0 }} />
+          <Handle
+            isConnectable={false}
+            type="target"
+            position={Position.Left}
+            id="a"
+            style={{ borderRadius: 0 }}
+          />
         )}
         <div className={'stepNode__Label'} onClick={onElementClick}>
           {data.label}
