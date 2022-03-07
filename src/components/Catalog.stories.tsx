@@ -1,6 +1,7 @@
 // For now the only view data we care about are steps
 import catalog from '../data/catalog';
 import { Catalog, ICatalog } from './Catalog';
+import { AlertProvider } from './MASAlerts';
 import { Drawer, DrawerContent } from '@patternfly/react-core';
 import { action } from '@storybook/addon-actions';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -12,15 +13,17 @@ export default {
 
 const Template: ComponentStory<typeof Catalog> = (props: ICatalog) => {
   return (
-    <Drawer
-      isExpanded={props.isCatalogExpanded}
-      onExpand={() => {
-        action('Catalog expanded');
-      }}
-      position={'left'}
-    >
-      <DrawerContent panelContent={<Catalog {...props} />} className={'panelCustom'} />
-    </Drawer>
+    <AlertProvider>
+      <Drawer
+        isExpanded={props.isCatalogExpanded}
+        onExpand={() => {
+          action('Catalog expanded');
+        }}
+        position={'left'}
+      >
+        <DrawerContent panelContent={<Catalog {...props} />} className={'panelCustom'} />
+      </Drawer>
+    </AlertProvider>
   );
 };
 

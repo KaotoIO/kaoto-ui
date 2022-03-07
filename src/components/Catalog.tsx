@@ -1,7 +1,8 @@
-import request from '../api/request';
+import { fetchCatalogSteps } from '../api';
 import { IStepProps } from '../types';
 import './Catalog.css';
 import {
+  AlertVariant,
   Bullseye,
   Card,
   CardBody,
@@ -24,11 +25,20 @@ import {
   ToolbarContent,
   ToolbarItem,
 } from '@patternfly/react-core';
+import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
 export interface ICatalog {
   isCatalogExpanded: boolean;
   onClosePanelClick: (e: any) => void;
+  queryParams?: {
+    // e.g. 'KameletBinding'
+    integrationType?: string;
+    // e.g. 'Kamelet'
+    kind?: string;
+    // e.g. 'START', 'END', 'MIDDLE'
+    type?: string;
+  };
   steps?: IStepProps[];
 }
 
@@ -44,28 +54,30 @@ const Catalog = (props: ICatalog) => {
   const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
 
+  const { addAlert } = useAlert() || {};
+
   /**
    * Sort & fetch all Steps for the Catalog
    */
   useEffect(() => {
     if (!props.steps) {
-      const getCatalogData = async () => {
-        try {
-          const resp = await request.get({
-            endpoint: '/step',
-          });
-
-          const data = await resp.json();
-          data.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
-          setCatalogData(data);
-        } catch (err) {
-          console.error(err);
-        }
-      };
-
-      getCatalogData().catch((e) => {
-        console.error(e);
-      });
+      fetchCatalogSteps(props.queryParams)
+        .then((value) => {
+          if (value) {
+            value.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
+            setCatalogData(value);
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+          addAlert &&
+            addAlert({
+              title: 'Something went wrong',
+              variant: AlertVariant.danger,
+              description:
+                'There was a problem fetching the catalog steps. Please try again later.',
+            });
+        });
     }
   }, []);
 
