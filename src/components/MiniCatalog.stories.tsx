@@ -1,4 +1,5 @@
 import catalog from '../data/catalog';
+import { AlertProvider } from './MASAlerts';
 import { MiniCatalog, IMiniCatalog } from './MiniCatalog';
 import { action } from '@storybook/addon-actions';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -10,9 +11,11 @@ export default {
 
 const Template: ComponentStory<typeof MiniCatalog> = (props: IMiniCatalog) => {
   return (
-    <div style={{ maxWidth: '20%' }}>
-      <MiniCatalog {...props} />
-    </div>
+    <AlertProvider>
+      <div style={{ maxWidth: '20%' }}>
+        <MiniCatalog {...props} />
+      </div>
+    </AlertProvider>
   );
 };
 

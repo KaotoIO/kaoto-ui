@@ -1,30 +1,21 @@
 import { IStepProps } from '../types';
 
 /**
- * Checks whether a step can be appended onto an existing step.
- * @param existingStep
- * @param appendedStep
+ * Checks kind of steps can be appended onto an existing step.
+ * @param existingStepType
  */
-export function canStepBeAppended(
-  existingStep: any,
-  appendedStep: any
-): { isValid: boolean; message?: string } {
-  let isValid = false;
-  let message = undefined;
+export function appendableStepTypes(existingStepType: string): string {
+  let possibleSteps: string = '';
 
-  switch (existingStep.connectorType) {
+  switch (existingStepType) {
     case 'START':
     case 'MIDDLE':
       // cannot append a START step to a START or MIDDLE step
-      isValid = appendedStep.connectorType !== 'START';
-      break;
-    case 'END':
-      // you can't add anything onto an end step
-      isValid = false;
+      possibleSteps = 'MIDDLE,END';
       break;
   }
 
-  return { isValid, message };
+  return possibleSteps;
 }
 
 /**

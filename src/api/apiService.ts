@@ -1,6 +1,26 @@
 import { IStepProps } from '../types';
 import request from './request';
 
+export async function fetchCatalogSteps(queryParams?: {
+  // e.g. 'KameletBinding'
+  integrationType?: string;
+  // e.g. 'Kamelet'
+  kind?: string;
+  // e.g. 'START', 'END', 'MIDDLE'
+  type?: string;
+}) {
+  try {
+    const resp = await request.get({
+      endpoint: '/step',
+      queryParams,
+    });
+
+    return await resp.json();
+  } catch (err) {
+    return console.error(err);
+  }
+}
+
 /**
  * Returns the custom resource (YAML).
  * Usually to update the YAML after a change in the integration from the Visualization.

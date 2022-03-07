@@ -1,3 +1,4 @@
+import { appendableStepTypes } from '../utils/validationService';
 import { MiniCatalog } from './MiniCatalog';
 import './Visualization.css';
 import { Button, Popover } from '@patternfly/react-core';
@@ -34,7 +35,16 @@ const VisualizationStep = ({ data }: any) => {
           <Popover
             appendTo={() => document.body}
             aria-label="Search for a step"
-            bodyContent={<MiniCatalog handleSelectStep={onElementClickAdd} />}
+            bodyContent={
+              <MiniCatalog
+                handleSelectStep={onElementClickAdd}
+                queryParams={{
+                  kind: data.kind,
+                  integrationType: 'KameletBinding',
+                  type: appendableStepTypes(data.connectorType),
+                }}
+              />
+            }
             hideOnOutsideClick={true}
             position={'auto'}
           >
