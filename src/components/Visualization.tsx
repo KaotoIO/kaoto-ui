@@ -5,8 +5,8 @@ import {
   useYAMLContext,
 } from '../api';
 import { IStepProps, IViewData, IVizStepProps, IVizStepPropsEdge } from '../types';
-import truncateString from '../utils/truncateName';
-import usePrevious from '../utils/usePrevious';
+import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
+import '../utils';
 import { canStepBeReplaced } from '../utils/validationService';
 import { StepErrorBoundary, StepViews, VisualizationSlot, VisualizationStep } from './';
 import './Visualization.css';
@@ -36,16 +36,6 @@ const placeholderStep: IStepProps = {
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
-
-/**
- * Returns a Step index when provided with the `UUID`.
- * `UUID` is originally set using the Step UUID.
- * @param UUID
- * @param steps
- */
-const findStepIdxWithUUID = (UUID: string, steps: IStepProps[]) => {
-  return steps.map((s) => s.UUID).indexOf(UUID);
-};
 
 interface IVisualization {
   initialState?: IViewData;
@@ -165,6 +155,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           kind: step.kind,
           label: truncateString(step.name, 14),
           UUID: step.UUID,
+          index,
           onDropChange,
           onElementClick,
           onElementClickAdd: onSelectNewStep,

@@ -1,5 +1,5 @@
 import { IStepProps, IViewProps } from '../types';
-import usePrevious from '../utils/usePrevious';
+import { usePrevious } from '../utils';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';

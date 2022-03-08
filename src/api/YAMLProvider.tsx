@@ -1,4 +1,4 @@
-import usePrevious from '../utils/usePrevious';
+import { usePrevious } from '../utils';
 import { useStepsAndViewsContext } from './StepsAndViewsProvider';
 import { fetchViewDefinitions } from './apiService';
 import {
