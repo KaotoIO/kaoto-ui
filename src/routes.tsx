@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { Route, RouteComponentProps, Switch } from 'react-router-dom';
-import { accessibleRouteChangeHandler } from './utils/utils';
 import { Dashboard } from './pages/Dashboard';
 import { NotFound } from './pages/NotFound';
-import { useDocumentTitle } from './utils/useDocumentTitle';
+import { accessibleRouteChangeHandler } from './utils';
+import { useDocumentTitle } from './utils';
+import * as React from 'react';
+import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { LastLocationProvider, useLastLocation } from 'react-router-last-location';
 
 let routeFocusTimer: number;
@@ -96,7 +96,7 @@ const AppRoutes = (): React.ReactElement => {
         <PageNotFound title="404 Page Not Found" />
       </Switch>
     </LastLocationProvider>
-  )
+  );
 };
 
 export { AppRoutes, routes };

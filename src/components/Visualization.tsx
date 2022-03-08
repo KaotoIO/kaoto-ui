@@ -5,8 +5,8 @@ import {
   useYAMLContext,
 } from '../api';
 import { IStepProps, IViewData, IVizStepProps, IVizStepPropsEdge } from '../types';
-import truncateString from '../utils/truncateName';
-import usePrevious from '../utils/usePrevious';
+import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
+import '../utils';
 import { canStepBeReplaced } from '../utils/validationService';
 import { StepErrorBoundary, StepViews, VisualizationSlot, VisualizationStep } from './';
 import './Visualization.css';
@@ -14,11 +14,8 @@ import { AlertVariant, Drawer, DrawerContent, DrawerContentBody } from '@pattern
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useRef, useState } from 'react';
 import ReactFlow, {
-  addEdge,
   Background,
-  Connection,
   Controls,
-  Edge,
   Elements,
   MiniMap,
   ReactFlowProvider,
@@ -39,16 +36,6 @@ const placeholderStep: IStepProps = {
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
-
-/**
- * Returns a Step index when provided with the `UUID`.
- * `UUID` is originally set using the Step UUID.
- * @param UUID
- * @param steps
- */
-const findStepIdxWithUUID = (UUID: string, steps: IStepProps[]) => {
-  return steps.map((s) => s.UUID).indexOf(UUID);
-};
 
 interface IVisualization {
   initialState?: IViewData;
@@ -73,7 +60,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       return;
     }
 
-    fetchCustomResource(viewData.steps)
+    // Remove all "Add Step" placeholders before updating the API
+    fetchCustomResource(viewData.steps.filter((step) => step.type))
       .then((value: string | void) => {
         if (value) {
           setYAMLData(value);
@@ -108,9 +96,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     const stepsAsElements: any[] = [];
     const stepEdges: any[] = [];
 
-    // if there are no steps, or if the first step isn't a source,
+    // if there are no steps or if the first step has a `type`,
+    // but it isn't a source,
     // create a dummy placeholder step
-    if (steps.length === 0 || (steps.length > 0 && steps[0].type !== 'START')) {
+    if (steps.length === 0 || (steps.length > 0 && steps[0].type && steps[0].type !== 'START')) {
       // @ts-ignore
       steps.unshift({ name: 'ADD A STEP' });
     }
@@ -166,6 +155,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           kind: step.kind,
           label: truncateString(step.name, 14),
           UUID: step.UUID,
+          index,
           onDropChange,
           onElementClick,
           onElementClickAdd: onSelectNewStep,
@@ -237,10 +227,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
   const onClosePanelClick = () => {
     setIsPanelExpanded(false);
-  };
-
-  const onConnect = (params: Edge<any> | Connection) => {
-    setElements((els) => addEdge(params, els));
   };
 
   const onDragOver = (event: {
@@ -344,7 +330,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
                 <ReactFlow
                   elements={elements}
                   nodeTypes={nodeTypes}
-                  onConnect={onConnect}
                   onDrop={onDrop}
                   onDragOver={onDragOver}
                   onElementsRemove={onElementsRemove}

@@ -1,5 +1,5 @@
 import { fetchViewDefinitions, useStepsAndViewsContext, useYAMLContext } from '../api';
-import usePrevious from '../utils/usePrevious';
+import { usePrevious } from '../utils';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import Editor from '@monaco-editor/react';
 import { useRef } from 'react';

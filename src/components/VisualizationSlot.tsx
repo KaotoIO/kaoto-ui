@@ -46,13 +46,25 @@ const VisualizationSlot = ({ data }: any) => {
       onDrop={onDrop}
     >
       {!(data.connectorType === 'START') && (
-        <Handle type="target" position={Position.Left} id="a" style={{ borderRadius: 0 }} />
+        <Handle
+          type="target"
+          position={Position.Left}
+          id="a"
+          style={{ borderRadius: 0 }}
+          isConnectable={false}
+        />
       )}
       <div className={'stepNode__Icon'}>
         <CubesIcon />
       </div>
       {!(data.connectorType === 'END') && (
-        <Handle type="source" position={Position.Right} id="b" style={{ borderRadius: 0 }} />
+        <Handle
+          type="source"
+          position={Position.Right}
+          id="b"
+          style={{ borderRadius: 0 }}
+          isConnectable={false}
+        />
       )}
       <div className={'stepNode__Label'}>{data.label}</div>
     </div>
