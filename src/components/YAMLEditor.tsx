@@ -67,7 +67,7 @@ const YAMLEditor = (props: IYAMLEditor) => {
   return (
     <StepErrorBoundary>
       <Editor
-        height="90vh"
+        height={'100%'}
         defaultLanguage={props.language ?? 'yaml'}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}

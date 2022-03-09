@@ -42,7 +42,7 @@ interface IVisualization {
   toggleCatalog?: () => void;
 }
 
-const Visualization = ({ toggleCatalog }: IVisualization) => {
+const Visualization = ({}: IVisualization) => {
   // `elements` is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<Elements<IStepProps>>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
@@ -241,14 +241,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
   const onElementClick = (_e: any, element: any) => {
     console.log(_e);
-
-    if (element.type === 'slot') {
-      // prevent slots from being selected,
-      // passive-aggressively open the steps catalog
-      if (toggleCatalog) toggleCatalog();
-
-      return;
-    }
+    _e.preventDefault();
 
     // Only set state again if the ID is not the same
     if (selectedStep.UUID !== element.UUID) {
