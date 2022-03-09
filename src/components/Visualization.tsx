@@ -84,27 +84,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     slot: VisualizationSlot,
     step: VisualizationStep,
   };
-
+  
   /**
-   * Creates an object for the Visualization from the Step model.
-   * Contains UI-specific metadata (e.g. position).
-   * Data is stored in the Elements hook.
-   * @param steps
-   */
-  const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
-    const incrementAmt = 160;
-    const stepsAsElements: any[] = [];
-    const stepEdges: any[] = [];
-
-    // if there are no steps or if the first step has a `type`,
-    // but it isn't a source,
-    // create a dummy placeholder step
-    if (steps.length === 0 || (steps.length > 0 && steps[0].type && steps[0].type !== 'START')) {
-      // @ts-ignore
-      steps.unshift({ name: 'ADD A STEP' });
-    }
-
-    /**
      * Handles dropping a step onto an existing step (i.e. step replacement)
      * @param event
      * @param data
@@ -141,6 +122,25 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           });
       }
     };
+
+  /**
+   * Creates an object for the Visualization from the Step model.
+   * Contains UI-specific metadata (e.g. position).
+   * Data is stored in the Elements hook.
+   * @param steps
+   */
+  const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
+    const incrementAmt = 160;
+    const stepsAsElements: any[] = [];
+    const stepEdges: any[] = [];
+
+    // if there are no steps or if the first step has a `type`,
+    // but it isn't a source,
+    // create a dummy placeholder step
+    if (steps.length === 0 || (steps.length > 0 && steps[0].type && steps[0].type !== 'START')) {
+      // @ts-ignore
+      steps.unshift({ name: 'ADD A STEP' });
+    }
 
     steps.map((step, index) => {
       // Grab the previous step to use for determining position and drawing edges
