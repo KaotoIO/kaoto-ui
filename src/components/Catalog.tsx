@@ -174,7 +174,7 @@ const Catalog = (props: ICatalog) => {
               return (
                 <Card
                   key={idx}
-                  className={'step'}
+                  className={'catalog--step'}
                   isCompact={true}
                   isHoverable={true}
                   draggable={'true'}

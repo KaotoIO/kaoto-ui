@@ -86,44 +86,44 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     slot: VisualizationSlot,
     step: VisualizationStep,
   };
-  
+
   /**
-     * Handles dropping a step onto an existing step (i.e. step replacement)
-     * @param event
-     * @param data
-     */
-    const onDropChange = (
-      event: { preventDefault: () => void; dataTransfer: { getData: (arg0: string) => any } },
-      data: any
-    ) => {
-      event.preventDefault();
+   * Handles dropping a step onto an existing step (i.e. step replacement)
+   * @param event
+   * @param data
+   */
+  const onDropChange = (
+    event: { preventDefault: () => void; dataTransfer: { getData: (arg0: string) => any } },
+    data: any
+  ) => {
+    event.preventDefault();
 
-      const dataJSON = event.dataTransfer.getData('text');
-      const step: IStepProps = JSON.parse(dataJSON);
-      const validation = canStepBeReplaced(data, step, viewData.steps);
+    const dataJSON = event.dataTransfer.getData('text');
+    const step: IStepProps = JSON.parse(dataJSON);
+    const validation = canStepBeReplaced(data, step, viewData.steps);
 
-      // Replace step
-      if (validation.isValid) {
-        // update the steps, the new node will be created automatically
-        dispatch({
-          type: 'REPLACE_STEP',
-          payload: { newStep: step, oldStepIndex: findStepIdxWithUUID(data.UUID, viewData.steps) },
+    // Replace step
+    if (validation.isValid) {
+      // update the steps, the new node will be created automatically
+      dispatch({
+        type: 'REPLACE_STEP',
+        payload: { newStep: step, oldStepIndex: findStepIdxWithUUID(data.UUID, viewData.steps) },
+      });
+      // fetch the updated view definitions again with new views
+      fetchViewDefinitions(viewData.steps).then((data: any) => {
+        dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+      });
+    } else {
+      // the step CANNOT be replaced, the proposed step is invalid
+      console.log('step CANNOT be replaced');
+      addAlert &&
+        addAlert({
+          title: 'Replace Step Unsuccessful',
+          variant: AlertVariant.danger,
+          description: validation.message ?? 'Something went wrong, please try again later.',
         });
-        // fetch the updated view definitions again with new views
-        fetchViewDefinitions(viewData.steps).then((data: any) => {
-          dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
-        });
-      } else {
-        // the step CANNOT be replaced, the proposed step is invalid
-        console.log('step CANNOT be replaced');
-        addAlert &&
-          addAlert({
-            title: 'Replace Step Unsuccessful',
-            variant: AlertVariant.danger,
-            description: validation.message ?? 'Something went wrong, please try again later.',
-          });
-      }
-    };
+    }
+  };
 
   /**
    * Creates an object for the Visualization from the Step model.
@@ -239,15 +239,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     event.dataTransfer.dropEffect = 'move';
   };
 
-  const onDrop = (event: {
-    preventDefault: () => void;
-    dataTransfer: { getData: (arg0: string) => any };
-    clientX: number;
-    clientY: number;
-  }) => {
-    event.preventDefault();
-  };
-
   const onElementClick = (_e: any, element: any) => {
     console.log(_e);
 
@@ -334,7 +325,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
                 <ReactFlow
                   elements={elements}
                   nodeTypes={nodeTypes}
-                  onDrop={onDrop}
                   onDragOver={onDragOver}
                   onElementsRemove={onElementsRemove}
                   onLoad={onLoad}
