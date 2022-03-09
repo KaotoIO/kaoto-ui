@@ -65,6 +65,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       .then((value: string | void) => {
         if (value) {
           setYAMLData(value);
+        } else {
+          setYAMLData('');
         }
       })
       .catch((e) => {
@@ -247,6 +249,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   };
 
   const onElementClick = (_e: any, element: any) => {
+    console.log(_e);
+
     if (element.type === 'slot') {
       // prevent slots from being selected,
       // passive-aggressively open the steps catalog

@@ -22,13 +22,15 @@ const YAMLEditor = (props: IYAMLEditor) => {
    * On detected changes to YAML state, issue POST to external endpoint
    * Returns JSON to be displayed in the visualizer
    */
-  const handleChanges = (incomingData: string) => {
+  const handleChanges = (incomingData?: string) => {
     // Wait a bit before setting data
     setTimeout(() => {
       // Check that the data has changed, otherwise return
       if (previousYaml === incomingData) {
         return;
       }
+
+      console.log('incomingData: ' + incomingData);
 
       setYAMLData(incomingData);
 
@@ -57,9 +59,9 @@ const YAMLEditor = (props: IYAMLEditor) => {
   }
 
   const debounced = useDebouncedCallback((value?: string) => {
-    if (value) {
-      handleChanges(value);
-    }
+    // if (value) {
+    handleChanges(value);
+    // }
   }, 800);
 
   return (
