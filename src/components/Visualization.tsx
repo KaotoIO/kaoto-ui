@@ -162,7 +162,7 @@ const Visualization = ({}: IVisualization) => {
           onElementClickAdd: onSelectNewStep,
         },
         id: getId(),
-        position: { x: 0, y: window.innerHeight / 2 },
+        position: { x: 0, y: window.innerHeight / 3 },
         type: 'step',
       };
 
