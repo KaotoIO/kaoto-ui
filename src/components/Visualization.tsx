@@ -62,15 +62,15 @@ const Visualization = ({}: IVisualization) => {
 
     // Remove all "Add Step" placeholders before updating the API
     fetchCustomResource(viewData.steps.filter((step) => step.type))
-      .then((value: string | void) => {
-        if (value) {
+      .then((value) => {
+        if (typeof value === 'string') {
           setYAMLData(value);
         } else {
           setYAMLData('');
         }
       })
       .catch((e) => {
-        console.log(e);
+        console.error(e);
         addAlert &&
           addAlert({
             title: 'Something went wrong',
@@ -115,7 +115,6 @@ const Visualization = ({}: IVisualization) => {
       });
     } else {
       // the step CANNOT be replaced, the proposed step is invalid
-      console.log('step CANNOT be replaced');
       addAlert &&
         addAlert({
           title: 'Replace Step Unsuccessful',
@@ -162,7 +161,7 @@ const Visualization = ({}: IVisualization) => {
           onElementClickAdd: onSelectNewStep,
         },
         id: getId(),
-        position: { x: 0, y: window.innerHeight / 3 },
+        position: { x: 0, y: 250 },
         type: 'step',
       };
 
@@ -180,7 +179,7 @@ const Visualization = ({}: IVisualization) => {
       switch (index) {
         case 0:
           // first item in `steps` array
-          inputStep.position.x = window.innerWidth / 5;
+          inputStep.position.x = 250;
           // mark as a slot if it's first in the array and not a START step
           if (steps.length > 0 && steps[0].type !== 'START') {
             inputStep.type = 'slot';
@@ -331,6 +330,7 @@ const Visualization = ({}: IVisualization) => {
               >
                 <ReactFlow
                   elements={elements}
+                  defaultZoom={1.2}
                   nodeTypes={nodeTypes}
                   onDragOver={onDragOver}
                   onElementClick={onElementClick}

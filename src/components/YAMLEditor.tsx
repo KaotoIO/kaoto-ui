@@ -30,8 +30,6 @@ const YAMLEditor = (props: IYAMLEditor) => {
         return;
       }
 
-      console.log('incomingData: ' + incomingData);
-
       setYAMLData(incomingData);
 
       fetchViewDefinitions(incomingData)
