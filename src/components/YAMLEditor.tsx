@@ -59,9 +59,7 @@ const YAMLEditor = (props: IYAMLEditor) => {
   }
 
   const debounced = useDebouncedCallback((value?: string) => {
-    // if (value) {
     handleChanges(value);
-    // }
   }, 800);
 
   return (
