@@ -226,10 +226,15 @@ const Visualization = ({}: IVisualization) => {
     dispatch({ type: 'DELETE_STEP', payload: { index: stepsIndex } });
   };
 
+  // Close Step View panel
   const onClosePanelClick = () => {
     setIsPanelExpanded(false);
   };
 
+  /**
+   * Called when a catalog step is dragged over the visualization canvas
+   * @param event
+   */
   const onDragOver = (event: {
     preventDefault: () => void;
     dataTransfer: { dropEffect: string };
@@ -238,19 +243,26 @@ const Visualization = ({}: IVisualization) => {
     event.dataTransfer.dropEffect = 'move';
   };
 
+  /**
+   * Called when an element is clicked
+   * @param _e
+   * @param element
+   */
   const onElementClick = (_e: any, element: any) => {
-    _e.preventDefault();
-
     // Only set state again if the ID is not the same
     if (selectedStep.UUID !== element.data.UUID) {
       const findStep: IStepProps =
         viewData.steps.find((step) => step.UUID === element.data.UUID) ?? selectedStep;
       setSelectedStep(findStep);
-    }
 
-    setIsPanelExpanded(!isPanelExpanded);
+      setIsPanelExpanded(!isPanelExpanded);
+    }
   };
 
+  /**
+   * Handles selecting a step from the Mini Catalog (append step)
+   * @param selectedStep
+   */
   const onSelectNewStep = (selectedStep: IStepProps) => {
     dispatch({ type: 'ADD_STEP', payload: { newStep: selectedStep } });
 
@@ -271,6 +283,10 @@ const Visualization = ({}: IVisualization) => {
     setReactFlowInstance(_reactFlowInstance);
   };
 
+  /**
+   * Handles Step View configuration changes
+   * @param newValues
+   */
   const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
     let newStep: IStepProps = selectedStep;
     const newStepParameters = newStep.parameters;

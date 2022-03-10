@@ -60,7 +60,7 @@ const VisualizationStep = ({ data }: any) => {
         </Popover>
       )}
       <div className={'stepNode__Icon'}>
-        <img src={data.icon} className="nodrag" alt={data.label} />
+        <img src={data.icon} alt={data.label} />
       </div>
       {data.connectorType !== 'START' && (
         <Handle
