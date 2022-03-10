@@ -1,19 +1,20 @@
 import { fetchViewDefinitions, useStepsAndViewsContext, useYAMLContext } from '../api';
 import { usePrevious } from '../utils';
 import { StepErrorBoundary } from './StepErrorBoundary';
-import Editor from '@monaco-editor/react';
+// import Editor from '@monaco-editor/react';
+import { CodeEditor, Language } from '@patternfly/react-code-editor';
 import { useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 interface IYAMLEditor {
   // Used to mock data for stories
   initialData?: string;
-  language?: string;
+  language?: Language;
   theme?: string;
 }
 
 const YAMLEditor = (props: IYAMLEditor) => {
-  const editorRef = useRef(null);
+  // const editorRef = useRef(null);
   const [YAMLData, setYAMLData] = useYAMLContext();
   const [, dispatch] = useStepsAndViewsContext();
   const previousYaml = usePrevious(YAMLData);
@@ -47,14 +48,14 @@ const YAMLEditor = (props: IYAMLEditor) => {
     debounced(value);
   }
 
-  function handleEditorDidMount(editor: any) {
-    editorRef.current = editor;
-  }
+  // function handleEditorDidMount(editor: any) {
+  //   editorRef.current = editor;
+  // }
 
-  function handleEditorValidation(markers: any[]) {
-    // Model Markers
-    markers.forEach((marker) => console.log('onValidate: ', marker.message));
-  }
+  // function handleEditorValidation(markers: any[]) {
+  //   // Model Markers
+  //   markers.forEach((marker) => console.log('onValidate: ', marker.message));
+  // }
 
   const debounced = useDebouncedCallback((value?: string) => {
     handleChanges(value);
@@ -62,6 +63,18 @@ const YAMLEditor = (props: IYAMLEditor) => {
 
   return (
     <StepErrorBoundary>
+      <CodeEditor
+        height="400px"
+        // height={'100%'}
+        isCopyEnabled={true}
+        isDarkTheme={true}
+        isDownloadEnabled={true}
+        isLanguageLabelVisible={true}
+        isUploadEnabled={true}
+        language={props.language ?? Language.yaml}
+        onChange={handleEditorChange}
+      />
+      {/*}
       <Editor
         height={'100%'}
         defaultLanguage={props.language ?? 'yaml'}
@@ -72,6 +85,7 @@ const YAMLEditor = (props: IYAMLEditor) => {
         value={props.initialData ?? YAMLData}
         className={'code-editor'}
       />
+      {*/}
     </StepErrorBoundary>
   );
 };
