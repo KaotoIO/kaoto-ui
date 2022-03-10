@@ -32,6 +32,7 @@
     "@patternfly/react-core": "4.168.8",
     "@rhoas/app-services-ui-shared": "^0.15.4",
     "ajv": "^8.8.2",
+    "monaco-editor": "^0.32.1",
     "monaco-editor-webpack-plugin": "^7.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",

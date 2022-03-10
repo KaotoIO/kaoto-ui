@@ -12268,6 +12268,7 @@ __metadata:
     jest-environment-jsdom: ^27.5.1
     lint-staged: 11.2.5
     mini-css-extract-plugin: 2.4.3
+    monaco-editor: ^0.32.1
     monaco-editor-webpack-plugin: ^7.0.1
     null-loader: ^4.0.1
     prettier: 2.4.1
@@ -13234,6 +13235,13 @@ __metadata:
     monaco-editor: ">= 0.31.0"
     webpack: ^4.5.0 || 5.x
   checksum: 436814c724d5033254519ef8203f0df600d15c6bf0a3bf48a42ea678086becb56ed5685df2bca4cd4107855ecf8cea73722e52b63573edba5c020ff51b4f2d31
+  languageName: node
+  linkType: hard
+
+"monaco-editor@npm:^0.32.1":
+  version: 0.32.1
+  resolution: "monaco-editor@npm:0.32.1"
+  checksum: f63e96fadca3e46ee639c3c7fead95bc03413d4b47d27ffdf5636270e2753c45391e830dd34ae5404004b8fc6a06b50a91d9ae4b593e1fc21cfc20ee00ca98c5
   languageName: node
   linkType: hard
 
