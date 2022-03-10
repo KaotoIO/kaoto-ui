@@ -34,9 +34,7 @@ For trial purposes, there is a docker image that can be run as described on [the
 ## Requirements
 
 - Node >= 14
-- Yarn Berry (3.x)
-- Storybook 6
-- Webpack 5
+- [Yarn](https://yarnpkg.com/getting-started/install) (Berry, 3.x)
 
 ## Install & Setup
 
