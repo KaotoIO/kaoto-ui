@@ -27,7 +27,6 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@monaco-editor/react": "4.3.1",
     "@patternfly/patternfly": "4.151.4",
     "@patternfly/react-code-editor": "^4.39.5",
     "@patternfly/react-core": "4.168.8",
@@ -91,7 +90,6 @@
     "jest-environment-jsdom": "^27.5.1",
     "lint-staged": "11.2.5",
     "mini-css-extract-plugin": "2.4.3",
-    "monaco-editor": "0.29.1",
     "null-loader": "^4.0.1",
     "prettier": "2.4.1",
     "prop-types": "15.7.2",

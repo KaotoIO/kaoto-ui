@@ -14,7 +14,7 @@ interface IYAMLEditor {
 }
 
 const YAMLEditor = (props: IYAMLEditor) => {
-  // const editorRef = useRef(null);
+  const editorRef = useRef(null);
   const [YAMLData, setYAMLData] = useYAMLContext();
   const [, dispatch] = useStepsAndViewsContext();
   const previousYaml = usePrevious(YAMLData);
@@ -48,9 +48,9 @@ const YAMLEditor = (props: IYAMLEditor) => {
     debounced(value);
   }
 
-  // function handleEditorDidMount(editor: any) {
-  //   editorRef.current = editor;
-  // }
+  function handleEditorDidMount(editor: any) {
+    editorRef.current = editor;
+  }
 
   // function handleEditorValidation(markers: any[]) {
   //   // Model Markers
@@ -71,8 +71,9 @@ const YAMLEditor = (props: IYAMLEditor) => {
         isDownloadEnabled={true}
         isLanguageLabelVisible={true}
         isUploadEnabled={true}
-        language={props.language ?? Language.yaml}
+        language={Language.yaml}
         onChange={handleEditorChange}
+        onEditorDidMount={handleEditorDidMount}
       />
       {/*}
       <Editor
