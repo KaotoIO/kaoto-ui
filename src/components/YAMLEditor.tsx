@@ -64,8 +64,8 @@ const YAMLEditor = (props: IYAMLEditor) => {
   return (
     <StepErrorBoundary>
       <CodeEditor
-        height="400px"
-        // height={'100%'}
+        code={props.initialData ?? YAMLData}
+        height="650px"
         isCopyEnabled={true}
         isDarkTheme={true}
         isDownloadEnabled={true}
