@@ -52,11 +52,6 @@ const YAMLEditor = (props: IYAMLEditor) => {
     editorRef.current = editor;
   }
 
-  // function handleEditorValidation(markers: any[]) {
-  //   // Model Markers
-  //   markers.forEach((marker) => console.log('onValidate: ', marker.message));
-  // }
-
   const debounced = useDebouncedCallback((value?: string) => {
     handleChanges(value);
   }, 800);
@@ -75,18 +70,6 @@ const YAMLEditor = (props: IYAMLEditor) => {
         onChange={handleEditorChange}
         onEditorDidMount={handleEditorDidMount}
       />
-      {/*}
-      <Editor
-        height={'100%'}
-        defaultLanguage={props.language ?? 'yaml'}
-        onChange={handleEditorChange}
-        onMount={handleEditorDidMount}
-        onValidate={handleEditorValidation}
-        theme={props.theme ?? 'vs-dark'}
-        value={props.initialData ?? YAMLData}
-        className={'code-editor'}
-      />
-      {*/}
     </StepErrorBoundary>
   );
 };
