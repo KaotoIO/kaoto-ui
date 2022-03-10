@@ -155,7 +155,7 @@ const StepViews = ({
                     <Extension
                       name="extension"
                       loading="Loading extension..."
-                      //failure="Could not load extension. Is it running?"
+                      failure="Could not load extension. Is it running?"
                     >
                       <StepExtension
                         text="Passed from Kaoto!"

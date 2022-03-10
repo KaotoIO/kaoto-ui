@@ -42,7 +42,7 @@ interface IVisualization {
   toggleCatalog?: () => void;
 }
 
-const Visualization = ({ toggleCatalog }: IVisualization) => {
+const Visualization = ({}: IVisualization) => {
   // `elements` is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<Elements<IStepProps>>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
@@ -62,13 +62,15 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
     // Remove all "Add Step" placeholders before updating the API
     fetchCustomResource(viewData.steps.filter((step) => step.type))
-      .then((value: string | void) => {
-        if (value) {
+      .then((value) => {
+        if (typeof value === 'string') {
           setYAMLData(value);
+        } else {
+          setYAMLData('');
         }
       })
       .catch((e) => {
-        console.log(e);
+        console.error(e);
         addAlert &&
           addAlert({
             title: 'Something went wrong',
@@ -84,44 +86,43 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     slot: VisualizationSlot,
     step: VisualizationStep,
   };
-  
+
   /**
-     * Handles dropping a step onto an existing step (i.e. step replacement)
-     * @param event
-     * @param data
-     */
-    const onDropChange = (
-      event: { preventDefault: () => void; dataTransfer: { getData: (arg0: string) => any } },
-      data: any
-    ) => {
-      event.preventDefault();
+   * Handles dropping a step onto an existing step (i.e. step replacement)
+   * @param event
+   * @param data
+   */
+  const onDropChange = (
+    event: { preventDefault: () => void; dataTransfer: { getData: (arg0: string) => any } },
+    data: any
+  ) => {
+    event.preventDefault();
 
-      const dataJSON = event.dataTransfer.getData('text');
-      const step: IStepProps = JSON.parse(dataJSON);
-      const validation = canStepBeReplaced(data, step, viewData.steps);
+    const dataJSON = event.dataTransfer.getData('text');
+    const step: IStepProps = JSON.parse(dataJSON);
+    const validation = canStepBeReplaced(data, step, viewData.steps);
 
-      // Replace step
-      if (validation.isValid) {
-        // update the steps, the new node will be created automatically
-        dispatch({
-          type: 'REPLACE_STEP',
-          payload: { newStep: step, oldStepIndex: findStepIdxWithUUID(data.UUID, viewData.steps) },
+    // Replace step
+    if (validation.isValid) {
+      // update the steps, the new node will be created automatically
+      dispatch({
+        type: 'REPLACE_STEP',
+        payload: { newStep: step, oldStepIndex: findStepIdxWithUUID(data.UUID, viewData.steps) },
+      });
+      // fetch the updated view definitions again with new views
+      fetchViewDefinitions(viewData.steps).then((data: any) => {
+        dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+      });
+    } else {
+      // the step CANNOT be replaced, the proposed step is invalid
+      addAlert &&
+        addAlert({
+          title: 'Replace Step Unsuccessful',
+          variant: AlertVariant.danger,
+          description: validation.message ?? 'Something went wrong, please try again later.',
         });
-        // fetch the updated view definitions again with new views
-        fetchViewDefinitions(viewData.steps).then((data: any) => {
-          dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
-        });
-      } else {
-        // the step CANNOT be replaced, the proposed step is invalid
-        console.log('step CANNOT be replaced');
-        addAlert &&
-          addAlert({
-            title: 'Replace Step Unsuccessful',
-            variant: AlertVariant.danger,
-            description: validation.message ?? 'Something went wrong, please try again later.',
-          });
-      }
-    };
+    }
+  };
 
   /**
    * Creates an object for the Visualization from the Step model.
@@ -157,11 +158,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           UUID: step.UUID,
           index,
           onDropChange,
-          onElementClick,
           onElementClickAdd: onSelectNewStep,
         },
         id: getId(),
-        position: { x: 0, y: window.innerHeight / 2 },
+        position: { x: 0, y: 250 },
         type: 'step',
       };
 
@@ -179,7 +179,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       switch (index) {
         case 0:
           // first item in `steps` array
-          inputStep.position.x = window.innerWidth / 5;
+          inputStep.position.x = 250;
           // mark as a slot if it's first in the array and not a START step
           if (steps.length > 0 && steps[0].type !== 'START') {
             inputStep.type = 'slot';
@@ -225,10 +225,15 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     dispatch({ type: 'DELETE_STEP', payload: { index: stepsIndex } });
   };
 
+  // Close Step View panel
   const onClosePanelClick = () => {
     setIsPanelExpanded(false);
   };
 
+  /**
+   * Called when a catalog step is dragged over the visualization canvas
+   * @param event
+   */
   const onDragOver = (event: {
     preventDefault: () => void;
     dataTransfer: { dropEffect: string };
@@ -237,34 +242,26 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     event.dataTransfer.dropEffect = 'move';
   };
 
-  const onDrop = (event: {
-    preventDefault: () => void;
-    dataTransfer: { getData: (arg0: string) => any };
-    clientX: number;
-    clientY: number;
-  }) => {
-    event.preventDefault();
-  };
-
+  /**
+   * Called when an element is clicked
+   * @param _e
+   * @param element
+   */
   const onElementClick = (_e: any, element: any) => {
-    if (element.type === 'slot') {
-      // prevent slots from being selected,
-      // passive-aggressively open the steps catalog
-      if (toggleCatalog) toggleCatalog();
-
-      return;
-    }
-
     // Only set state again if the ID is not the same
-    if (selectedStep.UUID !== element.UUID) {
+    if (selectedStep.UUID !== element.data.UUID) {
       const findStep: IStepProps =
-        viewData.steps.find((step) => step.UUID === element.UUID) ?? selectedStep;
+        viewData.steps.find((step) => step.UUID === element.data.UUID) ?? selectedStep;
       setSelectedStep(findStep);
-    }
 
-    setIsPanelExpanded(!isPanelExpanded);
+      setIsPanelExpanded(!isPanelExpanded);
+    }
   };
 
+  /**
+   * Handles selecting a step from the Mini Catalog (append step)
+   * @param selectedStep
+   */
   const onSelectNewStep = (selectedStep: IStepProps) => {
     dispatch({ type: 'ADD_STEP', payload: { newStep: selectedStep } });
 
@@ -285,6 +282,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     setReactFlowInstance(_reactFlowInstance);
   };
 
+  /**
+   * Handles Step View configuration changes
+   * @param newValues
+   */
   const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
     let newStep: IStepProps = selectedStep;
     const newStepParameters = newStep.parameters;
@@ -329,9 +330,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
               >
                 <ReactFlow
                   elements={elements}
+                  defaultZoom={1.2}
                   nodeTypes={nodeTypes}
-                  onDrop={onDrop}
                   onDragOver={onDragOver}
+                  onElementClick={onElementClick}
                   onElementsRemove={onElementsRemove}
                   onLoad={onLoad}
                   snapToGrid={true}

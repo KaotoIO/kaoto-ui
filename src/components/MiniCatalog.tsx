@@ -73,7 +73,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
   }
 
   return (
-    <section data-testid={'miniCatalog'}>
+    <section data-testid={'miniCatalog'} className={'nodrag'}>
       <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
         <ToolbarContent>
           {

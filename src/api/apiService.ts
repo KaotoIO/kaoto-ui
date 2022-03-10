@@ -17,7 +17,8 @@ export async function fetchCatalogSteps(queryParams?: {
 
     return await resp.json();
   } catch (err) {
-    return console.error(err);
+    console.error(err);
+    return err;
   }
 }
 
@@ -37,7 +38,7 @@ export async function fetchCustomResource(newSteps: IStepProps[]) {
 
     return await resp.text();
   } catch (err) {
-    return console.error(err);
+    return err;
   }
 }
 
@@ -59,5 +60,6 @@ export async function fetchViewDefinitions(data: string | IStepProps[]) {
     return await resp.json();
   } catch (err) {
     console.error(err);
+    return err;
   }
 }
