@@ -18,7 +18,6 @@ const VisualizationStep = ({ data }: any) => {
       : 'rgb(204, 204, 204)';
 
   const onDropChange = (event: any) => data.onDropChange(event, data);
-  const onElementClick = (event: any) => data.onElementClick(event, data);
   const onElementClickAdd = (selectedStep: any) => data.onElementClickAdd(selectedStep);
 
   return (
@@ -53,14 +52,14 @@ const VisualizationStep = ({ data }: any) => {
           hideOnOutsideClick={true}
           position={'auto'}
         >
-          <div className={'stepNode__Add'}>
+          <div className={'stepNode__Add nodrag'}>
             <Button variant="plain" aria-label="Action">
               <PlusCircleIcon />
             </Button>
           </div>
         </Popover>
       )}
-      <div className={'stepNode__Icon'} onClick={onElementClick}>
+      <div className={'stepNode__Icon'}>
         <img src={data.icon} className="nodrag" alt={data.label} />
       </div>
       {data.connectorType !== 'START' && (
@@ -72,9 +71,7 @@ const VisualizationStep = ({ data }: any) => {
           style={{ borderRadius: 0 }}
         />
       )}
-      <div className={'stepNode__Label'} onClick={onElementClick}>
-        {data.label}
-      </div>
+      <div className={'stepNode__Label'}>{data.label}</div>
     </div>
   );
 };

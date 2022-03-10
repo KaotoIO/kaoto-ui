@@ -159,7 +159,6 @@ const Visualization = ({}: IVisualization) => {
           UUID: step.UUID,
           index,
           onDropChange,
-          onElementClick,
           onElementClickAdd: onSelectNewStep,
         },
         id: getId(),
@@ -240,13 +239,12 @@ const Visualization = ({}: IVisualization) => {
   };
 
   const onElementClick = (_e: any, element: any) => {
-    console.log(_e);
     _e.preventDefault();
 
     // Only set state again if the ID is not the same
-    if (selectedStep.UUID !== element.UUID) {
+    if (selectedStep.UUID !== element.data.UUID) {
       const findStep: IStepProps =
-        viewData.steps.find((step) => step.UUID === element.UUID) ?? selectedStep;
+        viewData.steps.find((step) => step.UUID === element.data.UUID) ?? selectedStep;
       setSelectedStep(findStep);
     }
 
@@ -319,6 +317,7 @@ const Visualization = ({}: IVisualization) => {
                   elements={elements}
                   nodeTypes={nodeTypes}
                   onDragOver={onDragOver}
+                  onElementClick={onElementClick}
                   onElementsRemove={onElementsRemove}
                   onLoad={onLoad}
                   snapToGrid={true}
