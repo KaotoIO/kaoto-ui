@@ -6,10 +6,13 @@ const Dotenv = require('dotenv-webpack');
 const { dependencies, federatedModuleName } = require('./package.json');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const isPatternflyStyles = (stylesheet) =>
   stylesheet.includes('@patternfly/react-styles/css/') ||
-  stylesheet.includes('@patternfly/react-core/');
+  stylesheet.includes('@patternfly/react-core/') ||
+  stylesheet.includes('@patternfly/react-code-editor') ||
+  stylesheet.includes('monaco-editor-webpack-plugin');
 
 module.exports = () => {
   return {
@@ -70,6 +73,10 @@ module.exports = () => {
       new Dotenv({
         systemvars: true,
         silent: true,
+      }),
+      new MonacoWebpackPlugin({
+        languages: ['typescript', 'html', 'json'],
+        globalAPI: true,
       }),
       new MiniCssExtractPlugin({
         insert: (linkTag) => {
