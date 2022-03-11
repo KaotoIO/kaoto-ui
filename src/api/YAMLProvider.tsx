@@ -12,14 +12,14 @@ import {
 } from 'react';
 
 interface IYAMLDataProvider {
-  initialState: string;
+  initialState?: string;
   children: ReactNode;
 }
 
-export type IUseYAMLData = [string, Dispatch<SetStateAction<string>>];
+export type IUseYAMLData = [string | undefined, Dispatch<SetStateAction<string | undefined>>];
 
-export const useYAMLData = (newYAMLData: string): IUseYAMLData => {
-  const [YAMLData, setYAMLData] = useState<string>(newYAMLData);
+export const useYAMLData = (newYAMLData?: string): IUseYAMLData => {
+  const [YAMLData, setYAMLData] = useState<string | undefined>(newYAMLData ?? undefined);
   const previousYaml = usePrevious(YAMLData);
   const [, dispatch] = useStepsAndViewsContext();
 
@@ -43,14 +43,14 @@ export const useYAMLData = (newYAMLData: string): IUseYAMLData => {
 };
 
 function YAMLProvider({ initialState, children }: IYAMLDataProvider) {
-  const [YAMLData, setYAMLData] = useYAMLData(initialState);
+  const [YAMLData, setYAMLData] = useYAMLData(initialState ?? undefined);
 
   return (
     <YAMLDataContext.Provider value={[YAMLData, setYAMLData]}>{children}</YAMLDataContext.Provider>
   );
 }
 
-const YAMLDataContext = createContext<IUseYAMLData>(['', () => null]);
+const YAMLDataContext = createContext<IUseYAMLData>([undefined, () => null]);
 
 function useYAMLContext() {
   const context = useContext(YAMLDataContext);

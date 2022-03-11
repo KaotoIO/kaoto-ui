@@ -1,6 +1,5 @@
 import { StepsAndViewsProvider, YAMLProvider } from '../api';
 import { Catalog, Visualization, YAMLEditor } from '../components';
-import YAML from '../data/yaml';
 import './Dashboard.css';
 import {
   Button,
@@ -67,7 +66,7 @@ const Dashboard = () => {
           </div>
           <Grid>
             <StepsAndViewsProvider initialState={{ steps: [], views: [] }}>
-              <YAMLProvider initialState={YAML}>
+              <YAMLProvider>
                 {expanded.codeEditor && (
                   <GridItem span={4}>
                     <YAMLEditor />
