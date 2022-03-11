@@ -69,6 +69,7 @@ const YAMLEditor = (props: IYAMLEditor) => {
         language={Language.yaml}
         onChange={handleEditorChange}
         onEditorDidMount={handleEditorDidMount}
+        toolTipPosition={'right'}
       />
     </StepErrorBoundary>
   );
