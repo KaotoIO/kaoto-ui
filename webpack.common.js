@@ -75,7 +75,7 @@ module.exports = () => {
         silent: true,
       }),
       new MonacoWebpackPlugin({
-        languages: ['typescript', 'html', 'json', 'yaml'],
+        languages: ['yaml'],
         globalAPI: true,
       }),
       new MiniCssExtractPlugin({
