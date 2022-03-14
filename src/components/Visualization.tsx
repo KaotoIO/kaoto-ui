@@ -248,6 +248,14 @@ const Visualization = ({}: IVisualization) => {
    * @param element
    */
   const onElementClick = (_e: any, element: any) => {
+    if (element.type === 'slot') {
+      // prevent slots from being selected,
+      // passive-aggressively open the steps catalog
+      // if (toggleCatalog) toggleCatalog();
+
+      return;
+    }
+
     // Only set state again if the ID is not the same
     if (selectedStep.UUID !== element.data.UUID) {
       const findStep: IStepProps =

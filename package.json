@@ -27,15 +27,18 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@monaco-editor/react": "4.3.1",
     "@patternfly/patternfly": "4.151.4",
+    "@patternfly/react-code-editor": "^4.39.5",
     "@patternfly/react-core": "4.168.8",
     "@rhoas/app-services-ui-shared": "^0.15.4",
     "ajv": "^8.8.2",
+    "monaco-editor": "^0.32.1",
+    "monaco-editor-webpack-plugin": "^7.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-error-boundary": "3.1.4",
     "react-flow-renderer": "^9.7.3",
+    "react-monaco-editor": "^0.47.0",
     "react-router-dom": "5.3.0",
     "react-router-last-location": "2.0.1",
     "react-shadow": "19.0.2",
@@ -88,7 +91,6 @@
     "jest-environment-jsdom": "^27.5.1",
     "lint-staged": "11.2.5",
     "mini-css-extract-plugin": "2.4.3",
-    "monaco-editor": "0.29.1",
     "null-loader": "^4.0.1",
     "prettier": "2.4.1",
     "prop-types": "15.7.2",
@@ -113,5 +115,5 @@
     "*.{tsx,ts}": "prettier --write",
     "*.tsx": "eslint --ext .tsx"
   },
-  "packageManager": "yarn@3.1.0"
+  "packageManager": "yarn@3.2.0"
 }

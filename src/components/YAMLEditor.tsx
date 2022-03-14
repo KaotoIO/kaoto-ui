@@ -1,14 +1,15 @@
 import { fetchViewDefinitions, useStepsAndViewsContext, useYAMLContext } from '../api';
 import { usePrevious } from '../utils';
 import { StepErrorBoundary } from './StepErrorBoundary';
-import Editor from '@monaco-editor/react';
+// import Editor from '@monaco-editor/react';
+import { CodeEditor, Language } from '@patternfly/react-code-editor';
 import { useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 interface IYAMLEditor {
   // Used to mock data for stories
   initialData?: string;
-  language?: string;
+  language?: Language;
   theme?: string;
 }
 
@@ -51,26 +52,24 @@ const YAMLEditor = (props: IYAMLEditor) => {
     editorRef.current = editor;
   }
 
-  function handleEditorValidation(markers: any[]) {
-    // Model Markers
-    markers.forEach((marker) => console.log('onValidate: ', marker.message));
-  }
-
   const debounced = useDebouncedCallback((value?: string) => {
     handleChanges(value);
   }, 800);
 
   return (
     <StepErrorBoundary>
-      <Editor
-        height={'100%'}
-        defaultLanguage={props.language ?? 'yaml'}
+      <CodeEditor
+        code={props.initialData ?? YAMLData}
+        height="650px"
+        isCopyEnabled={true}
+        isDarkTheme={true}
+        isDownloadEnabled={true}
+        isLanguageLabelVisible={true}
+        isUploadEnabled={true}
+        language={Language.yaml}
         onChange={handleEditorChange}
-        onMount={handleEditorDidMount}
-        onValidate={handleEditorValidation}
-        theme={props.theme ?? 'vs-dark'}
-        value={props.initialData ?? YAMLData}
-        className={'code-editor'}
+        onEditorDidMount={handleEditorDidMount}
+        toolTipPosition={'right'}
       />
     </StepErrorBoundary>
   );
