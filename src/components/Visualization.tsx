@@ -62,7 +62,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     }
 
     if (shouldUpdateCodeEditor.current) {
-      console.log('requested to updated the code editor');
+      // console.log('requested to updated the code editor');
       updateCodeEditor(viewData.steps);
       shouldUpdateCodeEditor.current = false;
     }
