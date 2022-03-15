@@ -318,11 +318,11 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       });
 
       const oldStepIdx = findStepIdxWithUUID(selectedStep.UUID!, viewData.steps);
+      // we'll need to update the code editor
+      shouldUpdateCodeEditor.current = true;
+
       // Replace step with new step
       dispatch({ type: 'REPLACE_STEP', payload: { newStep, oldStepIndex: oldStepIdx } });
-
-      // check that this isn't returning old data
-      updateCodeEditor(viewData.steps);
     } else {
       return;
     }
