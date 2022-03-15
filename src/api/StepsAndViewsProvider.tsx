@@ -14,7 +14,7 @@ type StepsAndViewsAction =
 
 export type IUseStepsAndViews = [
   viewData: IViewData,
-  dispatch: (action: StepsAndViewsAction) => void
+  dispatch: (action: StepsAndViewsAction) => void | IViewData
 ];
 
 function stepsAndViewsReducer(state: IViewData, action: StepsAndViewsAction) {
@@ -68,10 +68,7 @@ function StepsAndViewsProvider({ initialState, children }: IStepsAndViewsProvide
   );
 }
 
-const StepsAndViewsContext = createContext<IUseStepsAndViews>([
-  { steps: [], views: [] },
-  () => null,
-]);
+const StepsAndViewsContext = createContext<IUseStepsAndViews>([{ steps: [], views: [] }, () => {}]);
 
 function useStepsAndViewsContext() {
   const context = useContext(StepsAndViewsContext);

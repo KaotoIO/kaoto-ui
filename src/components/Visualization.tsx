@@ -52,6 +52,7 @@ const Visualization = ({}: IVisualization) => {
   const [, setYAMLData] = useYAMLContext();
   const [viewData, dispatch] = useStepsAndViewsContext();
   const previousViewData = usePrevious(viewData);
+  const shouldUpdateCodeEditor = useRef(false);
 
   const { addAlert } = useAlert() || {};
 
@@ -60,13 +61,16 @@ const Visualization = ({}: IVisualization) => {
       return;
     }
 
+    if (shouldUpdateCodeEditor.current) {
+      console.log('requested to updated the code editor');
+      updateCodeEditor(viewData.steps);
+      shouldUpdateCodeEditor.current = false;
+    }
+
     prepareAndSetVizDataSteps(viewData.steps);
   }, [viewData]);
 
-  const updateCodeEditor = (viewDataSteps: any[]) => {
-    console.log('updating the code editor...');
-    console.table(viewDataSteps);
-
+  const updateCodeEditor = (viewDataSteps: IStepProps[]) => {
     // Remove all "Add Step" placeholders before updating the API
     fetchCustomResource(viewDataSteps.filter((step) => step.type))
       .then((value) => {
@@ -115,9 +119,9 @@ const Visualization = ({}: IVisualization) => {
         payload: { newStep: step, oldStepIndex: findStepIdxWithUUID(data.UUID, viewData.steps) },
       });
       // fetch the updated view definitions again with new views
-      fetchViewDefinitions(viewData.steps).then((data: any) => {
+      fetchViewDefinitions(viewData.steps).then((data: IViewData) => {
         dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
-        updateCodeEditor(viewData.steps);
+        updateCodeEditor(data.steps);
       });
     } else {
       // the step CANNOT be replaced, the proposed step is invalid
@@ -228,8 +232,9 @@ const Visualization = ({}: IVisualization) => {
     setSelectedStep(placeholderStep);
 
     const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, viewData.steps);
+    // need to rely on useEffect to get up-to-date value
+    shouldUpdateCodeEditor.current = true;
     dispatch({ type: 'DELETE_STEP', payload: { index: stepsIndex } });
-    updateCodeEditor(viewData.steps);
   };
 
   // Close Step View panel
@@ -283,7 +288,7 @@ const Visualization = ({}: IVisualization) => {
     // fetch the updated view definitions again with new views
     fetchViewDefinitions(viewData.steps).then((data: any) => {
       dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
-      updateCodeEditor(viewData.steps);
+      updateCodeEditor(data.steps);
     });
   };
 
