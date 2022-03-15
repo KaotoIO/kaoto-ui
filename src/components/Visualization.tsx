@@ -60,8 +60,15 @@ const Visualization = ({}: IVisualization) => {
       return;
     }
 
+    prepareAndSetVizDataSteps(viewData.steps);
+  }, [viewData]);
+
+  const updateCodeEditor = (viewDataSteps: any[]) => {
+    console.log('updating the code editor...');
+    console.table(viewDataSteps);
+
     // Remove all "Add Step" placeholders before updating the API
-    fetchCustomResource(viewData.steps.filter((step) => step.type))
+    fetchCustomResource(viewDataSteps.filter((step) => step.type))
       .then((value) => {
         if (typeof value === 'string') {
           setYAMLData(value);
@@ -78,9 +85,7 @@ const Visualization = ({}: IVisualization) => {
             description: 'There was a problem updating the integration. Please try again later.',
           });
       });
-
-    prepareAndSetVizDataSteps(viewData.steps);
-  }, [viewData]);
+  };
 
   const nodeTypes = {
     slot: VisualizationSlot,
@@ -112,6 +117,7 @@ const Visualization = ({}: IVisualization) => {
       // fetch the updated view definitions again with new views
       fetchViewDefinitions(viewData.steps).then((data: any) => {
         dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+        updateCodeEditor(viewData.steps);
       });
     } else {
       // the step CANNOT be replaced, the proposed step is invalid
@@ -223,6 +229,7 @@ const Visualization = ({}: IVisualization) => {
 
     const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, viewData.steps);
     dispatch({ type: 'DELETE_STEP', payload: { index: stepsIndex } });
+    updateCodeEditor(viewData.steps);
   };
 
   // Close Step View panel
@@ -276,6 +283,7 @@ const Visualization = ({}: IVisualization) => {
     // fetch the updated view definitions again with new views
     fetchViewDefinitions(viewData.steps).then((data: any) => {
       dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+      updateCodeEditor(viewData.steps);
     });
   };
 
@@ -307,6 +315,9 @@ const Visualization = ({}: IVisualization) => {
       const oldStepIdx = findStepIdxWithUUID(selectedStep.UUID!, viewData.steps);
       // Replace step with new step
       dispatch({ type: 'REPLACE_STEP', payload: { newStep, oldStepIndex: oldStepIdx } });
+
+      // check that this isn't returning old data
+      updateCodeEditor(viewData.steps);
     } else {
       return;
     }

@@ -1,5 +1,10 @@
-import { fetchViewDefinitions, useStepsAndViewsContext } from '../api';
-import { IStepProps } from '../types';
+import {
+  fetchCustomResource,
+  fetchViewDefinitions,
+  useStepsAndViewsContext,
+  useYAMLContext,
+} from '../api';
+import { IStepProps, IViewData } from '../types';
 import { canStepBeReplaced } from '../utils/validationService';
 import './Visualization.css';
 import { AlertVariant } from '@patternfly/react-core';
@@ -10,6 +15,7 @@ import { Handle, Position } from 'react-flow-renderer';
 // Custom Node type and component for React Flow
 const VisualizationSlot = ({ data }: any) => {
   const [viewData, dispatch] = useStepsAndViewsContext();
+  const [, setYAMLData] = useYAMLContext();
   const { addAlert } = useAlert() || {};
 
   /**
@@ -25,8 +31,27 @@ const VisualizationSlot = ({ data }: any) => {
       // update the steps, the new node will be created automatically
       dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
       // fetch the updated view definitions again with new views
-      fetchViewDefinitions(viewData.steps).then((data: any) => {
+      fetchViewDefinitions(viewData.steps).then((data: IViewData) => {
         dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+
+        fetchCustomResource(data.steps.filter((step: IStepProps) => step.type))
+          .then((value) => {
+            if (typeof value === 'string') {
+              setYAMLData(value);
+            } else {
+              setYAMLData('');
+            }
+          })
+          .catch((e) => {
+            console.error(e);
+            addAlert &&
+              addAlert({
+                title: 'Something went wrong',
+                variant: AlertVariant.danger,
+                description:
+                  'There was a problem updating the integration. Please try again later.',
+              });
+          });
       });
     } else {
       console.log('step CANNOT be replaced');
