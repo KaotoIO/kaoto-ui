@@ -1,6 +1,3 @@
-// import { usePrevious } from '../utils';
-// import { useStepsAndViewsContext } from './StepsAndViewsProvider';
-// import { fetchViewDefinitions } from './apiService';
 import {
   createContext,
   Dispatch,
@@ -20,28 +17,10 @@ export type IUseYAMLData = [string, Dispatch<SetStateAction<string>>];
 
 export const useYAMLData = (newYAMLData: string): IUseYAMLData => {
   const [YAMLData, setYAMLData] = useState<string>(newYAMLData);
-  // const previousYaml = usePrevious(YAMLData);
-  // const [, dispatch] = useStepsAndViewsContext();
 
   useEffect(() => {
     setYAMLData(newYAMLData);
   }, [newYAMLData]);
-
-  // useEffect(() => {
-  //   if (previousYaml === YAMLData) {
-  //     return;
-  //   }
-  //
-  //   fetchViewDefinitions(YAMLData)
-  //     .then((res) => {
-  //       dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
-  //     })
-  //     .catch((e) => {
-  //       console.error(e);
-  //     });
-  //
-  //   setYAMLData(newYAMLData);
-  // }, [newYAMLData]);
 
   return [YAMLData, setYAMLData];
 };

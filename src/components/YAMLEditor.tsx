@@ -2,7 +2,7 @@ import { fetchViewDefinitions, useStepsAndViewsContext, useYAMLContext } from '.
 import { usePrevious } from '../utils';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import { CodeEditor, Language } from '@patternfly/react-code-editor';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 interface IYAMLEditor {
@@ -17,6 +17,27 @@ const YAMLEditor = (props: IYAMLEditor) => {
   const [YAMLData, setYAMLData] = useYAMLContext();
   const [, dispatch] = useStepsAndViewsContext();
   const previousYaml = usePrevious(YAMLData);
+  const shouldUpdateVisualization = useRef(false);
+
+  useEffect(() => {
+    // Check that the data has changed, otherwise return
+    if (previousYaml === YAMLData) {
+      return;
+    }
+
+    if (shouldUpdateVisualization.current) {
+      fetchViewDefinitions(YAMLData)
+        .then((res) => {
+          // update Visualization with new data
+          dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+
+      shouldUpdateVisualization.current = false;
+    }
+  }, [YAMLData, dispatch, previousYaml]);
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
@@ -28,16 +49,8 @@ const YAMLEditor = (props: IYAMLEditor) => {
       return;
     }
 
+    shouldUpdateVisualization.current = true;
     setYAMLData(incomingData);
-
-    fetchViewDefinitions(incomingData)
-      .then((res) => {
-        // update Visualization with new data
-        dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
-      })
-      .catch((e) => {
-        console.error(e);
-      });
   };
 
   function handleEditorChange(value?: string) {
