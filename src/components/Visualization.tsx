@@ -42,7 +42,7 @@ interface IVisualization {
   toggleCatalog?: () => void;
 }
 
-const Visualization = ({}: IVisualization) => {
+const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `elements` is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<Elements<IStepProps>>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
@@ -52,6 +52,7 @@ const Visualization = ({}: IVisualization) => {
   const [, setYAMLData] = useYAMLContext();
   const [viewData, dispatch] = useStepsAndViewsContext();
   const previousViewData = usePrevious(viewData);
+  const shouldUpdateCodeEditor = useRef(false);
 
   const { addAlert } = useAlert() || {};
 
@@ -60,8 +61,18 @@ const Visualization = ({}: IVisualization) => {
       return;
     }
 
+    if (shouldUpdateCodeEditor.current) {
+      // console.log('requested to updated the code editor');
+      updateCodeEditor(viewData.steps);
+      shouldUpdateCodeEditor.current = false;
+    }
+
+    prepareAndSetVizDataSteps(viewData.steps);
+  }, [viewData]);
+
+  const updateCodeEditor = (viewDataSteps: IStepProps[]) => {
     // Remove all "Add Step" placeholders before updating the API
-    fetchCustomResource(viewData.steps.filter((step) => step.type))
+    fetchCustomResource(viewDataSteps.filter((step) => step.type))
       .then((value) => {
         if (typeof value === 'string') {
           setYAMLData(value);
@@ -78,9 +89,7 @@ const Visualization = ({}: IVisualization) => {
             description: 'There was a problem updating the integration. Please try again later.',
           });
       });
-
-    prepareAndSetVizDataSteps(viewData.steps);
-  }, [viewData]);
+  };
 
   const nodeTypes = {
     slot: VisualizationSlot,
@@ -110,8 +119,9 @@ const Visualization = ({}: IVisualization) => {
         payload: { newStep: step, oldStepIndex: findStepIdxWithUUID(data.UUID, viewData.steps) },
       });
       // fetch the updated view definitions again with new views
-      fetchViewDefinitions(viewData.steps).then((data: any) => {
+      fetchViewDefinitions(viewData.steps).then((data: IViewData) => {
         dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+        updateCodeEditor(data.steps);
       });
     } else {
       // the step CANNOT be replaced, the proposed step is invalid
@@ -222,6 +232,8 @@ const Visualization = ({}: IVisualization) => {
     setSelectedStep(placeholderStep);
 
     const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, viewData.steps);
+    // need to rely on useEffect to get up-to-date value
+    shouldUpdateCodeEditor.current = true;
     dispatch({ type: 'DELETE_STEP', payload: { index: stepsIndex } });
   };
 
@@ -251,8 +263,7 @@ const Visualization = ({}: IVisualization) => {
     if (element.type === 'slot') {
       // prevent slots from being selected,
       // passive-aggressively open the steps catalog
-      // if (toggleCatalog) toggleCatalog();
-
+      if (toggleCatalog) toggleCatalog();
       return;
     }
 
@@ -261,9 +272,10 @@ const Visualization = ({}: IVisualization) => {
       const findStep: IStepProps =
         viewData.steps.find((step) => step.UUID === element.data.UUID) ?? selectedStep;
       setSelectedStep(findStep);
-
-      setIsPanelExpanded(!isPanelExpanded);
     }
+
+    // show/hide the panel regardless
+    setIsPanelExpanded(!isPanelExpanded);
   };
 
   /**
@@ -276,6 +288,7 @@ const Visualization = ({}: IVisualization) => {
     // fetch the updated view definitions again with new views
     fetchViewDefinitions(viewData.steps).then((data: any) => {
       dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+      updateCodeEditor(data.steps);
     });
   };
 
@@ -305,6 +318,9 @@ const Visualization = ({}: IVisualization) => {
       });
 
       const oldStepIdx = findStepIdxWithUUID(selectedStep.UUID!, viewData.steps);
+      // we'll need to update the code editor
+      shouldUpdateCodeEditor.current = true;
+
       // Replace step with new step
       dispatch({ type: 'REPLACE_STEP', payload: { newStep, oldStepIndex: oldStepIdx } });
     } else {

@@ -1,9 +1,8 @@
 import { fetchViewDefinitions, useStepsAndViewsContext, useYAMLContext } from '../api';
 import { usePrevious } from '../utils';
 import { StepErrorBoundary } from './StepErrorBoundary';
-// import Editor from '@monaco-editor/react';
 import { CodeEditor, Language } from '@patternfly/react-code-editor';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 interface IYAMLEditor {
@@ -18,22 +17,16 @@ const YAMLEditor = (props: IYAMLEditor) => {
   const [YAMLData, setYAMLData] = useYAMLContext();
   const [, dispatch] = useStepsAndViewsContext();
   const previousYaml = usePrevious(YAMLData);
+  const shouldUpdateVisualization = useRef(false);
 
-  /**
-   * On detected changes to YAML state, issue POST to external endpoint
-   * Returns JSON to be displayed in the visualizer
-   */
-  const handleChanges = (incomingData?: string) => {
-    // Wait a bit before setting data
-    setTimeout(() => {
-      // Check that the data has changed, otherwise return
-      if (previousYaml === incomingData) {
-        return;
-      }
+  useEffect(() => {
+    // Check that the data has changed, otherwise return
+    if (previousYaml === YAMLData) {
+      return;
+    }
 
-      setYAMLData(incomingData);
-
-      fetchViewDefinitions(incomingData)
+    if (shouldUpdateVisualization.current) {
+      fetchViewDefinitions(YAMLData)
         .then((res) => {
           // update Visualization with new data
           dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
@@ -41,7 +34,23 @@ const YAMLEditor = (props: IYAMLEditor) => {
         .catch((e) => {
           console.error(e);
         });
-    }, 750);
+
+      shouldUpdateVisualization.current = false;
+    }
+  }, [YAMLData, dispatch, previousYaml]);
+
+  /**
+   * On detected changes to YAML state, issue POST to external endpoint
+   * Returns JSON to be displayed in the visualizer
+   */
+  const handleChanges = (incomingData?: string) => {
+    // Check that the data has changed, otherwise return
+    if (previousYaml === incomingData) {
+      return;
+    }
+
+    shouldUpdateVisualization.current = true;
+    setYAMLData(incomingData);
   };
 
   function handleEditorChange(value?: string) {
@@ -54,12 +63,12 @@ const YAMLEditor = (props: IYAMLEditor) => {
 
   const debounced = useDebouncedCallback((value?: string) => {
     handleChanges(value);
-  }, 800);
+  }, 1000);
 
   return (
     <StepErrorBoundary>
       <CodeEditor
-        code={props.initialData ?? YAMLData}
+        code={props.initialData ?? YAMLData ?? ''}
         height="650px"
         isCopyEnabled={true}
         isDarkTheme={true}
