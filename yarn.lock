@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 5
+  version: 6
   cacheKey: 8
 
 "@ampproject/remapping@npm:^2.1.0":
@@ -2294,13 +2294,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-code-editor@npm:^4.39.5":
-  version: 4.39.19
-  resolution: "@patternfly/react-code-editor@npm:4.39.19"
+"@patternfly/react-code-editor@npm:^4.39.19":
+  version: 4.40.1
+  resolution: "@patternfly/react-code-editor@npm:4.40.1"
   dependencies:
-    "@patternfly/react-core": ^4.198.19
-    "@patternfly/react-icons": ^4.49.19
-    "@patternfly/react-styles": ^4.48.19
+    "@patternfly/react-core": ^4.199.1
+    "@patternfly/react-icons": ^4.50.1
+    "@patternfly/react-styles": ^4.49.1
     react-dropzone: 9.0.0
     tslib: ^2.0.0
   peerDependencies:
@@ -2308,29 +2308,11 @@ __metadata:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
     react-monaco-editor: ^0.41.2
-  checksum: 141af33399f55f97f6460e3fde1db759444289beb92f95f9751fe7c5ab60d0930e535f2a4d26fbc8dd73c1d6fb395e38d3796465d1caa25c7c774da5db0896a5
+  checksum: 8ded092e75deaa5c220ced3c9293e65736605fa9bd0c0f0bdad25c62e5bd75067e06ccc910a7de1f687f1452b48d7e63de7821e34bcfc82f111242b7ffee600e
   languageName: node
   linkType: hard
 
-"@patternfly/react-core@npm:4.168.8":
-  version: 4.168.8
-  resolution: "@patternfly/react-core@npm:4.168.8"
-  dependencies:
-    "@patternfly/react-icons": ^4.19.8
-    "@patternfly/react-styles": ^4.18.8
-    "@patternfly/react-tokens": ^4.20.8
-    focus-trap: 6.2.2
-    react-dropzone: 9.0.0
-    tippy.js: 5.1.2
-    tslib: ^2.0.0
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-  checksum: 491350177231806745ac1f139fb970011020a41304831d9af68701cdf15943c7a95f5568ff78c2164832b0302fcef0c51185d25350deb0542b950fb85135eb02
-  languageName: node
-  linkType: hard
-
-"@patternfly/react-core@npm:^4.198.19":
+"@patternfly/react-core@npm:4.198.19":
   version: 4.198.19
   resolution: "@patternfly/react-core@npm:4.198.19"
   dependencies:
@@ -2348,27 +2330,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-icons@npm:4.19.8":
-  version: 4.19.8
-  resolution: "@patternfly/react-icons@npm:4.19.8"
+"@patternfly/react-core@npm:^4.199.1":
+  version: 4.199.1
+  resolution: "@patternfly/react-core@npm:4.199.1"
+  dependencies:
+    "@patternfly/react-icons": ^4.50.1
+    "@patternfly/react-styles": ^4.49.1
+    "@patternfly/react-tokens": ^4.51.1
+    focus-trap: 6.2.2
+    react-dropzone: 9.0.0
+    tippy.js: 5.1.2
+    tslib: ^2.0.0
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
-  checksum: c8eefa7e1c5f5b654dd29e063f4e65236186cfb3aab7df5bc3c15f34d92bc807a513a94a14b1c9c7f95b40d2192b39efdee39ba09fb9b07fce4e2f16955bb4df
+  checksum: 80432c20a8e32e2308dfeb654a0517f25b58b9d1b2728a3a8a255d487ae750de78db862d9db18f33169240ee54f23ffb3234e1bf0ecfdbde727006e2ce90150d
   languageName: node
   linkType: hard
 
-"@patternfly/react-icons@npm:^4.19.8":
-  version: 4.43.15
-  resolution: "@patternfly/react-icons@npm:4.43.15"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-  checksum: 34aa7d98fa271449eba9763726d44dd43685b3d02d10ab6101284954dd55699e1870ddeda4a8c88266e00bb513931c391b321954dc398b80e06115036bd4bfe0
-  languageName: node
-  linkType: hard
-
-"@patternfly/react-icons@npm:^4.49.19":
+"@patternfly/react-icons@npm:4.49.19, @patternfly/react-icons@npm:^4.49.19":
   version: 4.49.19
   resolution: "@patternfly/react-icons@npm:4.49.19"
   peerDependencies:
@@ -2378,10 +2358,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-styles@npm:^4.18.8":
-  version: 4.42.15
-  resolution: "@patternfly/react-styles@npm:4.42.15"
-  checksum: 7dc76f0bda471f99b0e1927292994c438bdc43b4b00bffd9e2840586b9692555d5a7cc81cc10d2a0dee9f9db33eb29f2bb2b2a704574f1e6027dc96d29061a9d
+"@patternfly/react-icons@npm:^4.50.1":
+  version: 4.50.1
+  resolution: "@patternfly/react-icons@npm:4.50.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+  checksum: dc9d2de07d9d0191439fb7f43433c879234f253e90c0511ddc91fa3834fe1cb1200d5fc7367777818d172c5001515ea3fda77d30a4235632b361283d4c64f355
   languageName: node
   linkType: hard
 
@@ -2392,10 +2375,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-tokens@npm:^4.20.8":
-  version: 4.44.15
-  resolution: "@patternfly/react-tokens@npm:4.44.15"
-  checksum: db6426142f0f7a31de3a4af556b3cb69d7c9e12b13ae640e973cc2a2658c327817d67ee781640d9a4cbf336537f92c4221fa31ad2c7283df5f550b71b3a7cbe4
+"@patternfly/react-styles@npm:^4.49.1":
+  version: 4.49.1
+  resolution: "@patternfly/react-styles@npm:4.49.1"
+  checksum: b305f0fc4a9fca407589c5d9ba9cb4ed3b90bd5b40e19f216cdd9f6204a0924aec709995369cc6257760fdef4c96255ce678f820012100cb24a24c5c586972b6
   languageName: node
   linkType: hard
 
@@ -2403,6 +2386,13 @@ __metadata:
   version: 4.50.19
   resolution: "@patternfly/react-tokens@npm:4.50.19"
   checksum: 2dd0078cff3ad752a8193a60cb4e9c98c17dfbab03ed1b851793a2e8d87fc28592171277bc5fccb703d52bf6dc6ece131753f8c3eec8253ec1670d5ff9e00cc0
+  languageName: node
+  linkType: hard
+
+"@patternfly/react-tokens@npm:^4.51.1":
+  version: 4.51.1
+  resolution: "@patternfly/react-tokens@npm:4.51.1"
+  checksum: 1f8af213313fbe50edc6f732f5da1e44d46768eb124b05d42b97c311cf178c56b779e11a96c93e836a8af2e77d53809e208e7805df6cf6fb76f9ec00e8aa1ce5
   languageName: node
   linkType: hard
 
@@ -5006,7 +4996,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.2.4, acorn@npm:^8.4.1":
+"acorn@npm:^8.2.4, acorn@npm:^8.4.1, acorn@npm:^8.5.0":
   version: 8.7.0
   resolution: "acorn@npm:8.7.0"
   bin:
@@ -12224,9 +12214,9 @@ __metadata:
   resolution: "kaoto-ui@workspace:."
   dependencies:
     "@patternfly/patternfly": 4.151.4
-    "@patternfly/react-code-editor": ^4.39.5
-    "@patternfly/react-core": 4.168.8
-    "@patternfly/react-icons": 4.19.8
+    "@patternfly/react-code-editor": ^4.39.19
+    "@patternfly/react-core": 4.198.19
+    "@patternfly/react-icons": 4.49.19
     "@rhoas/app-services-ui-shared": ^0.15.4
     "@storybook/addon-actions": ^6.4.19
     "@storybook/addon-docs": ^6.4.19
@@ -12268,8 +12258,8 @@ __metadata:
     jest-environment-jsdom: ^27.5.1
     lint-staged: 11.2.5
     mini-css-extract-plugin: 2.4.3
-    monaco-editor: ^0.32.1
-    monaco-editor-webpack-plugin: ^7.0.1
+    monaco-editor: ^0.21.3
+    monaco-editor-webpack-plugin: ^2.1.0
     null-loader: ^4.0.1
     prettier: 2.4.1
     prop-types: 15.7.2
@@ -12277,7 +12267,7 @@ __metadata:
     react-dom: 17.0.2
     react-error-boundary: 3.1.4
     react-flow-renderer: ^9.7.3
-    react-monaco-editor: ^0.47.0
+    react-monaco-editor: ^0.41.2
     react-router-dom: 5.3.0
     react-router-last-location: 2.0.1
     react-shadow: 19.0.2
@@ -12507,7 +12497,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loader-utils@npm:^2.0.0, loader-utils@npm:^2.0.2":
+"loader-utils@npm:^2.0.0":
   version: 2.0.2
   resolution: "loader-utils@npm:2.0.2"
   dependencies:
@@ -13226,22 +13216,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"monaco-editor-webpack-plugin@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "monaco-editor-webpack-plugin@npm:7.0.1"
+"monaco-editor-webpack-plugin@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "monaco-editor-webpack-plugin@npm:2.1.0"
   dependencies:
-    loader-utils: ^2.0.2
+    loader-utils: ^2.0.0
   peerDependencies:
-    monaco-editor: ">= 0.31.0"
+    monaco-editor: 0.21.x
     webpack: ^4.5.0 || 5.x
-  checksum: 436814c724d5033254519ef8203f0df600d15c6bf0a3bf48a42ea678086becb56ed5685df2bca4cd4107855ecf8cea73722e52b63573edba5c020ff51b4f2d31
+  checksum: d99b73261ba1e6ae07e1641e7d96b477658518de5340756f4774212f6231c7ed8bc8fffe4f6f027d788487c1648af6f1b14c679936884f516855ccd6d66a9138
   languageName: node
   linkType: hard
 
-"monaco-editor@npm:^0.32.1":
-  version: 0.32.1
-  resolution: "monaco-editor@npm:0.32.1"
-  checksum: f63e96fadca3e46ee639c3c7fead95bc03413d4b47d27ffdf5636270e2753c45391e830dd34ae5404004b8fc6a06b50a91d9ae4b593e1fc21cfc20ee00ca98c5
+"monaco-editor@npm:*":
+  version: 0.33.0
+  resolution: "monaco-editor@npm:0.33.0"
+  checksum: f88fd1c9be0d6845436aa92ee7f7bcc49f9e9bf452f73bb5efbbe52e50678d1c2aec4d612a943310f5e2282c1d9fcc41b792b65a5b9008e6054908e7e10311ea
+  languageName: node
+  linkType: hard
+
+"monaco-editor@npm:^0.21.3":
+  version: 0.21.3
+  resolution: "monaco-editor@npm:0.21.3"
+  checksum: 449ffcffd668bb19dd68aba07d26f9d2f63cbcedddfbbecff691648c8d31188f492c0abf492970d942f7d3d648c7ad22b281a52721fdcfb8cc943c7a08f42077
   languageName: node
   linkType: hard
 
@@ -15055,7 +15052,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.0.0, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.0.0, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -15453,16 +15450,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-monaco-editor@npm:^0.47.0":
-  version: 0.47.0
-  resolution: "react-monaco-editor@npm:0.47.0"
+"react-monaco-editor@npm:^0.41.2":
+  version: 0.41.2
+  resolution: "react-monaco-editor@npm:0.41.2"
   dependencies:
-    prop-types: ^15.8.1
+    monaco-editor: "*"
+    prop-types: ^15.7.2
   peerDependencies:
     "@types/react": ^17.x
-    monaco-editor: ^0.31.1
     react: ^17.x
-  checksum: 647d84cfcf06f177559bec874eb7312b98b91dd7a2b251c882cff9c2d1dfffaf4099ff4ea410d6aed125f4045ca470e7efdec4d14bec90296383f240f96f2560
+  checksum: 5691421358bfbfa924961dd0d8cc84d10a7e92cb83319804ca240e791449795c59cfb4ccaa4c35f71d3bfdf978612187a4689513b4bcd4edf0b7ac4330bf7aba
   languageName: node
   linkType: hard
 
@@ -18148,11 +18145,11 @@ __metadata:
 
 "typescript@patch:typescript@4.4.4#~builtin<compat/typescript>":
   version: 4.4.4
-  resolution: "typescript@patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=ddd1e8"
+  resolution: "typescript@patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=bda367"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: bd629ad0da4a15d79aaad56baf3ee7d96f6a181760d430ae77f8c5325df7bffd9edee57544a3970e3651e8b796fe03a5838a7eb39c6d46cc3866c0b23d36a0dd
+  checksum: 3d1b04449662193544b81d055479d03b4c5dca95f1a82f8922596f089d894c9fefbe16639d1d9dfe26a7054419645530cef44001bc17aed1fe1eb3c237e9b3c7
   languageName: node
   linkType: hard
 
