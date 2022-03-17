@@ -22,9 +22,9 @@
     "lint-staged": "yarn lint:fix && yarn format:fix",
     "prepublish": "npm run build",
     "storybook": "start-storybook -p 6006 -s public",
-    "test": "yarn run jest src/**/*.test.ts*",
-    "test:coverage": "yarn run jest --coverage --watchAll=false",
-    "test:watch": "yarn run jest --watch"
+    "test": "jest src/**/*.test.ts*",
+    "test:coverage": "jest --coverage --watchAll=false",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@patternfly/patternfly": "4.151.4",
@@ -115,5 +115,5 @@
     "*.{tsx,ts}": "prettier --write",
     "*.tsx": "eslint --ext .tsx"
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.1.0"
 }
