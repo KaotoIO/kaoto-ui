@@ -1,22 +1,23 @@
-FROM node:16
+FROM node:16 as appbuild
 
-# set the working direction
 WORKDIR /app
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+COPY .yarn/ .yarn/
+COPY .yarnrc.yml .
+COPY yarn.lock .
+COPY package.json .
 
-# install app dependencies
-COPY . ./
+RUN yarn install --mode=skip-build
 
-RUN yarn install
+COPY . .
 
 RUN echo "KAOTO_API=http://localhost:8081" > ./.env
 
-EXPOSE 80
-
 HEALTHCHECK --interval=3s --start-period=10s CMD curl --fail http://localhost:8080/ || exit 1
 
-# start app
-CMD ["yarn", "prod"]
+RUN yarn run build
 
+FROM nginx:latest
+COPY --from=appbuild /app/dist/* /usr/share/nginx/html/
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
