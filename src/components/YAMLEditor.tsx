@@ -8,7 +8,7 @@ import { useDebouncedCallback } from 'use-debounce';
 interface IYAMLEditor {
   // Used to mock data for stories
   initialData?: string;
-  language?: Language;
+  language?: string;
   theme?: string;
 }
 
@@ -75,7 +75,7 @@ const YAMLEditor = (props: IYAMLEditor) => {
         isDownloadEnabled={true}
         isLanguageLabelVisible={true}
         isUploadEnabled={true}
-        language={Language.yaml}
+        language={props.language as Language}
         onChange={handleEditorChange}
         onEditorDidMount={handleEditorDidMount}
         toolTipPosition={'right'}
