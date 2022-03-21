@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "webpack serve --mode development --hot --progress --config webpack.dev.js ",
-    "prod": "webpack serve --mode production --port 8080 --host 0.0.0.0 --progress --config webpack.prod.js ",
+    "prod": "webpack serve --mode production --port 8080 --allowed-hosts all --progress --config webpack.prod.js ",
     "build": "webpack --mode production --config webpack.prod.js",
     "build-storybook": "build-storybook -s public",
     "chromatic": "npx chromatic",
