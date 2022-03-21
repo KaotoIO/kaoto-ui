@@ -5,7 +5,7 @@ import { screen } from '@testing-library/dom';
 
 describe('YAMLEditor.tsx', () => {
   test('component renders correctly', () => {
-    render(<YAMLEditor initialData={''} language={Language.yaml} />);
+    render(<YAMLEditor language={Language.yaml} />);
     const emptyStateBrowseBtn = screen.getByRole('textbox');
     expect(emptyStateBrowseBtn).toBeInTheDocument();
   });
