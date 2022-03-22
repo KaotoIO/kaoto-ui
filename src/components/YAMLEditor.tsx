@@ -75,7 +75,7 @@ const YAMLEditor = (props: IYAMLEditor) => {
         isDownloadEnabled={true}
         isLanguageLabelVisible={true}
         isUploadEnabled={true}
-        language={Language.yaml}
+        language={(props.language as Language) ?? Language.yaml}
         onChange={handleEditorChange}
         onEditorDidMount={handleEditorDidMount}
         toolTipPosition={'right'}

@@ -20,7 +20,10 @@ module.exports = {
     '\\.(css|less)$': path.resolve(__dirname, './src/__mocks__/styleMock.js'),
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       path.resolve(__dirname, './src/__mocks__/fileMock.js'),
-    '@patternfly/react-code-editor': path.resolve(__dirname, './__mocks__/react-code-editor.js'),
+    '@patternfly/react-code-editor': path.resolve(
+      __dirname,
+      './src/__mocks__/reactCodeEditorMock.js'
+    ),
   },
 
   // A preset that is used as a base for Jest's configuration

@@ -1,9 +1,12 @@
 import { YAMLEditor } from './YAMLEditor';
 import { render } from '@testing-library/react';
+import { Language } from '@patternfly/react-code-editor';
+import { screen } from '@testing-library/dom';
 
 describe('YAMLEditor.tsx', () => {
   test('component renders correctly', () => {
-    const { container } = render(<YAMLEditor />);
-    expect(container.getElementsByClassName('code-editor').length).toBe(1);
+    render(<YAMLEditor language={Language.yaml} />);
+    const emptyStateBrowseBtn = screen.getByRole('textbox');
+    expect(emptyStateBrowseBtn).toBeInTheDocument();
   });
 });
