@@ -1,6 +1,5 @@
 import { StepsAndViewsProvider, YAMLProvider } from '../api';
 import { Catalog, Visualization, YAMLEditor } from '../components';
-import './Dashboard.css';
 import {
   Button,
   Drawer,
