@@ -2,6 +2,7 @@ export * from './Catalog';
 export * from './ErrorBoundary';
 export * from './Extension';
 export * from './JsonSchemaConfigurator';
+export * from './KaotoToolbar';
 export * from './MASAlerts';
 export * from './MASLoading';
 export * from './MiniCatalog';
