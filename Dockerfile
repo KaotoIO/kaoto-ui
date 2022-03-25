@@ -11,13 +11,15 @@ RUN yarn install --mode=skip-build
 
 COPY . .
 
-RUN echo "KAOTO_API=http://localhost:8081" > ./.env
-
-HEALTHCHECK --interval=3s --start-period=10s CMD curl --fail http://localhost:8080/ || exit 1
-
 RUN yarn run build
 
 FROM nginx:latest
+
 COPY --from=appbuild /app/dist/* /usr/share/nginx/html/
+COPY nginx/start_nginx.sh .
+
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+HEALTHCHECK --interval=3s --start-period=10s CMD curl --fail http://localhost/ || exit 1
+
+CMD ["./start_nginx.sh"]
