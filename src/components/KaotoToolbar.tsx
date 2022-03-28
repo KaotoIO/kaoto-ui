@@ -1,17 +1,13 @@
-import {
-  Button,
-  Tooltip,
-} from '@patternfly/react-core';
+import { Button, Tooltip } from '@patternfly/react-core';
 import { CodeIcon, CogIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import { IExpanded } from '../pages/Dashboard';
 
 export interface IKaotoToolbar {
   expanded: IExpanded;
-  handleChangeSettings: (update: any) => void;
   handleExpanded: (newState: IExpanded) => void;
 }
 
-export const KaotoToolbar = ({ expanded, handleChangeSettings, handleExpanded }: IKaotoToolbar) => {
+export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
   return (
     <div className={'step-creator-button'}>
       <Tooltip content={'Connector Catalog'}>
@@ -46,7 +42,7 @@ export const KaotoToolbar = ({ expanded, handleChangeSettings, handleExpanded }:
           data-testid={'settingsButton'}
           aria-label={'Settings'}
           onClick={() => {
-            console.log('clicked settings!');
+            handleExpanded({ settingsModal: !expanded.settingsModal });
           }}
         >
           <CogIcon width={40} height={40} />
