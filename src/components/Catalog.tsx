@@ -29,7 +29,7 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
 export interface ICatalog {
-  isCatalogExpanded: boolean;
+  isCatalogExpanded?: boolean;
   onClosePanelClick: (e: any) => void;
   queryParams?: {
     // e.g. 'KameletBinding'

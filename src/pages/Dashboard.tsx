@@ -1,19 +1,21 @@
 import { StepsAndViewsProvider, YAMLProvider } from '../api';
-import { Catalog, Visualization, YAMLEditor } from '../components';
+import { Catalog, KaotoToolbar, Visualization, YAMLEditor } from "../components";
 import {
-  Button,
   Drawer,
   DrawerContent,
   DrawerContentBody,
   Grid,
   GridItem,
-  Tooltip,
 } from '@patternfly/react-core';
-import { CodeIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import { useState } from 'react';
 
+export interface IExpanded {
+  catalog?: boolean,
+  codeEditor?: boolean
+}
+
 const Dashboard = () => {
-  const [expanded, setExpanded] = useState({
+  const [expanded, setExpanded] = useState<IExpanded>({
     catalog: false,
     codeEditor: true,
   });
@@ -26,6 +28,10 @@ const Dashboard = () => {
     setExpanded({ ...expanded, catalog: false });
   };
 
+  const handleExpanded = (updatedState: IExpanded) => {
+    setExpanded({ ...expanded, ...updatedState });
+  };
+
   return (
     <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
       <DrawerContent
@@ -35,34 +41,7 @@ const Dashboard = () => {
         className={'panelCustom'}
       >
         <DrawerContentBody>
-          <div className={'step-creator-button'}>
-            <Tooltip content={'Connector Catalog'}>
-              <Button
-                variant={'plain'}
-                data-testid={'openCatalogButton'}
-                isActive={expanded.catalog}
-                aria-label={'Connector Catalog'}
-                onClick={() => {
-                  setExpanded({ ...expanded, catalog: !expanded.catalog });
-                }}
-              >
-                <PlusCircleIcon width={40} height={40} />
-              </Button>
-            </Tooltip>
-            <Tooltip content={'Code Editor'}>
-              <Button
-                variant={'plain'}
-                isActive={expanded.codeEditor}
-                data-testid={'openEditorButton'}
-                aria-label={'Code Editor'}
-                onClick={() => {
-                  setExpanded({ ...expanded, codeEditor: !expanded.codeEditor });
-                }}
-              >
-                <CodeIcon width={40} height={40} />
-              </Button>
-            </Tooltip>
-          </div>
+          <KaotoToolbar expanded={expanded} handleExpanded={handleExpanded} />
           <Grid>
             <StepsAndViewsProvider initialState={{ steps: [], views: [] }}>
               <YAMLProvider>

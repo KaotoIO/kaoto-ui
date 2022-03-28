@@ -12,7 +12,7 @@ import {
   SkipToContent,
 } from '@patternfly/react-core';
 import { ReactNode, useState } from 'react';
-import { KaotoToolbar } from '../components/KaotoToolbar';
+// import { KaotoToolbar } from '../components/KaotoToolbar';
 import { NavLink, useLocation, useHistory } from 'react-router-dom';
 
 interface IAppLayout {
@@ -115,7 +115,9 @@ const AppLayout = ({ children }: IAppLayout) => {
       onPageResize={onPageResize}
       skipToContent={PageSkipToContent}
     >
+      {/*}
       <KaotoToolbar />
+      {*/}
       {children}
     </Page>
   );

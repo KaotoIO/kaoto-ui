@@ -1,53 +1,57 @@
 import {
-  PageSection,
-  PageSectionVariants,
-  Select,
-  SelectOption,
-  SelectVariant,
-  Toolbar,
-  ToolbarContent,
-  ToolbarItem,
+  Button,
+  Tooltip,
 } from '@patternfly/react-core';
-import { useState } from 'react';
+import { CodeIcon, CogIcon, PlusCircleIcon } from '@patternfly/react-icons';
+import { IExpanded } from "../pages/Dashboard";
 
-export const KaotoToolbar = () => {
-  const [dslMenuIsExpanded, setDslMenuIsExpanded] = useState(false);
-  const [dsl, setDsl] = useState('');
+export interface IKaotoToolbar {
+  expanded: IExpanded;
+  handleExpanded: (newState: IExpanded) => void;
+}
 
+export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
   return (
-    <PageSection
-      variant={PageSectionVariants.darker}
-      className={'kaotoToolbar'}
-      data-testid={'KaotoToolbar'}
-      padding={{ default: 'noPadding' }}
-    >
-      <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
-        <ToolbarContent>
-          <ToolbarItem /*alignment={{ default: 'alignRight' }}*/>
-            <Select
-              variant={SelectVariant.single}
-              aria-label="Select Input"
-              isOpen={dslMenuIsExpanded}
-              onToggle={(isExpanded) => {
-                setDslMenuIsExpanded(isExpanded);
-              }}
-              onSelect={(_event, selected) => {
-                // console.log('selected event ', _event);
-                // console.log('selected ', selected);
-                // @ts-ignore
-                setDsl(selected);
-                setDslMenuIsExpanded(false);
-              }}
-              selections={dsl}
-            >
-              <SelectOption key={0} value={'Select a Type'} isPlaceholder={true} />
-              <SelectOption key={1} value={'Kamelet'} />
-              <SelectOption key={2} value={'KameletBinding'} />
-              <SelectOption key={3} value={'Camel Route'} />
-            </Select>
-          </ToolbarItem>
-        </ToolbarContent>
-      </Toolbar>
-    </PageSection>
+    <div className={'step-creator-button'}>
+      <Tooltip content={'Connector Catalog'}>
+        <Button
+          variant={'plain'}
+          data-testid={'openCatalogButton'}
+          isActive={expanded.catalog}
+          aria-label={'Connector Catalog'}
+          onClick={() => {
+            handleExpanded({catalog: !expanded.catalog});
+          }}
+        >
+          <PlusCircleIcon width={40} height={40} />
+        </Button>
+      </Tooltip>
+      <Tooltip content={'Code Editor'}>
+        <Button
+          variant={'plain'}
+          isActive={expanded.codeEditor}
+          data-testid={'openEditorButton'}
+          aria-label={'Code Editor'}
+          onClick={() => {
+            handleExpanded({ ...expanded, codeEditor: !expanded.codeEditor });
+          }}
+        >
+          <CodeIcon width={40} height={40} />
+        </Button>
+      </Tooltip>
+      <Tooltip content={'Deploy'}>
+        <Button
+          variant={'plain'}
+          // isActive={expanded.codeEditor}
+          data-testid={'typeButton'}
+          aria-label={'Type'}
+          onClick={() => {
+            console.log('clicked!');
+          }}
+        >
+          <CogIcon width={40} height={40} />
+        </Button>
+      </Tooltip>
+    </div>
   );
 };
