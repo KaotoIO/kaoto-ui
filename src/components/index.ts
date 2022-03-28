@@ -6,6 +6,7 @@ export * from './KaotoToolbar';
 export * from './MASAlerts';
 export * from './MASLoading';
 export * from './MiniCatalog';
+export * from './SettingsModal';
 export * from './StepErrorBoundary';
 export * from './StepViews';
 export * from './Visualization';

@@ -1,17 +1,11 @@
 import { StepsAndViewsProvider, YAMLProvider } from '../api';
-import { Catalog, KaotoToolbar, Visualization, YAMLEditor } from "../components";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerContentBody,
-  Grid,
-  GridItem,
-} from '@patternfly/react-core';
+import { Catalog, KaotoToolbar, Visualization, YAMLEditor } from '../components';
+import { Drawer, DrawerContent, DrawerContentBody, Grid, GridItem } from '@patternfly/react-core';
 import { useState } from 'react';
 
 export interface IExpanded {
-  catalog?: boolean,
-  codeEditor?: boolean
+  catalog?: boolean;
+  codeEditor?: boolean;
 }
 
 const Dashboard = () => {
@@ -28,6 +22,10 @@ const Dashboard = () => {
     setExpanded({ ...expanded, catalog: false });
   };
 
+  const handleChangeSettings = (saved: any) => {
+    console.log('saved: ', saved);
+  };
+
   const handleExpanded = (updatedState: IExpanded) => {
     setExpanded({ ...expanded, ...updatedState });
   };
@@ -41,7 +39,11 @@ const Dashboard = () => {
         className={'panelCustom'}
       >
         <DrawerContentBody>
-          <KaotoToolbar expanded={expanded} handleExpanded={handleExpanded} />
+          <KaotoToolbar
+            expanded={expanded}
+            handleChangeSettings={handleChangeSettings}
+            handleExpanded={handleExpanded}
+          />
           <Grid>
             <StepsAndViewsProvider initialState={{ steps: [], views: [] }}>
               <YAMLProvider>

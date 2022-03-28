@@ -3,14 +3,15 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { CodeIcon, CogIcon, PlusCircleIcon } from '@patternfly/react-icons';
-import { IExpanded } from "../pages/Dashboard";
+import { IExpanded } from '../pages/Dashboard';
 
 export interface IKaotoToolbar {
   expanded: IExpanded;
+  handleChangeSettings: (update: any) => void;
   handleExpanded: (newState: IExpanded) => void;
 }
 
-export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
+export const KaotoToolbar = ({ expanded, handleChangeSettings, handleExpanded }: IKaotoToolbar) => {
   return (
     <div className={'step-creator-button'}>
       <Tooltip content={'Connector Catalog'}>
@@ -20,7 +21,7 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
           isActive={expanded.catalog}
           aria-label={'Connector Catalog'}
           onClick={() => {
-            handleExpanded({catalog: !expanded.catalog});
+            handleExpanded({ catalog: !expanded.catalog });
           }}
         >
           <PlusCircleIcon width={40} height={40} />
@@ -33,20 +34,19 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
           data-testid={'openEditorButton'}
           aria-label={'Code Editor'}
           onClick={() => {
-            handleExpanded({ ...expanded, codeEditor: !expanded.codeEditor });
+            handleExpanded({ codeEditor: !expanded.codeEditor });
           }}
         >
           <CodeIcon width={40} height={40} />
         </Button>
       </Tooltip>
-      <Tooltip content={'Deploy'}>
+      <Tooltip content={'Settings'}>
         <Button
           variant={'plain'}
-          // isActive={expanded.codeEditor}
-          data-testid={'typeButton'}
-          aria-label={'Type'}
+          data-testid={'settingsButton'}
+          aria-label={'Settings'}
           onClick={() => {
-            console.log('clicked!');
+            console.log('clicked settings!');
           }}
         >
           <CogIcon width={40} height={40} />
