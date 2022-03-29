@@ -3,7 +3,7 @@ import request from './request';
 
 export async function fetchCatalogSteps(queryParams?: {
   // e.g. 'KameletBinding'
-  integrationType?: string;
+  dsl?: string;
   // e.g. 'Kamelet'
   kind?: string;
   // e.g. 'START', 'END', 'MIDDLE'

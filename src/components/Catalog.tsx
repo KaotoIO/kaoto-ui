@@ -33,12 +33,13 @@ export interface ICatalog {
   onClosePanelClick: (e: any) => void;
   queryParams?: {
     // e.g. 'KameletBinding'
-    integrationType?: string;
+    dsl?: string;
     // e.g. 'Kamelet'
     kind?: string;
     // e.g. 'START', 'END', 'MIDDLE'
     type?: string;
   };
+  settingsDsl?: string;
   steps?: IStepProps[];
 }
 
