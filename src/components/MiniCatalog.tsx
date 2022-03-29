@@ -19,7 +19,7 @@ export interface IMiniCatalog {
   handleSelectStep?: (selectedStep: any) => void;
   queryParams?: {
     // e.g. 'KameletBinding'
-    integrationType?: string;
+    dsl?: string;
     // e.g. 'Kamelet'
     kind?: string;
     // e.g. 'START', 'END', 'MIDDLE'

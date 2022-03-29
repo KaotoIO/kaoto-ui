@@ -2,6 +2,25 @@
     background-color: var(--pf-global--BackgroundColor--200);
 }
 
+.step-creator-button {
+    background-color: #FFFFFF;
+    border-radius: 1.2em;
+    position: fixed;
+    right: 4em;
+    text-align: center;
+    top: 12em;
+    z-index: 200;
+}
+
+.step-creator-button button {
+    position: relative;
+}
+
+.visualization {
+    position: relative;
+}
+
+
 .stepNode {
     align-items: center;
     background: white;
