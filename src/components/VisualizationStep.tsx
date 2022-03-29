@@ -7,7 +7,7 @@ import { Handle, Position, useStoreState } from 'react-flow-renderer';
 
 // Custom Node type and component for React Flow
 const VisualizationStep = ({ data }: any) => {
-  const nodes = useStoreState((state) => state.nodes);
+  const nodes = useStoreState((state: { nodes: any }) => state.nodes);
   const isLastNode = nodes[nodes.length - 1].data.UUID === data.UUID;
 
   const borderColor =
@@ -44,7 +44,7 @@ const VisualizationStep = ({ data }: any) => {
               handleSelectStep={onElementClickAdd}
               queryParams={{
                 kind: data.kind,
-                integrationType: 'KameletBinding',
+                dsl: 'KameletBinding',
                 type: appendableStepTypes(data.connectorType),
               }}
             />

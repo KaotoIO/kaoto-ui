@@ -59,7 +59,11 @@ const Dashboard = () => {
       <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
         <DrawerContent
           panelContent={
-            <Catalog isCatalogExpanded={expanded.catalog} onClosePanelClick={onClosePanelClick} />
+            <Catalog
+              isCatalogExpanded={expanded.catalog}
+              onClosePanelClick={onClosePanelClick}
+              queryParams={{ dsl: settings.dsl }}
+            />
           }
           className={'panelCustom'}
         >
