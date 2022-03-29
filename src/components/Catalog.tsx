@@ -39,7 +39,6 @@ export interface ICatalog {
     // e.g. 'START', 'END', 'MIDDLE'
     type?: string;
   };
-  settingsDsl?: string;
   steps?: IStepProps[];
 }
 
@@ -57,30 +56,39 @@ const Catalog = (props: ICatalog) => {
 
   const { addAlert } = useAlert() || {};
 
+  const fetchSteps = () => {
+    fetchCatalogSteps(props.queryParams)
+      .then((value) => {
+        if (value) {
+          value.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
+          setCatalogData(value);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        addAlert &&
+          addAlert({
+            title: 'Something went wrong',
+            variant: AlertVariant.danger,
+            description: 'There was a problem fetching the catalog steps. Please try again later.',
+          });
+      });
+  };
+
   /**
    * Sort & fetch all Steps for the Catalog
    */
   useEffect(() => {
     if (!props.steps) {
-      fetchCatalogSteps(props.queryParams)
-        .then((value) => {
-          if (value) {
-            value.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
-            setCatalogData(value);
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-          addAlert &&
-            addAlert({
-              title: 'Something went wrong',
-              variant: AlertVariant.danger,
-              description:
-                'There was a problem fetching the catalog steps. Please try again later.',
-            });
-        });
+      fetchSteps();
     }
   }, []);
+
+  // If the user changes the DSL, update
+  // the catalog with relevant steps
+  useEffect(() => {
+    fetchSteps();
+  }, [props.queryParams?.dsl]);
 
   const changeSearch = (e: any) => {
     setQuery(e);
@@ -92,11 +100,10 @@ const Catalog = (props: ICatalog) => {
 
   function search(items: any[]) {
     /**
-     * Returns a list of items that meet
-     * meet the condition of the `type`
-     * matching the `isSelected` value,
-     * followed by the `name` containing
-     * the characters in the search query
+     * Returns a list of items that meet the condition
+     * of the `type` matching the `isSelected` value,
+     * followed by the `name` containing the characters
+     * in the search query
      */
     return items.filter((item) => {
       if (isSelected === item.type) {
