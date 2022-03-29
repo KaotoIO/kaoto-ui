@@ -34,7 +34,7 @@ module.exports = () => {
           ],
         },
         {
-          test: /\.css$/,
+          test: /\.css|s[ac]ss$/i,
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
           include: (stylesheet) => !isPatternflyStyles(stylesheet),
           sideEffects: true,
@@ -44,6 +44,12 @@ module.exports = () => {
           include: isPatternflyStyles,
           use: ['null-loader'],
           sideEffects: true,
+        },
+        {
+          test: /\.(ttf|eot|woff|woff2)$/,
+          use: {
+            loader: 'file-loader',
+          },
         },
         {
           test: /\.(svg|jpg|jpeg|png|gif)$/i,

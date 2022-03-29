@@ -1,4 +1,3 @@
-import './App.css';
 import { AlertProvider, MASLoading } from './components';
 import { AppLayout } from './layouts/AppLayout';
 import { AppRoutes } from './routes';
@@ -7,6 +6,8 @@ import '@patternfly/react-core/dist/styles/base.css';
 import { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
+
+import './App.css';
 
 export const App = () => {
   return (
