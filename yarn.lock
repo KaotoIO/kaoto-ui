@@ -3935,12 +3935,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/testing-library__jest-dom@npm:5.14.1":
-  version: 5.14.1
-  resolution: "@types/testing-library__jest-dom@npm:5.14.1"
+"@types/testing-library__jest-dom@npm:5.14.3":
+  version: 5.14.3
+  resolution: "@types/testing-library__jest-dom@npm:5.14.3"
   dependencies:
     "@types/jest": "*"
-  checksum: 77fe7ad3a9d49250972a0e3289b6d536942f95f0d539f32a917cf78c9422113d55c00de53b53dd4de1de49b68c8b500faea62e3017c4a64736cfbfbade749e04
+  checksum: 203443d0e7e5929fbc9e441146f92d85efa033b4697e427ed0164df1c40b720b6bb9bbd96a3171ea5fd8d9301b538fd0f49d4f35594d142afd0f6d2ecac25785
   languageName: node
   linkType: hard
 
@@ -11960,7 +11960,7 @@ __metadata:
     "@types/react": ^17.0.33
     "@types/react-dom": 17.0.10
     "@types/react-router-dom": 5.3.2
-    "@types/testing-library__jest-dom": 5.14.1
+    "@types/testing-library__jest-dom": 5.14.3
     "@types/uuid": 8.3.1
     "@typescript-eslint/eslint-plugin": ^5.10.0
     "@typescript-eslint/parser": 5.2.0
@@ -11988,7 +11988,7 @@ __metadata:
     monaco-editor: ^0.32.1
     monaco-editor-webpack-plugin: ^7.0.1
     null-loader: ^4.0.1
-    prettier: 2.4.1
+    prettier: 2.6.1
     prop-types: 15.7.2
     react: 17.0.2
     react-dom: 17.0.2
@@ -12010,7 +12010,7 @@ __metadata:
     uniforms-bridge-json-schema: ^3.6.2
     uniforms-patternfly: ^4.7.4
     url-loader: 4.1.1
-    use-debounce: 7.0.0
+    use-debounce: 7.0.1
     uuid: 8.3.2
     web-vitals: 2.1.2
     webpack: 5.71.0
@@ -14657,12 +14657,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.4.1":
-  version: 2.4.1
-  resolution: "prettier@npm:2.4.1"
+"prettier@npm:2.6.1":
+  version: 2.6.1
+  resolution: "prettier@npm:2.6.1"
   bin:
     prettier: bin-prettier.js
-  checksum: cc6830588b401b0d742862fe9c46bc9118204fb307c3abe0e49e95b35ed23629573807ffdf9cdd65289c252a0bb51fc0171437f6626ee36378dea80f0ee80b91
+  checksum: 78be1f8a3ddfad7c3d8a854b6c8941a3bb1ddfca4225c38d778e0fe1029a55368f71b3bbefff82c689015fbb4d391ec44add957f01308ad2725e01a7c1f37cb6
   languageName: node
   linkType: hard
 
@@ -18175,12 +18175,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-debounce@npm:7.0.0":
-  version: 7.0.0
-  resolution: "use-debounce@npm:7.0.0"
+"use-debounce@npm:7.0.1":
+  version: 7.0.1
+  resolution: "use-debounce@npm:7.0.1"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 966629520977488b5add406487c0945bc77e6b940969a1c71b32e083a711ae3a73c2627e439a29ff20583b994ff382f49d16231aab5920eb6282f048e5e5d86e
+  checksum: c5c1c34ccef6c11fe25fecef983a07f5a7260fce77b58f0f648f6ae08693a22a9077b5362b96154896e9ea756e6aaea303eb44550a293456cecb6f15cf87d73b
   languageName: node
   linkType: hard
 
