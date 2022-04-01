@@ -80,16 +80,16 @@ Tests are colocated and live as closely to corresponding code as possible.
 E2E tests are located in the `/cypress` directory. Run all [Cypress](https://docs.cypress.io/guides/overview/why-cypress) E2E tests headlessly:
 
 ```bash
+// in the browser
+yarn e2e
+
 // headlessly
-yarn cypress
+yarn e2e:headless
 
 // with a specific browser
 // optons: chrome, chromium, edge, electron, firefox
 // or specify a path: /usr/bin/chromium
-yarn cypress --browser firefox
-
-// in the browser
-yarn cypress:open
+yarn e2e --browser firefox
 ```
 
 See the [Cypress docs](https://docs.cypress.io) for more information. There are also GitHub Actions workflows in `.github/workflows` that run the tests automatically on opening a pull request.
