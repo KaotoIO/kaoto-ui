@@ -33,7 +33,7 @@ export const HeaderTools = () => {
   return (
     <PageHeaderTools className="header-tools">
       <MoonIcon size="md" />
-      <Switch className="switch-theme" isChecked={isLightTheme} onChange={onToggleSwitch}/>
+      <Switch aria-label="theme-switch" className="switch-theme" isChecked={isLightTheme} onChange={onToggleSwitch}/>
       <SunIcon size="md" color="var(--pf-global--palette--gold-400)" />
     </PageHeaderTools>
   );
