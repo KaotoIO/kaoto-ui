@@ -23,7 +23,7 @@
 
 .stepNode {
     align-items: center;
-    background: var(--pf-global--BackgroundColor--100);;
+    background: var(--pf-global--BackgroundColor--100);
     display: block;
     font-family: Ubuntu, serif;
     font-size: small;
