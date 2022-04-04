@@ -38,7 +38,7 @@ export const SettingsModal = ({
   };
 
   return (
-    <div className={'settings-modal'}>
+    <div className={'settings-modal'} data-testid={'settings-modal'}>
       <Modal
         actions={[
           <Button
