@@ -43,14 +43,32 @@ export async function fetchCustomResource(newSteps: IStepProps[]) {
 }
 
 /**
- * Returns a list of possible domain-specific languages (DSLs)
- * for users to choose from in their settings
+ * Returns a list of all domain-specific languages (DSLs)
  */
-export async function fetchDSLs() {
+export async function fetchAllDSLs() {
   try {
     const resp = await request.get({
       endpoint: '/languages',
       contentType: 'application/json',
+    });
+
+    return await resp.json();
+  } catch (err) {
+    return err;
+  }
+}
+
+/**
+ * Returns a list of possible domain-specific languages (DSLs)
+ * for users to choose from in their settings; based on their
+ * existing set of steps
+ */
+export async function fetchPossibleDSLs(props: { type?: string; steps: IStepProps[] }) {
+  try {
+    const resp = await request.post({
+      endpoint: '/integrations/customResources?type=' + props.type,
+      contentType: 'application/json',
+      body: { name: 'Updated integration', steps: props.steps },
     });
 
     return await resp.json();

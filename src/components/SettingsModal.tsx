@@ -9,13 +9,21 @@ import {
 } from '@patternfly/react-core';
 import { useEffect, useState } from 'react';
 import { ISettings } from '../pages/Dashboard';
-import { fetchDSLs } from '../api';
+import { fetchAllDSLs, fetchPossibleDSLs, useStepsAndViewsContext } from '../api';
 
 export interface ISettingsModal {
   currentSettings: ISettings;
   handleCloseModal: () => void;
   handleSaveSettings: (newState?: any) => void;
   isModalOpen: boolean;
+}
+
+export interface IDSLProps {
+  output: string;
+  input: string;
+  name: string;
+  description: string;
+  stepKinds: any;
 }
 
 /**
@@ -42,13 +50,35 @@ export const SettingsModal = ({
     }[]
   >([]);
   const [settings, setSettings] = useState<ISettings>(currentSettings);
+  const [viewData] = useStepsAndViewsContext();
 
   useEffect(() => {
-    fetchDSLs()
-      .then((value) => {
-        if (value) {
-          setDSLs(value);
-        }
+    const fetchContext = () => {
+      fetchPossibleDSLs({ steps: viewData.steps, type: settings.dsl })
+        .then((value) => {
+          if (value) {
+            const dslList: IDSLProps[] = [];
+
+            value.map((item: { crd: string; dsl: string }) => {
+              DSLs.map((dsl) => {
+                if (dsl.name === item.dsl) {
+                  dslList.push(dsl);
+                }
+              });
+            });
+
+            setDSLs(dslList);
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    };
+
+    fetchAllDSLs()
+      .then((dsls) => {
+        setDSLs(dsls);
+        fetchContext();
       })
       .catch((e) => {
         console.error(e);
