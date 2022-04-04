@@ -8,6 +8,6 @@ describe('Settings', () => {
   });
 
   it('loads the settings modal', () => {
-    cy.get('[data-testid="settingsModal"]').should('exist');
+    cy.get('[data-testid="settings-modal"]').should('exist');
   });
 });
