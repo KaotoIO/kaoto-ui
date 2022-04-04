@@ -43,6 +43,23 @@ export async function fetchCustomResource(newSteps: IStepProps[]) {
 }
 
 /**
+ * Returns a list of possible domain-specific languages (DSLs)
+ * for users to choose from in their settings
+ */
+export async function fetchDSLs() {
+  try {
+    const resp = await request.get({
+      endpoint: '/languages',
+      contentType: 'application/json',
+    });
+
+    return await resp.json();
+  } catch (err) {
+    return err;
+  }
+}
+
+/**
  * Returns view definitions (JSON).
  * Typically used after updating the integration from the YAML Editor,
  * or for step replacement that requires an updated array of views.

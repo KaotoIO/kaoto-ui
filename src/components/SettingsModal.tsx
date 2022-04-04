@@ -7,8 +7,9 @@ import {
   Modal,
   ModalVariant,
 } from '@patternfly/react-core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ISettings } from '../pages/Dashboard';
+import { fetchDSLs } from '../api';
 
 export interface ISettingsModal {
   currentSettings: ISettings;
@@ -31,14 +32,35 @@ export const SettingsModal = ({
   handleSaveSettings,
   isModalOpen,
 }: ISettingsModal) => {
+  const [DSLs, setDSLs] = useState<
+    {
+      output: string;
+      input: string;
+      name: string;
+      description: string;
+      stepKinds: any;
+    }[]
+  >([]);
   const [settings, setSettings] = useState<ISettings>(currentSettings);
+
+  useEffect(() => {
+    fetchDSLs()
+      .then((value) => {
+        if (value) {
+          setDSLs(value);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }, []);
 
   const onClose = () => {
     handleCloseModal();
   };
 
   return (
-    <div className={'settings-modal'}>
+    <div className={'settings-modal'} data-testid={'settings-modal'}>
       <Modal
         actions={[
           <Button
@@ -63,7 +85,7 @@ export const SettingsModal = ({
           <FormGroup
             label="Selection: "
             type="string"
-            helperText={'You must choose a type of integration'}
+            helperText={'You must choose what you want to build'}
             fieldId="selection"
           >
             <FormSelect
@@ -73,9 +95,9 @@ export const SettingsModal = ({
               }}
               value={settings.dsl}
             >
-              <FormSelectOption key={1} value={'Kamelet'} label={'Kamelet'} />
-              <FormSelectOption key={2} value={'KameletBinding'} label={'KameletBinding'} />
-              <FormSelectOption key={3} value={'Camel Route'} label={'Camel Route'} />
+              {DSLs.map((dsl, idx) => {
+                return <FormSelectOption key={idx} value={dsl.name} label={dsl.name} />;
+              })}
             </FormSelect>
           </FormGroup>
         </Form>

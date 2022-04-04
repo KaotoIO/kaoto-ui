@@ -1,4 +1,4 @@
-describe('step catalog', () => {
+describe.skip('step catalog', () => {
   beforeEach(() => {
     cy.visit('http://localhost:1337');
   });

@@ -1,4 +1,4 @@
-describe('YAML editor', () => {
+describe.skip('YAML editor', () => {
   beforeEach(() => {
     cy.visit('http://localhost:1337');
   });
