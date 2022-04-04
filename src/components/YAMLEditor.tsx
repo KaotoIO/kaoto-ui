@@ -1,9 +1,9 @@
-import { fetchViewDefinitions, useStepsAndViewsContext, useYAMLContext } from '../api';
-import { usePrevious } from '../utils';
+import { useYAMLContext, useStepsAndViewsContext, fetchViewDefinitions } from '../api';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import { CodeEditor, Language } from '@patternfly/react-code-editor';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
+import EditorDidMount from 'react-monaco-editor';
 
 interface IYAMLEditor {
   // Used to mock data for stories
@@ -13,55 +13,38 @@ interface IYAMLEditor {
 }
 
 const YAMLEditor = (props: IYAMLEditor) => {
-  const editorRef = useRef(null);
+  const editorRef = useRef<EditorDidMount["editor"] | null >(null);
   const [YAMLData, setYAMLData] = useYAMLContext();
   const [, dispatch] = useStepsAndViewsContext();
-  const previousYaml = usePrevious(YAMLData);
-  const shouldUpdateVisualization = useRef(false);
-
-  useEffect(() => {
-    // Check that the data has changed, otherwise return
-    if (previousYaml === YAMLData) {
-      return;
-    }
-
-    if (shouldUpdateVisualization.current) {
-      fetchViewDefinitions(YAMLData)
-        .then((res) => {
-          // update Visualization with new data
-          dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-
-      shouldUpdateVisualization.current = false;
-    }
-  }, [YAMLData, dispatch, previousYaml]);
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
    * Returns JSON to be displayed in the visualizer
    */
-  const handleChanges = (incomingData?: string) => {
-    // Check that the data has changed, otherwise return
-    if (previousYaml === incomingData) {
-      return;
+  const handleChanges = (incomingData: string) => {
+    if (YAMLData !== incomingData) {
+      setYAMLData(incomingData);
+      fetchViewDefinitions(incomingData)
+        .then((res) => {
+          dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     }
-
-    shouldUpdateVisualization.current = true;
-    setYAMLData(incomingData);
   };
 
-  function handleEditorChange(value?: string) {
-    debounced(value);
-  }
-
-  function handleEditorDidMount(editor: any) {
+  const handleEditorDidMount = (editor: EditorDidMount["editor"]) => {
     editorRef.current = editor;
-  }
+    editorRef.current?.onDidChangeModelContent(() => {
+      const editorYAML = editorRef.current?.getValue();
+      if (editorYAML) {
+        debounced(editorYAML);
+      }
+    });
+  };
 
-  const debounced = useDebouncedCallback((value?: string) => {
+  const debounced = useDebouncedCallback((value: string) => {
     handleChanges(value);
   }, 1000);
 
@@ -69,17 +52,16 @@ const YAMLEditor = (props: IYAMLEditor) => {
     <StepErrorBoundary>
       <CodeEditor
         code={YAMLData ?? props.initialData}
-        className={'code-editor'}
+        className="code-editor"
         height="650px"
-        isCopyEnabled={true}
-        isDarkTheme={true}
-        isDownloadEnabled={true}
-        isLanguageLabelVisible={true}
-        isUploadEnabled={true}
         language={(props.language as Language) ?? Language.yaml}
-        onChange={handleEditorChange}
         onEditorDidMount={handleEditorDidMount}
-        toolTipPosition={'right'}
+        toolTipPosition="right"
+        isCopyEnabled
+        isDarkTheme
+        isDownloadEnabled
+        isLanguageLabelVisible
+        isUploadEnabled
       />
     </StepErrorBoundary>
   );
