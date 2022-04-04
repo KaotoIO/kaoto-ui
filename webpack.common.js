@@ -47,20 +47,11 @@ module.exports = () => {
         },
         {
           test: /\.(ttf|eot|woff|woff2)$/,
-          use: {
-            loader: 'file-loader',
-          },
+          type: 'asset/resource',
         },
         {
           test: /\.(svg|jpg|jpeg|png|gif)$/i,
-          use: [
-            {
-              loader: 'url-loader',
-              options: {
-                limit: 5000,
-              },
-            },
-          ],
+          type: 'asset/inline'
         },
         {
           test: /\.yaml$/,
