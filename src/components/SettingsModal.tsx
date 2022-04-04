@@ -63,7 +63,7 @@ export const SettingsModal = ({
           <FormGroup
             label="Selection: "
             type="string"
-            helperText={'You must choose a type of integration'}
+            helperText={'You must choose what you want to build'}
             fieldId="selection"
           >
             <FormSelect
@@ -75,7 +75,7 @@ export const SettingsModal = ({
             >
               <FormSelectOption key={1} value={'Kamelet'} label={'Kamelet'} />
               <FormSelectOption key={2} value={'KameletBinding'} label={'KameletBinding'} />
-              <FormSelectOption key={3} value={'Camel Route'} label={'Camel Route'} />
+              <FormSelectOption key={3} value={'CamelRoute'} label={'Camel Route'} />
             </FormSelect>
           </FormGroup>
         </Form>

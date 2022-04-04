@@ -18,8 +18,8 @@ import { useEffect, useState } from 'react';
 export interface IMiniCatalog {
   handleSelectStep?: (selectedStep: any) => void;
   queryParams?: {
-    // the DSL, e.g. 'KameletBinding'
-    integrationType?: string;
+    // e.g. 'KameletBinding'
+    dsl?: string;
     // e.g. 'Kamelet'
     kind?: string;
     // e.g. 'START', 'END', 'MIDDLE'
