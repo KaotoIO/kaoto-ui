@@ -70,7 +70,7 @@ export const SettingsModal = ({
     fetchAllDSLs()
       .then((dsls) => {
         setDSLs(dsls);
-        fetchContext();
+        if (viewData.steps.length !== 0) fetchContext();
       })
       .catch((e) => {
         console.error(e);
