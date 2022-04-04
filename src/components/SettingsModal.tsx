@@ -40,15 +40,7 @@ export const SettingsModal = ({
   handleSaveSettings,
   isModalOpen,
 }: ISettingsModal) => {
-  const [DSLs, setDSLs] = useState<
-    {
-      output: string;
-      input: string;
-      name: string;
-      description: string;
-      stepKinds: any;
-    }[]
-  >([]);
+  const [DSLs, setDSLs] = useState<IDSLProps[]>([]);
   const [settings, setSettings] = useState<ISettings>(currentSettings);
   const [viewData] = useStepsAndViewsContext();
 
