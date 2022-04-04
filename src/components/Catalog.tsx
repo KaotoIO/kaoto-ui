@@ -32,8 +32,8 @@ export interface ICatalog {
   isCatalogExpanded?: boolean;
   onClosePanelClick: (e: any) => void;
   queryParams?: {
-    // e.g. 'KameletBinding'
-    dsl?: string;
+    // the DSL, e.g. 'KameletBinding'
+    integrationType?: string;
     // e.g. 'Kamelet'
     kind?: string;
     // e.g. 'START', 'END', 'MIDDLE'
@@ -88,7 +88,7 @@ const Catalog = (props: ICatalog) => {
   // the catalog with relevant steps
   useEffect(() => {
     fetchSteps();
-  }, [props.queryParams?.dsl]);
+  }, [props.queryParams?.integrationType]);
 
   const changeSearch = (e: any) => {
     setQuery(e);

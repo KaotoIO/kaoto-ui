@@ -43,8 +43,8 @@ const VisualizationStep = ({ data }: any) => {
             <MiniCatalog
               handleSelectStep={onElementClickAdd}
               queryParams={{
+                integrationType: 'KameletBinding',
                 kind: data.kind,
-                dsl: 'KameletBinding',
                 type: appendableStepTypes(data.connectorType),
               }}
             />
