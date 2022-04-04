@@ -7,8 +7,9 @@ import {
   Modal,
   ModalVariant,
 } from '@patternfly/react-core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ISettings } from '../pages/Dashboard';
+import { fetchDSLs } from '../api';
 
 export interface ISettingsModal {
   currentSettings: ISettings;
@@ -31,7 +32,28 @@ export const SettingsModal = ({
   handleSaveSettings,
   isModalOpen,
 }: ISettingsModal) => {
+  const [DSLs, setDSLs] = useState<
+    {
+      output: string;
+      input: string;
+      name: string;
+      description: string;
+      stepKinds: any;
+    }[]
+  >([]);
   const [settings, setSettings] = useState<ISettings>(currentSettings);
+
+  useEffect(() => {
+    fetchDSLs()
+      .then((value) => {
+        if (value) {
+          setDSLs(value);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }, []);
 
   const onClose = () => {
     handleCloseModal();
@@ -73,9 +95,9 @@ export const SettingsModal = ({
               }}
               value={settings.dsl}
             >
-              <FormSelectOption key={1} value={'Kamelet'} label={'Kamelet'} />
-              <FormSelectOption key={2} value={'KameletBinding'} label={'KameletBinding'} />
-              <FormSelectOption key={3} value={'CamelRoute'} label={'Camel Route'} />
+              {DSLs.map((dsl, idx) => {
+                return <FormSelectOption key={idx} value={dsl.name} label={dsl.name} />;
+              })}
             </FormSelect>
           </FormGroup>
         </Form>
