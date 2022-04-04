@@ -50,7 +50,7 @@ const AppLayout = ({ children }: IAppLayout) => {
       showNavToggle
       isNavOpen={isNavOpen}
       onNavToggle={isMobileView ? onNavToggleMobile : onNavToggle}
-      headerTools={HeaderTools()}
+      headerTools={<HeaderTools />}
     />
   );
 
