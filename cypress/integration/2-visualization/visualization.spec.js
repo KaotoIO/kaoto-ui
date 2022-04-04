@@ -1,4 +1,4 @@
-describe('visualization', () => {
+describe.skip('visualization', () => {
   beforeEach(() => {
     cy.visit('http://localhost:1337');
   });
