@@ -3,7 +3,7 @@
 }
 
 .step-creator-button {
-    background-color: #FFFFFF;
+    background-color: var(--pf-global--BackgroundColor--100);
     border-radius: 1.2em;
     position: fixed;
     right: 4em;
@@ -23,7 +23,7 @@
 
 .stepNode {
     align-items: center;
-    background: white;
+    background: var(--pf-global--BackgroundColor--100);
     display: block;
     font-family: Ubuntu, serif;
     font-size: small;

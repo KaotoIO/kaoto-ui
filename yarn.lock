@@ -2138,10 +2138,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/patternfly@npm:4.151.4":
-  version: 4.151.4
-  resolution: "@patternfly/patternfly@npm:4.151.4"
-  checksum: e1eae1bec63f1e6c62bef4f53ad9ef2fb909a703102e30405a346630204ec0cb48fd64b6ca96e5e12a6e319889c99f1830dcbb5164b92adc1e343542e83ab083
+"@patternfly/patternfly@npm:4.185.1":
+  version: 4.185.1
+  resolution: "@patternfly/patternfly@npm:4.185.1"
+  checksum: 868c49dbad455bfcc74346bc20a23f30b8535c39beb4323789ef7174a8b2fd790bd11af6bdb4d9c80889b7220cb0b425c8329335a5466151b9f481106a96a16d
   languageName: node
   linkType: hard
 
@@ -11939,7 +11939,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "kaoto-ui@workspace:."
   dependencies:
-    "@patternfly/patternfly": 4.151.4
+    "@patternfly/patternfly": 4.185.1
     "@patternfly/react-code-editor": ^4.39.5
     "@patternfly/react-core": 4.198.19
     "@patternfly/react-icons": 4.49.19

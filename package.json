@@ -27,7 +27,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@patternfly/patternfly": "4.151.4",
+    "@patternfly/patternfly": "4.185.1",
     "@patternfly/react-code-editor": "^4.39.5",
     "@patternfly/react-core": "4.198.19",
     "@patternfly/react-icons": "4.49.19",

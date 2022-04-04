@@ -13,6 +13,7 @@ import {
 } from '@patternfly/react-core';
 import { ReactNode, useState } from 'react';
 import { NavLink, useLocation, useHistory } from 'react-router-dom';
+import { HeaderTools } from './HeaderTools';
 
 interface IAppLayout {
   children: ReactNode;
@@ -49,6 +50,7 @@ const AppLayout = ({ children }: IAppLayout) => {
       showNavToggle
       isNavOpen={isNavOpen}
       onNavToggle={isMobileView ? onNavToggleMobile : onNavToggle}
+      headerTools={HeaderTools()}
     />
   );
 
