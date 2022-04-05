@@ -31,6 +31,11 @@ export interface IDSLProps {
   stepKinds: any;
 }
 
+export interface ICompatibleDSLsAndCRDs {
+  crd: string;
+  dsl: string;
+}
+
 /**
  * Contains the contents for the Settings modal.
  * @param currentSettings
@@ -52,7 +57,7 @@ export const SettingsModal = ({
   const [, setYAMLData] = useYAMLContext();
 
   // compatible DSLs (no description) & CRDs/YAML
-  const compatibleDSLsAndCRDs = useRef([]);
+  const compatibleDSLsAndCRDs = useRef<ICompatibleDSLsAndCRDs[]>([]);
 
   useEffect(() => {
     const fetchContext = () => {
@@ -103,12 +108,12 @@ export const SettingsModal = ({
   };
 
   const onSave = () => {
-    DSLs.map((dsl) => {
-      if (dsl.name === item.dsl) {
-        dslList.push(dsl);
-      }
-    });
+    const newDSL = compatibleDSLsAndCRDs.current.find(
+      (i: ICompatibleDSLsAndCRDs) => i.dsl === settings.dsl
+    );
 
+    // update YAML with new compatible DSL/YAML
+    if (newDSL) setYAMLData(newDSL.crd);
     handleSaveSettings(settings);
   };
 
