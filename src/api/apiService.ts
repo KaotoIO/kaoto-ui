@@ -59,11 +59,11 @@ export async function fetchAllDSLs() {
 }
 
 /**
- * Returns a list of possible domain-specific languages (DSLs)
- * for users to choose from in their settings; based on their
- * existing set of steps
+ * Returns a list of domain-specific languages (DSLs) compatible
+ * with existing steps. Will also include the respective YAML/CRD
+ * for each compatible DSL.
  */
-export async function fetchPossibleDSLs(props: { type?: string; steps: IStepProps[] }) {
+export async function fetchCompatibleDSLsAndCRDs(props: { type?: string; steps: IStepProps[] }) {
   try {
     const resp = await request.post({
       endpoint: '/integrations/customResources?type=' + props.type,

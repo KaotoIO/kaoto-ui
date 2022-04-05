@@ -7,9 +7,14 @@ import {
   Modal,
   ModalVariant,
 } from '@patternfly/react-core';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ISettings } from '../pages/Dashboard';
-import { fetchAllDSLs, fetchPossibleDSLs, useStepsAndViewsContext } from '../api';
+import {
+  fetchAllDSLs,
+  fetchCompatibleDSLsAndCRDs,
+  useStepsAndViewsContext,
+  useYAMLContext,
+} from '../api';
 
 export interface ISettingsModal {
   currentSettings: ISettings;
@@ -40,16 +45,26 @@ export const SettingsModal = ({
   handleSaveSettings,
   isModalOpen,
 }: ISettingsModal) => {
+  // possible DSLs with their descriptions
   const [DSLs, setDSLs] = useState<IDSLProps[]>([]);
   const [settings, setSettings] = useState<ISettings>(currentSettings);
   const [viewData] = useStepsAndViewsContext();
+  const [, setYAMLData] = useYAMLContext();
+
+  // compatible DSLs (no description) & CRDs/YAML
+  const compatibleDSLsAndCRDs = useRef([]);
 
   useEffect(() => {
     const fetchContext = () => {
-      fetchPossibleDSLs({ steps: viewData.steps, type: settings.dsl })
+      fetchCompatibleDSLsAndCRDs({ steps: viewData.steps, type: settings.dsl })
         .then((value) => {
           if (value) {
+            // contains a list of compatible DSLs returned,
+            // merged with their descriptions (fetched separately)
             const dslList: IDSLProps[] = [];
+
+            // save compatible CRDs & DSLs for later use when saving settings
+            compatibleDSLsAndCRDs.current = value;
 
             value.map((item: { crd: string; dsl: string }) => {
               DSLs.map((dsl) => {
@@ -67,6 +82,12 @@ export const SettingsModal = ({
         });
     };
 
+    /**
+     * fetch ALL DSLs and descriptions.
+     * if the user has at least one step, then a separate
+     * call is made to check compatible DSLs, with their
+     * respective YAML/CRDs, and merged together.
+     */
     fetchAllDSLs()
       .then((dsls) => {
         setDSLs(dsls);
@@ -81,17 +102,21 @@ export const SettingsModal = ({
     handleCloseModal();
   };
 
+  const onSave = () => {
+    DSLs.map((dsl) => {
+      if (dsl.name === item.dsl) {
+        dslList.push(dsl);
+      }
+    });
+
+    handleSaveSettings(settings);
+  };
+
   return (
     <div className={'settings-modal'} data-testid={'settings-modal'}>
       <Modal
         actions={[
-          <Button
-            key="confirm"
-            variant="primary"
-            onClick={() => {
-              handleSaveSettings(settings);
-            }}
-          >
+          <Button key="confirm" variant="primary" onClick={onSave}>
             Save
           </Button>,
           <Button key="cancel" variant="link" onClick={onClose}>
