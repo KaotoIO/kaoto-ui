@@ -28,7 +28,7 @@ module.exports = merge(common('development'), {
   },
   plugins: [
     new webpack.DefinePlugin({
-      KAOTO_API: JSON.stringify(process.env.KAOTO_API || 'http://localhost:8080'),
+      KAOTO_API: JSON.stringify(process.env.KAOTO_API || 'http://localhost:8081'),
     }),
   ],
 });
