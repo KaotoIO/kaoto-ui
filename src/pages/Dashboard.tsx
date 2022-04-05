@@ -88,14 +88,16 @@ const Dashboard = () => {
           </DrawerContentBody>
         </DrawerContent>
       </Drawer>
-      <SettingsModal
-        currentSettings={settings}
-        handleCloseModal={() => {
-          setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
-        }}
-        handleSaveSettings={handleSaveSettings}
-        isModalOpen={expanded.settingsModal ?? false}
-      />
+      <YAMLProvider>
+        <SettingsModal
+          currentSettings={settings}
+          handleCloseModal={() => {
+            setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
+          }}
+          handleSaveSettings={handleSaveSettings}
+          isModalOpen={expanded.settingsModal ?? false}
+        />
+      </YAMLProvider>
     </>
   );
 };

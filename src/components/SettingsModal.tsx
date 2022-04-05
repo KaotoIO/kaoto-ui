@@ -54,12 +54,14 @@ export const SettingsModal = ({
   const [DSLs, setDSLs] = useState<IDSLProps[]>([]);
   const [settings, setSettings] = useState<ISettings>(currentSettings);
   const [viewData] = useStepsAndViewsContext();
-  const [, setYAMLData] = useYAMLContext();
+  const [YAMLData, setYAMLData] = useYAMLContext();
 
   // compatible DSLs (no description) & CRDs/YAML
   const compatibleDSLsAndCRDs = useRef<ICompatibleDSLsAndCRDs[]>([]);
 
   useEffect(() => {
+    console.log('change detected...');
+
     const fetchContext = () => {
       fetchCompatibleDSLsAndCRDs({ steps: viewData.steps, type: settings.dsl })
         .then((value) => {
@@ -101,7 +103,7 @@ export const SettingsModal = ({
       .catch((e) => {
         console.error(e);
       });
-  }, []);
+  }, [YAMLData]);
 
   const onClose = () => {
     handleCloseModal();
