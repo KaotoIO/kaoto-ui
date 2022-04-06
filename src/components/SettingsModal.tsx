@@ -50,18 +50,13 @@ export const SettingsModal = ({
   handleSaveSettings,
   isModalOpen,
 }: ISettingsModal) => {
-  // possible DSLs with their descriptions
-  const [DSLs, setDSLs] = useState<IDSLProps[]>([]);
+  const availableDSLs = useRef<IDSLProps[]>([]);
+  const compatibleDSLsAndCRDs = useRef<ICompatibleDSLsAndCRDs[]>([]);
   const [settings, setSettings] = useState<ISettings>(currentSettings);
   const [viewData] = useStepsAndViewsContext();
   const [YAMLData, setYAMLData] = useYAMLContext();
 
-  // compatible DSLs (no description) & CRDs/YAML
-  const compatibleDSLsAndCRDs = useRef<ICompatibleDSLsAndCRDs[]>([]);
-
   useEffect(() => {
-    // console.log('change detected...');
-
     const fetchContext = () => {
       fetchCompatibleDSLsAndCRDs({ steps: viewData.steps, type: settings.dsl })
         .then((value) => {
@@ -74,14 +69,14 @@ export const SettingsModal = ({
             compatibleDSLsAndCRDs.current = value;
 
             value.map((item: { crd: string; dsl: string }) => {
-              DSLs.map((dsl) => {
+              availableDSLs.current.map((dsl) => {
                 if (dsl.name === item.dsl) {
                   dslList.push(dsl);
                 }
               });
             });
 
-            setDSLs(dslList);
+            availableDSLs.current = dslList;
           }
         })
         .catch((e) => {
@@ -97,7 +92,7 @@ export const SettingsModal = ({
      */
     fetchAllDSLs()
       .then((dsls) => {
-        setDSLs(dsls);
+        availableDSLs.current = dsls;
         if (viewData.steps.length !== 0) fetchContext();
       })
       .catch((e) => {
@@ -149,7 +144,7 @@ export const SettingsModal = ({
               }}
               value={settings.dsl}
             >
-              {DSLs.map((dsl, idx) => {
+              {availableDSLs.current.map((dsl, idx) => {
                 return <FormSelectOption key={idx} value={dsl.name} label={dsl.name} />;
               })}
             </FormSelect>

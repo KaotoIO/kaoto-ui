@@ -1,12 +1,4 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 
 interface IYAMLDataProvider {
   initialState?: string;
@@ -15,26 +7,28 @@ interface IYAMLDataProvider {
 
 export type IUseYAMLData = [string, Dispatch<SetStateAction<string>>];
 
-export const useYAMLData = (newYAMLData: string): IUseYAMLData => {
-  const [YAMLData, setYAMLData] = useState<string>(newYAMLData);
-
-  useEffect(() => {
-    setYAMLData(newYAMLData);
-  }, [newYAMLData]);
-
-  return [YAMLData, setYAMLData];
-};
-
+/**
+ * Provider
+ * @param initialState
+ * @param children
+ * @constructor
+ */
 function YAMLProvider({ initialState, children }: IYAMLDataProvider) {
-  const [YAMLData, setYAMLData] = useYAMLData(initialState ?? '');
+  const [YAMLData, setYAMLData] = useState<string>(initialState ?? '');
 
   return (
     <YAMLDataContext.Provider value={[YAMLData, setYAMLData]}>{children}</YAMLDataContext.Provider>
   );
 }
 
+/**
+ * Create context
+ */
 const YAMLDataContext = createContext<IUseYAMLData>(['', () => null]);
 
+/**
+ * Convenience hook
+ */
 function useYAMLContext() {
   const context = useContext(YAMLDataContext);
   if (!context) {

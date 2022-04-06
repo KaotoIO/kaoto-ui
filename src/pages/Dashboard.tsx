@@ -55,40 +55,36 @@ const Dashboard = () => {
   };
 
   return (
-    <>
-      <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
-        <DrawerContent
-          panelContent={
-            <Catalog
-              isCatalogExpanded={expanded.catalog}
-              onClosePanelClick={onClosePanelClick}
-              queryParams={{ dsl: settings.dsl }}
-            />
-          }
-          className={'panelCustom'}
-        >
-          <DrawerContentBody>
-            <KaotoToolbar expanded={expanded} handleExpanded={handleExpanded} />
-            <Grid>
-              <StepsAndViewsProvider initialState={{ steps: [], views: [] }}>
-                <YAMLProvider>
-                  {expanded.codeEditor && (
-                    <GridItem span={4}>
-                      <YAMLEditor />
-                    </GridItem>
-                  )}
-                  <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
-                    <Visualization
-                      toggleCatalog={() => setExpanded({ ...expanded, catalog: !expanded.catalog })}
-                    />
-                  </GridItem>
-                </YAMLProvider>
-              </StepsAndViewsProvider>
-            </Grid>
-          </DrawerContentBody>
-        </DrawerContent>
-      </Drawer>
+    <StepsAndViewsProvider initialState={{ steps: [], views: [] }}>
       <YAMLProvider>
+        <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
+          <DrawerContent
+            panelContent={
+              <Catalog
+                isCatalogExpanded={expanded.catalog}
+                onClosePanelClick={onClosePanelClick}
+                queryParams={{ dsl: settings.dsl }}
+              />
+            }
+            className={'panelCustom'}
+          >
+            <DrawerContentBody>
+              <KaotoToolbar expanded={expanded} handleExpanded={handleExpanded} />
+              <Grid>
+                {expanded.codeEditor && (
+                  <GridItem span={4}>
+                    <YAMLEditor />
+                  </GridItem>
+                )}
+                <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
+                  <Visualization
+                    toggleCatalog={() => setExpanded({ ...expanded, catalog: !expanded.catalog })}
+                  />
+                </GridItem>
+              </Grid>
+            </DrawerContentBody>
+          </DrawerContent>
+        </Drawer>
         <SettingsModal
           currentSettings={settings}
           handleCloseModal={() => {
@@ -98,7 +94,7 @@ const Dashboard = () => {
           isModalOpen={expanded.settingsModal ?? false}
         />
       </YAMLProvider>
-    </>
+    </StepsAndViewsProvider>
   );
 };
 
