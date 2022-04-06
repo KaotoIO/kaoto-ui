@@ -1,4 +1,3 @@
-import { ActionGroup, Button } from '@patternfly/react-core';
 import Ajv from 'ajv';
 import { AutoForm } from 'uniforms';
 import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
@@ -44,11 +43,6 @@ export const JsonSchemaConfigurator = ({
       <AutoFields />
       <ErrorsField />
       <br />
-      <ActionGroup>
-        <Button variant={'primary'} type={'submit'}>
-          Verify Configuration
-        </Button>
-      </ActionGroup>
     </AutoForm>
   );
 };
