@@ -55,7 +55,7 @@ const Dashboard = () => {
   };
 
   return (
-    <>
+    <YAMLProvider>
       <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
         <DrawerContent
           panelContent={
@@ -71,34 +71,30 @@ const Dashboard = () => {
             <KaotoToolbar expanded={expanded} handleExpanded={handleExpanded} />
             <Grid>
               <StepsAndViewsProvider initialState={{ steps: [], views: [] }}>
-                <YAMLProvider>
-                  {expanded.codeEditor && (
-                    <GridItem span={4}>
-                      <YAMLEditor />
-                    </GridItem>
-                  )}
-                  <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
-                    <Visualization
-                      toggleCatalog={() => setExpanded({ ...expanded, catalog: !expanded.catalog })}
-                    />
+                {expanded.codeEditor && (
+                  <GridItem span={4}>
+                    <YAMLEditor />
                   </GridItem>
-                </YAMLProvider>
+                )}
+                <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
+                  <Visualization
+                    toggleCatalog={() => setExpanded({ ...expanded, catalog: !expanded.catalog })}
+                  />
+                </GridItem>
               </StepsAndViewsProvider>
             </Grid>
           </DrawerContentBody>
         </DrawerContent>
       </Drawer>
-      <YAMLProvider>
-        <SettingsModal
-          currentSettings={settings}
-          handleCloseModal={() => {
-            setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
-          }}
-          handleSaveSettings={handleSaveSettings}
-          isModalOpen={expanded.settingsModal ?? false}
-        />
-      </YAMLProvider>
-    </>
+      <SettingsModal
+        currentSettings={settings}
+        handleCloseModal={() => {
+          setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
+        }}
+        handleSaveSettings={handleSaveSettings}
+        isModalOpen={expanded.settingsModal ?? false}
+      />
+    </YAMLProvider>
   );
 };
 
