@@ -55,22 +55,22 @@ const Dashboard = () => {
   };
 
   return (
-    <YAMLProvider>
-      <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
-        <DrawerContent
-          panelContent={
-            <Catalog
-              isCatalogExpanded={expanded.catalog}
-              onClosePanelClick={onClosePanelClick}
-              queryParams={{ dsl: settings.dsl }}
-            />
-          }
-          className={'panelCustom'}
-        >
-          <DrawerContentBody>
-            <KaotoToolbar expanded={expanded} handleExpanded={handleExpanded} />
-            <Grid>
-              <StepsAndViewsProvider initialState={{ steps: [], views: [] }}>
+    <StepsAndViewsProvider initialState={{ steps: [], views: [] }}>
+      <YAMLProvider>
+        <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
+          <DrawerContent
+            panelContent={
+              <Catalog
+                isCatalogExpanded={expanded.catalog}
+                onClosePanelClick={onClosePanelClick}
+                queryParams={{ dsl: settings.dsl }}
+              />
+            }
+            className={'panelCustom'}
+          >
+            <DrawerContentBody>
+              <KaotoToolbar expanded={expanded} handleExpanded={handleExpanded} />
+              <Grid>
                 {expanded.codeEditor && (
                   <GridItem span={4}>
                     <YAMLEditor />
@@ -81,20 +81,20 @@ const Dashboard = () => {
                     toggleCatalog={() => setExpanded({ ...expanded, catalog: !expanded.catalog })}
                   />
                 </GridItem>
-              </StepsAndViewsProvider>
-            </Grid>
-          </DrawerContentBody>
-        </DrawerContent>
-      </Drawer>
-      <SettingsModal
-        currentSettings={settings}
-        handleCloseModal={() => {
-          setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
-        }}
-        handleSaveSettings={handleSaveSettings}
-        isModalOpen={expanded.settingsModal ?? false}
-      />
-    </YAMLProvider>
+              </Grid>
+            </DrawerContentBody>
+          </DrawerContent>
+        </Drawer>
+        <SettingsModal
+          currentSettings={settings}
+          handleCloseModal={() => {
+            setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
+          }}
+          handleSaveSettings={handleSaveSettings}
+          isModalOpen={expanded.settingsModal ?? false}
+        />
+      </YAMLProvider>
+    </StepsAndViewsProvider>
   );
 };
 
