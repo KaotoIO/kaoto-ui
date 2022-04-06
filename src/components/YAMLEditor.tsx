@@ -13,7 +13,7 @@ interface IYAMLEditor {
 }
 
 const YAMLEditor = (props: IYAMLEditor) => {
-  const editorRef = useRef<EditorDidMount["editor"] | null >(null);
+  const editorRef = useRef<EditorDidMount['editor'] | null>(null);
   const [YAMLData, setYAMLData] = useYAMLContext();
   const [, dispatch] = useStepsAndViewsContext();
 
@@ -34,7 +34,7 @@ const YAMLEditor = (props: IYAMLEditor) => {
     }
   };
 
-  const handleEditorDidMount = (editor: EditorDidMount["editor"]) => {
+  const handleEditorDidMount = (editor: EditorDidMount['editor']) => {
     editorRef.current = editor;
     editorRef.current?.onDidChangeModelContent(() => {
       const editorYAML = editorRef.current?.getValue();

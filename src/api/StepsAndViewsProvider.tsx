@@ -17,6 +17,11 @@ export type IUseStepsAndViews = [
   dispatch: (action: StepsAndViewsAction) => void | IViewData
 ];
 
+/**
+ * Reducer
+ * @param state
+ * @param action
+ */
 function stepsAndViewsReducer(state: IViewData, action: StepsAndViewsAction) {
   const { type, payload } = action;
 
@@ -46,20 +51,15 @@ function stepsAndViewsReducer(state: IViewData, action: StepsAndViewsAction) {
   }
 }
 
-export const useStepsAndViews = (initialState?: IViewData): IUseStepsAndViews => {
-  const [viewData, dispatch] = useReducer(stepsAndViewsReducer, initialState);
-
-  // handle from the component directly instead
-  // useEffect(() => {
-  //   setViewData(newStepsViews);
-  // }, [newStepsViews]);
-
-  return [viewData, dispatch];
-};
-
+/**
+ * Provider
+ * @param initialState
+ * @param children
+ * @constructor
+ */
 function StepsAndViewsProvider({ initialState, children }: IStepsAndViewsProvider) {
   // viewData contains the Step model exactly as returned by the API
-  const [viewData, dispatch] = useStepsAndViews(initialState);
+  const [viewData, dispatch] = useReducer(stepsAndViewsReducer, initialState);
 
   return (
     <StepsAndViewsContext.Provider value={[viewData, dispatch]}>
@@ -68,8 +68,14 @@ function StepsAndViewsProvider({ initialState, children }: IStepsAndViewsProvide
   );
 }
 
+/**
+ * Create context
+ */
 const StepsAndViewsContext = createContext<IUseStepsAndViews>([{ steps: [], views: [] }, () => {}]);
 
+/**
+ * Convenience hook
+ */
 function useStepsAndViewsContext() {
   const context = useContext(StepsAndViewsContext);
   if (!context) {
