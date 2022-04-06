@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node16.14.0-slim-chrome99-ff97
+      options: --user 1001
 
     outputs:
       record: ${{ steps.should-we-record.outputs.record }}
