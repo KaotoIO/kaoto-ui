@@ -180,7 +180,7 @@ const StepViews = ({
                   <JsonSchemaConfigurator
                     schema={{ type: 'object', properties: stepPropertySchema.current }}
                     configuration={stepPropertyModel.current}
-                    onSubmit={(configuration, isValid) => {
+                    onChangeModel={(configuration, isValid) => {
                       if (isValid) {
                         saveConfig(configuration);
                       }

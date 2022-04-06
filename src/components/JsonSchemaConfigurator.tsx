@@ -1,4 +1,3 @@
-import { ActionGroup, Button } from '@patternfly/react-core';
 import Ajv from 'ajv';
 import { AutoForm } from 'uniforms';
 import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
@@ -23,13 +22,13 @@ export function createValidator(schema: object) {
 type JsonSchemaConfiguratorProps = {
   schema: any;
   configuration: any;
-  onSubmit: (configuration: unknown, isValid: boolean) => void;
+  onChangeModel: (configuration: unknown, isValid: boolean) => void;
 };
 
 export const JsonSchemaConfigurator = ({
   schema,
   configuration,
-  onSubmit,
+  onChangeModel,
 }: JsonSchemaConfiguratorProps) => {
   schema.type = schema.type || 'object';
   const schemaValidator = createValidator(schema);
@@ -38,17 +37,12 @@ export const JsonSchemaConfigurator = ({
     <AutoForm
       schema={bridge}
       model={configuration}
-      onSubmit={(model: any) => onSubmit(model, true)}
+      onChangeModel={(model: any) => onChangeModel(model, true)}
       data-testid={'json-schema-configurator'}
     >
       <AutoFields />
       <ErrorsField />
       <br />
-      <ActionGroup>
-        <Button variant={'primary'} type={'submit'}>
-          Verify Configuration
-        </Button>
-      </ActionGroup>
     </AutoForm>
   );
 };
