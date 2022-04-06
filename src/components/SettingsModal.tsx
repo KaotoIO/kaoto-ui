@@ -60,7 +60,7 @@ export const SettingsModal = ({
   const compatibleDSLsAndCRDs = useRef<ICompatibleDSLsAndCRDs[]>([]);
 
   useEffect(() => {
-    console.log('change detected...');
+    // console.log('change detected...');
 
     const fetchContext = () => {
       fetchCompatibleDSLsAndCRDs({ steps: viewData.steps, type: settings.dsl })
