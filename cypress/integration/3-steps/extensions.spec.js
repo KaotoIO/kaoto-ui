@@ -5,7 +5,7 @@ describe.skip('step extensions', () => {
 
   it('loads the step extension', () => {
     // click on a step, need mock data
-    cy.get('[data-testid]="stepExtensionTab"').click();
-    cy.get('[data-testid]="stepExtension"').should('exist');
+    cy.get('[data-testid="stepExtensionTab"]').click();
+    cy.get('[data-testid="stepExtension"]').should('exist');
   });
 });
