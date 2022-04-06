@@ -38,7 +38,7 @@ describe('JsonSchemaConfigurator.tsx', () => {
       <JsonSchemaConfigurator
         schema={bridge}
         configuration={stepPropertyModel}
-        onSubmit={jest.fn()}
+        onChangeModel={jest.fn()}
       />
     );
     const element = screen.getByTestId('json-schema-configurator');
