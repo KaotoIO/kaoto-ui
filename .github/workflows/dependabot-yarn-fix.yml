@@ -52,7 +52,7 @@ jobs:
         run: |
           git config user.name "dependabot-fix"
           git config user.email "hellokaoto@gmail.com"
-          git add yarn.lock
+          git add .
           git commit -m '[dependabot skip] Fix yarn.lock'
           git push
 
