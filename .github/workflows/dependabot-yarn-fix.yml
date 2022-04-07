@@ -26,6 +26,7 @@ jobs:
     # See also: https://github.com/yarnpkg/berry/issues/1679#issuecomment-669937860
     env:
       YARN_ENABLE_SCRIPTS: false
+      YARN_ENABLE_IMMUTABLE_INSTALLS: true
 
     steps:
       - uses: actions/checkout@v2
@@ -43,16 +44,7 @@ jobs:
         with:
           node-version: 15.x
 
-      - name: Restore cache
-        uses: actions/cache@v2.1.4
-        with:
-          path: |
-            .yarn/cache
-            **/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
-
-      - run: CI=true yarn install
+      - run: YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn install
 
       - run: yarn dedupe
 
