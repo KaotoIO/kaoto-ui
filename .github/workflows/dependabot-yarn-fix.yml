@@ -26,7 +26,7 @@ jobs:
     # See also: https://github.com/yarnpkg/berry/issues/1679#issuecomment-669937860
     env:
       YARN_ENABLE_SCRIPTS: false
-      YARN_ENABLE_IMMUTABLE_INSTALLS: true
+      YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
     steps:
       - uses: actions/checkout@v2
@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: 15.x
 
-      - run: YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn install
+      - run: YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
 
       - run: yarn dedupe
 
