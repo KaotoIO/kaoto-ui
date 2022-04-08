@@ -1,20 +1,6 @@
 import { IStepProps } from '../types';
 import request from './request';
 
-export async function deployIntegration(integration: any) {
-  try {
-    const resp = await request.post({
-      endpoint: '/integrations',
-      contentType: 'application/json',
-      body: integration,
-    });
-
-    return await resp.text();
-  } catch (err) {
-    return err;
-  }
-}
-
 export async function fetchCatalogSteps(queryParams?: {
   // e.g. 'KameletBinding'
   dsl?: string;
@@ -91,6 +77,19 @@ export async function fetchCompatibleDSLsAndCRDs(props: { type?: string; steps: 
   }
 }
 
+export async function fetchDeployments() {
+  try {
+    const resp = await request.get({
+      endpoint: '/integrations',
+      contentType: 'application/json',
+    });
+
+    return await resp.json();
+  } catch (err) {
+    return err;
+  }
+}
+
 /**
  * Returns view definitions (JSON).
  * Typically used after updating the integration from the YAML Editor,
@@ -109,6 +108,34 @@ export async function fetchViewDefinitions(data: string | IStepProps[]) {
     return await resp.json();
   } catch (err) {
     console.error(err);
+    return err;
+  }
+}
+
+export async function startDeployment(integration: any) {
+  try {
+    const resp = await request.post({
+      endpoint: '/integrations',
+      contentType: 'application/json',
+      body: integration,
+    });
+
+    return await resp.text();
+  } catch (err) {
+    return err;
+  }
+}
+
+export async function stopDeployment(integration: any) {
+  try {
+    const resp = await request.delete({
+      endpoint: '/integrations',
+      contentType: 'application/json',
+      body: integration,
+    });
+
+    return await resp.text();
+  } catch (err) {
     return err;
   }
 }

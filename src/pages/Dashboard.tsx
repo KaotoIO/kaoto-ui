@@ -1,4 +1,4 @@
-import { StepsAndViewsProvider, YAMLProvider } from '../api';
+import { startDeployment, StepsAndViewsProvider, stopDeployment, YAMLProvider } from '../api';
 import { Catalog, KaotoToolbar, SettingsModal, Visualization, YAMLEditor } from '../components';
 import {
   AlertVariant,
@@ -39,8 +39,28 @@ const Dashboard = () => {
     setExpanded({ ...expanded, catalog: false });
   };
 
-  const handleDeploy = (integration: any) => {
-    console.log('deploy! ', integration);
+  const handleStartDeployment = () => {
+    console.log('deploy!');
+
+    startDeployment({})
+      .then((res) => {
+        console.log('deployment response: ', res);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleStopDeployment = () => {
+    console.log('stopping deployment..');
+
+    stopDeployment({})
+      .then((res) => {
+        console.log('stop deployment response: ', res);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleExpanded = (updatedState: IExpanded) => {
@@ -75,7 +95,8 @@ const Dashboard = () => {
             <DrawerContentBody>
               <KaotoToolbar
                 expanded={expanded}
-                handleDeploy={handleDeploy}
+                handleDeployStart={handleStartDeployment}
+                handleDeployStop={handleStopDeployment}
                 handleExpanded={handleExpanded}
               />
               <Grid>

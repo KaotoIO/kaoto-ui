@@ -12,7 +12,12 @@ describe('KaotoToolbar.tsx', () => {
     };
 
     render(
-      <KaotoToolbar expanded={expandedTest} handleDeploy={jest.fn()} handleExpanded={jest.fn()} />
+      <KaotoToolbar
+        expanded={expandedTest}
+        handleDeployStart={jest.fn()}
+        handleDeployStop={jest.fn()}
+        handleExpanded={jest.fn()}
+      />
     );
 
     const element = screen.getByTestId('kaotoToolbar');

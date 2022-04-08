@@ -1,15 +1,27 @@
 import { Button, Tooltip } from '@patternfly/react-core';
-import { CodeIcon, CogIcon, PlusCircleIcon } from '@patternfly/react-icons';
+import {
+  CodeIcon,
+  CogIcon,
+  PauseCircleIcon,
+  PlayIcon,
+  PlusCircleIcon,
+} from '@patternfly/react-icons';
 import { IExpanded } from '../pages/Dashboard';
 import './KaotoToolbar.css';
 
 export interface IKaotoToolbar {
   expanded: IExpanded;
-  handleDeploy: (integration: any) => void;
+  handleDeployStart?: () => void;
+  handleDeployStop?: () => void;
   handleExpanded: (newState: IExpanded) => void;
 }
 
-export const KaotoToolbar = ({ expanded, handleDeploy, handleExpanded }: IKaotoToolbar) => {
+export const KaotoToolbar = ({
+  expanded,
+  handleDeployStart,
+  handleDeployStop,
+  handleExpanded,
+}: IKaotoToolbar) => {
   return (
     <div className={'kaotoToolbar__button'} data-testid={'kaotoToolbar'}>
       <Tooltip content={'Connector Catalog'}>
@@ -22,7 +34,7 @@ export const KaotoToolbar = ({ expanded, handleDeploy, handleExpanded }: IKaotoT
             handleExpanded({ catalog: !expanded.catalog });
           }}
         >
-          <PlusCircleIcon width={40} height={40} />
+          <PlusCircleIcon width={35} height={35} />
         </Button>
       </Tooltip>
       <Tooltip content={'Code Editor'}>
@@ -35,22 +47,39 @@ export const KaotoToolbar = ({ expanded, handleDeploy, handleExpanded }: IKaotoT
             handleExpanded({ codeEditor: !expanded.codeEditor });
           }}
         >
-          <CodeIcon width={40} height={40} />
+          <CodeIcon width={35} height={35} />
         </Button>
       </Tooltip>
-      <Tooltip content={'Deploy'}>
-        <Button
-          variant={'plain'}
-          data-testid={'deployButton'}
-          isActive={expanded.catalog}
-          aria-label={'Deploy'}
-          onClick={() => {
-            handleDeploy({});
-          }}
-        >
-          <PlusCircleIcon width={40} height={40} />
-        </Button>
-      </Tooltip>
+      {handleDeployStart && (
+        <Tooltip content={'Deploy'}>
+          <Button
+            variant={'plain'}
+            data-testid={'deployButton'}
+            isActive={expanded.catalog}
+            aria-label={'Deploy'}
+            onClick={() => {
+              handleDeployStart();
+            }}
+          >
+            <PlayIcon width={35} height={35} />
+          </Button>
+        </Tooltip>
+      )}
+      {handleDeployStop && (
+        <Tooltip content={'Stop Deployment'}>
+          <Button
+            variant={'plain'}
+            data-testid={'stopDeploymentButton'}
+            isActive={expanded.catalog}
+            aria-label={'Stop Deployment'}
+            onClick={() => {
+              handleDeployStop();
+            }}
+          >
+            <PauseCircleIcon width={35} height={35} />
+          </Button>
+        </Tooltip>
+      )}
       <Tooltip content={'Settings'}>
         <Button
           variant={'plain'}
@@ -60,7 +89,7 @@ export const KaotoToolbar = ({ expanded, handleDeploy, handleExpanded }: IKaotoT
             handleExpanded({ settingsModal: !expanded.settingsModal });
           }}
         >
-          <CogIcon width={40} height={40} />
+          <CogIcon width={35} height={35} />
         </Button>
       </Tooltip>
     </div>
