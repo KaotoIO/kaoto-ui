@@ -11,7 +11,7 @@ There are many ways to contribute to Kaoto:
 If you have a bug or a suggestion for a new feature, you can create new issues.
 Always **use one of the templates available** and answer as many of the questions as you can.
 
-If you are **submitting a bug**, provide a simple step by step explanation on how to reproduce it and what is the expected outcome.
+If you are **submitting a bug**, provide a simple step by step explanation of how to reproduce it and what is the expected outcome.
 
 If you are **submitting a feature**, be ready to follow up and contribute with its development. Features that are proposed but don't have
 funds or developers ready to implement it may be closed due to not enough interest raised. If you can't fund or implement it yourself and 
@@ -41,7 +41,7 @@ There are a few things to consider when sending a pull request merge:
  * All commits must pass tests: Each commit should have consistency on its own and don't break any functionality
  * All jobs/checks must be green: This includes test coverage, code smells, security issues,... 
  * Be descriptive on the PR text about what the changes are. Better to have duplicated explanation than no explanation at all. Provide examples.
- * Add screenshots and videos of what your PR is doing. Specially if you are adding a new feature.
+ * Add screenshots and videos of what your PR is doing. Especially if you are adding a new feature.
  * High test coverage: Your code must be covered by unit and e2e tests. If for some reason your PR can't or shouldn't, be very clear why. The tests must be included in the same PR.
 
 ### How your commits messages should look like
