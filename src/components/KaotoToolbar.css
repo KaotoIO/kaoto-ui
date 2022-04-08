@@ -1,0 +1,14 @@
+.kaotoToolbar__button {
+    background-color: var(--pf-global--BackgroundColor--100);
+    border-radius: 1.2em;
+    position: fixed;
+    right: 4em;
+    text-align: center;
+    top: 12em;
+    z-index: 200;
+}
+
+.kaotoToolbar__button button {
+    position: relative;
+}
+

@@ -1,6 +1,7 @@
 import { Button, Tooltip } from '@patternfly/react-core';
 import { CodeIcon, CogIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import { IExpanded } from '../pages/Dashboard';
+import './KaotoToolbar.css';
 
 export interface IKaotoToolbar {
   expanded: IExpanded;
@@ -9,7 +10,7 @@ export interface IKaotoToolbar {
 
 export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
   return (
-    <div className={'step-creator-button'}>
+    <div className={'kaotoToolbar__button'} data-testid={'kaotoToolbar'}>
       <Tooltip content={'Connector Catalog'}>
         <Button
           variant={'plain'}
