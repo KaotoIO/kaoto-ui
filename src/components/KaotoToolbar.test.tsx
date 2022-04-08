@@ -11,7 +11,9 @@ describe('KaotoToolbar.tsx', () => {
       settingsModal: false,
     };
 
-    render(<KaotoToolbar expanded={expandedTest} handleExpanded={jest.fn()} />);
+    render(
+      <KaotoToolbar expanded={expandedTest} handleDeploy={jest.fn()} handleExpanded={jest.fn()} />
+    );
 
     const element = screen.getByTestId('kaotoToolbar');
     expect(element).toBeInTheDocument();

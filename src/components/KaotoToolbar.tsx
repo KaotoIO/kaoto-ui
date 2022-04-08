@@ -5,10 +5,11 @@ import './KaotoToolbar.css';
 
 export interface IKaotoToolbar {
   expanded: IExpanded;
+  handleDeploy: (integration: any) => void;
   handleExpanded: (newState: IExpanded) => void;
 }
 
-export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
+export const KaotoToolbar = ({ expanded, handleDeploy, handleExpanded }: IKaotoToolbar) => {
   return (
     <div className={'kaotoToolbar__button'} data-testid={'kaotoToolbar'}>
       <Tooltip content={'Connector Catalog'}>
@@ -35,6 +36,19 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
           }}
         >
           <CodeIcon width={40} height={40} />
+        </Button>
+      </Tooltip>
+      <Tooltip content={'Deploy'}>
+        <Button
+          variant={'plain'}
+          data-testid={'deployButton'}
+          isActive={expanded.catalog}
+          aria-label={'Deploy'}
+          onClick={() => {
+            handleDeploy({});
+          }}
+        >
+          <PlusCircleIcon width={40} height={40} />
         </Button>
       </Tooltip>
       <Tooltip content={'Settings'}>

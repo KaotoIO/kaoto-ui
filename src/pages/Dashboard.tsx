@@ -39,6 +39,10 @@ const Dashboard = () => {
     setExpanded({ ...expanded, catalog: false });
   };
 
+  const handleDeploy = (integration: any) => {
+    console.log('deploy! ', integration);
+  };
+
   const handleExpanded = (updatedState: IExpanded) => {
     setExpanded({ ...expanded, ...updatedState });
   };
@@ -69,7 +73,11 @@ const Dashboard = () => {
             className={'panelCustom'}
           >
             <DrawerContentBody>
-              <KaotoToolbar expanded={expanded} handleExpanded={handleExpanded} />
+              <KaotoToolbar
+                expanded={expanded}
+                handleDeploy={handleDeploy}
+                handleExpanded={handleExpanded}
+              />
               <Grid>
                 {expanded.codeEditor && (
                   <GridItem span={4}>

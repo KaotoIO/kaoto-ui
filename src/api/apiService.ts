@@ -1,6 +1,20 @@
 import { IStepProps } from '../types';
 import request from './request';
 
+export async function deployIntegration(integration: any) {
+  try {
+    const resp = await request.post({
+      endpoint: '/integrations',
+      contentType: 'application/json',
+      body: integration,
+    });
+
+    return await resp.text();
+  } catch (err) {
+    return err;
+  }
+}
+
 export async function fetchCatalogSteps(queryParams?: {
   // e.g. 'KameletBinding'
   dsl?: string;
