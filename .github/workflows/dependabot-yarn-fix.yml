@@ -37,20 +37,18 @@ jobs:
           token: ${{ secrets.DEPENDABOT_FIX_GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - run: git lfs pull --include .yarn/
-
       - name: Configure Node.js
         uses: actions/setup-node@v2.1.5
         with:
-          node-version: 15.x
+          node-version: 14.x
 
       - run: YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
 
       - name: Commit yarn.lock
         run: |
-          git config user.name "dependabot-fix"
+          git config user.name "Kaoto bot"
           git config user.email "hellokaoto@gmail.com"
-          git add .
+          git add yarn.lock .yarn/cache
           git commit -m '[dependabot skip] Fix yarn.lock'
           git push
 
