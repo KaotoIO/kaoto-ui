@@ -48,7 +48,7 @@ jobs:
         run: |
           git config user.name "Kaoto bot"
           git config user.email "hellokaoto@gmail.com"
-          git add yarn.lock .yarn/cache
+          git add yarn.lock .yarn/cache .pnp*
           git commit -m '[dependabot skip] Fix yarn.lock'
           git push
 
