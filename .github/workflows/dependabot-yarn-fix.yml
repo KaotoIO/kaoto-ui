@@ -36,6 +36,7 @@ jobs:
           # See: https://github.community/t/push-from-action-does-not-trigger-subsequent-action/16854/2
           token: ${{ secrets.DEPENDABOT_FIX_GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 2
 
       - name: Configure Node.js
         uses: actions/setup-node@v2.1.5
