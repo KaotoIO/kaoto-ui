@@ -41,10 +41,16 @@ jobs:
         uses: actions/setup-node@v2.1.5
         with:
           node-version: 14.x
+          
+      - name: Discard yarn.lock changes from dependabot
+        run: git checkout HEAD^ -- yarn.lock
+        
 
-      - run: YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
+      - name: Run yarn install
+        run: |-
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
 
-      - name: Commit yarn.lock
+      - name: Commit changes
         run: |
           git config user.name "Kaoto bot"
           git config user.email "hellokaoto@gmail.com"
