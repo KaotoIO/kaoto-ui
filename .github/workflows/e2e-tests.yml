@@ -1,6 +1,11 @@
 name: 🏗️ E2E Tests (Cypress)
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [ opened, synchronize, reopened ]
 
 jobs:
 
