@@ -55,7 +55,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/jest", "npm:27.4.0"],
             ["@types/react", "npm:17.0.39"],
             ["@types/react-dom", "npm:18.0.0"],
-            ["@types/react-router-dom", "npm:5.3.2"],
+            ["@types/react-router-dom", "npm:5.3.3"],
             ["@types/testing-library__jest-dom", "npm:5.14.3"],
             ["@types/uuid", "npm:8.3.1"],
             ["@typescript-eslint/eslint-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.18.0"],
@@ -7139,14 +7139,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/history", "npm:4.7.11"]
           ],
           "linkType": "HARD",
-        }],
-        ["npm:5.0.0", {
-          "packageLocation": "./.yarn/cache/@types-history-npm-5.0.0-58917308ad-53d35a7b3b.zip/node_modules/@types/history/",
-          "packageDependencies": [
-            ["@types/history", "npm:5.0.0"],
-            ["history", "npm:5.2.0"]
-          ],
-          "linkType": "HARD",
         }]
       ]],
       ["@types/hoist-non-react-statics", [
@@ -7461,11 +7453,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/react-router-dom", [
-        ["npm:5.3.2", {
-          "packageLocation": "./.yarn/cache/@types-react-router-dom-npm-5.3.2-85c77b2709-90f052dc5a.zip/node_modules/@types/react-router-dom/",
+        ["npm:5.3.3", {
+          "packageLocation": "./.yarn/cache/@types-react-router-dom-npm-5.3.3-9f687b5b3a-28c4ea4890.zip/node_modules/@types/react-router-dom/",
           "packageDependencies": [
-            ["@types/react-router-dom", "npm:5.3.2"],
-            ["@types/history", "npm:5.0.0"],
+            ["@types/react-router-dom", "npm:5.3.3"],
+            ["@types/history", "npm:4.7.11"],
             ["@types/react", "npm:17.0.39"],
             ["@types/react-router", "npm:5.1.18"]
           ],
@@ -17237,7 +17229,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/jest", "npm:27.4.0"],
             ["@types/react", "npm:17.0.39"],
             ["@types/react-dom", "npm:18.0.0"],
-            ["@types/react-router-dom", "npm:5.3.2"],
+            ["@types/react-router-dom", "npm:5.3.3"],
             ["@types/testing-library__jest-dom", "npm:5.14.3"],
             ["@types/uuid", "npm:8.3.1"],
             ["@typescript-eslint/eslint-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.18.0"],
@@ -21518,7 +21510,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/prop-types", null],
             ["@types/react", "npm:17.0.39"],
             ["@types/react-dom", "npm:18.0.0"],
-            ["@types/react-router-dom", "npm:5.3.2"],
+            ["@types/react-router-dom", "npm:5.3.3"],
             ["history", "npm:5.2.0"],
             ["prop-types", "npm:15.7.2"],
             ["react", "npm:17.0.2"],
