@@ -1,7 +1,7 @@
 import { KaotoToolbar } from './KaotoToolbar';
 import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
-import { IExpanded } from '../pages/Dashboard';
+import { IExpanded, ISettings } from '../pages/Dashboard';
 
 describe('KaotoToolbar.tsx', () => {
   test('component renders correctly', () => {
@@ -11,13 +11,13 @@ describe('KaotoToolbar.tsx', () => {
       settingsModal: false,
     };
 
+    const settingsTest: ISettings = {
+      dsl: 'KameletBinding',
+      name: 'A Test Integration',
+    };
+
     render(
-      <KaotoToolbar
-        expanded={expandedTest}
-        handleDeployStart={jest.fn()}
-        handleDeployStop={jest.fn()}
-        handleExpanded={jest.fn()}
-      />
+      <KaotoToolbar expanded={expandedTest} handleExpanded={jest.fn()} settings={settingsTest} />
     );
 
     const element = screen.getByTestId('kaotoToolbar');

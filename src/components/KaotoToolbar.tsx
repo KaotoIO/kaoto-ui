@@ -1,3 +1,4 @@
+import { canBeDeployed } from '../utils/validationService';
 import { Button, Tooltip } from '@patternfly/react-core';
 import {
   CodeIcon,
@@ -6,22 +7,43 @@ import {
   PlayIcon,
   PlusCircleIcon,
 } from '@patternfly/react-icons';
-import { IExpanded } from '../pages/Dashboard';
+import { IExpanded, ISettings } from '../pages/Dashboard';
 import './KaotoToolbar.css';
+import { startDeployment, stopDeployment, useStepsAndViewsContext } from '../api';
 
 export interface IKaotoToolbar {
   expanded: IExpanded;
-  handleDeployStart?: () => void;
-  handleDeployStop?: () => void;
   handleExpanded: (newState: IExpanded) => void;
+  settings: ISettings;
 }
 
-export const KaotoToolbar = ({
-  expanded,
-  handleDeployStart,
-  handleDeployStop,
-  handleExpanded,
-}: IKaotoToolbar) => {
+export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
+  const [viewData] = useStepsAndViewsContext();
+
+  const handleStartDeployment = () => {
+    console.log('deploy!');
+
+    startDeployment(viewData)
+      .then((res) => {
+        console.log('deployment response: ', res);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleStopDeployment = () => {
+    console.log('stopping deployment..');
+
+    stopDeployment({})
+      .then((res) => {
+        console.log('stop deployment response: ', res);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <div className={'kaotoToolbar__button'} data-testid={'kaotoToolbar'}>
       <Tooltip content={'Connector Catalog'}>
@@ -50,7 +72,7 @@ export const KaotoToolbar = ({
           <CodeIcon width={35} height={35} />
         </Button>
       </Tooltip>
-      {handleDeployStart && (
+      {canBeDeployed() && (
         <Tooltip content={'Deploy'}>
           <Button
             variant={'plain'}
@@ -58,14 +80,15 @@ export const KaotoToolbar = ({
             isActive={expanded.catalog}
             aria-label={'Deploy'}
             onClick={() => {
-              handleDeployStart();
+              // handleDeployStart();
+              handleStartDeployment();
             }}
           >
             <PlayIcon width={35} height={35} />
           </Button>
         </Tooltip>
       )}
-      {handleDeployStop && (
+      {canBeDeployed() && (
         <Tooltip content={'Stop Deployment'}>
           <Button
             variant={'plain'}
@@ -73,7 +96,8 @@ export const KaotoToolbar = ({
             isActive={expanded.catalog}
             aria-label={'Stop Deployment'}
             onClick={() => {
-              handleDeployStop();
+              // handleDeployStop();
+              handleStopDeployment();
             }}
           >
             <PauseCircleIcon width={35} height={35} />

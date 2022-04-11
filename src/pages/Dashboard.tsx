@@ -1,4 +1,4 @@
-import { startDeployment, StepsAndViewsProvider, stopDeployment, YAMLProvider } from '../api';
+import { StepsAndViewsProvider, YAMLProvider } from '../api';
 import { Catalog, KaotoToolbar, SettingsModal, Visualization, YAMLEditor } from '../components';
 import {
   AlertVariant,
@@ -19,6 +19,7 @@ export interface IExpanded {
 
 export interface ISettings {
   dsl?: string;
+  name?: string;
 }
 
 const Dashboard = () => {
@@ -37,30 +38,6 @@ const Dashboard = () => {
 
   const onClosePanelClick = () => {
     setExpanded({ ...expanded, catalog: false });
-  };
-
-  const handleStartDeployment = () => {
-    console.log('deploy!');
-
-    startDeployment({})
-      .then((res) => {
-        console.log('deployment response: ', res);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  const handleStopDeployment = () => {
-    console.log('stopping deployment..');
-
-    stopDeployment({})
-      .then((res) => {
-        console.log('stop deployment response: ', res);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
   };
 
   const handleExpanded = (updatedState: IExpanded) => {
@@ -95,9 +72,8 @@ const Dashboard = () => {
             <DrawerContentBody>
               <KaotoToolbar
                 expanded={expanded}
-                handleDeployStart={handleStartDeployment}
-                handleDeployStop={handleStopDeployment}
                 handleExpanded={handleExpanded}
+                settings={settings}
               />
               <Grid>
                 {expanded.codeEditor && (
