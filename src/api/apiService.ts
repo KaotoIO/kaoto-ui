@@ -112,12 +112,24 @@ export async function fetchViewDefinitions(data: string | IStepProps[]) {
   }
 }
 
-export async function startDeployment(integration: any) {
+/**
+ * Starts an integration deployment
+ * @param dsl
+ * @param integration
+ * @param integrationName
+ * @param namespace
+ */
+export async function startDeployment(
+  dsl: string,
+  integration: any,
+  integrationName: string,
+  namespace: string
+) {
   try {
     const resp = await request.post({
-      endpoint: '/integrations',
+      endpoint: '/integrations?type=' + dsl + '&namespace=' + namespace,
       contentType: 'application/json',
-      body: integration,
+      body: { name: integrationName, steps: integration },
     });
 
     return await resp.text();
@@ -126,12 +138,15 @@ export async function startDeployment(integration: any) {
   }
 }
 
-export async function stopDeployment(integration: any) {
+/**
+ * Stops an integration deployment
+ * @param integrationName
+ */
+export async function stopDeployment(integrationName: string) {
   try {
     const resp = await request.delete({
-      endpoint: '/integrations',
+      endpoint: '/integrations/' + integrationName,
       contentType: 'application/json',
-      body: integration,
     });
 
     return await resp.text();

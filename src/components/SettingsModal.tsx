@@ -6,6 +6,8 @@ import {
   FormSelectOption,
   Modal,
   ModalVariant,
+  Popover,
+  TextInput,
 } from '@patternfly/react-core';
 import { useEffect, useRef, useState } from 'react';
 import { ISettings } from '../pages/Dashboard';
@@ -15,6 +17,7 @@ import {
   useStepsAndViewsContext,
   useYAMLContext,
 } from '../api';
+import { HelpIcon } from '@patternfly/react-icons';
 
 export interface ISettingsModal {
   currentSettings: ISettings;
@@ -132,10 +135,63 @@ export const SettingsModal = ({
       >
         <Form>
           <FormGroup
+            label="Integration name"
+            isRequired
+            fieldId="integration-name"
+            helperText="Give your integration a fun name."
+          >
+            <TextInput
+              isRequired
+              type="text"
+              id="integration-name"
+              name="integration-name"
+              aria-describedby="integration-name-helper"
+              value={currentSettings.integrationName}
+            />
+          </FormGroup>
+          <FormGroup
+            label="Namespace"
+            isRequired
+            fieldId="namespace"
+            helperText="Specify the namespace for your cluster."
+          >
+            <TextInput
+              isRequired
+              type="text"
+              id="namespace"
+              name="namespace"
+              aria-describedby="namespace-helper"
+              value={currentSettings.namespace}
+            />
+          </FormGroup>
+          <FormGroup
             label="Selection: "
+            labelIcon={
+              <Popover
+                headerContent={'Integration type'}
+                bodyContent={
+                  <div>
+                    <p></p>
+                    <ul>
+                      <li></li>
+                    </ul>
+                  </div>
+                }
+              >
+                <button
+                  type="button"
+                  aria-label="More info for integration type"
+                  onClick={(e) => e.preventDefault()}
+                  aria-describedby="dsl-type"
+                  className="pf-c-form__group-label-help"
+                >
+                  <HelpIcon noVerticalAlign />
+                </button>
+              </Popover>
+            }
             type="string"
             helperText={'You must choose what you want to build'}
-            fieldId="selection"
+            fieldId="dsl-type"
           >
             <FormSelect
               aria-label="Select Type"

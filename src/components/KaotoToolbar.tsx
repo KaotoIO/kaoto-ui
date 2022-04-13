@@ -17,13 +17,13 @@ export interface IKaotoToolbar {
   settings: ISettings;
 }
 
-export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
+export const KaotoToolbar = ({ expanded, handleExpanded, settings }: IKaotoToolbar) => {
   const [viewData] = useStepsAndViewsContext();
 
   const handleStartDeployment = () => {
-    console.log('deploy!');
+    console.log('deploying...');
 
-    startDeployment(viewData)
+    startDeployment(settings.dsl, viewData, settings.integrationName, settings.namespace)
       .then((res) => {
         console.log('deployment response: ', res);
       })
@@ -35,7 +35,7 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
   const handleStopDeployment = () => {
     console.log('stopping deployment..');
 
-    stopDeployment({})
+    stopDeployment(settings.integrationName)
       .then((res) => {
         console.log('stop deployment response: ', res);
       })

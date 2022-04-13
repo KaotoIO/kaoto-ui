@@ -13,7 +13,8 @@ describe('KaotoToolbar.tsx', () => {
 
     const settingsTest: ISettings = {
       dsl: 'KameletBinding',
-      name: 'A Test Integration',
+      integrationName: 'A Test Integration',
+      namespace: 'default',
     };
 
     render(

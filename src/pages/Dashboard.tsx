@@ -18,8 +18,9 @@ export interface IExpanded {
 }
 
 export interface ISettings {
-  dsl?: string;
-  name?: string;
+  dsl: string;
+  integrationName: string;
+  namespace: string;
 }
 
 const Dashboard = () => {
@@ -28,7 +29,11 @@ const Dashboard = () => {
     codeEditor: true,
     settingsModal: false,
   });
-  const [settings, setSettings] = useState<ISettings>({ dsl: 'KameletBinding' });
+  const [settings, setSettings] = useState<ISettings>({
+    dsl: 'KameletBinding',
+    integrationName: 'Integration',
+    namespace: 'default',
+  });
 
   const { addAlert } = useAlert() || {};
 
