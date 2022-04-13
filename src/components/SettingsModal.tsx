@@ -94,8 +94,8 @@ export const SettingsModal = ({
      * respective YAML/CRDs, and merged together.
      */
     fetchAllDSLs()
-      .then((dsls) => {
-        availableDSLs.current = dsls;
+      .then((DSLs) => {
+        availableDSLs.current = DSLs;
         if (viewData.steps.length !== 0) fetchContext();
       })
       .catch((e) => {
@@ -165,15 +165,30 @@ export const SettingsModal = ({
             />
           </FormGroup>
           <FormGroup
-            label="Selection: "
+            label="Integration type"
             labelIcon={
               <Popover
                 headerContent={'Integration type'}
                 bodyContent={
                   <div>
-                    <p></p>
+                    <p>
+                      The integration type determines what steps you have in the catalog. Not all
+                      shown here will be available to you, as it depends on the steps you currently
+                      are using.
+                    </p>
+                    <br />
                     <ul>
-                      <li></li>
+                      <li>
+                        <b>Kamelets</b>: Choose this if you want to create a connection to a
+                        something.
+                      </li>
+                      <li>
+                        <b>KameletBindings</b>: Choose this if you want to create an integration.
+                      </li>
+                      <li>
+                        <b>Camel Routes</b> (advanced): Choose this if you want to create an
+                        advanced integration.
+                      </li>
                     </ul>
                   </div>
                 }
@@ -190,7 +205,6 @@ export const SettingsModal = ({
               </Popover>
             }
             type="string"
-            helperText={'You must choose what you want to build'}
             fieldId="dsl-type"
           >
             <FormSelect
