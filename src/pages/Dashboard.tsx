@@ -10,17 +10,12 @@ import {
 } from '@patternfly/react-core';
 import { useState } from 'react';
 import { useAlert } from '@rhoas/app-services-ui-shared';
+import { ISettings } from '../types';
 
 export interface IExpanded {
   catalog?: boolean;
   codeEditor?: boolean;
   settingsModal?: boolean;
-}
-
-export interface ISettings {
-  dsl: string;
-  integrationName: string;
-  namespace: string;
 }
 
 const Dashboard = () => {

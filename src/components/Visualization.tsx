@@ -4,7 +4,7 @@ import {
   useStepsAndViewsContext,
   useYAMLContext,
 } from '../api';
-import { IStepProps, IViewData, IVizStepProps, IVizStepPropsEdge } from '../types';
+import { ISettings, IStepProps, IViewData, IVizStepProps, IVizStepPropsEdge } from '../types';
 import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
 import '../utils';
 import { canStepBeReplaced } from '../utils/validationService';
@@ -39,10 +39,11 @@ const getId = () => `dndnode_${id++}`;
 
 interface IVisualization {
   initialState?: IViewData;
+  settings: ISettings;
   toggleCatalog?: () => void;
 }
 
-const Visualization = ({ toggleCatalog }: IVisualization) => {
+const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
   // `elements` is an array of UI-specific objects that represent the Step model visually
   const [elements, setElements] = useState<Elements<IStepProps>>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
@@ -72,7 +73,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
   const updateCodeEditor = (viewDataSteps: IStepProps[]) => {
     // Remove all "Add Step" placeholders before updating the API
-    fetchCustomResource(viewDataSteps.filter((step) => step.type))
+    fetchCustomResource(
+      viewDataSteps.filter((step) => step.type),
+      settings.integrationName
+    )
       .then((value) => {
         if (typeof value === 'string') {
           setYAMLData(value);

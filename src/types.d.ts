@@ -15,6 +15,12 @@ declare global {
   const __webpack_share_scopes__: any;
 }
 
+export interface ISettings {
+  dsl: string;
+  integrationName: string;
+  namespace: string;
+}
+
 export interface IStepPropsParameters {
   [key: string]: any;
 }

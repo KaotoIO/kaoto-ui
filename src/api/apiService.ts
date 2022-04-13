@@ -27,13 +27,14 @@ export async function fetchCatalogSteps(queryParams?: {
  * Usually to update the YAML after a change in the integration from the Visualization.
  * Requires a list of all new steps.
  * @param newSteps
+ * @param integrationName
  */
-export async function fetchCustomResource(newSteps: IStepProps[]) {
+export async function fetchCustomResource(newSteps: IStepProps[], integrationName: string) {
   try {
     const resp = await request.post({
       endpoint: '/integrations/customResource',
       contentType: 'application/json',
-      body: { name: 'Updated integration', steps: newSteps },
+      body: { name: integrationName, steps: newSteps },
     });
 
     return await resp.text();

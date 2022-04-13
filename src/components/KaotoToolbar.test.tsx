@@ -1,7 +1,8 @@
 import { KaotoToolbar } from './KaotoToolbar';
 import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
-import { IExpanded, ISettings } from '../pages/Dashboard';
+import { IExpanded } from '../pages/Dashboard';
+import { ISettings } from '../types';
 
 describe('KaotoToolbar.tsx', () => {
   test('component renders correctly', () => {

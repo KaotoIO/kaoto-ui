@@ -7,9 +7,10 @@ import {
   PlayIcon,
   PlusCircleIcon,
 } from '@patternfly/react-icons';
-import { IExpanded, ISettings } from '../pages/Dashboard';
+import { IExpanded } from '../pages/Dashboard';
 import './KaotoToolbar.css';
 import { startDeployment, stopDeployment, useStepsAndViewsContext } from '../api';
+import { ISettings } from '../types';
 
 export interface IKaotoToolbar {
   expanded: IExpanded;

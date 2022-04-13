@@ -10,7 +10,7 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import { useEffect, useRef, useState } from 'react';
-import { ISettings } from '../pages/Dashboard';
+import { ISettings } from '../types';
 import {
   fetchAllDSLs,
   fetchCompatibleDSLsAndCRDs,
@@ -57,7 +57,7 @@ export const SettingsModal = ({
   const compatibleDSLsAndCRDs = useRef<ICompatibleDSLsAndCRDs[]>([]);
   const [settings, setSettings] = useState<ISettings>(currentSettings);
   const [viewData] = useStepsAndViewsContext();
-  const [YAMLData, setYAMLData] = useYAMLContext();
+  const [, setYAMLData] = useYAMLContext();
 
   useEffect(() => {
     const fetchContext = () => {
@@ -101,7 +101,7 @@ export const SettingsModal = ({
       .catch((e) => {
         console.error(e);
       });
-  }, [YAMLData]);
+  }, [viewData]);
 
   const onChangeIntegrationName = (newName: string) => {
     setSettings({ ...settings, integrationName: newName });
@@ -122,6 +122,7 @@ export const SettingsModal = ({
 
     // update YAML with new compatible DSL/YAML
     if (newDSL) setYAMLData(newDSL.crd);
+    console.table(settings);
     handleSaveSettings(settings);
   };
 
