@@ -103,6 +103,14 @@ export const SettingsModal = ({
       });
   }, [YAMLData]);
 
+  const onChangeIntegrationName = (newName: string) => {
+    setSettings({ ...settings, integrationName: newName });
+  };
+
+  const onChangeNamespace = (newNamespace: string) => {
+    setSettings({ ...settings, namespace: newNamespace });
+  };
+
   const onClose = () => {
     handleCloseModal();
   };
@@ -135,33 +143,35 @@ export const SettingsModal = ({
       >
         <Form>
           <FormGroup
-            label="Integration name"
-            isRequired
             fieldId="integration-name"
             helperText="Give your integration a fun name."
+            isRequired
+            label="Integration name"
           >
             <TextInput
-              isRequired
-              type="text"
-              id="integration-name"
-              name="integration-name"
               aria-describedby="integration-name-helper"
-              value={currentSettings.integrationName}
+              id="integration-name"
+              isRequired
+              name="integration-name"
+              onChange={onChangeIntegrationName}
+              type="text"
+              value={settings.integrationName}
             />
           </FormGroup>
           <FormGroup
-            label="Namespace"
-            isRequired
             fieldId="namespace"
             helperText="Specify the namespace for your cluster."
+            isRequired
+            label="Namespace"
           >
             <TextInput
-              isRequired
-              type="text"
-              id="namespace"
-              name="namespace"
               aria-describedby="namespace-helper"
-              value={currentSettings.namespace}
+              id="namespace"
+              isRequired
+              name="namespace"
+              onChange={onChangeNamespace}
+              type="text"
+              value={settings.namespace}
             />
           </FormGroup>
           <FormGroup
