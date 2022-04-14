@@ -34,7 +34,7 @@ export async function fetchCustomResource(newSteps: IStepProps[], integrationNam
     const resp = await request.post({
       endpoint: '/integrations/customResource',
       contentType: 'application/json',
-      body: { name: integrationName, steps: newSteps },
+      body: { name: integrationName.toLowerCase(), steps: newSteps },
     });
 
     return await resp.text();
@@ -69,7 +69,7 @@ export async function fetchCompatibleDSLsAndCRDs(props: { type?: string; steps: 
     const resp = await request.post({
       endpoint: '/integrations/customResources?type=' + props.type,
       contentType: 'application/json',
-      body: { name: 'Updated integration', steps: props.steps },
+      body: { name: 'Updated integration'.toLowerCase(), steps: props.steps },
     });
 
     return await resp.json();
@@ -130,12 +130,12 @@ export async function startDeployment(
     const resp = await request.post({
       endpoint: '/integrations?type=' + dsl + '&namespace=' + namespace,
       contentType: 'application/json',
-      body: { name: integrationName, steps: integration },
+      body: { name: integrationName.toLowerCase(), steps: integration },
     });
 
     return await resp.text();
   } catch (err) {
-    return err;
+    throw err;
   }
 }
 
@@ -146,12 +146,12 @@ export async function startDeployment(
 export async function stopDeployment(integrationName: string) {
   try {
     const resp = await request.delete({
-      endpoint: '/integrations/' + integrationName,
+      endpoint: '/integrations/' + integrationName.toLowerCase(),
       contentType: 'application/json',
     });
 
     return await resp.text();
   } catch (err) {
-    return err;
+    throw err;
   }
 }

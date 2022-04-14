@@ -4,7 +4,7 @@ import {
   useStepsAndViewsContext,
   useYAMLContext,
 } from '../api';
-import { IStepProps, IViewData } from '../types';
+import { IStepProps, IViewData, IVizStepNodeData } from '../types';
 import { canStepBeReplaced } from '../utils/validationService';
 import './Visualization.css';
 import { AlertVariant } from '@patternfly/react-core';
@@ -12,8 +12,12 @@ import CubesIcon from '@patternfly/react-icons/dist/esm/icons/cubes-icon';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, Position } from 'react-flow-renderer';
 
+export interface IVisualizationSlot {
+  data: IVizStepNodeData;
+}
+
 // Custom Node type and component for React Flow
-const VisualizationSlot = ({ data }: any) => {
+const VisualizationSlot = ({ data }: IVisualizationSlot) => {
   const [viewData, dispatch] = useStepsAndViewsContext();
   const [, setYAMLData] = useYAMLContext();
   const { addAlert } = useAlert() || {};
@@ -31,10 +35,13 @@ const VisualizationSlot = ({ data }: any) => {
       // update the steps, the new node will be created automatically
       dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
       // fetch the updated view definitions again with new views
-      fetchViewDefinitions(viewData.steps).then((data: IViewData) => {
-        dispatch({ type: 'UPDATE_INTEGRATION', payload: data });
+      fetchViewDefinitions(viewData.steps).then((newViewDefs: IViewData) => {
+        dispatch({ type: 'UPDATE_INTEGRATION', payload: newViewDefs });
 
-        fetchCustomResource(data.steps.filter((step: IStepProps) => step.type))
+        fetchCustomResource(
+          newViewDefs.steps.filter((step: IStepProps) => step.type),
+          data.settings.integrationName
+        )
           .then((value) => {
             if (typeof value === 'string') {
               setYAMLData(value);

@@ -97,6 +97,8 @@ export const SettingsModal = ({
       .then((DSLs) => {
         availableDSLs.current = DSLs;
         if (viewData.steps.length !== 0) fetchContext();
+
+        // setSettings({...settings, integrationName: });
       })
       .catch((e) => {
         console.error(e);
@@ -122,7 +124,6 @@ export const SettingsModal = ({
 
     // update YAML with new compatible DSL/YAML
     if (newDSL) setYAMLData(newDSL.crd);
-    console.table(settings);
     handleSaveSettings(settings);
   };
 

@@ -26,7 +26,7 @@ const Dashboard = () => {
   });
   const [settings, setSettings] = useState<ISettings>({
     dsl: 'KameletBinding',
-    integrationName: 'Integration',
+    integrationName: 'integration',
     namespace: 'default',
   });
 
@@ -83,6 +83,7 @@ const Dashboard = () => {
                 )}
                 <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
                   <Visualization
+                    settings={settings}
                     toggleCatalog={() => setExpanded({ ...expanded, catalog: !expanded.catalog })}
                   />
                 </GridItem>

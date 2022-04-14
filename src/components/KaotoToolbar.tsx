@@ -1,5 +1,5 @@
 import { canBeDeployed } from '../utils/validationService';
-import { Button, Tooltip } from '@patternfly/react-core';
+import { AlertVariant, Button, Tooltip } from '@patternfly/react-core';
 import {
   CodeIcon,
   CogIcon,
@@ -9,8 +9,9 @@ import {
 } from '@patternfly/react-icons';
 import { IExpanded } from '../pages/Dashboard';
 import './KaotoToolbar.css';
-import { startDeployment, stopDeployment, useStepsAndViewsContext } from '../api';
+import { startDeployment, stopDeployment, useStepsAndViewsContext, useYAMLContext } from '../api';
 import { ISettings } from '../types';
+import { useAlert } from '@rhoas/app-services-ui-shared';
 
 export interface IKaotoToolbar {
   expanded: IExpanded;
@@ -19,17 +20,32 @@ export interface IKaotoToolbar {
 }
 
 export const KaotoToolbar = ({ expanded, handleExpanded, settings }: IKaotoToolbar) => {
+  const [, setYAMLData] = useYAMLContext();
   const [viewData] = useStepsAndViewsContext();
 
-  const handleStartDeployment = () => {
-    console.log('deploying...');
+  const { addAlert } = useAlert() || {};
 
-    startDeployment(settings.dsl, viewData, settings.integrationName, settings.namespace)
+  const handleStartDeployment = () => {
+    startDeployment(settings.dsl, viewData.steps, settings.integrationName, settings.namespace)
       .then((res) => {
-        console.log('deployment response: ', res);
+        setYAMLData(res);
+
+        addAlert &&
+          addAlert({
+            title: 'Deployment started',
+            variant: AlertVariant.success,
+            description: 'Your integration is deploying..',
+          });
       })
       .catch((error) => {
-        console.error(error);
+        console.log('error deploying.. ', error);
+
+        addAlert &&
+          addAlert({
+            title: 'Deployment not started',
+            variant: AlertVariant.warning,
+            description: 'There was a problem deploying your integration. Please try again later.',
+          });
       });
   };
 
@@ -39,9 +55,24 @@ export const KaotoToolbar = ({ expanded, handleExpanded, settings }: IKaotoToolb
     stopDeployment(settings.integrationName)
       .then((res) => {
         console.log('stop deployment response: ', res);
+
+        addAlert &&
+          addAlert({
+            title: 'Stop deployment',
+            variant: AlertVariant.success,
+            description: 'Stopping deployment..',
+          });
       })
       .catch((error) => {
+        console.log('error stopping deployment.. ', error);
         console.error(error);
+
+        addAlert &&
+          addAlert({
+            title: 'Stop deployment',
+            variant: AlertVariant.success,
+            description: 'There was a problem stopping your deployment. Please try again later.',
+          });
       });
   };
 

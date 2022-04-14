@@ -4,9 +4,14 @@ import './Visualization.css';
 import { Button, Popover } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import { Handle, Position, useStoreState } from 'react-flow-renderer';
+import { IVizStepNodeData } from '../types';
+
+export interface IVisualizationStep {
+  data: IVizStepNodeData;
+}
 
 // Custom Node type and component for React Flow
-const VisualizationStep = ({ data }: any) => {
+const VisualizationStep = ({ data }: IVisualizationStep) => {
   const nodes = useStoreState((state: { nodes: any }) => state.nodes);
   const isLastNode = nodes[nodes.length - 1].data.UUID === data.UUID;
 

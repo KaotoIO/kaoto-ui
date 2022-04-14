@@ -41,7 +41,7 @@ export interface IStepProps {
   title?: string;
 
   // e.g. 'START', 'MIDDLE', 'END'
-  type?: string;
+  type: string;
 
   // generated only for integration steps
   UUID?: string;
@@ -67,6 +67,18 @@ export interface IViewProps {
 export interface IViewData {
   steps: IStepProps[];
   views: IViewProps[];
+}
+
+export interface IVizStepNodeData {
+  connectorType: string;
+  icon?: string;
+  kind?: string;
+  label: string;
+  UUID?: string;
+  index: number;
+  onDropChange: (arg1: any, arg2: any) => void;
+  onElementClickAdd: (arg: any) => void;
+  settings: ISettings;
 }
 
 export interface IVizStepProps extends IVizStepPropsNode, IVizStepPropsEdge {}

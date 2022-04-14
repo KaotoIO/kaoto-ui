@@ -4,7 +4,14 @@ import {
   useStepsAndViewsContext,
   useYAMLContext,
 } from '../api';
-import { ISettings, IStepProps, IViewData, IVizStepProps, IVizStepPropsEdge } from '../types';
+import {
+  ISettings,
+  IStepProps,
+  IViewData,
+  IVizStepNodeData,
+  IVizStepProps,
+  IVizStepPropsEdge,
+} from '../types';
 import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
 import '../utils';
 import { canStepBeReplaced } from '../utils/validationService';
@@ -162,18 +169,21 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
       const previousStep = stepsAsElements[index - 1];
       let stepEdge: IVizStepPropsEdge = { id: '' };
 
+      const vizStepData: IVizStepNodeData = {
+        connectorType: step.type,
+        icon: step.icon,
+        kind: step.kind,
+        label: truncateString(step.name, 14),
+        UUID: step.UUID,
+        index,
+        onDropChange,
+        onElementClickAdd: onSelectNewStep,
+        settings,
+      };
+
       // Build the default parameters
       let inputStep: IVizStepProps = {
-        data: {
-          connectorType: step.type,
-          icon: step.icon,
-          kind: step.kind,
-          label: truncateString(step.name, 14),
-          UUID: step.UUID,
-          index,
-          onDropChange,
-          onElementClickAdd: onSelectNewStep,
-        },
+        data: vizStepData,
         id: getId(),
         position: { x: 0, y: 250 },
         type: 'step',
