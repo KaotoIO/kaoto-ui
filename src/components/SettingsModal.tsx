@@ -6,15 +6,18 @@ import {
   FormSelectOption,
   Modal,
   ModalVariant,
+  Popover,
+  TextInput,
 } from '@patternfly/react-core';
 import { useEffect, useRef, useState } from 'react';
-import { ISettings } from '../pages/Dashboard';
+import { ISettings } from '../types';
 import {
   fetchAllDSLs,
   fetchCompatibleDSLsAndCRDs,
   useStepsAndViewsContext,
   useYAMLContext,
 } from '../api';
+import { HelpIcon } from '@patternfly/react-icons';
 
 export interface ISettingsModal {
   currentSettings: ISettings;
@@ -52,13 +55,21 @@ export const SettingsModal = ({
 }: ISettingsModal) => {
   const availableDSLs = useRef<IDSLProps[]>([]);
   const compatibleDSLsAndCRDs = useRef<ICompatibleDSLsAndCRDs[]>([]);
-  const [settings, setSettings] = useState<ISettings>(currentSettings);
+  const [localSettings, setLocalSettings] = useState<ISettings>(currentSettings);
   const [viewData] = useStepsAndViewsContext();
-  const [YAMLData, setYAMLData] = useYAMLContext();
+  const [, setYAMLData] = useYAMLContext();
+
+  useEffect(() => {
+    // console.log('currentSettings changed.. ', currentSettings);
+  }, [currentSettings]);
 
   useEffect(() => {
     const fetchContext = () => {
-      fetchCompatibleDSLsAndCRDs({ steps: viewData.steps, type: settings.dsl })
+      fetchCompatibleDSLsAndCRDs({
+        integrationName: currentSettings.integrationName,
+        steps: viewData.steps,
+        type: currentSettings.dsl,
+      })
         .then((value) => {
           if (value) {
             // contains a list of compatible DSLs returned,
@@ -91,14 +102,24 @@ export const SettingsModal = ({
      * respective YAML/CRDs, and merged together.
      */
     fetchAllDSLs()
-      .then((dsls) => {
-        availableDSLs.current = dsls;
+      .then((DSLs) => {
+        availableDSLs.current = DSLs;
         if (viewData.steps.length !== 0) fetchContext();
+
+        // setSettings({...settings, integrationName: });
       })
       .catch((e) => {
         console.error(e);
       });
-  }, [YAMLData]);
+  }, [viewData]);
+
+  const onChangeIntegrationName = (newName: string) => {
+    setLocalSettings({ ...currentSettings, integrationName: newName });
+  };
+
+  const onChangeNamespace = (newNamespace: string) => {
+    setLocalSettings({ ...currentSettings, namespace: newNamespace });
+  };
 
   const onClose = () => {
     handleCloseModal();
@@ -106,12 +127,13 @@ export const SettingsModal = ({
 
   const onSave = () => {
     const newDSL = compatibleDSLsAndCRDs.current.find(
-      (i: ICompatibleDSLsAndCRDs) => i.dsl === settings.dsl
+      (i: ICompatibleDSLsAndCRDs) => i.dsl === localSettings.dsl
     );
-
     // update YAML with new compatible DSL/YAML
+    // should I be doing this here though?
     if (newDSL) setYAMLData(newDSL.crd);
-    handleSaveSettings(settings);
+
+    handleSaveSettings(localSettings);
   };
 
   return (
@@ -132,17 +154,86 @@ export const SettingsModal = ({
       >
         <Form>
           <FormGroup
-            label="Selection: "
+            fieldId="integration-name"
+            helperText="Give your integration a fun name."
+            isRequired
+            label="Integration name"
+          >
+            <TextInput
+              aria-describedby="integration-name-helper"
+              id="integration-name"
+              isRequired
+              name="integration-name"
+              onChange={onChangeIntegrationName}
+              type="text"
+              value={localSettings.integrationName}
+            />
+          </FormGroup>
+          <FormGroup
+            fieldId="namespace"
+            helperText="Specify the namespace for your cluster."
+            isRequired
+            label="Namespace"
+          >
+            <TextInput
+              aria-describedby="namespace-helper"
+              id="namespace"
+              isRequired
+              name="namespace"
+              onChange={onChangeNamespace}
+              type="text"
+              value={localSettings.namespace}
+            />
+          </FormGroup>
+          <FormGroup
+            label="Integration type"
+            labelIcon={
+              <Popover
+                headerContent={'Integration type'}
+                bodyContent={
+                  <div>
+                    <p>
+                      The integration type determines what steps you have in the catalog. Not all
+                      shown here will be available to you, as it depends on the steps you currently
+                      are using.
+                    </p>
+                    <br />
+                    <ul>
+                      <li>
+                        <b>Kamelets</b>: Choose this if you want to create a connection to a
+                        something.
+                      </li>
+                      <li>
+                        <b>KameletBindings</b>: Choose this if you want to create an integration.
+                      </li>
+                      <li>
+                        <b>Camel Routes</b> (advanced): Choose this if you want to create an
+                        advanced integration.
+                      </li>
+                    </ul>
+                  </div>
+                }
+              >
+                <button
+                  type="button"
+                  aria-label="More info for integration type"
+                  onClick={(e) => e.preventDefault()}
+                  aria-describedby="dsl-type"
+                  className="pf-c-form__group-label-help"
+                >
+                  <HelpIcon noVerticalAlign />
+                </button>
+              </Popover>
+            }
             type="string"
-            helperText={'You must choose what you want to build'}
-            fieldId="selection"
+            fieldId="dsl-type"
           >
             <FormSelect
               aria-label="Select Type"
               onChange={(value) => {
-                setSettings({ ...settings, dsl: value });
+                setLocalSettings({ ...localSettings, dsl: value });
               }}
-              value={settings.dsl}
+              value={localSettings.dsl}
             >
               {availableDSLs.current.map((dsl, idx) => {
                 return <FormSelectOption key={idx} value={dsl.name} label={dsl.name} />;

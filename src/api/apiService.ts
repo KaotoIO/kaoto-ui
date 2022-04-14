@@ -27,13 +27,14 @@ export async function fetchCatalogSteps(queryParams?: {
  * Usually to update the YAML after a change in the integration from the Visualization.
  * Requires a list of all new steps.
  * @param newSteps
+ * @param integrationName
  */
-export async function fetchCustomResource(newSteps: IStepProps[]) {
+export async function fetchCustomResource(newSteps: IStepProps[], integrationName: string) {
   try {
     const resp = await request.post({
       endpoint: '/integrations/customResource',
       contentType: 'application/json',
-      body: { name: 'Updated integration', steps: newSteps },
+      body: { name: integrationName.toLowerCase(), steps: newSteps },
     });
 
     return await resp.text();
@@ -63,12 +64,29 @@ export async function fetchAllDSLs() {
  * with existing steps. Will also include the respective YAML/CRD
  * for each compatible DSL.
  */
-export async function fetchCompatibleDSLsAndCRDs(props: { type?: string; steps: IStepProps[] }) {
+export async function fetchCompatibleDSLsAndCRDs(props: {
+  integrationName: string;
+  type?: string;
+  steps: IStepProps[];
+}) {
   try {
     const resp = await request.post({
       endpoint: '/integrations/customResources?type=' + props.type,
       contentType: 'application/json',
-      body: { name: 'Updated integration', steps: props.steps },
+      body: { name: props.integrationName.toLowerCase(), steps: props.steps },
+    });
+
+    return await resp.json();
+  } catch (err) {
+    return err;
+  }
+}
+
+export async function fetchDeployments() {
+  try {
+    const resp = await request.get({
+      endpoint: '/integrations',
+      contentType: 'application/json',
     });
 
     return await resp.json();
@@ -96,5 +114,48 @@ export async function fetchViewDefinitions(data: string | IStepProps[]) {
   } catch (err) {
     console.error(err);
     return err;
+  }
+}
+
+/**
+ * Starts an integration deployment
+ * @param dsl
+ * @param integration
+ * @param integrationName
+ * @param namespace
+ */
+export async function startDeployment(
+  dsl: string,
+  integration: any,
+  integrationName: string,
+  namespace: string
+) {
+  try {
+    const resp = await request.post({
+      endpoint: '/integrations?type=' + dsl + '&namespace=' + namespace,
+      contentType: 'application/json',
+      body: { name: integrationName.toLowerCase(), steps: integration },
+    });
+
+    return await resp.text();
+  } catch (err) {
+    throw err;
+  }
+}
+
+/**
+ * Stops an integration deployment
+ * @param integrationName
+ */
+export async function stopDeployment(integrationName: string) {
+  try {
+    const resp = await request.delete({
+      endpoint: '/integrations/' + integrationName.toLowerCase(),
+      contentType: 'application/json',
+    });
+
+    return await resp.text();
+  } catch (err) {
+    throw err;
   }
 }

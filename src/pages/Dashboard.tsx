@@ -10,15 +10,12 @@ import {
 } from '@patternfly/react-core';
 import { useState } from 'react';
 import { useAlert } from '@rhoas/app-services-ui-shared';
+import { ISettings } from '../types';
 
 export interface IExpanded {
   catalog?: boolean;
   codeEditor?: boolean;
   settingsModal?: boolean;
-}
-
-export interface ISettings {
-  dsl?: string;
 }
 
 const Dashboard = () => {
@@ -27,7 +24,11 @@ const Dashboard = () => {
     codeEditor: true,
     settingsModal: false,
   });
-  const [settings, setSettings] = useState<ISettings>({ dsl: 'KameletBinding' });
+  const [settings, setSettings] = useState<ISettings>({
+    dsl: 'KameletBinding',
+    integrationName: 'integration',
+    namespace: 'default',
+  });
 
   const { addAlert } = useAlert() || {};
 
@@ -69,7 +70,11 @@ const Dashboard = () => {
             className={'panelCustom'}
           >
             <DrawerContentBody>
-              <KaotoToolbar expanded={expanded} handleExpanded={handleExpanded} />
+              <KaotoToolbar
+                expanded={expanded}
+                handleExpanded={handleExpanded}
+                settings={settings}
+              />
               <Grid>
                 {expanded.codeEditor && (
                   <GridItem span={4}>
@@ -78,6 +83,7 @@ const Dashboard = () => {
                 )}
                 <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
                   <Visualization
+                    settings={settings}
                     toggleCatalog={() => setExpanded({ ...expanded, catalog: !expanded.catalog })}
                   />
                 </GridItem>
