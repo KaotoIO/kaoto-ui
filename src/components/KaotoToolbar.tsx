@@ -50,7 +50,7 @@ export const KaotoToolbar = ({ expanded, handleExpanded, settings }: IKaotoToolb
   };
 
   const handleStopDeployment = () => {
-    console.log('stopping deployment..');
+    // console.log('stopping deployment..');
 
     stopDeployment(settings.integrationName)
       .then((res) => {

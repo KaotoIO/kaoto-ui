@@ -4,7 +4,9 @@ import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import { dynamicImport } from './import';
+// import { useAlert } from '@rhoas/app-services-ui-shared';
 import {
+  // AlertVariant,
   Button,
   DrawerActions,
   DrawerCloseButton,
@@ -43,6 +45,8 @@ const StepViews = ({
   const stepPropertySchema = useRef<{ [label: string]: { type: string } }>({});
   const stepPropertyModel = useRef<{ [label: string]: any }>({});
   const previousTabIndex = usePrevious(detailsTabIndex);
+
+  // const { addAlert } = useAlert() || {};
 
   useEffect(() => {
     if (previousTabIndex === detailsTabIndex) {
@@ -139,6 +143,16 @@ const StepViews = ({
 
               // Example demonstrating interactivity with step extension
               const onButtonClicked = () => {
+                /*
+                addAlert &&
+                  addAlert({
+                    title: '👋 Hello from Kaoto!',
+                    variant: AlertVariant.success,
+                    description: 'Nice to meet you.',
+                  });
+
+                 */
+
                 console.log(
                   'Button clicked! Viewing ' + view.id + ' for the following step: ' + view.step
                 );

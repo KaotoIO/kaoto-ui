@@ -55,13 +55,21 @@ export const SettingsModal = ({
 }: ISettingsModal) => {
   const availableDSLs = useRef<IDSLProps[]>([]);
   const compatibleDSLsAndCRDs = useRef<ICompatibleDSLsAndCRDs[]>([]);
-  const [settings, setSettings] = useState<ISettings>(currentSettings);
+  const [localSettings, setLocalSettings] = useState<ISettings>(currentSettings);
   const [viewData] = useStepsAndViewsContext();
   const [, setYAMLData] = useYAMLContext();
 
   useEffect(() => {
+    // console.log('currentSettings changed.. ', currentSettings);
+  }, [currentSettings]);
+
+  useEffect(() => {
     const fetchContext = () => {
-      fetchCompatibleDSLsAndCRDs({ steps: viewData.steps, type: settings.dsl })
+      fetchCompatibleDSLsAndCRDs({
+        integrationName: currentSettings.integrationName,
+        steps: viewData.steps,
+        type: currentSettings.dsl,
+      })
         .then((value) => {
           if (value) {
             // contains a list of compatible DSLs returned,
@@ -106,11 +114,11 @@ export const SettingsModal = ({
   }, [viewData]);
 
   const onChangeIntegrationName = (newName: string) => {
-    setSettings({ ...settings, integrationName: newName });
+    setLocalSettings({ ...currentSettings, integrationName: newName });
   };
 
   const onChangeNamespace = (newNamespace: string) => {
-    setSettings({ ...settings, namespace: newNamespace });
+    setLocalSettings({ ...currentSettings, namespace: newNamespace });
   };
 
   const onClose = () => {
@@ -119,12 +127,13 @@ export const SettingsModal = ({
 
   const onSave = () => {
     const newDSL = compatibleDSLsAndCRDs.current.find(
-      (i: ICompatibleDSLsAndCRDs) => i.dsl === settings.dsl
+      (i: ICompatibleDSLsAndCRDs) => i.dsl === localSettings.dsl
     );
-
     // update YAML with new compatible DSL/YAML
+    // should I be doing this here though?
     if (newDSL) setYAMLData(newDSL.crd);
-    handleSaveSettings(settings);
+
+    handleSaveSettings(localSettings);
   };
 
   return (
@@ -157,7 +166,7 @@ export const SettingsModal = ({
               name="integration-name"
               onChange={onChangeIntegrationName}
               type="text"
-              value={settings.integrationName}
+              value={localSettings.integrationName}
             />
           </FormGroup>
           <FormGroup
@@ -173,7 +182,7 @@ export const SettingsModal = ({
               name="namespace"
               onChange={onChangeNamespace}
               type="text"
-              value={settings.namespace}
+              value={localSettings.namespace}
             />
           </FormGroup>
           <FormGroup
@@ -222,9 +231,9 @@ export const SettingsModal = ({
             <FormSelect
               aria-label="Select Type"
               onChange={(value) => {
-                setSettings({ ...settings, dsl: value });
+                setLocalSettings({ ...localSettings, dsl: value });
               }}
-              value={settings.dsl}
+              value={localSettings.dsl}
             >
               {availableDSLs.current.map((dsl, idx) => {
                 return <FormSelectOption key={idx} value={dsl.name} label={dsl.name} />;

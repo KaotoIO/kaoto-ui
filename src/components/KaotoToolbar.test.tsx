@@ -3,6 +3,7 @@ import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 import { IExpanded } from '../pages/Dashboard';
 import { ISettings } from '../types';
+import { AlertProvider } from './MASAlerts';
 
 describe('KaotoToolbar.tsx', () => {
   test('component renders correctly', () => {
@@ -19,7 +20,9 @@ describe('KaotoToolbar.tsx', () => {
     };
 
     render(
-      <KaotoToolbar expanded={expandedTest} handleExpanded={jest.fn()} settings={settingsTest} />
+      <AlertProvider>
+        <KaotoToolbar expanded={expandedTest} handleExpanded={jest.fn()} settings={settingsTest} />
+      </AlertProvider>
     );
 
     const element = screen.getByTestId('kaotoToolbar');

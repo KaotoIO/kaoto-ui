@@ -64,12 +64,16 @@ export async function fetchAllDSLs() {
  * with existing steps. Will also include the respective YAML/CRD
  * for each compatible DSL.
  */
-export async function fetchCompatibleDSLsAndCRDs(props: { type?: string; steps: IStepProps[] }) {
+export async function fetchCompatibleDSLsAndCRDs(props: {
+  integrationName: string;
+  type?: string;
+  steps: IStepProps[];
+}) {
   try {
     const resp = await request.post({
       endpoint: '/integrations/customResources?type=' + props.type,
       contentType: 'application/json',
-      body: { name: 'Updated integration'.toLowerCase(), steps: props.steps },
+      body: { name: props.integrationName.toLowerCase(), steps: props.steps },
     });
 
     return await resp.json();
