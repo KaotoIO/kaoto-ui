@@ -61,7 +61,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/eslint-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.18.0"],
             ["@typescript-eslint/parser", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.18.0"],
             ["ajv", "npm:8.10.0"],
-            ["chromatic", "npm:6.4.3"],
+            ["chromatic", "npm:6.5.4"],
             ["css-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.6.0"],
             ["css-minimizer-webpack-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.4.1"],
             ["cypress", "npm:9.5.3"],
@@ -10567,10 +10567,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["chromatic", [
-        ["npm:6.4.3", {
-          "packageLocation": "./.yarn/cache/chromatic-npm-6.4.3-3b672f4f5c-014523cf44.zip/node_modules/chromatic/",
+        ["npm:6.5.4", {
+          "packageLocation": "./.yarn/cache/chromatic-npm-6.5.4-34c15906e0-79e036b305.zip/node_modules/chromatic/",
           "packageDependencies": [
-            ["chromatic", "npm:6.4.3"]
+            ["chromatic", "npm:6.5.4"]
           ],
           "linkType": "HARD",
         }]
@@ -17262,7 +17262,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/eslint-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.18.0"],
             ["@typescript-eslint/parser", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.18.0"],
             ["ajv", "npm:8.10.0"],
-            ["chromatic", "npm:6.4.3"],
+            ["chromatic", "npm:6.5.4"],
             ["css-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.6.0"],
             ["css-minimizer-webpack-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.4.1"],
             ["cypress", "npm:9.5.3"],
