@@ -84,7 +84,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["monaco-editor", "npm:0.32.1"],
             ["monaco-editor-webpack-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:7.0.1"],
             ["null-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.0.1"],
-            ["prettier", "npm:2.6.1"],
+            ["prettier", "npm:2.6.2"],
             ["prop-types", "npm:15.7.2"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:17.0.2"],
@@ -6930,7 +6930,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/prettier", null],
             ["javascript-natural-sort", "npm:0.7.1"],
             ["lodash", "npm:4.17.21"],
-            ["prettier", "npm:2.6.1"]
+            ["prettier", "npm:2.6.2"]
           ],
           "packagePeers": [
             "@types/prettier",
@@ -11142,14 +11142,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["core-js", [
         ["npm:2.6.12", {
-          "packageLocation": "./.yarn/unplugged/core-js-npm-2.6.12-0b93d77d31/node_modules/core-js/",
+          "packageLocation": "./.yarn/cache/core-js-npm-2.6.12-0b93d77d31-44fa9934a8.zip/node_modules/core-js/",
           "packageDependencies": [
             ["core-js", "npm:2.6.12"]
           ],
           "linkType": "HARD",
         }],
         ["npm:3.21.0", {
-          "packageLocation": "./.yarn/unplugged/core-js-npm-3.21.0-9d2e98b782/node_modules/core-js/",
+          "packageLocation": "./.yarn/cache/core-js-npm-3.21.0-9d2e98b782-87df49aa2c.zip/node_modules/core-js/",
           "packageDependencies": [
             ["core-js", "npm:3.21.0"]
           ],
@@ -11169,7 +11169,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["core-js-pure", [
         ["npm:3.21.0", {
-          "packageLocation": "./.yarn/unplugged/core-js-pure-npm-3.21.0-dc4104b1b9/node_modules/core-js-pure/",
+          "packageLocation": "./.yarn/cache/core-js-pure-npm-3.21.0-dc4104b1b9-0b9b72fb24.zip/node_modules/core-js-pure/",
           "packageDependencies": [
             ["core-js-pure", "npm:3.21.0"]
           ],
@@ -11732,7 +11732,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["cypress", [
         ["npm:9.5.3", {
-          "packageLocation": "./.yarn/unplugged/cypress-npm-9.5.3-113ca8f14b/node_modules/cypress/",
+          "packageLocation": "./.yarn/cache/cypress-npm-9.5.3-113ca8f14b-cfd2333fed.zip/node_modules/cypress/",
           "packageDependencies": [
             ["cypress", "npm:9.5.3"],
             ["@cypress/request", "npm:2.88.10"],
@@ -13065,7 +13065,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/prettier", null],
             ["eslint", "npm:7.32.0"],
             ["eslint-config-prettier", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:8.5.0"],
-            ["prettier", "npm:2.6.1"],
+            ["prettier", "npm:2.6.2"],
             ["prettier-linter-helpers", "npm:1.0.0"]
           ],
           "packagePeers": [
@@ -17285,7 +17285,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["monaco-editor", "npm:0.32.1"],
             ["monaco-editor-webpack-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:7.0.1"],
             ["null-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.0.1"],
-            ["prettier", "npm:2.6.1"],
+            ["prettier", "npm:2.6.2"],
             ["prop-types", "npm:15.7.2"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:17.0.2"],
@@ -20669,10 +20669,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:2.6.1", {
-          "packageLocation": "./.yarn/cache/prettier-npm-2.6.1-94a3731152-78be1f8a3d.zip/node_modules/prettier/",
+        ["npm:2.6.2", {
+          "packageLocation": "./.yarn/cache/prettier-npm-2.6.2-05918420da-48d08dde8e.zip/node_modules/prettier/",
           "packageDependencies": [
-            ["prettier", "npm:2.6.1"]
+            ["prettier", "npm:2.6.2"]
           ],
           "linkType": "HARD",
         }]
