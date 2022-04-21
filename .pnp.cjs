@@ -52,7 +52,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/react", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:12.1.3"],
             ["@testing-library/user-event", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:14.1.0"],
             ["@trivago/prettier-plugin-sort-imports", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.2.0"],
-            ["@types/jest", "npm:27.4.0"],
+            ["@types/jest", "npm:27.4.1"],
             ["@types/react", "npm:17.0.44"],
             ["@types/react-dom", "npm:18.0.0"],
             ["@types/react-router-dom", "npm:5.3.3"],
@@ -7697,6 +7697,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/jest", "npm:27.4.0"],
             ["jest-diff", "npm:27.5.1"],
+            ["pretty-format", "npm:27.5.1"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:27.4.1", {
+          "packageLocation": "./.yarn/cache/@types-jest-npm-27.4.1-31d07cd0d8-5184f3eef4.zip/node_modules/@types/jest/",
+          "packageDependencies": [
+            ["@types/jest", "npm:27.4.1"],
+            ["jest-matcher-utils", "npm:27.5.1"],
             ["pretty-format", "npm:27.5.1"]
           ],
           "linkType": "HARD",
@@ -17729,7 +17738,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/react", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:12.1.3"],
             ["@testing-library/user-event", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:14.1.0"],
             ["@trivago/prettier-plugin-sort-imports", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.2.0"],
-            ["@types/jest", "npm:27.4.0"],
+            ["@types/jest", "npm:27.4.1"],
             ["@types/react", "npm:17.0.44"],
             ["@types/react-dom", "npm:18.0.0"],
             ["@types/react-router-dom", "npm:5.3.3"],
@@ -24827,7 +24836,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/babel-jest", null],
             ["@types/babel__core", null],
             ["@types/esbuild", null],
-            ["@types/jest", "npm:27.4.0"],
+            ["@types/jest", "npm:27.4.1"],
             ["@types/typescript", null],
             ["babel-jest", null],
             ["bs-logger", "npm:0.2.6"],
