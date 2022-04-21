@@ -2586,26 +2586,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/builder-webpack5@npm:^6.5.0-alpha.54":
-  version: 6.5.0-alpha.54
-  resolution: "@storybook/builder-webpack5@npm:6.5.0-alpha.54"
+"@storybook/builder-webpack5@npm:^6.5.0-alpha.64":
+  version: 6.5.0-alpha.64
+  resolution: "@storybook/builder-webpack5@npm:6.5.0-alpha.64"
   dependencies:
     "@babel/core": ^7.12.10
-    "@storybook/addons": 6.5.0-alpha.54
-    "@storybook/api": 6.5.0-alpha.54
-    "@storybook/channel-postmessage": 6.5.0-alpha.54
-    "@storybook/channels": 6.5.0-alpha.54
-    "@storybook/client-api": 6.5.0-alpha.54
-    "@storybook/client-logger": 6.5.0-alpha.54
-    "@storybook/components": 6.5.0-alpha.54
-    "@storybook/core-common": 6.5.0-alpha.54
-    "@storybook/core-events": 6.5.0-alpha.54
-    "@storybook/node-logger": 6.5.0-alpha.54
-    "@storybook/preview-web": 6.5.0-alpha.54
-    "@storybook/router": 6.5.0-alpha.54
+    "@storybook/addons": 6.5.0-alpha.64
+    "@storybook/api": 6.5.0-alpha.64
+    "@storybook/channel-postmessage": 6.5.0-alpha.64
+    "@storybook/channels": 6.5.0-alpha.64
+    "@storybook/client-api": 6.5.0-alpha.64
+    "@storybook/client-logger": 6.5.0-alpha.64
+    "@storybook/components": 6.5.0-alpha.64
+    "@storybook/core-common": 6.5.0-alpha.64
+    "@storybook/core-events": 6.5.0-alpha.64
+    "@storybook/node-logger": 6.5.0-alpha.64
+    "@storybook/preview-web": 6.5.0-alpha.64
+    "@storybook/router": 6.5.0-alpha.64
     "@storybook/semver": ^7.3.2
-    "@storybook/store": 6.5.0-alpha.54
-    "@storybook/theming": 6.5.0-alpha.54
+    "@storybook/store": 6.5.0-alpha.64
+    "@storybook/theming": 6.5.0-alpha.64
     "@types/node": ^14.0.10 || ^16.0.0
     babel-loader: ^8.0.0
     babel-plugin-named-exports-order: ^0.0.2
@@ -2634,7 +2634,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 3042c73e72e57de142aaeca6616fe28f4bb205f087d77eb1369dce6e12090958e4d43e8adcdb16f4b0b2ba9eb93305980094ef9be2a49305abe8830b66faaa00
+  checksum: 8eefb6f4ebd8bb70b57cf3695ac1bd0c852abc1dde8d8e81f98b9056756ffe0f4bae555bc63f50ec12df6be61849c2023ea392b3d54e6245ef5371d1eba3da95
   languageName: node
   linkType: hard
 
@@ -12310,7 +12310,7 @@ __metadata:
     "@storybook/addon-actions": ^6.5.0-alpha.54
     "@storybook/addon-docs": ^6.5.0-alpha.54
     "@storybook/addon-links": ^6.5.0-alpha.54
-    "@storybook/builder-webpack5": ^6.5.0-alpha.54
+    "@storybook/builder-webpack5": ^6.5.0-alpha.64
     "@storybook/manager-webpack5": ^6.5.0-alpha.64
     "@storybook/node-logger": ^6.5.0-alpha.54
     "@storybook/react": ^6.5.0-alpha.54
