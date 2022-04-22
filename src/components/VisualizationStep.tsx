@@ -54,7 +54,8 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
               }}
             />
           }
-          enableFlip={false}
+          enableFlip={true}
+          flipBehavior={['top-start', 'left-start']}
           hideOnOutsideClick={true}
           position={'right-start'}
         >
