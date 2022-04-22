@@ -54,8 +54,10 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
               }}
             />
           }
+          enableFlip={true}
+          flipBehavior={['top-start', 'left-start']}
           hideOnOutsideClick={true}
-          position={'auto'}
+          position={'right-start'}
         >
           <div className={'stepNode__Add nodrag'}>
             <Button variant="plain" aria-label="Action">
