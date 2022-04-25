@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@patternfly/patternfly": "4.185.1",
-    "@patternfly/react-code-editor": "^4.43.16",
+    "@patternfly/react-code-editor": "^4.47.3",
     "@patternfly/react-core": "4.202.16",
     "@patternfly/react-icons": "4.49.19",
     "@rhoas/app-services-ui-shared": "^0.15.4",
