@@ -42,7 +42,7 @@
     "react-monaco-editor": "^0.47.0",
     "react-router-dom": "5.3.0",
     "react-router-last-location": "2.0.1",
-    "react-shadow": "19.0.2",
+    "react-shadow": "19.0.3",
     "uniforms": "^3.6.2",
     "uniforms-bridge-json-schema": "^3.6.2",
     "uniforms-patternfly": "^4.7.4",
