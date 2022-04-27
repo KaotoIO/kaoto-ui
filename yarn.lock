@@ -12680,7 +12680,7 @@ __metadata:
     react-monaco-editor: ^0.47.0
     react-router-dom: 5.3.0
     react-router-last-location: 2.0.1
-    react-shadow: 19.0.2
+    react-shadow: 19.0.3
     rimraf: 3.0.2
     source-map-loader: 3.0.1
     style-loader: 3.3.1
@@ -15976,9 +15976,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-shadow@npm:19.0.2":
-  version: 19.0.2
-  resolution: "react-shadow@npm:19.0.2"
+"react-shadow@npm:19.0.3":
+  version: 19.0.3
+  resolution: "react-shadow@npm:19.0.3"
   dependencies:
     humps: ^2.0.1
     react-use: ^15.3.3
@@ -15986,7 +15986,7 @@ __metadata:
     prop-types: ^15.0.0
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.0.0 || ^17.0.0
-  checksum: 0ec53be78748eb8a8f53d09795abdd515eae9cfb297e46c2997a70a3865a7f5f1ad634cc679e79a1f1ab82da457ce9508a63e5078657f1354a0d75fa94c31fcf
+  checksum: eb789ac10a85bf872406493189916a60aacec07a4eaaaf5b15d7fc8f7de3bfb9b1531f17dd899c6270700b6e964c828355798bc06e688c71a372272cbd8a5729
   languageName: node
   linkType: hard
 
