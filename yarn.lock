@@ -8504,14 +8504,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-webpack@npm:7.0.3":
-  version: 7.0.3
-  resolution: "dotenv-webpack@npm:7.0.3"
+"dotenv-webpack@npm:7.1.0":
+  version: 7.1.0
+  resolution: "dotenv-webpack@npm:7.1.0"
   dependencies:
     dotenv-defaults: ^2.0.2
   peerDependencies:
     webpack: ^4 || ^5
-  checksum: d80dcbebe3b9e8f6251b3eb15647bb647bf358172ff21d2eaa4bb012afc9eaa7f4ba6c452f2dafd40afc96474e8c7ffbd21f0a2896eec244eff59a79e32c7716
+  checksum: e69f5b5de16f99a0acc35f2bc75e1dd40a587053cdb62ffb2fe80cea197ba703a829771f6db270a01e96ca8f52c8160671c243875a7b9c7c040bc32fc3d400f1
   languageName: node
   linkType: hard
 
@@ -12637,7 +12637,7 @@ __metadata:
     css-loader: ^6.6.0
     css-minimizer-webpack-plugin: ^3.4.1
     cypress: 9.5.3
-    dotenv-webpack: 7.0.3
+    dotenv-webpack: 7.1.0
     eslint: 7.32.0
     eslint-config-prettier: 8.5.0
     eslint-plugin-import: ^2.25.4
