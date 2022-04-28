@@ -48,7 +48,7 @@
     "uniforms-patternfly": "^4.7.4",
     "use-debounce": "7.0.1",
     "uuid": "8.3.2",
-    "web-vitals": "2.1.2",
+    "web-vitals": "2.1.4",
     "yarn": "2.4.3"
   },
   "devDependencies": {
