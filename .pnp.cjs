@@ -81,7 +81,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jest-environment-jsdom", "npm:27.5.1"],
             ["lint-staged", "npm:12.3.7"],
             ["mini-css-extract-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:2.4.3"],
-            ["monaco-editor", "npm:0.32.1"],
+            ["monaco-editor", "npm:0.33.0"],
             ["monaco-editor-webpack-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:7.0.1"],
             ["null-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.0.1"],
             ["prettier", "npm:2.6.2"],
@@ -18446,7 +18446,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jest-environment-jsdom", "npm:27.5.1"],
             ["lint-staged", "npm:12.3.7"],
             ["mini-css-extract-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:2.4.3"],
-            ["monaco-editor", "npm:0.32.1"],
+            ["monaco-editor", "npm:0.33.0"],
             ["monaco-editor-webpack-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:7.0.1"],
             ["null-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.0.1"],
             ["prettier", "npm:2.6.2"],
@@ -19577,10 +19577,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["monaco-editor", [
-        ["npm:0.32.1", {
-          "packageLocation": "./.yarn/cache/monaco-editor-npm-0.32.1-a3112f302f-f63e96fadc.zip/node_modules/monaco-editor/",
+        ["npm:0.33.0", {
+          "packageLocation": "./.yarn/cache/monaco-editor-npm-0.33.0-a149b0897f-f88fd1c9be.zip/node_modules/monaco-editor/",
           "packageDependencies": [
-            ["monaco-editor", "npm:0.32.1"]
+            ["monaco-editor", "npm:0.33.0"]
           ],
           "linkType": "HARD",
         }]
@@ -19600,7 +19600,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/monaco-editor", null],
             ["@types/webpack", null],
             ["loader-utils", "npm:2.0.2"],
-            ["monaco-editor", "npm:0.32.1"],
+            ["monaco-editor", "npm:0.33.0"],
             ["webpack", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.71.0"]
           ],
           "packagePeers": [
@@ -22580,7 +22580,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-monaco-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.47.0"],
             ["@types/monaco-editor", null],
             ["@types/react", "npm:17.0.44"],
-            ["monaco-editor", "npm:0.32.1"],
+            ["monaco-editor", "npm:0.33.0"],
             ["prop-types", "npm:15.8.1"],
             ["react", "npm:17.0.2"]
           ],
