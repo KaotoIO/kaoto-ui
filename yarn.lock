@@ -4622,12 +4622,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.0.0":
-  version: 18.0.0
-  resolution: "@types/react-dom@npm:18.0.0"
+"@types/react-dom@npm:18.0.3":
+  version: 18.0.3
+  resolution: "@types/react-dom@npm:18.0.3"
   dependencies:
     "@types/react": "*"
-  checksum: 0d8c9cb3e72aefe0dd2b58a49845a200369f01ae92f3f11f642e04efc95dfd1c9380b6592d4273dd6113fb8707947d15b66d56c75c41f39f28bd897f0c08dfa9
+  checksum: 5c87fb610e212f0942ebbf522dfca4c9dc2ac8afa4c601454415e7c42f993518868207faff7658d11974142937ba7af2f80e274c3a3f5e0e697bdd5547dbe1b0
   languageName: node
   linkType: hard
 
@@ -12772,7 +12772,7 @@ __metadata:
     "@trivago/prettier-plugin-sort-imports": ^3.1.1
     "@types/jest": ^27.4.1
     "@types/react": ^17.0.44
-    "@types/react-dom": 18.0.0
+    "@types/react-dom": 18.0.3
     "@types/react-router-dom": 5.3.3
     "@types/testing-library__jest-dom": 5.14.3
     "@types/uuid": 8.3.1
