@@ -2205,17 +2205,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-icons@npm:4.49.19":
-  version: 4.49.19
-  resolution: "@patternfly/react-icons@npm:4.49.19"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-  checksum: ec2f0178109644bef058001f90e257d1a22537254ae60dd40005216b257c29b917e59b9c11afa2ac2bb9c6f89dc00d400e10d353be9d4229b77f4b097ea6ac7f
-  languageName: node
-  linkType: hard
-
-"@patternfly/react-icons@npm:^4.53.16":
+"@patternfly/react-icons@npm:4.57.2, @patternfly/react-icons@npm:^4.53.16":
   version: 4.57.2
   resolution: "@patternfly/react-icons@npm:4.57.2"
   peerDependencies:
@@ -12756,7 +12746,7 @@ __metadata:
     "@patternfly/patternfly": 4.185.1
     "@patternfly/react-code-editor": ^4.47.3
     "@patternfly/react-core": 4.202.16
-    "@patternfly/react-icons": 4.49.19
+    "@patternfly/react-icons": 4.57.2
     "@rhoas/app-services-ui-shared": ^0.15.4
     "@storybook/addon-actions": ^6.5.0-alpha.54
     "@storybook/addon-docs": ^6.5.0-beta.1
