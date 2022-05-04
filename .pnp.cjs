@@ -90,7 +90,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:17.0.2"],
             ["react-error-boundary", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.1.4"],
             ["react-flow-renderer", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:9.7.4"],
-            ["react-monaco-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.47.0"],
+            ["react-monaco-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.48.0"],
             ["react-router-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.3.0"],
             ["react-router-last-location", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:2.0.1"],
             ["react-shadow", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:19.0.3"],
@@ -4894,7 +4894,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:17.0.2"],
             ["react-dropzone", "virtual:4d8a21bf4e13d2891a5f0407a6c548ecfad913ee4e19738ed36f8d7adeda33b4abde313753b935c84eb4a58bc8fbd291ef736e91c864ac6c8c92b9ef42772c74#npm:9.0.0"],
-            ["react-monaco-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.47.0"],
+            ["react-monaco-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.48.0"],
             ["tslib", "npm:2.3.1"]
           ],
           "packagePeers": [
@@ -18429,7 +18429,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:17.0.2"],
             ["react-error-boundary", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.1.4"],
             ["react-flow-renderer", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:9.7.4"],
-            ["react-monaco-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.47.0"],
+            ["react-monaco-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.48.0"],
             ["react-router-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.3.0"],
             ["react-router-last-location", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:2.0.1"],
             ["react-shadow", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:19.0.3"],
@@ -22541,17 +22541,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["react-monaco-editor", [
-        ["npm:0.47.0", {
-          "packageLocation": "./.yarn/cache/react-monaco-editor-npm-0.47.0-b4e87e9090-647d84cfcf.zip/node_modules/react-monaco-editor/",
+        ["npm:0.48.0", {
+          "packageLocation": "./.yarn/cache/react-monaco-editor-npm-0.48.0-2401aaa30d-35a9f4cf42.zip/node_modules/react-monaco-editor/",
           "packageDependencies": [
-            ["react-monaco-editor", "npm:0.47.0"]
+            ["react-monaco-editor", "npm:0.48.0"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.47.0", {
-          "packageLocation": "./.yarn/__virtual__/react-monaco-editor-virtual-03b27ca42f/0/cache/react-monaco-editor-npm-0.47.0-b4e87e9090-647d84cfcf.zip/node_modules/react-monaco-editor/",
+        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.48.0", {
+          "packageLocation": "./.yarn/__virtual__/react-monaco-editor-virtual-0cc6d1bd67/0/cache/react-monaco-editor-npm-0.48.0-2401aaa30d-35a9f4cf42.zip/node_modules/react-monaco-editor/",
           "packageDependencies": [
-            ["react-monaco-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.47.0"],
+            ["react-monaco-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.48.0"],
             ["@types/monaco-editor", null],
             ["@types/react", "npm:17.0.44"],
             ["monaco-editor", "npm:0.33.0"],
