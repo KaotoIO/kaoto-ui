@@ -12869,7 +12869,7 @@ __metadata:
     jest: 27.5.1
     jest-environment-jsdom: ^27.5.1
     lint-staged: 12.4.1
-    mini-css-extract-plugin: 2.4.3
+    mini-css-extract-plugin: 2.6.0
     monaco-editor: ^0.33.0
     monaco-editor-webpack-plugin: ^7.0.1
     null-loader: ^4.0.1
@@ -13710,14 +13710,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:2.4.3":
-  version: 2.4.3
-  resolution: "mini-css-extract-plugin@npm:2.4.3"
+"mini-css-extract-plugin@npm:2.6.0":
+  version: 2.6.0
+  resolution: "mini-css-extract-plugin@npm:2.6.0"
   dependencies:
-    schema-utils: ^3.1.0
+    schema-utils: ^4.0.0
   peerDependencies:
     webpack: ^5.0.0
-  checksum: bee9d5f5c84ebc557bb201be4453003f98b47807153762bbf566b6f5e8071e67b6147f22d36111ecad62fd6d71979e5c6f43989000731c562a409b65ef529e45
+  checksum: ea73bd66558de7a37db094fe68fa130e7a725ab15f880ff8467a75d9c4c2f1576d20720088ea22af9922a94b8600bbfef0c6acaf10d12a32a9bd20a90ba3c35f
   languageName: node
   linkType: hard
 
