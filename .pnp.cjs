@@ -37,7 +37,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@patternfly/patternfly", "npm:4.192.1"],
             ["@patternfly/react-code-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.47.3"],
-            ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.202.16"],
+            ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.206.2"],
             ["@patternfly/react-icons", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.57.2"],
             ["@rhoas/app-services-ui-shared", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.15.4"],
             ["@storybook/addon-actions", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.0-alpha.54"],
@@ -4903,10 +4903,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@patternfly/react-core", [
-        ["npm:4.202.16", {
-          "packageLocation": "./.yarn/cache/@patternfly-react-core-npm-4.202.16-86fd26126e-1bc64ee79b.zip/node_modules/@patternfly/react-core/",
+        ["npm:4.206.2", {
+          "packageLocation": "./.yarn/cache/@patternfly-react-core-npm-4.206.2-9bafaac03b-5c090c1c2f.zip/node_modules/@patternfly/react-core/",
           "packageDependencies": [
-            ["@patternfly/react-core", "npm:4.202.16"]
+            ["@patternfly/react-core", "npm:4.206.2"]
           ],
           "linkType": "SOFT",
         }],
@@ -4941,13 +4941,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.202.16", {
-          "packageLocation": "./.yarn/__virtual__/@patternfly-react-core-virtual-380346ddfd/0/cache/@patternfly-react-core-npm-4.202.16-86fd26126e-1bc64ee79b.zip/node_modules/@patternfly/react-core/",
+        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.206.2", {
+          "packageLocation": "./.yarn/__virtual__/@patternfly-react-core-virtual-919ffaefd9/0/cache/@patternfly-react-core-npm-4.206.2-9bafaac03b-5c090c1c2f.zip/node_modules/@patternfly/react-core/",
           "packageDependencies": [
-            ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.202.16"],
-            ["@patternfly/react-icons", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.57.2"],
-            ["@patternfly/react-styles", "npm:4.56.2"],
-            ["@patternfly/react-tokens", "npm:4.58.2"],
+            ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.206.2"],
+            ["@patternfly/react-icons", "virtual:919ffaefd9ec89d31d2bc369d43b4dca3fd9c6cbdc069e5812c83d4f153642543f8c35d1441c2ffd851319c59b3ced77be5b778830220a899cd4d7f78ff893c9#npm:4.62.0"],
+            ["@patternfly/react-styles", "npm:4.61.0"],
+            ["@patternfly/react-tokens", "npm:4.63.0"],
             ["@types/react", "npm:17.0.44"],
             ["@types/react-dom", "npm:18.0.3"],
             ["focus-trap", "npm:6.2.2"],
@@ -4978,6 +4978,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@patternfly-react-icons-npm-4.57.3-822cb8ce93-9406297c1b.zip/node_modules/@patternfly/react-icons/",
           "packageDependencies": [
             ["@patternfly/react-icons", "npm:4.57.3"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["npm:4.62.0", {
+          "packageLocation": "./.yarn/cache/@patternfly-react-icons-npm-4.62.0-0bfaa7f995-54f13f31cf.zip/node_modules/@patternfly/react-icons/",
+          "packageDependencies": [
+            ["@patternfly/react-icons", "npm:4.62.0"]
           ],
           "linkType": "SOFT",
         }],
@@ -5014,36 +5021,53 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "react"
           ],
           "linkType": "HARD",
+        }],
+        ["virtual:919ffaefd9ec89d31d2bc369d43b4dca3fd9c6cbdc069e5812c83d4f153642543f8c35d1441c2ffd851319c59b3ced77be5b778830220a899cd4d7f78ff893c9#npm:4.62.0", {
+          "packageLocation": "./.yarn/__virtual__/@patternfly-react-icons-virtual-36d68e4b4d/0/cache/@patternfly-react-icons-npm-4.62.0-0bfaa7f995-54f13f31cf.zip/node_modules/@patternfly/react-icons/",
+          "packageDependencies": [
+            ["@patternfly/react-icons", "virtual:919ffaefd9ec89d31d2bc369d43b4dca3fd9c6cbdc069e5812c83d4f153642543f8c35d1441c2ffd851319c59b3ced77be5b778830220a899cd4d7f78ff893c9#npm:4.62.0"],
+            ["@types/react", "npm:17.0.44"],
+            ["@types/react-dom", "npm:18.0.3"],
+            ["react", "npm:17.0.2"],
+            ["react-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:17.0.2"]
+          ],
+          "packagePeers": [
+            "@types/react-dom",
+            "@types/react",
+            "react-dom",
+            "react"
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@patternfly/react-styles", [
-        ["npm:4.56.2", {
-          "packageLocation": "./.yarn/cache/@patternfly-react-styles-npm-4.56.2-4042c6e932-c36a318bfd.zip/node_modules/@patternfly/react-styles/",
-          "packageDependencies": [
-            ["@patternfly/react-styles", "npm:4.56.2"]
-          ],
-          "linkType": "HARD",
-        }],
         ["npm:4.56.3", {
           "packageLocation": "./.yarn/cache/@patternfly-react-styles-npm-4.56.3-5de166338a-87ea690576.zip/node_modules/@patternfly/react-styles/",
           "packageDependencies": [
             ["@patternfly/react-styles", "npm:4.56.3"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:4.61.0", {
+          "packageLocation": "./.yarn/cache/@patternfly-react-styles-npm-4.61.0-b6a085aaa3-94db6566a9.zip/node_modules/@patternfly/react-styles/",
+          "packageDependencies": [
+            ["@patternfly/react-styles", "npm:4.61.0"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@patternfly/react-tokens", [
-        ["npm:4.58.2", {
-          "packageLocation": "./.yarn/cache/@patternfly-react-tokens-npm-4.58.2-cf9a6bb1f2-7faf89b639.zip/node_modules/@patternfly/react-tokens/",
-          "packageDependencies": [
-            ["@patternfly/react-tokens", "npm:4.58.2"]
-          ],
-          "linkType": "HARD",
-        }],
         ["npm:4.58.3", {
           "packageLocation": "./.yarn/cache/@patternfly-react-tokens-npm-4.58.3-1ec55297d9-6c474914ca.zip/node_modules/@patternfly/react-tokens/",
           "packageDependencies": [
             ["@patternfly/react-tokens", "npm:4.58.3"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:4.63.0", {
+          "packageLocation": "./.yarn/cache/@patternfly-react-tokens-npm-4.63.0-07dd244c6a-bdaf75f2c6.zip/node_modules/@patternfly/react-tokens/",
+          "packageDependencies": [
+            ["@patternfly/react-tokens", "npm:4.63.0"]
           ],
           "linkType": "HARD",
         }]
@@ -18555,7 +18579,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["kaoto-ui", "workspace:."],
             ["@patternfly/patternfly", "npm:4.192.1"],
             ["@patternfly/react-code-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.47.3"],
-            ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.202.16"],
+            ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.206.2"],
             ["@patternfly/react-icons", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.57.2"],
             ["@rhoas/app-services-ui-shared", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.15.4"],
             ["@storybook/addon-actions", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.0-alpha.54"],
@@ -26138,7 +26162,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/__virtual__/uniforms-patternfly-virtual-83ec90391a/0/cache/uniforms-patternfly-npm-4.7.4-8a18e4f1cc-1d9cc82dc2.zip/node_modules/uniforms-patternfly/",
           "packageDependencies": [
             ["uniforms-patternfly", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.4"],
-            ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.202.16"],
+            ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.206.2"],
             ["@patternfly/react-icons", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.57.2"],
             ["@types/patternfly__react-core", null],
             ["@types/patternfly__react-icons", null],
