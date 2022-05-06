@@ -12895,7 +12895,7 @@ __metadata:
     uniforms-bridge-json-schema: ^3.6.2
     uniforms-patternfly: ^4.7.4
     url-loader: 4.1.1
-    use-debounce: 7.0.1
+    use-debounce: 8.0.1
     uuid: 8.3.2
     web-vitals: 2.1.4
     webpack: 5.71.0
@@ -19135,12 +19135,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-debounce@npm:7.0.1":
-  version: 7.0.1
-  resolution: "use-debounce@npm:7.0.1"
+"use-debounce@npm:8.0.1":
+  version: 8.0.1
+  resolution: "use-debounce@npm:8.0.1"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: c5c1c34ccef6c11fe25fecef983a07f5a7260fce77b58f0f648f6ae08693a22a9077b5362b96154896e9ea756e6aaea303eb44550a293456cecb6f15cf87d73b
+  checksum: c66cb9a33b7b141232432dbdbdceb35573da8efd340e60c7f42e00f36e06c897818b731d9a9211d137a98dfb4acd5d686ff9bbe98b5990411ea6e67ee6e5a83d
   languageName: node
   linkType: hard
 
