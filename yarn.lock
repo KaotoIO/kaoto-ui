@@ -2160,13 +2160,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-core@npm:4.202.16":
-  version: 4.202.16
-  resolution: "@patternfly/react-core@npm:4.202.16"
+"@patternfly/react-core@npm:4.206.2":
+  version: 4.206.2
+  resolution: "@patternfly/react-core@npm:4.206.2"
   dependencies:
-    "@patternfly/react-icons": ^4.53.16
-    "@patternfly/react-styles": ^4.52.16
-    "@patternfly/react-tokens": ^4.54.16
+    "@patternfly/react-icons": ^4.57.2
+    "@patternfly/react-styles": ^4.56.2
+    "@patternfly/react-tokens": ^4.58.2
     focus-trap: 6.2.2
     react-dropzone: 9.0.0
     tippy.js: 5.1.2
@@ -2174,7 +2174,7 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
-  checksum: 1bc64ee79b89b9cafb5153645b52f5a13ee8af01e6dfd03802d2fb590342626881765d406a53e9a36ea4c94d4cb5aae5497b7eaa6b1c468a204551fba4d16aed
+  checksum: 5c090c1c2f676481c6698f1a79e51351196292be10ca17e0d77a1c9c223cb9bc1e7da18ace5292863cd6325a76c208ca0dd3f01377c3d43b8da026cdcab70ff9
   languageName: node
   linkType: hard
 
@@ -2196,13 +2196,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-icons@npm:4.57.2, @patternfly/react-icons@npm:^4.53.16":
+"@patternfly/react-icons@npm:4.57.2":
   version: 4.57.2
   resolution: "@patternfly/react-icons@npm:4.57.2"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
   checksum: 1432d6426cde80895b552966582869096197e628600ca1d04d382c8882034241e1a117377cdb8b8a31d91166873edb4ed5c311b2617b3d74aeb33568a867e752
+  languageName: node
+  linkType: hard
+
+"@patternfly/react-icons@npm:^4.57.2":
+  version: 4.62.0
+  resolution: "@patternfly/react-icons@npm:4.62.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+  checksum: 54f13f31cf75f72968d1a16b33029e74cb8ab993f3cfdce974f3edce5b1fdfd5503389cda14b63e04bebd91af8ee1cecb0b3a23ceec592fc36fd213cce5dfc04
   languageName: node
   linkType: hard
 
@@ -2216,10 +2226,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-styles@npm:^4.52.16":
-  version: 4.56.2
-  resolution: "@patternfly/react-styles@npm:4.56.2"
-  checksum: c36a318bfdc785c5ac7a38acab634df4f9c129956f336b3b42a8d885504b60e20b5770a938d65a4693331b736e2ae40d3c3ca3d377944bc20f2a9c1641a30fd9
+"@patternfly/react-styles@npm:^4.56.2":
+  version: 4.61.0
+  resolution: "@patternfly/react-styles@npm:4.61.0"
+  checksum: 94db6566a99c219505b909969533056aa0e5534cb4c289838ea4b33ce8b96edeed3f849214878ac2ef8d29757e41052946f238e605e0eb93315546e1e050e621
   languageName: node
   linkType: hard
 
@@ -2230,10 +2240,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-tokens@npm:^4.54.16":
-  version: 4.58.2
-  resolution: "@patternfly/react-tokens@npm:4.58.2"
-  checksum: 7faf89b639e6b9ba65c4ac9d7d8450509daf93e5481be7551e5c684a994b8d7b19df211728eb939a62d398fee83ca2125269aaae3b108a040d304f2487e0946a
+"@patternfly/react-tokens@npm:^4.58.2":
+  version: 4.63.0
+  resolution: "@patternfly/react-tokens@npm:4.63.0"
+  checksum: bdaf75f2c6bdc8595fc0dd6ac7c736af267290899cf43d3246d630efb2d096ded96604b676a83f1555c2095838485647a7ee104d4c5f306b25f83c95ab1dd8b2
   languageName: node
   linkType: hard
 
@@ -12826,7 +12836,7 @@ __metadata:
   dependencies:
     "@patternfly/patternfly": 4.192.1
     "@patternfly/react-code-editor": ^4.47.3
-    "@patternfly/react-core": 4.202.16
+    "@patternfly/react-core": 4.206.2
     "@patternfly/react-icons": 4.57.2
     "@rhoas/app-services-ui-shared": ^0.15.4
     "@storybook/addon-actions": ^6.5.0-alpha.54
