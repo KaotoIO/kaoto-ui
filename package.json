@@ -89,7 +89,7 @@
     "file-selector": "^0.5.0",
     "html-webpack-plugin": "5.5.0",
     "jest": "27.5.1",
-    "jest-environment-jsdom": "^27.5.1",
+    "jest-environment-jsdom": "^28.0.2",
     "lint-staged": "12.4.1",
     "mini-css-extract-plugin": "2.6.0",
     "null-loader": "^4.0.1",
