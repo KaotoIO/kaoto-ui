@@ -114,7 +114,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["webpack-dev-server", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.8.1"],
             ["webpack-merge", "npm:5.8.0"],
             ["whatwg-fetch", "npm:3.6.2"],
-            ["yaml-loader", "npm:0.6.0"],
+            ["yaml-loader", "npm:0.8.0"],
             ["yarn", "npm:2.4.3"]
           ],
           "linkType": "SOFT",
@@ -18047,6 +18047,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["javascript-stringify", [
+        ["npm:2.1.0", {
+          "packageLocation": "./.yarn/cache/javascript-stringify-npm-2.1.0-3da58139d2-009981ec84.zip/node_modules/javascript-stringify/",
+          "packageDependencies": [
+            ["javascript-stringify", "npm:2.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["jest", [
         ["npm:27.5.1", {
           "packageLocation": "./.yarn/cache/jest-npm-27.5.1-bacad4fe2a-96f1d69042.zip/node_modules/jest/",
@@ -18988,7 +18997,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["webpack-dev-server", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.8.1"],
             ["webpack-merge", "npm:5.8.0"],
             ["whatwg-fetch", "npm:3.6.2"],
-            ["yaml-loader", "npm:0.6.0"],
+            ["yaml-loader", "npm:0.8.0"],
             ["yarn", "npm:2.4.3"]
           ],
           "linkType": "SOFT",
@@ -27907,15 +27916,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["yaml", "npm:1.10.2"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:2.0.1", {
+          "packageLocation": "./.yarn/cache/yaml-npm-2.0.1-92722db385-23f95ff0d6.zip/node_modules/yaml/",
+          "packageDependencies": [
+            ["yaml", "npm:2.0.1"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["yaml-loader", [
-        ["npm:0.6.0", {
-          "packageLocation": "./.yarn/cache/yaml-loader-npm-0.6.0-348c22dc2a-de6f070aaf.zip/node_modules/yaml-loader/",
+        ["npm:0.8.0", {
+          "packageLocation": "./.yarn/cache/yaml-loader-npm-0.8.0-653ab95fef-d12dd26466.zip/node_modules/yaml-loader/",
           "packageDependencies": [
-            ["yaml-loader", "npm:0.6.0"],
-            ["loader-utils", "npm:1.4.0"],
-            ["yaml", "npm:1.10.2"]
+            ["yaml-loader", "npm:0.8.0"],
+            ["javascript-stringify", "npm:2.1.0"],
+            ["loader-utils", "npm:2.0.2"],
+            ["yaml", "npm:2.0.1"]
           ],
           "linkType": "HARD",
         }]
