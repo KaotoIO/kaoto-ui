@@ -75,7 +75,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react-hooks", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.5.0"],
             ["eslint-plugin-testing-library", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.3.1"],
             ["file-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.2.0"],
-            ["file-selector", "npm:0.5.0"],
+            ["file-selector", "npm:0.6.0"],
             ["html-webpack-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.5.0"],
             ["jest", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:27.5.1"],
             ["jest-environment-jsdom", "npm:27.5.1"],
@@ -15442,11 +15442,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:0.5.0", {
-          "packageLocation": "./.yarn/cache/file-selector-npm-0.5.0-c731a8ed22-f95a069381.zip/node_modules/file-selector/",
+        ["npm:0.6.0", {
+          "packageLocation": "./.yarn/cache/file-selector-npm-0.6.0-04259af1f7-7d051b6e5d.zip/node_modules/file-selector/",
           "packageDependencies": [
-            ["file-selector", "npm:0.5.0"],
-            ["tslib", "npm:2.3.1"]
+            ["file-selector", "npm:0.6.0"],
+            ["tslib", "npm:2.4.0"]
           ],
           "linkType": "HARD",
         }]
@@ -18958,7 +18958,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react-hooks", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.5.0"],
             ["eslint-plugin-testing-library", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.3.1"],
             ["file-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.2.0"],
-            ["file-selector", "npm:0.5.0"],
+            ["file-selector", "npm:0.6.0"],
             ["html-webpack-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.5.0"],
             ["jest", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:27.5.1"],
             ["jest-environment-jsdom", "npm:27.5.1"],
@@ -26177,6 +26177,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/tslib-npm-2.3.1-0e21e18015-de17a98d46.zip/node_modules/tslib/",
           "packageDependencies": [
             ["tslib", "npm:2.3.1"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:2.4.0", {
+          "packageLocation": "./.yarn/cache/tslib-npm-2.4.0-9cb6dc5030-8c4aa6a3c5.zip/node_modules/tslib/",
+          "packageDependencies": [
+            ["tslib", "npm:2.4.0"]
           ],
           "linkType": "HARD",
         }]
