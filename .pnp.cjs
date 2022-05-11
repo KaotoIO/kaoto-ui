@@ -104,7 +104,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=ddd1e8"],
             ["uniforms", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.8.1"],
             ["uniforms-bridge-json-schema", "npm:3.8.1"],
-            ["uniforms-patternfly", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.4"],
+            ["uniforms-patternfly", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.5"],
             ["url-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.1.1"],
             ["use-debounce", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:8.0.1"],
             ["uuid", "npm:8.3.2"],
@@ -18657,7 +18657,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=ddd1e8"],
             ["uniforms", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.8.1"],
             ["uniforms-bridge-json-schema", "npm:3.8.1"],
-            ["uniforms-patternfly", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.4"],
+            ["uniforms-patternfly", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.5"],
             ["url-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.1.1"],
             ["use-debounce", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:8.0.1"],
             ["uuid", "npm:8.3.2"],
@@ -26169,17 +26169,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["uniforms-patternfly", [
-        ["npm:4.7.4", {
-          "packageLocation": "./.yarn/cache/uniforms-patternfly-npm-4.7.4-8a18e4f1cc-1d9cc82dc2.zip/node_modules/uniforms-patternfly/",
+        ["npm:4.7.5", {
+          "packageLocation": "./.yarn/cache/uniforms-patternfly-npm-4.7.5-11d824938e-aa287a9718.zip/node_modules/uniforms-patternfly/",
           "packageDependencies": [
-            ["uniforms-patternfly", "npm:4.7.4"]
+            ["uniforms-patternfly", "npm:4.7.5"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.4", {
-          "packageLocation": "./.yarn/__virtual__/uniforms-patternfly-virtual-83ec90391a/0/cache/uniforms-patternfly-npm-4.7.4-8a18e4f1cc-1d9cc82dc2.zip/node_modules/uniforms-patternfly/",
+        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.5", {
+          "packageLocation": "./.yarn/__virtual__/uniforms-patternfly-virtual-a516984ef8/0/cache/uniforms-patternfly-npm-4.7.5-11d824938e-aa287a9718.zip/node_modules/uniforms-patternfly/",
           "packageDependencies": [
-            ["uniforms-patternfly", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.4"],
+            ["uniforms-patternfly", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.5"],
             ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.206.2"],
             ["@patternfly/react-icons", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.57.2"],
             ["@types/patternfly__react-core", null],
