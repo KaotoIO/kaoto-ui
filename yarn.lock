@@ -5112,10 +5112,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:8.3.1":
-  version: 8.3.1
-  resolution: "@types/uuid@npm:8.3.1"
-  checksum: b41bdc5e86c6f0f1899306be10455636da0f2168c9489b869edd6837ddeb7c0e501b1ff7d857402462986bada2a379125743dd895fa801d03437cd632116a373
+"@types/uuid@npm:8.3.4":
+  version: 8.3.4
+  resolution: "@types/uuid@npm:8.3.4"
+  checksum: 6f11f3ff70f30210edaa8071422d405e9c1d4e53abbe50fdce365150d3c698fe7bbff65c1e71ae080cbfb8fded860dbb5e174da96fdbbdfcaa3fb3daa474d20f
   languageName: node
   linkType: hard
 
@@ -13127,7 +13127,7 @@ __metadata:
     "@types/react-dom": 18.0.3
     "@types/react-router-dom": 5.3.3
     "@types/testing-library__jest-dom": 5.14.3
-    "@types/uuid": 8.3.1
+    "@types/uuid": 8.3.4
     "@typescript-eslint/eslint-plugin": ^5.23.0
     "@typescript-eslint/parser": 5.23.0
     ajv: ^8.8.2
