@@ -102,7 +102,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["tsconfig-paths-webpack-plugin", "npm:3.5.2"],
             ["tslib", "npm:2.3.1"],
             ["typescript", "patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=ddd1e8"],
-            ["uniforms", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.8.1"],
+            ["uniforms", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.9.1"],
             ["uniforms-bridge-json-schema", "npm:3.8.1"],
             ["uniforms-patternfly", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.5"],
             ["url-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.1.1"],
@@ -18612,7 +18612,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["tsconfig-paths-webpack-plugin", "npm:3.5.2"],
             ["tslib", "npm:2.3.1"],
             ["typescript", "patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=ddd1e8"],
-            ["uniforms", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.8.1"],
+            ["uniforms", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.9.1"],
             ["uniforms-bridge-json-schema", "npm:3.8.1"],
             ["uniforms-patternfly", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.5"],
             ["url-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.1.1"],
@@ -26089,10 +26089,33 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.8.1", {
-          "packageLocation": "./.yarn/__virtual__/uniforms-virtual-83d2160227/0/cache/uniforms-npm-3.8.1-0066765138-4f120c46ab.zip/node_modules/uniforms/",
+        ["npm:3.9.1", {
+          "packageLocation": "./.yarn/cache/uniforms-npm-3.9.1-0080fe3979-0737acceb5.zip/node_modules/uniforms/",
           "packageDependencies": [
-            ["uniforms", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.8.1"],
+            ["uniforms", "npm:3.9.1"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.9.1", {
+          "packageLocation": "./.yarn/__virtual__/uniforms-virtual-adb2f2ac5c/0/cache/uniforms-npm-3.9.1-0080fe3979-0737acceb5.zip/node_modules/uniforms/",
+          "packageDependencies": [
+            ["uniforms", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.9.1"],
+            ["@types/react", "npm:17.0.44"],
+            ["invariant", "npm:2.2.4"],
+            ["lodash", "npm:4.17.21"],
+            ["react", "npm:17.0.2"],
+            ["tslib", "npm:2.3.1"]
+          ],
+          "packagePeers": [
+            "@types/react",
+            "react"
+          ],
+          "linkType": "HARD",
+        }],
+        ["virtual:a516984ef8b84b82dc7693a14c30598cc41a9e0b25e3707859212c2bd9905883b8b0209a1ed2998a22a20ef3df3b4315d6b6325f920e56d422e71af24c3e3706#npm:3.8.1", {
+          "packageLocation": "./.yarn/__virtual__/uniforms-virtual-194604b4a2/0/cache/uniforms-npm-3.8.1-0066765138-4f120c46ab.zip/node_modules/uniforms/",
+          "packageDependencies": [
+            ["uniforms", "virtual:a516984ef8b84b82dc7693a14c30598cc41a9e0b25e3707859212c2bd9905883b8b0209a1ed2998a22a20ef3df3b4315d6b6325f920e56d422e71af24c3e3706#npm:3.8.1"],
             ["@types/react", "npm:17.0.44"],
             ["invariant", "npm:2.2.4"],
             ["lodash", "npm:4.17.21"],
@@ -26157,7 +26180,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["lodash", "npm:4.17.21"],
             ["react", "npm:17.0.2"],
             ["tslib", "npm:2.3.1"],
-            ["uniforms", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.8.1"]
+            ["uniforms", "virtual:a516984ef8b84b82dc7693a14c30598cc41a9e0b25e3707859212c2bd9905883b8b0209a1ed2998a22a20ef3df3b4315d6b6325f920e56d422e71af24c3e3706#npm:3.8.1"]
           ],
           "packagePeers": [
             "@patternfly/react-core",
