@@ -50,7 +50,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/dom", "npm:8.11.3"],
             ["@testing-library/jest-dom", "npm:5.16.4"],
             ["@testing-library/react", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:12.1.5"],
-            ["@testing-library/user-event", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:14.1.1"],
+            ["@testing-library/user-event", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:14.2.0"],
             ["@trivago/prettier-plugin-sort-imports", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.2.0"],
             ["@types/jest", "npm:27.4.1"],
             ["@types/react", "npm:17.0.44"],
@@ -7670,17 +7670,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@testing-library/user-event", [
-        ["npm:14.1.1", {
-          "packageLocation": "./.yarn/cache/@testing-library-user-event-npm-14.1.1-5080ff18a4-dd02aecbde.zip/node_modules/@testing-library/user-event/",
+        ["npm:14.2.0", {
+          "packageLocation": "./.yarn/cache/@testing-library-user-event-npm-14.2.0-84217e47a5-b34f19bbfe.zip/node_modules/@testing-library/user-event/",
           "packageDependencies": [
-            ["@testing-library/user-event", "npm:14.1.1"]
+            ["@testing-library/user-event", "npm:14.2.0"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:14.1.1", {
-          "packageLocation": "./.yarn/__virtual__/@testing-library-user-event-virtual-54201c972f/0/cache/@testing-library-user-event-npm-14.1.1-5080ff18a4-dd02aecbde.zip/node_modules/@testing-library/user-event/",
+        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:14.2.0", {
+          "packageLocation": "./.yarn/__virtual__/@testing-library-user-event-virtual-2dc6c9dc6b/0/cache/@testing-library-user-event-npm-14.2.0-84217e47a5-b34f19bbfe.zip/node_modules/@testing-library/user-event/",
           "packageDependencies": [
-            ["@testing-library/user-event", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:14.1.1"],
+            ["@testing-library/user-event", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:14.2.0"],
             ["@testing-library/dom", "npm:8.11.3"],
             ["@types/testing-library__dom", null]
           ],
@@ -18154,7 +18154,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/dom", "npm:8.11.3"],
             ["@testing-library/jest-dom", "npm:5.16.4"],
             ["@testing-library/react", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:12.1.5"],
-            ["@testing-library/user-event", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:14.1.1"],
+            ["@testing-library/user-event", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:14.2.0"],
             ["@trivago/prettier-plugin-sort-imports", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.2.0"],
             ["@types/jest", "npm:27.4.1"],
             ["@types/react", "npm:17.0.44"],
