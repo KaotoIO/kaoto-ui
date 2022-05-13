@@ -85,7 +85,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["monaco-editor-webpack-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:7.0.1"],
             ["null-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.0.1"],
             ["prettier", "npm:2.6.2"],
-            ["prop-types", "npm:15.7.2"],
+            ["prop-types", "npm:15.8.1"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:17.0.2"],
             ["react-error-boundary", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.1.4"],
@@ -18189,7 +18189,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["monaco-editor-webpack-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:7.0.1"],
             ["null-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.0.1"],
             ["prettier", "npm:2.6.2"],
-            ["prop-types", "npm:15.7.2"],
+            ["prop-types", "npm:15.8.1"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:17.0.2"],
             ["react-error-boundary", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.1.4"],
@@ -21736,16 +21736,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["prop-types", [
-        ["npm:15.7.2", {
-          "packageLocation": "./.yarn/cache/prop-types-npm-15.7.2-d7a04f2274-5eef82fdda.zip/node_modules/prop-types/",
-          "packageDependencies": [
-            ["prop-types", "npm:15.7.2"],
-            ["loose-envify", "npm:1.4.0"],
-            ["object-assign", "npm:4.1.1"],
-            ["react-is", "npm:16.13.1"]
-          ],
-          "linkType": "HARD",
-        }],
         ["npm:15.8.1", {
           "packageLocation": "./.yarn/cache/prop-types-npm-15.8.1-17c71ee7ee-c056d3f1c0.zip/node_modules/prop-types/",
           "packageDependencies": [
@@ -22459,7 +22449,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-dom", "npm:18.0.3"],
             ["@types/react-router-dom", "npm:5.3.3"],
             ["history", "npm:5.2.0"],
-            ["prop-types", "npm:15.7.2"],
+            ["prop-types", "npm:15.8.1"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:17.0.2"],
             ["react-router-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:5.3.1"]
@@ -22493,7 +22483,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", "npm:17.0.44"],
             ["@types/react-dom", "npm:18.0.3"],
             ["humps", "npm:2.0.1"],
-            ["prop-types", "npm:15.7.2"],
+            ["prop-types", "npm:15.8.1"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:17.0.2"],
             ["react-use", "virtual:74c9582d0c6f057fc94bb524dc1a3598447206c9d91d80e142d37c492fe5ab652d31c99b5a5894d546c93eea6cc9f4be843387f6b4639b02454f7dc23a0a1050#npm:15.3.8"]
