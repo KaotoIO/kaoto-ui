@@ -1,4 +1,3 @@
-
 describe('editing properties', () => {
   beforeEach(() => {
     cy.visit('http://localhost:1337');
@@ -22,15 +21,4 @@ describe('editing properties', () => {
     
     }) ;
   });
-
 });
-
-
-
-
-
-
-
-
-    
-
