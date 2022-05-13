@@ -1,4 +1,5 @@
 describe('YAML editor', () => {
+  
   beforeEach(() => {
     let url = Cypress.config().baseUrl;
     cy.visit(url);
