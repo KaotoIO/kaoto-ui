@@ -13,13 +13,13 @@ COPY . .
 
 RUN yarn run build
 
-FROM nginx:latest
+FROM nginxinc/nginx-unprivileged
 
 COPY --from=appbuild /app/dist/* /usr/share/nginx/html/
-COPY nginx/start_nginx.sh .
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-EXPOSE 80
+EXPOSE 8080
 
 HEALTHCHECK --interval=3s --start-period=10s CMD curl --fail http://localhost/ || exit 1
 
-CMD ["./start_nginx.sh"]
+CMD ["nginx", "-g", "daemon off;"]
