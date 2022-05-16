@@ -13,12 +13,17 @@ describe('editing properties', () => {
       cy.get('[data-testid="configurationTab"]').click();
       cy.get('[data-testid="json-schema-configurator"]').click();
       cy.get('input[name="topic"]').type('Hello');
+      cy.get('.code-editor').should('contain.text','Hello');
       cy.get('input[name="bootstrapServers"]').type('anything');
+      cy.get('.code-editor').should('contain.text','anything');
       cy.get('input[name="securityProtocol"]').type('anything');
+      cy.get('.code-editor').should('contain.text','anything');
       cy.get('input[name="saslMechanism"]').type('anything');
+      cy.get('.code-editor').should('contain.text','anything');
       cy.get('input[name="user"]').type('anything');  
-      cy.get('input[name="password"]').type('anything');       
-    
+      cy.get('.code-editor').should('contain.text','anything'); 
+      cy.get('input[name="password"]').type('abc{enter}');
+      cy.get('.code-editor').should('contain.text','abc');
     }) ;
   });
 });
