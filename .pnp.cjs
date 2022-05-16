@@ -103,7 +103,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["tslib", "npm:2.3.1"],
             ["typescript", "patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=ddd1e8"],
             ["uniforms", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.8.1"],
-            ["uniforms-bridge-json-schema", "npm:3.8.1"],
+            ["uniforms-bridge-json-schema", "npm:3.9.1"],
             ["uniforms-patternfly", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.5"],
             ["url-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.1.1"],
             ["use-debounce", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:8.0.1"],
@@ -17713,7 +17713,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["tslib", "npm:2.3.1"],
             ["typescript", "patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=ddd1e8"],
             ["uniforms", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.8.1"],
-            ["uniforms-bridge-json-schema", "npm:3.8.1"],
+            ["uniforms-bridge-json-schema", "npm:3.9.1"],
             ["uniforms-patternfly", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.7.5"],
             ["url-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.1.1"],
             ["use-debounce", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:8.0.1"],
@@ -25179,6 +25179,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
+        ["npm:3.9.1", {
+          "packageLocation": "./.yarn/cache/uniforms-npm-3.9.1-0080fe3979-0737acceb5.zip/node_modules/uniforms/",
+          "packageDependencies": [
+            ["uniforms", "npm:3.9.1"]
+          ],
+          "linkType": "SOFT",
+        }],
         ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:3.8.1", {
           "packageLocation": "./.yarn/__virtual__/uniforms-virtual-83d2160227/0/cache/uniforms-npm-3.8.1-0066765138-4f120c46ab.zip/node_modules/uniforms/",
           "packageDependencies": [
@@ -25195,10 +25202,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["virtual:b66c8ad7fdbf904aa1f64fc36cbeb8222725db52f54a82a43c856db067dd8c7394ea5eac964b0045a5950c1e77e80039e3ed66659a09ef334a4f458e90d7e96f#npm:3.8.1", {
-          "packageLocation": "./.yarn/__virtual__/uniforms-virtual-fe03382d56/0/cache/uniforms-npm-3.8.1-0066765138-4f120c46ab.zip/node_modules/uniforms/",
+        ["virtual:b92c2eb50b5dec9952b9d841194e78dda85ea5b401887d33d64da3949d3a4a42c328449ea9120cf59e97534a959a0fda67e3eb93c273b9dad15778e724a72166#npm:3.9.1", {
+          "packageLocation": "./.yarn/__virtual__/uniforms-virtual-5d704fa995/0/cache/uniforms-npm-3.9.1-0080fe3979-0737acceb5.zip/node_modules/uniforms/",
           "packageDependencies": [
-            ["uniforms", "virtual:b66c8ad7fdbf904aa1f64fc36cbeb8222725db52f54a82a43c856db067dd8c7394ea5eac964b0045a5950c1e77e80039e3ed66659a09ef334a4f458e90d7e96f#npm:3.8.1"],
+            ["uniforms", "virtual:b92c2eb50b5dec9952b9d841194e78dda85ea5b401887d33d64da3949d3a4a42c328449ea9120cf59e97534a959a0fda67e3eb93c273b9dad15778e724a72166#npm:3.9.1"],
             ["@types/react", null],
             ["invariant", "npm:2.2.4"],
             ["lodash", "npm:4.17.21"],
@@ -25213,14 +25220,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["uniforms-bridge-json-schema", [
-        ["npm:3.8.1", {
-          "packageLocation": "./.yarn/cache/uniforms-bridge-json-schema-npm-3.8.1-b66c8ad7fd-f5b3d86fbd.zip/node_modules/uniforms-bridge-json-schema/",
+        ["npm:3.9.1", {
+          "packageLocation": "./.yarn/cache/uniforms-bridge-json-schema-npm-3.9.1-b92c2eb50b-ad684343f3.zip/node_modules/uniforms-bridge-json-schema/",
           "packageDependencies": [
-            ["uniforms-bridge-json-schema", "npm:3.8.1"],
+            ["uniforms-bridge-json-schema", "npm:3.9.1"],
             ["invariant", "npm:2.2.4"],
             ["lodash", "npm:4.17.21"],
             ["tslib", "npm:2.3.1"],
-            ["uniforms", "virtual:b66c8ad7fdbf904aa1f64fc36cbeb8222725db52f54a82a43c856db067dd8c7394ea5eac964b0045a5950c1e77e80039e3ed66659a09ef334a4f458e90d7e96f#npm:3.8.1"]
+            ["uniforms", "virtual:b92c2eb50b5dec9952b9d841194e78dda85ea5b401887d33d64da3949d3a4a42c328449ea9120cf59e97534a959a0fda67e3eb93c273b9dad15778e724a72166#npm:3.9.1"]
           ],
           "linkType": "HARD",
         }]
