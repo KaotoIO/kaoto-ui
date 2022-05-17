@@ -12,7 +12,7 @@ describe('editing properties', () => {
       cy.get('.code-editor').type(user);
     })
     .then(() => {
-      cy.get('[data-id="dndnode_2"]').click();
+      cy.get('[data-id="dndnode_2"]', {timeout:50000}).click();
       cy.get('[data-testid="configurationTab"]').click();
       cy.get('[data-testid="json-schema-configurator"]').click();
     })
