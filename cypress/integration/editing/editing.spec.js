@@ -7,23 +7,26 @@ describe('editing properties', () => {
     cy.get('.code-editor').click();
     cy.get('button').contains('Start from scratch').click();
      
-    cy.fixture('editor.txt').then((user) => {
-      cy.get('.code-editor').type(user)
+    cy.fixture('editor.txt')
+    .then((user) => {
+      cy.get('.code-editor').type(user);
+    })
+    .then(() => {
       cy.get('[data-id="dndnode_2"]').click();
       cy.get('[data-testid="configurationTab"]').click();
       cy.get('[data-testid="json-schema-configurator"]').click();
-      cy.get('input[name="topic"]').type('Hello');
-      cy.get('.code-editor').should('contain.text','Hello');
-      cy.get('input[name="bootstrapServers"]').type('anything');
-      cy.get('.code-editor').should('contain.text','anything');
-      cy.get('input[name="securityProtocol"]').type('anything');
-      cy.get('.code-editor').should('contain.text','anything');
-      cy.get('input[name="saslMechanism"]').type('anything');
-      cy.get('.code-editor').should('contain.text','anything');
-      cy.get('input[name="user"]').type('anything');  
-      cy.get('.code-editor').should('contain.text','anything'); 
-      cy.get('input[name="password"]').type('abc{enter}');
-      cy.get('.code-editor').should('contain.text','abc');
-    }) ;
+    })
+      cy.get('input[name="topic"]').type('topicname');
+      cy.get('.code-editor').should('contain.text', 'topicname');
+      cy.get('input[name="bootstrapServers"]').type('bootstrap');
+      cy.get('.code-editor').should('contain.text', 'bootstrap');
+      cy.get('input[name="securityProtocol"]').type('security');
+      cy.get('.code-editor').should('contain.text', 'security');
+      cy.get('input[name="saslMechanism"]').type('sasl');
+      cy.get('.code-editor').should('contain.text', 'sasl');
+      cy.get('input[name="user"]').type('user');
+      cy.get('.code-editor').should('contain.text', 'user');
+      cy.get('input[name="password"]').type('password');
+      cy.get('.code-editor').should('contain.text', 'password');
+    });
   });
-});
