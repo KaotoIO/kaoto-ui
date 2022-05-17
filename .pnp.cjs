@@ -35,7 +35,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {
           "packageLocation": "./",
           "packageDependencies": [
-            ["@patternfly/patternfly", "npm:4.192.1"],
+            ["@patternfly/patternfly", "npm:4.194.4"],
             ["@patternfly/react-code-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.55.1"],
             ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.206.2"],
             ["@patternfly/react-icons", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.65.1"],
@@ -4855,10 +4855,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@patternfly/patternfly", [
-        ["npm:4.192.1", {
-          "packageLocation": "./.yarn/cache/@patternfly-patternfly-npm-4.192.1-f8df4faba6-8dc7f181f0.zip/node_modules/@patternfly/patternfly/",
+        ["npm:4.194.4", {
+          "packageLocation": "./.yarn/cache/@patternfly-patternfly-npm-4.194.4-d9f779dc96-1e1defd03e.zip/node_modules/@patternfly/patternfly/",
           "packageDependencies": [
-            ["@patternfly/patternfly", "npm:4.192.1"]
+            ["@patternfly/patternfly", "npm:4.194.4"]
           ],
           "linkType": "HARD",
         }]
@@ -17645,7 +17645,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["kaoto-ui", "workspace:."],
-            ["@patternfly/patternfly", "npm:4.192.1"],
+            ["@patternfly/patternfly", "npm:4.194.4"],
             ["@patternfly/react-code-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.55.1"],
             ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.206.2"],
             ["@patternfly/react-icons", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.65.1"],
