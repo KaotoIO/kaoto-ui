@@ -12239,7 +12239,7 @@ __metadata:
     react-error-boundary: 3.1.4
     react-flow-renderer: ^9.7.3
     react-monaco-editor: ^0.48.0
-    react-router-dom: 5.3.1
+    react-router-dom: 5.3.2
     react-router-last-location: 2.0.1
     react-shadow: 19.0.3
     rimraf: 3.0.2
@@ -15485,20 +15485,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:5.3.1":
-  version: 5.3.1
-  resolution: "react-router-dom@npm:5.3.1"
+"react-router-dom@npm:5.3.2":
+  version: 5.3.2
+  resolution: "react-router-dom@npm:5.3.2"
   dependencies:
     "@babel/runtime": ^7.12.13
     history: ^4.9.0
     loose-envify: ^1.3.1
     prop-types: ^15.6.2
-    react-router: 5.3.1
+    react-router: 5.3.2
     tiny-invariant: ^1.0.2
     tiny-warning: ^1.0.0
   peerDependencies:
     react: ">=15"
-  checksum: efbf80c91d64bf51e61fa5dd9e4b7e9c350a0a560d575992d3ee214e0e48da38210b5d8a03c6b270a21f8fd6fa020d076f2af191db5a722c28a68fcad9cefde6
+  checksum: 9738c850ab727d5ad395844eee7476fd38575f6a9535e9e0d1db49eb6d9351212be8fb7fe25bd639fb8c394062b9e2b73b55a0b1b23e7303375526785a219a6b
   languageName: node
   linkType: hard
 
@@ -15514,9 +15514,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:5.3.1":
-  version: 5.3.1
-  resolution: "react-router@npm:5.3.1"
+"react-router@npm:5.3.2":
+  version: 5.3.2
+  resolution: "react-router@npm:5.3.2"
   dependencies:
     "@babel/runtime": ^7.12.13
     history: ^4.9.0
@@ -15530,7 +15530,7 @@ __metadata:
     tiny-warning: ^1.0.0
   peerDependencies:
     react: ">=15"
-  checksum: b85c7b4dee5a011f542a654a673489bdedb8cd217e32838d13bc9b2c93f068fd37777bc7ef6cbebd6675cadc4e89add75f5e52e452be6c5b1f92070ad7f7e505
+  checksum: eb67720480104dd7e97a419f69997b0ecfc5b6b1ff8e70fdb44c8a6735f02df81322a429bed97a16c8f7d1286b574c9fe3f636801326d75dba4d5e0bd3370f6d
   languageName: node
   linkType: hard
 
