@@ -32,10 +32,13 @@ export interface IFetch {
 }
 declare var window: any;
 let apiURL = process.env.KAOTO_API;
-// console.log(process.env.NODE_ENV);
 
-if (process.env.NODE_ENV == 'production' && window.KAOTO_API) {
+if (process.env.NODE_ENV == 'production') {
+  if (window.KAOTO_API) {
   apiURL = window.KAOTO_API;
+} else {
+  apiURL = '/api'
+}
 }
 
 // converts an object into a query string
