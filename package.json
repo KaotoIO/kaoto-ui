@@ -31,7 +31,7 @@
     "@patternfly/react-code-editor": "^4.55.1",
     "@patternfly/react-core": "4.206.2",
     "@patternfly/react-icons": "4.65.1",
-    "@rhoas/app-services-ui-shared": "^0.15.4",
+    "@rhoas/app-services-ui-shared": "^0.16.0",
     "ajv": "^8.8.2",
     "monaco-editor": "^0.33.0",
     "monaco-editor-webpack-plugin": "^7.0.1",

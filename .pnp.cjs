@@ -39,7 +39,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@patternfly/react-code-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.55.1"],
             ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.206.2"],
             ["@patternfly/react-icons", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.65.1"],
-            ["@rhoas/app-services-ui-shared", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.15.4"],
+            ["@rhoas/app-services-ui-shared", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.16.0"],
             ["@storybook/addon-actions", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.0-alpha.54"],
             ["@storybook/addon-docs", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.0-beta.8"],
             ["@storybook/addon-links", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.0-alpha.54"],
@@ -5104,17 +5104,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@rhoas/app-services-ui-shared", [
-        ["npm:0.15.4", {
-          "packageLocation": "./.yarn/cache/@rhoas-app-services-ui-shared-npm-0.15.4-9871d469d0-8e481bb3a0.zip/node_modules/@rhoas/app-services-ui-shared/",
+        ["npm:0.16.0", {
+          "packageLocation": "./.yarn/cache/@rhoas-app-services-ui-shared-npm-0.16.0-cf129e071e-94338a94eb.zip/node_modules/@rhoas/app-services-ui-shared/",
           "packageDependencies": [
-            ["@rhoas/app-services-ui-shared", "npm:0.15.4"]
+            ["@rhoas/app-services-ui-shared", "npm:0.16.0"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.15.4", {
-          "packageLocation": "./.yarn/__virtual__/@rhoas-app-services-ui-shared-virtual-d9d73ec9c0/0/cache/@rhoas-app-services-ui-shared-npm-0.15.4-9871d469d0-8e481bb3a0.zip/node_modules/@rhoas/app-services-ui-shared/",
+        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.16.0", {
+          "packageLocation": "./.yarn/__virtual__/@rhoas-app-services-ui-shared-virtual-9ecc4f66fa/0/cache/@rhoas-app-services-ui-shared-npm-0.16.0-cf129e071e-94338a94eb.zip/node_modules/@rhoas/app-services-ui-shared/",
           "packageDependencies": [
-            ["@rhoas/app-services-ui-shared", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.15.4"],
+            ["@rhoas/app-services-ui-shared", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.16.0"],
             ["@types/react", "npm:17.0.44"],
             ["react", "npm:17.0.2"],
             ["tslib", "npm:2.3.1"]
@@ -17695,7 +17695,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@patternfly/react-code-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.55.1"],
             ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.206.2"],
             ["@patternfly/react-icons", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.65.1"],
-            ["@rhoas/app-services-ui-shared", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.15.4"],
+            ["@rhoas/app-services-ui-shared", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.16.0"],
             ["@storybook/addon-actions", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.0-alpha.54"],
             ["@storybook/addon-docs", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.0-beta.8"],
             ["@storybook/addon-links", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.0-alpha.54"],

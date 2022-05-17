@@ -2283,14 +2283,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rhoas/app-services-ui-shared@npm:^0.15.4":
-  version: 0.15.4
-  resolution: "@rhoas/app-services-ui-shared@npm:0.15.4"
+"@rhoas/app-services-ui-shared@npm:^0.16.0":
+  version: 0.16.0
+  resolution: "@rhoas/app-services-ui-shared@npm:0.16.0"
   dependencies:
     tslib: 2.3.1
   peerDependencies:
     react: 17.0.2
-  checksum: 8e481bb3a0f0c7321bfdd3ddfb6c04b5b0e2516d072e5f9c925399b677e504c1facc72a78b707ed9982f355a1bd7c0dea456eb1c5e9b7abb74b40fb3ea8d34e1
+  checksum: 94338a94eb5c05bfaec36cfad7eeea2821f7e6b200b67f8b4544c886046f6aa2f68b2efd3f65a6b9f6aa433f4d74faaacf3b58e5ac545cd48208a005872574bd
   languageName: node
   linkType: hard
 
@@ -12232,7 +12232,7 @@ __metadata:
     "@patternfly/react-code-editor": ^4.55.1
     "@patternfly/react-core": 4.206.2
     "@patternfly/react-icons": 4.65.1
-    "@rhoas/app-services-ui-shared": ^0.15.4
+    "@rhoas/app-services-ui-shared": ^0.16.0
     "@storybook/addon-actions": ^6.5.0-alpha.54
     "@storybook/addon-docs": ^6.5.0-beta.8
     "@storybook/addon-links": ^6.5.0-alpha.54
