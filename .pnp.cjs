@@ -12425,7 +12425,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["cypress", [
         ["npm:9.6.1", {
-          "packageLocation": "./.yarn/unplugged/cypress-npm-9.6.1-5d0d6ee11e/node_modules/cypress/",
+          "packageLocation": "./.yarn/cache/cypress-npm-9.6.1-5d0d6ee11e-3d464346f3.zip/node_modules/cypress/",
           "packageDependencies": [
             ["cypress", "npm:9.6.1"],
             ["@cypress/request", "npm:2.88.10"],
