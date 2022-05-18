@@ -1,7 +1,6 @@
 {
   "baseUrl": "http://localhost:1337",
   "projectId": "yqy7ah",
-  "nodeVersion": "bundled",
   "trashAssetsBeforeRuns": false,
   "videoUploadOnPasses": false,
   "video": true,
