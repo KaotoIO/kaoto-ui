@@ -7961,9 +7961,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:9.5.3":
-  version: 9.5.3
-  resolution: "cypress@npm:9.5.3"
+"cypress@npm:9.6.1":
+  version: 9.6.1
+  resolution: "cypress@npm:9.6.1"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -8009,7 +8009,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: cfd2333fede054a61c1a8d5f3ec0f08b661ff814bff61a418855b542acc8c2d43f3b24dbda849cd9bcce618bf59ce1c5d0abf86a985daaffc0f187db424a5fc8
+  checksum: 3d464346f30b164c10947e332e5c8095c1f53b946d378c18a09e7591b0aadb331062d880505a228ff1d996d37c9e7b4e8a9f2308871a00442d9171a1718f7fa4
   languageName: node
   linkType: hard
 
@@ -12651,7 +12651,7 @@ __metadata:
     chromatic: ^6.5.4
     css-loader: ^6.6.0
     css-minimizer-webpack-plugin: ^3.4.1
-    cypress: 9.5.3
+    cypress: 9.6.1
     dotenv-webpack: 7.0.3
     eslint: 7.32.0
     eslint-config-prettier: 8.5.0
