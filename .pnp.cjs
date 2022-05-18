@@ -12425,7 +12425,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["cypress", [
         ["npm:9.6.1", {
-          "packageLocation": "./.yarn/cache/cypress-npm-9.6.1-5d0d6ee11e-3d464346f3.zip/node_modules/cypress/",
+          "packageLocation": "./.yarn/unplugged/cypress-npm-9.6.1-5d0d6ee11e/node_modules/cypress/",
           "packageDependencies": [
             ["cypress", "npm:9.6.1"],
             ["@cypress/request", "npm:2.88.10"],
@@ -12662,20 +12662,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/supports-color", null],
             ["ms", "npm:2.1.3"],
             ["supports-color", null]
-          ],
-          "packagePeers": [
-            "@types/supports-color",
-            "supports-color"
-          ],
-          "linkType": "HARD",
-        }],
-        ["virtual:5d0d6ee11ef99d1c212ed3a8667ee795d43ffd814546ae7a6bfae8808b44b625511fb65b1588b0dbc583527f00fbba54ff9a64b9ffc19e64828a0581c2aaaacc#npm:4.3.3", {
-          "packageLocation": "./.yarn/__virtual__/debug-virtual-6c62b08287/0/cache/debug-npm-4.3.3-710fd4cc7f-14472d56fe.zip/node_modules/debug/",
-          "packageDependencies": [
-            ["debug", "virtual:5d0d6ee11ef99d1c212ed3a8667ee795d43ffd814546ae7a6bfae8808b44b625511fb65b1588b0dbc583527f00fbba54ff9a64b9ffc19e64828a0581c2aaaacc#npm:4.3.3"],
-            ["@types/supports-color", null],
-            ["ms", "npm:2.1.2"],
-            ["supports-color", "npm:8.1.1"]
           ],
           "packagePeers": [
             "@types/supports-color",
@@ -18278,11 +18264,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/enquirer", null],
             ["cli-truncate", "npm:2.1.0"],
             ["colorette", "npm:2.0.16"],
-            ["enquirer", null],
+            ["enquirer", "npm:2.3.6"],
             ["log-update", "npm:4.0.0"],
             ["p-map", "npm:4.0.0"],
             ["rfdc", "npm:1.3.0"],
-            ["rxjs", "npm:7.5.5"],
+            ["rxjs", "npm:7.5.4"],
             ["through", "npm:2.3.8"],
             ["wrap-ansi", "npm:7.0.0"]
           ],
@@ -18299,11 +18285,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/enquirer", null],
             ["cli-truncate", "npm:2.1.0"],
             ["colorette", "npm:2.0.16"],
-            ["enquirer", "npm:2.3.6"],
+            ["enquirer", null],
             ["log-update", "npm:4.0.0"],
             ["p-map", "npm:4.0.0"],
             ["rfdc", "npm:1.3.0"],
-            ["rxjs", "npm:7.5.4"],
+            ["rxjs", "npm:7.5.5"],
             ["through", "npm:2.3.8"],
             ["wrap-ansi", "npm:7.0.0"]
           ],
