@@ -49,7 +49,7 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node17.8.0-chrome99-ff97-slim
+      image: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
       options: --user 1001
 
     services:
@@ -104,7 +104,7 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node17.8.0-chrome99-ff97-slim
+      image: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
       options: --user 1001
 
     services:
