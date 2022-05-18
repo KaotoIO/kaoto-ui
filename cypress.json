@@ -1,6 +1,5 @@
 {
   "baseUrl": "http://localhost:1337",
-  "projectId": "yqy7ah",
   "trashAssetsBeforeRuns": false,
   "videoUploadOnPasses": false,
   "video": true,
