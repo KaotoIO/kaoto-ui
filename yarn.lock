@@ -2325,28 +2325,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-docs@npm:^6.5.0-beta.8":
-  version: 6.5.0-beta.8
-  resolution: "@storybook/addon-docs@npm:6.5.0-beta.8"
+"@storybook/addon-docs@npm:^6.5.0-rc.0":
+  version: 6.5.0-rc.0
+  resolution: "@storybook/addon-docs@npm:6.5.0-rc.0"
   dependencies:
     "@babel/plugin-transform-react-jsx": ^7.12.12
     "@babel/preset-env": ^7.12.11
     "@jest/transform": ^26.6.2
     "@mdx-js/react": ^1.6.22
-    "@storybook/addons": 6.5.0-beta.8
-    "@storybook/api": 6.5.0-beta.8
-    "@storybook/components": 6.5.0-beta.8
-    "@storybook/core-common": 6.5.0-beta.8
-    "@storybook/core-events": 6.5.0-beta.8
+    "@storybook/addons": 6.5.0-rc.0
+    "@storybook/api": 6.5.0-rc.0
+    "@storybook/components": 6.5.0-rc.0
+    "@storybook/core-common": 6.5.0-rc.0
+    "@storybook/core-events": 6.5.0-rc.0
     "@storybook/csf": 0.0.2--canary.4566f4d.1
-    "@storybook/docs-tools": 6.5.0-beta.8
+    "@storybook/docs-tools": 6.5.0-rc.0
     "@storybook/mdx1-csf": canary
-    "@storybook/node-logger": 6.5.0-beta.8
-    "@storybook/postinstall": 6.5.0-beta.8
-    "@storybook/preview-web": 6.5.0-beta.8
-    "@storybook/source-loader": 6.5.0-beta.8
-    "@storybook/store": 6.5.0-beta.8
-    "@storybook/theming": 6.5.0-beta.8
+    "@storybook/node-logger": 6.5.0-rc.0
+    "@storybook/postinstall": 6.5.0-rc.0
+    "@storybook/preview-web": 6.5.0-rc.0
+    "@storybook/source-loader": 6.5.0-rc.0
+    "@storybook/store": 6.5.0-rc.0
+    "@storybook/theming": 6.5.0-rc.0
     babel-loader: ^8.0.0
     core-js: ^3.8.2
     fast-deep-equal: ^3.1.3
@@ -2368,7 +2368,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: ef87aa2f6fa751d3c704557206742366a59caa49187937ffca734970564cc5d728f4f5d3d4ed9cac7889ba0f60e3e5930a4be6addc122da52cc8b5ceb1a6bdde
+  checksum: d8d0af3b87f318d832f6d0b5f162286757b4c538dd6f158eefd99799ab5dcf2fb6660e92185e64416cf0e1c67be5dcdf8436cd6ca003e02144abaabb9e8813b1
   languageName: node
   linkType: hard
 
@@ -3213,21 +3213,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/docs-tools@npm:6.5.0-beta.8":
-  version: 6.5.0-beta.8
-  resolution: "@storybook/docs-tools@npm:6.5.0-beta.8"
-  dependencies:
-    "@babel/core": ^7.12.10
-    "@storybook/csf": 0.0.2--canary.4566f4d.1
-    "@storybook/store": 6.5.0-beta.8
-    core-js: ^3.8.2
-    doctrine: ^3.0.0
-    lodash: ^4.17.21
-    regenerator-runtime: ^0.13.7
-  checksum: 32da665dde0eae65882202936016dec32889ba0cd33c160c4852e472d9391f77dfd8f35a557ad9773f05077b65adde6fa3ab3b32183c8708ee20305a1c715296
-  languageName: node
-  linkType: hard
-
 "@storybook/docs-tools@npm:6.5.0-rc.0":
   version: 6.5.0-rc.0
   resolution: "@storybook/docs-tools@npm:6.5.0-rc.0"
@@ -3396,12 +3381,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/postinstall@npm:6.5.0-beta.8":
-  version: 6.5.0-beta.8
-  resolution: "@storybook/postinstall@npm:6.5.0-beta.8"
+"@storybook/postinstall@npm:6.5.0-rc.0":
+  version: 6.5.0-rc.0
+  resolution: "@storybook/postinstall@npm:6.5.0-rc.0"
   dependencies:
     core-js: ^3.8.2
-  checksum: 3905821ec81d35738c2571b21b30e3657b2bf826e3f7c6bc5f0ef79cdfe136037a4216adf841b047f3baa6f637fc77a3d606ed8ca5ad91dc5e22a350f797f8b1
+  checksum: f34b4dc981547bbc8e13d862758a0baffa71db95dbd98e9d82fdbeef2a5156f51a91495dcb4291a17dca0bc0a02b0978db4f18ebbbadf1ea7ea6777ba7f4377e
   languageName: node
   linkType: hard
 
@@ -3596,12 +3581,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/source-loader@npm:6.5.0-beta.8":
-  version: 6.5.0-beta.8
-  resolution: "@storybook/source-loader@npm:6.5.0-beta.8"
+"@storybook/source-loader@npm:6.5.0-rc.0":
+  version: 6.5.0-rc.0
+  resolution: "@storybook/source-loader@npm:6.5.0-rc.0"
   dependencies:
-    "@storybook/addons": 6.5.0-beta.8
-    "@storybook/client-logger": 6.5.0-beta.8
+    "@storybook/addons": 6.5.0-rc.0
+    "@storybook/client-logger": 6.5.0-rc.0
     "@storybook/csf": 0.0.2--canary.4566f4d.1
     core-js: ^3.8.2
     estraverse: ^5.2.0
@@ -3613,7 +3598,7 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 49bc9901c9bca81659acc4934fee270b99cea00101e9842a2e63f2102b17e9973a9091bb1d23eb21620d7b0a36eca1a6de047df18f0e6aa6b8f96cea73f1fabf
+  checksum: 7ea60f08753fab079d0f84aa4d3d7d7affd89a8de0e492c8562e6e52f01024cd0728026ac811eef1c49c00b5cbbccfdd0fe1a3e4f684cde997e217a6a19d8f6a
   languageName: node
   linkType: hard
 
@@ -12473,7 +12458,7 @@ __metadata:
     "@patternfly/react-icons": 4.65.1
     "@rhoas/app-services-ui-shared": ^0.16.0
     "@storybook/addon-actions": ^6.5.0-alpha.54
-    "@storybook/addon-docs": ^6.5.0-beta.8
+    "@storybook/addon-docs": ^6.5.0-rc.0
     "@storybook/addon-links": ^6.5.0-alpha.54
     "@storybook/builder-webpack5": ^6.5.0-beta.8
     "@storybook/manager-webpack5": ^6.5.0-rc.0
