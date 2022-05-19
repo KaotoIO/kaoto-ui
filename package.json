@@ -52,7 +52,7 @@
     "yarn": "2.4.3"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^6.5.0-alpha.54",
+    "@storybook/addon-actions": "^6.5.0",
     "@storybook/addon-docs": "^6.5.0-rc.0",
     "@storybook/addon-links": "^6.5.0-alpha.54",
     "@storybook/builder-webpack5": "^6.5.0",
