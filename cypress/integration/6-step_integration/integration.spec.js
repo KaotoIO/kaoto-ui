@@ -19,7 +19,7 @@ describe('3 step integration', () => {
         cy.get('.pf-c-drawer__close').click();
         cy.get('.code-editor').should('contain.text', 'timer-source');
         cy.get('.stepNode__Add').click();
-        cy.get('#stepSearch').type('extra').wait(3000);
+        cy.get('#stepSearch').type('extra').wait(1000);
         cy.get('[data-ouia-component-id="OUIA-Generated-Button-tertiary-1"]').click();
         cy.get('.code-editor').should('contain.text', 'extract-field-action');
         cy.get('[data-ouia-component-id="OUIA-Generated-Button-plain-12"]').click();
