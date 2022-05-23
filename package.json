@@ -55,7 +55,7 @@
     "@storybook/addon-actions": "^6.5.4",
     "@storybook/addon-docs": "^6.5.4",
     "@storybook/addon-links": "^6.5.4",
-    "@storybook/builder-webpack5": "^6.5.0",
+    "@storybook/builder-webpack5": "^6.5.4",
     "@storybook/manager-webpack5": "^6.5.3",
     "@storybook/node-logger": "^6.5.0-alpha.54",
     "@storybook/react": "^6.5.0-rc.0",
