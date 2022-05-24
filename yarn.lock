@@ -5,6 +5,15 @@ __metadata:
   version: 5
   cacheKey: 8
 
+"@4tw/cypress-drag-drop@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@4tw/cypress-drag-drop@npm:2.1.0"
+  peerDependencies:
+    cypress: ^2.1.0 || ^3.1.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
+  checksum: 01e13bdf35a95e7cb55b94acb0792ce3467ed3a610b8068941b728c6d35909717102cc49df86e8154760a809c11a6070200c6257c26cd0ffbf99f290f83134ff
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:^2.1.0":
   version: 2.1.2
   resolution: "@ampproject/remapping@npm:2.1.2"
@@ -7725,6 +7734,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cypress-file-upload@npm:^5.0.8":
+  version: 5.0.8
+  resolution: "cypress-file-upload@npm:5.0.8"
+  peerDependencies:
+    cypress: ">3.0.0"
+  checksum: 9c70ca7e0bb137d0ec0b8d38987219ce15b26ac3a40e3ed4e78e6ad4690392eab905586848eec6ad8edd42ee480e68ccc63007b2ebd0a02f4b3eca116ff017e3
+  languageName: node
+  linkType: hard
+
 "cypress@npm:9.6.1":
   version: 9.6.1
   resolution: "cypress@npm:9.6.1"
@@ -12452,6 +12470,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "kaoto-ui@workspace:."
   dependencies:
+    "@4tw/cypress-drag-drop": ^2.1.0
     "@patternfly/patternfly": 4.194.4
     "@patternfly/react-code-editor": ^4.55.1
     "@patternfly/react-core": 4.214.1
@@ -12482,6 +12501,7 @@ __metadata:
     css-loader: ^6.6.0
     css-minimizer-webpack-plugin: ^3.4.1
     cypress: 9.6.1
+    cypress-file-upload: ^5.0.8
     dotenv-webpack: 7.1.0
     eslint: 7.32.0
     eslint-config-prettier: 8.5.0
