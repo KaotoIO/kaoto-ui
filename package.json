@@ -40,7 +40,7 @@
     "react-error-boundary": "3.1.4",
     "react-flow-renderer": "^9.7.3",
     "react-monaco-editor": "^0.48.0",
-    "react-router-dom": "5.3.2",
+    "react-router-dom": "5.3.3",
     "react-router-last-location": "2.0.1",
     "react-shadow": "19.0.3",
     "uniforms": "^3.6.2",
