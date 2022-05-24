@@ -27,7 +27,6 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@4tw/cypress-drag-drop": "^2.1.0",
     "@patternfly/patternfly": "4.194.4",
     "@patternfly/react-code-editor": "^4.55.1",
     "@patternfly/react-core": "4.214.1",
