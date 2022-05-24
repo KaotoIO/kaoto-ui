@@ -76,6 +76,7 @@
     "css-loader": "^6.6.0",
     "css-minimizer-webpack-plugin": "^4.0.0",
     "cypress": "9.6.1",
+    "cypress-drag-drop": "^1.1.1",
     "dotenv-webpack": "7.1.0",
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.5.0",

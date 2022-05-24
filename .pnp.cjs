@@ -65,6 +65,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["css-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.6.0"],
             ["css-minimizer-webpack-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.0.0"],
             ["cypress", "npm:9.6.1"],
+            ["cypress-drag-drop", "npm:1.1.1"],
             ["dotenv-webpack", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:7.1.0"],
             ["eslint", "npm:7.32.0"],
             ["eslint-config-prettier", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:8.5.0"],
@@ -12297,14 +12298,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["core-js", [
         ["npm:2.6.12", {
-          "packageLocation": "./.yarn/cache/core-js-npm-2.6.12-0b93d77d31-44fa9934a8.zip/node_modules/core-js/",
+          "packageLocation": "./.yarn/unplugged/core-js-npm-2.6.12-0b93d77d31/node_modules/core-js/",
           "packageDependencies": [
             ["core-js", "npm:2.6.12"]
           ],
           "linkType": "HARD",
         }],
         ["npm:3.21.0", {
-          "packageLocation": "./.yarn/cache/core-js-npm-3.21.0-9d2e98b782-87df49aa2c.zip/node_modules/core-js/",
+          "packageLocation": "./.yarn/unplugged/core-js-npm-3.21.0-9d2e98b782/node_modules/core-js/",
           "packageDependencies": [
             ["core-js", "npm:3.21.0"]
           ],
@@ -12324,7 +12325,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["core-js-pure", [
         ["npm:3.21.0", {
-          "packageLocation": "./.yarn/cache/core-js-pure-npm-3.21.0-dc4104b1b9-0b9b72fb24.zip/node_modules/core-js-pure/",
+          "packageLocation": "./.yarn/unplugged/core-js-pure-npm-3.21.0-dc4104b1b9/node_modules/core-js-pure/",
           "packageDependencies": [
             ["core-js-pure", "npm:3.21.0"]
           ],
@@ -12886,7 +12887,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["cypress", [
         ["npm:9.6.1", {
-          "packageLocation": "./.yarn/cache/cypress-npm-9.6.1-5d0d6ee11e-3d464346f3.zip/node_modules/cypress/",
+          "packageLocation": "./.yarn/unplugged/cypress-npm-9.6.1-5d0d6ee11e/node_modules/cypress/",
           "packageDependencies": [
             ["cypress", "npm:9.6.1"],
             ["@cypress/request", "npm:2.88.10"],
@@ -12931,6 +12932,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["tmp", "npm:0.2.1"],
             ["untildify", "npm:4.0.0"],
             ["yauzl", "npm:2.10.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["cypress-drag-drop", [
+        ["npm:1.1.1", {
+          "packageLocation": "./.yarn/cache/cypress-drag-drop-npm-1.1.1-9ba6019ad5-8e449c5db2.zip/node_modules/cypress-drag-drop/",
+          "packageDependencies": [
+            ["cypress-drag-drop", "npm:1.1.1"]
           ],
           "linkType": "HARD",
         }]
@@ -18576,6 +18586,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["css-loader", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.6.0"],
             ["css-minimizer-webpack-plugin", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.0.0"],
             ["cypress", "npm:9.6.1"],
+            ["cypress-drag-drop", "npm:1.1.1"],
             ["dotenv-webpack", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:7.1.0"],
             ["eslint", "npm:7.32.0"],
             ["eslint-config-prettier", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:8.5.0"],

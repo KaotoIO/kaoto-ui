@@ -8020,6 +8020,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cypress-drag-drop@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "cypress-drag-drop@npm:1.1.1"
+  checksum: 8e449c5db25c64afd5c403a19e91879f8d28750c0f7bb1ca5e0e95abb9731639e64b251c279673fb6de57c17454b6066b1e097536639e662ad1c1e308ecfa283
+  languageName: node
+  linkType: hard
+
 "cypress@npm:9.6.1":
   version: 9.6.1
   resolution: "cypress@npm:9.6.1"
@@ -12859,6 +12866,7 @@ __metadata:
     css-loader: ^6.6.0
     css-minimizer-webpack-plugin: ^4.0.0
     cypress: 9.6.1
+    cypress-drag-drop: ^1.1.1
     dotenv-webpack: 7.1.0
     eslint: 7.32.0
     eslint-config-prettier: 8.5.0
