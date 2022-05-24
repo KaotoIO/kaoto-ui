@@ -5,6 +5,15 @@ __metadata:
   version: 5
   cacheKey: 8
 
+"@4tw/cypress-drag-drop@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@4tw/cypress-drag-drop@npm:2.1.0"
+  peerDependencies:
+    cypress: ^2.1.0 || ^3.1.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
+  checksum: 01e13bdf35a95e7cb55b94acb0792ce3467ed3a610b8068941b728c6d35909717102cc49df86e8154760a809c11a6070200c6257c26cd0ffbf99f290f83134ff
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:^2.1.0":
   version: 2.1.2
   resolution: "@ampproject/remapping@npm:2.1.2"
@@ -12555,6 +12564,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "kaoto-ui@workspace:."
   dependencies:
+    "@4tw/cypress-drag-drop": ^2.1.0
     "@patternfly/patternfly": 4.194.4
     "@patternfly/react-code-editor": ^4.55.1
     "@patternfly/react-core": 4.214.1

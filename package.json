@@ -52,6 +52,7 @@
     "yarn": "2.4.3"
   },
   "devDependencies": {
+    "@4tw/cypress-drag-drop": "^2.1.0",
     "@storybook/addon-actions": "^6.5.4",
     "@storybook/addon-docs": "^6.5.4",
     "@storybook/addon-links": "^6.5.4",

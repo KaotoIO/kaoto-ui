@@ -35,6 +35,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {
           "packageLocation": "./",
           "packageDependencies": [
+            ["@4tw/cypress-drag-drop", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:2.1.0"],
             ["@patternfly/patternfly", "npm:4.194.4"],
             ["@patternfly/react-code-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.55.1"],
             ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.214.1"],
@@ -118,6 +119,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["yarn", "npm:2.4.3"]
           ],
           "linkType": "SOFT",
+        }]
+      ]],
+      ["@4tw/cypress-drag-drop", [
+        ["npm:2.1.0", {
+          "packageLocation": "./.yarn/cache/@4tw-cypress-drag-drop-npm-2.1.0-ca5ad46720-01e13bdf35.zip/node_modules/@4tw/cypress-drag-drop/",
+          "packageDependencies": [
+            ["@4tw/cypress-drag-drop", "npm:2.1.0"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:2.1.0", {
+          "packageLocation": "./.yarn/__virtual__/@4tw-cypress-drag-drop-virtual-54a866a1ee/0/cache/@4tw-cypress-drag-drop-npm-2.1.0-ca5ad46720-01e13bdf35.zip/node_modules/@4tw/cypress-drag-drop/",
+          "packageDependencies": [
+            ["@4tw/cypress-drag-drop", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:2.1.0"],
+            ["@types/cypress", null],
+            ["cypress", "npm:9.6.1"]
+          ],
+          "packagePeers": [
+            "@types/cypress",
+            "cypress"
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@ampproject/remapping", [
@@ -11764,14 +11787,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["core-js", [
         ["npm:2.6.12", {
-          "packageLocation": "./.yarn/cache/core-js-npm-2.6.12-0b93d77d31-44fa9934a8.zip/node_modules/core-js/",
+          "packageLocation": "./.yarn/unplugged/core-js-npm-2.6.12-0b93d77d31/node_modules/core-js/",
           "packageDependencies": [
             ["core-js", "npm:2.6.12"]
           ],
           "linkType": "HARD",
         }],
         ["npm:3.21.0", {
-          "packageLocation": "./.yarn/cache/core-js-npm-3.21.0-9d2e98b782-87df49aa2c.zip/node_modules/core-js/",
+          "packageLocation": "./.yarn/unplugged/core-js-npm-3.21.0-9d2e98b782/node_modules/core-js/",
           "packageDependencies": [
             ["core-js", "npm:3.21.0"]
           ],
@@ -11791,7 +11814,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["core-js-pure", [
         ["npm:3.21.0", {
-          "packageLocation": "./.yarn/cache/core-js-pure-npm-3.21.0-dc4104b1b9-0b9b72fb24.zip/node_modules/core-js-pure/",
+          "packageLocation": "./.yarn/unplugged/core-js-pure-npm-3.21.0-dc4104b1b9/node_modules/core-js-pure/",
           "packageDependencies": [
             ["core-js-pure", "npm:3.21.0"]
           ],
@@ -12353,7 +12376,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["cypress", [
         ["npm:9.6.1", {
-          "packageLocation": "./.yarn/cache/cypress-npm-9.6.1-5d0d6ee11e-3d464346f3.zip/node_modules/cypress/",
+          "packageLocation": "./.yarn/unplugged/cypress-npm-9.6.1-5d0d6ee11e/node_modules/cypress/",
           "packageDependencies": [
             ["cypress", "npm:9.6.1"],
             ["@cypress/request", "npm:2.88.10"],
@@ -18013,6 +18036,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["kaoto-ui", "workspace:."],
+            ["@4tw/cypress-drag-drop", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:2.1.0"],
             ["@patternfly/patternfly", "npm:4.194.4"],
             ["@patternfly/react-code-editor", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.55.1"],
             ["@patternfly/react-core", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:4.214.1"],
