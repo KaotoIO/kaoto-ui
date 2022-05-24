@@ -1,4 +1,5 @@
 describe('YAML editor', () => {
+  
   beforeEach(() => {
     cy.visit('http://localhost:1337');
   });
