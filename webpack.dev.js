@@ -25,12 +25,11 @@ module.exports = merge(common('development'), {
     static: {
       directory: './dist',
     },
-    
-    stats: 'errors-only',
   },
   plugins: [
     new webpack.DefinePlugin({
       KAOTO_API: JSON.stringify(process.env.KAOTO_API || 'http://localhost:8081'),
     }),
   ],
+  stats: 'errors-warnings',
 });
