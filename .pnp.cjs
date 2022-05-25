@@ -11898,14 +11898,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["core-js", [
         ["npm:2.6.12", {
-          "packageLocation": "./.yarn/cache/core-js-npm-2.6.12-0b93d77d31-44fa9934a8.zip/node_modules/core-js/",
+          "packageLocation": "./.yarn/unplugged/core-js-npm-2.6.12-0b93d77d31/node_modules/core-js/",
           "packageDependencies": [
             ["core-js", "npm:2.6.12"]
           ],
           "linkType": "HARD",
         }],
         ["npm:3.21.0", {
-          "packageLocation": "./.yarn/cache/core-js-npm-3.21.0-9d2e98b782-87df49aa2c.zip/node_modules/core-js/",
+          "packageLocation": "./.yarn/unplugged/core-js-npm-3.21.0-9d2e98b782/node_modules/core-js/",
           "packageDependencies": [
             ["core-js", "npm:3.21.0"]
           ],
@@ -11925,7 +11925,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["core-js-pure", [
         ["npm:3.21.0", {
-          "packageLocation": "./.yarn/cache/core-js-pure-npm-3.21.0-dc4104b1b9-0b9b72fb24.zip/node_modules/core-js-pure/",
+          "packageLocation": "./.yarn/unplugged/core-js-pure-npm-3.21.0-dc4104b1b9/node_modules/core-js-pure/",
           "packageDependencies": [
             ["core-js-pure", "npm:3.21.0"]
           ],
@@ -12487,7 +12487,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["cypress", [
         ["npm:9.6.1", {
-          "packageLocation": "./.yarn/cache/cypress-npm-9.6.1-5d0d6ee11e-3d464346f3.zip/node_modules/cypress/",
+          "packageLocation": "./.yarn/unplugged/cypress-npm-9.6.1-5d0d6ee11e/node_modules/cypress/",
           "packageDependencies": [
             ["cypress", "npm:9.6.1"],
             ["@cypress/request", "npm:2.88.10"],
