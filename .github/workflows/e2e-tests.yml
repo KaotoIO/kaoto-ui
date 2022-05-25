@@ -93,6 +93,13 @@ jobs:
           name: videos-firefox
           path: cypress/videos
 
+      - name: 💾 Save screenshots
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: screenshots-firefox
+          path: cypress/screenshots
+
   test-on-chrome:
     needs: install
     runs-on: ubuntu-latest
@@ -141,6 +148,13 @@ jobs:
         with:
           name: videos-chrome
           path: cypress/videos
+
+      - name: 💾 Save screenshots
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: screenshots-chrome
+          path: cypress/screenshots
           
   test-on-edge:
     needs: install
@@ -188,5 +202,12 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: videos-chrome
+          name: videos-edge
           path: cypress/videos
+
+      - name: 💾 Save screenshots
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: screenshots-edge
+          path: cypress/screenshots
