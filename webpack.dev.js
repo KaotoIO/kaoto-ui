@@ -25,6 +25,8 @@ module.exports = merge(common('development'), {
     static: {
       directory: './dist',
     },
+    
+    stats: 'errors-only',
   },
   plugins: [
     new webpack.DefinePlugin({
