@@ -1,4 +1,9 @@
-import { useYAMLContext, useStepsAndViewsContext, fetchViewDefinitions } from '../api';
+import {
+  useYAMLContext,
+  useStepsAndViewsContext,
+  fetchViewDefinitions,
+  fetchCustomResource,
+} from '../api';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import { CodeEditor, Language } from '@patternfly/react-code-editor';
 import { useRef } from 'react';
@@ -27,6 +32,16 @@ const YAMLEditor = (props: IYAMLEditor) => {
       fetchViewDefinitions(incomingData)
         .then((res) => {
           dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
+          /**
+           * Use new API-provided view definition to re-fetch the "proper" custom
+           * resource (YAML). Used to fill any relevant YAML data missed while
+           * manually typing.
+           */
+          fetchCustomResource(res.steps, 'integration').then((yamlResponse) => {
+            if (typeof yamlResponse === 'string') {
+              setYAMLData(yamlResponse);
+            }
+          });
         })
         .catch((e) => {
           console.error(e);
