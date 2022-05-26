@@ -55,7 +55,7 @@
     "@4tw/cypress-drag-drop": "^2.1.0",
     "@storybook/addon-actions": "^6.5.5",
     "@storybook/addon-docs": "^6.5.5",
-    "@storybook/addon-links": "^6.5.4",
+    "@storybook/addon-links": "^6.5.5",
     "@storybook/builder-webpack5": "^6.5.5",
     "@storybook/manager-webpack5": "^6.5.5",
     "@storybook/node-logger": "^6.5.0-alpha.54",
