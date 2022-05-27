@@ -9,6 +9,7 @@ describe('source code and drag and drop', () => {
         cy.fixture('editor.txt')
             .then((user) => {
                 cy.get('.code-editor').type(user);
+                cy.wait(2000)
                 cy.get('[data-testid="openCatalogButton"] > svg').click();
                 cy.get('#stepSearch').type('timer')
                 cy.get('.pf-c-card__body').trigger('dragstart', {
@@ -18,10 +19,10 @@ describe('source code and drag and drop', () => {
                     dataTransfer
                 });
                 cy.get('.pf-c-drawer__close > .pf-c-button').click();
-                cy.get('.code-editor').click();
-                cy.get('[style="top:323px;height:19px;"] > :nth-child(1) > .mtk5').click();
-                // cy.get('[style="top:323px;height:19px;"] > :nth-child(1) > .mtk5').clear({force: true})
-                // cy.contains('timer-source').type('kafka');
+                cy.get('.code-editor')
+                    .contains('timer-source')
+                    .should('have.text', 'timer-source', '{backspace}')
+                    .type('{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}kafka-', { delay: 500 });
             })
     })
 })
