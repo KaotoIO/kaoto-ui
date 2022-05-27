@@ -18,6 +18,7 @@ import {
   TabTitleText,
 } from '@patternfly/react-core';
 import { lazy, useEffect, useRef, useState } from 'react';
+import { IStepExtensionApi } from '../api/stepExtensionApi';
 
 export interface IStepViewsProps {
   deleteStep: (e: any) => void;
@@ -137,6 +138,14 @@ const StepViews = ({
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
 
+              const kaotoApi: IStepExtensionApi = {
+                notifyKaoto: (message) => {
+                  console.log('message.variant: ', message.variant);
+                  console.log('message.title: ', message.title);
+                  console.log('message.body: ', message.body);
+                },
+              };
+
               // Example demonstrating interactivity with step extension
               const onButtonClicked = () => {
                 console.log(
@@ -161,6 +170,7 @@ const StepViews = ({
                         text="Passed from Kaoto!"
                         onButtonClicked={onButtonClicked}
                         path="/"
+                        {...kaotoApi}
                       />
                     </Extension>
                   </StepErrorBoundary>
