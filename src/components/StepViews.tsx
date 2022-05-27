@@ -150,9 +150,6 @@ const StepViews = ({
               };
 
               const createAlert = (title: string, body?: string, variant?: string) => {
-                console.log('body: ', body);
-                console.log('title: ', title);
-                console.log('variant: ', variant);
                 let variantType = AlertVariant.default;
 
                 // map to PatternFly AlertVariant enum type
