@@ -5,6 +5,7 @@ import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import { dynamicImport } from './import';
 import {
+  AlertVariant,
   Button,
   DrawerActions,
   DrawerCloseButton,
@@ -19,6 +20,7 @@ import {
 } from '@patternfly/react-core';
 import { lazy, useEffect, useRef, useState } from 'react';
 import { IStepExtensionApi } from '../api/stepExtensionApi';
+import { useAlert } from '@rhoas/app-services-ui-shared';
 
 export interface IStepViewsProps {
   deleteStep: (e: any) => void;
@@ -44,6 +46,8 @@ const StepViews = ({
   const stepPropertySchema = useRef<{ [label: string]: { type: string } }>({});
   const stepPropertyModel = useRef<{ [label: string]: any }>({});
   const previousTabIndex = usePrevious(detailsTabIndex);
+
+  const { addAlert } = useAlert() || {};
 
   useEffect(() => {
     if (previousTabIndex === detailsTabIndex) {
@@ -138,19 +142,45 @@ const StepViews = ({
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
 
-              const kaotoApi: IStepExtensionApi = {
-                notifyKaoto: (message) => {
-                  console.log('message.variant: ', message.variant);
-                  console.log('message.title: ', message.title);
-                  console.log('message.body: ', message.body);
-                },
-              };
-
               // Example demonstrating interactivity with step extension
               const onButtonClicked = () => {
                 console.log(
                   'Button clicked! Viewing ' + view.id + ' for the following step: ' + view.step
                 );
+              };
+
+              const createAlert = (title: string, body?: string, variant?: string) => {
+                console.log('body: ', body);
+                console.log('title: ', title);
+                console.log('variant: ', variant);
+                let variantType = AlertVariant.default;
+
+                // map to PatternFly AlertVariant enum type
+                switch (variant) {
+                  case 'info':
+                    variantType = AlertVariant.info;
+                    break;
+                  case 'danger':
+                    variantType = AlertVariant.danger;
+                    break;
+                  case 'success':
+                    variantType = AlertVariant.success;
+                    break;
+                  case 'warning':
+                    variantType = AlertVariant.warning;
+                    break;
+                }
+
+                addAlert &&
+                  addAlert({
+                    title: title,
+                    variant: variantType,
+                    description: body,
+                  });
+              };
+
+              const kaotoApi: IStepExtensionApi = {
+                notifyKaoto: createAlert,
               };
 
               return (
