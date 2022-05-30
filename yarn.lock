@@ -2299,17 +2299,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-actions@npm:^6.5.5":
-  version: 6.5.5
-  resolution: "@storybook/addon-actions@npm:6.5.5"
+"@storybook/addon-actions@npm:^6.5.6":
+  version: 6.5.6
+  resolution: "@storybook/addon-actions@npm:6.5.6"
   dependencies:
-    "@storybook/addons": 6.5.5
-    "@storybook/api": 6.5.5
-    "@storybook/client-logger": 6.5.5
-    "@storybook/components": 6.5.5
-    "@storybook/core-events": 6.5.5
+    "@storybook/addons": 6.5.6
+    "@storybook/api": 6.5.6
+    "@storybook/client-logger": 6.5.6
+    "@storybook/components": 6.5.6
+    "@storybook/core-events": 6.5.6
     "@storybook/csf": 0.0.2--canary.4566f4d.1
-    "@storybook/theming": 6.5.5
+    "@storybook/theming": 6.5.6
     core-js: ^3.8.2
     fast-deep-equal: ^3.1.3
     global: ^4.4.0
@@ -2330,7 +2330,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: b55d56d3d08c43528fe2c17423601cbb456a4402992973315eb15f4ff3078ffc55b491961a250055d0471ad537b93acc1c97cba94022c4e192bae259fb234c28
+  checksum: 2f0264a77a72b9d9ece713b4f7b8479639193249da3f39bc2391df556740f5926cc95d21b1d1ee09fd568d8acbdc171537cabfdb76dd565845f1646be5dd7675
   languageName: node
   linkType: hard
 
@@ -12454,7 +12454,7 @@ __metadata:
     "@patternfly/react-core": 4.214.1
     "@patternfly/react-icons": 4.65.1
     "@rhoas/app-services-ui-shared": ^0.16.0
-    "@storybook/addon-actions": ^6.5.5
+    "@storybook/addon-actions": ^6.5.6
     "@storybook/addon-docs": ^6.5.5
     "@storybook/addon-links": ^6.5.5
     "@storybook/builder-webpack5": ^6.5.6
