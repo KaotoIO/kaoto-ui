@@ -18,6 +18,10 @@
   
   <a href="https://dashboard.cypress.io/projects/zfop6s/runs">
     <img src="https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/simple/zfop6s&style=flat&logo=cypress" alt="Cypress Runs"/></a>
+  
+  <a href="https://github.com/KaotoIO/kaoto-ui/actions/workflows/e2e-tests.yml">
+    <img src="https://github.com/KaotoIO/kaoto-ui/actions/workflows/e2e-tests.yml/badge.svg?event=push" alt="🏗️ E2E Tests (Cypress)"/></a>
+  
 </p>
 
 # Kaoto UI
