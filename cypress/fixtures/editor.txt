@@ -1,0 +1,22 @@
+apiVersion: camel.apache.org/v1alpha1
+group: camel.apache.org</br>
+kind: KameletBinding
+metadata:
+  additionalProperties: {}
+  {backspace}  finalizers: []
+  {backspace}  managedFields: []
+  {backspace}  name: Updated integration
+  {backspace}  ownerReferences: []
+{backspace}plural: kameletbindings
+scope: Namespaced
+served: true
+singular: kameletbinding</br>
+spec:
+  source:
+{backspace}    ref:
+  name: kafka-source 
+  {backspace}{backspace}  sink:
+  ref:
+  name: kafka-sink
+{backspace}{backspace}storage: true</br>
+version: v1alpha1
