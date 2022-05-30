@@ -30,13 +30,20 @@ This is the user interface for [Kaoto Backend](https://github.com/KaotoIO/kaoto-
 
 For trial purposes, there is a docker image that can be run as described on [the quickstarter](https://kaoto.io/quickstart/).
 
+## Installing with the operator in a kubernetes environment
 
-## Requirements
+Follow the instructions on https://github.com/KaotoIO/kaoto-operator/
+
+## Contributing 
+
+If you want to run Kaoto-ui in your machine, follow these instructions. Remember that you need a [backend](https://KaotoIO/kaoto-backend/) running.
+
+### Requirements
 
 - Node >= 14
 - [Yarn](https://yarnpkg.com/getting-started/install) (Berry, 3.x)
 
-## Install & Setup
+### Install & Setup
 
 1. Install dependencies:
 
@@ -45,11 +52,11 @@ yarn install
 ```
 
 2. Duplicate the `.env.example` file and name it `.env`.
-3. Update `KAOTO_API` in the file with the correct host for the API. If using Kaoto API locally, this should be `http://localhost:8081`, but please check.
+3. Update `KAOTO_API` in the file with the correct host for the API backend. If using Kaoto locally, this should be `http://localhost:8081`, but please check.
 
 **IMPORTANT:** We are using Yarn [Zero Installs](https://yarnpkg.com/features/zero-installs), so the dependency tree is checked in via the `.pnp.cjs`. Because we are committing `.yarn/cache` and `.pnp.*`, you should not need to run `yarn install` each time you switch between branches. However, if you find you are having issues with dependencies on a branch, consider regenerating them. See [here](https://yarnpkg.com/getting-started/qa) for more info.
 
-## Development
+### Development
 
 Run the app in development mode:
 
