@@ -21,6 +21,7 @@ import {
 import { lazy, useEffect, useRef, useState } from 'react';
 import { IStepExtensionApi } from '../api/stepExtensionApi';
 import { useAlert } from '@rhoas/app-services-ui-shared';
+import { fetchAllDSLs, fetchDeployments } from '../api';
 
 export interface IStepViewsProps {
   deleteStep: (e: any) => void;
@@ -149,7 +150,7 @@ const StepViews = ({
                 );
               };
 
-              const createAlert = (title: string, body?: string, variant?: string) => {
+              const seCreateAlert = (title: string, body?: string, variant?: string) => {
                 let variantType = AlertVariant.default;
 
                 // map to PatternFly AlertVariant enum type
@@ -176,8 +177,24 @@ const StepViews = ({
                   });
               };
 
+              const seFetchDsls = () => {
+                return fetchAllDSLs;
+              };
+
+              const seFetchDeployments = () => {
+                return fetchDeployments;
+              };
+
+              const seFetchIntegrations = () => {
+                // fetch all integrations, which is an empty array for now
+                return [];
+              };
+
               const kaotoApi: IStepExtensionApi = {
-                notifyKaoto: createAlert,
+                fetchDeployments: seFetchDeployments,
+                fetchIntegrations: seFetchIntegrations,
+                fetchDsls: seFetchDsls,
+                notifyKaoto: seCreateAlert,
               };
 
               return (
