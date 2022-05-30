@@ -43,7 +43,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@rhoas/app-services-ui-shared", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.16.0"],
             ["@storybook/addon-actions", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.6"],
             ["@storybook/addon-docs", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.5"],
-            ["@storybook/addon-links", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.5"],
+            ["@storybook/addon-links", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.6"],
             ["@storybook/builder-webpack5", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.6"],
             ["@storybook/manager-webpack5", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.5"],
             ["@storybook/node-logger", "npm:6.5.0-alpha.54"],
@@ -5222,22 +5222,22 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@storybook/addon-links", [
-        ["npm:6.5.5", {
-          "packageLocation": "./.yarn/cache/@storybook-addon-links-npm-6.5.5-d8c7ca09ba-fe8960a960.zip/node_modules/@storybook/addon-links/",
+        ["npm:6.5.6", {
+          "packageLocation": "./.yarn/cache/@storybook-addon-links-npm-6.5.6-eb8ddad213-992ecacf89.zip/node_modules/@storybook/addon-links/",
           "packageDependencies": [
-            ["@storybook/addon-links", "npm:6.5.5"]
+            ["@storybook/addon-links", "npm:6.5.6"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.5", {
-          "packageLocation": "./.yarn/__virtual__/@storybook-addon-links-virtual-14c6f78152/0/cache/@storybook-addon-links-npm-6.5.5-d8c7ca09ba-fe8960a960.zip/node_modules/@storybook/addon-links/",
+        ["virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.6", {
+          "packageLocation": "./.yarn/__virtual__/@storybook-addon-links-virtual-0925b68db2/0/cache/@storybook-addon-links-npm-6.5.6-eb8ddad213-992ecacf89.zip/node_modules/@storybook/addon-links/",
           "packageDependencies": [
-            ["@storybook/addon-links", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.5"],
-            ["@storybook/addons", "virtual:1eb91bb955637458ba42fb54e978622d7f6e58d6beb4023a66f9c00c944ef0b3ed3f886776cf5f4bec0ca43cdaea6194b8e313cb10da6d15bf08f6d146666e15#npm:6.5.5"],
-            ["@storybook/client-logger", "npm:6.5.5"],
-            ["@storybook/core-events", "npm:6.5.5"],
+            ["@storybook/addon-links", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.6"],
+            ["@storybook/addons", "virtual:c000f36371fac30fa23b2603763b4b29c3b94eac270620eb597d1b16e2741bc28ff29936894e129537ccf974716caa1f8e0d2d82c4d78bf060a0735964fe3cd2#npm:6.5.6"],
+            ["@storybook/client-logger", "npm:6.5.6"],
+            ["@storybook/core-events", "npm:6.5.6"],
             ["@storybook/csf", "npm:0.0.2--canary.4566f4d.1"],
-            ["@storybook/router", "virtual:59e47dc0449bf0f4dc20bc37e64c78bc304700b7b361589970cac67b56663658fc809068c5f68acdf0f0741c3f4ac5dee406af34eff1c4c61c3b99aa6d13fcc4#npm:6.5.5"],
+            ["@storybook/router", "virtual:c2556d8e7e90bd313ad11d63931efa5d8be95833a5f7012726ef0871d04d8377c944dd5f8607dbfe45faf1120bc45917ce83df1ca648bcc7aae41ded0268f80e#npm:6.5.6"],
             ["@types/qs", "npm:6.9.7"],
             ["@types/react", "npm:17.0.44"],
             ["@types/react-dom", "npm:18.0.3"],
@@ -17957,7 +17957,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@rhoas/app-services-ui-shared", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:0.16.0"],
             ["@storybook/addon-actions", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.6"],
             ["@storybook/addon-docs", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.5"],
-            ["@storybook/addon-links", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.5"],
+            ["@storybook/addon-links", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.6"],
             ["@storybook/builder-webpack5", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.6"],
             ["@storybook/manager-webpack5", "virtual:8bf2356f211f3a3adabe2f14c35e712460dc01a2f07e59279cbbe64134be9ce9f2aa44d2df1b6a0418db7fdeedc5a183d10702a9f0dcbc64ecbd3208f19e145c#npm:6.5.5"],
             ["@storybook/node-logger", "npm:6.5.0-alpha.54"],

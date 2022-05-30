@@ -2381,15 +2381,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-links@npm:^6.5.5":
-  version: 6.5.5
-  resolution: "@storybook/addon-links@npm:6.5.5"
+"@storybook/addon-links@npm:^6.5.6":
+  version: 6.5.6
+  resolution: "@storybook/addon-links@npm:6.5.6"
   dependencies:
-    "@storybook/addons": 6.5.5
-    "@storybook/client-logger": 6.5.5
-    "@storybook/core-events": 6.5.5
+    "@storybook/addons": 6.5.6
+    "@storybook/client-logger": 6.5.6
+    "@storybook/core-events": 6.5.6
     "@storybook/csf": 0.0.2--canary.4566f4d.1
-    "@storybook/router": 6.5.5
+    "@storybook/router": 6.5.6
     "@types/qs": ^6.9.5
     core-js: ^3.8.2
     global: ^4.4.0
@@ -2405,7 +2405,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: fe8960a960cfadc2aa06553a101991baa2fa2267e31669b0344868181ad4440ee25d3501df4fef15aea790f250349c4e6f1f010491bf13684dd2e6a8d6131837
+  checksum: 992ecacf89b07893a07b3fd888a746731336880c1d9447b97f904c9bdd33b74393a8ce7672e77e1283f3c14dd72d524021ae7aee5d0789623ddf77decd954ceb
   languageName: node
   linkType: hard
 
@@ -12456,7 +12456,7 @@ __metadata:
     "@rhoas/app-services-ui-shared": ^0.16.0
     "@storybook/addon-actions": ^6.5.6
     "@storybook/addon-docs": ^6.5.5
-    "@storybook/addon-links": ^6.5.5
+    "@storybook/addon-links": ^6.5.6
     "@storybook/builder-webpack5": ^6.5.6
     "@storybook/manager-webpack5": ^6.5.5
     "@storybook/node-logger": ^6.5.0-alpha.54
