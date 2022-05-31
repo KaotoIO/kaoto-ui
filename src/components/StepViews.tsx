@@ -21,7 +21,7 @@ import {
 import { lazy, useEffect, useRef, useState } from 'react';
 import { IStepExtensionApi } from '../api/stepExtensionApi';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { fetchAllDSLs, fetchDeployments } from '../api';
+import { fetchAllDSLs, fetchCatalogSteps, fetchDeployments } from '../api';
 
 export interface IStepViewsProps {
   deleteStep: (e: any) => void;
@@ -177,24 +177,53 @@ const StepViews = ({
                   });
               };
 
+              const seFetchCatalogSteps = () => {
+                return fetchCatalogSteps().then((steps) => {
+                  return steps;
+                });
+              };
+
               const seFetchDsls = () => {
-                return fetchAllDSLs;
+                return fetchAllDSLs().then((dsls) => {
+                  console.table(dsls);
+                  return dsls;
+                });
               };
 
               const seFetchDeployments = () => {
-                return fetchDeployments;
+                return fetchDeployments().then((deployments) => {
+                  console.table(deployments);
+                  return deployments;
+                });
               };
 
-              const seFetchIntegrations = () => {
+              const seFetchIntegrations = ({ format }: { format?: string }) => {
                 // fetch all integrations, which is an empty array for now
+                if (format && format.toLowerCase() === 'YAML') {
+                  //
+                } else {
+                  // send JSON integrations
+                }
+
                 return [];
               };
 
+              const seStartDeployment = () => {
+                //
+              };
+
+              const seStopDeployment = () => {
+                //
+              };
+
               const kaotoApi: IStepExtensionApi = {
+                fetchCatalogSteps: seFetchCatalogSteps,
                 fetchDeployments: seFetchDeployments,
                 fetchIntegrations: seFetchIntegrations,
                 fetchDsls: seFetchDsls,
                 notifyKaoto: seCreateAlert,
+                startDeployment: seStartDeployment,
+                stopDeployment: seStopDeployment,
               };
 
               return (

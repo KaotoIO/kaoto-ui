@@ -19,8 +19,11 @@
  * The following are methods that are exposed to a step extension.
  */
 export interface IStepExtensionApi {
+  fetchCatalogSteps: () => void;
   fetchDeployments: () => void;
   fetchDsls: () => void;
-  fetchIntegrations: () => void;
+  fetchIntegrations: ({ format }: { format?: string }) => void;
   notifyKaoto: (title: string, body?: string, variant?: string) => void;
+  startDeployment: () => void;
+  stopDeployment: () => void;
 }
