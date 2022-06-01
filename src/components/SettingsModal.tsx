@@ -68,7 +68,7 @@ export const SettingsModal = ({
       fetchCompatibleDSLsAndCRDs({
         integrationName: currentSettings.integrationName,
         steps: viewData.steps,
-        type: currentSettings.dsl,
+        dsl: currentSettings.dsl,
       })
         .then((value) => {
           if (value) {
