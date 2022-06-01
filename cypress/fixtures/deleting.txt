@@ -1,0 +1,31 @@
+apiVersion: camel.apache.org/v1alpha1
+group: camel.apache.org
+kind: KameletBinding
+metadata:
+  additionalProperties: {}
+finalizers: []
+managedFields: []
+name: Updated integration
+ownerReferences: []
+{backspace}plural: kameletbindings
+scope: Namespaced
+served: true
+singular: kameletbinding
+spec:
+  source:
+{backspace}    ref:
+  apiVersion: camel.apache.org/v1alpha1
+name: chuck-norris-source
+kind: Kamelet
+{backspace}{backspace}  steps:
+- ref:
+   apiVersion: camel.apache.org/v1alpha1
+name: chunk-template-action
+kind: Kamelet
+{backspace}{backspace}  sink:
+  ref:
+{backspace}      apiVersion: camel.apache.org/v1alpha1
+name: kafka-sink
+kind: Kamelet
+{backspace}{backspace}storage: true</br>
+version: v1alpha1
