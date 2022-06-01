@@ -10,7 +10,7 @@ ownerReferences: []
 {backspace}plural: kameletbindings
 scope: Namespaced
 served: true
-singular: kameletbinding
+singular: kameletbinding</br>
 spec:
   source:
 {backspace}    ref:
@@ -21,7 +21,7 @@ kind: Kamelet
 - ref:
    apiVersion: camel.apache.org/v1alpha1
 name: chunk-template-action
-kind: Kamelet
+kind: Kamelet</br>
 {backspace}{backspace}  sink:
   ref:
 {backspace}      apiVersion: camel.apache.org/v1alpha1
