@@ -5,10 +5,11 @@ import {
   fetchCustomResource,
 } from '../api';
 import { StepErrorBoundary } from './StepErrorBoundary';
-import { CodeEditor, Language } from '@patternfly/react-code-editor';
+import {CodeEditor, CodeEditorControl, Language} from '@patternfly/react-code-editor';
 import { useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import EditorDidMount from 'react-monaco-editor';
+import {RedoIcon, UndoIcon} from "@patternfly/react-icons";
 
 interface IYAMLEditor {
   // Used to mock data for stories
@@ -63,6 +64,35 @@ const YAMLEditor = (props: IYAMLEditor) => {
     handleChanges(value);
   }, 1000);
 
+  const undoAction = () => {
+      (editorRef.current?.getModel() as any)?.undo();
+  }
+  const redoAction = () => {
+      (editorRef.current?.getModel()as any)?.redo();
+    }
+
+  const UndoButton = (
+      <CodeEditorControl
+          key='undoButton'
+          icon={<UndoIcon/>}
+          aria-label="Undo change"
+          toolTipText="Undo change"
+          onClick={undoAction}
+          isVisible={YAMLData !== ''}
+        />
+    );
+
+  const RedoButton = (
+      <CodeEditorControl
+          key='redoButton'
+          icon={<RedoIcon/>}
+          aria-label="Redo change"
+          toolTipText="Redo change"
+          onClick={redoAction}
+          isVisible={YAMLData !== ''}
+      />
+    );
+
   return (
     <StepErrorBoundary>
       <CodeEditor
@@ -72,6 +102,7 @@ const YAMLEditor = (props: IYAMLEditor) => {
         language={(props.language as Language) ?? Language.yaml}
         onEditorDidMount={handleEditorDidMount}
         toolTipPosition="right"
+        customControls={[UndoButton, RedoButton]}
         isCopyEnabled
         isDarkTheme
         isDownloadEnabled
