@@ -11,21 +11,18 @@ jobs:
 
   install:
     runs-on: ubuntu-latest
-    container:
-      image: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
-      options: --user 1001
 
     outputs:
       record: ${{ steps.should-we-record.outputs.record }}
 
     steps:
       - name: 👷‍♀️ Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 🎥 Should we record?
         run: echo '::set-output name=record::${{  env.CYPRESS_PROJECT_ID != '' }}'
         id: should-we-record
-
+        
       - name: 👩‍🏭 Cypress install
         uses: cypress-io/github-action@v2
         with:
@@ -49,7 +46,7 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
+      image: cypress/included:9.7.0
       options: --user 1001
 
     services:
@@ -60,7 +57,7 @@ jobs:
           - 8081/tcp
     steps:
       - name: 👷‍♀️ Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 🗄️ Download the build folders
         uses: actions/download-artifact@v2
@@ -70,21 +67,18 @@ jobs:
 
       - name: 🤓 Set KAOTO_API
         run: echo "KAOTO_API=http://kaoto:8081" > .env
-      - name: 🔨 Cypress run
-        uses: cypress-io/github-action@v2
+        
+        
+      - name: 🤓 Start the website
+        run: yarn start &
+        
+      - name: Wait for website to be up
+        uses: iFaxity/wait-on-action@v1
         with:
-          browser: firefox
-          # we have already installed all dependencies above
-          install: false
-          start: yarn start
-          record: ${{needs.install.outputs.record}}
-          wait-on: 'http://localhost:1337'
-          wait-on-timeout: 120
-          command-prefix: yarn dlx
-        env:
-          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          resource: http://localhost:1337
+
+      - name: 🔨 Cypress run
+        run: yarn e2e:headless
 
       - name: 💾 Save videos
         if: always()
@@ -105,7 +99,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
-      options: --user 1001
 
     services:
       kaoto:
@@ -115,7 +108,7 @@ jobs:
           - 8081/tcp
     steps:
       - name: 👷‍♀️ Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 🗄️ Download the build folders
         uses: actions/download-artifact@v2
@@ -126,17 +119,24 @@ jobs:
       - name: 🤓 Set KAOTO_API
         run: echo "KAOTO_API=http://kaoto:8081" > .env
 
+      - name: Checks
+        run: pwd && ls && find . -name "cypress.json"
+
+      - name: Hate you Cypress
+        run: chmod 777 cypress.json
+
       - name: 🔨 Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v2.7.0
         with:
           browser: chrome
-          # we have already installed all dependencies above
+          build: yarn build
+          command-prefix: yarn dlx
+          start: yarn start 
           install: false
-          start: yarn start
+          tag: ${{ github.event_name }}
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
           wait-on-timeout: 120
-          command-prefix: yarn dlx
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -171,7 +171,7 @@ jobs:
           - 8081/tcp
     steps:
       - name: 👷‍♀️ Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 🗄️ Download the build folders
         uses: actions/download-artifact@v2
@@ -182,17 +182,45 @@ jobs:
       - name: 🤓 Set KAOTO_API
         run: echo "KAOTO_API=http://kaoto:8081" > .env
 
-      - name: 🔨 Cypress run
-        uses: cypress-io/github-action@v2
+      - name: Checks
+        run: pwd && ls && find . -name "cypress.json"
+        
+      - name: 👩‍🏭 Cypress install
+        uses: cypress-io/github-action@v2.7.0
         with:
+          runTests: false
+          build: yarn build
+          record: ${{needs.install.outputs.record}}
+          command-prefix: yarn dlx
+          working-directory: .
+        env:
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checks
+        run: pwd && ls && find . -name "cypress.json"
+        
+        
+      - name: 🤓 Start the website
+        run: yarn start &
+        
+      - name: Wait for website to be up
+        uses: iFaxity/wait-on-action@v1
+        with:
+          resource: http://localhost:1337
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2.7.0 # lock version
+        with:
+          command: npx yarn dlx cypress@v9 run --headless --config baseUrl=PATH,retries=2 --config-file cypress.json
+          install-command: yarn install --immutable
           browser: edge
-          # we have already installed all dependencies above
-          install: false
-          start: yarn start
+          install: true
+          tag: ${{ github.event_name }}
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
           wait-on-timeout: 120
-          command-prefix: yarn dlx
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
