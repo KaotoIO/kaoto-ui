@@ -38,7 +38,7 @@ jobs:
             type=semver,pattern={{major}}
             type=sha
           username: ${{ secrets.DOCKER_USERNAME }}
-        if: ${{env.username != ''}}
+        if: ${{ secrets.DOCKER_USERNAME != ''}}
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
