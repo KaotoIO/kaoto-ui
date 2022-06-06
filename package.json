@@ -48,8 +48,7 @@
     "uniforms-patternfly": "^4.7.5",
     "use-debounce": "8.0.1",
     "uuid": "8.3.2",
-    "web-vitals": "2.1.4",
-    "yarn": "2.4.3"
+    "web-vitals": "2.1.4"
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^2.1.0",
@@ -116,6 +115,5 @@
     "*.js": "eslint --cache --fix",
     "*.{tsx,ts}": "prettier --write",
     "*.tsx": "eslint --ext .tsx"
-  },
-  "packageManager": "yarn@3.1.0"
+  }
 }
