@@ -66,12 +66,12 @@ export async function fetchAllDSLs() {
  */
 export async function fetchCompatibleDSLsAndCRDs(props: {
   integrationName: string;
-  type?: string;
+  dsl?: string;
   steps: IStepProps[];
 }) {
   try {
     const resp = await request.post({
-      endpoint: '/integrations/customResources?type=' + props.type,
+      endpoint: '/integrations/customResources?dsl=' + props.dsl,
       contentType: 'application/json',
       body: { name: props.integrationName.toLowerCase(), steps: props.steps },
     });
