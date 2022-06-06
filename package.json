@@ -115,5 +115,8 @@
     "*.js": "eslint --cache --fix",
     "*.{tsx,ts}": "prettier --write",
     "*.tsx": "eslint --ext .tsx"
+  },
+  "resolutions": {
+    "@types/react": "17.0.44"
   }
 }
