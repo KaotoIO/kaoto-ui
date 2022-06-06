@@ -2,8 +2,6 @@ FROM node:16 as appbuild
 
 WORKDIR /app
 
-COPY .yarn/ .yarn/
-COPY .yarnrc.yml .
 COPY yarn.lock .
 COPY package.json .
 
