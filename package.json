@@ -20,7 +20,6 @@
     "lint": "eslint --ext .ts,.tsx,.js ./src",
     "lint:fix": "yarn lint --fix",
     "lint-staged": "yarn lint:fix && yarn format:fix",
-    "prepublish": "npm run build",
     "storybook": "start-storybook -p 6006 -s public",
     "test": "jest src/**/*.test.ts*",
     "test:coverage": "jest --coverage --watchAll=false",
@@ -48,8 +47,7 @@
     "uniforms-patternfly": "^4.7.5",
     "use-debounce": "8.0.1",
     "uuid": "8.3.2",
-    "web-vitals": "2.1.4",
-    "yarn": "2.4.3"
+    "web-vitals": "2.1.4"
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^2.1.0",
@@ -117,5 +115,7 @@
     "*.{tsx,ts}": "prettier --write",
     "*.tsx": "eslint --ext .tsx"
   },
-  "packageManager": "yarn@3.1.0"
+  "resolutions": {
+    "@types/react": "17.0.44"
+  }
 }
