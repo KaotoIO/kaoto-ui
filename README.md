@@ -13,12 +13,6 @@
 </p>
 
 <p align="center">
-  <a href="https://app.netlify.com/sites/kaoto/deploys">
-    <img src="https://api.netlify.com/api/v1/badges/07e8b623-a94d-4686-a784-eb4a9b90dde1/deploy-status" alt="Netlify Status"/></a>
-  
-  <a href="https://dashboard.cypress.io/projects/zfop6s/runs">
-    <img src="https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/simple/zfop6s&style=flat&logo=cypress" alt="Cypress Runs"/></a>
-  
   <a href="https://github.com/KaotoIO/kaoto-ui/actions/workflows/e2e-tests.yml">
     <img src="https://github.com/KaotoIO/kaoto-ui/actions/workflows/e2e-tests.yml/badge.svg?event=push" alt="🏗️ E2E Tests (Cypress)"/></a>
   
