@@ -74,7 +74,7 @@ jobs:
         with:
           browser: firefox
           # we have already installed all dependencies above
-          install: false
+#          install: false
           start: yarn start
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
@@ -129,7 +129,7 @@ jobs:
         with:
           browser: chrome
           # we have already installed all dependencies above
-          install: false
+#          install: false
           start: yarn start
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
@@ -184,7 +184,7 @@ jobs:
         with:
           browser: edge
           # we have already installed all dependencies above
-          install: false
+#          install: false
           start: yarn start
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
