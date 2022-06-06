@@ -1,3 +1,13 @@
+import {
+  fetchAllDSLs,
+  fetchCatalogSteps,
+  fetchCustomResource,
+  fetchDeployments,
+  fetchViewDefinitions,
+  startDeployment,
+  stopDeployment,
+} from '../api';
+import { IStepExtensionApi } from '../api/stepExtensionApi';
 import { IStepProps, IViewProps } from '../types';
 import { usePrevious } from '../utils';
 import { Extension } from './Extension';
@@ -18,10 +28,8 @@ import {
   Tabs,
   TabTitleText,
 } from '@patternfly/react-core';
-import { lazy, useEffect, useRef, useState } from 'react';
-import { IStepExtensionApi } from '../api/stepExtensionApi';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { fetchAllDSLs, fetchCatalogSteps, fetchDeployments } from '../api';
+import { lazy, useEffect, useRef, useState } from 'react';
 
 export interface IStepViewsProps {
   deleteStep: (e: any) => void;
@@ -183,44 +191,55 @@ const StepViews = ({
                 });
               };
 
-              const seFetchDsls = () => {
+              const seFetchCRDs = (newSteps: IStepProps[], integrationName: string) => {
+                return fetchCustomResource(newSteps, integrationName).then((res) => {
+                  return res;
+                });
+              };
+
+              const seFetchDSLs = () => {
                 return fetchAllDSLs().then((dsls) => {
-                  console.table(dsls);
                   return dsls;
                 });
               };
 
               const seFetchDeployments = () => {
                 return fetchDeployments().then((deployments) => {
-                  console.table(deployments);
                   return deployments;
                 });
               };
 
-              const seFetchIntegrations = ({ format }: { format?: string }) => {
-                // fetch all integrations, which is an empty array for now
-                if (format && format.toLowerCase() === 'YAML') {
-                  //
-                } else {
-                  // send JSON integrations
-                }
-
-                return [];
+              const seFetchViewDefinitions = (data: string | IStepProps[]) => {
+                // send JSON integrations
+                // requires you to provide the custom resource definition
+                fetchViewDefinitions(data).then((res) => {
+                  return res;
+                });
               };
 
-              const seStartDeployment = () => {
-                //
+              const seStartDeployment = (
+                dsl: string,
+                integration: any,
+                integrationName: string,
+                namespace: string
+              ) => {
+                return startDeployment(dsl, integration, integrationName, namespace).then((res) => {
+                  return res;
+                });
               };
 
-              const seStopDeployment = () => {
-                //
+              const seStopDeployment = (integrationName: string) => {
+                return stopDeployment(integrationName).then((res) => {
+                  return res;
+                });
               };
 
               const kaotoApi: IStepExtensionApi = {
                 fetchCatalogSteps: seFetchCatalogSteps,
+                fetchCRDs: seFetchCRDs,
                 fetchDeployments: seFetchDeployments,
-                fetchIntegrations: seFetchIntegrations,
-                fetchDsls: seFetchDsls,
+                fetchDSLs: seFetchDSLs,
+                fetchViewDefinitions: seFetchViewDefinitions,
                 notifyKaoto: seCreateAlert,
                 startDeployment: seStartDeployment,
                 stopDeployment: seStopDeployment,
