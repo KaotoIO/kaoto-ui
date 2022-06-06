@@ -45,7 +45,7 @@ If you want to run Kaoto-ui in your machine, follow these instructions. Remember
 ### Requirements
 
 - Node >= 14
-- [Yarn](https://yarnpkg.com/getting-started/install) (Berry, 3.x)
+- [Yarn](https://classic.yarnpkg.com/en/docs/install#mac-stable) (1.x)
 
 ### Install & Setup
 
@@ -57,8 +57,6 @@ yarn install
 
 2. Duplicate the `.env.example` file and name it `.env`.
 3. Update `KAOTO_API` in the file with the correct host for the API backend. If using Kaoto locally, this should be `http://localhost:8081`, but please check.
-
-**IMPORTANT:** We are using Yarn [Zero Installs](https://yarnpkg.com/features/zero-installs), so the dependency tree is checked in via the `.pnp.cjs`. Because we are committing `.yarn/cache` and `.pnp.*`, you should not need to run `yarn install` each time you switch between branches. However, if you find you are having issues with dependencies on a branch, consider regenerating them. See [here](https://yarnpkg.com/getting-started/qa) for more info.
 
 ### Development
 
