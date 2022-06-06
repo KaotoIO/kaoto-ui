@@ -2,8 +2,14 @@
 
 # dependencies
 /node_modules
+# no longer using yarn berry
+/.yarn
 /.pnp
 .pnp.js
+.pnp.cjs
+.pnp.loader.mjs
+.yarn/install-state.gz
+.yarn/unplugged
 
 # testing
 /coverage
@@ -24,8 +30,3 @@ build-storybook.log*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# yarn berry stuff
-.yarn/install-state.gz
-.yarn/unplugged
-
