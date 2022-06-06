@@ -1,3 +1,13 @@
+import {
+  fetchAllDSLs,
+  fetchCatalogSteps,
+  fetchCustomResource,
+  fetchDeployments,
+  fetchViewDefinitions,
+  startDeployment,
+  stopDeployment,
+} from '../api';
+import { IStepExtensionApi } from '../api/stepExtensionApi';
 import { IStepProps, IViewProps } from '../types';
 import { usePrevious } from '../utils';
 import { Extension } from './Extension';
@@ -5,6 +15,7 @@ import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import { dynamicImport } from './import';
 import {
+  AlertVariant,
   Button,
   DrawerActions,
   DrawerCloseButton,
@@ -17,6 +28,7 @@ import {
   Tabs,
   TabTitleText,
 } from '@patternfly/react-core';
+import { useAlert } from '@rhoas/app-services-ui-shared';
 import { lazy, useEffect, useRef, useState } from 'react';
 
 export interface IStepViewsProps {
@@ -43,6 +55,8 @@ const StepViews = ({
   const stepPropertySchema = useRef<{ [label: string]: { type: string } }>({});
   const stepPropertyModel = useRef<{ [label: string]: any }>({});
   const previousTabIndex = usePrevious(detailsTabIndex);
+
+  const { addAlert } = useAlert() || {};
 
   useEffect(() => {
     if (previousTabIndex === detailsTabIndex) {
@@ -144,6 +158,93 @@ const StepViews = ({
                 );
               };
 
+              const seCreateAlert = (title: string, body?: string, variant?: string) => {
+                let variantType = AlertVariant.default;
+
+                // map to PatternFly AlertVariant enum type
+                switch (variant) {
+                  case 'info':
+                    variantType = AlertVariant.info;
+                    break;
+                  case 'danger':
+                    variantType = AlertVariant.danger;
+                    break;
+                  case 'success':
+                    variantType = AlertVariant.success;
+                    break;
+                  case 'warning':
+                    variantType = AlertVariant.warning;
+                    break;
+                }
+
+                addAlert &&
+                  addAlert({
+                    title: title,
+                    variant: variantType,
+                    description: body,
+                  });
+              };
+
+              const seFetchCatalogSteps = () => {
+                return fetchCatalogSteps().then((steps) => {
+                  return steps;
+                });
+              };
+
+              const seFetchCRDs = (newSteps: IStepProps[], integrationName: string) => {
+                return fetchCustomResource(newSteps, integrationName).then((res) => {
+                  return res;
+                });
+              };
+
+              const seFetchDSLs = () => {
+                return fetchAllDSLs().then((dsls) => {
+                  return dsls;
+                });
+              };
+
+              const seFetchDeployments = () => {
+                return fetchDeployments().then((deployments) => {
+                  return deployments;
+                });
+              };
+
+              const seFetchViewDefinitions = (data: string | IStepProps[]) => {
+                // send JSON integrations
+                // requires you to provide the custom resource definition
+                fetchViewDefinitions(data).then((res) => {
+                  return res;
+                });
+              };
+
+              const seStartDeployment = (
+                dsl: string,
+                integration: any,
+                integrationName: string,
+                namespace: string
+              ) => {
+                return startDeployment(dsl, integration, integrationName, namespace).then((res) => {
+                  return res;
+                });
+              };
+
+              const seStopDeployment = (integrationName: string) => {
+                return stopDeployment(integrationName).then((res) => {
+                  return res;
+                });
+              };
+
+              const kaotoApi: IStepExtensionApi = {
+                fetchCatalogSteps: seFetchCatalogSteps,
+                fetchCRDs: seFetchCRDs,
+                fetchDeployments: seFetchDeployments,
+                fetchDSLs: seFetchDSLs,
+                fetchViewDefinitions: seFetchViewDefinitions,
+                notifyKaoto: seCreateAlert,
+                startDeployment: seStartDeployment,
+                stopDeployment: seStopDeployment,
+              };
+
               return (
                 <Tab
                   eventKey={index}
@@ -161,6 +262,7 @@ const StepViews = ({
                         text="Passed from Kaoto!"
                         onButtonClicked={onButtonClicked}
                         path="/"
+                        {...kaotoApi}
                       />
                     </Extension>
                   </StepErrorBoundary>
