@@ -32,7 +32,6 @@ jobs:
           runTests: false
           build: yarn build
           record: true
-          command-prefix: yarn dlx
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -80,7 +79,6 @@ jobs:
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
           wait-on-timeout: 120
-          command-prefix: yarn dlx
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -136,7 +134,6 @@ jobs:
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
           wait-on-timeout: 120
-          command-prefix: yarn dlx
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -192,7 +189,6 @@ jobs:
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
           wait-on-timeout: 120
-          command-prefix: yarn dlx
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
