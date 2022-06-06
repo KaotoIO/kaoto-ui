@@ -30,9 +30,10 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           runTests: false
-          build: yarn build
           record: true
-          command-prefix: yarn dlx
+          command: npx yarn dlx cypress@v9 run --headless --config baseUrl=PATH,retries=2 --config-file cypress.json
+          install-command: yarn install --immutable
+          build: yarn build
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
