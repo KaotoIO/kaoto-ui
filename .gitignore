@@ -4,7 +4,6 @@
 /node_modules
 # no longer using yarn berry
 /.yarn
-/.pnp
 .pnp.js
 .pnp.cjs
 .pnp.loader.mjs
