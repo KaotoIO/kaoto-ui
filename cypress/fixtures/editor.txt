@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 apiVersion: camel.apache.org/v1alpha1
 group: camel.apache.org</br>
+=======
+group: camel.apache.org
+>>>>>>> 63a8339 (Add cypress test for editing)
 kind: KameletBinding
 metadata:
   additionalProperties: {}
@@ -10,6 +14,7 @@ metadata:
 {backspace}plural: kameletbindings
 scope: Namespaced
 served: true
+<<<<<<< HEAD
 singular: kameletbinding</br>
 spec:
   source:
@@ -19,4 +24,19 @@ spec:
   ref:
   name: kafka-sink
 {backspace}{backspace}storage: true</br>
+=======
+singular: kameletbinding
+spec:
+  source:
+{backspace}    ref:
+  apiVersion: camel.apache.org/v1alpha1
+{backspace}  name: timer-source
+{backspace}  kind: Kamelet
+  {backspace}{backspace}  sink:
+  ref:
+  {backspace}    apiVersion: camel.apache.org/v1alpha1
+  {backspace}name: kafka-sink
+  {backspace}kind: Kamelet
+{backspace}{backspace}storage: true
+>>>>>>> 63a8339 (Add cypress test for editing)
 version: v1alpha1

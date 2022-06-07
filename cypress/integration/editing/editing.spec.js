@@ -7,40 +7,26 @@ describe('editing properties', () => {
   it('loads the YAML editor', () => {
     cy.get('.code-editor').click();
     cy.get('button').contains('Start from scratch').click();
-  
-    cy.get('.code-editor').type('group: camel.apache.org\n'+
-    'kind: KameletBinding\n'+
-    'metadata:\n'+
-      'additionalProperties: {}\n'+
-      'finalizers: []\n'+
-      'managedFields: []\n'+
-      'name: Updated integration\n'+
-      'ownerReferences: []\n'+
-  'plural: kameletbindings\n'+
-    'scope: Namespaced\n'+
-    'served: true\n'+
-    'singular: kameletbinding\n'+
-    'spec:\n'+
-      'source:\n'+
-        'ref:\n'+
-          'apiVersion: camel.apache.org/v1alpha1\n'+
-          'name: timer-source\n'+
-          'kind: Kamelet\n'+
-      'sink:\n'+
-        'ref:\n'+
-          'apiVersion: camel.apache.org/v1alpha1\n'+
-          'name: kafka-sink\n'+
-          'kind: Kamelet\n'+
-    'storage: true\n'+
-    'version: v1alpha1');
+     
+    cy.fixture('editor.txt').then((user) => {
+      cy.get('.code-editor').type(user)
+      cy.get('[data-id="dndnode_2"]').click();
+      cy.get('[data-testid="configurationTab"]').click();
+      cy.get('[data-testid="json-schema-configurator"]').click();
+      cy.get('input[name="topic"]').type('Hello');
+      cy.get('input[name="bootstrapServers"]').type('anything');
+      cy.get('input[name="securityProtocol"]').type('anything');
+      cy.get('input[name="saslMechanism"]').type('anything');
+      cy.get('input[name="user"]').type('anything');  
+      cy.get('input[name="password"]').type('anything');       
     
-    // cy.get('[data-testid="dndnode_2"]');
-    // it('loads the visualization canvas', () => {
-    //   cy.get('[data-testid="react-flow-wrapper"]').should('exist');
-    
+    }) ;
   });
 
 });
+
+
+
 
 
 
@@ -63,4 +49,8 @@ describe('editing properties', () => {
 //       expect($el.text()).to.eq(englishTitle)
 //     })
 // })
+
+   // cy.get('[data-testid="dndnode_2"]');
+    // it('loads the visualization canvas', () => {
+    //   cy.get('[data-testid="react-flow-wrapper"]').should('exist');
 
