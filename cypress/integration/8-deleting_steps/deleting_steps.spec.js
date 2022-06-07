@@ -5,7 +5,7 @@ describe('Test for deleting steps', () => {
     it('loads the YAML editor', () => {
         cy.get('.code-editor').click();
         cy.get('button').contains('Start from scratch').click();
-        cy.fixture('deleting.txt')
+        cy.fixture('delete.txt')
             .then((user) => {
                 cy.get('.code-editor').type(user);
                 cy.wait(1000)

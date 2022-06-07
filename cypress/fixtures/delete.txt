@@ -15,17 +15,17 @@ spec:
   source:
 {backspace}    ref:
   apiVersion: camel.apache.org/v1alpha1
-name: chuck-norris-source
+name: chuck-norris-source</br>
 kind: Kamelet
 {backspace}{backspace}  steps:
 - ref:
    apiVersion: camel.apache.org/v1alpha1
 name: chunk-template-action
-kind: Kamelet</br>
+kind: Kamelet
 {backspace}{backspace}  sink:
   ref:
 {backspace}      apiVersion: camel.apache.org/v1alpha1
-name: kafka-sink</br>
-kind: Kamelet
+name: kafka-sink
+kind: Kamelet</br>
 {backspace}{backspace}storage: true</br>
 version: v1alpha1
