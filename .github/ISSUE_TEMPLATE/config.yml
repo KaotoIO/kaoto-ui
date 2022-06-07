@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Forum
+    url: https://github.com/KaotoIO/kaoto-ui/discussions/categories/q-a
+    about: Please ask and answer questions here.
+  - name: Developers Forum
+    url: https://github.com/KaotoIO/kaoto-ui/discussions/categories/general
+    about: Please discuss future enhancement ideas here
