@@ -1639,18 +1639,18 @@
   resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.196.7.tgz#5f39c53e0a6a626ea6e3abfd5bcc2e3695818ceb"
   integrity sha512-hA7Oww411e1p0/IXjC1I+4/1NNis9V+NVBxfUIpRwyuLbCIDHBdtMu2qAPLdKxXjuibV9EE6ZdlT7ra/kcFuJQ==
 
-"@patternfly/react-code-editor@^4.55.1":
-  version "4.55.1"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-code-editor/-/react-code-editor-4.55.1.tgz#43508dea9606367f06c91a87d0b6f7f2705108d3"
-  integrity sha512-B/lMbxH0u8Kq6sMKovu8kqUNuf5GIPrCBZMWbkxf2BoPcDLyCgHksmTXhUavhqkO1y5TMCaq+EjJMD0pAvHkrw==
+"@patternfly/react-code-editor@^4.62.3":
+  version "4.62.3"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-code-editor/-/react-code-editor-4.62.3.tgz#39889602cca4202fbe15548b8ee48ee4b29183d2"
+  integrity sha512-zNXTJ+DvKvVFRoURQC3nai6PuDegt71X3ONqkazVpZ7ODt6hDeeOHj+eW85sDa2ATSeRghITtEQsZPPNG6Uykw==
   dependencies:
-    "@patternfly/react-core" "^4.214.1"
-    "@patternfly/react-icons" "^4.65.1"
-    "@patternfly/react-styles" "^4.64.1"
+    "@patternfly/react-core" "^4.221.3"
+    "@patternfly/react-icons" "^4.72.3"
+    "@patternfly/react-styles" "^4.71.3"
     react-dropzone "9.0.0"
     tslib "^2.0.0"
 
-"@patternfly/react-core@4.221.3", "@patternfly/react-core@^4.214.1":
+"@patternfly/react-core@4.221.3", "@patternfly/react-core@^4.221.3":
   version "4.221.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.221.3.tgz#7007be54b37a044ac78ba4243614043e8da7be24"
   integrity sha512-I33TnX5Xn8ypXYjHc7G5kIVsYjB4PnDxxmJG6rBLqFslrnGUBzvb0sflnP43QlI0camamVIoaBRjedj8WXqaRg==
@@ -1668,12 +1668,12 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.65.1.tgz#bc31f349577e416c8211b68da4dfb5e46e8039d7"
   integrity sha512-CUYFRPztFkR7qrXq/0UAhLjeHd8FdjLe4jBjj8tfKc7OXwxDeZczqNFyRMATZpPaduTH7BU2r3OUjQrgAbquWg==
 
-"@patternfly/react-icons@^4.65.1", "@patternfly/react-icons@^4.72.3":
+"@patternfly/react-icons@^4.72.3":
   version "4.72.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.72.3.tgz#5886755a2b516d49d97ed3bdc88609d9b3c4fc2a"
   integrity sha512-bZCPsOsxtFXTmZQqDKNebkBywud3E0ID3446AWI1RO5Ypufdc0FTkehSzBPANfJPYjjK9/EYaIy8rF0yiJdFPQ==
 
-"@patternfly/react-styles@^4.64.1", "@patternfly/react-styles@^4.71.3":
+"@patternfly/react-styles@^4.71.3":
   version "4.71.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.71.3.tgz#4f1cf4624a675751f035dc3bfa4cb3c6ca48e43b"
   integrity sha512-JpMBIrJfco3JwK9KbJvjr+tKZidVhbkGrQT7GyWbYAwZ2bOmCmeCPJYc0xhAWcvNumn9a7AhYzAWPJVlQQue3g==
