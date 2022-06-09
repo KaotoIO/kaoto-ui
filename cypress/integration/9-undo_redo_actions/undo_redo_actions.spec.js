@@ -16,8 +16,10 @@ describe('Test for undo/redo actions on code-editor', () => {
                     .type('{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}timer-', { delay: 500 });
                     cy.get('[aria-label="Undo change"] > svg').click()
                     cy.get('[aria-label="Undo change"] > svg').click()
+                    cy.get('[data-testid="react-flow-wrapper"]').contains('kafka-source')
                     cy.get('[aria-label="Redo change"] > svg').click()
                     cy.get('[aria-label="Redo change"] > svg').click()
+                    cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source')
                 })           
             })
     })
