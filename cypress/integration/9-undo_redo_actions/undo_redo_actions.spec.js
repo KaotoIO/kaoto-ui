@@ -2,6 +2,7 @@ describe('Test for undo/redo actions on code-editor', () => {
     beforeEach(() => {
         cy.visit('http://localhost:1337');
     });
+
     it('loads the YAML editor', () => {
         const dataTransfer = new DataTransfer();
         cy.get('.code-editor').click();
