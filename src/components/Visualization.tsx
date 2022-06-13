@@ -35,16 +35,6 @@ import ReactFlow, {
 import 'react-flow-renderer/dist/style.css';
 import 'react-flow-renderer/dist/theme-default.css';
 
-const placeholderStep: IStepProps = {
-  apiVersion: '',
-  icon: '',
-  id: '',
-  name: '',
-  parameters: [],
-  type: '',
-  UUID: '',
-};
-
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
@@ -63,7 +53,7 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
-  const [selectedStep, setSelectedStep] = useState<IStepProps>(placeholderStep);
+  const [selectedStep, setSelectedStep] = useState<IStepProps>({ name: '', type: '' });
   const [, setYAMLData] = useYAMLContext();
   const [viewData, dispatch] = useStepsAndViewsContext();
   const previousViewData = usePrevious(viewData);
@@ -180,7 +170,7 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
         UUID: step.UUID,
         index,
         onDropChange,
-        onElementClickAdd: onSelectNewStep,
+        onMiniCatalogClickAdd: onSelectNewStep,
         settings,
       };
 
@@ -245,7 +235,7 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
   const deleteStep = () => {
     if (!selectedStep.UUID) return;
     setIsPanelExpanded(false);
-    setSelectedStep(placeholderStep);
+    setSelectedStep({ name: '', type: '' });
 
     const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, viewData.steps);
     // need to rely on useEffect to get up-to-date value
@@ -276,6 +266,9 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
    * @param node
    */
   const onNodeClick = (_e: any, node: any) => {
+    // here we check if it's a node or edge
+    // workaround for https://github.com/wbkd/react-flow/issues/2202
+    if (!_e.target.classList.contains('stepNode__clickable')) return;
     if (node.type === 'slot') {
       // prevent slots from being selected,
       // passive-aggressively open the steps catalog

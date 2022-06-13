@@ -23,7 +23,7 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
       : 'rgb(204, 204, 204)';
 
   const onDropChange = (event: any) => data.onDropChange(event, data);
-  const onElementClickAdd = (selectedStep: any) => data.onElementClickAdd(selectedStep);
+  const onMiniCatalogClickAdd = (selectedStep: any) => data.onMiniCatalogClickAdd(selectedStep);
 
   return (
     <div
@@ -46,7 +46,7 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
           aria-label="Search for a step"
           bodyContent={
             <MiniCatalog
-              handleSelectStep={onElementClickAdd}
+              handleSelectStep={onMiniCatalogClickAdd}
               queryParams={{
                 dsl: 'KameletBinding',
                 kind: data.kind,
@@ -66,7 +66,7 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
           </div>
         </Popover>
       )}
-      <div className={'stepNode__Icon'}>
+      <div className={'stepNode__Icon stepNode__clickable'}>
         <img src={data.icon} alt={data.label} />
       </div>
       {data.connectorType !== 'START' && (
@@ -78,7 +78,7 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
           style={{ borderRadius: 0 }}
         />
       )}
-      <div className={'stepNode__Label'}>{data.label}</div>
+      <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
     </div>
   );
 };

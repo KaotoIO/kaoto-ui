@@ -76,7 +76,7 @@ export interface IVizStepNodeData {
   UUID?: string;
   index: number;
   onDropChange: (arg1: any, arg2: any) => void;
-  onElementClickAdd: (arg: any) => void;
+  onMiniCatalogClickAdd: (arg: any) => void;
   settings: ISettings;
 }
 
