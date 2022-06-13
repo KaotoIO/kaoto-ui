@@ -9,7 +9,7 @@ import {
   IStepProps,
   IViewData,
   IVizStepNodeData,
-  IVizStepProps,
+  IVizStepPropsNode,
   IVizStepPropsEdge,
 } from '../types';
 import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
@@ -19,14 +19,18 @@ import { StepErrorBoundary, StepViews, VisualizationSlot, VisualizationStep } fr
 import './Visualization.css';
 import { AlertVariant, Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, {
+  applyEdgeChanges,
+  applyNodeChanges,
   Background,
   Controls,
-  Elements,
+  Edge,
+  EdgeChange,
   MiniMap,
+  Node,
+  NodeChange,
   ReactFlowProvider,
-  removeElements,
 } from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import 'react-flow-renderer/dist/theme-default.css';
@@ -51,8 +55,11 @@ interface IVisualization {
 }
 
 const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
-  // `elements` is an array of UI-specific objects that represent the Step model visually
-  const [elements, setElements] = useState<Elements<IStepProps>>([]);
+  // `nodes` is an array of UI-specific objects that represent
+  // the Step model visually, while `edges` connect them
+  const [nodes, setNodes] = useState<Node<IStepProps>[]>([]);
+  const [edges, setEdges] = useState<Edge[]>([]);
+
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
@@ -101,10 +108,7 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
       });
   };
 
-  const nodeTypes = {
-    slot: VisualizationSlot,
-    step: VisualizationStep,
-  };
+  const nodeTypes = useMemo(() => ({ slot: VisualizationSlot, step: VisualizationStep }), []);
 
   /**
    * Handles dropping a step onto an existing step (i.e. step replacement)
@@ -152,7 +156,7 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
    */
   const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
     const incrementAmt = 160;
-    const stepsAsElements: any[] = [];
+    const stepsAsNodes: any[] = [];
     const stepEdges: any[] = [];
 
     // if there are no steps or if the first step has a `type`,
@@ -165,7 +169,7 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
 
     steps.map((step, index) => {
       // Grab the previous step to use for determining position and drawing edges
-      const previousStep = stepsAsElements[index - 1];
+      const previousStep = stepsAsNodes[index - 1];
       let stepEdge: IVizStepPropsEdge = { id: '' };
 
       const vizStepData: IVizStepNodeData = {
@@ -181,7 +185,7 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
       };
 
       // Build the default parameters
-      let inputStep: IVizStepProps = {
+      let inputStep: IVizStepPropsNode = {
         data: vizStepData,
         id: getId(),
         position: { x: 0, y: 250 },
@@ -223,7 +227,7 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
           break;
       }
 
-      stepsAsElements.push(inputStep);
+      stepsAsNodes.push(inputStep);
 
       // only add step edge if there is more than one step and not on the first step
       if (steps.length > 1 && index !== 0) {
@@ -233,9 +237,8 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
       return;
     });
 
-    // combine steps and step edges before setting hook state
-    const combined = stepsAsElements.concat(stepEdges);
-    setElements(combined);
+    setEdges(stepEdges);
+    setNodes(stepsAsNodes);
   };
 
   // Delete an integration step
@@ -268,12 +271,12 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
   };
 
   /**
-   * Called when an element is clicked
+   * Called when a React Flow node is clicked
    * @param _e
-   * @param element
+   * @param node
    */
-  const onElementClick = (_e: any, element: any) => {
-    if (element.type === 'slot') {
+  const onNodeClick = (_e: any, node: any) => {
+    if (node.type === 'slot') {
       // prevent slots from being selected,
       // passive-aggressively open the steps catalog
       if (toggleCatalog) toggleCatalog();
@@ -281,9 +284,9 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
     }
 
     // Only set state again if the ID is not the same
-    if (selectedStep.UUID !== element.data.UUID) {
+    if (selectedStep.UUID !== node.data.UUID) {
       const findStep: IStepProps =
-        viewData.steps.find((step) => step.UUID === element.data.UUID) ?? selectedStep;
+        viewData.steps.find((step) => step.UUID === node.data.UUID) ?? selectedStep;
       setSelectedStep(findStep);
     }
 
@@ -305,8 +308,9 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
     });
   };
 
-  const onElementsRemove = (elementsToRemove: Elements<IVizStepProps[]>) =>
-    setElements((els) => removeElements(elementsToRemove, els));
+  const onNodesChange = (changes: NodeChange[]) => setNodes((ns) => applyNodeChanges(changes, ns));
+
+  const onEdgesChange = (changes: EdgeChange[]) => setEdges((es) => applyEdgeChanges(changes, es));
 
   const onExpandPanel = () => {
     //drawerRef.current && drawerRef.current.focus();
@@ -366,12 +370,14 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
                 style={{ width: window.innerWidth, height: window.innerHeight }}
               >
                 <ReactFlow
-                  elements={elements}
+                  nodes={nodes}
+                  edges={edges}
                   defaultZoom={1.2}
                   nodeTypes={nodeTypes}
                   onDragOver={onDragOver}
-                  onElementClick={onElementClick}
-                  onElementsRemove={onElementsRemove}
+                  onNodeClick={onNodeClick}
+                  onNodesChange={onNodesChange}
+                  onEdgesChange={onEdgesChange}
                   onLoad={onLoad}
                   snapToGrid={true}
                   snapGrid={[15, 15]}

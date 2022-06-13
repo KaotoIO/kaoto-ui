@@ -1,10 +1,10 @@
+import { IVizStepNodeData } from '../types';
 import { appendableStepTypes } from '../utils/validationService';
 import { MiniCatalog } from './MiniCatalog';
 import './Visualization.css';
 import { Button, Popover } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
-import { Handle, Position, useStoreState } from 'react-flow-renderer';
-import { IVizStepNodeData } from '../types';
+import { Handle, Node, Position, useNodes } from 'react-flow-renderer';
 
 export interface IVisualizationStep {
   data: IVizStepNodeData;
@@ -12,7 +12,7 @@ export interface IVisualizationStep {
 
 // Custom Node type and component for React Flow
 const VisualizationStep = ({ data }: IVisualizationStep) => {
-  const nodes = useStoreState((state: { nodes: any }) => state.nodes);
+  const nodes: Node[] = useNodes();
   const isLastNode = nodes[nodes.length - 1].data.UUID === data.UUID;
 
   const borderColor =
