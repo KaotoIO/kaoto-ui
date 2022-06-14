@@ -73,7 +73,7 @@ const VisualizationSlot = ({ data }: IVisualizationSlot) => {
 
   return (
     <div
-      className={'stepNode'}
+      className={'stepNode stepNode__clickable'}
       style={{ border: '2px solid rgb(149, 213, 245)', borderRadius: '50%' }}
       onDrop={onDrop}
     >
@@ -86,7 +86,7 @@ const VisualizationSlot = ({ data }: IVisualizationSlot) => {
           isConnectable={false}
         />
       )}
-      <div className={'stepNode__Icon'}>
+      <div className={'stepNode__Icon stepNode__clickable'}>
         <CubesIcon />
       </div>
       {!(data.connectorType === 'END') && (
@@ -98,7 +98,7 @@ const VisualizationSlot = ({ data }: IVisualizationSlot) => {
           isConnectable={false}
         />
       )}
-      <div className={'stepNode__Label'}>{data.label}</div>
+      <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
     </div>
   );
 };

@@ -1,5 +1,4 @@
-import { CSSProperties, ReactNode } from 'react';
-import { ArrowHeadType, Edge, ElementId, FlowElement, Node } from 'react-flow-renderer/dist/types';
+import { Edge, Node } from 'react-flow-renderer';
 
 declare module '*.yaml' {
   const content: { [key: string]: any };
@@ -77,11 +76,9 @@ export interface IVizStepNodeData {
   UUID?: string;
   index: number;
   onDropChange: (arg1: any, arg2: any) => void;
-  onElementClickAdd: (arg: any) => void;
+  onMiniCatalogClickAdd: (arg: any) => void;
   settings: ISettings;
 }
-
-export interface IVizStepProps extends IVizStepPropsNode, IVizStepPropsEdge {}
 
 export interface IVizStepPropsNode extends Node {}
 

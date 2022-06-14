@@ -1,10 +1,10 @@
+import { IVizStepNodeData } from '../types';
 import { appendableStepTypes } from '../utils/validationService';
 import { MiniCatalog } from './MiniCatalog';
 import './Visualization.css';
 import { Button, Popover } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
-import { Handle, Position, useStoreState } from 'react-flow-renderer';
-import { IVizStepNodeData } from '../types';
+import { Handle, Node, Position, useNodes } from 'react-flow-renderer';
 
 export interface IVisualizationStep {
   data: IVizStepNodeData;
@@ -12,7 +12,7 @@ export interface IVisualizationStep {
 
 // Custom Node type and component for React Flow
 const VisualizationStep = ({ data }: IVisualizationStep) => {
-  const nodes = useStoreState((state: { nodes: any }) => state.nodes);
+  const nodes: Node[] = useNodes();
   const isLastNode = nodes[nodes.length - 1].data.UUID === data.UUID;
 
   const borderColor =
@@ -23,7 +23,7 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
       : 'rgb(204, 204, 204)';
 
   const onDropChange = (event: any) => data.onDropChange(event, data);
-  const onElementClickAdd = (selectedStep: any) => data.onElementClickAdd(selectedStep);
+  const onMiniCatalogClickAdd = (selectedStep: any) => data.onMiniCatalogClickAdd(selectedStep);
 
   return (
     <div
@@ -46,7 +46,7 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
           aria-label="Search for a step"
           bodyContent={
             <MiniCatalog
-              handleSelectStep={onElementClickAdd}
+              handleSelectStep={onMiniCatalogClickAdd}
               queryParams={{
                 dsl: 'KameletBinding',
                 kind: data.kind,
@@ -66,7 +66,7 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
           </div>
         </Popover>
       )}
-      <div className={'stepNode__Icon'}>
+      <div className={'stepNode__Icon stepNode__clickable'}>
         <img src={data.icon} alt={data.label} />
       </div>
       {data.connectorType !== 'START' && (
@@ -78,7 +78,7 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
           style={{ borderRadius: 0 }}
         />
       )}
-      <div className={'stepNode__Label'}>{data.label}</div>
+      <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
     </div>
   );
 };
