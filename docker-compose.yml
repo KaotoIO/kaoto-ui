@@ -1,3 +1,4 @@
+version: '3'
 services:
   kaoto-backend-svc:
     image: kaotoio/backend:nightly
@@ -9,3 +10,4 @@ services:
       - 8080:8080
     depends_on:
       - kaoto-backend-svc
+
