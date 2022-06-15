@@ -12,7 +12,13 @@ describe('editing properties', () => {
         cy.get('.code-editor').type(user);
       })
       .then(() => {
-        cy.get('[data-id="dndnode_2"]').click();
+        cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source').click();
+        cy.get('[data-testid="configurationTab"] ').click();
+        cy.get('input[name="period"]').type("3000");
+        cy.get('.code-editor').should('contain.text', 'period');
+        cy.get('.pf-c-drawer__close > .pf-c-button').click()
+
+        cy.get('[data-testid="react-flow-wrapper"]').contains('kafka-sink').click();
         cy.get('[data-testid="configurationTab"]').click();
         cy.get('[data-testid="json-schema-configurator"]').click();
       })
@@ -30,12 +36,6 @@ describe('editing properties', () => {
         cy.get('input[name="password"]').type('password');
         cy.get('.code-editor').should('contain.text', 'password');
         cy.get('[data-ouia-component-id="OUIA-Generated-Button-plain-7"]').click();
-        
-        cy.get('.stepNode').contains("timer-source").click();
-        cy.get('[data-testid="configurationTab"] ').click();
-        cy.get('input[name="period"]').type("1");
-        cy.get('.pf-c-drawer__close > .pf-c-button').click()
-        // cy.get('.pf-c-drawer__close > .pf-c-button').click();
 
         cy.get('.code-editor')
           .contains('period')
