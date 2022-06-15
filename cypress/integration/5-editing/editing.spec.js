@@ -42,7 +42,7 @@ describe('editing properties', () => {
           .should('have.text', 'period')
           .type('{end}{shift+alt}{leftArrow}{backspace}2', { delay: 500 })
           .wait(1000);
-        cy.get('.stepNode').contains("timer-source").click();
+          cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source').click();
         cy.get('[data-testid="configurationTab"] ').click();
       });
   });
