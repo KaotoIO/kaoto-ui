@@ -20,7 +20,8 @@ describe('Test for undo/redo actions on code-editor', () => {
                     cy.get('[data-testid="react-flow-wrapper"]').contains('kafka-source')
                     cy.get('[aria-label="Redo change"] > svg').click()
                     cy.get('[aria-label="Redo change"] > svg').click()
-                    cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source');
+                    cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source')
+                    cy.wait(2000)
                 })           
             })
     })
