@@ -137,7 +137,7 @@ export async function startDeployment(
 ) {
   try {
     const resp = await request.post({
-      endpoint: '/integrations?type=' + dsl + '&namespace=' + namespace,
+      endpoint: '/integrations?dsl=' + dsl + '&namespace=' + namespace,
       contentType: 'application/json',
       body: { name: integrationName.toLowerCase(), steps: integration },
     });
