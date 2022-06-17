@@ -1,5 +1,6 @@
 import { StepsAndViewsProvider, YAMLProvider } from '../api';
 import { Catalog, KaotoToolbar, SettingsModal, Visualization, YAMLEditor } from '../components';
+import { ISettings } from '../types';
 import {
   AlertVariant,
   Drawer,
@@ -8,9 +9,8 @@ import {
   Grid,
   GridItem,
 } from '@patternfly/react-core';
-import { useState } from 'react';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { ISettings } from '../types';
+import { useState } from 'react';
 
 export interface IExpanded {
   catalog?: boolean;
@@ -78,7 +78,7 @@ const Dashboard = () => {
               <Grid>
                 {expanded.codeEditor && (
                   <GridItem span={4}>
-                    <YAMLEditor />
+                    <YAMLEditor dsl={settings.dsl} />
                   </GridItem>
                 )}
                 <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>

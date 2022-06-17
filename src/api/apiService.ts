@@ -28,11 +28,16 @@ export async function fetchCatalogSteps(queryParams?: {
  * Requires a list of all new steps.
  * @param newSteps
  * @param integrationName
+ * @param dsl
  */
-export async function fetchCustomResource(newSteps: IStepProps[], integrationName: string) {
+export async function fetchCustomResource(
+  newSteps: IStepProps[],
+  integrationName: string,
+  dsl: string
+) {
   try {
     const resp = await request.post({
-      endpoint: '/integrations/customResource',
+      endpoint: '/integrations/customResource?dsl=' + dsl,
       contentType: 'application/json',
       body: { name: integrationName.toLowerCase(), steps: newSteps },
     });
@@ -132,7 +137,7 @@ export async function startDeployment(
 ) {
   try {
     const resp = await request.post({
-      endpoint: '/integrations?type=' + dsl + '&namespace=' + namespace,
+      endpoint: '/integrations?dsl=' + dsl + '&namespace=' + namespace,
       contentType: 'application/json',
       body: { name: integrationName.toLowerCase(), steps: integration },
     });

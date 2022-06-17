@@ -191,8 +191,12 @@ const StepViews = ({
                 });
               };
 
-              const seFetchCRDs = (newSteps: IStepProps[], integrationName: string) => {
-                return fetchCustomResource(newSteps, integrationName).then((res) => {
+              const seFetchCRDs = (
+                newSteps: IStepProps[],
+                integrationName: string,
+                dsl: string
+              ) => {
+                return fetchCustomResource(newSteps, integrationName, dsl).then((res) => {
                   return res;
                 });
               };

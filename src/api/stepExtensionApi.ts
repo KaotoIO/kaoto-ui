@@ -21,7 +21,7 @@ import { IStepProps } from '../types';
  */
 export interface IStepExtensionApi {
   fetchCatalogSteps: () => void;
-  fetchCRDs: (newSteps: IStepProps[], integrationName: string) => void;
+  fetchCRDs: (newSteps: IStepProps[], integrationName: string, dsl: string) => void;
   fetchDeployments: () => void;
   fetchDSLs: () => void;
   fetchViewDefinitions: (data: string | IStepProps[]) => void;

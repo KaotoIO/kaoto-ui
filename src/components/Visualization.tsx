@@ -78,7 +78,8 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
     // Remove all "Add Step" placeholders before updating the API
     fetchCustomResource(
       viewDataSteps.filter((step) => step.type),
-      settings.integrationName
+      settings.integrationName,
+      settings.dsl
     )
       .then((value) => {
         if (typeof value === 'string') {
@@ -167,6 +168,7 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
         icon: step.icon,
         kind: step.kind,
         label: truncateString(step.name, 14),
+        dsl: settings.dsl,
         UUID: step.UUID,
         index,
         onDropChange,
