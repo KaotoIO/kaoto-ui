@@ -40,7 +40,8 @@ const VisualizationSlot = ({ data }: IVisualizationSlot) => {
 
         fetchCustomResource(
           newViewDefs.steps.filter((step: IStepProps) => step.type),
-          data.settings.integrationName
+          data.settings.integrationName,
+          data.settings.dsl
         )
           .then((value) => {
             if (typeof value === 'string') {

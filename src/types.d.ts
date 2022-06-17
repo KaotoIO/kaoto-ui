@@ -70,6 +70,7 @@ export interface IViewData {
 
 export interface IVizStepNodeData {
   connectorType: string;
+  dsl: string;
   icon?: string;
   kind?: string;
   label: string;

@@ -5,13 +5,14 @@ import {
   fetchCustomResource,
 } from '../api';
 import { StepErrorBoundary } from './StepErrorBoundary';
-import {CodeEditor, CodeEditorControl, Language} from '@patternfly/react-code-editor';
+import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
+import { RedoIcon, UndoIcon } from '@patternfly/react-icons';
 import { useRef } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
 import EditorDidMount from 'react-monaco-editor';
-import {RedoIcon, UndoIcon} from "@patternfly/react-icons";
+import { useDebouncedCallback } from 'use-debounce';
 
 interface IYAMLEditor {
+  dsl: string;
   // Used to mock data for stories
   initialData?: string;
   language?: Language;
@@ -38,7 +39,7 @@ const YAMLEditor = (props: IYAMLEditor) => {
            * resource (YAML). Used to fill any relevant YAML data missed while
            * manually typing.
            */
-          fetchCustomResource(res.steps, 'integration').then((yamlResponse) => {
+          fetchCustomResource(res.steps, 'integration', props.dsl).then((yamlResponse) => {
             if (typeof yamlResponse === 'string') {
               setYAMLData(yamlResponse);
             }
@@ -65,33 +66,33 @@ const YAMLEditor = (props: IYAMLEditor) => {
   }, 1000);
 
   const undoAction = () => {
-      (editorRef.current?.getModel() as any)?.undo();
-  }
+    (editorRef.current?.getModel() as any)?.undo();
+  };
   const redoAction = () => {
-      (editorRef.current?.getModel()as any)?.redo();
-    }
+    (editorRef.current?.getModel() as any)?.redo();
+  };
 
   const UndoButton = (
-      <CodeEditorControl
-          key='undoButton'
-          icon={<UndoIcon/>}
-          aria-label="Undo change"
-          toolTipText="Undo change"
-          onClick={undoAction}
-          isVisible={YAMLData !== ''}
-        />
-    );
+    <CodeEditorControl
+      key="undoButton"
+      icon={<UndoIcon />}
+      aria-label="Undo change"
+      toolTipText="Undo change"
+      onClick={undoAction}
+      isVisible={YAMLData !== ''}
+    />
+  );
 
   const RedoButton = (
-      <CodeEditorControl
-          key='redoButton'
-          icon={<RedoIcon/>}
-          aria-label="Redo change"
-          toolTipText="Redo change"
-          onClick={redoAction}
-          isVisible={YAMLData !== ''}
-      />
-    );
+    <CodeEditorControl
+      key="redoButton"
+      icon={<RedoIcon />}
+      aria-label="Redo change"
+      toolTipText="Redo change"
+      onClick={redoAction}
+      isVisible={YAMLData !== ''}
+    />
+  );
 
   return (
     <StepErrorBoundary>
