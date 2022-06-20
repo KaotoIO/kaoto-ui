@@ -18,3 +18,5 @@ This extension must allow the user to set up all the configuration options of th
  * Validate that if condition, consequence
  * Validate the `XXXXXX` property has the proper format
  * Add a `test` button to check the configuration 
+
+Remember to **add an e2e test** to check this extension loads when it should and works properly.
