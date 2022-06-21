@@ -81,7 +81,7 @@ const StepViews = ({
 
     stepPropertySchema.current = tempSchemaObject;
     stepPropertyModel.current = tempModelObject;
-  }, [step.parameters]);
+  }, [step.parameters, isPanelExpanded]);
 
   const handleTabClick = (_event: any, tabIndex: any) => {
     setActiveTabKey(tabIndex);
