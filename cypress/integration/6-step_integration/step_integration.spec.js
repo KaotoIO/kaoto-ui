@@ -45,7 +45,7 @@ describe('3 step integration', () => {
         cy.get('[data-id="dndnode_17"]').click();
         cy.get('[data-testid="configurationTab"]').click();
         cy.get('.pf-c-drawer__close > .pf-c-button').click();
-        cy.get('.code-editor').should('contain.text', 'postgresql');
+        cy.get('.code-editor').should('contain.text', 'mysql-source');
         cy.get('.code-editor').should('contain.text', 'kafka-sink');
     });
 });
