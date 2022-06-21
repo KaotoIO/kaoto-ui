@@ -1,4 +1,5 @@
 import { Dashboard } from './pages/Dashboard';
+import { LayoutOne } from './pages/LayoutOne';
 import { NotFound } from './pages/NotFound';
 import { accessibleRouteChangeHandler } from './utils';
 import { useDocumentTitle } from './utils';
@@ -35,6 +36,13 @@ const routes: AppRouteConfig[] = [
     label: 'Dashboard',
     path: '/',
     title: 'Kaoto | Main Dashboard',
+  },
+  {
+    component: LayoutOne,
+    exact: true,
+    label: 'Layout 1',
+    path: '/layout-1',
+    title: 'Kaoto | Layout 1',
   },
 ];
 
