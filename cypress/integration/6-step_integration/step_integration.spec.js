@@ -34,7 +34,7 @@ describe('3 step integration', () => {
         cy.get('[data-testid="openCatalogButton"]').click();
         cy.get('#stepSearch').click().clear();
         cy.get('.pf-l-gallery').scrollTo('0%', '75%');
-        cy.get('[data-ouia-component-id="OUIA-Generated-Card-112"]').trigger('dragstart', {
+        cy.get('.pf-c-card__title').contains('postgresql-source').trigger('dragstart', {
             dataTransfer
         });
         cy.get('[data-id="dndnode_13"]').trigger('drop', {
