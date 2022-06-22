@@ -34,7 +34,7 @@ describe('3 step integration', () => {
         cy.get('[data-testid="openCatalogButton"]').click();
         cy.get('#stepSearch').click().clear();
         cy.get('.pf-l-gallery').scrollTo('0%', '75%');
-        cy.get('[data-ouia-component-id="OUIA-Generated-Card-110"]').trigger('dragstart', {
+        cy.get('.pf-c-card__title').contains('postgresql-source').trigger('dragstart', {
             dataTransfer
         });
         cy.get('[data-id="dndnode_13"]').trigger('drop', {
@@ -45,7 +45,7 @@ describe('3 step integration', () => {
         cy.get('[data-id="dndnode_17"]').click();
         cy.get('[data-testid="configurationTab"]').click();
         cy.get('.pf-c-drawer__close > .pf-c-button').click();
-        cy.get('.code-editor').should('contain.text', 'postgresql');
+        cy.get('.code-editor').should('contain.text', 'postgresql-source');
         cy.get('.code-editor').should('contain.text', 'kafka-sink');
     });
 });
