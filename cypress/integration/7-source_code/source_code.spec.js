@@ -1,6 +1,7 @@
 describe('source code and drag and drop', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:1337');
+        let url = Cypress.config().baseUrl;
+        cy.visit(url);
     });
     it('loads the YAML editor', () => {
         const dataTransfer = new DataTransfer();
