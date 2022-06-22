@@ -92,7 +92,7 @@
     "lint-staged": "12.4.3",
     "mini-css-extract-plugin": "2.6.0",
     "null-loader": "^4.0.1",
-    "prettier": "2.7.0",
+    "prettier": "2.7.1",
     "prop-types": "15.8.1",
     "rimraf": "3.0.2",
     "source-map-loader": "4.0.0",
