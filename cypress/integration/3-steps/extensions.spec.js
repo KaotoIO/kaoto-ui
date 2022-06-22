@@ -1,6 +1,7 @@
 describe.skip('step extensions', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:1337');
+    let url = Cypress.config().baseUrl;
+    cy.visit(url);
   });
 
   it('loads the step extension', () => {

@@ -2,7 +2,8 @@ import '@4tw/cypress-drag-drop';
 
 describe('3 step integration', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:1337');
+        let url = Cypress.config().baseUrl;
+        cy.visit(url);
     });
 
     it('add the step integration', () => {

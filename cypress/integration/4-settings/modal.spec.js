@@ -1,6 +1,7 @@
 describe('Settings', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:1337');
+    let url = Cypress.config().baseUrl;
+    cy.visit(url);
   });
 
   it('settings cog button is visible', () => {
