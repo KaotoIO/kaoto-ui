@@ -1,9 +1,9 @@
-import { KaotoToolbar } from './KaotoToolbar';
-import { screen } from '@testing-library/dom';
-import { render } from '@testing-library/react';
 import { IExpanded } from '../pages/Dashboard';
 import { ISettings } from '../types';
+import { KaotoToolbarOld } from './KaotoToolbarOld';
 import { AlertProvider } from './MASAlerts';
+import { screen } from '@testing-library/dom';
+import { render } from '@testing-library/react';
 
 describe('KaotoToolbar.tsx', () => {
   test('component renders correctly', () => {
@@ -21,7 +21,11 @@ describe('KaotoToolbar.tsx', () => {
 
     render(
       <AlertProvider>
-        <KaotoToolbar expanded={expandedTest} handleExpanded={jest.fn()} settings={settingsTest} />
+        <KaotoToolbarOld
+          expanded={expandedTest}
+          handleExpanded={jest.fn()}
+          settings={settingsTest}
+        />
       </AlertProvider>
     );
 

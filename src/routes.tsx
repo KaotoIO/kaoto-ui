@@ -1,5 +1,5 @@
 import { Dashboard } from './pages/Dashboard';
-import { LayoutOne } from './pages/LayoutOne';
+import { DashboardOld } from './pages/DashboardOld';
 import { NotFound } from './pages/NotFound';
 import { accessibleRouteChangeHandler } from './utils';
 import { useDocumentTitle } from './utils';
@@ -38,11 +38,11 @@ const routes: AppRouteConfig[] = [
     title: 'Kaoto | Main Dashboard',
   },
   {
-    component: LayoutOne,
+    component: DashboardOld,
     exact: true,
-    label: 'Layout 1',
-    path: '/layout-1',
-    title: 'Kaoto | Layout 1',
+    label: 'Old Dashboard',
+    path: '/old-dashboard',
+    title: 'Kaoto | Old Dashboard',
   },
 ];
 

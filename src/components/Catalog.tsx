@@ -7,17 +7,12 @@ import {
   Card,
   CardBody,
   CardTitle,
-  DrawerActions,
-  DrawerCloseButton,
-  DrawerColorVariant,
-  DrawerHead,
-  DrawerPanelBody,
-  DrawerPanelContent,
   Gallery,
   Grid,
   GridItem,
   InputGroup,
   Label,
+  PageSection,
   TextInput,
   ToggleGroup,
   ToggleGroupItem,
@@ -115,108 +110,94 @@ const Catalog = (props: ICatalog) => {
   }
 
   return (
-    <DrawerPanelContent
-      minSize={'525px'}
-      colorVariant={DrawerColorVariant.light200}
-      data-testid={'stepCatalog'}
-    >
-      <DrawerHead>
-        <h3 className={'pf-c-title pf-m-2xl'} tabIndex={props.isCatalogExpanded ? 0 : -1}>
-          Step Catalog
-        </h3>
-        <DrawerActions>
-          <DrawerCloseButton onClick={props.onClosePanelClick} />
-        </DrawerActions>
-      </DrawerHead>
-      <DrawerPanelBody>
-        <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
-          <ToolbarContent>
-            {
-              <>
-                <ToolbarItem>
-                  <InputGroup>
-                    <TextInput
-                      name={'stepSearch'}
-                      id={'stepSearch'}
-                      type={'search'}
-                      placeholder={'search for a step...'}
-                      aria-label={'search for a step'}
-                      value={query}
-                      onChange={changeSearch}
-                    />
-                  </InputGroup>
-                </ToolbarItem>
-                <ToolbarItem variant={'separator'} />
-                <ToolbarItem>
-                  <ToggleGroup aria-label={'Icon variant toggle group'}>
-                    <ToggleGroupItem
-                      text={'start'}
-                      aria-label={'sources button'}
-                      buttonId={'START'}
-                      isSelected={isSelected === 'START'}
-                      onChange={handleItemClick}
-                    />
-                    <ToggleGroupItem
-                      icon={'actions'}
-                      aria-label={'actions button'}
-                      buttonId={'MIDDLE'}
-                      isSelected={isSelected === 'MIDDLE'}
-                      onChange={handleItemClick}
-                    />
-                    <ToggleGroupItem
-                      text={'end'}
-                      aria-label={'sinks button'}
-                      buttonId={'END'}
-                      isSelected={isSelected === 'END'}
-                      onChange={handleItemClick}
-                    />
-                  </ToggleGroup>
-                </ToolbarItem>
-              </>
-            }
-          </ToolbarContent>
-        </Toolbar>
-        <Gallery hasGutter={true} style={{ maxHeight: '650px', overflow: 'auto' }}>
-          {catalogData &&
-            search(catalogData).map((step, idx) => {
-              return (
-                <Card
-                  key={idx}
-                  className={'catalog--step'}
-                  isCompact={true}
-                  isHoverable={true}
-                  draggable={'true'}
-                  onDragStart={(e: any) => {
-                    e.dataTransfer.setData('application/reactflow', 'step');
-                    e.dataTransfer.setData('text/plain', JSON.stringify(step));
+    <PageSection data-testid={'stepCatalog'}>
+      <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
+        <ToolbarContent>
+          {
+            <>
+              <ToolbarItem>
+                <InputGroup>
+                  <TextInput
+                    name={'stepSearch'}
+                    id={'stepSearch'}
+                    type={'search'}
+                    placeholder={'search for a step...'}
+                    aria-label={'search for a step'}
+                    value={query}
+                    onChange={changeSearch}
+                  />
+                </InputGroup>
+              </ToolbarItem>
+              <ToolbarItem variant={'separator'} />
+              <ToolbarItem>
+                <ToggleGroup aria-label={'Icon variant toggle group'}>
+                  <ToggleGroupItem
+                    text={'start'}
+                    aria-label={'sources button'}
+                    buttonId={'START'}
+                    isSelected={isSelected === 'START'}
+                    onChange={handleItemClick}
+                  />
+                  <ToggleGroupItem
+                    icon={'actions'}
+                    aria-label={'actions button'}
+                    buttonId={'MIDDLE'}
+                    isSelected={isSelected === 'MIDDLE'}
+                    onChange={handleItemClick}
+                  />
+                  <ToggleGroupItem
+                    text={'end'}
+                    aria-label={'sinks button'}
+                    buttonId={'END'}
+                    isSelected={isSelected === 'END'}
+                    onChange={handleItemClick}
+                  />
+                </ToggleGroup>
+              </ToolbarItem>
+            </>
+          }
+        </ToolbarContent>
+      </Toolbar>
+      <Gallery hasGutter={true} style={{ maxHeight: '650px', overflow: 'auto' }}>
+        {catalogData &&
+          search(catalogData).map((step, idx) => {
+            return (
+              <Card
+                key={idx}
+                className={'catalog--step'}
+                isCompact={true}
+                isHoverable={true}
+                draggable={'true'}
+                onDragStart={(e: any) => {
+                  e.dataTransfer.setData('application/reactflow', 'step');
+                  e.dataTransfer.setData('text/plain', JSON.stringify(step));
 
-                    e.dataTransfer.effectAllowed = 'move';
-                  }}
-                >
-                  <Grid md={6}>
-                    <GridItem span={2}>
-                      <Bullseye>
-                        <img src={step.icon} className={'catalog--stepImage'} alt={'Step Image'} />
-                      </Bullseye>
-                    </GridItem>
-                    <GridItem span={7}>
-                      <CardTitle>
-                        <span>{step.name}</span>
-                      </CardTitle>
-                      <CardBody>{shorten(step.description, 60)}</CardBody>
-                    </GridItem>
-                    <GridItem span={3}>
-                      <Label color={'blue'} className={'catalog--stepLabel'}>
-                        SOURCE
-                      </Label>
-                    </GridItem>
-                  </Grid>
-                </Card>
-              );
-            })}
-        </Gallery>
-      </DrawerPanelBody>
-    </DrawerPanelContent>
+                  e.dataTransfer.effectAllowed = 'move';
+                }}
+              >
+                <Grid md={6}>
+                  <GridItem span={2}>
+                    <Bullseye>
+                      <img src={step.icon} className={'catalog--stepImage'} alt={'Step Image'} />
+                    </Bullseye>
+                  </GridItem>
+                  <GridItem span={7}>
+                    <CardTitle>
+                      <span>{step.name}</span>
+                    </CardTitle>
+                    <CardBody>{shorten(step.description, 60)}</CardBody>
+                  </GridItem>
+                  <GridItem span={3}>
+                    <Label color={'blue'} className={'catalog--stepLabel'}>
+                      SOURCE
+                    </Label>
+                  </GridItem>
+                </Grid>
+              </Card>
+            );
+          })}
+      </Gallery>
+    </PageSection>
   );
 };
 

@@ -2,6 +2,7 @@ import { startDeployment, stopDeployment, useStepsAndViewsContext, useYAMLContex
 import { IExpanded } from '../pages/Dashboard';
 import { ISettings } from '../types';
 import { canBeDeployed } from '../utils/validationService';
+import './KaotoToolbarOld.css';
 import { AlertVariant, Button, Tooltip } from '@patternfly/react-core';
 import {
   CodeIcon,
@@ -12,13 +13,13 @@ import {
 } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 
-export interface ICustomToolbar {
+export interface IKaotoToolbarOld {
   expanded: IExpanded;
   handleExpanded: (newState: IExpanded) => void;
   settings: ISettings;
 }
 
-export const CustomToolbar = ({ expanded, handleExpanded, settings }: ICustomToolbar) => {
+export const KaotoToolbarOld = ({ expanded, handleExpanded, settings }: IKaotoToolbarOld) => {
   const [, setYAMLData] = useYAMLContext();
   const [viewData] = useStepsAndViewsContext();
 
@@ -76,7 +77,7 @@ export const CustomToolbar = ({ expanded, handleExpanded, settings }: ICustomToo
   };
 
   return (
-    <div data-testid={'CustomToolbar'}>
+    <div className={'kaotoToolbar__button'} data-testid={'kaotoToolbar'}>
       <Tooltip content={'Connector Catalog'}>
         <Button
           variant={'plain'}

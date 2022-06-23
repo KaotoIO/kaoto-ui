@@ -14,6 +14,16 @@ declare global {
   const __webpack_share_scopes__: any;
 }
 
+/**
+ * TODO: Update once API changes are documented
+ */
+export interface IDeployment {
+  name?: string;
+  date?: string;
+  description?: string;
+  status?: string;
+}
+
 export interface ISettings {
   dsl: string;
   integrationName: string;
