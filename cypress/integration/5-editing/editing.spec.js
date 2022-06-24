@@ -1,7 +1,7 @@
 describe('editing properties', () => {
   beforeEach(() => {
     let url = Cypress.config().baseUrl;
-        cy.visit(url);
+    cy.visit(url);
   });
 
   it('loads the YAML editor', () => {
@@ -43,7 +43,7 @@ describe('editing properties', () => {
           .should('have.text', 'period')
           .type('{end}{shift+alt}{leftArrow}{backspace}{leftArrow}', { delay: 500 })
           .wait(1000);
-          cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source').click();
+        cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source').click();
         cy.get('[data-testid="configurationTab"] ').click();
       });
   });
