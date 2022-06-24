@@ -14,7 +14,7 @@ describe('editing properties', () => {
       })
       .then(() => {
         cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source').click();
-        cy.get('[data-testid="configurationTab"] ').click();
+        cy.get('[data-testid="configurationTab"]').click();
         cy.get('input[name="period"]').type("3000");
         cy.get('.code-editor').should('contain.text', 'period');
         cy.get('.pf-c-drawer__close > .pf-c-button').click()
