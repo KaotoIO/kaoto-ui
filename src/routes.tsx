@@ -1,5 +1,4 @@
 import { Dashboard } from './pages/Dashboard';
-import { DashboardOld } from './pages/DashboardOld';
 import { NotFound } from './pages/NotFound';
 import { accessibleRouteChangeHandler } from './utils';
 import { useDocumentTitle } from './utils';
@@ -36,13 +35,6 @@ const routes: AppRouteConfig[] = [
     label: 'Dashboard',
     path: '/',
     title: 'Kaoto | Main Dashboard',
-  },
-  {
-    component: DashboardOld,
-    exact: true,
-    label: 'Old Dashboard',
-    path: '/old-dashboard',
-    title: 'Kaoto | Old Dashboard',
   },
 ];
 

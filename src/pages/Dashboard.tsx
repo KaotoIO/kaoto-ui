@@ -30,7 +30,7 @@ const Dashboard = () => {
   });
   const [settings, setSettings] = useState<ISettings>({
     dsl: 'KameletBinding',
-    integrationName: 'integration',
+    integrationName: 'Integration',
     namespace: 'default',
   });
   const [viewData] = useStepsAndViewsContext();
@@ -75,7 +75,6 @@ const Dashboard = () => {
       });
     } catch (e) {
       console.log('error deploying.. ', e);
-      // setError(error);
 
       addAlert &&
         addAlert({
@@ -87,8 +86,6 @@ const Dashboard = () => {
   };
 
   const handleStopDeployment = () => {
-    // console.log('stopping deployment..');
-
     try {
       stopDeployment(settings.integrationName).then((res) => {
         console.log('stop deployment response: ', res);
@@ -127,12 +124,11 @@ const Dashboard = () => {
               settings={settings}
             />
             <Grid>
-              {expanded.codeEditor && (
+              {expanded.codeEditor ? (
                 <GridItem span={4}>
                   <YAMLEditor dsl={settings.dsl} />
                 </GridItem>
-              )}
-              {expanded.catalog && (
+              ) : expanded.catalog ? (
                 <GridItem span={3}>
                   <Catalog
                     isCatalogExpanded={expanded.catalog}
@@ -140,6 +136,8 @@ const Dashboard = () => {
                     queryParams={{ dsl: settings.dsl }}
                   />
                 </GridItem>
+              ) : (
+                <></>
               )}
               <GridItem
                 span={expanded.codeEditor || expanded.catalog ? 8 : 12}
@@ -147,7 +145,9 @@ const Dashboard = () => {
               >
                 <Visualization
                   settings={settings}
-                  toggleCatalog={() => setExpanded({ ...expanded, catalog: !expanded.catalog })}
+                  toggleCatalog={() =>
+                    setExpanded({ ...expanded, catalog: !expanded.catalog, codeEditor: false })
+                  }
                 />
               </GridItem>
             </Grid>

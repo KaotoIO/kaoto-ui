@@ -9,15 +9,19 @@ import {
   DataListItem,
   DataListItemCells,
   DataListItemRow,
+  EmptyState,
+  EmptyStateVariant,
+  EmptyStateIcon,
+  EmptyStateBody,
   Modal,
   ModalVariant,
   Popover,
+  Title,
 } from '@patternfly/react-core';
-import { HelpIcon } from '@patternfly/react-icons';
+import { CubesIcon, HelpIcon } from '@patternfly/react-icons';
 import { useEffect, useState } from 'react';
 
 export interface IDeploymentsModal {
-  // currentDeployments: IDeployments;
   handleCloseModal: () => void;
   isModalOpen: boolean;
 }
@@ -29,11 +33,7 @@ export interface IDeploymentsModal {
  * @param isModalOpen
  * @constructor
  */
-export const DeploymentsModal = ({
-  // currentDeployments,
-  handleCloseModal,
-  isModalOpen,
-}: IDeploymentsModal) => {
+export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeploymentsModal) => {
   const [deployments, setDeployments] = useState<IDeployment[]>([]);
 
   useEffect(() => {
@@ -71,84 +71,46 @@ export const DeploymentsModal = ({
         title="Deployments"
         variant={ModalVariant.large}
       >
-        <DataList aria-label="Checkbox and action data list example">
-          <DataListItem aria-labelledby="check-action-item2">
-            <DataListItemRow>
-              <DataListCheck aria-labelledby="check-action-item2" name="check-action-check2" />
-              <DataListItemCells
-                dataListCells={[
-                  <DataListCell key="primary content">
-                    <span id="check-action-item2">Example deployment</span> dolor sit amet,
-                    consectetur adipisicing elit, sed do eiusmod.
-                  </DataListCell>,
-                  <DataListCell key="secondary content">
-                    Secondary content. Dolor sit amet, consectetur adipisicing elit, sed do eiusmod.
-                  </DataListCell>,
-                ]}
-              />
-              <DataListAction
-                visibility={{ default: 'hidden', lg: 'visible' }}
-                aria-labelledby="check-action-item2 check-action-action2"
-                id="check-action-action2"
-                aria-label="Actions"
-              >
-                <Button variant="primary">Details</Button>
-                <Button variant="secondary">Delete</Button>
-              </DataListAction>
-            </DataListItemRow>
-          </DataListItem>
-          <DataListItem aria-labelledby="check-action-item3">
-            <DataListItemRow>
-              <DataListCheck aria-labelledby="check-action-item3" name="check-action-check3" />
-              <DataListItemCells
-                dataListCells={[
-                  <DataListCell key="primary content">
-                    <span id="check-action-item3">Example deployment</span> dolor sit amet,
-                    consectetur adipisicing elit, sed do eiusmod.
-                  </DataListCell>,
-                  <DataListCell key="secondary content">
-                    Secondary content. Dolor sit amet, consectetur adipisicing elit, sed do eiusmod.
-                  </DataListCell>,
-                ]}
-              />
-              <DataListAction
-                visibility={{ default: 'hidden', lg: 'visible' }}
-                aria-labelledby="check-action-item3 check-action-action3"
-                id="check-action-action3"
-                aria-label="Actions"
-              >
-                <Button variant="primary">Details</Button>
-                <Button variant="secondary">Delete</Button>
-              </DataListAction>
-            </DataListItemRow>
-          </DataListItem>
-          {deployments?.map((d, idx) => {
-            return (
-              <DataListItem aria-labelledby={`deployment-item-${idx}`} key={idx}>
-                <DataListItemRow>
-                  <DataListCheck
-                    aria-labelledby={`deployment-item-${idx}`}
-                    name={`deployment-check-${idx}`}
-                  />
-                  <DataListItemCells
-                    dataListCells={[
-                      <DataListCell key="primary content">{d.name}</DataListCell>,
-                      <DataListCell key="secondary content">{d.description}</DataListCell>,
-                    ]}
-                  />
-                  <DataListAction
-                    visibility={{ default: 'hidden', lg: 'visible' }}
-                    aria-labelledby={`deployment-item-${idx} deployment-check-${idx}`}
-                    id={`deployment-action-${idx}`}
-                    aria-label="Actions"
-                  >
-                    <Button variant="primary">Details</Button>
-                    <Button variant="secondary">Delete</Button>
-                  </DataListAction>
-                </DataListItemRow>
-              </DataListItem>
-            );
-          })}
+        <DataList aria-label="List of deployments">
+          {deployments.length > 0 ? (
+            <>
+              {deployments?.map((d, idx) => {
+                return (
+                  <DataListItem aria-labelledby={`deployment-item-${idx}`} key={idx}>
+                    <DataListItemRow>
+                      <DataListCheck
+                        aria-labelledby={`deployment-item-${idx}`}
+                        name={`deployment-check-${idx}`}
+                      />
+                      <DataListItemCells
+                        dataListCells={[
+                          <DataListCell key="primary content">{d.name}</DataListCell>,
+                          <DataListCell key="secondary content">{d.description}</DataListCell>,
+                        ]}
+                      />
+                      <DataListAction
+                        visibility={{ default: 'hidden', lg: 'visible' }}
+                        aria-labelledby={`deployment-item-${idx} deployment-check-${idx}`}
+                        id={`deployment-action-${idx}`}
+                        aria-label="Actions"
+                      >
+                        <Button variant="primary">Details</Button>
+                        <Button variant="secondary">Delete</Button>
+                      </DataListAction>
+                    </DataListItemRow>
+                  </DataListItem>
+                );
+              })}
+            </>
+          ) : (
+            <EmptyState variant={EmptyStateVariant.small}>
+              <EmptyStateIcon icon={CubesIcon} />
+              <Title headingLevel="h4" size="lg">
+                No deployments
+              </Title>
+              <EmptyStateBody>Your deployments will appear here.</EmptyStateBody>
+            </EmptyState>
+          )}
         </DataList>
       </Modal>
     </div>

@@ -157,7 +157,7 @@ export const KaotoToolbar = ({
               tabIndex={0}
               variant="link"
               icon={<PlusCircleIcon />}
-              onClick={() => handleExpanded({ catalog: !expanded.catalog })}
+              onClick={() => handleExpanded({ catalog: !expanded.catalog, codeEditor: false })}
             />
           </Tooltip>
         </ToolbarItem>
@@ -184,7 +184,7 @@ export const KaotoToolbar = ({
           <Button
             variant="secondary"
             data-testid={'show-code-button'}
-            onClick={() => handleExpanded({ codeEditor: !expanded.codeEditor })}
+            onClick={() => handleExpanded({ codeEditor: !expanded.codeEditor, catalog: false })}
           >
             Code
           </Button>
