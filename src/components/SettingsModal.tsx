@@ -111,14 +111,14 @@ export const SettingsModal = ({
       .catch((e) => {
         console.error(e);
       });
-  }, [viewData]);
+  }, [currentSettings.dsl, currentSettings.integrationName, viewData]);
 
   const onChangeIntegrationName = (newName: string) => {
-    setLocalSettings({ ...currentSettings, integrationName: newName });
+    setLocalSettings({ ...localSettings, integrationName: newName });
   };
 
   const onChangeNamespace = (newNamespace: string) => {
-    setLocalSettings({ ...currentSettings, namespace: newNamespace });
+    setLocalSettings({ ...localSettings, namespace: newNamespace });
   };
 
   const onClose = () => {
