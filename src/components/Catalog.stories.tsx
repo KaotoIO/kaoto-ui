@@ -1,5 +1,5 @@
 // For now the only view data we care about are steps
-import catalog from '../data/catalog';
+import catalogData from '../data/catalog';
 import { Catalog, ICatalog } from './Catalog';
 import { AlertProvider } from './MASAlerts';
 import { Drawer, DrawerContent } from '@patternfly/react-core';
@@ -31,5 +31,5 @@ export const Primary = Template.bind({});
 Primary.args = {
   isCatalogExpanded: true,
   onClosePanelClick: action('Catalog opened'),
-  steps: catalog,
+  steps: catalogData,
 };

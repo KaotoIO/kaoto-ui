@@ -13,7 +13,9 @@ import {
   InputGroup,
   Label,
   PageSection,
-  TextInput,
+  SearchInput,
+  Text,
+  TextContent,
   ToggleGroup,
   ToggleGroupItem,
   Toolbar,
@@ -43,7 +45,7 @@ function shorten(str: string, maxLen: number, separator = ' ') {
   return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
 }
 
-const Catalog = (props: ICatalog) => {
+export const Catalog = (props: ICatalog) => {
   // If the catalog data won't be changing, consider removing this state
   const [catalogData, setCatalogData] = useState<IStepProps[]>(props.steps ?? []);
   const [isSelected, setIsSelected] = useState('START');
@@ -111,13 +113,21 @@ const Catalog = (props: ICatalog) => {
 
   return (
     <PageSection data-testid={'stepCatalog'}>
-      <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
-        <ToolbarContent>
+      <TextContent>
+        <Text component="h1">Step Catalog</Text>
+        <Text component="p">Drag any step onto a placeholder in the canvas.</Text>
+      </TextContent>
+      <Toolbar
+        id={'toolbar'}
+        style={{ background: 'transparent' }}
+        className={'stepCatalog-toolbar'}
+      >
+        <ToolbarContent style={{ padding: 0 }}>
           {
             <>
               <ToolbarItem>
                 <InputGroup>
-                  <TextInput
+                  <SearchInput
                     name={'stepSearch'}
                     id={'stepSearch'}
                     type={'search'}
@@ -128,7 +138,6 @@ const Catalog = (props: ICatalog) => {
                   />
                 </InputGroup>
               </ToolbarItem>
-              <ToolbarItem variant={'separator'} />
               <ToolbarItem>
                 <ToggleGroup aria-label={'Icon variant toggle group'}>
                   <ToggleGroupItem
@@ -158,7 +167,7 @@ const Catalog = (props: ICatalog) => {
           }
         </ToolbarContent>
       </Toolbar>
-      <Gallery hasGutter={true} style={{ maxHeight: '650px', overflow: 'auto' }}>
+      <Gallery hasGutter={true} style={{ maxHeight: '650px', overflow: 'auto', padding: '0 10px' }}>
         {catalogData &&
           search(catalogData).map((step, idx) => {
             return (
@@ -200,5 +209,3 @@ const Catalog = (props: ICatalog) => {
     </PageSection>
   );
 };
-
-export { Catalog };

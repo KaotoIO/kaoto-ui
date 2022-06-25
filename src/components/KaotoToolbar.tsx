@@ -18,9 +18,9 @@ import {
 } from '@patternfly/react-core';
 import {
   BellIcon,
+  CatalogIcon,
   CubesIcon,
   PlayIcon,
-  PlusCircleIcon,
   StopIcon,
   ThIcon,
 } from '@patternfly/react-icons';
@@ -152,11 +152,12 @@ export const KaotoToolbar = ({
         {/*</ToolbarItem>*/}
 
         <ToolbarItem>
-          <Tooltip content={<div>Add a Step</div>} position={'bottom'}>
+          <Tooltip content={<div>Step Catalog</div>} position={'bottom'}>
             <Button
               tabIndex={0}
               variant="link"
-              icon={<PlusCircleIcon />}
+              data-testid={'toolbar-step-catalog-btn'}
+              icon={<CatalogIcon />}
               onClick={() => handleExpanded({ catalog: !expanded.catalog, codeEditor: false })}
             />
           </Tooltip>
@@ -171,7 +172,7 @@ export const KaotoToolbar = ({
           </ToolbarItem>
         ) : (
           <ToolbarItem alignment={{ default: 'alignRight' }}>
-            <div className="status-container">
+            <div className="status-container" data-testid={'toolbar-deployment-status'}>
               <div className="dot"></div>
               <div className="text">Running</div>
             </div>
@@ -183,7 +184,7 @@ export const KaotoToolbar = ({
         <ToolbarItem>
           <Button
             variant="secondary"
-            data-testid={'show-code-button'}
+            data-testid={'toolbar-show-code-btn'}
             onClick={() => handleExpanded({ codeEditor: !expanded.codeEditor, catalog: false })}
           >
             Code
@@ -191,7 +192,12 @@ export const KaotoToolbar = ({
         </ToolbarItem>
 
         <ToolbarItem>
-          <Button variant="primary" onClick={() => alert('YAY')} isDisabled>
+          <Button
+            variant="primary"
+            data-testid={'toolbar-save-btn'}
+            onClick={() => alert('YAY')}
+            isDisabled
+          >
             Save
           </Button>
         </ToolbarItem>
@@ -202,6 +208,7 @@ export const KaotoToolbar = ({
               <Button
                 tabIndex={0}
                 variant="link"
+                data-testid={'toolbar-deploy-start-btn'}
                 icon={<PlayIcon />}
                 onClick={handleDeployStartClick}
               />
@@ -214,6 +221,7 @@ export const KaotoToolbar = ({
                 tabIndex={0}
                 variant="link"
                 icon={<StopIcon />}
+                data-testid={'toolbar-deploy-stop-btn'}
                 onClick={handleDeployStopClick}
                 isDisabled={true}
               />
@@ -229,6 +237,7 @@ export const KaotoToolbar = ({
                 toggle={<KebabToggle onToggle={(val) => setKebabIsOpen(val)} />}
                 isOpen={kebabIsOpen}
                 isPlain
+                data-testid={'toolbar-kebab-dropdown-btn'}
                 dropdownItems={kebabItems}
               />
             </OverflowMenuControl>
