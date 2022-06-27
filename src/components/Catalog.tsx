@@ -117,9 +117,7 @@ export const Catalog = (props: ICatalog) => {
     <PageSection data-testid={'stepCatalog'}>
       <TextContent>
         <HelperText>
-          <HelperTextItem icon={<InfoIcon />}>
-            Drag a step onto any circle in the visualization
-          </HelperTextItem>
+          <HelperTextItem icon={<InfoIcon />}>Drag a step onto a circle</HelperTextItem>
         </HelperText>
       </TextContent>
       <Toolbar

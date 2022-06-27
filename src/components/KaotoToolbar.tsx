@@ -179,7 +179,7 @@ export const KaotoToolbar = ({
           </ToolbarItem>
         )}
 
-        <ToolbarItem variant="separator" />
+        {deployment && <ToolbarItem variant="separator" />}
 
         <ToolbarItem>
           <Button

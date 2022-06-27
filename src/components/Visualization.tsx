@@ -362,7 +362,10 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
                 className="reactflow-wrapper"
                 data-testid={'react-flow-wrapper'}
                 ref={reactFlowWrapper}
-                style={{ width: window.innerWidth, height: window.innerHeight }}
+                style={{
+                  width: window.innerWidth,
+                  height: window.innerHeight - 125,
+                }}
               >
                 <ReactFlow
                   nodes={nodes}
