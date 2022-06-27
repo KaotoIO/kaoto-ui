@@ -170,7 +170,7 @@ export const Catalog = (props: ICatalog) => {
           }
         </ToolbarContent>
       </Toolbar>
-      <Gallery hasGutter={true} style={{ maxHeight: '650px', overflow: 'auto', padding: '0 10px' }}>
+      <Gallery hasGutter={true} style={{ maxHeight: '615px', overflow: 'auto', padding: '0 10px' }}>
         {catalogData &&
           search(catalogData).map((step, idx) => {
             return (
