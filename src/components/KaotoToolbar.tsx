@@ -8,9 +8,11 @@ import {
   DropdownPosition,
   DropdownSeparator,
   DropdownToggle,
+  InputGroup,
   KebabToggle,
   OverflowMenu,
   OverflowMenuControl,
+  TextInput,
   Toolbar,
   ToolbarContent,
   ToolbarItem,
@@ -19,10 +21,13 @@ import {
 import {
   BellIcon,
   CatalogIcon,
+  CheckIcon,
   CubesIcon,
+  PencilAltIcon,
   PlayIcon,
   StopIcon,
   ThIcon,
+  TimesIcon,
 } from '@patternfly/react-icons';
 import { useState } from 'react';
 
@@ -32,19 +37,23 @@ export interface IKaotoToolbar {
   handleExpanded: (newState: IExpanded) => void;
   handleStartDeploy: () => void;
   handleStopDeploy: () => void;
+  handleUpdateName: (val: any) => void;
   settings: ISettings;
 }
 
 export const KaotoToolbar = ({
-  deployment,
+  // deployment,
   expanded,
   handleExpanded,
   handleStartDeploy,
   handleStopDeploy,
+  handleUpdateName,
   settings,
 }: IKaotoToolbar) => {
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [localName, setLocalName] = useState<string>(settings.integrationName);
 
   const handleDeployStartClick = () => {
     handleStartDeploy();
@@ -139,9 +148,55 @@ export const KaotoToolbar = ({
 
         <ToolbarItem variant="separator" />
 
-        <ToolbarItem variant="label" id="stacked-example-resource-select">
-          {settings.integrationName ?? 'Integration'}
+        <ToolbarItem variant="label">
+          {isEditingName ? (
+            <InputGroup>
+              <TextInput
+                name="edit-integration-name"
+                id="edit-integration-name"
+                type="text"
+                onChange={(val) => {
+                  handleUpdateName(val);
+                  setLocalName(val);
+                }}
+                value={localName}
+                aria-label="edit integration name"
+              />
+              <Button
+                variant="control"
+                aria-label="save button for editing integration name"
+                onClick={() => {
+                  setIsEditingName(false);
+                }}
+              >
+                <CheckIcon />
+              </Button>
+              <Button
+                variant="control"
+                aria-label="close button for editing integration name"
+                onClick={() => {
+                  setIsEditingName(false);
+                }}
+              >
+                <TimesIcon />
+              </Button>
+            </InputGroup>
+          ) : (
+            <>
+              {settings.integrationName ?? 'Integration'}&nbsp;&nbsp;
+              <Button
+                variant={'link'}
+                onClick={() => {
+                  setIsEditingName(true);
+                }}
+              >
+                <PencilAltIcon />
+              </Button>
+            </>
+          )}
         </ToolbarItem>
+
+        <ToolbarItem variant="separator" />
 
         {/*<ToolbarItem variant="separator" />*/}
 
@@ -163,23 +218,31 @@ export const KaotoToolbar = ({
           </Tooltip>
         </ToolbarItem>
 
-        {deployment ? (
-          <ToolbarItem alignment={{ default: 'alignRight' }}>
-            <div className="status-container">
-              <div className={`dot-${deployment.status}`}></div>
-              <div className="text">{deployment.status}</div>
-            </div>
-          </ToolbarItem>
-        ) : (
-          <ToolbarItem alignment={{ default: 'alignRight' }}>
-            <div className="status-container" data-testid={'toolbar-deployment-status'}>
-              <div className="dot"></div>
-              <div className="text">Running</div>
-            </div>
-          </ToolbarItem>
-        )}
+        {/*{deployment ? (*/}
+        {/*  <ToolbarItem alignment={{ default: 'alignRight' }}>*/}
+        {/*    <div className="status-container">*/}
+        {/*      <div className={`dot-${deployment.status}`}></div>*/}
+        {/*      <div className="text">{deployment.status}</div>*/}
+        {/*    </div>*/}
+        {/*  </ToolbarItem>*/}
+        {/*) : (*/}
+        {/*  <ToolbarItem alignment={{ default: 'alignRight' }}>*/}
+        {/*    <div className="status-container" data-testid={'toolbar-deployment-status'}>*/}
+        {/*      <div className="dot"></div>*/}
+        {/*      <div className="text">Running</div>*/}
+        {/*    </div>*/}
+        {/*  </ToolbarItem>*/}
+        {/*)}*/}
 
-        {deployment && <ToolbarItem variant="separator" />}
+        {/*{deployment && <ToolbarItem variant="separator" />}*/}
+        <ToolbarItem alignment={{ default: 'alignRight' }}>
+          <div className="status-container" data-testid={'toolbar-deployment-status'}>
+            <div className="dot"></div>
+            <div className="text">Running</div>
+          </div>
+        </ToolbarItem>
+
+        <ToolbarItem variant="separator" />
 
         <ToolbarItem>
           <Button

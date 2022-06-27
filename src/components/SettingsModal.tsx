@@ -60,8 +60,8 @@ export const SettingsModal = ({
   const [, setYAMLData] = useYAMLContext();
 
   useEffect(() => {
-    // console.log('currentSettings changed.. ', currentSettings);
-  }, [currentSettings]);
+    setLocalSettings({ ...localSettings, integrationName: currentSettings.integrationName });
+  }, [currentSettings.integrationName]);
 
   useEffect(() => {
     const fetchContext = () => {
@@ -130,7 +130,6 @@ export const SettingsModal = ({
       (i: ICompatibleDSLsAndCRDs) => i.dsl === localSettings.dsl
     );
     // update YAML with new compatible DSL/YAML
-    // should I be doing this here though?
     if (newDSL) setYAMLData(newDSL.crd);
 
     handleSaveSettings(localSettings);
