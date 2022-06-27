@@ -198,7 +198,7 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
       switch (index) {
         case 0:
           // first item in `steps` array
-          inputStep.position.x = 250;
+          inputStep.position.x = 450;
           // mark as a slot if it's first in the array and not a START step
           if (steps.length > 0 && steps[0].type !== 'START') {
             inputStep.type = 'slot';
@@ -362,7 +362,10 @@ const Visualization = ({ settings, toggleCatalog }: IVisualization) => {
                 className="reactflow-wrapper"
                 data-testid={'react-flow-wrapper'}
                 ref={reactFlowWrapper}
-                style={{ width: window.innerWidth, height: window.innerHeight }}
+                style={{
+                  width: window.innerWidth,
+                  height: window.innerHeight - 125,
+                }}
               >
                 <ReactFlow
                   nodes={nodes}

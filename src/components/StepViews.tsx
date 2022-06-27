@@ -8,7 +8,7 @@ import {
   stopDeployment,
 } from '../api';
 import { IStepExtensionApi } from '../api/stepExtensionApi';
-import { IStepProps, IViewProps } from '../types';
+import { IDeployment, IStepProps, IViewProps } from '../types';
 import { usePrevious } from '../utils';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
@@ -208,7 +208,7 @@ const StepViews = ({
               };
 
               const seFetchDeployments = () => {
-                return fetchDeployments().then((deployments) => {
+                return fetchDeployments().then((deployments: IDeployment[]) => {
                   return deployments;
                 });
               };

@@ -1,4 +1,11 @@
 import {
+  fetchAllDSLs,
+  fetchCompatibleDSLsAndCRDs,
+  useStepsAndViewsContext,
+  useYAMLContext,
+} from '../api';
+import { ISettings } from '../types';
+import {
   Button,
   Form,
   FormGroup,
@@ -9,15 +16,8 @@ import {
   Popover,
   TextInput,
 } from '@patternfly/react-core';
-import { useEffect, useRef, useState } from 'react';
-import { ISettings } from '../types';
-import {
-  fetchAllDSLs,
-  fetchCompatibleDSLsAndCRDs,
-  useStepsAndViewsContext,
-  useYAMLContext,
-} from '../api';
 import { HelpIcon } from '@patternfly/react-icons';
+import { useEffect, useRef, useState } from 'react';
 
 export interface ISettingsModal {
   currentSettings: ISettings;
@@ -200,8 +200,16 @@ export const SettingsModal = ({
                     <br />
                     <ul>
                       <li>
-                        <b>Kamelets</b>: Choose this if you want to create a connection to a
-                        something.
+                        <b>Kamelets</b>: Choose this if you want to create a connection to be used
+                        in an integration. Read more about Kamelets&nbsp;
+                        <a
+                          href={'https://camel.apache.org/camel-k/1.9.x/kamelets/kamelets.html'}
+                          target={'_blank'}
+                          rel={'noopener'}
+                        >
+                          here
+                        </a>
+                        .
                       </li>
                       <li>
                         <b>KameletBindings</b>: Choose this if you want to create an integration.

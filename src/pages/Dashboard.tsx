@@ -1,40 +1,41 @@
-import { StepsAndViewsProvider, YAMLProvider } from '../api';
-import { Catalog, KaotoToolbar, SettingsModal, Visualization, YAMLEditor } from '../components';
-import { ISettings } from '../types';
 import {
-  AlertVariant,
-  Drawer,
-  DrawerContent,
-  DrawerContentBody,
-  Grid,
-  GridItem,
-} from '@patternfly/react-core';
+  startDeployment,
+  StepsAndViewsProvider,
+  stopDeployment,
+  useStepsAndViewsContext,
+  YAMLProvider,
+} from '../api';
+import { Catalog, DeploymentsModal, SettingsModal, Visualization, YAMLEditor } from '../components';
+import { KaotoToolbar } from '../components/KaotoToolbar';
+import { ISettings } from '../types';
+import './Dashboard.css';
+import { AlertVariant, Page, PageSection, GridItem, Grid } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useState } from 'react';
 
 export interface IExpanded {
   catalog?: boolean;
   codeEditor?: boolean;
+  deploymentsModal?: boolean;
   settingsModal?: boolean;
 }
 
 const Dashboard = () => {
+  const [deployment, setDeployment] = useState({});
   const [expanded, setExpanded] = useState<IExpanded>({
     catalog: false,
-    codeEditor: true,
+    codeEditor: false,
+    deploymentsModal: false,
     settingsModal: false,
   });
   const [settings, setSettings] = useState<ISettings>({
     dsl: 'KameletBinding',
-    integrationName: 'integration',
+    integrationName: 'Integration',
     namespace: 'default',
   });
+  const [viewData] = useStepsAndViewsContext();
 
   const { addAlert } = useAlert() || {};
-
-  const onExpandPanel = () => {
-    //drawerRef.current && drawerRef.current.focus();
-  };
 
   const onClosePanelClick = () => {
     setExpanded({ ...expanded, catalog: false });
@@ -55,42 +56,109 @@ const Dashboard = () => {
       });
   };
 
+  const handleStartDeployment = () => {
+    try {
+      startDeployment(
+        settings.dsl,
+        viewData.steps,
+        settings.integrationName,
+        settings.namespace
+      ).then((res) => {
+        setDeployment(res);
+
+        addAlert &&
+          addAlert({
+            title: 'Deployment started',
+            variant: AlertVariant.success,
+            description: 'Your integration is deploying..',
+          });
+      });
+    } catch (e) {
+      console.log('error deploying.. ', e);
+
+      addAlert &&
+        addAlert({
+          title: 'Deployment not started',
+          variant: AlertVariant.warning,
+          description: 'There was a problem deploying your integration. Please try again later.',
+        });
+    }
+  };
+
+  const handleStopDeployment = () => {
+    try {
+      stopDeployment(settings.integrationName).then((res) => {
+        console.log('stop deployment response: ', res);
+
+        addAlert &&
+          addAlert({
+            title: 'Stop deployment',
+            variant: AlertVariant.success,
+            description: 'Stopping deployment..',
+          });
+      });
+    } catch (e) {
+      console.log('error stopping deployment.. ', e);
+      console.error(e);
+
+      addAlert &&
+        addAlert({
+          title: 'Stop deployment',
+          variant: AlertVariant.success,
+          description: 'There was a problem stopping your deployment. Please try again later.',
+        });
+    }
+  };
+
   return (
     <StepsAndViewsProvider initialState={{ steps: [], views: [] }}>
       <YAMLProvider>
-        <Drawer isExpanded={expanded.catalog} onExpand={onExpandPanel} position={'left'}>
-          <DrawerContent
-            panelContent={
-              <Catalog
-                isCatalogExpanded={expanded.catalog}
-                onClosePanelClick={onClosePanelClick}
-                queryParams={{ dsl: settings.dsl }}
-              />
-            }
-            className={'panelCustom'}
-          >
-            <DrawerContentBody>
-              <KaotoToolbar
-                expanded={expanded}
-                handleExpanded={handleExpanded}
-                settings={settings}
-              />
-              <Grid>
-                {expanded.codeEditor && (
-                  <GridItem span={4}>
-                    <YAMLEditor dsl={settings.dsl} />
-                  </GridItem>
-                )}
-                <GridItem span={expanded.codeEditor ? 8 : 12} className={'visualization'}>
-                  <Visualization
-                    settings={settings}
-                    toggleCatalog={() => setExpanded({ ...expanded, catalog: !expanded.catalog })}
+        <Page>
+          <PageSection padding={{ default: 'noPadding' }}>
+            <KaotoToolbar
+              deployment={deployment}
+              expanded={expanded}
+              handleExpanded={handleExpanded}
+              handleStartDeploy={handleStartDeployment}
+              handleStopDeploy={handleStopDeployment}
+              settings={settings}
+            />
+            <Grid>
+              {expanded.codeEditor ? (
+                <GridItem span={3}>
+                  <YAMLEditor dsl={settings.dsl} />
+                </GridItem>
+              ) : expanded.catalog ? (
+                <GridItem span={3}>
+                  <Catalog
+                    isCatalogExpanded={expanded.catalog}
+                    onClosePanelClick={onClosePanelClick}
+                    queryParams={{ dsl: settings.dsl }}
                   />
                 </GridItem>
-              </Grid>
-            </DrawerContentBody>
-          </DrawerContent>
-        </Drawer>
+              ) : (
+                <></>
+              )}
+              <GridItem
+                span={expanded.codeEditor || expanded.catalog ? 9 : 12}
+                className={'visualization'}
+              >
+                <Visualization
+                  settings={settings}
+                  toggleCatalog={() =>
+                    setExpanded({ ...expanded, catalog: !expanded.catalog, codeEditor: false })
+                  }
+                />
+              </GridItem>
+            </Grid>
+          </PageSection>
+        </Page>
+        <DeploymentsModal
+          handleCloseModal={() => {
+            setExpanded({ ...expanded, deploymentsModal: !expanded.deploymentsModal });
+          }}
+          isModalOpen={expanded.deploymentsModal ?? false}
+        />
         <SettingsModal
           currentSettings={settings}
           handleCloseModal={() => {

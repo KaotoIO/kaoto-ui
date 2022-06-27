@@ -1,0 +1,32 @@
+.pf-c-toolbar.viz-toolbar {
+    padding: 6px 1rem;
+}
+
+.status-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+@keyframes blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.dot {
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(91, 150, 213, 0.2);
+    background-color: #5b96d5;
+    margin-right: 6px;
+    animation: blink 2s infinite;
+}
+.text {
+    color: #8dbfff;
+    font-size: 12px;
+    font-weight: 600;
+}
