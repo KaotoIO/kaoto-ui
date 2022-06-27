@@ -183,7 +183,7 @@ export const KaotoToolbar = ({
 
         <ToolbarItem>
           <Button
-            variant="secondary"
+            variant={expanded.codeEditor ? 'primary' : 'secondary'}
             data-testid={'toolbar-show-code-btn'}
             onClick={() => handleExpanded({ codeEditor: !expanded.codeEditor, catalog: false })}
           >
@@ -191,16 +191,16 @@ export const KaotoToolbar = ({
           </Button>
         </ToolbarItem>
 
-        <ToolbarItem>
-          <Button
-            variant="primary"
-            data-testid={'toolbar-save-btn'}
-            onClick={() => alert('YAY')}
-            isDisabled
-          >
-            Save
-          </Button>
-        </ToolbarItem>
+        {/*<ToolbarItem>*/}
+        {/*  <Button*/}
+        {/*    variant="primary"*/}
+        {/*    data-testid={'toolbar-save-btn'}*/}
+        {/*    onClick={() => alert('YAY')}*/}
+        {/*    isDisabled*/}
+        {/*  >*/}
+        {/*    Save*/}
+        {/*  </Button>*/}
+        {/*</ToolbarItem>*/}
 
         {canBeDeployed() ? (
           <ToolbarItem>

@@ -125,7 +125,7 @@ const Dashboard = () => {
             />
             <Grid>
               {expanded.codeEditor ? (
-                <GridItem span={4}>
+                <GridItem span={3}>
                   <YAMLEditor dsl={settings.dsl} />
                 </GridItem>
               ) : expanded.catalog ? (
@@ -140,7 +140,7 @@ const Dashboard = () => {
                 <></>
               )}
               <GridItem
-                span={expanded.codeEditor || expanded.catalog ? 8 : 12}
+                span={expanded.codeEditor || expanded.catalog ? 9 : 12}
                 className={'visualization'}
               >
                 <Visualization

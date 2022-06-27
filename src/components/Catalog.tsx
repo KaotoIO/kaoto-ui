@@ -10,11 +10,12 @@ import {
   Gallery,
   Grid,
   GridItem,
+  HelperText,
+  HelperTextItem,
   InputGroup,
   Label,
   PageSection,
   SearchInput,
-  Text,
   TextContent,
   ToggleGroup,
   ToggleGroupItem,
@@ -22,6 +23,7 @@ import {
   ToolbarContent,
   ToolbarItem,
 } from '@patternfly/react-core';
+import { InfoIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
@@ -114,8 +116,11 @@ export const Catalog = (props: ICatalog) => {
   return (
     <PageSection data-testid={'stepCatalog'}>
       <TextContent>
-        <Text component="h1">Step Catalog</Text>
-        <Text component="p">Drag any step onto a placeholder in the canvas.</Text>
+        <HelperText>
+          <HelperTextItem icon={<InfoIcon />}>
+            Drag a step onto any circle in the visualization
+          </HelperTextItem>
+        </HelperText>
       </TextContent>
       <Toolbar
         id={'toolbar'}
