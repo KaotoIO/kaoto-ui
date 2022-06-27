@@ -42,7 +42,7 @@ export interface IKaotoToolbar {
 }
 
 export const KaotoToolbar = ({
-  // deployment,
+  deployment,
   expanded,
   handleExpanded,
   handleStartDeploy,
@@ -198,14 +198,6 @@ export const KaotoToolbar = ({
 
         <ToolbarItem variant="separator" />
 
-        {/*<ToolbarItem variant="separator" />*/}
-
-        {/*<ToolbarItem>*/}
-        {/*  <Button variant="plain" aria-label="edit">*/}
-        {/*    <CodeIcon />*/}
-        {/*  </Button>*/}
-        {/*</ToolbarItem>*/}
-
         <ToolbarItem>
           <Tooltip content={<div>Step Catalog</div>} position={'bottom'}>
             <Button
@@ -218,31 +210,23 @@ export const KaotoToolbar = ({
           </Tooltip>
         </ToolbarItem>
 
-        {/*{deployment ? (*/}
-        {/*  <ToolbarItem alignment={{ default: 'alignRight' }}>*/}
-        {/*    <div className="status-container">*/}
-        {/*      <div className={`dot-${deployment.status}`}></div>*/}
-        {/*      <div className="text">{deployment.status}</div>*/}
-        {/*    </div>*/}
-        {/*  </ToolbarItem>*/}
-        {/*) : (*/}
-        {/*  <ToolbarItem alignment={{ default: 'alignRight' }}>*/}
-        {/*    <div className="status-container" data-testid={'toolbar-deployment-status'}>*/}
-        {/*      <div className="dot"></div>*/}
-        {/*      <div className="text">Running</div>*/}
-        {/*    </div>*/}
-        {/*  </ToolbarItem>*/}
-        {/*)}*/}
+        {deployment ? (
+          <ToolbarItem alignment={{ default: 'alignRight' }}>
+            <div className="status-container">
+              <div className={`dot-${deployment.status}`}></div>
+              <div className="text">{deployment.status}</div>
+            </div>
+          </ToolbarItem>
+        ) : (
+          <ToolbarItem alignment={{ default: 'alignRight' }}>
+            <div className="status-container" data-testid={'toolbar-deployment-status'}>
+              <div className="dot"></div>
+              <div className="text">Running</div>
+            </div>
+          </ToolbarItem>
+        )}
 
-        {/*{deployment && <ToolbarItem variant="separator" />}*/}
-        <ToolbarItem alignment={{ default: 'alignRight' }}>
-          <div className="status-container" data-testid={'toolbar-deployment-status'}>
-            <div className="dot"></div>
-            <div className="text">Running</div>
-          </div>
-        </ToolbarItem>
-
-        <ToolbarItem variant="separator" />
+        {deployment && <ToolbarItem variant="separator" />}
 
         <ToolbarItem>
           <Button
