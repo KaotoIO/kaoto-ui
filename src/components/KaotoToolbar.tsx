@@ -212,7 +212,7 @@ export const KaotoToolbar = ({
 
         {deployment ? (
           <ToolbarItem alignment={{ default: 'alignRight' }}>
-            <div className="status-container">
+            <div className="status-container" data-testid={'toolbar-deployment-status'}>
               <div className={`dot-${deployment.status}`}></div>
               <div className="text">{deployment.status}</div>
             </div>
