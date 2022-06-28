@@ -71,7 +71,7 @@
     "@types/uuid": "8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "5.29.0",
-    "chromatic": "^6.6.3",
+    "chromatic": "^6.6.4",
     "css-loader": "^6.6.0",
     "css-minimizer-webpack-plugin": "^4.0.0",
     "cypress": "9.7.0",
