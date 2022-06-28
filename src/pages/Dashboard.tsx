@@ -121,6 +121,9 @@ const Dashboard = () => {
               handleExpanded={handleExpanded}
               handleStartDeploy={handleStartDeployment}
               handleStopDeploy={handleStopDeployment}
+              handleUpdateName={(val) => {
+                setSettings({ ...settings, integrationName: val });
+              }}
               settings={settings}
             />
             <Grid>

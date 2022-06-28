@@ -1,10 +1,19 @@
 
-.catalog--step {
+.catalog__hint {
+    padding: 0.5em !important;
+    border-radius: 10px;
+}
+
+.catalog__hint .pf-c-hint__body {
+    font-size: 0.9em;
+}
+
+.catalog__step {
     border-radius: 15px;
     cursor: grab;
 }
 
-.catalog--stepImage {
+.catalog__stepImage {
     height: 75px;
     width: 75px;
     align-items: center;
@@ -14,33 +23,33 @@
     position: relative;
 }
 
-.catalog--stepLabel {
+.catalog__stepLabel {
     margin-top: 5px !important;
 }
 
 /* MINI CATALOG */
 
 /* Mini Catalog Search */
-.miniCatalog--search.pf-c-toolbar__item {
+.miniCatalog__search.pf-c-toolbar__item {
     width: 100%;
 }
 
 /* Mini Catalog Step (from list) */
-button.miniCatalog--stepItem.pf-c-button.pf-m-tertiary {
+button.miniCatalog__stepItem.pf-c-button.pf-m-tertiary {
     --pf-c-button--after--BorderColor: transparent;
     width: 100%;
 }
 
-button.miniCatalog--stepItem:hover {
+button.miniCatalog__stepItem:hover {
     background: #F5F5F5;
 }
 
-.miniCatalog--stepItem__grid {
+.miniCatalog__stepItem__grid {
     line-height: 40px;
     padding: 2px;
 }
 
-.miniCatalog--stepImage {
+.miniCatalog__stepImage {
     height: 40px;
     width: 40px;
     padding: 0 5px;

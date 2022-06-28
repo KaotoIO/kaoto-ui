@@ -10,8 +10,8 @@ import {
   Gallery,
   Grid,
   GridItem,
-  HelperText,
-  HelperTextItem,
+  Hint,
+  HintBody,
   InputGroup,
   Label,
   PageSection,
@@ -23,7 +23,7 @@ import {
   ToolbarContent,
   ToolbarItem,
 } from '@patternfly/react-core';
-import { InfoIcon } from '@patternfly/react-icons';
+import { InfoCircleIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
@@ -116,15 +116,14 @@ export const Catalog = (props: ICatalog) => {
   return (
     <PageSection data-testid={'stepCatalog'}>
       <TextContent>
-        <HelperText>
-          <HelperTextItem icon={<InfoIcon />}>Drag a step onto a circle</HelperTextItem>
-        </HelperText>
+        <Hint className={'catalog__hint'}>
+          <HintBody>
+            <InfoCircleIcon />
+            &nbsp;&nbsp;You can drag a step onto a circle in the visualization
+          </HintBody>
+        </Hint>
       </TextContent>
-      <Toolbar
-        id={'toolbar'}
-        style={{ background: 'transparent' }}
-        className={'stepCatalog-toolbar'}
-      >
+      <Toolbar id={'toolbar'} style={{ background: 'transparent' }} className={'catalog__toolbar'}>
         <ToolbarContent style={{ padding: 0 }}>
           {
             <>
@@ -176,9 +175,9 @@ export const Catalog = (props: ICatalog) => {
             return (
               <Card
                 key={idx}
-                className={'catalog--step'}
+                className={'catalog__step'}
                 isCompact={true}
-                isHoverable={true}
+                isSelectable={true}
                 draggable={'true'}
                 onDragStart={(e: any) => {
                   e.dataTransfer.setData('application/reactflow', 'step');
@@ -190,7 +189,7 @@ export const Catalog = (props: ICatalog) => {
                 <Grid md={6}>
                   <GridItem span={2}>
                     <Bullseye>
-                      <img src={step.icon} className={'catalog--stepImage'} alt={'Step Image'} />
+                      <img src={step.icon} className={'catalog__stepImage'} alt={'Step Image'} />
                     </Bullseye>
                   </GridItem>
                   <GridItem span={7}>
@@ -200,7 +199,7 @@ export const Catalog = (props: ICatalog) => {
                     <CardBody>{shorten(step.description, 60)}</CardBody>
                   </GridItem>
                   <GridItem span={3}>
-                    <Label color={'blue'} className={'catalog--stepLabel'}>
+                    <Label color={'blue'} className={'catalog__stepLabel'}>
                       SOURCE
                     </Label>
                   </GridItem>
