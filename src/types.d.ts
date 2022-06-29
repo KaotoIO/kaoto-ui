@@ -25,22 +25,52 @@ export interface IDeployment {
 }
 
 export interface ISettings {
+  // e.g. 'KameletBinding'
   dsl: string;
   integrationName: string;
+
+  // Cluster namespace
   namespace: string;
 }
 
-export interface IStepPropsParameters {
+export interface IIntegration {
+  metadata: IIntegrationMetadata;
+  params: IIntegrationParams[];
+  steps: IStepProps[];
+}
+
+export interface IIntegrationMetadata {
+  name: string;
   [key: string]: any;
+}
+
+export interface IIntegrationParams {
+  id: string;
+  title?: string;
+  defaultValue?: {};
+  description?: string;
+  enum?: any[];
+  enumeration?: {}[];
+  examples?: {}[];
+  nullable?: boolean;
+  path?: boolean;
+  type?: string;
+  value?: {};
 }
 
 export interface IStepProps {
   apiVersion?: string;
   description?: string;
+
+  // ?
   group?: string;
   icon?: string;
   id?: string;
+
+  // ?
   kameletType?: string;
+
+  // e.g. 'Kamelet'
   kind?: string;
   name: string;
   parameters?: IStepPropsParameters[];
@@ -54,6 +84,10 @@ export interface IStepProps {
 
   // generated only for integration steps
   UUID?: string;
+}
+
+export interface IStepPropsParameters {
+  [key: string]: any;
 }
 
 export interface IViewConstraintsProps {

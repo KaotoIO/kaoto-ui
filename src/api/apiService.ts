@@ -1,4 +1,4 @@
-import { IStepProps } from '../types';
+import { IIntegration, IStepProps } from '../types';
 import request from './request';
 
 export async function fetchCatalogSteps(queryParams?: {
@@ -37,7 +37,7 @@ export async function fetchCustomResource(
 ) {
   try {
     const resp = await request.post({
-      endpoint: '/integrations/customResource?dsl=' + dsl,
+      endpoint: '/integrations?dsl=' + dsl,
       contentType: 'application/json',
       body: { name: integrationName.toLowerCase(), steps: newSteps },
     });
@@ -101,8 +101,55 @@ export async function fetchDeployments() {
 }
 
 /**
+ * Returns integration in JSON, or type @IIntegration
+ * Accepts YAML or steps as type IStepProps[].
+ * Typically, used after updating the integration from the YAML Editor,
+ * or for step replacement that requires an updated array of views.
+ * @param sourceCode - Source code represented as a string, typically a
+ * YAML Custom Resource, but doesn't have to be.
+ * @param dsl - The DSL that is being used across Kaoto
+ */
+export async function fetchIntegrationJson(sourceCode: string, dsl: string) {
+  try {
+    // get dsl from somewhere else, so you don't have to pass it each time from each component?
+    const resp = await request.post({
+      endpoint: '/integrations?dsl=' + dsl,
+      contentType: 'text/yaml',
+      body: sourceCode,
+    });
+
+    return await resp.json();
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+}
+
+/**
+ * Returns the source code as a string, typically a Custom Resource in
+ * YAML, but doesn't have to be. Usually to update the Code Editor after
+ * a change in the integration from the Visualization.
+ * Requires a list of all new steps.
+ * @param newIntegration
+ * @param dsl
+ */
+export async function fetchIntegrationSourceCode(newIntegration: IIntegration, dsl: string) {
+  try {
+    const resp = await request.post({
+      endpoint: '/integrations?dsl=' + dsl,
+      contentType: 'application/json',
+      body: newIntegration,
+    });
+
+    return await resp.text();
+  } catch (err) {
+    return err;
+  }
+}
+
+/**
  * Returns view definitions (JSON).
- * Typically used after updating the integration from the YAML Editor,
+ * Typically, used after updating the integration from the YAML Editor,
  * or for step replacement that requires an updated array of views.
  * Accepts YAML or steps as type IStepProps[].
  * @param data
