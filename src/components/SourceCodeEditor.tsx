@@ -1,8 +1,7 @@
 import {
-  useYAMLContext,
-  useStepsAndViewsContext,
-  fetchViewDefinitions,
-  fetchCustomResource,
+  fetchIntegrationJson,
+  useIntegrationSourceContext,
+  useIntegrationJsonContext,
 } from '../api';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
@@ -11,39 +10,32 @@ import { useRef } from 'react';
 import EditorDidMount from 'react-monaco-editor';
 import { useDebouncedCallback } from 'use-debounce';
 
-interface IYAMLEditor {
+interface ISourceCodeEditor {
   dsl: string;
+  handleUpdateViews: (newViews: any) => void;
   // Used to mock data for stories
   initialData?: string;
   language?: Language;
   theme?: string;
 }
 
-const YAMLEditor = (props: IYAMLEditor) => {
+const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<EditorDidMount['editor'] | null>(null);
-  const [YAMLData, setYAMLData] = useYAMLContext();
-  const [, dispatch] = useStepsAndViewsContext();
+  const [sourceCode, setSourceCode] = useIntegrationSourceContext();
+  const [, dispatch] = useIntegrationJsonContext();
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
    * Returns JSON to be displayed in the visualizer
    */
   const handleChanges = (incomingData: string) => {
-    if (YAMLData !== incomingData) {
-      setYAMLData(incomingData);
-      fetchViewDefinitions(incomingData)
+    if (sourceCode !== incomingData) {
+      setSourceCode(incomingData);
+
+      // update integration JSON state with changes
+      fetchIntegrationJson(incomingData, props.dsl)
         .then((res) => {
           dispatch({ type: 'UPDATE_INTEGRATION', payload: res });
-          /**
-           * Use new API-provided view definition to re-fetch the "proper" custom
-           * resource (YAML). Used to fill any relevant YAML data missed while
-           * manually typing.
-           */
-          fetchCustomResource(res.steps, 'integration', props.dsl).then((yamlResponse) => {
-            if (typeof yamlResponse === 'string') {
-              setYAMLData(yamlResponse);
-            }
-          });
         })
         .catch((e) => {
           console.error(e);
@@ -79,7 +71,7 @@ const YAMLEditor = (props: IYAMLEditor) => {
       aria-label="Undo change"
       toolTipText="Undo change"
       onClick={undoAction}
-      isVisible={YAMLData !== ''}
+      isVisible={sourceCode !== ''}
     />
   );
 
@@ -90,14 +82,14 @@ const YAMLEditor = (props: IYAMLEditor) => {
       aria-label="Redo change"
       toolTipText="Redo change"
       onClick={redoAction}
-      isVisible={YAMLData !== ''}
+      isVisible={sourceCode !== ''}
     />
   );
 
   return (
     <StepErrorBoundary>
       <CodeEditor
-        code={YAMLData ?? props.initialData}
+        code={sourceCode ?? props.initialData}
         className="code-editor"
         height="650px"
         language={(props.language as Language) ?? Language.yaml}
@@ -114,4 +106,4 @@ const YAMLEditor = (props: IYAMLEditor) => {
   );
 };
 
-export { YAMLEditor };
+export { SourceCodeEditor };

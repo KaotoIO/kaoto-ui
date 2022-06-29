@@ -1,5 +1,5 @@
 export * from './apiService';
 export * from './request';
-export * from './StepsAndViewsProvider';
+export * from './IntegrationJsonProvider';
+export * from './IntegrationSourceProvider';
 export * from './StepExtensionApiProvider';
-export * from './YAMLProvider';

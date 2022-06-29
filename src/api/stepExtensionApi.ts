@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { IStepProps } from '../types';
+import { IIntegration, IStepProps } from '../types';
 
 /**
  * The API for a typical Step Extension
@@ -21,16 +21,14 @@ import { IStepProps } from '../types';
  */
 export interface IStepExtensionApi {
   fetchCatalogSteps: () => void;
-  fetchCRDs: (newSteps: IStepProps[], integrationName: string, dsl: string) => void;
+  fetchDeployment: (integrationName: string, namespace?: string) => void;
+  fetchDeploymentLogs: (integrationName: string, lines?: number, namespace?: string) => void;
   fetchDeployments: () => void;
   fetchDSLs: () => void;
-  fetchViewDefinitions: (data: string | IStepProps[]) => void;
+  fetchIntegrationJson: (sourceCode: string, dsl: string) => Promise<IIntegration>;
+  fetchIntegrationSource: (integration: IIntegration, dsl: string) => void;
+  fetchViews: (data: IStepProps[]) => void;
   notifyKaoto: (title: string, body?: string, variant?: string) => void;
-  startDeployment: (
-    dsl: string,
-    integration: any,
-    integrationName: string,
-    namespace: string
-  ) => void;
-  stopDeployment: (integrationName: string) => void;
+  startDeployment: (integration: any, integrationName: string, namespace?: string) => void;
+  stopDeployment: (integrationName: string, namespace?: string) => void;
 }

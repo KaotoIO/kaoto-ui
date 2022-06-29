@@ -1,7 +1,13 @@
-import { StepsAndViewsProvider, YAMLProvider } from '../api';
-import { Catalog, DeploymentsModal, SettingsModal, Visualization, YAMLEditor } from '../components';
+import { IntegrationJsonProvider, IntegrationSourceProvider } from '../api';
+import {
+  Catalog,
+  DeploymentsModal,
+  SettingsModal,
+  Visualization,
+  SourceCodeEditor,
+} from '../components';
 import { KaotoToolbar } from '../components/KaotoToolbar';
-import { ISettings } from '../types';
+import { IDeployment, ISettings, IViewProps } from '../types';
 import './Dashboard.css';
 import { AlertVariant, Page, PageSection, GridItem, Grid } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
@@ -27,6 +33,7 @@ const Dashboard = () => {
     integrationName: 'Integration',
     namespace: 'default',
   });
+  const [views, setViews] = useState<IViewProps[]>([]);
 
   const { addAlert } = useAlert() || {};
 
@@ -49,13 +56,13 @@ const Dashboard = () => {
       });
   };
 
-  const handleSaveDeployment = (newDeployment: any) => {
+  const handleSaveDeployment = (newDeployment: IDeployment) => {
     setDeployment(newDeployment);
   };
 
   return (
-    <StepsAndViewsProvider initialState={{ steps: [], views: [] }}>
-      <YAMLProvider>
+    <IntegrationJsonProvider initialState={{ metadata: { name: '' }, params: [], steps: [] }}>
+      <IntegrationSourceProvider initialState={''}>
         <Page>
           <PageSection padding={{ default: 'noPadding' }}>
             <KaotoToolbar
@@ -71,7 +78,13 @@ const Dashboard = () => {
             <Grid>
               {expanded.codeEditor ? (
                 <GridItem span={3}>
-                  <YAMLEditor dsl={settings.dsl} />
+                  <SourceCodeEditor
+                    dsl={settings.dsl}
+                    handleUpdateViews={(newViews: IViewProps[]) => {
+                      if (newViews === views) return;
+                      setViews(newViews);
+                    }}
+                  />
                 </GridItem>
               ) : expanded.catalog ? (
                 <GridItem span={3}>
@@ -89,10 +102,15 @@ const Dashboard = () => {
                 className={'visualization'}
               >
                 <Visualization
+                  handleUpdateViews={(newViews: IViewProps[]) => {
+                    if (newViews === views) return;
+                    setViews(newViews);
+                  }}
                   settings={settings}
                   toggleCatalog={() =>
                     setExpanded({ ...expanded, catalog: !expanded.catalog, codeEditor: false })
                   }
+                  views={views}
                 />
               </GridItem>
             </Grid>
@@ -110,10 +128,14 @@ const Dashboard = () => {
             setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
           }}
           handleSaveSettings={handleSaveSettings}
+          handleUpdateViews={(newViews: IViewProps[]) => {
+            if (newViews === views) return;
+            setViews(newViews);
+          }}
           isModalOpen={expanded.settingsModal ?? false}
         />
-      </YAMLProvider>
-    </StepsAndViewsProvider>
+      </IntegrationSourceProvider>
+    </IntegrationJsonProvider>
   );
 };
 

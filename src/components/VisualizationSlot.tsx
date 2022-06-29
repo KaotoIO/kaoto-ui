@@ -1,10 +1,5 @@
-import {
-  fetchCustomResource,
-  fetchViewDefinitions,
-  useStepsAndViewsContext,
-  useYAMLContext,
-} from '../api';
-import { IStepProps, IViewData, IVizStepNodeData } from '../types';
+import { useIntegrationJsonContext } from '../api';
+import { IStepProps, IVizStepNodeData } from '../types';
 import { canStepBeReplaced } from '../utils/validationService';
 import './Visualization.css';
 import { AlertVariant } from '@patternfly/react-core';
@@ -18,8 +13,7 @@ export interface IVisualizationSlot {
 
 // Custom Node type and component for React Flow
 const VisualizationSlot = ({ data }: IVisualizationSlot) => {
-  const [viewData, dispatch] = useStepsAndViewsContext();
-  const [, setYAMLData] = useYAMLContext();
+  const [integrationJson, dispatch] = useIntegrationJsonContext();
   const { addAlert } = useAlert() || {};
 
   /**
@@ -29,38 +23,11 @@ const VisualizationSlot = ({ data }: IVisualizationSlot) => {
   const onDrop = (e: { dataTransfer: { getData: (arg0: string) => any } }) => {
     const dataJSON = e.dataTransfer.getData('text');
     const step: IStepProps = JSON.parse(dataJSON);
-    const validation = canStepBeReplaced(data, step, viewData.steps);
+    const validation = canStepBeReplaced(data, step, integrationJson.steps);
 
     if (validation.isValid) {
       // update the steps, the new node will be created automatically
       dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
-      // fetch the updated view definitions again with new views
-      fetchViewDefinitions(viewData.steps).then((newViewDefs: IViewData) => {
-        dispatch({ type: 'UPDATE_INTEGRATION', payload: newViewDefs });
-
-        fetchCustomResource(
-          newViewDefs.steps.filter((step: IStepProps) => step.type),
-          data.settings.integrationName,
-          data.settings.dsl
-        )
-          .then((value) => {
-            if (typeof value === 'string') {
-              setYAMLData(value);
-            } else {
-              setYAMLData('');
-            }
-          })
-          .catch((e) => {
-            console.error(e);
-            addAlert &&
-              addAlert({
-                title: 'Something went wrong',
-                variant: AlertVariant.danger,
-                description:
-                  'There was a problem updating the integration. Please try again later.',
-              });
-          });
-      });
     } else {
       console.log('step CANNOT be replaced');
       addAlert &&

@@ -1,4 +1,4 @@
-import { startDeployment, stopDeployment, useStepsAndViewsContext } from '../api';
+import { startDeployment, stopDeployment, useIntegrationJsonContext } from '../api';
 import { IExpanded } from '../pages/Dashboard';
 import { IDeployment, ISettings } from '../types';
 import { canBeDeployed } from '../utils/validationService';
@@ -54,28 +54,24 @@ export const KaotoToolbar = ({
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
-  const [localName, setLocalName] = useState<string>(settings.integrationName);
-  const [viewData] = useStepsAndViewsContext();
+  const [integrationJson] = useIntegrationJsonContext();
 
   const { addAlert } = useAlert() || {};
 
   const handleDeployStartClick = () => {
     try {
-      startDeployment(
-        settings.dsl,
-        viewData.steps,
-        settings.integrationName,
-        settings.namespace
-      ).then((res) => {
-        handleSaveDeployment(res);
+      startDeployment(integrationJson.steps, settings.integrationName, settings.namespace).then(
+        (res) => {
+          handleSaveDeployment(res);
 
-        addAlert &&
-          addAlert({
-            title: 'Deployment started',
-            variant: AlertVariant.success,
-            description: 'Your integration is deploying..',
-          });
-      });
+          addAlert &&
+            addAlert({
+              title: 'Deployment started',
+              variant: AlertVariant.success,
+              description: 'Your integration is deploying..',
+            });
+        }
+      );
     } catch (e) {
       console.log('error deploying.. ', e);
 
@@ -101,7 +97,6 @@ export const KaotoToolbar = ({
           });
       });
     } catch (e) {
-      console.log('error stopping deployment.. ', e);
       console.error(e);
 
       addAlert &&
@@ -207,9 +202,8 @@ export const KaotoToolbar = ({
                 type="text"
                 onChange={(val) => {
                   handleUpdateName(val);
-                  setLocalName(val);
                 }}
-                value={localName}
+                value={settings.integrationName}
                 aria-label="edit integration name"
               />
               <Button
@@ -233,7 +227,7 @@ export const KaotoToolbar = ({
             </InputGroup>
           ) : (
             <>
-              {settings.integrationName ?? 'Integration'}&nbsp;&nbsp;
+              {settings.integrationName}&nbsp;&nbsp;
               <Button
                 variant={'link'}
                 onClick={() => {

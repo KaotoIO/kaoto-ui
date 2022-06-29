@@ -1,10 +1,13 @@
 import {
-  fetchAllDSLs,
-  fetchCompatibleDSLsAndCRDs,
-  useStepsAndViewsContext,
-  useYAMLContext,
+  fetchCompatibleDSLs,
+  fetchIntegrationJson,
+  fetchIntegrationSourceCode,
+  fetchViews,
+  useIntegrationJsonContext,
+  useIntegrationSourceContext,
 } from '../api';
-import { ISettings } from '../types';
+import { ISettings, IViewProps } from '../types';
+import { usePrevious } from '../utils';
 import {
   Button,
   Form,
@@ -17,26 +20,14 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface ISettingsModal {
   currentSettings: ISettings;
   handleCloseModal: () => void;
-  handleSaveSettings: (newState?: any) => void;
+  handleSaveSettings: (newState?: ISettings) => void;
+  handleUpdateViews: (newViews: IViewProps[]) => void;
   isModalOpen: boolean;
-}
-
-export interface IDSLProps {
-  output: string;
-  input: string;
-  name: string;
-  description: string;
-  stepKinds: any;
-}
-
-export interface ICompatibleDSLsAndCRDs {
-  crd: string;
-  dsl: string;
 }
 
 /**
@@ -44,6 +35,7 @@ export interface ICompatibleDSLsAndCRDs {
  * @param currentSettings
  * @param handleCloseModal
  * @param handleSaveSettings
+ * @param handleUpdateViews
  * @param isModalOpen
  * @constructor
  */
@@ -51,67 +43,37 @@ export const SettingsModal = ({
   currentSettings,
   handleCloseModal,
   handleSaveSettings,
+  handleUpdateViews,
   isModalOpen,
 }: ISettingsModal) => {
-  const availableDSLs = useRef<IDSLProps[]>([]);
-  const compatibleDSLsAndCRDs = useRef<ICompatibleDSLsAndCRDs[]>([]);
+  const [availableDSLs, setAvailableDSLs] = useState<string[]>([]);
   const [localSettings, setLocalSettings] = useState<ISettings>(currentSettings);
-  const [viewData] = useStepsAndViewsContext();
-  const [, setYAMLData] = useYAMLContext();
+  const [integrationJson, dispatch] = useIntegrationJsonContext();
+  const [, setSourceCode] = useIntegrationSourceContext();
+  const previousIntegrationJson = usePrevious(integrationJson);
 
   useEffect(() => {
+    // update settings if there is a name change
     setLocalSettings({ ...localSettings, integrationName: currentSettings.integrationName });
   }, [currentSettings.integrationName]);
 
   useEffect(() => {
-    const fetchContext = () => {
-      fetchCompatibleDSLsAndCRDs({
-        integrationName: currentSettings.integrationName,
-        steps: viewData.steps,
-        dsl: currentSettings.dsl,
-      })
-        .then((value) => {
-          if (value) {
-            // contains a list of compatible DSLs returned,
-            // merged with their descriptions (fetched separately)
-            const dslList: IDSLProps[] = [];
+    if (previousIntegrationJson === integrationJson) return;
 
-            // save compatible CRDs & DSLs for later use when saving settings
-            compatibleDSLsAndCRDs.current = value;
-
-            value.map((item: { crd: string; dsl: string }) => {
-              availableDSLs.current.map((dsl) => {
-                if (dsl.name === item.dsl) {
-                  dslList.push(dsl);
-                }
-              });
-            });
-
-            availableDSLs.current = dslList;
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-    };
-
-    /**
-     * fetch ALL DSLs and descriptions.
-     * if the user has at least one step, then a separate
-     * call is made to check compatible DSLs, with their
-     * respective YAML/CRDs, and merged together.
-     */
-    fetchAllDSLs()
-      .then((DSLs) => {
-        availableDSLs.current = DSLs;
-        if (viewData.steps.length !== 0) fetchContext();
-
-        // setSettings({...settings, integrationName: });
+    // subsequent changes to the integration requires fetching
+    // DSLs compatible with the specific integration
+    fetchCompatibleDSLs({
+      steps: integrationJson.steps,
+    })
+      .then((value) => {
+        if (value) {
+          setAvailableDSLs(value);
+        }
       })
       .catch((e) => {
         console.error(e);
       });
-  }, [currentSettings.dsl, currentSettings.integrationName, viewData]);
+  }, [integrationJson?.steps]);
 
   const onChangeIntegrationName = (newName: string) => {
     setLocalSettings({ ...localSettings, integrationName: newName });
@@ -126,13 +88,35 @@ export const SettingsModal = ({
   };
 
   const onSave = () => {
-    const newDSL = compatibleDSLsAndCRDs.current.find(
-      (i: ICompatibleDSLsAndCRDs) => i.dsl === localSettings.dsl
-    );
-    // update YAML with new compatible DSL/YAML
-    if (newDSL) setYAMLData(newDSL.crd);
-
     handleSaveSettings(localSettings);
+    // check if DSL has changed
+    if (currentSettings.dsl !== localSettings.dsl) {
+      // update integration source with latest DSL
+      fetchIntegrationSourceCode(integrationJson, localSettings.dsl)
+        .then((source) => {
+          if (typeof source === 'string') {
+            setSourceCode(source);
+
+            // update integration JSON with latest DSL
+            fetchIntegrationJson(source, localSettings.dsl)
+              .then((newIntegration) => {
+                dispatch({ type: 'UPDATE_INTEGRATION', payload: newIntegration });
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+
+            // update views in case DSL change results in views change
+            // i.e. CamelRoute -> KameletBinding results in loss of incompatible steps
+            fetchViews(integrationJson.steps).then((newViews) => {
+              handleUpdateViews(newViews);
+            });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
   return (
@@ -242,8 +226,8 @@ export const SettingsModal = ({
               }}
               value={localSettings.dsl}
             >
-              {availableDSLs.current.map((dsl, idx) => {
-                return <FormSelectOption key={idx} value={dsl.name} label={dsl.name} />;
+              {availableDSLs.map((dsl, idx) => {
+                return <FormSelectOption key={idx} value={dsl} label={dsl} />;
               })}
             </FormSelect>
           </FormGroup>

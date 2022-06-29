@@ -1,14 +1,17 @@
 import {
-  fetchAllDSLs,
+  fetchCapabilities,
   fetchCatalogSteps,
-  fetchCustomResource,
+  fetchDeployment,
+  fetchDeploymentLogs,
   fetchDeployments,
-  fetchViewDefinitions,
+  fetchIntegrationJson,
+  fetchIntegrationSourceCode,
+  fetchViews,
   startDeployment,
   stopDeployment,
 } from '../api';
 import { IStepExtensionApi } from '../api/stepExtensionApi';
-import { IDeployment, IStepProps, IViewProps } from '../types';
+import { IDeployment, IIntegration, IStepProps, IViewProps } from '../types';
 import { usePrevious } from '../utils';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
@@ -191,19 +194,25 @@ const StepViews = ({
                 });
               };
 
-              const seFetchCRDs = (
-                newSteps: IStepProps[],
-                integrationName: string,
-                dsl: string
-              ) => {
-                return fetchCustomResource(newSteps, integrationName, dsl).then((res) => {
-                  return res;
+              const seFetchDSLs = () => {
+                return fetchCapabilities().then((dsls: { dsls: { [val: string]: string }[] }) => {
+                  return dsls.dsls;
                 });
               };
 
-              const seFetchDSLs = () => {
-                return fetchAllDSLs().then((dsls) => {
-                  return dsls;
+              const seFetchDeployment = (integrationName: string, namespace?: string) => {
+                return fetchDeployment(integrationName, namespace).then((deployment) => {
+                  return deployment;
+                });
+              };
+
+              const seFetchDeploymentLogs = (
+                integrationName: string,
+                lines?: number,
+                namespace?: string
+              ) => {
+                return fetchDeploymentLogs(integrationName, lines, namespace).then((log) => {
+                  return log;
                 });
               };
 
@@ -213,21 +222,32 @@ const StepViews = ({
                 });
               };
 
-              const seFetchViewDefinitions = (data: string | IStepProps[]) => {
+              const seFetchIntegrationSource = (integration: IIntegration, dsl: string) => {
+                return fetchIntegrationSourceCode(integration, dsl).then((sourceCode) => {
+                  return sourceCode;
+                });
+              };
+
+              const seFetchIntegrationJson = (sourceCode: string, dsl: string) => {
+                return fetchIntegrationJson(sourceCode, dsl).then((integration) => {
+                  return integration;
+                });
+              };
+
+              const seFetchViews = (data: IStepProps[]) => {
                 // send JSON integrations
-                // requires you to provide the custom resource definition
-                fetchViewDefinitions(data).then((res) => {
+                // requires you to provide the integration JSON
+                fetchViews(data).then((res) => {
                   return res;
                 });
               };
 
               const seStartDeployment = (
-                dsl: string,
                 integration: any,
                 integrationName: string,
-                namespace: string
+                namespace?: string
               ) => {
-                return startDeployment(dsl, integration, integrationName, namespace).then((res) => {
+                return startDeployment(integration, integrationName, namespace).then((res) => {
                   return res;
                 });
               };
@@ -240,10 +260,13 @@ const StepViews = ({
 
               const kaotoApi: IStepExtensionApi = {
                 fetchCatalogSteps: seFetchCatalogSteps,
-                fetchCRDs: seFetchCRDs,
+                fetchDeployment: seFetchDeployment,
+                fetchDeploymentLogs: seFetchDeploymentLogs,
                 fetchDeployments: seFetchDeployments,
                 fetchDSLs: seFetchDSLs,
-                fetchViewDefinitions: seFetchViewDefinitions,
+                fetchIntegrationJson: seFetchIntegrationJson,
+                fetchIntegrationSource: seFetchIntegrationSource,
+                fetchViews: seFetchViews,
                 notifyKaoto: seCreateAlert,
                 startDeployment: seStartDeployment,
                 stopDeployment: seStopDeployment,

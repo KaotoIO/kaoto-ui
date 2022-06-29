@@ -1,13 +1,15 @@
 import initialYAML from '../data/yaml';
-import { YAMLEditor } from './index';
+import { SourceCodeEditor } from './index';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {
-  title: 'Components/YAMLEditor',
-  component: YAMLEditor,
-} as ComponentMeta<typeof YAMLEditor>;
+  title: 'Components/SourceCodeEditor',
+  component: SourceCodeEditor,
+} as ComponentMeta<typeof SourceCodeEditor>;
 
-const Template: ComponentStory<typeof YAMLEditor> = (props) => <YAMLEditor {...props} />;
+const Template: ComponentStory<typeof SourceCodeEditor> = (props) => (
+  <SourceCodeEditor {...props} />
+);
 
 export const Primary = Template.bind({});
 Primary.args = {
