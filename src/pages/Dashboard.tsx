@@ -1,10 +1,4 @@
-import {
-  startDeployment,
-  StepsAndViewsProvider,
-  stopDeployment,
-  useStepsAndViewsContext,
-  YAMLProvider,
-} from '../api';
+import { StepsAndViewsProvider, YAMLProvider } from '../api';
 import { Catalog, DeploymentsModal, SettingsModal, Visualization, YAMLEditor } from '../components';
 import { KaotoToolbar } from '../components/KaotoToolbar';
 import { ISettings } from '../types';
@@ -33,7 +27,6 @@ const Dashboard = () => {
     integrationName: 'Integration',
     namespace: 'default',
   });
-  const [viewData] = useStepsAndViewsContext();
 
   const { addAlert } = useAlert() || {};
 
@@ -56,58 +49,8 @@ const Dashboard = () => {
       });
   };
 
-  const handleStartDeployment = () => {
-    try {
-      startDeployment(
-        settings.dsl,
-        viewData.steps,
-        settings.integrationName,
-        settings.namespace
-      ).then((res) => {
-        setDeployment(res);
-
-        addAlert &&
-          addAlert({
-            title: 'Deployment started',
-            variant: AlertVariant.success,
-            description: 'Your integration is deploying..',
-          });
-      });
-    } catch (e) {
-      console.log('error deploying.. ', e);
-
-      addAlert &&
-        addAlert({
-          title: 'Deployment not started',
-          variant: AlertVariant.warning,
-          description: 'There was a problem deploying your integration. Please try again later.',
-        });
-    }
-  };
-
-  const handleStopDeployment = () => {
-    try {
-      stopDeployment(settings.integrationName).then((res) => {
-        console.log('stop deployment response: ', res);
-
-        addAlert &&
-          addAlert({
-            title: 'Stop deployment',
-            variant: AlertVariant.success,
-            description: 'Stopping deployment..',
-          });
-      });
-    } catch (e) {
-      console.log('error stopping deployment.. ', e);
-      console.error(e);
-
-      addAlert &&
-        addAlert({
-          title: 'Stop deployment',
-          variant: AlertVariant.success,
-          description: 'There was a problem stopping your deployment. Please try again later.',
-        });
-    }
+  const handleSaveDeployment = (newDeployment: any) => {
+    setDeployment(newDeployment);
   };
 
   return (
@@ -119,8 +62,7 @@ const Dashboard = () => {
               deployment={deployment}
               expanded={expanded}
               handleExpanded={handleExpanded}
-              handleStartDeploy={handleStartDeployment}
-              handleStopDeploy={handleStopDeployment}
+              handleSaveDeployment={handleSaveDeployment}
               handleUpdateName={(val) => {
                 setSettings({ ...settings, integrationName: val });
               }}
