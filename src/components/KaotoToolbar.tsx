@@ -1,7 +1,9 @@
+import { startDeployment, stopDeployment, useStepsAndViewsContext } from '../api';
 import { IExpanded } from '../pages/Dashboard';
 import { IDeployment, ISettings } from '../types';
 import { canBeDeployed } from '../utils/validationService';
 import {
+  AlertVariant,
   Button,
   Dropdown,
   DropdownItem,
@@ -29,14 +31,14 @@ import {
   ThIcon,
   TimesIcon,
 } from '@patternfly/react-icons';
+import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useState } from 'react';
 
 export interface IKaotoToolbar {
   deployment?: IDeployment;
   expanded: IExpanded;
   handleExpanded: (newState: IExpanded) => void;
-  handleStartDeploy: () => void;
-  handleStopDeploy: () => void;
+  handleSaveDeployment: (newDeployment: any) => void;
   handleUpdateName: (val: any) => void;
   settings: ISettings;
 }
@@ -45,8 +47,7 @@ export const KaotoToolbar = ({
   deployment,
   expanded,
   handleExpanded,
-  handleStartDeploy,
-  handleStopDeploy,
+  handleSaveDeployment,
   handleUpdateName,
   settings,
 }: IKaotoToolbar) => {
@@ -54,13 +55,62 @@ export const KaotoToolbar = ({
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [localName, setLocalName] = useState<string>(settings.integrationName);
+  const [viewData] = useStepsAndViewsContext();
+
+  const { addAlert } = useAlert() || {};
 
   const handleDeployStartClick = () => {
-    handleStartDeploy();
+    try {
+      startDeployment(
+        settings.dsl,
+        viewData.steps,
+        settings.integrationName,
+        settings.namespace
+      ).then((res) => {
+        handleSaveDeployment(res);
+
+        addAlert &&
+          addAlert({
+            title: 'Deployment started',
+            variant: AlertVariant.success,
+            description: 'Your integration is deploying..',
+          });
+      });
+    } catch (e) {
+      console.log('error deploying.. ', e);
+
+      addAlert &&
+        addAlert({
+          title: 'Deployment not started',
+          variant: AlertVariant.warning,
+          description: 'There was a problem deploying your integration. Please try again later.',
+        });
+    }
   };
 
   const handleDeployStopClick = () => {
-    handleStopDeploy();
+    try {
+      stopDeployment(settings.integrationName).then((res) => {
+        console.log('stop deployment response: ', res);
+
+        addAlert &&
+          addAlert({
+            title: 'Stop deployment',
+            variant: AlertVariant.success,
+            description: 'Stopping deployment..',
+          });
+      });
+    } catch (e) {
+      console.log('error stopping deployment.. ', e);
+      console.error(e);
+
+      addAlert &&
+        addAlert({
+          title: 'Stop deployment',
+          variant: AlertVariant.success,
+          description: 'There was a problem stopping your deployment. Please try again later.',
+        });
+    }
   };
 
   const onFocusAppMenu = () => {
