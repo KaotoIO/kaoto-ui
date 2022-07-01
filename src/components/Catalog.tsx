@@ -200,7 +200,7 @@ export const Catalog = (props: ICatalog) => {
                   </GridItem>
                   <GridItem span={3}>
                     <Label color={'blue'} className={'catalog__stepLabel'}>
-                      SOURCE
+                      {step.kind}
                     </Label>
                   </GridItem>
                 </Grid>
