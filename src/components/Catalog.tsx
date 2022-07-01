@@ -1,5 +1,6 @@
 import { fetchCatalogSteps } from '../api';
 import { IStepProps } from '../types';
+import { truncateString } from '../utils';
 import './Catalog.css';
 import {
   AlertVariant,
@@ -200,7 +201,7 @@ export const Catalog = (props: ICatalog) => {
                   </GridItem>
                   <GridItem span={3}>
                     <Label color={'blue'} className={'catalog__stepLabel'}>
-                      {step.kind}
+                      {truncateString(step.kind, 8)}
                     </Label>
                   </GridItem>
                 </Grid>
