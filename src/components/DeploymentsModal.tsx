@@ -1,4 +1,4 @@
-import { fetchDeployments } from '../api';
+import { fetchDeployments, stopDeployment, useSettingsContext } from '../api';
 import { IDeployment } from '../types';
 import {
   Button,
@@ -17,8 +17,10 @@ import {
   ModalVariant,
   Popover,
   Title,
+  AlertVariant,
 } from '@patternfly/react-core';
 import { CubesIcon, HelpIcon } from '@patternfly/react-icons';
+import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
 export interface IDeploymentsModal {
@@ -35,6 +37,9 @@ export interface IDeploymentsModal {
  */
 export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeploymentsModal) => {
   const [deployments, setDeployments] = useState<IDeployment[]>([]);
+  const [settings] = useSettingsContext();
+
+  const { addAlert } = useAlert() || {};
 
   useEffect(() => {
     // fetch deployments
@@ -46,6 +51,28 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
         throw Error(e);
       });
   }, []);
+
+  const handleDeleteDeployment = (deployment: any) => {
+    console.log('deployment: ', deployment);
+    stopDeployment(deployment.name, settings.namespace)
+      .then(() => {
+        addAlert &&
+          addAlert({
+            title: 'Deleted Deployment',
+            variant: AlertVariant.success,
+            description: 'Successfully deleted the deployment.',
+          });
+      })
+      .catch((e) => {
+        console.error(e);
+        addAlert &&
+          addAlert({
+            title: 'Something went wrong',
+            variant: AlertVariant.danger,
+            description: 'There was a problem updating the integration. Please try again later.',
+          });
+      });
+  };
 
   return (
     <div className={'deployments-modal'} data-testid={'deployments-modal'}>
@@ -94,8 +121,10 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
                         id={`deployment-action-${idx}`}
                         aria-label="Actions"
                       >
-                        <Button variant="primary">Details</Button>
-                        <Button variant="secondary">Delete</Button>
+                        {/*<Button variant="primary">Details</Button>*/}
+                        <Button variant="secondary" onClick={handleDeleteDeployment}>
+                          Delete
+                        </Button>
                       </DataListAction>
                     </DataListItemRow>
                   </DataListItem>

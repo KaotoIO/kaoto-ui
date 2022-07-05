@@ -21,14 +21,14 @@ import { IIntegration, IStepProps } from '../types';
  */
 export interface IStepExtensionApi {
   fetchCatalogSteps: () => void;
-  fetchDeployment: (integrationName: string, namespace?: string) => void;
-  fetchDeploymentLogs: (integrationName: string, lines?: number, namespace?: string) => void;
+  fetchDeployment: (name: string, namespace?: string) => void;
+  fetchDeploymentLogs: (name: string, lines?: number, namespace?: string) => void;
   fetchDeployments: () => void;
   fetchDSLs: () => void;
   fetchIntegrationJson: (sourceCode: string, dsl: string) => Promise<IIntegration>;
   fetchIntegrationSource: (integration: IIntegration, dsl: string) => void;
   fetchViews: (data: IStepProps[]) => void;
   notifyKaoto: (title: string, body?: string, variant?: string) => void;
-  startDeployment: (integration: any, integrationName: string, namespace?: string) => void;
-  stopDeployment: (integrationName: string, namespace?: string) => void;
+  startDeployment: (integration: any, name: string, namespace?: string) => void;
+  stopDeployment: (name: string, namespace?: string) => void;
 }

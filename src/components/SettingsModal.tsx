@@ -1,14 +1,14 @@
 import {
   fetchCompatibleDSLs,
-  fetchIntegrationJson,
   fetchIntegrationSourceCode,
-  fetchViews,
   useIntegrationJsonContext,
   useIntegrationSourceContext,
+  useSettingsContext,
 } from '../api';
 import { ISettings, IViewProps } from '../types';
 import { usePrevious } from '../utils';
 import {
+  AlertVariant,
   Button,
   Form,
   FormGroup,
@@ -20,42 +20,38 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
+import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
 export interface ISettingsModal {
-  currentSettings: ISettings;
   handleCloseModal: () => void;
-  handleSaveSettings: (newState?: ISettings) => void;
   handleUpdateViews: (newViews: IViewProps[]) => void;
   isModalOpen: boolean;
 }
 
 /**
  * Contains the contents for the Settings modal.
- * @param currentSettings
  * @param handleCloseModal
- * @param handleSaveSettings
  * @param handleUpdateViews
  * @param isModalOpen
  * @constructor
  */
-export const SettingsModal = ({
-  currentSettings,
-  handleCloseModal,
-  handleSaveSettings,
-  handleUpdateViews,
-  isModalOpen,
-}: ISettingsModal) => {
+export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal) => {
   const [availableDSLs, setAvailableDSLs] = useState<string[]>([]);
-  const [localSettings, setLocalSettings] = useState<ISettings>(currentSettings);
-  const [integrationJson, dispatch] = useIntegrationJsonContext();
+  const [settings, setSettings] = useSettingsContext();
+  const [localSettings, setLocalSettings] = useState<ISettings>(settings);
+  const [integrationJson] = useIntegrationJsonContext();
   const [, setSourceCode] = useIntegrationSourceContext();
   const previousIntegrationJson = usePrevious(integrationJson);
+  const previousName = usePrevious(localSettings.name);
+
+  const { addAlert } = useAlert() || {};
 
   useEffect(() => {
     // update settings if there is a name change
-    setLocalSettings({ ...localSettings, integrationName: currentSettings.integrationName });
-  }, [currentSettings.integrationName]);
+    if (settings.name === previousName) return;
+    setLocalSettings({ ...localSettings, name: settings.name });
+  }, [settings.name]);
 
   useEffect(() => {
     if (previousIntegrationJson === integrationJson) return;
@@ -75,8 +71,8 @@ export const SettingsModal = ({
       });
   }, [integrationJson?.steps]);
 
-  const onChangeIntegrationName = (newName: string) => {
-    setLocalSettings({ ...localSettings, integrationName: newName });
+  const onChangeName = (newName: string) => {
+    setLocalSettings({ ...localSettings, name: newName });
   };
 
   const onChangeNamespace = (newNamespace: string) => {
@@ -88,35 +84,35 @@ export const SettingsModal = ({
   };
 
   const onSave = () => {
-    handleSaveSettings(localSettings);
-    // check if DSL has changed
-    if (currentSettings.dsl !== localSettings.dsl) {
-      // update integration source with latest DSL
-      fetchIntegrationSourceCode(integrationJson, localSettings.dsl)
-        .then((source) => {
-          if (typeof source === 'string') {
-            setSourceCode(source);
+    setSettings(localSettings);
+    let tmpInt = integrationJson;
+    tmpInt.metadata = { ...localSettings };
 
-            // update integration JSON with latest DSL
-            fetchIntegrationJson(source, localSettings.dsl)
-              .then((newIntegration) => {
-                dispatch({ type: 'UPDATE_INTEGRATION', payload: newIntegration });
-              })
-              .catch((err) => {
-                console.error(err);
-              });
+    fetchIntegrationSourceCode(tmpInt)
+      .then((source) => {
+        if (typeof source === 'string') {
+          setSourceCode(source);
 
-            // update views in case DSL change results in views change
-            // i.e. CamelRoute -> KameletBinding results in loss of incompatible steps
-            fetchViews(integrationJson.steps).then((newViews) => {
-              handleUpdateViews(newViews);
+          addAlert &&
+            addAlert({
+              title: 'Saved Settings',
+              variant: AlertVariant.success,
+              description: 'Configuration settings saved successfully.',
             });
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+
+        addAlert &&
+          addAlert({
+            title: 'Save Settings Unsuccessful',
+            variant: AlertVariant.danger,
+            description: 'Something went wrong, please try again later.',
+          });
+      });
+
+    handleCloseModal();
   };
 
   return (
@@ -147,9 +143,9 @@ export const SettingsModal = ({
               id="integration-name"
               isRequired
               name="integration-name"
-              onChange={onChangeIntegrationName}
+              onChange={onChangeName}
               type="text"
-              value={localSettings.integrationName}
+              value={localSettings.name}
             />
           </FormGroup>
           <FormGroup

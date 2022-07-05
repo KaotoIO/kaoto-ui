@@ -200,18 +200,14 @@ const StepViews = ({
                 });
               };
 
-              const seFetchDeployment = (integrationName: string, namespace?: string) => {
-                return fetchDeployment(integrationName, namespace).then((deployment) => {
+              const seFetchDeployment = (name: string, namespace?: string) => {
+                return fetchDeployment(name, namespace).then((deployment) => {
                   return deployment;
                 });
               };
 
-              const seFetchDeploymentLogs = (
-                integrationName: string,
-                lines?: number,
-                namespace?: string
-              ) => {
-                return fetchDeploymentLogs(integrationName, lines, namespace).then((log) => {
+              const seFetchDeploymentLogs = (name: string, lines?: number, namespace?: string) => {
+                return fetchDeploymentLogs(name, lines, namespace).then((log) => {
                   return log;
                 });
               };
@@ -222,8 +218,8 @@ const StepViews = ({
                 });
               };
 
-              const seFetchIntegrationSource = (integration: IIntegration, dsl: string) => {
-                return fetchIntegrationSourceCode(integration, dsl).then((sourceCode) => {
+              const seFetchIntegrationSource = (integration: IIntegration) => {
+                return fetchIntegrationSourceCode(integration).then((sourceCode) => {
                   return sourceCode;
                 });
               };
@@ -242,18 +238,14 @@ const StepViews = ({
                 });
               };
 
-              const seStartDeployment = (
-                integration: any,
-                integrationName: string,
-                namespace?: string
-              ) => {
-                return startDeployment(integration, integrationName, namespace).then((res) => {
+              const seStartDeployment = (integration: any, name: string, namespace?: string) => {
+                return startDeployment(integration, name, namespace).then((res) => {
                   return res;
                 });
               };
 
-              const seStopDeployment = (integrationName: string) => {
-                return stopDeployment(integrationName).then((res) => {
+              const seStopDeployment = (name: string) => {
+                return stopDeployment(name).then((res) => {
                   return res;
                 });
               };

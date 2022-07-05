@@ -17,6 +17,12 @@ export type IUseIntegrationJson = [
   dispatch: (action: IntegrationJsonAction) => void | IIntegration
 ];
 
+/**
+ * Regenerate a UUID for a list of Steps
+ * Every time there is a change to steps or their positioning in the Steps array,
+ * their UUIDs need to be regenerated
+ * @param steps
+ */
 function regenerateUuids(steps: IStepProps[]) {
   const newSteps = steps.slice();
   newSteps.map((step, idx) => {
@@ -36,6 +42,7 @@ function integrationJsonReducer(state: IIntegration, action: IntegrationJsonActi
   switch (type) {
     case 'ADD_STEP': {
       let newSteps = state.steps.slice();
+      // manually generate UUID for the new step
       payload.newStep.UUID = payload.newStep.name + state.steps.length;
       newSteps.push(payload.newStep);
       return { ...state, steps: newSteps };
@@ -87,7 +94,11 @@ function IntegrationJsonProvider({ initialState, children }: IIntegrationJsonPro
  * Create context
  */
 const IntegrationJsonContext = createContext<IUseIntegrationJson>([
-  { metadata: { name: '' }, steps: [], params: [] },
+  {
+    metadata: { name: 'Integration', dsl: 'KameletBinding', namespace: 'default' },
+    steps: [],
+    params: [],
+  },
   () => {},
 ]);
 

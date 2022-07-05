@@ -1,6 +1,11 @@
-import { startDeployment, stopDeployment, useIntegrationJsonContext } from '../api';
+import {
+  startDeployment,
+  stopDeployment,
+  useIntegrationSourceContext,
+  useSettingsContext,
+} from '../api';
 import { IExpanded } from '../pages/Dashboard';
-import { IDeployment, ISettings } from '../types';
+import { IDeployment } from '../types';
 import { canBeDeployed } from '../utils/validationService';
 import {
   AlertVariant,
@@ -39,8 +44,6 @@ export interface IKaotoToolbar {
   expanded: IExpanded;
   handleExpanded: (newState: IExpanded) => void;
   handleSaveDeployment: (newDeployment: any) => void;
-  handleUpdateName: (val: any) => void;
-  settings: ISettings;
 }
 
 export const KaotoToolbar = ({
@@ -48,30 +51,27 @@ export const KaotoToolbar = ({
   expanded,
   handleExpanded,
   handleSaveDeployment,
-  handleUpdateName,
-  settings,
 }: IKaotoToolbar) => {
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
-  const [integrationJson] = useIntegrationJsonContext();
+  const [settings, setSettings] = useSettingsContext();
+  const [sourceCode] = useIntegrationSourceContext();
 
   const { addAlert } = useAlert() || {};
 
   const handleDeployStartClick = () => {
     try {
-      startDeployment(integrationJson.steps, settings.integrationName, settings.namespace).then(
-        (res) => {
-          handleSaveDeployment(res);
+      startDeployment(sourceCode, settings.name, settings.namespace).then((res) => {
+        handleSaveDeployment(res);
 
-          addAlert &&
-            addAlert({
-              title: 'Deployment started',
-              variant: AlertVariant.success,
-              description: 'Your integration is deploying..',
-            });
-        }
-      );
+        addAlert &&
+          addAlert({
+            title: 'Deployment started',
+            variant: AlertVariant.success,
+            description: 'Your integration is deploying..',
+          });
+      });
     } catch (e) {
       console.log('error deploying.. ', e);
 
@@ -86,7 +86,7 @@ export const KaotoToolbar = ({
 
   const handleDeployStopClick = () => {
     try {
-      stopDeployment(settings.integrationName).then((res) => {
+      stopDeployment(settings.name).then((res) => {
         console.log('stop deployment response: ', res);
 
         addAlert &&
@@ -201,9 +201,9 @@ export const KaotoToolbar = ({
                 id="edit-integration-name"
                 type="text"
                 onChange={(val) => {
-                  handleUpdateName(val);
+                  setSettings({ ...settings, name: val });
                 }}
-                value={settings.integrationName}
+                value={settings.name}
                 aria-label="edit integration name"
               />
               <Button
@@ -227,7 +227,7 @@ export const KaotoToolbar = ({
             </InputGroup>
           ) : (
             <>
-              {settings.integrationName}&nbsp;&nbsp;
+              {settings.name}&nbsp;&nbsp;
               <Button
                 variant={'link'}
                 onClick={() => {

@@ -1,6 +1,6 @@
-import { fetchCatalogSteps } from '../api';
+import { fetchCatalogSteps, useSettingsContext } from '../api';
 import { IStepProps } from '../types';
-import { truncateString } from '../utils';
+import { truncateString, usePrevious } from '../utils';
 import './Catalog.css';
 import {
   AlertVariant,
@@ -15,7 +15,6 @@ import {
   HintBody,
   InputGroup,
   Label,
-  PageSection,
   SearchInput,
   TextContent,
   ToggleGroup,
@@ -28,36 +27,31 @@ import { InfoCircleIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
-export interface ICatalog {
-  isCatalogExpanded?: boolean;
-  onClosePanelClick: (e: any) => void;
-  queryParams?: {
-    // e.g. 'KameletBinding'
-    dsl?: string;
-    // e.g. 'Kamelet'
-    kind?: string;
-    // e.g. 'START', 'END', 'MIDDLE'
-    type?: string;
-  };
-  steps?: IStepProps[];
-}
-
 // Shorten a string to less than maxLen characters without truncating words.
 function shorten(str: string, maxLen: number, separator = ' ') {
   if (str.length <= maxLen) return str;
   return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
 }
 
-export const Catalog = (props: ICatalog) => {
+export const Catalog = () => {
   // If the catalog data won't be changing, consider removing this state
-  const [catalogData, setCatalogData] = useState<IStepProps[]>(props.steps ?? []);
+  const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
+  const [settings] = useSettingsContext();
+  const previousDSL = usePrevious(settings.dsl);
 
   const { addAlert } = useAlert() || {};
 
-  const fetchSteps = () => {
-    fetchCatalogSteps(props.queryParams)
+  /**
+   * Sort & fetch all Steps for the Catalog
+   * Checks for changes to the settings for DSL
+   */
+  useEffect(() => {
+    if (previousDSL === settings.dsl) return;
+    fetchCatalogSteps({
+      dsl: settings.dsl,
+    })
       .then((value) => {
         if (value) {
           value.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
@@ -73,22 +67,7 @@ export const Catalog = (props: ICatalog) => {
             description: 'There was a problem fetching the catalog steps. Please try again later.',
           });
       });
-  };
-
-  /**
-   * Sort & fetch all Steps for the Catalog
-   */
-  useEffect(() => {
-    if (!props.steps) {
-      fetchSteps();
-    }
-  }, []);
-
-  // If the user changes the DSL, update
-  // the catalog with relevant steps
-  useEffect(() => {
-    fetchSteps();
-  }, [props.queryParams?.dsl]);
+  }, [settings.dsl]);
 
   const changeSearch = (e: any) => {
     setQuery(e);
@@ -115,20 +94,31 @@ export const Catalog = (props: ICatalog) => {
   }
 
   return (
-    <PageSection data-testid={'stepCatalog'}>
-      <TextContent>
-        <Hint className={'catalog__hint'}>
-          <HintBody>
-            <InfoCircleIcon />
-            &nbsp;&nbsp;You can drag a step onto a circle in the visualization
-          </HintBody>
-        </Hint>
-      </TextContent>
-      <Toolbar id={'toolbar'} style={{ background: 'transparent' }} className={'catalog__toolbar'}>
-        <ToolbarContent style={{ padding: 0 }}>
+    <div data-testid={'stepCatalog'}>
+      <div style={{ padding: '10px', marginTop: '0.7em' }}>
+        <TextContent>
+          <Hint className={'catalog__hint'}>
+            <HintBody>
+              <InfoCircleIcon />
+              &nbsp;&nbsp;You can drag a step onto a circle in the visualization
+            </HintBody>
+          </Hint>
+        </TextContent>
+      </div>
+      <Toolbar
+        id={'toolbar'}
+        style={{
+          background: 'transparent',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingTop: '0',
+        }}
+      >
+        <ToolbarContent style={{ padding: '5px' }}>
           {
             <>
-              <ToolbarItem>
+              <ToolbarItem style={{ padding: '0', marginRight: '0' }}>
                 <InputGroup>
                   <SearchInput
                     name={'stepSearch'}
@@ -190,7 +180,12 @@ export const Catalog = (props: ICatalog) => {
                 <Grid md={6}>
                   <GridItem span={2}>
                     <Bullseye>
-                      <img src={step.icon} className={'catalog__stepImage'} alt={'Step Image'} />
+                      <img
+                        src={step.icon}
+                        className={'catalog__stepImage'}
+                        alt={'Step Image'}
+                        data-testid={'catalog__stepImage'}
+                      />
                     </Bullseye>
                   </GridItem>
                   <GridItem span={7}>
@@ -200,7 +195,11 @@ export const Catalog = (props: ICatalog) => {
                     <CardBody>{shorten(step.description, 60)}</CardBody>
                   </GridItem>
                   <GridItem span={3}>
-                    <Label color={'blue'} className={'catalog__stepLabel'}>
+                    <Label
+                      color={'blue'}
+                      data-testid={'catalog__stepLabel'}
+                      style={{ marginTop: '0.8em' }}
+                    >
                       {truncateString(step.kind, 8)}
                     </Label>
                   </GridItem>
@@ -209,6 +208,6 @@ export const Catalog = (props: ICatalog) => {
             );
           })}
       </Gallery>
-    </PageSection>
+    </div>
   );
 };

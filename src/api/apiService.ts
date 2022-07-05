@@ -66,12 +66,12 @@ export async function fetchCompatibleDSLs(props: { steps: IStepProps[] }) {
 
 /**
  * Fetches a single deployment CRD, optionally for a specific namespace
- * @param integrationName
+ * @param name
  * @param namespace
  */
-export async function fetchDeployment(integrationName: string, namespace?: string) {
-  let URL = `${apiVersion}/deployment/${integrationName}`;
-  if (namespace) URL = `${apiVersion}/deployments/${integrationName}?namespace=${namespace}`;
+export async function fetchDeployment(name: string, namespace?: string) {
+  let URL = `${apiVersion}/deployment/${name}`;
+  if (namespace) URL = `${apiVersion}/deployments/${name}?namespace=${namespace}`;
   try {
     const resp = await request.get({
       endpoint: URL,
@@ -105,16 +105,12 @@ export async function fetchDeployments(namespace?: string) {
 
 /**
  * Fetches a single deployment's logs, optionally for a specific namespace and a specific number of lines
- * @param integrationName
+ * @param name
  * @param lines
  * @param namespace
  */
-export async function fetchDeploymentLogs(
-  integrationName: string,
-  lines?: number,
-  namespace?: string
-) {
-  let URL = `${apiVersion}/deployment/${integrationName}`;
+export async function fetchDeploymentLogs(name: string, lines?: number, namespace?: string) {
+  let URL = `${apiVersion}/deployment/${name}`;
   if (namespace) URL = URL + `?namespace=${namespace}`;
   if (lines) URL = URL + `&lines=${lines}`;
   try {
@@ -155,16 +151,15 @@ export async function fetchIntegrationJson(data: string | IStepProps[], dsl: str
 
 /**
  * Returns the source code as a string, typically a Custom Resource in
- * YAML, but doesn't have to be. Usually to update the Code Editor after
- * a change in the integration from the Visualization.
+ * YAML. Usually to update the Code Editor after a change in the integration
+ * from the Visualization.
  * Requires a list of all new steps.
  * @param newIntegration
- * @param dsl
  */
-export async function fetchIntegrationSourceCode(newIntegration: IIntegration, dsl: string) {
+export async function fetchIntegrationSourceCode(newIntegration: IIntegration) {
   try {
     const resp = await request.post({
-      endpoint: `${apiVersion}/integrations?dsl=${dsl}`,
+      endpoint: `${apiVersion}/integrations?dsl=${newIntegration.metadata.dsl}`,
       contentType: 'application/json',
       body: newIntegration,
     });
@@ -199,23 +194,18 @@ export async function fetchViews(data: IStepProps[]) {
 
 /**
  * Starts an integration deployment
- * @param integration
- * @param integrationName
+ * @param integrationSource
+ * @param name
  * @param namespace
  */
-export async function startDeployment(
-  integration: any,
-  integrationName: string,
-  namespace?: string
-) {
-  let URL = `${apiVersion}/deployments/${integrationName.toLowerCase()}`;
-  if (namespace)
-    URL = `${apiVersion}/deployments/${integrationName.toLowerCase()}&namespace=${namespace}`;
+export async function startDeployment(integrationSource: string, name: string, namespace?: string) {
+  let URL = `${apiVersion}/deployments/${name.toLowerCase()}`;
+  if (namespace) URL = `${apiVersion}/deployments/${name.toLowerCase()}&namespace=${namespace}`;
   try {
     const resp = await request.post({
       endpoint: URL,
-      contentType: 'application/json',
-      body: { name: integrationName.toLowerCase(), steps: integration },
+      contentType: 'text/yaml',
+      body: integrationSource,
     });
 
     return await resp.text();
@@ -226,13 +216,12 @@ export async function startDeployment(
 
 /**
  * Stops an integration deployment
- * @param integrationName
+ * @param name
  * @param namespace
  */
-export async function stopDeployment(integrationName: string, namespace?: string) {
-  let URL = `${apiVersion}/deployments/${integrationName.toLowerCase()}`;
-  if (namespace)
-    URL = `${apiVersion}/deployments/${integrationName.toLowerCase()}&namespace=${namespace}`;
+export async function stopDeployment(name: string, namespace?: string) {
+  let URL = `${apiVersion}/deployments/${name.toLowerCase()}`;
+  if (namespace) URL = `${apiVersion}/deployments/${name.toLowerCase()}&namespace=${namespace}`;
 
   try {
     const resp = await request.delete({
