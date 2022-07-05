@@ -25,22 +25,52 @@ export interface IDeployment {
 }
 
 export interface ISettings {
+  // e.g. 'KameletBinding'
   dsl: string;
   integrationName: string;
+
+  // Cluster namespace
   namespace: string;
 }
 
-export interface IStepPropsParameters {
+export interface IIntegration {
+  metadata: IIntegrationMetadata;
+  params: IIntegrationParams[];
+  steps: IStepProps[];
+}
+
+export interface IIntegrationMetadata {
+  name: string;
   [key: string]: any;
+}
+
+export interface IIntegrationParams {
+  id: string;
+  title?: string;
+  defaultValue?: {};
+  description?: string;
+  enum?: any[];
+  enumeration?: {}[];
+  examples?: {}[];
+  nullable?: boolean;
+  path?: boolean;
+  type?: string;
+  value?: {};
 }
 
 export interface IStepProps {
   apiVersion?: string;
   description?: string;
+
+  // ?
   group?: string;
   icon?: string;
   id?: string;
+
+  // ?
   kameletType?: string;
+
+  // e.g. 'Kamelet'
   kind?: string;
   name: string;
   parameters?: IStepPropsParameters[];
@@ -54,6 +84,10 @@ export interface IStepProps {
 
   // generated only for integration steps
   UUID?: string;
+}
+
+export interface IStepPropsParameters {
+  [key: string]: any;
 }
 
 export interface IViewConstraintsProps {
@@ -81,6 +115,8 @@ export interface IViewData {
 export interface IVizStepNodeData {
   connectorType: string;
   dsl: string;
+  // handleUpdateViews: (newViews: IViewProps[]) => void;
+  handleUpdateViews?: (newViews: IViewProps[]) => void;
   icon?: string;
   kind?: string;
   label: string;
@@ -88,7 +124,7 @@ export interface IVizStepNodeData {
   index: number;
   onDropChange: (arg1: any, arg2: any) => void;
   onMiniCatalogClickAdd: (arg: any) => void;
-  settings: ISettings;
+  settings?: ISettings;
 }
 
 export interface IVizStepPropsNode extends Node {}

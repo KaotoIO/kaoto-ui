@@ -22,7 +22,9 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
       ? 'rgb(149, 213, 245)'
       : 'rgb(204, 204, 204)';
 
-  const onDropChange = (event: any) => data.onDropChange(event, data);
+  const onDropChange = (event: any) => {
+    data.onDropChange(event, data);
+  };
   const onMiniCatalogClickAdd = (selectedStep: any) => data.onMiniCatalogClickAdd(selectedStep);
 
   return (
@@ -48,7 +50,7 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
             <MiniCatalog
               handleSelectStep={onMiniCatalogClickAdd}
               queryParams={{
-                dsl: 'KameletBinding',
+                dsl: data.dsl,
                 kind: data.kind,
                 type: appendableStepTypes(data.connectorType),
               }}

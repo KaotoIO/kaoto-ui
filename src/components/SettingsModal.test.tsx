@@ -15,6 +15,7 @@ describe('SettingsModal.tsx', () => {
         currentSettings={initialSettings}
         handleCloseModal={jest.fn()}
         handleSaveSettings={jest.fn()}
+        handleUpdateViews={jest.fn()}
         isModalOpen={false}
       />
     );
