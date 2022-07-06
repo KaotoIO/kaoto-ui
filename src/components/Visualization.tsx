@@ -230,7 +230,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
       switch (index) {
         case 0:
           // first item in `steps` array
-          inputStep.position.x = window.innerWidth / 2 - incrementAmt;
+          inputStep.position.x = window.innerWidth / 2 - incrementAmt - 80;
           // mark as a slot if it's first in the array and not a START step
           if (steps.length > 0 && steps[0].type !== 'START') {
             inputStep.type = 'slot';
