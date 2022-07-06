@@ -3,9 +3,10 @@ import {
   useIntegrationJsonContext,
   fetchIntegrationSourceCode,
   fetchViews,
+  useSettingsContext,
+  fetchIntegrationJson,
 } from '../api';
 import {
-  ISettings,
   IStepProps,
   IViewData,
   IVizStepNodeData,
@@ -39,7 +40,6 @@ import 'react-flow-renderer/dist/theme-default.css';
 interface IVisualization {
   handleUpdateViews: (newViews: IViewProps[]) => void;
   initialState?: IViewData;
-  settings: ISettings;
   toggleCatalog?: () => void;
   views: IViewProps[];
 }
@@ -47,7 +47,7 @@ interface IVisualization {
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
-const Visualization = ({ handleUpdateViews, settings, toggleCatalog, views }: IVisualization) => {
+const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
   const [nodes, setNodes] = useState<Node<IStepProps>[]>([]);
@@ -56,10 +56,12 @@ const Visualization = ({ handleUpdateViews, settings, toggleCatalog, views }: IV
   const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({ name: '', type: '' });
-  const [, setSourceCode] = useIntegrationSourceContext();
+  const [source, setSourceCode] = useIntegrationSourceContext();
   const [integrationJson, dispatch] = useIntegrationJsonContext();
   const previousIntegrationJson = usePrevious(integrationJson);
   const shouldUpdateCodeEditor = useRef(true);
+  const [settings] = useSettingsContext();
+  const previousSettings = usePrevious(settings);
 
   const { addAlert } = useAlert() || {};
 
@@ -85,13 +87,34 @@ const Visualization = ({ handleUpdateViews, settings, toggleCatalog, views }: IV
     prepareAndSetVizDataSteps(integrationJson.steps);
   }, [integrationJson]);
 
+  // checks for changes to settings (e.g. dsl, name, namespace)
+  useEffect(() => {
+    if (settings === previousSettings) return;
+    fetchIntegrationJson(source, settings.dsl)
+      .then((newIntegration) => {
+        let tmpInt = newIntegration;
+        tmpInt.metadata = { ...settings };
+        dispatch({ type: 'UPDATE_INTEGRATION', payload: tmpInt });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    // update views in case DSL change results in views change
+    // i.e. CamelRoute -> KameletBinding results in loss of incompatible steps
+    fetchViews(integrationJson.steps).then((newViews) => {
+      handleUpdateViews(newViews);
+    });
+  }, [settings]);
+
   const updateCodeEditor = (integrationJsonSteps: IStepProps[]) => {
     // Remove all "Add Step" placeholders before updating the API
     const filteredSteps = integrationJsonSteps.filter((step) => step.type);
     let tempInt = integrationJson;
     tempInt.steps = filteredSteps;
+    tempInt.metadata = { ...settings };
 
-    fetchIntegrationSourceCode(tempInt, settings.dsl)
+    fetchIntegrationSourceCode(tempInt)
       .then((value) => {
         if (typeof value === 'string') {
           setSourceCode(value);
@@ -207,7 +230,7 @@ const Visualization = ({ handleUpdateViews, settings, toggleCatalog, views }: IV
       switch (index) {
         case 0:
           // first item in `steps` array
-          inputStep.position.x = 450;
+          inputStep.position.x = window.innerWidth / 2 - incrementAmt;
           // mark as a slot if it's first in the array and not a START step
           if (steps.length > 0 && steps[0].type !== 'START') {
             inputStep.type = 'slot';

@@ -7,7 +7,7 @@ describe('Catalog.tsx', () => {
   test('component renders correctly', () => {
     render(
       <AlertProvider>
-        <Catalog isCatalogExpanded={true} onClosePanelClick={jest.fn()} />
+        <Catalog />
       </AlertProvider>
     );
 

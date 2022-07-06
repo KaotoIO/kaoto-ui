@@ -1,6 +1,6 @@
 
 .catalog__hint {
-    padding: 0.5em !important;
+    padding: 0.8em !important;
     border-radius: 10px;
 }
 
@@ -21,10 +21,6 @@
     justify-content: center;
     padding: 15px;
     position: relative;
-}
-
-.catalog__stepLabel {
-    margin-top: 5px !important;
 }
 
 /* MINI CATALOG */

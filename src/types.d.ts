@@ -27,7 +27,8 @@ export interface IDeployment {
 export interface ISettings {
   // e.g. 'KameletBinding'
   dsl: string;
-  integrationName: string;
+  // name of integration or deployment
+  name: string;
 
   // Cluster namespace
   namespace: string;
