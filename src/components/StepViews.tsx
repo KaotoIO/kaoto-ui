@@ -1,21 +1,22 @@
-import {
-  fetchCapabilities,
-  fetchCatalogSteps,
-  fetchDeployment,
-  fetchDeploymentLogs,
-  fetchDeployments,
-  fetchIntegrationJson,
-  fetchIntegrationSourceCode,
-  fetchViews,
-  startDeployment,
-  stopDeployment,
-} from '../api';
-import { IStepExtensionApi } from '../api/stepExtensionApi';
-import { IDeployment, IIntegration, IStepProps, IViewProps } from '../types';
+import { IStepProps, IViewProps } from '../types';
 import { usePrevious } from '../utils';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
+import {
+  IStepExtensionApi,
+  getKaotoCatalogSteps,
+  getKaotoDeployment,
+  getKaotoDeploymentLogs,
+  getKaotoDeployments,
+  getKaotoDSLs,
+  getKaotoIntegrationJson,
+  getKaotoIntegrationSource,
+  getKaotoViews,
+  onKaotoButtonClicked,
+  startKaotoDeployment,
+  stopKaotoDeployment,
+} from './StepExtensionApi';
 import { dynamicImport } from './import';
 import {
   AlertVariant,
@@ -60,6 +61,33 @@ const StepViews = ({
   const previousTabIndex = usePrevious(detailsTabIndex);
 
   const { addAlert } = useAlert() || {};
+
+  const alertKaoto = (title: string, body?: string, variant?: string) => {
+    let variantType = AlertVariant.default;
+
+    // map to PatternFly AlertVariant enum type
+    switch (variant) {
+      case 'info':
+        variantType = AlertVariant.info;
+        break;
+      case 'danger':
+        variantType = AlertVariant.danger;
+        break;
+      case 'success':
+        variantType = AlertVariant.success;
+        break;
+      case 'warning':
+        variantType = AlertVariant.warning;
+        break;
+    }
+
+    addAlert &&
+      addAlert({
+        title: title,
+        variant: variantType,
+        description: body,
+      });
+  };
 
   useEffect(() => {
     if (previousTabIndex === detailsTabIndex) {
@@ -154,114 +182,19 @@ const StepViews = ({
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
 
-              // Example demonstrating interactivity with step extension
-              const onButtonClicked = () => {
-                console.log(
-                  'Button clicked! Viewing ' + view.id + ' for the following step: ' + view.step
-                );
-              };
-
-              const seCreateAlert = (title: string, body?: string, variant?: string) => {
-                let variantType = AlertVariant.default;
-
-                // map to PatternFly AlertVariant enum type
-                switch (variant) {
-                  case 'info':
-                    variantType = AlertVariant.info;
-                    break;
-                  case 'danger':
-                    variantType = AlertVariant.danger;
-                    break;
-                  case 'success':
-                    variantType = AlertVariant.success;
-                    break;
-                  case 'warning':
-                    variantType = AlertVariant.warning;
-                    break;
-                }
-
-                addAlert &&
-                  addAlert({
-                    title: title,
-                    variant: variantType,
-                    description: body,
-                  });
-              };
-
-              const seFetchCatalogSteps = () => {
-                return fetchCatalogSteps().then((steps) => {
-                  return steps;
-                });
-              };
-
-              const seFetchDSLs = () => {
-                return fetchCapabilities().then((dsls: { dsls: { [val: string]: string }[] }) => {
-                  return dsls.dsls;
-                });
-              };
-
-              const seFetchDeployment = (name: string, namespace?: string) => {
-                return fetchDeployment(name, namespace).then((deployment) => {
-                  return deployment;
-                });
-              };
-
-              const seFetchDeploymentLogs = (name: string, lines?: number, namespace?: string) => {
-                return fetchDeploymentLogs(name, lines, namespace).then((log) => {
-                  return log;
-                });
-              };
-
-              const seFetchDeployments = () => {
-                return fetchDeployments().then((deployments: IDeployment[]) => {
-                  return deployments;
-                });
-              };
-
-              const seFetchIntegrationSource = (integration: IIntegration) => {
-                return fetchIntegrationSourceCode(integration).then((sourceCode) => {
-                  return sourceCode;
-                });
-              };
-
-              const seFetchIntegrationJson = (sourceCode: string, dsl: string) => {
-                return fetchIntegrationJson(sourceCode, dsl).then((integration) => {
-                  return integration;
-                });
-              };
-
-              const seFetchViews = (data: IStepProps[]) => {
-                // send JSON integrations
-                // requires you to provide the integration JSON
-                fetchViews(data).then((res) => {
-                  return res;
-                });
-              };
-
-              const seStartDeployment = (integration: any, name: string, namespace?: string) => {
-                return startDeployment(integration, name, namespace).then((res) => {
-                  return res;
-                });
-              };
-
-              const seStopDeployment = (name: string) => {
-                return stopDeployment(name).then((res) => {
-                  return res;
-                });
-              };
-
               const kaotoApi: IStepExtensionApi = {
-                fetchCatalogSteps: seFetchCatalogSteps,
-                fetchDeployment: seFetchDeployment,
-                fetchDeploymentLogs: seFetchDeploymentLogs,
-                fetchDeployments: seFetchDeployments,
-                fetchDSLs: seFetchDSLs,
-                fetchIntegrationJson: seFetchIntegrationJson,
-                fetchIntegrationSource: seFetchIntegrationSource,
-                fetchViews: seFetchViews,
-                notifyKaoto: seCreateAlert,
-                startDeployment: seStartDeployment,
-                stopDeployment: seStopDeployment,
+                getCatalogSteps: getKaotoCatalogSteps,
+                getDeployment: getKaotoDeployment,
+                getDeploymentLogs: getKaotoDeploymentLogs,
+                getDeployments: getKaotoDeployments,
+                getDSLs: getKaotoDSLs,
+                getIntegrationJson: getKaotoIntegrationJson,
+                getIntegrationSource: getKaotoIntegrationSource,
+                getViews: getKaotoViews,
+                notifyKaoto: alertKaoto,
+                onKaotoButtonClicked,
+                startDeployment: startKaotoDeployment,
+                stopDeployment: stopKaotoDeployment,
               };
 
               return (
@@ -277,12 +210,7 @@ const StepViews = ({
                       loading="Loading extension..."
                       failure="Could not load extension. Is it running?"
                     >
-                      <StepExtension
-                        text="Passed from Kaoto!"
-                        onButtonClicked={onButtonClicked}
-                        path="/"
-                        {...kaotoApi}
-                      />
+                      <StepExtension text="Passed from Kaoto!" path="/" {...kaotoApi} />
                     </Extension>
                   </StepErrorBoundary>
                 </Tab>
