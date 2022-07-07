@@ -5,7 +5,6 @@ import {
   useSettingsContext,
 } from '../api';
 import { IExpanded } from '../pages/Dashboard';
-import { IDeployment } from '../types';
 import { canBeDeployed, isNameValidCheck } from '../utils/validationService';
 import {
   AlertVariant,
@@ -40,7 +39,7 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useState } from 'react';
 
 export interface IKaotoToolbar {
-  deployment?: IDeployment;
+  deployment?: string;
   expanded: IExpanded;
   handleExpanded: (newState: IExpanded) => void;
   handleSaveDeployment: (newDeployment: any) => void;
@@ -275,17 +274,12 @@ export const KaotoToolbar = ({
         {deployment ? (
           <ToolbarItem alignment={{ default: 'alignRight' }}>
             <div className="status-container" data-testid={'toolbar-deployment-status'}>
-              <div className={`dot-${deployment.status}`}></div>
-              <div className="text">{deployment.status}</div>
-            </div>
-          </ToolbarItem>
-        ) : (
-          <ToolbarItem alignment={{ default: 'alignRight' }}>
-            <div className="status-container" data-testid={'toolbar-deployment-status'}>
-              <div className="dot"></div>
+              <div className={`dot`}></div>
               <div className="text">Running</div>
             </div>
           </ToolbarItem>
+        ) : (
+          <ToolbarItem alignment={{ default: 'alignRight' }}></ToolbarItem>
         )}
 
         {deployment && <ToolbarItem variant="separator" />}

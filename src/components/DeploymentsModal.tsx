@@ -1,14 +1,8 @@
 import { fetchDeployments, stopDeployment, useSettingsContext } from '../api';
 import { IDeployment } from '../types';
+import { usePrevious } from '../utils';
 import {
   Button,
-  DataList,
-  DataListAction,
-  DataListCell,
-  DataListCheck,
-  DataListItem,
-  DataListItemCells,
-  DataListItemRow,
   EmptyState,
   EmptyStateVariant,
   EmptyStateIcon,
@@ -20,24 +14,45 @@ import {
   AlertVariant,
 } from '@patternfly/react-core';
 import { CubesIcon, HelpIcon } from '@patternfly/react-icons';
+import {
+  TableComposable,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+  ThProps,
+  IAction,
+  ActionsColumn,
+} from '@patternfly/react-table';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
 export interface IDeploymentsModal {
+  currentDeployment?: string;
   handleCloseModal: () => void;
   isModalOpen: boolean;
 }
 
 /**
  * Contains the contents for the Deployments modal.
- * @param currentDeployments
+ * @param currentDeployment
  * @param handleCloseModal
  * @param isModalOpen
  * @constructor
  */
-export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeploymentsModal) => {
+export const DeploymentsModal = ({
+  currentDeployment,
+  handleCloseModal,
+  isModalOpen,
+}: IDeploymentsModal) => {
   const [deployments, setDeployments] = useState<IDeployment[]>([]);
   const [settings] = useSettingsContext();
+  const [activeSortIndex, setActiveSortIndex] = useState<number | undefined>(undefined);
+  const [activeSortDirection, setActiveSortDirection] = useState<'asc' | 'desc' | undefined>(
+    undefined
+  );
+  const previousDeployment = usePrevious(currentDeployment);
 
   const { addAlert } = useAlert() || {};
 
@@ -52,8 +67,68 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
       });
   }, []);
 
-  const handleDeleteDeployment = (deployment: any) => {
-    console.log('deployment: ', deployment);
+  // on changes to deployment, re-fetch list of deployments
+  useEffect(() => {
+    if (previousDeployment === currentDeployment) return;
+    // fetch deployments
+    fetchDeployments()
+      .then((output) => {
+        setDeployments(output);
+      })
+      .catch((e) => {
+        throw Error(e);
+      });
+  }, [currentDeployment]);
+
+  const columnNames = {
+    name: 'Name',
+    namespace: 'Namespace',
+    date: 'Date',
+    errors: 'Errors',
+    status: 'Status',
+  };
+
+  const defaultActions = (deployment: IDeployment): IAction[] => [
+    {
+      title: 'Delete',
+      onClick: () => {
+        handleDeleteDeployment(deployment);
+      },
+    },
+  ];
+
+  const getSortableRowValues = (deployment: IDeployment) => {
+    const { name, namespace, date, errors, status } = deployment;
+    return [name, namespace, date, errors, status];
+  };
+
+  let sortedDeployments = deployments;
+
+  if (activeSortIndex) {
+    sortedDeployments = deployments.sort((a, b) => {
+      const aValue = getSortableRowValues(a)[activeSortIndex];
+      const bValue = getSortableRowValues(b)[activeSortIndex];
+      if (activeSortDirection === 'asc') {
+        return (aValue as string).localeCompare(bValue as string);
+      }
+      return (bValue as string).localeCompare(aValue as string);
+    });
+  }
+
+  const getSortParams = (columnIndex: number): ThProps['sort'] => ({
+    sortBy: {
+      index: activeSortIndex,
+      direction: activeSortDirection,
+      defaultDirection: 'desc',
+    },
+    onSort: (_event, index, direction) => {
+      setActiveSortIndex(index);
+      setActiveSortDirection(direction);
+    },
+    columnIndex,
+  });
+
+  const handleDeleteDeployment = (deployment: IDeployment) => {
     stopDeployment(deployment.name, settings.namespace)
       .then(() => {
         addAlert &&
@@ -98,49 +173,48 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
         title="Deployments"
         variant={ModalVariant.large}
       >
-        <DataList aria-label="List of deployments">
-          {deployments.length > 0 ? (
-            <>
-              {deployments?.map((d, idx) => {
-                return (
-                  <DataListItem aria-labelledby={`deployment-item-${idx}`} key={idx}>
-                    <DataListItemRow>
-                      <DataListCheck
-                        aria-labelledby={`deployment-item-${idx}`}
-                        name={`deployment-check-${idx}`}
-                      />
-                      <DataListItemCells
-                        dataListCells={[
-                          <DataListCell key="primary content">{d.name}</DataListCell>,
-                          <DataListCell key="secondary content">{d.description}</DataListCell>,
-                        ]}
-                      />
-                      <DataListAction
-                        visibility={{ default: 'hidden', lg: 'visible' }}
-                        aria-labelledby={`deployment-item-${idx} deployment-check-${idx}`}
-                        id={`deployment-action-${idx}`}
-                        aria-label="Actions"
-                      >
-                        {/*<Button variant="primary">Details</Button>*/}
-                        <Button variant="secondary" onClick={handleDeleteDeployment}>
-                          Delete
-                        </Button>
-                      </DataListAction>
-                    </DataListItemRow>
-                  </DataListItem>
-                );
-              })}
-            </>
-          ) : (
-            <EmptyState variant={EmptyStateVariant.small}>
-              <EmptyStateIcon icon={CubesIcon} />
-              <Title headingLevel="h4" size="lg">
-                No deployments
-              </Title>
-              <EmptyStateBody>Your deployments will appear here.</EmptyStateBody>
-            </EmptyState>
-          )}
-        </DataList>
+        {deployments.length > 0 ? (
+          <TableComposable aria-label="List of deployments">
+            <Thead>
+              <Tr>
+                <Th sort={getSortParams(0)}>{columnNames.name}</Th>
+                <Th modifier="wrap">{columnNames.namespace}</Th>
+                <Th modifier="wrap" sort={getSortParams(2)} info={{ tooltip: 'More information ' }}>
+                  {columnNames.date}
+                </Th>
+                <Th modifier="wrap">{columnNames.errors}</Th>
+                <Th modifier="wrap">{columnNames.status}</Th>
+                <Th></Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {sortedDeployments.map((dep, rowIndex) => (
+                <Tr key={rowIndex}>
+                  <Td dataLabel={columnNames.name}>{dep.name}</Td>
+                  <Td dataLabel={columnNames.namespace}>{dep.namespace}</Td>
+                  <Td dataLabel={columnNames.date}>{dep.date}</Td>
+                  <Td dataLabel={columnNames.errors}>{dep.errors.length}</Td>
+                  <Td dataLabel={columnNames.status}>{dep.status.phase}</Td>
+                  <Td isActionCell>
+                    <ActionsColumn
+                      items={defaultActions(dep)}
+                      // isDisabled={dep.name === '4'}
+                      // actionsToggle={customActionsToggle}
+                    />
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </TableComposable>
+        ) : (
+          <EmptyState variant={EmptyStateVariant.small}>
+            <EmptyStateIcon icon={CubesIcon} />
+            <Title headingLevel="h4" size="lg">
+              No deployments
+            </Title>
+            <EmptyStateBody>Your deployments will appear here.</EmptyStateBody>
+          </EmptyState>
+        )}
       </Modal>
     </div>
   );

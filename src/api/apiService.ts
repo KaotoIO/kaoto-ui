@@ -8,11 +8,14 @@ const apiVersion = '/v1';
  * domain-specific languages (DSLs)
  * Returns { dsls: { [val: string]: string }[] }
  */
-export async function fetchCapabilities() {
+export async function fetchCapabilities(namespace?: string) {
   try {
     const resp = await request.get({
       endpoint: `${apiVersion}/capabilities`,
       contentType: 'application/json',
+      queryParams: {
+        namespace: namespace ?? 'default',
+      },
     });
 
     return await resp.json();
@@ -32,11 +35,15 @@ export async function fetchCatalogSteps(queryParams?: {
   kind?: string;
   // e.g. 'START', 'END', 'MIDDLE'
   type?: string;
+  namespace?: string;
 }) {
   try {
     const resp = await request.get({
       endpoint: `${apiVersion}/steps`,
-      queryParams,
+      queryParams: {
+        ...queryParams,
+        namespace: queryParams?.namespace ?? 'default',
+      },
     });
 
     return await resp.json();
@@ -50,12 +57,15 @@ export async function fetchCatalogSteps(queryParams?: {
  * Given the list of steps, returns the list of potential
  * DSLs compatible with said list. This is an idempotent operation.
  */
-export async function fetchCompatibleDSLs(props: { steps: IStepProps[] }) {
+export async function fetchCompatibleDSLs(props: { namespace?: string; steps: IStepProps[] }) {
   try {
     const resp = await request.post({
       endpoint: `${apiVersion}/integrations/dsls`,
       contentType: 'application/json',
       body: props.steps,
+      queryParams: {
+        namespace: props.namespace ?? 'default',
+      },
     });
 
     return await resp.json();
@@ -70,12 +80,13 @@ export async function fetchCompatibleDSLs(props: { steps: IStepProps[] }) {
  * @param namespace
  */
 export async function fetchDeployment(name: string, namespace?: string) {
-  let URL = `${apiVersion}/deployment/${name}`;
-  if (namespace) URL = `${apiVersion}/deployments/${name}?namespace=${namespace}`;
   try {
     const resp = await request.get({
-      endpoint: URL,
+      endpoint: `${apiVersion}/deployment/${name}`,
       contentType: 'application/json',
+      queryParams: {
+        namespace: namespace ?? 'default',
+      },
     });
 
     return await resp.text();
@@ -86,15 +97,18 @@ export async function fetchDeployment(name: string, namespace?: string) {
 
 /**
  * Fetches all deployments, optionally for a specific namespace
+ * @param cache
  * @param namespace
  */
-export async function fetchDeployments(namespace?: string) {
-  let URL = `${apiVersion}/deployments`;
-  if (namespace) URL = `${apiVersion}/deployments?namespace=${namespace}`;
+export async function fetchDeployments(cache?: RequestCache | undefined, namespace?: string) {
   try {
     const resp = await request.get({
-      endpoint: URL,
+      endpoint: `${apiVersion}/deployments`,
       contentType: 'application/json',
+      cache,
+      queryParams: {
+        namespace: namespace ?? 'default',
+      },
     });
 
     return await resp.json();
@@ -110,13 +124,15 @@ export async function fetchDeployments(namespace?: string) {
  * @param namespace
  */
 export async function fetchDeploymentLogs(name: string, lines?: number, namespace?: string) {
-  let URL = `${apiVersion}/deployment/${name}`;
-  if (namespace) URL = URL + `?namespace=${namespace}`;
-  if (lines) URL = URL + `&lines=${lines}`;
   try {
     const resp = await request.get({
-      endpoint: URL,
+      endpoint: `${apiVersion}/deployment/${name}`,
       contentType: 'application/json',
+      queryParams: {
+        name,
+        lines,
+        namespace: namespace ?? 'default',
+      },
     });
 
     return await resp.text();
@@ -133,13 +149,22 @@ export async function fetchDeploymentLogs(name: string, lines?: number, namespac
  * YAML Custom Resource, but doesn't have to be.
  * @param data
  * @param dsl - The DSL that is being used across Kaoto
+ * @param namespace
  */
-export async function fetchIntegrationJson(data: string | IStepProps[], dsl: string) {
+export async function fetchIntegrationJson(
+  data: string | IStepProps[],
+  dsl: string,
+  namespace?: string
+) {
   try {
     const resp = await request.post({
-      endpoint: `${apiVersion}/integrations?dsl=${dsl}`,
+      endpoint: `${apiVersion}/integrations`,
       contentType: typeof data === 'string' ? 'text/yaml' : 'application/json',
       body: typeof data === 'string' ? data : { steps: data },
+      queryParams: {
+        dsl,
+        namespace: namespace ?? 'default',
+      },
     });
 
     return await resp.json();
@@ -155,13 +180,17 @@ export async function fetchIntegrationJson(data: string | IStepProps[], dsl: str
  * from the Visualization.
  * Requires a list of all new steps.
  * @param newIntegration
+ * @param namespace
  */
-export async function fetchIntegrationSourceCode(newIntegration: IIntegration) {
+export async function fetchIntegrationSourceCode(newIntegration: IIntegration, namespace?: string) {
   try {
     const resp = await request.post({
       endpoint: `${apiVersion}/integrations?dsl=${newIntegration.metadata.dsl}`,
       contentType: 'application/json',
       body: newIntegration,
+      queryParams: {
+        namespace: namespace ?? 'default',
+      },
     });
 
     return await resp.text();
@@ -176,13 +205,17 @@ export async function fetchIntegrationSourceCode(newIntegration: IIntegration) {
  * or for step replacement that requires an updated array of views.
  * Accepts an integration's source code (string) or JSON.
  * @param data
+ * @param namespace
  */
-export async function fetchViews(data: IStepProps[]) {
+export async function fetchViews(data: IStepProps[], namespace?: string) {
   try {
     const resp = await request.post({
       endpoint: `${apiVersion}/view-definitions`,
       contentType: 'application/json',
       body: data,
+      queryParams: {
+        namespace: namespace ?? 'default',
+      },
     });
 
     return await resp.json();
@@ -199,13 +232,14 @@ export async function fetchViews(data: IStepProps[]) {
  * @param namespace
  */
 export async function startDeployment(integrationSource: string, name: string, namespace?: string) {
-  let URL = `${apiVersion}/deployments/${name.toLowerCase()}`;
-  if (namespace) URL = `${apiVersion}/deployments/${name.toLowerCase()}&namespace=${namespace}`;
   try {
     const resp = await request.post({
-      endpoint: URL,
+      endpoint: `${apiVersion}/deployments/${name.toLowerCase()}`,
       contentType: 'text/yaml',
       body: integrationSource,
+      queryParams: {
+        namespace: namespace ?? 'default',
+      },
     });
 
     return await resp.text();
@@ -220,13 +254,11 @@ export async function startDeployment(integrationSource: string, name: string, n
  * @param namespace
  */
 export async function stopDeployment(name: string, namespace?: string) {
-  let URL = `${apiVersion}/deployments/${name.toLowerCase()}`;
-  if (namespace) URL = `${apiVersion}/deployments/${name.toLowerCase()}&namespace=${namespace}`;
-
   try {
     const resp = await request.delete({
-      endpoint: URL,
+      endpoint: `${apiVersion}/deployments/${name.toLowerCase()}`,
       contentType: 'application/json',
+      queryParams: { namespace: namespace ?? 'default' },
     });
 
     return await resp.text();

@@ -7,7 +7,7 @@ import {
   SourceCodeEditor,
 } from '../components';
 import { KaotoToolbar } from '../components/KaotoToolbar';
-import { IDeployment, IViewProps } from '../types';
+import { IViewProps } from '../types';
 import './Dashboard.css';
 import { Page, PageSection, GridItem, Grid } from '@patternfly/react-core';
 import { useState } from 'react';
@@ -20,7 +20,7 @@ export interface IExpanded {
 }
 
 const Dashboard = () => {
-  const [deployment, setDeployment] = useState({});
+  const [deployment, setDeployment] = useState<string>();
   const [expanded, setExpanded] = useState<IExpanded>({
     catalog: false,
     codeEditor: false,
@@ -33,7 +33,7 @@ const Dashboard = () => {
     setExpanded({ ...expanded, ...updatedState });
   };
 
-  const handleSaveDeployment = (newDeployment: IDeployment) => {
+  const handleSaveDeployment = (newDeployment: string) => {
     setDeployment(newDeployment);
   };
 
@@ -85,6 +85,7 @@ const Dashboard = () => {
             </PageSection>
           </Page>
           <DeploymentsModal
+            currentDeployment={deployment}
             handleCloseModal={() => {
               setExpanded({ ...expanded, deploymentsModal: !expanded.deploymentsModal });
             }}
