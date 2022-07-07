@@ -10,7 +10,7 @@ export type IUseSettings = [ISettings, Dispatch<SetStateAction<ISettings>>];
 
 const initialOrChangedSettings: ISettings = {
   dsl: 'KameletBinding',
-  name: 'Integration',
+  name: 'integration',
   namespace: 'default',
 };
 

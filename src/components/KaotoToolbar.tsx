@@ -6,7 +6,7 @@ import {
 } from '../api';
 import { IExpanded } from '../pages/Dashboard';
 import { IDeployment } from '../types';
-import { canBeDeployed } from '../utils/validationService';
+import { canBeDeployed, isNameValidCheck } from '../utils/validationService';
 import {
   AlertVariant,
   Button,
@@ -56,7 +56,9 @@ export const KaotoToolbar = ({
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [settings, setSettings] = useSettingsContext();
+  const [localName, setLocalName] = useState(settings.name);
   const [sourceCode] = useIntegrationSourceContext();
+  const [isNameValid, setIsNameValid] = useState(true);
 
   const { addAlert } = useAlert() || {};
 
@@ -201,17 +203,28 @@ export const KaotoToolbar = ({
                 id="edit-integration-name"
                 type="text"
                 onChange={(val) => {
-                  setSettings({ ...settings, name: val });
+                  setLocalName(val);
+                  if (isNameValidCheck(val)) {
+                    setIsNameValid(true);
+                  } else {
+                    setIsNameValid(false);
+                  }
                 }}
-                value={settings.name}
+                value={localName}
                 aria-label="edit integration name"
+                aria-invalid={!isNameValid}
               />
               <Button
                 variant="control"
                 aria-label="save button for editing integration name"
                 onClick={() => {
-                  setIsEditingName(false);
+                  if (isNameValidCheck(localName)) {
+                    setIsEditingName(false);
+                    setSettings({ ...settings, name: localName });
+                  }
                 }}
+                aria-disabled={!isNameValid}
+                isDisabled={!isNameValid}
               >
                 <CheckIcon />
               </Button>
@@ -219,6 +232,8 @@ export const KaotoToolbar = ({
                 variant="control"
                 aria-label="close button for editing integration name"
                 onClick={() => {
+                  setLocalName(settings.name);
+                  setIsNameValid(true);
                   setIsEditingName(false);
                 }}
               >

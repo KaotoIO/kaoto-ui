@@ -93,3 +93,17 @@ export function canStepBeReplaced(
 
   return { isValid, message };
 }
+
+/**
+ * Verifies that the provided name is valid
+ * Regex: [a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*
+ * @param name
+ */
+export function isNameValidCheck(name: string) {
+  const regexPattern = /^[a-z\d]([-a-z\d]*[a-z\d])?(\.[a-z\d]([-a-z\d]*[a-z\d])?)*$/gm;
+  if (!regexPattern.test(name)) {
+    return false;
+  } else {
+    return true;
+  }
+}
