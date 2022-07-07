@@ -22,7 +22,7 @@ export interface IFetch {
 
   // Object of key/value string for passing query parameters
   queryParams?: {
-    [name: string]: string;
+    [name: string]: string | undefined | null | number | boolean;
   };
 
   /**
@@ -35,15 +35,15 @@ let apiURL = process.env.KAOTO_API;
 
 if (process.env.NODE_ENV == 'production') {
   if (window.KAOTO_API) {
-  apiURL = window.KAOTO_API;
-} else {
-  apiURL = '/api'
-}
+    apiURL = window.KAOTO_API;
+  } else {
+    apiURL = '/api';
+  }
 }
 
 // converts an object into a query string
-// ex: {authorId : 'abc123'} -> &type=Kamelet
-function objectToQueryString(obj: { [x: string]: string }) {
+// ex: {type : 'Kamelet'} -> &type=Kamelet
+function objectToQueryString(obj: { [x: string]: string | undefined | null | number | boolean }) {
   return Object.keys(obj)
     .map((key) => key + '=' + obj[key])
     .join('&');

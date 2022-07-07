@@ -70,12 +70,13 @@ export async function fetchCompatibleDSLs(props: { steps: IStepProps[] }) {
  * @param namespace
  */
 export async function fetchDeployment(name: string, namespace?: string) {
-  let URL = `${apiVersion}/deployment/${name}`;
-  if (namespace) URL = `${apiVersion}/deployments/${name}?namespace=${namespace}`;
   try {
     const resp = await request.get({
-      endpoint: URL,
+      endpoint: `${apiVersion}/deployment/${name}`,
       contentType: 'application/json',
+      queryParams: {
+        namespace,
+      },
     });
 
     return await resp.text();
@@ -89,12 +90,13 @@ export async function fetchDeployment(name: string, namespace?: string) {
  * @param namespace
  */
 export async function fetchDeployments(namespace?: string) {
-  let URL = `${apiVersion}/deployments`;
-  if (namespace) URL = `${apiVersion}/deployments?namespace=${namespace}`;
   try {
     const resp = await request.get({
-      endpoint: URL,
+      endpoint: `${apiVersion}/deployments`,
       contentType: 'application/json',
+      queryParams: {
+        namespace,
+      },
     });
 
     return await resp.json();
@@ -110,13 +112,15 @@ export async function fetchDeployments(namespace?: string) {
  * @param namespace
  */
 export async function fetchDeploymentLogs(name: string, lines?: number, namespace?: string) {
-  let URL = `${apiVersion}/deployment/${name}`;
-  if (namespace) URL = URL + `?namespace=${namespace}`;
-  if (lines) URL = URL + `&lines=${lines}`;
   try {
     const resp = await request.get({
-      endpoint: URL,
+      endpoint: `${apiVersion}/deployment/${name}`,
       contentType: 'application/json',
+      queryParams: {
+        name,
+        lines,
+        namespace,
+      },
     });
 
     return await resp.text();
@@ -137,9 +141,10 @@ export async function fetchDeploymentLogs(name: string, lines?: number, namespac
 export async function fetchIntegrationJson(data: string | IStepProps[], dsl: string) {
   try {
     const resp = await request.post({
-      endpoint: `${apiVersion}/integrations?dsl=${dsl}`,
+      endpoint: `${apiVersion}/integrations`,
       contentType: typeof data === 'string' ? 'text/yaml' : 'application/json',
       body: typeof data === 'string' ? data : { steps: data },
+      queryParams: { dsl },
     });
 
     return await resp.json();
@@ -199,13 +204,14 @@ export async function fetchViews(data: IStepProps[]) {
  * @param namespace
  */
 export async function startDeployment(integrationSource: string, name: string, namespace?: string) {
-  let URL = `${apiVersion}/deployments/${name.toLowerCase()}`;
-  if (namespace) URL = `${apiVersion}/deployments/${name.toLowerCase()}&namespace=${namespace}`;
   try {
     const resp = await request.post({
-      endpoint: URL,
+      endpoint: `${apiVersion}/deployments/${name.toLowerCase()}`,
       contentType: 'text/yaml',
       body: integrationSource,
+      queryParams: {
+        namespace,
+      },
     });
 
     return await resp.text();
@@ -220,13 +226,11 @@ export async function startDeployment(integrationSource: string, name: string, n
  * @param namespace
  */
 export async function stopDeployment(name: string, namespace?: string) {
-  let URL = `${apiVersion}/deployments/${name.toLowerCase()}`;
-  if (namespace) URL = `${apiVersion}/deployments/${name.toLowerCase()}&namespace=${namespace}`;
-
   try {
     const resp = await request.delete({
-      endpoint: URL,
+      endpoint: `${apiVersion}/deployments/${name.toLowerCase()}`,
       contentType: 'application/json',
+      queryParams: { namespace },
     });
 
     return await resp.text();
