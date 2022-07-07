@@ -1,5 +1,6 @@
 import { fetchDeployments, stopDeployment, useSettingsContext } from '../api';
 import { IDeployment } from '../types';
+import { usePrevious } from '../utils';
 import {
   Button,
   EmptyState,
@@ -28,24 +29,30 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
 export interface IDeploymentsModal {
+  currentDeployment?: IDeployment;
   handleCloseModal: () => void;
   isModalOpen: boolean;
 }
 
 /**
  * Contains the contents for the Deployments modal.
- * @param currentDeployments
+ * @param currentDeployment
  * @param handleCloseModal
  * @param isModalOpen
  * @constructor
  */
-export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeploymentsModal) => {
+export const DeploymentsModal = ({
+  currentDeployment,
+  handleCloseModal,
+  isModalOpen,
+}: IDeploymentsModal) => {
   const [deployments, setDeployments] = useState<IDeployment[]>([]);
   const [settings] = useSettingsContext();
   const [activeSortIndex, setActiveSortIndex] = useState<number | undefined>(undefined);
   const [activeSortDirection, setActiveSortDirection] = useState<'asc' | 'desc' | undefined>(
     undefined
   );
+  const previousDeployment = usePrevious(currentDeployment);
 
   const { addAlert } = useAlert() || {};
 
@@ -59,6 +66,19 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
         throw Error(e);
       });
   }, []);
+
+  // on changes to deployment, re-fetch list of deployments
+  useEffect(() => {
+    if (previousDeployment === currentDeployment) return;
+    // fetch deployments
+    fetchDeployments()
+      .then((output) => {
+        setDeployments(output);
+      })
+      .catch((e) => {
+        throw Error(e);
+      });
+  }, [currentDeployment]);
 
   const columnNames = {
     name: 'Name',

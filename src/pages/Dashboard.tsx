@@ -20,7 +20,13 @@ export interface IExpanded {
 }
 
 const Dashboard = () => {
-  const [deployment, setDeployment] = useState({});
+  const [deployment, setDeployment] = useState<IDeployment>({
+    date: '',
+    errors: [],
+    name: '',
+    namespace: '',
+    status: {},
+  });
   const [expanded, setExpanded] = useState<IExpanded>({
     catalog: false,
     codeEditor: false,
@@ -85,6 +91,7 @@ const Dashboard = () => {
             </PageSection>
           </Page>
           <DeploymentsModal
+            currentDeployment={deployment}
             handleCloseModal={() => {
               setExpanded({ ...expanded, deploymentsModal: !expanded.deploymentsModal });
             }}
