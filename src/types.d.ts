@@ -14,14 +14,24 @@ declare global {
   const __webpack_share_scopes__: any;
 }
 
-/**
- * TODO: Update once API changes are documented
- */
 export interface IDeployment {
-  name?: string;
-  date?: string;
-  description?: string;
-  status?: string;
+  date: string;
+  errors: any[];
+  name: string;
+  namespace?: string;
+  status: {
+    conditions?: [
+      {
+        lastTransitionTime: string;
+        lastUpdateTime: string;
+        status: string;
+        type: string;
+      }
+    ];
+    phase?: string;
+    replicas?: number;
+    selector?: string;
+  };
 }
 
 export interface ISettings {
