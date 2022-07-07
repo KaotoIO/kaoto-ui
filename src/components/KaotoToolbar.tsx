@@ -58,7 +58,9 @@ export const KaotoToolbar = ({
   const [settings, setSettings] = useSettingsContext();
   const [localName, setLocalName] = useState(settings.name);
   const [sourceCode] = useIntegrationSourceContext();
-  const [isNameValid, setIsNameValid] = useState(true);
+  const [nameValidation, setNameValidation] = useState<
+    'default' | 'warning' | 'success' | 'error' | undefined
+  >('default');
 
   const { addAlert } = useAlert() || {};
 
@@ -205,17 +207,18 @@ export const KaotoToolbar = ({
                 onChange={(val) => {
                   setLocalName(val);
                   if (isNameValidCheck(val)) {
-                    setIsNameValid(true);
+                    setNameValidation('success');
                   } else {
-                    setIsNameValid(false);
+                    setNameValidation('error');
                   }
                 }}
                 value={localName}
                 aria-label="edit integration name"
-                aria-invalid={!isNameValid}
+                validated={nameValidation}
+                aria-invalid={nameValidation === 'error'}
               />
               <Button
-                variant="control"
+                variant="plain"
                 aria-label="save button for editing integration name"
                 onClick={() => {
                   if (isNameValidCheck(localName)) {
@@ -223,17 +226,17 @@ export const KaotoToolbar = ({
                     setSettings({ ...settings, name: localName });
                   }
                 }}
-                aria-disabled={!isNameValid}
-                isDisabled={!isNameValid}
+                aria-disabled={nameValidation === 'error'}
+                isDisabled={nameValidation === 'error'}
               >
                 <CheckIcon />
               </Button>
               <Button
-                variant="control"
+                variant="plain"
                 aria-label="close button for editing integration name"
                 onClick={() => {
                   setLocalName(settings.name);
-                  setIsNameValid(true);
+                  setNameValidation('default');
                   setIsEditingName(false);
                 }}
               >
@@ -288,13 +291,15 @@ export const KaotoToolbar = ({
         {deployment && <ToolbarItem variant="separator" />}
 
         <ToolbarItem>
-          <Button
-            variant={expanded.codeEditor ? 'primary' : 'secondary'}
-            data-testid={'toolbar-show-code-btn'}
-            onClick={() => handleExpanded({ codeEditor: !expanded.codeEditor, catalog: false })}
-          >
-            Code
-          </Button>
+          <Tooltip content={<div>Source Code</div>} position={'bottom'}>
+            <Button
+              variant={expanded.codeEditor ? 'primary' : 'secondary'}
+              data-testid={'toolbar-show-code-btn'}
+              onClick={() => handleExpanded({ codeEditor: !expanded.codeEditor, catalog: false })}
+            >
+              Code
+            </Button>
+          </Tooltip>
         </ToolbarItem>
 
         {/*<ToolbarItem>*/}
