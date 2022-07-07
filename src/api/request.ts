@@ -15,6 +15,8 @@ export interface IFetch {
    */
   accept?: string;
 
+  cache?: RequestCache | undefined;
+
   /**
    * Default: 'application/json'
    */
@@ -54,6 +56,7 @@ const api = ({
   method,
   headers = {},
   body,
+  cache,
   contentType,
   accept,
   queryParams,
@@ -64,7 +67,7 @@ const api = ({
   let options: RequestInit = {
     method,
     body: contentType?.includes('application/json') && stringifyBody ? JSON.stringify(body) : body,
-    // cache: 'no-cache',
+    cache: cache ?? 'default',
     /**
      * TODO: Omit for now, reassess for prod
      */
