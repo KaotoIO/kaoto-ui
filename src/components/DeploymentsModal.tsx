@@ -29,7 +29,7 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
 export interface IDeploymentsModal {
-  currentDeployment?: IDeployment;
+  currentDeployment?: string;
   handleCloseModal: () => void;
   isModalOpen: boolean;
 }

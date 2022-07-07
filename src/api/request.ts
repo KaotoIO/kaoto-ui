@@ -95,6 +95,6 @@ export default {
   get: (options: IFetch) => api({ method: 'GET', ...options }),
   post: (options: IFetch) => api({ method: 'POST', ...options }),
   put: (options: IFetch) => api({ method: 'PUT', ...options }),
-  patch: (options: IFetch) => api({ method: 'PATCH', ...options }),
+  // patch: (options: IFetch) => api({ method: 'PATCH', ...options }),
   delete: (options: IFetch) => api({ method: 'DELETE', ...options }),
 };

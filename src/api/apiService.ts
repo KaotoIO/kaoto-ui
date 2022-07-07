@@ -87,13 +87,15 @@ export async function fetchDeployment(name: string, namespace?: string) {
 
 /**
  * Fetches all deployments, optionally for a specific namespace
+ * @param cache
  * @param namespace
  */
-export async function fetchDeployments(namespace?: string) {
+export async function fetchDeployments(cache?: RequestCache | undefined, namespace?: string) {
   try {
     const resp = await request.get({
       endpoint: `${apiVersion}/deployments`,
       contentType: 'application/json',
+      cache,
       queryParams: {
         namespace,
       },

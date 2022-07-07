@@ -39,7 +39,6 @@ export interface ISettings {
   dsl: string;
   // name of integration or deployment
   name: string;
-
   // Cluster namespace
   namespace: string;
 }
