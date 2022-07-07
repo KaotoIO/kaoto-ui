@@ -43,11 +43,13 @@ export interface IStepExtensionApi {
     namespace?: string
   ) => Promise<IIntegration>;
   getIntegrationSource: (integration: IIntegration, dsl: string, namespace?: string) => void;
+  getStep: () => IStepProps;
   getViews: (data: IStepProps[], namespace?: string) => void;
   notifyKaoto: (title: string, body?: string, variant?: string) => void;
   onKaotoButtonClicked: (view: IViewProps) => void;
   startDeployment: (integration: any, name: string, namespace?: string) => void;
   stopDeployment: (name: string, namespace?: string) => void;
+  updateStep: (step: IStepProps) => void;
 }
 
 // Example demonstrating interactivity with step extension

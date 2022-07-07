@@ -190,11 +190,18 @@ const StepViews = ({
                 getDSLs: getKaotoDSLs,
                 getIntegrationJson: getKaotoIntegrationJson,
                 getIntegrationSource: getKaotoIntegrationSource,
+                getStep: () => {
+                  return step;
+                },
                 getViews: getKaotoViews,
                 notifyKaoto: alertKaoto,
                 onKaotoButtonClicked,
                 startDeployment: startKaotoDeployment,
                 stopDeployment: stopKaotoDeployment,
+                updateStep: (step: IStepProps) => {
+                  console.log('here is the new step... ', step);
+                  // update state here
+                },
               };
 
               return (
