@@ -6,7 +6,7 @@ import {
 } from '../api';
 import { IExpanded } from '../pages/Dashboard';
 import { IDeployment } from '../types';
-import { canBeDeployed } from '../utils/validationService';
+import { canBeDeployed, isNameValidCheck } from '../utils/validationService';
 import {
   AlertVariant,
   Button,
@@ -56,7 +56,11 @@ export const KaotoToolbar = ({
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [settings, setSettings] = useSettingsContext();
+  const [localName, setLocalName] = useState(settings.name);
   const [sourceCode] = useIntegrationSourceContext();
+  const [nameValidation, setNameValidation] = useState<
+    'default' | 'warning' | 'success' | 'error' | undefined
+  >('default');
 
   const { addAlert } = useAlert() || {};
 
@@ -201,24 +205,38 @@ export const KaotoToolbar = ({
                 id="edit-integration-name"
                 type="text"
                 onChange={(val) => {
-                  setSettings({ ...settings, name: val });
+                  setLocalName(val);
+                  if (isNameValidCheck(val)) {
+                    setNameValidation('success');
+                  } else {
+                    setNameValidation('error');
+                  }
                 }}
-                value={settings.name}
+                value={localName}
                 aria-label="edit integration name"
+                validated={nameValidation}
+                aria-invalid={nameValidation === 'error'}
               />
               <Button
-                variant="control"
+                variant="plain"
                 aria-label="save button for editing integration name"
                 onClick={() => {
-                  setIsEditingName(false);
+                  if (isNameValidCheck(localName)) {
+                    setIsEditingName(false);
+                    setSettings({ ...settings, name: localName });
+                  }
                 }}
+                aria-disabled={nameValidation === 'error'}
+                isDisabled={nameValidation === 'error'}
               >
                 <CheckIcon />
               </Button>
               <Button
-                variant="control"
+                variant="plain"
                 aria-label="close button for editing integration name"
                 onClick={() => {
+                  setLocalName(settings.name);
+                  setNameValidation('default');
                   setIsEditingName(false);
                 }}
               >
@@ -273,13 +291,15 @@ export const KaotoToolbar = ({
         {deployment && <ToolbarItem variant="separator" />}
 
         <ToolbarItem>
-          <Button
-            variant={expanded.codeEditor ? 'primary' : 'secondary'}
-            data-testid={'toolbar-show-code-btn'}
-            onClick={() => handleExpanded({ codeEditor: !expanded.codeEditor, catalog: false })}
-          >
-            Code
-          </Button>
+          <Tooltip content={<div>Source Code</div>} position={'bottom'}>
+            <Button
+              variant={expanded.codeEditor ? 'primary' : 'secondary'}
+              data-testid={'toolbar-show-code-btn'}
+              onClick={() => handleExpanded({ codeEditor: !expanded.codeEditor, catalog: false })}
+            >
+              Code
+            </Button>
+          </Tooltip>
         </ToolbarItem>
 
         {/*<ToolbarItem>*/}

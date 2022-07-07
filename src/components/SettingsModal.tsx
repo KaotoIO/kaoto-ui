@@ -7,6 +7,7 @@ import {
 } from '../api';
 import { ISettings, IViewProps } from '../types';
 import { usePrevious } from '../utils';
+import { isNameValidCheck } from '../utils/validationService';
 import {
   AlertVariant,
   Button,
@@ -44,6 +45,12 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const [, setSourceCode] = useIntegrationSourceContext();
   const previousIntegrationJson = usePrevious(integrationJson);
   const previousName = usePrevious(localSettings.name);
+  const [nameValidation, setNameValidation] = useState<
+    'default' | 'warning' | 'success' | 'error' | undefined
+  >('default');
+  const [namespaceValidation, setNamespaceValidation] = useState<
+    'default' | 'warning' | 'success' | 'error' | undefined
+  >('default');
 
   const { addAlert } = useAlert() || {};
 
@@ -73,10 +80,22 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
 
   const onChangeName = (newName: string) => {
     setLocalSettings({ ...localSettings, name: newName });
+
+    if (isNameValidCheck(newName)) {
+      setNameValidation('success');
+    } else {
+      setNameValidation('error');
+    }
   };
 
   const onChangeNamespace = (newNamespace: string) => {
     setLocalSettings({ ...localSettings, namespace: newNamespace });
+
+    if (isNameValidCheck(newNamespace)) {
+      setNamespaceValidation('success');
+    } else {
+      setNamespaceValidation('error');
+    }
   };
 
   const onClose = () => {
@@ -86,7 +105,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const onSave = () => {
     setSettings(localSettings);
     let tmpInt = integrationJson;
-    tmpInt.metadata = { ...localSettings };
+    tmpInt.metadata = { ...localSettings, ...integrationJson.metadata };
 
     fetchIntegrationSourceCode(tmpInt)
       .then((source) => {
@@ -119,7 +138,12 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
     <div className={'settings-modal'} data-testid={'settings-modal'}>
       <Modal
         actions={[
-          <Button key="confirm" variant="primary" onClick={onSave}>
+          <Button
+            key="confirm"
+            variant="primary"
+            onClick={onSave}
+            isDisabled={namespaceValidation === 'error' || nameValidation === 'error'}
+          >
             Save
           </Button>,
           <Button key="cancel" variant="link" onClick={onClose}>
@@ -135,6 +159,8 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
           <FormGroup
             fieldId="integration-name"
             helperText="Give your integration a fun name."
+            helperTextInvalid="Must be lowercase and alphanumeric (dashes allowed)"
+            validated={nameValidation}
             isRequired
             label="Integration name"
           >
@@ -146,13 +172,17 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
               onChange={onChangeName}
               type="text"
               value={localSettings.name}
+              validated={nameValidation}
+              aria-invalid={nameValidation === 'error'}
             />
           </FormGroup>
           <FormGroup
             fieldId="namespace"
             helperText="Specify the namespace for your cluster."
+            helperTextInvalid="Must be lowercase and alphanumeric (dashes allowed)"
             isRequired
             label="Namespace"
+            validated={namespaceValidation}
           >
             <TextInput
               aria-describedby="namespace-helper"
@@ -162,6 +192,8 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
               onChange={onChangeNamespace}
               type="text"
               value={localSettings.namespace}
+              validated={namespaceValidation}
+              aria-invalid={namespaceValidation === 'error'}
             />
           </FormGroup>
           <FormGroup
