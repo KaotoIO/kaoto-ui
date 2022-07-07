@@ -1,3 +1,4 @@
+import { useIntegrationJsonContext } from '../api';
 import { IStepProps, IViewProps } from '../types';
 import { usePrevious } from '../utils';
 import { Extension } from './Extension';
@@ -59,6 +60,7 @@ const StepViews = ({
   const stepPropertySchema = useRef<{ [label: string]: { type: string } }>({});
   const stepPropertyModel = useRef<{ [label: string]: any }>({});
   const previousTabIndex = usePrevious(detailsTabIndex);
+  const [, dispatch] = useIntegrationJsonContext();
 
   const { addAlert } = useAlert() || {};
 
@@ -200,7 +202,11 @@ const StepViews = ({
                 stopDeployment: stopKaotoDeployment,
                 updateStep: (step: IStepProps) => {
                   console.log('here is the new step... ', step);
-                  // update state here
+                  // update state of step
+                  dispatch({
+                    type: 'REPLACE_STEP',
+                    payload: { newStep: step, oldStepIndex: index },
+                  });
                 },
               };
 
