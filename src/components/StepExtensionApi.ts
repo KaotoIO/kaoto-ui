@@ -32,22 +32,30 @@ import { IDeployment, IIntegration, IStepProps, IViewProps } from '../types';
  * The following are methods that are exposed to a Step Extension.
  */
 export interface IStepExtensionApi {
-  getCatalogSteps: (namespace?: string) => void;
-  getDeployment: (name: string, namespace?: string) => void;
+  getCatalogSteps: (namespace?: string) => Promise<IStepProps[]>;
+  getDeployment: (name: string, namespace?: string) => Promise<string | unknown>;
   getDeploymentLogs: (name: string, lines?: number, namespace?: string) => void;
-  getDeployments: (namespace?: string) => void;
-  getDSLs: (namespace?: string) => void;
+  getDeployments: (namespace?: string) => Promise<IDeployment[]>;
+  getDSLs: (namespace?: string) => Promise<{ [p: string]: string }[]>;
   getIntegrationJson: (
     sourceCode: string,
     dsl: string,
     namespace?: string
   ) => Promise<IIntegration>;
-  getIntegrationSource: (integration: IIntegration, dsl: string, namespace?: string) => void;
+  getIntegrationSource: (
+    integration: IIntegration,
+    dsl: string,
+    namespace?: string
+  ) => Promise<string | unknown>;
   getStep: () => IStepProps;
-  getViews: (data: IStepProps[], namespace?: string) => void;
+  getViews: (data: IStepProps[], namespace?: string) => Promise<IViewProps[]>;
   notifyKaoto: (title: string, body?: string, variant?: string) => void;
   onKaotoButtonClicked: (view: IViewProps) => void;
-  startDeployment: (integration: any, name: string, namespace?: string) => void;
+  startDeployment: (
+    integration: any,
+    name: string,
+    namespace?: string
+  ) => Promise<string | unknown>;
   stopDeployment: (name: string, namespace?: string) => void;
   updateStep: (step: IStepProps) => void;
 }
@@ -57,20 +65,14 @@ const onKaotoButtonClicked = (view: any) => {
   console.log('Button clicked! Viewing ' + view.id + ' for the following step: ' + view.step);
 };
 
-const getKaotoCatalogSteps = () => {
+const getKaotoCatalogSteps = (): Promise<IStepProps[]> => {
   return fetchCatalogSteps().then((steps) => {
     return steps;
   });
 };
 
-const getKaotoDSLs = () => {
-  return fetchCapabilities().then((dsls: { dsls: { [val: string]: string }[] }) => {
-    return dsls.dsls;
-  });
-};
-
-const getKaotoDeployment = (name: string, namespace?: string) => {
-  return fetchDeployment(name, namespace).then((deployment) => {
+const getKaotoDeployment = (name: string, namespace?: string): Promise<string | unknown> => {
+  return fetchDeployment(name, namespace).then((deployment: string | unknown) => {
     return deployment;
   });
 };
@@ -87,27 +89,37 @@ const getKaotoDeployments = () => {
   });
 };
 
+const getKaotoDSLs = (): Promise<{ [p: string]: string }[]> => {
+  return fetchCapabilities().then((dsls: { dsls: { [val: string]: string }[] }) => {
+    return dsls.dsls;
+  });
+};
+
 const getKaotoIntegrationSource = (integration: IIntegration) => {
   return fetchIntegrationSourceCode(integration).then((sourceCode) => {
     return sourceCode;
   });
 };
 
-const getKaotoIntegrationJson = (sourceCode: string, dsl: string) => {
-  return fetchIntegrationJson(sourceCode, dsl).then((integration) => {
+const getKaotoIntegrationJson = (sourceCode: string, dsl: string, namespace?: string) => {
+  return fetchIntegrationJson(sourceCode, dsl, namespace).then((integration) => {
     return integration;
   });
 };
 
-const getKaotoViews = (data: IStepProps[]) => {
+const getKaotoViews = (data: IStepProps[], namespace?: string): Promise<IViewProps[]> => {
   // send JSON integrations
   // requires you to provide the integration JSON
-  fetchViews(data).then((res) => {
+  return fetchViews(data, namespace).then((res: IViewProps[]) => {
     return res;
   });
 };
 
-const startKaotoDeployment = (integration: any, name: string, namespace?: string) => {
+const startKaotoDeployment = (
+  integration: any,
+  name: string,
+  namespace?: string
+): Promise<string> => {
   return startDeployment(integration, name, namespace).then((res) => {
     return res;
   });
