@@ -216,6 +216,20 @@ export const KaotoToolbar = ({
               }}
             />
           </Tooltip>
+          <ConfirmationModal
+            handleCancel={() => {
+              setIsConfirmationModalOpen(false);
+            }}
+            handleConfirm={() => {
+              dispatch({ type: 'DELETE_INTEGRATION', payload: null });
+              setIsConfirmationModalOpen(false);
+            }}
+            isModalOpen={isConfirmationModalOpen}
+            modalBody={
+              'This will clear the whole canvas, and you will lose your current work. Are you sure you will' +
+              ' like to proceed?'
+            }
+          />
         </ToolbarItem>
 
         {/* Step Catalog Button */}
@@ -373,20 +387,6 @@ export const KaotoToolbar = ({
           </OverflowMenu>
         </ToolbarItem>
       </ToolbarContent>
-      <ConfirmationModal
-        handleCancel={() => {
-          setIsConfirmationModalOpen(false);
-        }}
-        handleConfirm={() => {
-          dispatch({ type: 'DELETE_INTEGRATION', payload: null });
-          setIsConfirmationModalOpen(false);
-        }}
-        isModalOpen={isConfirmationModalOpen}
-        modalBody={
-          'This will clear the whole canvas, and you will lose your current work. Are you sure you will' +
-          ' like to proceed?'
-        }
-      />
     </Toolbar>
   );
 };
