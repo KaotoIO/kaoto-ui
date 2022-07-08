@@ -12,6 +12,7 @@ import {
   Popover,
   Title,
   AlertVariant,
+  Badge,
 } from '@patternfly/react-core';
 import { CubesIcon, HelpIcon, WarningTriangleIcon } from '@patternfly/react-icons';
 import {
@@ -86,6 +87,7 @@ export const DeploymentsModal = ({
     date: 'Date',
     errors: 'Errors',
     status: 'Status',
+    type: 'Type',
   };
 
   const defaultActions = (deployment: IDeployment): IAction[] => [
@@ -98,8 +100,8 @@ export const DeploymentsModal = ({
   ];
 
   const getSortableRowValues = (deployment: IDeployment) => {
-    const { name, namespace, date, errors, status } = deployment;
-    return [name, namespace, date, errors, status];
+    const { name, namespace, date, errors, status, type } = deployment;
+    return [name, namespace, date, errors, status, type];
   };
 
   let sortedDeployments = deployments;
@@ -184,6 +186,7 @@ export const DeploymentsModal = ({
                 </Th>
                 <Th modifier="wrap">{columnNames.errors}</Th>
                 <Th modifier="wrap">{columnNames.status}</Th>
+                <Th modifier="wrap">{columnNames.type}</Th>
                 <Th></Th>
               </Tr>
             </Thead>
@@ -202,7 +205,12 @@ export const DeploymentsModal = ({
                     )}
                     {dep.errors.length}
                   </Td>
-                  <Td dataLabel={columnNames.status}>{dep.status.phase}</Td>
+                  <Td dataLabel={columnNames.status}>{dep.status}</Td>
+                  <Td dataLabel={columnNames.type}>
+                    <Badge key={rowIndex} isRead>
+                      {dep.type}
+                    </Badge>
+                  </Td>
                   <Td isActionCell>
                     <ActionsColumn items={defaultActions(dep)} />
                   </Td>

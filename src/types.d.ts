@@ -16,22 +16,16 @@ declare global {
 
 export interface IDeployment {
   date: string;
+  // array of errors
   errors: any[];
+  // name of integration/deployment
   name: string;
+  // defaults to 'default'
   namespace?: string;
-  status: {
-    conditions?: [
-      {
-        lastTransitionTime: string;
-        lastUpdateTime: string;
-        status: string;
-        type: string;
-      }
-    ];
-    phase?: string;
-    replicas?: number;
-    selector?: string;
-  };
+  // e.g. 'Invalid', 'Running', 'Creating', 'Stopped'
+  status: 'Invalid' | 'Creating' | 'Running' | 'Stopped';
+  // e.g. 'Kamelet', 'KameletBinding'
+  type: string;
 }
 
 export interface ISettings {
