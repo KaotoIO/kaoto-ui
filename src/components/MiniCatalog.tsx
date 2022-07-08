@@ -51,15 +51,15 @@ export const MiniCatalog = (props: IMiniCatalog) => {
     }
   }, []);
 
-  const changeSearch = (e: any) => {
+  const changeSearch = (e: string) => {
     setQuery(e);
   };
 
-  function search(items: any[]) {
+  function search(items: IStepProps[]) {
     return items.filter((item) => item.name.toLowerCase().indexOf(query.toLowerCase()) > -1);
   }
 
-  function handleSelectStep(selectedStep: any) {
+  function handleSelectStep(selectedStep: IStepProps) {
     if (props.handleSelectStep) {
       props.handleSelectStep(selectedStep);
     }
