@@ -5,6 +5,7 @@ describe('YAML editor', () => {
   });
 
   it('loads the YAML editor', () => {
-    cy.get('.code-editor').should('exist');
+    cy.get('[data-testid="toolbar-show-code-btn"]').click();
+    cy.get('[data-testid="toolbar-show-code-btn"]').should('exist');
   });
 });

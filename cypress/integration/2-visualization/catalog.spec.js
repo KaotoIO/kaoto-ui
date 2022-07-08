@@ -5,7 +5,7 @@ describe('step catalog', () => {
   });
 
   it('loads the step catalog', () => {
-    cy.get('[data-testid="openCatalogButton"]').click();
+    cy.get('[data-testid="react-flow-wrapper"]').contains('ADD A STEP').click();
     cy.get('[data-testid="stepCatalog"]').should('exist');
   });
 });

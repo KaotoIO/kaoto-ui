@@ -4,6 +4,8 @@ describe('Test for deleting steps', () => {
         cy.visit(url);
     });
     it('loads the YAML editor', () => {
+        // cy.get('.code-editor').click();
+        cy.get('[data-testid="toolbar-show-code-btn"]').click(); 
         cy.get('.code-editor').click();
         cy.get('button').contains('Start from scratch').click();
         cy.fixture('delete.txt')
