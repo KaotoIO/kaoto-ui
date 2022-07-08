@@ -74,7 +74,7 @@ export interface IStepProps {
   // ?
   kameletType?: string;
 
-  // e.g. 'Kamelet'
+  // e.g. 'Kamelet', 'Camel-Connector', 'EIP'
   kind?: string;
   name: string;
   parameters?: IStepPropsParameters[];
@@ -88,6 +88,17 @@ export interface IStepProps {
 
   // generated only for integration steps
   UUID?: string;
+}
+
+export interface IStepQueryParams {
+  // e.g. 'KameletBinding', 'Kamelet'
+  dsl?: string;
+  // e.g. 'Kamelet', 'Camel-Connector', 'EIP'
+  kind?: string;
+  // cluster namespace, defaults to 'default' if not provided
+  namespace?: string;
+  // e.g. 'START', 'END', 'MIDDLE'
+  type?: string;
 }
 
 export interface IStepPropsParameters {
