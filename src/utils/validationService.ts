@@ -18,19 +18,6 @@ export function appendableStepTypes(existingStepType: string): string {
   return possibleSteps;
 }
 
-export function canBeDeployed(): boolean {
-  // console.log('check if can be deployed: ', integrationSteps);
-  // let valid = true;
-  // in order for an integration to be deployable, it needs to have at least
-  // one step, and no mis-configured steps or placeholders
-  // if (integrationSteps > 0 && integrationSteps[0].type !== 'slot') {
-  //   valid = true;
-  // }
-
-  // return valid;
-  return true;
-}
-
 /**
  * Checks whether a proposed step can be inserted between two existing steps.
  * @param _previousStep
