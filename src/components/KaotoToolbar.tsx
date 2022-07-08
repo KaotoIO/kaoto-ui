@@ -342,7 +342,6 @@ export const KaotoToolbar = ({
                   icon={<StopIcon />}
                   data-testid={'toolbar-deploy-stop-btn'}
                   onClick={handleDeployStopClick}
-                  isDisabled={true}
                 />
               </Tooltip>
             </ToolbarItem>
