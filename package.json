@@ -6,6 +6,8 @@
   "engines": {
     "node": ">=14.x"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "start": "webpack serve --mode development --hot --progress --config webpack.dev.js ",
     "prod": "webpack serve --mode production --port 8080 --allowed-hosts all --progress --config webpack.prod.js ",
@@ -118,5 +120,26 @@
   },
   "resolutions": {
     "@types/react": "17.0.44"
+  },
+  "bugs": {
+    "url": "https://github.com/KaotoIO/kaoto-ui/issues"
+  },
+  "homepage": "https://www.kaoto.io/",
+  "license": "Apache-2.0",
+  "maintainers": [
+    {
+      "name": "Rachel Yordán",
+      "email": "rachelyordan@gmail.com"
+    }
+  ],
+  "keywords": [
+    "apache camel",
+    "camel",
+    "low code",
+    "integration"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KaotoIO/kaoto-ui.git"
   }
 }

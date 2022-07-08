@@ -79,7 +79,7 @@ export async function fetchCompatibleDSLs(props: { namespace?: string; steps: IS
  * @param name
  * @param namespace
  */
-export async function fetchDeployment(name: string, namespace?: string) {
+export async function fetchDeployment(name: string, namespace?: string): Promise<string | unknown> {
   try {
     const resp = await request.get({
       endpoint: `${apiVersion}/deployment/${name}`,

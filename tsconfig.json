@@ -3,6 +3,7 @@
   "compilerOptions": {
     "allowJs": false,
     "baseUrl": ".",
+    "declaration": true,
     "typeRoots": ["./node_modules/@types"],
   },
   "include": ["src", "webpack.config.js", "setupTests.ts"]
