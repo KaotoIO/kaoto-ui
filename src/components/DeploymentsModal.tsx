@@ -196,11 +196,7 @@ export const DeploymentsModal = ({
                   <Td dataLabel={columnNames.errors}>{dep.errors.length}</Td>
                   <Td dataLabel={columnNames.status}>{dep.status.phase}</Td>
                   <Td isActionCell>
-                    <ActionsColumn
-                      items={defaultActions(dep)}
-                      // isDisabled={dep.name === '4'}
-                      // actionsToggle={customActionsToggle}
-                    />
+                    <ActionsColumn items={defaultActions(dep)} />
                   </Td>
                 </Tr>
               ))}
