@@ -32,7 +32,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
   useEffect(() => {
     if (previousName === settings.name) return;
     let tmpInt = integrationJson;
-    tmpInt.metadata = { ...settings };
+    tmpInt.metadata = { ...integrationJson.metadata, ...settings };
     fetchIntegrationSourceCode(tmpInt).then((newSrc) => {
       if (typeof newSrc === 'string') setSourceCode(newSrc);
     });
@@ -50,7 +50,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       fetchIntegrationJson(incomingData, settings.dsl)
         .then((res: IIntegration) => {
           let tmpInt = res;
-          tmpInt.metadata = { ...settings };
+          tmpInt.metadata = { ...res.metadata, ...settings };
           dispatch({ type: 'UPDATE_INTEGRATION', payload: tmpInt });
         })
         .catch((e) => {

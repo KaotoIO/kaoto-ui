@@ -93,7 +93,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     fetchIntegrationJson(source, settings.dsl)
       .then((newIntegration) => {
         let tmpInt = newIntegration;
-        tmpInt.metadata = { ...settings };
+        tmpInt.metadata = { ...newIntegration.metadata, ...settings };
         dispatch({ type: 'UPDATE_INTEGRATION', payload: tmpInt });
       })
       .catch((err) => {
@@ -112,7 +112,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     const filteredSteps = integrationJsonSteps.filter((step) => step.type);
     let tempInt = integrationJson;
     tempInt.steps = filteredSteps;
-    tempInt.metadata = { ...settings };
+    tempInt.metadata = { ...integrationJson.metadata, ...settings };
 
     fetchIntegrationSourceCode(tempInt)
       .then((value) => {

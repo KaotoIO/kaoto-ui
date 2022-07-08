@@ -20,6 +20,12 @@ export function findStepIdxWithUUID(UUID: string, steps: IStepProps[]) {
   return steps.map((s) => s.UUID).indexOf(UUID);
 }
 
+export function formatDateTime(date: string) {
+  return new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'long' }).format(
+    Date.parse(date)
+  );
+}
+
 export function truncateString(str: string, num: number) {
   if (str.length > num) {
     return str.slice(0, num) + '..';
