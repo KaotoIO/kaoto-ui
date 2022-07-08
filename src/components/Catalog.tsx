@@ -29,6 +29,7 @@ import { useEffect, useState } from 'react';
 
 // Shorten a string to less than maxLen characters without truncating words.
 function shorten(str: string, maxLen: number, separator = ' ') {
+  if (!str) return;
   if (str.length <= maxLen) return str;
   return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
 }
@@ -192,7 +193,7 @@ export const Catalog = () => {
                     <CardTitle>
                       <span>{step.name}</span>
                     </CardTitle>
-                    <CardBody>{shorten(step.description, 60)}</CardBody>
+                    <CardBody>{shorten(step?.description, 60)}</CardBody>
                   </GridItem>
                   <GridItem span={3}>
                     <Label
