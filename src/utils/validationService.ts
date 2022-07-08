@@ -101,9 +101,5 @@ export function canStepBeReplaced(
  */
 export function isNameValidCheck(name: string) {
   const regexPattern = /^[a-z\d]([-a-z\d]*[a-z\d])?(\.[a-z\d]([-a-z\d]*[a-z\d])?)*$/gm;
-  if (!regexPattern.test(name)) {
-    return false;
-  } else {
-    return true;
-  }
+  return regexPattern.test(name);
 }
