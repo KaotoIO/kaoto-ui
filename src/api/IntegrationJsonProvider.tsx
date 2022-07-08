@@ -8,6 +8,7 @@ interface IIntegrationJsonProvider {
 
 type IntegrationJsonAction =
   | { type: 'ADD_STEP'; payload: { newStep: IStepProps } }
+  | { type: 'DELETE_INTEGRATION'; payload: null }
   | { type: 'DELETE_STEP'; payload: { index: number } }
   | { type: 'REPLACE_STEP'; payload: { newStep: IStepProps; oldStepIndex: number } }
   | { type: 'UPDATE_INTEGRATION'; payload: any };
@@ -16,6 +17,12 @@ export type IUseIntegrationJson = [
   integrationJson: IIntegration,
   dispatch: (action: IntegrationJsonAction) => void | IIntegration
 ];
+
+const initialIntegration: IIntegration = {
+  metadata: { name: 'integration', dsl: 'KameletBinding', namespace: 'default' },
+  steps: [],
+  params: [],
+};
 
 /**
  * Regenerate a UUID for a list of Steps
@@ -46,6 +53,9 @@ function integrationJsonReducer(state: IIntegration, action: IntegrationJsonActi
       payload.newStep.UUID = payload.newStep.name + state.steps.length;
       newSteps.push(payload.newStep);
       return { ...state, steps: newSteps };
+    }
+    case 'DELETE_INTEGRATION': {
+      return { ...initialIntegration };
     }
     case 'DELETE_STEP': {
       let stepsCopy = state.steps.slice();
@@ -93,14 +103,7 @@ function IntegrationJsonProvider({ initialState, children }: IIntegrationJsonPro
 /**
  * Create context
  */
-const IntegrationJsonContext = createContext<IUseIntegrationJson>([
-  {
-    metadata: { name: 'Integration', dsl: 'KameletBinding', namespace: 'default' },
-    steps: [],
-    params: [],
-  },
-  () => {},
-]);
+const IntegrationJsonContext = createContext<IUseIntegrationJson>([initialIntegration, () => {}]);
 
 /**
  * Convenience hook
