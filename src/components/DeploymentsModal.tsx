@@ -13,7 +13,7 @@ import {
   Title,
   AlertVariant,
 } from '@patternfly/react-core';
-import { CubesIcon, HelpIcon } from '@patternfly/react-icons';
+import { CubesIcon, HelpIcon, WarningTriangleIcon } from '@patternfly/react-icons';
 import {
   TableComposable,
   Thead,
@@ -193,7 +193,15 @@ export const DeploymentsModal = ({
                   <Td dataLabel={columnNames.name}>{dep.name}</Td>
                   <Td dataLabel={columnNames.namespace}>{dep.namespace}</Td>
                   <Td dataLabel={columnNames.date}>{formatDateTime(dep.date)}</Td>
-                  <Td dataLabel={columnNames.errors}>{dep.errors.length}</Td>
+                  <Td dataLabel={columnNames.errors}>
+                    {dep.errors.length > 0 && (
+                      <span>
+                        <WarningTriangleIcon />
+                        &nbsp;&nbsp;
+                      </span>
+                    )}
+                    {dep.errors.length}
+                  </Td>
                   <Td dataLabel={columnNames.status}>{dep.status.phase}</Td>
                   <Td isActionCell>
                     <ActionsColumn items={defaultActions(dep)} />
