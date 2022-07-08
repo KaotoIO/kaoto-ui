@@ -1,4 +1,5 @@
 export * from './Catalog';
+export * from './ConfirmationModal';
 export * from './DeploymentsModal';
 export * from './ErrorBoundary';
 export * from './Extension';
@@ -7,10 +8,10 @@ export * from './MASAlerts';
 export * from './MASLoading';
 export * from './MiniCatalog';
 export * from './SettingsModal';
+export * from './SourceCodeEditor';
 export * from './StepErrorBoundary';
 export * from './StepExtensionApi';
 export * from './StepViews';
 export * from './Visualization';
 export * from './VisualizationSlot';
 export * from './VisualizationStep';
-export * from './SourceCodeEditor';

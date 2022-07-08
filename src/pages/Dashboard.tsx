@@ -15,6 +15,7 @@ import { useState } from 'react';
 export interface IExpanded {
   catalog?: boolean;
   codeEditor?: boolean;
+  confirmationModal?: boolean;
   deploymentsModal?: boolean;
   settingsModal?: boolean;
 }

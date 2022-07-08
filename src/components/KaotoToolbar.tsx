@@ -1,11 +1,13 @@
 import {
   startDeployment,
   stopDeployment,
+  useIntegrationJsonContext,
   useIntegrationSourceContext,
   useSettingsContext,
 } from '../api';
 import { IExpanded } from '../pages/Dashboard';
 import { canBeDeployed, isNameValidCheck } from '../utils/validationService';
+import { ConfirmationModal } from './ConfirmationModal';
 import {
   AlertVariant,
   Button,
@@ -34,6 +36,7 @@ import {
   StopIcon,
   ThIcon,
   TimesIcon,
+  TrashIcon,
 } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useState } from 'react';
@@ -53,9 +56,11 @@ export const KaotoToolbar = ({
 }: IKaotoToolbar) => {
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [settings, setSettings] = useSettingsContext();
   const [localName, setLocalName] = useState(settings.name);
+  const [, dispatch] = useIntegrationJsonContext();
   const [sourceCode] = useIntegrationSourceContext();
   const [nameValidation, setNameValidation] = useState<
     'default' | 'warning' | 'success' | 'error' | undefined
@@ -175,6 +180,7 @@ export const KaotoToolbar = ({
   return (
     <Toolbar className={'viz-toolbar'} data-testid={'viz-toolbar'}>
       <ToolbarContent>
+        {/* App Menu */}
         <ToolbarItem>
           <Dropdown
             onSelect={onSelectAppMenu}
@@ -196,6 +202,38 @@ export const KaotoToolbar = ({
 
         <ToolbarItem variant="separator" />
 
+        {/* Delete/Clear Button */}
+        <ToolbarItem>
+          <Tooltip content={<div>Clear</div>} position={'bottom'}>
+            <Button
+              tabIndex={0}
+              variant="link"
+              data-testid={'toolbar-delete-btn'}
+              icon={<TrashIcon />}
+              onClick={() => {
+                // verify with user first
+                setIsConfirmationModalOpen(true);
+              }}
+            />
+          </Tooltip>
+        </ToolbarItem>
+
+        {/* Step Catalog Button */}
+        <ToolbarItem>
+          <Tooltip content={<div>Step Catalog</div>} position={'bottom'}>
+            <Button
+              tabIndex={0}
+              variant="link"
+              data-testid={'toolbar-step-catalog-btn'}
+              icon={<CatalogIcon />}
+              onClick={() => handleExpanded({ catalog: !expanded.catalog, codeEditor: false })}
+            />
+          </Tooltip>
+        </ToolbarItem>
+
+        <ToolbarItem variant="separator" />
+
+        {/* Name */}
         <ToolbarItem variant="label">
           {isEditingName ? (
             <InputGroup>
@@ -255,20 +293,6 @@ export const KaotoToolbar = ({
               </Button>
             </>
           )}
-        </ToolbarItem>
-
-        <ToolbarItem variant="separator" />
-
-        <ToolbarItem>
-          <Tooltip content={<div>Step Catalog</div>} position={'bottom'}>
-            <Button
-              tabIndex={0}
-              variant="link"
-              data-testid={'toolbar-step-catalog-btn'}
-              icon={<CatalogIcon />}
-              onClick={() => handleExpanded({ catalog: !expanded.catalog, codeEditor: false })}
-            />
-          </Tooltip>
         </ToolbarItem>
 
         {deployment ? (
@@ -349,6 +373,20 @@ export const KaotoToolbar = ({
           </OverflowMenu>
         </ToolbarItem>
       </ToolbarContent>
+      <ConfirmationModal
+        handleCancel={() => {
+          setIsConfirmationModalOpen(false);
+        }}
+        handleConfirm={() => {
+          dispatch({ type: 'DELETE_INTEGRATION', payload: null });
+          setIsConfirmationModalOpen(false);
+        }}
+        isModalOpen={isConfirmationModalOpen}
+        modalBody={
+          'This will clear the whole canvas, and you will lose your current work. Are you sure you will' +
+          ' like to proceed?'
+        }
+      />
     </Toolbar>
   );
 };
