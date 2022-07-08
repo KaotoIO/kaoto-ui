@@ -14,7 +14,7 @@ import {
   AlertVariant,
   Badge,
 } from '@patternfly/react-core';
-import { CubesIcon, HelpIcon, WarningTriangleIcon } from '@patternfly/react-icons';
+import {CubesIcon, HelpIcon} from '@patternfly/react-icons';
 import {
   TableComposable,
   Thead,
@@ -28,6 +28,7 @@ import {
 } from '@patternfly/react-table';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
+import {CustomExclamationTriangleIcon} from "./Icons";
 
 export interface IDeploymentsModal {
   currentDeployment?: string;
@@ -199,7 +200,7 @@ export const DeploymentsModal = ({
                   <Td dataLabel={columnNames.errors}>
                     {dep.errors.length > 0 && (
                       <span>
-                        <WarningTriangleIcon />
+                        <CustomExclamationTriangleIcon color='red' />
                         &nbsp;&nbsp;
                       </span>
                     )}
