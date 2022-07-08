@@ -63,24 +63,19 @@ export interface IIntegrationParams {
 }
 
 export interface IStepProps {
-  apiVersion?: string;
+  branches?: IStepPropsBranch[];
   description?: string;
-
-  // ?
   group?: string;
   icon?: string;
   id?: string;
 
-  // ?
-  kameletType?: string;
-
-  // e.g. 'Kamelet'
+  // e.g. 'Kamelet', 'Camel-Connector', 'EIP'
   kind?: string;
   name: string;
-  parameters?: IStepPropsParameters[];
 
-  // should be 'KAMELET' for now
-  subType?: string;
+  // parameters provided for this step
+  parameters?: IStepPropsParameters[];
+  required?: string[];
   title?: string;
 
   // e.g. 'START', 'MIDDLE', 'END'
@@ -90,8 +85,24 @@ export interface IStepProps {
   UUID?: string;
 }
 
+export interface IStepPropsBranch {
+  steps?: IStepProps[];
+  parameters?: IStepPropsParameters[];
+}
+
 export interface IStepPropsParameters {
   [key: string]: any;
+}
+
+export interface IStepQueryParams {
+  // e.g. 'KameletBinding', 'Kamelet'
+  dsl?: string;
+  // e.g. 'Kamelet', 'Camel-Connector', 'EIP'
+  kind?: string;
+  // cluster namespace, defaults to 'default' if not provided
+  namespace?: string;
+  // e.g. 'START', 'END', 'MIDDLE'
+  type?: string;
 }
 
 export interface IViewConstraintsProps {

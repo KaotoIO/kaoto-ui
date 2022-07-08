@@ -181,8 +181,10 @@ export const DeploymentsModal = ({
             <Thead>
               <Tr>
                 <Th sort={getSortParams(0)}>{columnNames.name}</Th>
-                <Th modifier="wrap">{columnNames.namespace}</Th>
-                <Th modifier="wrap" sort={getSortParams(2)} info={{ tooltip: 'More information ' }}>
+                <Th modifier="wrap" info={{ tooltip: 'Cluster namespace' }}>
+                  {columnNames.namespace}
+                </Th>
+                <Th modifier="wrap" sort={getSortParams(2)}>
                   {columnNames.date}
                 </Th>
                 <Th modifier="wrap">{columnNames.errors}</Th>
@@ -194,7 +196,9 @@ export const DeploymentsModal = ({
             <Tbody>
               {sortedDeployments.map((dep, rowIndex) => (
                 <Tr key={rowIndex}>
-                  <Td dataLabel={columnNames.name}>{dep.name}</Td>
+                  <Td dataLabel={columnNames.name}>
+                    <b>{dep.name}</b>
+                  </Td>
                   <Td dataLabel={columnNames.namespace}>{dep.namespace}</Td>
                   <Td dataLabel={columnNames.date}>{formatDateTime(dep.date)}</Td>
                   <Td dataLabel={columnNames.errors}>

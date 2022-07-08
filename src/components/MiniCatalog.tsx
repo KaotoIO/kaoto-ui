@@ -1,5 +1,5 @@
 import { fetchCatalogSteps } from '../api';
-import { IStepProps } from '../types';
+import { IStepProps, IStepQueryParams } from '../types';
 import {
   AlertVariant,
   Bullseye,
@@ -17,14 +17,7 @@ import { useEffect, useState } from 'react';
 
 export interface IMiniCatalog {
   handleSelectStep?: (selectedStep: any) => void;
-  queryParams?: {
-    // e.g. 'KameletBinding'
-    dsl?: string;
-    // e.g. 'Kamelet'
-    kind?: string;
-    // e.g. 'START', 'END', 'MIDDLE'
-    type?: string;
-  };
+  queryParams?: IStepQueryParams;
   steps?: IStepProps[];
 }
 
@@ -58,15 +51,15 @@ export const MiniCatalog = (props: IMiniCatalog) => {
     }
   }, []);
 
-  const changeSearch = (e: any) => {
+  const changeSearch = (e: string) => {
     setQuery(e);
   };
 
-  function search(items: any[]) {
+  function search(items: IStepProps[]) {
     return items.filter((item) => item.name.toLowerCase().indexOf(query.toLowerCase()) > -1);
   }
 
-  function handleSelectStep(selectedStep: any) {
+  function handleSelectStep(selectedStep: IStepProps) {
     if (props.handleSelectStep) {
       props.handleSelectStep(selectedStep);
     }

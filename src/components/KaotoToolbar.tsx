@@ -6,7 +6,7 @@ import {
   useSettingsContext,
 } from '../api';
 import { IExpanded } from '../pages/Dashboard';
-import { canBeDeployed, isNameValidCheck } from '../utils/validationService';
+import { isNameValidCheck } from '../utils/validationService';
 import { ConfirmationModal } from './ConfirmationModal';
 import {
   AlertVariant,
@@ -321,18 +321,7 @@ export const KaotoToolbar = ({
             </Tooltip>
           </ToolbarItem>
 
-          {/*<ToolbarItem>*/}
-          {/*  <Button*/}
-          {/*    variant="primary"*/}
-          {/*    data-testid={'toolbar-save-btn'}*/}
-          {/*    onClick={() => alert('YAY')}*/}
-          {/*    isDisabled*/}
-          {/*  >*/}
-          {/*    Save*/}
-          {/*  </Button>*/}
-          {/*</ToolbarItem>*/}
-
-          {canBeDeployed() ? (
+          {!deployment ? (
             <ToolbarItem>
               <Tooltip content={<div>Deploy</div>} position={'bottom'}>
                 <Button
@@ -353,7 +342,6 @@ export const KaotoToolbar = ({
                   icon={<StopIcon />}
                   data-testid={'toolbar-deploy-stop-btn'}
                   onClick={handleDeployStopClick}
-                  isDisabled={true}
                 />
               </Tooltip>
             </ToolbarItem>
@@ -385,7 +373,7 @@ export const KaotoToolbar = ({
         }}
         isModalOpen={isConfirmationModalOpen}
         modalBody={
-          'This will clear the whole canvas, and you will lose your current work. Are you sure you will' +
+          'This will clear the whole canvas, and you will lose your current work. Are you sure you would' +
           ' like to proceed?'
         }
       />
