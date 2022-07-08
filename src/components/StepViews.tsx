@@ -201,7 +201,6 @@ const StepViews = ({
                 startDeployment: startKaotoDeployment,
                 stopDeployment: stopKaotoDeployment,
                 updateStep: (step: IStepProps) => {
-                  console.log('here is the new step... ', step);
                   // update state of step
                   dispatch({
                     type: 'REPLACE_STEP',
