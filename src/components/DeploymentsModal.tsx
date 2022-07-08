@@ -180,8 +180,10 @@ export const DeploymentsModal = ({
             <Thead>
               <Tr>
                 <Th sort={getSortParams(0)}>{columnNames.name}</Th>
-                <Th modifier="wrap">{columnNames.namespace}</Th>
-                <Th modifier="wrap" sort={getSortParams(2)} info={{ tooltip: 'More information ' }}>
+                <Th modifier="wrap" info={{ tooltip: 'Cluster namespace' }}>
+                  {columnNames.namespace}
+                </Th>
+                <Th modifier="wrap" sort={getSortParams(2)}>
                   {columnNames.date}
                 </Th>
                 <Th modifier="wrap">{columnNames.errors}</Th>

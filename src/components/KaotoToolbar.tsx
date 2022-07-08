@@ -374,7 +374,7 @@ export const KaotoToolbar = ({
         }}
         isModalOpen={isConfirmationModalOpen}
         modalBody={
-          'This will clear the whole canvas, and you will lose your current work. Are you sure you will' +
+          'This will clear the whole canvas, and you will lose your current work. Are you sure you would' +
           ' like to proceed?'
         }
       />
