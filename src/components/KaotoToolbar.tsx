@@ -172,221 +172,223 @@ export const KaotoToolbar = ({
       Feedback
     </DropdownItem>,
     <DropdownSeparator key="separator" />,
-    <DropdownItem key="delete" component="button" isDisabled>
+    <DropdownItem key="delete" component="button" onClick={() => setIsConfirmationModalOpen(true)}>
       Delete
     </DropdownItem>,
   ];
 
   return (
-    <Toolbar className={'viz-toolbar'} data-testid={'viz-toolbar'}>
-      <ToolbarContent>
-        {/* App Menu */}
-        <ToolbarItem>
-          <Dropdown
-            onSelect={onSelectAppMenu}
-            toggle={
-              <DropdownToggle
-                toggleIndicator={null}
-                onToggle={(e) => setAppMenuIsOpen(e)}
-                aria-label="Applications"
-                id="toggle-icon-only"
-              >
-                <ThIcon />
-              </DropdownToggle>
-            }
-            isOpen={appMenuIsOpen}
-            isPlain
-            dropdownItems={appMenuItems}
-          />
-        </ToolbarItem>
-
-        <ToolbarItem variant="separator" />
-
-        {/* Delete/Clear Button */}
-        <ToolbarItem>
-          <Tooltip content={<div>Clear</div>} position={'bottom'}>
-            <Button
-              tabIndex={0}
-              variant="link"
-              data-testid={'toolbar-delete-btn'}
-              icon={<TrashIcon />}
-              onClick={() => {
-                // verify with user first
-                setIsConfirmationModalOpen(true);
-              }}
+    <>
+      <Toolbar className={'viz-toolbar'} data-testid={'viz-toolbar'}>
+        <ToolbarContent>
+          {/* App Menu */}
+          <ToolbarItem>
+            <Dropdown
+              onSelect={onSelectAppMenu}
+              toggle={
+                <DropdownToggle
+                  toggleIndicator={null}
+                  onToggle={(e) => setAppMenuIsOpen(e)}
+                  aria-label="Applications"
+                  id="toggle-icon-only"
+                >
+                  <ThIcon />
+                </DropdownToggle>
+              }
+              isOpen={appMenuIsOpen}
+              isPlain
+              dropdownItems={appMenuItems}
             />
-          </Tooltip>
-          <ConfirmationModal
-            handleCancel={() => {
-              setIsConfirmationModalOpen(false);
-            }}
-            handleConfirm={() => {
-              dispatch({ type: 'DELETE_INTEGRATION', payload: null });
-              setIsConfirmationModalOpen(false);
-            }}
-            isModalOpen={isConfirmationModalOpen}
-            modalBody={
-              'This will clear the whole canvas, and you will lose your current work. Are you sure you will' +
-              ' like to proceed?'
-            }
-          />
-        </ToolbarItem>
+          </ToolbarItem>
 
-        {/* Step Catalog Button */}
-        <ToolbarItem>
-          <Tooltip content={<div>Step Catalog</div>} position={'bottom'}>
-            <Button
-              tabIndex={0}
-              variant="link"
-              data-testid={'toolbar-step-catalog-btn'}
-              icon={<CatalogIcon />}
-              onClick={() => handleExpanded({ catalog: !expanded.catalog, codeEditor: false })}
-            />
-          </Tooltip>
-        </ToolbarItem>
+          <ToolbarItem variant="separator" />
 
-        <ToolbarItem variant="separator" />
-
-        {/* Name */}
-        <ToolbarItem variant="label">
-          {isEditingName ? (
-            <InputGroup>
-              <TextInput
-                name="edit-integration-name"
-                id="edit-integration-name"
-                type="text"
-                onChange={(val) => {
-                  setLocalName(val);
-                  if (isNameValidCheck(val)) {
-                    setNameValidation('success');
-                  } else {
-                    setNameValidation('error');
-                  }
-                }}
-                value={localName}
-                aria-label="edit integration name"
-                validated={nameValidation}
-                aria-invalid={nameValidation === 'error'}
-              />
+          {/* Delete/Clear Button */}
+          <ToolbarItem>
+            <Tooltip content={<div>Clear</div>} position={'bottom'}>
               <Button
-                variant="plain"
-                aria-label="save button for editing integration name"
+                tabIndex={0}
+                variant="link"
+                data-testid={'toolbar-delete-btn'}
+                icon={<TrashIcon />}
                 onClick={() => {
-                  if (isNameValidCheck(localName)) {
+                  // verify with user first
+                  setIsConfirmationModalOpen(true);
+                }}
+              />
+            </Tooltip>
+          </ToolbarItem>
+
+          {/* Step Catalog Button */}
+          <ToolbarItem>
+            <Tooltip content={<div>Step Catalog</div>} position={'bottom'}>
+              <Button
+                tabIndex={0}
+                variant="link"
+                data-testid={'toolbar-step-catalog-btn'}
+                icon={<CatalogIcon />}
+                onClick={() => handleExpanded({ catalog: !expanded.catalog, codeEditor: false })}
+              />
+            </Tooltip>
+          </ToolbarItem>
+
+          <ToolbarItem variant="separator" />
+
+          {/* Name */}
+          <ToolbarItem variant="label">
+            {isEditingName ? (
+              <InputGroup>
+                <TextInput
+                  name="edit-integration-name"
+                  id="edit-integration-name"
+                  type="text"
+                  onChange={(val) => {
+                    setLocalName(val);
+                    if (isNameValidCheck(val)) {
+                      setNameValidation('success');
+                    } else {
+                      setNameValidation('error');
+                    }
+                  }}
+                  value={localName}
+                  aria-label="edit integration name"
+                  validated={nameValidation}
+                  aria-invalid={nameValidation === 'error'}
+                />
+                <Button
+                  variant="plain"
+                  aria-label="save button for editing integration name"
+                  onClick={() => {
+                    if (isNameValidCheck(localName)) {
+                      setIsEditingName(false);
+                      setSettings({ ...settings, name: localName });
+                    }
+                  }}
+                  aria-disabled={nameValidation === 'error'}
+                  isDisabled={nameValidation === 'error'}
+                >
+                  <CheckIcon />
+                </Button>
+                <Button
+                  variant="plain"
+                  aria-label="close button for editing integration name"
+                  onClick={() => {
+                    setLocalName(settings.name);
+                    setNameValidation('default');
                     setIsEditingName(false);
-                    setSettings({ ...settings, name: localName });
-                  }
-                }}
-                aria-disabled={nameValidation === 'error'}
-                isDisabled={nameValidation === 'error'}
-              >
-                <CheckIcon />
-              </Button>
-              <Button
-                variant="plain"
-                aria-label="close button for editing integration name"
-                onClick={() => {
-                  setLocalName(settings.name);
-                  setNameValidation('default');
-                  setIsEditingName(false);
-                }}
-              >
-                <TimesIcon />
-              </Button>
-            </InputGroup>
+                  }}
+                >
+                  <TimesIcon />
+                </Button>
+              </InputGroup>
+            ) : (
+              <>
+                {settings.name}&nbsp;&nbsp;
+                <Button
+                  variant={'link'}
+                  onClick={() => {
+                    setIsEditingName(true);
+                  }}
+                >
+                  <PencilAltIcon />
+                </Button>
+              </>
+            )}
+          </ToolbarItem>
+
+          {deployment ? (
+            <ToolbarItem alignment={{ default: 'alignRight' }}>
+              <div className="status-container" data-testid={'toolbar-deployment-status'}>
+                <div className={`dot`}></div>
+                <div className="text">Running</div>
+              </div>
+            </ToolbarItem>
           ) : (
-            <>
-              {settings.name}&nbsp;&nbsp;
-              <Button
-                variant={'link'}
-                onClick={() => {
-                  setIsEditingName(true);
-                }}
-              >
-                <PencilAltIcon />
-              </Button>
-            </>
+            <ToolbarItem alignment={{ default: 'alignRight' }}></ToolbarItem>
           )}
-        </ToolbarItem>
 
-        {deployment ? (
-          <ToolbarItem alignment={{ default: 'alignRight' }}>
-            <div className="status-container" data-testid={'toolbar-deployment-status'}>
-              <div className={`dot`}></div>
-              <div className="text">Running</div>
-            </div>
-          </ToolbarItem>
-        ) : (
-          <ToolbarItem alignment={{ default: 'alignRight' }}></ToolbarItem>
-        )}
+          {deployment && <ToolbarItem variant="separator" />}
 
-        {deployment && <ToolbarItem variant="separator" />}
-
-        <ToolbarItem>
-          <Tooltip content={<div>Source Code</div>} position={'bottom'}>
-            <Button
-              variant={expanded.codeEditor ? 'primary' : 'secondary'}
-              data-testid={'toolbar-show-code-btn'}
-              onClick={() => handleExpanded({ codeEditor: !expanded.codeEditor, catalog: false })}
-            >
-              Code
-            </Button>
-          </Tooltip>
-        </ToolbarItem>
-
-        {/*<ToolbarItem>*/}
-        {/*  <Button*/}
-        {/*    variant="primary"*/}
-        {/*    data-testid={'toolbar-save-btn'}*/}
-        {/*    onClick={() => alert('YAY')}*/}
-        {/*    isDisabled*/}
-        {/*  >*/}
-        {/*    Save*/}
-        {/*  </Button>*/}
-        {/*</ToolbarItem>*/}
-
-        {canBeDeployed() ? (
           <ToolbarItem>
-            <Tooltip content={<div>Deploy</div>} position={'bottom'}>
+            <Tooltip content={<div>Source Code</div>} position={'bottom'}>
               <Button
-                tabIndex={0}
-                variant="link"
-                data-testid={'toolbar-deploy-start-btn'}
-                icon={<PlayIcon />}
-                onClick={handleDeployStartClick}
-              />
+                variant={expanded.codeEditor ? 'primary' : 'secondary'}
+                data-testid={'toolbar-show-code-btn'}
+                onClick={() => handleExpanded({ codeEditor: !expanded.codeEditor, catalog: false })}
+              >
+                Code
+              </Button>
             </Tooltip>
           </ToolbarItem>
-        ) : (
-          <ToolbarItem>
-            <Tooltip content={<div>Stop</div>} position={'bottom'}>
-              <Button
-                tabIndex={0}
-                variant="link"
-                icon={<StopIcon />}
-                data-testid={'toolbar-deploy-stop-btn'}
-                onClick={handleDeployStopClick}
-                isDisabled={true}
-              />
-            </Tooltip>
-          </ToolbarItem>
-        )}
 
-        <ToolbarItem variant="overflow-menu">
-          <OverflowMenu breakpoint="2xl">
-            <OverflowMenuControl hasAdditionalOptions>
-              <Dropdown
-                position={DropdownPosition.right}
-                toggle={<KebabToggle onToggle={(val) => setKebabIsOpen(val)} />}
-                isOpen={kebabIsOpen}
-                isPlain
-                data-testid={'toolbar-kebab-dropdown-btn'}
-                dropdownItems={kebabItems}
-              />
-            </OverflowMenuControl>
-          </OverflowMenu>
-        </ToolbarItem>
-      </ToolbarContent>
-    </Toolbar>
+          {/*<ToolbarItem>*/}
+          {/*  <Button*/}
+          {/*    variant="primary"*/}
+          {/*    data-testid={'toolbar-save-btn'}*/}
+          {/*    onClick={() => alert('YAY')}*/}
+          {/*    isDisabled*/}
+          {/*  >*/}
+          {/*    Save*/}
+          {/*  </Button>*/}
+          {/*</ToolbarItem>*/}
+
+          {canBeDeployed() ? (
+            <ToolbarItem>
+              <Tooltip content={<div>Deploy</div>} position={'bottom'}>
+                <Button
+                  tabIndex={0}
+                  variant="link"
+                  data-testid={'toolbar-deploy-start-btn'}
+                  icon={<PlayIcon />}
+                  onClick={handleDeployStartClick}
+                />
+              </Tooltip>
+            </ToolbarItem>
+          ) : (
+            <ToolbarItem>
+              <Tooltip content={<div>Stop</div>} position={'bottom'}>
+                <Button
+                  tabIndex={0}
+                  variant="link"
+                  icon={<StopIcon />}
+                  data-testid={'toolbar-deploy-stop-btn'}
+                  onClick={handleDeployStopClick}
+                  isDisabled={true}
+                />
+              </Tooltip>
+            </ToolbarItem>
+          )}
+
+          <ToolbarItem variant="overflow-menu">
+            <OverflowMenu breakpoint="2xl">
+              <OverflowMenuControl hasAdditionalOptions>
+                <Dropdown
+                  position={DropdownPosition.right}
+                  toggle={<KebabToggle onToggle={(val) => setKebabIsOpen(val)} />}
+                  isOpen={kebabIsOpen}
+                  isPlain
+                  data-testid={'toolbar-kebab-dropdown-btn'}
+                  dropdownItems={kebabItems}
+                />
+              </OverflowMenuControl>
+            </OverflowMenu>
+          </ToolbarItem>
+        </ToolbarContent>
+      </Toolbar>
+      <ConfirmationModal
+        handleCancel={() => {
+          setIsConfirmationModalOpen(false);
+        }}
+        handleConfirm={() => {
+          dispatch({ type: 'DELETE_INTEGRATION', payload: null });
+          setIsConfirmationModalOpen(false);
+        }}
+        isModalOpen={isConfirmationModalOpen}
+        modalBody={
+          'This will clear the whole canvas, and you will lose your current work. Are you sure you will' +
+          ' like to proceed?'
+        }
+      />
+    </>
   );
 };
