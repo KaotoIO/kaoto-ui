@@ -1,6 +1,6 @@
 import { fetchDeployments, stopDeployment, useSettingsContext } from '../api';
 import { IDeployment } from '../types';
-import { usePrevious } from '../utils';
+import { formatDateTime, usePrevious } from '../utils';
 import {
   Button,
   EmptyState,
@@ -192,7 +192,7 @@ export const DeploymentsModal = ({
                 <Tr key={rowIndex}>
                   <Td dataLabel={columnNames.name}>{dep.name}</Td>
                   <Td dataLabel={columnNames.namespace}>{dep.namespace}</Td>
-                  <Td dataLabel={columnNames.date}>{dep.date}</Td>
+                  <Td dataLabel={columnNames.date}>{formatDateTime(dep.date)}</Td>
                   <Td dataLabel={columnNames.errors}>{dep.errors.length}</Td>
                   <Td dataLabel={columnNames.status}>{dep.status.phase}</Td>
                   <Td isActionCell>
