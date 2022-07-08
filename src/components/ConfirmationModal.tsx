@@ -1,5 +1,6 @@
 import { Button, Modal, ModalVariant } from '@patternfly/react-core';
-import { ExclamationTriangleIcon } from '@patternfly/react-icons';
+import { OrangeExclamationTriangleIcon } from "./Icons";
+
 
 export interface IConfirmationModal {
   handleCancel: () => void;
@@ -48,8 +49,7 @@ export const ConfirmationModal = ({
         isOpen={isModalOpen}
         onClose={handleCancel}
         className={'customClass'}
-        // titleIconVariant={'warning'}
-        titleIconVariant={ExclamationTriangleIcon}
+        titleIconVariant={OrangeExclamationTriangleIcon}
         title={modalTitle ?? 'Confirmation'}
         variant={ModalVariant.small}
       >
