@@ -195,7 +195,9 @@ export const DeploymentsModal = ({
             <Tbody>
               {sortedDeployments.map((dep, rowIndex) => (
                 <Tr key={rowIndex}>
-                  <Td dataLabel={columnNames.name}>{dep.name}</Td>
+                  <Td dataLabel={columnNames.name}>
+                    <b>{dep.name}</b>
+                  </Td>
                   <Td dataLabel={columnNames.namespace}>{dep.namespace}</Td>
                   <Td dataLabel={columnNames.date}>{formatDateTime(dep.date)}</Td>
                   <Td dataLabel={columnNames.errors}>

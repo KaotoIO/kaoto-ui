@@ -51,7 +51,6 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
               handleSelectStep={onMiniCatalogClickAdd}
               queryParams={{
                 dsl: data.dsl,
-                kind: data.kind,
                 type: appendableStepTypes(data.connectorType),
               }}
             />
