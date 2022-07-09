@@ -374,6 +374,7 @@ export const KaotoToolbar = ({
         }}
         handleConfirm={() => {
           dispatch({ type: 'DELETE_INTEGRATION', payload: null });
+          setSettings({ dsl: 'KameletBinding', name: 'integration', namespace: 'default' });
           setIsConfirmationModalOpen(false);
         }}
         isModalOpen={isConfirmationModalOpen}
