@@ -134,6 +134,15 @@ export const DeploymentsModal = ({
   const handleDeleteDeployment = (deployment: IDeployment) => {
     stopDeployment(deployment.name, settings.namespace)
       .then(() => {
+        // fetch deployments
+        fetchDeployments('no-cache', settings.namespace)
+          .then((output) => {
+            setDeployments(output);
+          })
+          .catch((e) => {
+            throw Error(e);
+          });
+
         addAlert &&
           addAlert({
             title: 'Deleted Deployment',
