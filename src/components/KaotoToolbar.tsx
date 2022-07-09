@@ -3,7 +3,6 @@ import {
   startDeployment,
   stopDeployment,
   useIntegrationJsonContext,
-  useIntegrationSourceContext,
   useSettingsContext,
 } from '../api';
 import { IExpanded } from '../pages/Dashboard';
@@ -62,7 +61,6 @@ export const KaotoToolbar = ({
   const [settings, setSettings] = useSettingsContext();
   const [localName, setLocalName] = useState(settings.name);
   const [integrationJson, dispatch] = useIntegrationJsonContext();
-  const [sourceCode, setSourceCode] = useIntegrationSourceContext();
   const [nameValidation, setNameValidation] = useState<
     'default' | 'warning' | 'success' | 'error' | undefined
   >('default');
@@ -70,27 +68,33 @@ export const KaotoToolbar = ({
   const { addAlert } = useAlert() || {};
 
   const handleDeployStartClick = () => {
-    try {
-      startDeployment(sourceCode, settings.name, settings.namespace).then((res) => {
-        handleSaveDeployment(res);
+    // workaround for a bug where the source code doesn't get updated with name change.
+    // alternative: ask API to accept JSON for deployments
+    fetchIntegrationSourceCode(integrationJson, settings.namespace).then((updatedSource) => {
+      if (typeof updatedSource === 'string') {
+        startDeployment(updatedSource, settings.name, settings.namespace)
+          .then((res) => {
+            handleSaveDeployment(res);
 
-        addAlert &&
-          addAlert({
-            title: 'Deployment started',
-            variant: AlertVariant.success,
-            description: 'Your integration is deploying..',
+            addAlert &&
+              addAlert({
+                title: 'Deployment started',
+                variant: AlertVariant.success,
+                description: 'Your integration is deploying..',
+              });
+          })
+          .catch((e) => {
+            console.log('error deploying integration: ', e);
+            addAlert &&
+              addAlert({
+                title: 'Deployment not started',
+                variant: AlertVariant.warning,
+                description:
+                  'There was a problem deploying your integration. Please try again later.',
+              });
           });
-      });
-    } catch (e) {
-      console.log('error deploying.. ', e);
-
-      addAlert &&
-        addAlert({
-          title: 'Deployment not started',
-          variant: AlertVariant.warning,
-          description: 'There was a problem deploying your integration. Please try again later.',
-        });
-    }
+      }
+    });
   };
 
   const handleDeployStopClick = () => {
@@ -263,11 +267,6 @@ export const KaotoToolbar = ({
                     if (isNameValidCheck(localName)) {
                       setIsEditingName(false);
                       setSettings({ ...settings, name: localName });
-                      let tmpInt = integrationJson;
-                      tmpInt.metadata = { ...integrationJson.metadata, ...settings };
-                      fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
-                        if (typeof newSrc === 'string') setSourceCode(newSrc);
-                      });
                     }
                   }}
                   aria-disabled={nameValidation === 'error'}
