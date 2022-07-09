@@ -1,5 +1,6 @@
 export * from './Catalog';
 export * from './ConfirmationModal';
+export * from './Console';
 export * from './DeploymentsModal';
 export * from './ErrorBoundary';
 export * from './Extension';

@@ -5,6 +5,7 @@ import {
   SettingsModal,
   Visualization,
   SourceCodeEditor,
+  Console,
 } from '../components';
 import { KaotoToolbar } from '../components/KaotoToolbar';
 import { IViewProps } from '../types';
@@ -20,10 +21,6 @@ import {
   Drawer,
   DrawerContent,
   DrawerContentBody,
-  DrawerPanelContent,
-  DrawerHead,
-  DrawerActions,
-  DrawerCloseButton,
 } from '@patternfly/react-core';
 import { TerminalIcon } from '@patternfly/react-icons';
 import { useRef, useState } from 'react';
@@ -56,21 +53,6 @@ const Dashboard = () => {
     setDeployment(newDeployment);
   };
 
-  const panelContent = (
-    <DrawerPanelContent>
-      <DrawerHead>
-        <span tabIndex={expanded.console ? 0 : -1} ref={consoleDrawerRef}>
-          drawer-panel
-        </span>
-        <DrawerActions>
-          <DrawerCloseButton
-            onClick={() => setExpanded({ ...expanded, console: !expanded.console })}
-          />
-        </DrawerActions>
-      </DrawerHead>
-    </DrawerPanelContent>
-  );
-
   return (
     <IntegrationJsonProvider initialState={{ metadata: { name: '' }, params: [], steps: [] }}>
       <IntegrationSourceProvider initialState={''}>
@@ -87,7 +69,18 @@ const Dashboard = () => {
                 position={'bottom'}
                 onExpand={() => consoleDrawerRef.current && consoleDrawerRef.current.focus()}
               >
-                <DrawerContent panelContent={panelContent}>
+                <DrawerContent
+                  panelContent={
+                    <Console
+                      expanded={expanded}
+                      handleCloseConsole={() => {
+                        setExpanded({ ...expanded, console: !expanded.console });
+                      }}
+                      deployment={deployment}
+                      ref={consoleDrawerRef}
+                    />
+                  }
+                >
                   <DrawerContentBody>
                     <Page>
                       <PageSection padding={{ default: 'noPadding' }}>
@@ -100,6 +93,7 @@ const Dashboard = () => {
                         <Grid>
                           {expanded.codeEditor ? (
                             <GridItem span={3}>
+                              {/* SOURCE CODE EDITOR */}
                               <SourceCodeEditor
                                 handleUpdateViews={(newViews: IViewProps[]) => {
                                   if (newViews === views) return;
@@ -109,6 +103,7 @@ const Dashboard = () => {
                             </GridItem>
                           ) : expanded.catalog ? (
                             <GridItem span={3}>
+                              {/* STEP CATALOG */}
                               <Catalog currentDeployment={deployment} />
                             </GridItem>
                           ) : (
@@ -118,6 +113,7 @@ const Dashboard = () => {
                             span={expanded.codeEditor || expanded.catalog ? 9 : 12}
                             className={'visualization'}
                           >
+                            {/* VISUALIZATION / CANVAS */}
                             <Visualization
                               handleUpdateViews={(newViews: IViewProps[]) => {
                                 if (newViews === views) return;
@@ -141,6 +137,7 @@ const Dashboard = () => {
               </Drawer>
             </FlexItem>
 
+            {/* BOTTOM STATUS BAR */}
             <FlexItem>
               <Banner isSticky={true} screenReaderText="Status">
                 <Flex flexWrap={{ default: 'nowrap' }}>
