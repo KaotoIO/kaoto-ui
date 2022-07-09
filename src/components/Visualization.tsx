@@ -392,7 +392,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
                 ref={reactFlowWrapper}
                 style={{
                   width: window.innerWidth,
-                  height: window.innerHeight - 125,
+                  height: window.innerHeight - 153,
                 }}
               >
                 <ReactFlow
