@@ -1,4 +1,5 @@
 import {
+  fetchIntegrationSourceCode,
   startDeployment,
   stopDeployment,
   useIntegrationJsonContext,
@@ -60,8 +61,8 @@ export const KaotoToolbar = ({
   const [isEditingName, setIsEditingName] = useState(false);
   const [settings, setSettings] = useSettingsContext();
   const [localName, setLocalName] = useState(settings.name);
-  const [, dispatch] = useIntegrationJsonContext();
-  const [sourceCode] = useIntegrationSourceContext();
+  const [integrationJson, dispatch] = useIntegrationJsonContext();
+  const [sourceCode, setSourceCode] = useIntegrationSourceContext();
   const [nameValidation, setNameValidation] = useState<
     'default' | 'warning' | 'success' | 'error' | undefined
   >('default');
@@ -262,6 +263,11 @@ export const KaotoToolbar = ({
                     if (isNameValidCheck(localName)) {
                       setIsEditingName(false);
                       setSettings({ ...settings, name: localName });
+                      let tmpInt = integrationJson;
+                      tmpInt.metadata = { ...integrationJson.metadata, ...settings };
+                      fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
+                        if (typeof newSrc === 'string') setSourceCode(newSrc);
+                      });
                     }
                   }}
                   aria-disabled={nameValidation === 'error'}

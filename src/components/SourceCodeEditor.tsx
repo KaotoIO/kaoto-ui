@@ -3,14 +3,12 @@ import {
   useIntegrationSourceContext,
   useIntegrationJsonContext,
   useSettingsContext,
-  fetchIntegrationSourceCode,
 } from '../api';
 import { IIntegration } from '../types';
-import { usePrevious } from '../utils';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
 import { RedoIcon, UndoIcon } from '@patternfly/react-icons';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import EditorDidMount from 'react-monaco-editor';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -25,18 +23,8 @@ interface ISourceCodeEditor {
 const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<EditorDidMount['editor'] | null>(null);
   const [sourceCode, setSourceCode] = useIntegrationSourceContext();
-  const [integrationJson, dispatch] = useIntegrationJsonContext();
+  const [, dispatch] = useIntegrationJsonContext();
   const [settings] = useSettingsContext();
-  const previousName = usePrevious(settings.name);
-
-  useEffect(() => {
-    if (previousName === settings.name) return;
-    let tmpInt = integrationJson;
-    tmpInt.metadata = { ...integrationJson.metadata, ...settings };
-    fetchIntegrationSourceCode(tmpInt).then((newSrc) => {
-      if (typeof newSrc === 'string') setSourceCode(newSrc);
-    });
-  }, [settings.name]);
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint

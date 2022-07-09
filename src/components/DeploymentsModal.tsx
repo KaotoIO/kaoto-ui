@@ -50,9 +50,9 @@ export const DeploymentsModal = ({
 }: IDeploymentsModal) => {
   const [deployments, setDeployments] = useState<IDeployment[]>([]);
   const [settings] = useSettingsContext();
-  const [activeSortIndex, setActiveSortIndex] = useState<number | undefined>(undefined);
+  const [activeSortIndex, setActiveSortIndex] = useState<number | undefined>(2);
   const [activeSortDirection, setActiveSortDirection] = useState<'asc' | 'desc' | undefined>(
-    undefined
+    'desc'
   );
   const previousDeployment = usePrevious(currentDeployment);
 
