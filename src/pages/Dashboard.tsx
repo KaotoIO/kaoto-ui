@@ -62,7 +62,7 @@ const Dashboard = () => {
                   </GridItem>
                 ) : expanded.catalog ? (
                   <GridItem span={3}>
-                    <Catalog />
+                    <Catalog currentDeployment={deployment} />
                   </GridItem>
                 ) : (
                   <></>

@@ -29,11 +29,16 @@ import { useEffect, useState } from 'react';
 
 // Shorten a string to less than maxLen characters without truncating words.
 function shorten(str: string, maxLen: number, separator = ' ') {
+  if (!str) return;
   if (str.length <= maxLen) return str;
   return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
 }
 
-export const Catalog = () => {
+export interface ICatalog {
+  currentDeployment?: string;
+}
+
+export const Catalog = ({ currentDeployment }: ICatalog) => {
   // If the catalog data won't be changing, consider removing this state
   const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
@@ -68,6 +73,32 @@ export const Catalog = () => {
           });
       });
   }, [settings.dsl]);
+
+  useEffect(() => {
+    // verify that we actually need this, as the API
+    // isn't returning deployed kamelets in time anyway
+    fetchCatalogSteps(
+      {
+        dsl: settings.dsl,
+      },
+      'no-cache'
+    )
+      .then((value) => {
+        if (value) {
+          value.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
+          setCatalogData(value);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        addAlert &&
+          addAlert({
+            title: 'Something went wrong',
+            variant: AlertVariant.danger,
+            description: 'There was a problem fetching the catalog steps. Please try again later.',
+          });
+      });
+  }, [currentDeployment]);
 
   const changeSearch = (e: any) => {
     setQuery(e);
@@ -192,7 +223,7 @@ export const Catalog = () => {
                     <CardTitle>
                       <span>{step.name}</span>
                     </CardTitle>
-                    <CardBody>{shorten(step.description, 60)}</CardBody>
+                    <CardBody>{shorten(step?.description, 60)}</CardBody>
                   </GridItem>
                   <GridItem span={3}>
                     <Label

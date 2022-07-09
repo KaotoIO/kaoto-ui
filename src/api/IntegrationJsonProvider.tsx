@@ -55,7 +55,7 @@ function integrationJsonReducer(state: IIntegration, action: IntegrationJsonActi
       return { ...state, steps: newSteps };
     }
     case 'DELETE_INTEGRATION': {
-      return { ...initialIntegration };
+      return initialIntegration;
     }
     case 'DELETE_STEP': {
       let stepsCopy = state.steps.slice();

@@ -105,7 +105,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const onSave = () => {
     setSettings(localSettings);
     let tmpInt = integrationJson;
-    tmpInt.metadata = { ...localSettings, ...integrationJson.metadata };
+    tmpInt.metadata = { ...integrationJson.metadata, ...localSettings };
 
     fetchIntegrationSourceCode(tmpInt)
       .then((source) => {

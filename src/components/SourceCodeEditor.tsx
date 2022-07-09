@@ -33,7 +33,8 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
     if (previousName === settings.name) return;
     let tmpInt = integrationJson;
     tmpInt.metadata = { ...integrationJson.metadata, ...settings };
-    fetchIntegrationSourceCode(tmpInt).then((newSrc) => {
+
+    fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
       if (typeof newSrc === 'string') setSourceCode(newSrc);
     });
   }, [settings.name]);
