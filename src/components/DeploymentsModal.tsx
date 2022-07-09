@@ -1,6 +1,7 @@
 import { fetchDeployments, stopDeployment, useSettingsContext } from '../api';
 import { IDeployment } from '../types';
 import { formatDateTime, usePrevious } from '../utils';
+import { CustomExclamationTriangleIcon } from './Icons';
 import {
   Button,
   EmptyState,
@@ -14,7 +15,7 @@ import {
   AlertVariant,
   Badge,
 } from '@patternfly/react-core';
-import {CubesIcon, HelpIcon} from '@patternfly/react-icons';
+import { CubesIcon, HelpIcon } from '@patternfly/react-icons';
 import {
   TableComposable,
   Thead,
@@ -28,7 +29,6 @@ import {
 } from '@patternfly/react-table';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
-import {CustomExclamationTriangleIcon} from "./Icons";
 
 export interface IDeploymentsModal {
   currentDeployment?: string;
@@ -60,7 +60,7 @@ export const DeploymentsModal = ({
 
   useEffect(() => {
     // fetch deployments
-    fetchDeployments()
+    fetchDeployments('no-cache')
       .then((output) => {
         setDeployments(output);
       })
@@ -73,7 +73,7 @@ export const DeploymentsModal = ({
   useEffect(() => {
     if (previousDeployment === currentDeployment) return;
     // fetch deployments
-    fetchDeployments()
+    fetchDeployments('no-cache')
       .then((output) => {
         setDeployments(output);
       })
@@ -204,7 +204,7 @@ export const DeploymentsModal = ({
                   <Td dataLabel={columnNames.errors}>
                     {dep.errors.length > 0 && (
                       <span>
-                        <CustomExclamationTriangleIcon color='red' />
+                        <CustomExclamationTriangleIcon color="red" />
                         &nbsp;&nbsp;
                       </span>
                     )}
