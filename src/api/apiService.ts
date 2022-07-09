@@ -27,19 +27,24 @@ export async function fetchCapabilities(namespace?: string) {
 /**
  * Fetch all Catalog Steps, optionally with specified query params
  * @param queryParams
+ * @param cache
  */
-export async function fetchCatalogSteps(queryParams?: {
-  // e.g. 'KameletBinding'
-  dsl?: string;
-  // e.g. 'Kamelet'
-  kind?: string;
-  // e.g. 'START', 'END', 'MIDDLE'
-  type?: string;
-  namespace?: string;
-}) {
+export async function fetchCatalogSteps(
+  queryParams?: {
+    // e.g. 'KameletBinding'
+    dsl?: string;
+    // e.g. 'Kamelet'
+    kind?: string;
+    // e.g. 'START', 'END', 'MIDDLE'
+    type?: string;
+    namespace?: string;
+  },
+  cache?: RequestCache | undefined
+) {
   try {
     const resp = await request.get({
       endpoint: `${apiVersion}/steps`,
+      cache,
       queryParams: {
         ...queryParams,
         namespace: queryParams?.namespace ?? 'default',

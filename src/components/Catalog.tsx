@@ -50,9 +50,12 @@ export const Catalog = () => {
    */
   useEffect(() => {
     if (previousDSL === settings.dsl) return;
-    fetchCatalogSteps({
-      dsl: settings.dsl,
-    })
+    fetchCatalogSteps(
+      {
+        dsl: settings.dsl,
+      },
+      'no-cache'
+    )
       .then((value) => {
         if (value) {
           value.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
