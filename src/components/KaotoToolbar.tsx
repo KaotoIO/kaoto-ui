@@ -94,7 +94,7 @@ export const KaotoToolbar = ({
 
   const handleDeployStopClick = () => {
     try {
-      stopDeployment(settings.name).then((res) => {
+      stopDeployment(settings.name, settings.namespace).then((res) => {
         console.log('stop deployment response: ', res);
 
         addAlert &&
