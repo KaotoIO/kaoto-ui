@@ -34,7 +34,11 @@ function shorten(str: string, maxLen: number, separator = ' ') {
   return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
 }
 
-export const Catalog = () => {
+export interface ICatalog {
+  currentDeployment?: string;
+}
+
+export const Catalog = ({ currentDeployment }: ICatalog) => {
   // If the catalog data won't be changing, consider removing this state
   const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
@@ -50,6 +54,29 @@ export const Catalog = () => {
    */
   useEffect(() => {
     if (previousDSL === settings.dsl) return;
+    fetchCatalogSteps({
+      dsl: settings.dsl,
+    })
+      .then((value) => {
+        if (value) {
+          value.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
+          setCatalogData(value);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        addAlert &&
+          addAlert({
+            title: 'Something went wrong',
+            variant: AlertVariant.danger,
+            description: 'There was a problem fetching the catalog steps. Please try again later.',
+          });
+      });
+  }, [settings.dsl]);
+
+  useEffect(() => {
+    // verify that we actually need this, as the API
+    // isn't returning deployed kamelets in time anyway
     fetchCatalogSteps(
       {
         dsl: settings.dsl,
@@ -71,7 +98,7 @@ export const Catalog = () => {
             description: 'There was a problem fetching the catalog steps. Please try again later.',
           });
       });
-  }, [settings.dsl]);
+  }, [currentDeployment]);
 
   const changeSearch = (e: any) => {
     setQuery(e);
