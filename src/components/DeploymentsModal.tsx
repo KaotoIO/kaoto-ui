@@ -60,7 +60,7 @@ export const DeploymentsModal = ({
 
   useEffect(() => {
     // fetch deployments
-    fetchDeployments('no-cache')
+    fetchDeployments('no-cache', settings.namespace)
       .then((output) => {
         setDeployments(output);
       })
@@ -73,7 +73,7 @@ export const DeploymentsModal = ({
   useEffect(() => {
     if (previousDeployment === currentDeployment) return;
     // fetch deployments
-    fetchDeployments('no-cache')
+    fetchDeployments('no-cache', settings.namespace)
       .then((output) => {
         setDeployments(output);
       })
