@@ -1,4 +1,5 @@
 import { fetchCatalogSteps, useSettingsContext } from '../api';
+import { useDeploymentContext } from '../api/DeploymentProvider';
 import { IStepProps } from '../types';
 import { truncateString, usePrevious } from '../utils';
 import './Catalog.css';
@@ -25,7 +26,7 @@ import {
 } from '@patternfly/react-core';
 import { InfoCircleIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Shorten a string to less than maxLen characters without truncating words.
 function shorten(str: string, maxLen: number, separator = ' ') {
@@ -34,11 +35,7 @@ function shorten(str: string, maxLen: number, separator = ' ') {
   return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
 }
 
-export interface ICatalog {
-  currentDeployment?: string;
-}
-
-export const Catalog = ({ currentDeployment }: ICatalog) => {
+export const Catalog = () => {
   // If the catalog data won't be changing, consider removing this state
   const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
@@ -46,6 +43,7 @@ export const Catalog = ({ currentDeployment }: ICatalog) => {
   const [settings] = useSettingsContext();
   const previousDSL = usePrevious(settings.dsl);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const [deployment] = useDeploymentContext();
 
   const { addAlert } = useAlert() || {};
 
@@ -100,7 +98,7 @@ export const Catalog = ({ currentDeployment }: ICatalog) => {
             description: 'There was a problem fetching the catalog steps. Please try again later.',
           });
       });
-  }, [currentDeployment]);
+  }, [deployment]);
 
   const changeSearch = (e: any) => {
     setQuery(e);

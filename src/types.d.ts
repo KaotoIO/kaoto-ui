@@ -15,6 +15,8 @@ declare global {
 }
 
 export interface IDeployment {
+  // yaml CRD of deployment
+  crd?: string;
   date: string;
   // array of errors
   errors: any[];

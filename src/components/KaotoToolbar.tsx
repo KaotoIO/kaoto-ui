@@ -4,6 +4,7 @@ import {
   useIntegrationJsonContext,
   useSettingsContext,
 } from '../api';
+import { useDeploymentContext } from '../api/DeploymentProvider';
 import { IExpanded } from '../pages/Dashboard';
 import { isNameValidCheck } from '../utils/validationService';
 import { ConfirmationModal } from './ConfirmationModal';
@@ -40,18 +41,12 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useState } from 'react';
 
 export interface IKaotoToolbar {
-  deployment?: string;
   expanded: IExpanded;
   handleExpanded: (newState: IExpanded) => void;
-  handleSaveDeployment: (newDeployment: any) => void;
 }
 
-export const KaotoToolbar = ({
-  deployment,
-  expanded,
-  handleExpanded,
-  handleSaveDeployment,
-}: IKaotoToolbar) => {
+export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
+  const [deployment, setDeployment] = useDeploymentContext();
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
@@ -72,7 +67,7 @@ export const KaotoToolbar = ({
       if (typeof updatedSource === 'string') {
         startDeployment(updatedSource, settings.name, settings.namespace)
           .then((res) => {
-            handleSaveDeployment(res);
+            setDeployment({ ...deployment, crd: res });
 
             addAlert &&
               addAlert({
@@ -282,7 +277,7 @@ export const KaotoToolbar = ({
             )}
           </ToolbarItem>
 
-          {deployment ? (
+          {deployment.crd ? (
             <ToolbarItem alignment={{ default: 'alignRight' }}>
               <div className="status-container" data-testid={'toolbar-deployment-status'}>
                 <div className={`dot`}></div>
@@ -293,7 +288,7 @@ export const KaotoToolbar = ({
             <ToolbarItem alignment={{ default: 'alignRight' }}></ToolbarItem>
           )}
 
-          {deployment && <ToolbarItem variant="separator" />}
+          {deployment.crd && <ToolbarItem variant="separator" />}
 
           <ToolbarItem>
             <Tooltip content={<div>Source Code</div>} position={'bottom'}>

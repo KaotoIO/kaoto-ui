@@ -1,4 +1,3 @@
-import { IntegrationJsonProvider, IntegrationSourceProvider, SettingsProvider } from '../api';
 import {
   Catalog,
   DeploymentsModal,
@@ -35,7 +34,6 @@ export interface IExpanded {
 }
 
 const Dashboard = () => {
-  const [deployment, setDeployment] = useState<string>();
   const [expanded, setExpanded] = useState<IExpanded>({
     catalog: false,
     codeEditor: false,
@@ -54,137 +52,123 @@ const Dashboard = () => {
     setExpanded({ ...expanded, ...updatedState });
   };
 
-  const handleSaveDeployment = (newDeployment?: string) => {
-    setDeployment(newDeployment);
-  };
-
   return (
-    <IntegrationJsonProvider initialState={{ metadata: { name: '' }, params: [], steps: [] }}>
-      <IntegrationSourceProvider initialState={''}>
-        <SettingsProvider>
-          <Drawer
-            isExpanded={expanded.console}
-            position="bottom"
-            onExpand={onExpand}
-            style={{ maxHeight: window.innerHeight }}
-          >
-            <DrawerContent
-              panelContent={
-                <DrawerPanelContent>
-                  <DrawerContentBody
-                    style={{ maxHeight: '200px' }}
-                    tabIndex={expanded.console ? 0 : -1}
-                    // ref={consoleDrawerRef}
-                  >
-                    <Console
-                      expanded={expanded}
-                      handleCloseConsole={() => {
-                        setExpanded({ ...expanded, console: !expanded.console });
-                      }}
-                    />
-                  </DrawerContentBody>
-                </DrawerPanelContent>
-              }
-            >
-              <DrawerContentBody>
-                <Flex
-                  direction={{ default: 'column' }}
-                  flexWrap={{ default: 'nowrap' }}
-                  spaceItems={{ default: 'spaceItemsNone' }}
-                  style={{ height: '100%' }}
-                >
-                  <FlexItem>
-                    <Page>
-                      <PageSection padding={{ default: 'noPadding' }}>
-                        <KaotoToolbar
-                          deployment={deployment}
-                          expanded={expanded}
-                          handleExpanded={handleExpanded}
-                          handleSaveDeployment={handleSaveDeployment}
-                        />
-                        <Grid>
-                          {expanded.codeEditor ? (
-                            <GridItem span={3} rowSpan={2}>
-                              {/* SOURCE CODE EDITOR */}
-                              <SourceCodeEditor
-                                handleUpdateViews={(newViews: IViewProps[]) => {
-                                  if (newViews === views) return;
-                                  setViews(newViews);
-                                }}
-                              />
-                            </GridItem>
-                          ) : expanded.catalog ? (
-                            <GridItem span={3} rowSpan={2}>
-                              {/* STEP CATALOG */}
-                              <Catalog currentDeployment={deployment} />
-                            </GridItem>
-                          ) : (
-                            <></>
-                          )}
-                          <GridItem
-                            span={expanded.codeEditor || expanded.catalog ? 9 : 12}
-                            className={'visualization'}
-                          >
-                            {/* VISUALIZATION / CANVAS */}
-                            <Visualization
-                              handleUpdateViews={(newViews: IViewProps[]) => {
-                                if (newViews === views) return;
-                                setViews(newViews);
-                              }}
-                              toggleCatalog={() =>
-                                setExpanded({
-                                  ...expanded,
-                                  catalog: !expanded.catalog,
-                                  codeEditor: false,
-                                })
-                              }
-                              views={views}
-                            />
-                          </GridItem>
-                        </Grid>
-                      </PageSection>
-                    </Page>
-                  </FlexItem>
-                </Flex>
+    <>
+      <Drawer
+        isExpanded={expanded.console}
+        position="bottom"
+        onExpand={onExpand}
+        style={{ maxHeight: window.innerHeight }}
+      >
+        <DrawerContent
+          panelContent={
+            <DrawerPanelContent>
+              <DrawerContentBody
+                style={{ maxHeight: '200px' }}
+                tabIndex={expanded.console ? 0 : -1}
+                // ref={consoleDrawerRef}
+              >
+                <Console
+                  expanded={expanded}
+                  handleCloseConsole={() => {
+                    setExpanded({ ...expanded, console: !expanded.console });
+                  }}
+                />
               </DrawerContentBody>
-            </DrawerContent>
-          </Drawer>
-
-          <Banner isSticky={true} screenReaderText="Status">
-            <Flex flexWrap={{ default: 'nowrap' }}>
+            </DrawerPanelContent>
+          }
+        >
+          <DrawerContentBody>
+            <Flex
+              direction={{ default: 'column' }}
+              flexWrap={{ default: 'nowrap' }}
+              spaceItems={{ default: 'spaceItemsNone' }}
+              style={{ height: '100%' }}
+            >
               <FlexItem>
-                <a
-                  role={'button'}
-                  onClick={() => setExpanded({ ...expanded, console: !expanded.console })}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <TerminalIcon />
-                  &nbsp;&nbsp;View Console
-                </a>
+                <Page>
+                  <PageSection padding={{ default: 'noPadding' }}>
+                    <KaotoToolbar expanded={expanded} handleExpanded={handleExpanded} />
+                    <Grid>
+                      {expanded.codeEditor ? (
+                        <GridItem span={3} rowSpan={2}>
+                          {/* SOURCE CODE EDITOR */}
+                          <SourceCodeEditor
+                            handleUpdateViews={(newViews: IViewProps[]) => {
+                              if (newViews === views) return;
+                              setViews(newViews);
+                            }}
+                          />
+                        </GridItem>
+                      ) : expanded.catalog ? (
+                        <GridItem span={3} rowSpan={2}>
+                          {/* STEP CATALOG */}
+                          <Catalog />
+                        </GridItem>
+                      ) : (
+                        <></>
+                      )}
+                      <GridItem
+                        span={expanded.codeEditor || expanded.catalog ? 9 : 12}
+                        className={'visualization'}
+                      >
+                        {/* VISUALIZATION / CANVAS */}
+                        <Visualization
+                          handleUpdateViews={(newViews: IViewProps[]) => {
+                            if (newViews === views) return;
+                            setViews(newViews);
+                          }}
+                          toggleCatalog={() =>
+                            setExpanded({
+                              ...expanded,
+                              catalog: !expanded.catalog,
+                              codeEditor: false,
+                            })
+                          }
+                          views={views}
+                        />
+                      </GridItem>
+                    </Grid>
+                  </PageSection>
+                </Page>
               </FlexItem>
             </Flex>
-          </Banner>
+          </DrawerContentBody>
+        </DrawerContent>
+      </Drawer>
 
-          <DeploymentsModal
-            currentDeployment={deployment}
-            handleCloseModal={() => {
-              setExpanded({ ...expanded, deploymentsModal: !expanded.deploymentsModal });
-            }}
-            isModalOpen={expanded.deploymentsModal ?? false}
-          />
-          <SettingsModal
-            handleCloseModal={() => {
-              setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
-            }}
-            handleUpdateViews={(newViews: IViewProps[]) => {
-              if (newViews === views) return;
-              setViews(newViews);
-            }}
-            isModalOpen={expanded.settingsModal ?? false}
-          />
-        </SettingsProvider>
-      </IntegrationSourceProvider>
-    </IntegrationJsonProvider>
+      <Banner isSticky={true} screenReaderText="Status">
+        <Flex flexWrap={{ default: 'nowrap' }}>
+          <FlexItem>
+            <a
+              role={'button'}
+              onClick={() => setExpanded({ ...expanded, console: !expanded.console })}
+              style={{ textDecoration: 'none' }}
+            >
+              <TerminalIcon />
+              &nbsp;&nbsp;View Console
+            </a>
+          </FlexItem>
+        </Flex>
+      </Banner>
+
+      <DeploymentsModal
+        handleCloseModal={() => {
+          setExpanded({ ...expanded, deploymentsModal: !expanded.deploymentsModal });
+        }}
+        isModalOpen={expanded.deploymentsModal ?? false}
+      />
+      <SettingsModal
+        handleCloseModal={() => {
+          setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
+        }}
+        handleUpdateViews={(newViews: IViewProps[]) => {
+          if (newViews === views) return;
+          setViews(newViews);
+        }}
+        isModalOpen={expanded.settingsModal ?? false}
+      />
+    </>
   );
 };
 

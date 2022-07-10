@@ -1,6 +1,7 @@
 import { fetchDeployments, stopDeployment, useSettingsContext } from '../api';
+import { useDeploymentContext } from '../api/DeploymentProvider';
 import { IDeployment } from '../types';
-import { formatDateTime, usePrevious } from '../utils';
+import { formatDateTime } from '../utils';
 import { CustomExclamationTriangleIcon } from './Icons';
 import {
   Button,
@@ -31,7 +32,6 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
 export interface IDeploymentsModal {
-  currentDeployment?: string;
   handleCloseModal: () => void;
   isModalOpen: boolean;
 }
@@ -43,18 +43,14 @@ export interface IDeploymentsModal {
  * @param isModalOpen
  * @constructor
  */
-export const DeploymentsModal = ({
-  currentDeployment,
-  handleCloseModal,
-  isModalOpen,
-}: IDeploymentsModal) => {
+export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeploymentsModal) => {
   const [deployments, setDeployments] = useState<IDeployment[]>([]);
   const [settings] = useSettingsContext();
   const [activeSortIndex, setActiveSortIndex] = useState<number | undefined>(2);
   const [activeSortDirection, setActiveSortDirection] = useState<'asc' | 'desc' | undefined>(
     'desc'
   );
-  const previousDeployment = usePrevious(currentDeployment);
+  const [deployment] = useDeploymentContext();
 
   const { addAlert } = useAlert() || {};
 
@@ -71,7 +67,6 @@ export const DeploymentsModal = ({
 
   // on changes to deployment, re-fetch list of deployments
   useEffect(() => {
-    if (previousDeployment === currentDeployment) return;
     // fetch deployments
     fetchDeployments('no-cache', settings.namespace)
       .then((output) => {
@@ -80,7 +75,7 @@ export const DeploymentsModal = ({
       .catch((e) => {
         throw Error(e);
       });
-  }, [previousDeployment,settings.namespace,currentDeployment]);
+  }, [deployment, settings.namespace]);
 
   const columnNames = {
     name: 'Name',

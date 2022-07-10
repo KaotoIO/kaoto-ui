@@ -29,7 +29,7 @@ interface IConsole {
 }
 
 const Console = (props: IConsole) => {
-  const [logs, setLogs] = useState();
+  const [logs, setLogs] = useState<string[]>([]);
   const [isPaused, setIsPaused] = useState(false);
   const [itemCount, setItemCount] = useState(1);
   const [currentItemCount, setCurrentItemCount] = useState(0);
@@ -41,6 +41,7 @@ const Console = (props: IConsole) => {
   const logViewerRef = useRef<{ scrollToBottom: () => void }>();
 
   useEffect(() => {
+    if (!props.deployment) return;
     fetchDeploymentLogs(settings.name)
       .then((data) => {
         setLogs(data);
@@ -48,26 +49,26 @@ const Console = (props: IConsole) => {
       .catch((e) => {
         console.error(e);
       });
-  }, [props.deployment]);
+  }, [props.deployment, settings]);
 
-  useEffect(() => {
-    setTimer(
-      window.setInterval(() => {
-        setItemCount((itemCount) => itemCount + 1);
-      }, 500)
-    );
-    return () => {
-      window.clearInterval(timer);
-    };
-  }, []);
+  // useEffect(() => {
+  //   setTimer(
+  //     window.setInterval(() => {
+  //       setItemCount((itemCount) => itemCount + 1);
+  //     }, 500)
+  //   );
+  //   return () => {
+  //     window.clearInterval(timer);
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    if (itemCount > logs.length) {
-      window.clearInterval(timer);
-    } else {
-      setBuffer(logs.slice(0, itemCount));
-    }
-  }, [itemCount]);
+  // useEffect(() => {
+  //   if (itemCount > logs.length) {
+  //     window.clearInterval(timer);
+  //   } else {
+  //     setBuffer(logs.slice(0, itemCount));
+  //   }
+  // }, [itemCount]);
 
   useEffect(() => {
     if (!isPaused && buffer.length > 0) {
@@ -171,7 +172,8 @@ const Console = (props: IConsole) => {
   return (
     <>
       <LogViewer
-        data={renderData}
+        // data={renderData}
+        data={logs}
         id={'complex-toolbar-demo'}
         scrollToRow={currentItemCount}
         innerRef={logViewerRef}
