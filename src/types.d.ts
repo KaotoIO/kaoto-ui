@@ -22,7 +22,6 @@ export interface IDeployment {
   name: string;
   // defaults to 'default'
   namespace?: string;
-  // e.g. 'Invalid', 'Running', 'Creating', 'Stopped'
   status: 'Invalid' | 'Creating' | 'Running' | 'Stopped';
   // e.g. 'Kamelet', 'KameletBinding'
   type: string;

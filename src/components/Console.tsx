@@ -1,10 +1,8 @@
-import { data } from '../data/log';
+// import { data } from '../data/log';
+import { fetchDeploymentLogs, useSettingsContext } from '../api';
 import { IExpanded } from '../pages/Dashboard';
 import {
-  Badge,
   Button,
-  Select,
-  SelectOption,
   Toolbar,
   ToolbarContent,
   ToolbarGroup,
@@ -31,24 +29,26 @@ interface IConsole {
 }
 
 const Console = (props: IConsole) => {
-  const dataSources = {
-    'container-1': { type: 'C', id: 'data1' },
-    'container-2': { type: 'D', id: 'data2' },
-    'container-3': { type: 'E', id: 'data3' },
-  };
+  const [logs, setLogs] = useState();
   const [isPaused, setIsPaused] = useState(false);
   const [itemCount, setItemCount] = useState(1);
   const [currentItemCount, setCurrentItemCount] = useState(0);
   const [renderData, setRenderData] = useState('');
-  const [selectedDataSource, setSelectedDataSource] = useState('container-1');
-  const [selectDataSourceOpen, setSelectDataSourceOpen] = useState(false);
   const [timer, setTimer] = useState<string | number | undefined>();
-  const [selectedData, setSelectedData] = useState(
-    data[dataSources[selectedDataSource].id].split('\n')
-  );
+  const [settings] = useSettingsContext();
   const [buffer, setBuffer] = useState([]);
   const [linesBehind, setLinesBehind] = useState(0);
-  const logViewerRef = useRef();
+  const logViewerRef = useRef<{ scrollToBottom: () => void }>();
+
+  useEffect(() => {
+    fetchDeploymentLogs(settings.name)
+      .then((data) => {
+        setLogs(data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }, [props.deployment]);
 
   useEffect(() => {
     setTimer(
@@ -62,10 +62,10 @@ const Console = (props: IConsole) => {
   }, []);
 
   useEffect(() => {
-    if (itemCount > selectedData.length) {
+    if (itemCount > logs.length) {
       window.clearInterval(timer);
     } else {
-      setBuffer(selectedData.slice(0, itemCount));
+      setBuffer(logs.slice(0, itemCount));
     }
   }, [itemCount]);
 
@@ -73,6 +73,7 @@ const Console = (props: IConsole) => {
     if (!isPaused && buffer.length > 0) {
       setCurrentItemCount(buffer.length);
       setRenderData(buffer.join('\n'));
+
       if (logViewerRef && logViewerRef.current) {
         logViewerRef.current.scrollToBottom();
       }
@@ -85,10 +86,10 @@ const Console = (props: IConsole) => {
 
   const onDownloadClick = () => {
     const element = document.createElement('a');
-    const dataToDownload = [data[dataSources[selectedDataSource].id]];
+    const dataToDownload = [logs];
     const file = new Blob(dataToDownload, { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
-    element.download = `${selectedDataSource}.txt`;
+    element.download = `${settings.name}-log.txt`;
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
@@ -103,25 +104,6 @@ const Console = (props: IConsole) => {
       }
     }
   };
-
-  const selectDataSourceMenu = Object.entries(dataSources).map(([value, { type }]) => (
-    <SelectOption
-      key={value}
-      value={value}
-      isSelected={selectedDataSource === value}
-      isChecked={selectedDataSource === value}
-    >
-      <Badge key={value}>{type}</Badge>
-      {` ${value}`}
-    </SelectOption>
-  ));
-
-  const selectDataSourcePlaceholder = (
-    <Fragment>
-      <Badge>{dataSources[selectedDataSource].type}</Badge>
-      {` ${selectedDataSource}`}
-    </Fragment>
-  );
 
   const ControlButton = () => {
     return (
@@ -140,25 +122,6 @@ const Console = (props: IConsole) => {
   const leftAlignedToolbarGroup = (
     <Fragment>
       <ToolbarToggleGroup toggleIcon={<EllipsisVIcon />} breakpoint="md">
-        <ToolbarItem variant="search-filter">
-          <Select
-            onToggle={(isOpen) => setSelectDataSourceOpen(isOpen)}
-            onSelect={(_event, selection) => {
-              setSelectDataSourceOpen(false);
-              setSelectedDataSource(selection);
-              setSelectedData(data[dataSources[selection].id].split('\n'));
-              setLinesBehind(0);
-              setBuffer([]);
-              setItemCount(1);
-              setCurrentItemCount(0);
-            }}
-            selections={selectedDataSource}
-            isOpen={selectDataSourceOpen}
-            placeholderText={selectDataSourcePlaceholder}
-          >
-            {selectDataSourceMenu}
-          </Select>
-        </ToolbarItem>
         <ToolbarItem variant="search-filter">
           <LogViewerSearch
             onFocus={() => setIsPaused(true)}
@@ -206,28 +169,30 @@ const Console = (props: IConsole) => {
   };
 
   return (
-    <LogViewer
-      data={renderData}
-      // id="complex-toolbar-demo"
-      scrollToRow={currentItemCount}
-      innerRef={logViewerRef}
-      height={400}
-      toolbar={
-        <Toolbar>
-          <ToolbarContent>
-            <ToolbarGroup alignment={{ default: 'alignLeft' }}>
-              {leftAlignedToolbarGroup}
-            </ToolbarGroup>
-            <ToolbarGroup alignment={{ default: 'alignRight' }}>
-              {rightAlignedToolbarGroup}
-            </ToolbarGroup>
-          </ToolbarContent>
-        </Toolbar>
-      }
-      overScanCount={10}
-      footer={isPaused && <FooterButton />}
-      onScroll={onScroll}
-    />
+    <>
+      <LogViewer
+        data={renderData}
+        id={'complex-toolbar-demo'}
+        scrollToRow={currentItemCount}
+        innerRef={logViewerRef}
+        height={400}
+        toolbar={
+          <Toolbar>
+            <ToolbarContent>
+              <ToolbarGroup alignment={{ default: 'alignLeft' }}>
+                {leftAlignedToolbarGroup}
+              </ToolbarGroup>
+              <ToolbarGroup alignment={{ default: 'alignRight' }}>
+                {rightAlignedToolbarGroup}
+              </ToolbarGroup>
+            </ToolbarContent>
+          </Toolbar>
+        }
+        overScanCount={10}
+        footer={isPaused && <FooterButton />}
+        onScroll={onScroll}
+      />
+    </>
   );
 };
 
