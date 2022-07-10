@@ -25,7 +25,7 @@ import {
 } from '@patternfly/react-core';
 import { InfoCircleIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { useEffect, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 // Shorten a string to less than maxLen characters without truncating words.
 function shorten(str: string, maxLen: number, separator = ' ') {
@@ -45,6 +45,7 @@ export const Catalog = ({ currentDeployment }: ICatalog) => {
   const [query, setQuery] = useState(``);
   const [settings] = useSettingsContext();
   const previousDSL = usePrevious(settings.dsl);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const { addAlert } = useAlert() || {};
 
@@ -72,6 +73,7 @@ export const Catalog = ({ currentDeployment }: ICatalog) => {
             description: 'There was a problem fetching the catalog steps. Please try again later.',
           });
       });
+    searchInputRef.current?.focus();
   }, [settings.dsl]);
 
   useEffect(() => {
@@ -159,6 +161,7 @@ export const Catalog = ({ currentDeployment }: ICatalog) => {
                     aria-label={'search for a step'}
                     value={query}
                     onChange={changeSearch}
+                    ref={searchInputRef}
                   />
                 </InputGroup>
               </ToolbarItem>
