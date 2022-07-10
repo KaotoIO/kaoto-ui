@@ -21,9 +21,6 @@ import {
   Drawer,
   DrawerContent,
   DrawerContentBody,
-  DrawerHead,
-  DrawerCloseButton,
-  DrawerActions,
   DrawerPanelContent,
 } from '@patternfly/react-core';
 import { TerminalIcon } from '@patternfly/react-icons';
@@ -57,7 +54,7 @@ const Dashboard = () => {
     setExpanded({ ...expanded, ...updatedState });
   };
 
-  const handleSaveDeployment = (newDeployment: string) => {
+  const handleSaveDeployment = (newDeployment?: string) => {
     setDeployment(newDeployment);
   };
 

@@ -108,6 +108,8 @@ export const KaotoToolbar = ({
             variant: AlertVariant.success,
             description: 'Stopping deployment..',
           });
+
+        handleSaveDeployment(null);
       });
     } catch (e) {
       console.error(e);
