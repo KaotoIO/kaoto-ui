@@ -261,6 +261,13 @@ export const KaotoToolbar = ({
                   aria-label="edit integration name"
                   validated={nameValidation}
                   aria-invalid={nameValidation === 'error'}
+                  onKeyUp={(e) => {
+                    if (e.key !== 'Enter') return;
+                    if (isNameValidCheck(localName)) {
+                      setIsEditingName(false);
+                      setSettings({ ...settings, name: localName });
+                    }
+                  }}
                 />
                 <Button
                   variant="plain"
