@@ -21,6 +21,10 @@ import {
   Drawer,
   DrawerContent,
   DrawerContentBody,
+  DrawerHead,
+  DrawerCloseButton,
+  DrawerActions,
+  DrawerPanelContent,
 } from '@patternfly/react-core';
 import { TerminalIcon } from '@patternfly/react-icons';
 import { useRef, useState } from 'react';
@@ -45,6 +49,10 @@ const Dashboard = () => {
   const [views, setViews] = useState<IViewProps[]>([]);
   const consoleDrawerRef = useRef<HTMLSpanElement | null>(null);
 
+  const onExpand = () => {
+    consoleDrawerRef.current && consoleDrawerRef.current.focus();
+  };
+
   const handleExpanded = (updatedState: IExpanded) => {
     setExpanded({ ...expanded, ...updatedState });
   };
@@ -57,31 +65,38 @@ const Dashboard = () => {
     <IntegrationJsonProvider initialState={{ metadata: { name: '' }, params: [], steps: [] }}>
       <IntegrationSourceProvider initialState={''}>
         <SettingsProvider>
-          <Flex
-            direction={{ default: 'column' }}
-            flexWrap={{ default: 'nowrap' }}
-            spaceItems={{ default: 'spaceItemsNone' }}
-            style={{ height: '100%' }}
+          <Drawer
+            isExpanded={expanded.console}
+            position="bottom"
+            onExpand={onExpand}
+            style={{ maxHeight: window.innerHeight }}
           >
-            <FlexItem>
-              <Drawer
-                isExpanded={expanded.console}
-                position={'bottom'}
-                onExpand={() => consoleDrawerRef.current && consoleDrawerRef.current.focus()}
-              >
-                <DrawerContent
-                  panelContent={
+            <DrawerContent
+              panelContent={
+                <DrawerPanelContent>
+                  <DrawerContentBody
+                    style={{ maxHeight: '200px' }}
+                    tabIndex={expanded.console ? 0 : -1}
+                    // ref={consoleDrawerRef}
+                  >
                     <Console
                       expanded={expanded}
                       handleCloseConsole={() => {
                         setExpanded({ ...expanded, console: !expanded.console });
                       }}
-                      deployment={deployment}
-                      ref={consoleDrawerRef}
                     />
-                  }
+                  </DrawerContentBody>
+                </DrawerPanelContent>
+              }
+            >
+              <DrawerContentBody>
+                <Flex
+                  direction={{ default: 'column' }}
+                  flexWrap={{ default: 'nowrap' }}
+                  spaceItems={{ default: 'spaceItemsNone' }}
+                  style={{ height: '100%' }}
                 >
-                  <DrawerContentBody>
+                  <FlexItem>
                     <Page>
                       <PageSection padding={{ default: 'noPadding' }}>
                         <KaotoToolbar
@@ -92,7 +107,7 @@ const Dashboard = () => {
                         />
                         <Grid>
                           {expanded.codeEditor ? (
-                            <GridItem span={3}>
+                            <GridItem span={3} rowSpan={2}>
                               {/* SOURCE CODE EDITOR */}
                               <SourceCodeEditor
                                 handleUpdateViews={(newViews: IViewProps[]) => {
@@ -102,7 +117,7 @@ const Dashboard = () => {
                               />
                             </GridItem>
                           ) : expanded.catalog ? (
-                            <GridItem span={3}>
+                            <GridItem span={3} rowSpan={2}>
                               {/* STEP CATALOG */}
                               <Catalog currentDeployment={deployment} />
                             </GridItem>
@@ -132,31 +147,28 @@ const Dashboard = () => {
                         </Grid>
                       </PageSection>
                     </Page>
-                  </DrawerContentBody>
-                </DrawerContent>
-              </Drawer>
-            </FlexItem>
-
-            {/* BOTTOM STATUS BAR */}
-            <FlexItem>
-              <Banner isSticky={true} screenReaderText="Status">
-                <Flex flexWrap={{ default: 'nowrap' }}>
-                  {!deployment && (
-                    <FlexItem>
-                      <a
-                        role={'button'}
-                        onClick={() => setExpanded({ ...expanded, console: !expanded.console })}
-                        style={{ textDecoration: 'none' }}
-                      >
-                        <TerminalIcon />
-                        &nbsp;&nbsp;View Console
-                      </a>
-                    </FlexItem>
-                  )}
+                  </FlexItem>
                 </Flex>
-              </Banner>
-            </FlexItem>
-          </Flex>
+              </DrawerContentBody>
+            </DrawerContent>
+          </Drawer>
+
+          <Banner isSticky={true} screenReaderText="Status">
+            <Flex flexWrap={{ default: 'nowrap' }}>
+              {!deployment && (
+                <FlexItem>
+                  <a
+                    role={'button'}
+                    onClick={() => setExpanded({ ...expanded, console: !expanded.console })}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <TerminalIcon />
+                    &nbsp;&nbsp;View Console
+                  </a>
+                </FlexItem>
+              )}
+            </Flex>
+          </Banner>
 
           <DeploymentsModal
             currentDeployment={deployment}
