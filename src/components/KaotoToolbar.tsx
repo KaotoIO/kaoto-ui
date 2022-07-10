@@ -1,7 +1,6 @@
 import {
   fetchIntegrationSourceCode,
   startDeployment,
-  stopDeployment,
   useIntegrationJsonContext,
   useSettingsContext,
 } from '../api';
@@ -33,7 +32,6 @@ import {
   CubesIcon,
   PencilAltIcon,
   PlayIcon,
-  StopIcon,
   ThIcon,
   TimesIcon,
   TrashIcon,
@@ -95,32 +93,6 @@ export const KaotoToolbar = ({
           });
       }
     });
-  };
-
-  const handleDeployStopClick = () => {
-    try {
-      stopDeployment(settings.name, settings.namespace).then((res) => {
-        console.log('stop deployment response: ', res);
-
-        addAlert &&
-          addAlert({
-            title: 'Stop deployment',
-            variant: AlertVariant.success,
-            description: 'Stopping deployment..',
-          });
-
-        handleSaveDeployment(null);
-      });
-    } catch (e) {
-      console.error(e);
-
-      addAlert &&
-        addAlert({
-          title: 'Stop deployment',
-          variant: AlertVariant.success,
-          description: 'There was a problem stopping your deployment. Please try again later.',
-        });
-    }
   };
 
   const onFocusAppMenu = () => {
@@ -335,31 +307,17 @@ export const KaotoToolbar = ({
             </Tooltip>
           </ToolbarItem>
 
-          {!deployment ? (
-            <ToolbarItem>
-              <Tooltip content={<div>Deploy</div>} position={'bottom'}>
-                <Button
-                  tabIndex={0}
-                  variant="link"
-                  data-testid={'toolbar-deploy-start-btn'}
-                  icon={<PlayIcon />}
-                  onClick={handleDeployStartClick}
-                />
-              </Tooltip>
-            </ToolbarItem>
-          ) : (
-            <ToolbarItem>
-              <Tooltip content={<div>Stop</div>} position={'bottom'}>
-                <Button
-                  tabIndex={0}
-                  variant="link"
-                  icon={<StopIcon />}
-                  data-testid={'toolbar-deploy-stop-btn'}
-                  onClick={handleDeployStopClick}
-                />
-              </Tooltip>
-            </ToolbarItem>
-          )}
+          <ToolbarItem>
+            <Tooltip content={<div>Deploy</div>} position={'bottom'}>
+              <Button
+                tabIndex={0}
+                variant="link"
+                data-testid={'toolbar-deploy-start-btn'}
+                icon={<PlayIcon />}
+                onClick={handleDeployStartClick}
+              />
+            </Tooltip>
+          </ToolbarItem>
 
           <ToolbarItem variant="overflow-menu">
             <OverflowMenu breakpoint="2xl">
