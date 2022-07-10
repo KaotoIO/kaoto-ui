@@ -58,13 +58,13 @@ const Dashboard = () => {
         isExpanded={expanded.console}
         position="bottom"
         onExpand={onExpand}
-        style={{ maxHeight: window.innerHeight }}
+        style={{ maxHeight: window.innerHeight - 105 }}
       >
         <DrawerContent
           panelContent={
-            <DrawerPanelContent>
+            <DrawerPanelContent isResizable>
               <DrawerContentBody
-                style={{ maxHeight: '200px' }}
+                style={{ maxHeight: '250px' }}
                 tabIndex={expanded.console ? 0 : -1}
                 // ref={consoleDrawerRef}
               >

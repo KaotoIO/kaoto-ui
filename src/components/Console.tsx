@@ -44,6 +44,7 @@ const Console = (props: IConsole) => {
     if (!deployment) return;
     fetchDeploymentLogs(settings.name)
       .then((data) => {
+        console.log(data);
         setLogs(data);
       })
       .catch((e) => {
