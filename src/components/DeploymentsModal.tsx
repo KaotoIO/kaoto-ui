@@ -67,7 +67,7 @@ export const DeploymentsModal = ({
       .catch((e) => {
         throw Error(e);
       });
-  }, []);
+  }, [settings.namespace]);
 
   // on changes to deployment, re-fetch list of deployments
   useEffect(() => {
@@ -80,7 +80,7 @@ export const DeploymentsModal = ({
       .catch((e) => {
         throw Error(e);
       });
-  }, [currentDeployment]);
+  }, [previousDeployment,settings.namespace,currentDeployment]);
 
   const columnNames = {
     name: 'Name',

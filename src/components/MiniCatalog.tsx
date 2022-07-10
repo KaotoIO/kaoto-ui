@@ -13,7 +13,7 @@ import {
   ToolbarItem,
 } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { useEffect, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 export interface IMiniCatalog {
   handleSelectStep?: (selectedStep: any) => void;
@@ -26,7 +26,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
   const [query, setQuery] = useState(``);
 
   const { addAlert } = useAlert() || {};
-
+  const searchInputRef = useRef<HTMLInputElement>(null);
   /**
    * Sort & fetch all Steps for the Catalog
    */
@@ -49,6 +49,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
             });
         });
     }
+    searchInputRef.current?.focus();
   }, []);
 
   const changeSearch = (e: string) => {
@@ -80,6 +81,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                   aria-label={'search for a step'}
                   value={query}
                   onChange={changeSearch}
+                  ref={searchInputRef}
                 />
               </InputGroup>
             </ToolbarItem>
