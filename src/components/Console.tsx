@@ -1,5 +1,6 @@
 // import { data } from '../data/log';
 import { fetchDeploymentLogs, useSettingsContext } from '../api';
+import { useDeploymentContext } from '../api/DeploymentProvider';
 import { IExpanded } from '../pages/Dashboard';
 import {
   Button,
@@ -22,13 +23,12 @@ import { LogViewer, LogViewerSearch } from '@patternfly/react-log-viewer';
 import { Fragment, useEffect, useRef, useState } from 'react';
 
 interface IConsole {
-  // CRD, or string, of deployment
-  deployment?: string;
   expanded: IExpanded;
   handleCloseConsole: () => void;
 }
 
 const Console = (props: IConsole) => {
+  const [deployment] = useDeploymentContext();
   const [logs, setLogs] = useState<string[]>([]);
   const [isPaused, setIsPaused] = useState(false);
   const [itemCount, setItemCount] = useState(1);
@@ -41,7 +41,7 @@ const Console = (props: IConsole) => {
   const logViewerRef = useRef<{ scrollToBottom: () => void }>();
 
   useEffect(() => {
-    if (!props.deployment) return;
+    if (!deployment) return;
     fetchDeploymentLogs(settings.name)
       .then((data) => {
         setLogs(data);
@@ -49,7 +49,7 @@ const Console = (props: IConsole) => {
       .catch((e) => {
         console.error(e);
       });
-  }, [props.deployment, settings]);
+  }, [deployment, settings]);
 
   // useEffect(() => {
   //   setTimer(

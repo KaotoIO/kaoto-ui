@@ -134,7 +134,6 @@ export async function fetchDeploymentLogs(name: string, lines?: number, namespac
       endpoint: `${apiVersion}/deployment/${name}`,
       contentType: 'application/json',
       queryParams: {
-        name,
         lines,
         namespace: namespace ?? 'default',
       },
