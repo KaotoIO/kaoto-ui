@@ -152,18 +152,16 @@ const Dashboard = () => {
 
           <Banner isSticky={true} screenReaderText="Status">
             <Flex flexWrap={{ default: 'nowrap' }}>
-              {!deployment && (
-                <FlexItem>
-                  <a
-                    role={'button'}
-                    onClick={() => setExpanded({ ...expanded, console: !expanded.console })}
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <TerminalIcon />
-                    &nbsp;&nbsp;View Console
-                  </a>
-                </FlexItem>
-              )}
+              <FlexItem>
+                <a
+                  role={'button'}
+                  onClick={() => setExpanded({ ...expanded, console: !expanded.console })}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <TerminalIcon />
+                  &nbsp;&nbsp;View Console
+                </a>
+              </FlexItem>
             </Flex>
           </Banner>
 
