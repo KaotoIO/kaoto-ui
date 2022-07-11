@@ -128,11 +128,14 @@ export async function fetchDeployments(cache?: RequestCache | undefined, namespa
  * @param namespace
  * @param lines
  */
-export async function fetchDeploymentLogs(name: string, namespace?: string, lines?: number) {
+export async function fetchDeploymentLogs(
+  name: string,
+  namespace?: string,
+  lines?: number
+): Promise<ReadableStream | unknown> {
   try {
     const resp = await request.get({
       endpoint: `${apiVersion}/deployments/${name}/logs`,
-      // endpoint: `/integrations/${name}/logs`,
       contentType: 'application/json',
       queryParams: {
         namespace: namespace ?? 'default',
@@ -140,7 +143,7 @@ export async function fetchDeploymentLogs(name: string, namespace?: string, line
       },
     });
 
-    return await resp.text();
+    return await resp.body;
   } catch (err) {
     return err;
   }

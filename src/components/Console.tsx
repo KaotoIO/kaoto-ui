@@ -1,4 +1,3 @@
-// import { data } from '../data/log';
 import { fetchDeploymentLogs, useSettingsContext } from '../api';
 import { useDeploymentContext } from '../api/DeploymentProvider';
 import { IExpanded } from '../pages/Dashboard';
@@ -14,9 +13,10 @@ import {
 import {
   CloseIcon,
   DownloadIcon,
-  EllipsisVIcon, // OutlinedPlayCircleIcon,
-  // PauseIcon,
-  // PlayIcon,
+  EllipsisVIcon,
+  OutlinedPlayCircleIcon,
+  PauseIcon,
+  PlayIcon,
 } from '@patternfly/react-icons';
 import { LogViewer, LogViewerSearch } from '@patternfly/react-log-viewer';
 import { Fragment, useEffect, useRef, useState } from 'react';
@@ -29,68 +29,76 @@ interface IConsole {
 const Console = (props: IConsole) => {
   const [deployment] = useDeploymentContext();
   const [logs, setLogs] = useState<string[]>([]);
-  // const [isPaused, setIsPaused] = useState(false);
-  // const [itemCount, setItemCount] = useState(1);
-  // const [currentItemCount, setCurrentItemCount] = useState(0);
-  // const [renderData, setRenderData] = useState('');
-  // const [timer, setTimer] = useState<string | number | undefined>();
+  const [isPaused, setIsPaused] = useState(false);
+  const [itemCount, setItemCount] = useState(1);
+  const [currentItemCount, setCurrentItemCount] = useState(0);
+  const [renderData, setRenderData] = useState('');
   const [settings] = useSettingsContext();
-  // const [buffer, setBuffer] = useState([]);
-  // const [linesBehind, setLinesBehind] = useState(0);
+  const [buffer, setBuffer] = useState<string[]>([]);
+  const [linesBehind, setLinesBehind] = useState(0);
   const logViewerRef = useRef<{ scrollToBottom: () => void }>();
 
   useEffect(() => {
-    if (!deployment) return;
-    setTimeout(() => {
-      fetchDeploymentLogs(settings.name, settings.namespace, 50)
-        .then((data) => {
-          console.log(data);
-          setLogs(data);
-        })
-        .catch((e) => {
-          console.error(e);
+    setLinesBehind(0);
+    setBuffer([]);
+    setItemCount(1);
+    setCurrentItemCount(0);
+
+    fetchDeploymentLogs(settings.name, settings.namespace, 50)
+      .then((body: ReadableStream | unknown) => {
+        const reader = body.pipeThrough(new TextDecoderStream()).getReader();
+        return new ReadableStream({
+          async start(controller) {
+            return pump();
+            function pump() {
+              return reader.read().then(({ done, value }: { done: boolean; value: string }) => {
+                setLogs((currentArray) => [...currentArray, value]);
+                setItemCount((itemCount) => itemCount + 1);
+
+                // When no more data needs to be consumed, close the stream
+                if (done) {
+                  controller.close();
+                  return;
+                }
+                // Enqueue the next data chunk into our target stream
+                controller.enqueue(value);
+                return pump();
+              });
+            }
+          },
         });
-    }, 5000);
-  }, []);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }, [settings, deployment]);
 
-  // useEffect(() => {
-  //   setTimer(
-  //     window.setInterval(() => {
-  //       setItemCount((itemCount) => itemCount + 1);
-  //     }, 500)
-  //   );
-  //   return () => {
-  //     window.clearInterval(timer);
-  //   };
-  // }, []);
+  useEffect(() => {
+    if (itemCount > logs.length) {
+      setBuffer(logs.slice(0, itemCount));
+    }
+  }, [itemCount]);
 
-  // useEffect(() => {
-  //   if (itemCount > logs.length) {
-  //     window.clearInterval(timer);
-  //   } else {
-  //     setBuffer(logs.slice(0, itemCount));
-  //   }
-  // }, [itemCount]);
+  useEffect(() => {
+    if (!isPaused && buffer.length > 0) {
+      // if it's NOT paused, and there is a buffer.
+      // `currentItemCount` = length of the buffer
+      setCurrentItemCount(buffer.length);
+      setRenderData(buffer.join('\n'));
 
-  // useEffect(() => {
-  //   if (!isPaused && buffer.length > 0) {
-  //     setCurrentItemCount(buffer.length);
-  //     setRenderData(buffer.join('\n'));
-  //
-  //     if (logViewerRef && logViewerRef.current) {
-  //       logViewerRef.current.scrollToBottom();
-  //     }
-  //   } else if (buffer.length !== currentItemCount) {
-  //     setLinesBehind(buffer.length - currentItemCount);
-  //   } else {
-  //     setLinesBehind(0);
-  //   }
-  // }, [isPaused, buffer]);
+      if (logViewerRef && logViewerRef.current) {
+        logViewerRef.current.scrollToBottom();
+      }
+    } else if (buffer.length !== currentItemCount) {
+      setLinesBehind(buffer.length - currentItemCount);
+    } else {
+      setLinesBehind(0);
+    }
+  }, [isPaused, buffer]);
 
   const onDownloadClick = () => {
     const element = document.createElement('a');
-    const dataToDownload = [logs];
-    const file = new Blob(dataToDownload, { type: 'text/plain' });
+    const file = new Blob(logs, { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
     element.download = `${settings.name}-log.txt`;
     document.body.appendChild(element);
@@ -98,44 +106,44 @@ const Console = (props: IConsole) => {
     document.body.removeChild(element);
   };
 
-  // const onScroll = ({ scrollOffsetToBottom, scrollUpdateWasRequested }: any) => {
-  //   if (!scrollUpdateWasRequested) {
-  //     if (scrollOffsetToBottom > 0) {
-  //       setIsPaused(true);
-  //     } else {
-  //       setIsPaused(false);
-  //     }
-  //   }
-  // };
+  const onScroll = ({ scrollOffsetToBottom, scrollUpdateWasRequested }: any) => {
+    if (!scrollUpdateWasRequested) {
+      if (scrollOffsetToBottom > 0) {
+        setIsPaused(true);
+      } else {
+        setIsPaused(false);
+      }
+    }
+  };
 
-  // const ControlButton = () => {
-  //   return (
-  //     <Button
-  //       variant={isPaused ? 'plain' : 'link'}
-  //       onClick={() => {
-  //         setIsPaused(!isPaused);
-  //       }}
-  //     >
-  //       {isPaused ? <PlayIcon /> : <PauseIcon />}
-  //       {isPaused ? ` Resume Log` : ` Pause Log`}
-  //     </Button>
-  //   );
-  // };
+  const ControlButton = () => {
+    return (
+      <Button
+        variant={isPaused ? 'plain' : 'link'}
+        onClick={() => {
+          setIsPaused(!isPaused);
+        }}
+      >
+        {isPaused ? <PlayIcon /> : <PauseIcon />}
+        {isPaused ? ` Resume Log` : ` Pause Log`}
+      </Button>
+    );
+  };
 
   const leftAlignedToolbarGroup = (
     <Fragment>
       <ToolbarToggleGroup toggleIcon={<EllipsisVIcon />} breakpoint="md">
         <ToolbarItem variant="search-filter">
           <LogViewerSearch
-            // onFocus={() => setIsPaused(true)}
+            onFocus={() => setIsPaused(true)}
             placeholder="Search"
             minSearchChars={1}
           />
         </ToolbarItem>
       </ToolbarToggleGroup>
-      {/*<ToolbarItem>*/}
-      {/*  <ControlButton />*/}
-      {/*</ToolbarItem>*/}
+      <ToolbarItem>
+        <ControlButton />
+      </ToolbarItem>
     </Fragment>
   );
 
@@ -158,26 +166,24 @@ const Console = (props: IConsole) => {
     </Fragment>
   );
 
-  // const FooterButton = () => {
-  //   const handleClick = () => {
-  //     setIsPaused(false);
-  //   };
-  //
-  //   return (
-  //     <Button onClick={handleClick} isBlock>
-  //       <OutlinedPlayCircleIcon />
-  //       resume {linesBehind === 0 ? null : `and show ${linesBehind} lines`}
-  //     </Button>
-  //   );
-  // };
+  const FooterButton = () => {
+    const handleClick = () => {
+      setIsPaused(false);
+    };
+
+    return (
+      <Button onClick={handleClick} isBlock>
+        <OutlinedPlayCircleIcon />
+        resume {linesBehind === 0 ? null : `and show ${linesBehind} lines`}
+      </Button>
+    );
+  };
 
   return (
     <>
       <LogViewer
-        // data={renderData}
-        data={logs}
-        id={'complex-toolbar-demo'}
-        // scrollToRow={currentItemCount}
+        data={renderData}
+        scrollToRow={currentItemCount}
         innerRef={logViewerRef}
         height={400}
         toolbar={
@@ -192,9 +198,9 @@ const Console = (props: IConsole) => {
             </ToolbarContent>
           </Toolbar>
         }
-        // overScanCount={10}
-        // footer={isPaused && <FooterButton />}
-        // onScroll={onScroll}
+        overScanCount={10}
+        footer={isPaused && <FooterButton />}
+        onScroll={onScroll}
       />
     </>
   );
