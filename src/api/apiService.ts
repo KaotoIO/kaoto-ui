@@ -140,7 +140,7 @@ export async function fetchDeploymentLogs(name: string, namespace?: string, line
       },
     });
 
-    return await resp.text();
+    return await resp.body;
   } catch (err) {
     return err;
   }
