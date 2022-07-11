@@ -28,7 +28,7 @@ export interface IFetch {
   };
 
   /**
-   * Whether or not to stringify the data to JSON, overrides the content type
+   * Whether to stringify the data to JSON, overrides the content type
    */
   stringifyBody?: boolean;
 }

@@ -15,6 +15,8 @@ declare global {
 }
 
 export interface IDeployment {
+  // yaml CRD of deployment
+  crd?: string;
   date: string;
   // array of errors
   errors: any[];
@@ -22,7 +24,6 @@ export interface IDeployment {
   name: string;
   // defaults to 'default'
   namespace?: string;
-  // e.g. 'Invalid', 'Running', 'Creating', 'Stopped'
   status: 'Invalid' | 'Creating' | 'Running' | 'Stopped';
   // e.g. 'Kamelet', 'KameletBinding'
   type: string;

@@ -1686,6 +1686,17 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.75.1.tgz#3567b5a21a7f52c6a272f0330357fac87083867a"
   integrity sha512-1ly8SVi/kcc0zkiViOjUd8D5BEr7GeqWGmDPuDSBtD60l1dYf3hZc44IWFVkRM/oHZML/musdrJkLfh4MDqX9w==
 
+"@patternfly/react-log-viewer@^4.69.1":
+  version "4.69.1"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-log-viewer/-/react-log-viewer-4.69.1.tgz#69d83e6c801e01d20e6fb09d12b401a84e250d78"
+  integrity sha512-SzIfMPvp+H4xrQ/q6haguwzvuXdm/e0AJ3a2f/J21OFiUvIvo1To2/+CVYQX3NggAslJQ9e+3czdZD+mBe2AXw==
+  dependencies:
+    "@patternfly/react-core" "^4.224.1"
+    "@patternfly/react-icons" "^4.75.1"
+    "@patternfly/react-styles" "^4.74.1"
+    memoize-one "^5.1.0"
+    resize-observer-polyfill "^1.5.1"
+
 "@patternfly/react-styles@^4.71.3":
   version "4.71.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.71.3.tgz#4f1cf4624a675751f035dc3bfa4cb3c6ca48e43b"
@@ -9374,6 +9385,11 @@ memfs@^3.1.2, memfs@^3.2.2, memfs@^3.4.3:
   integrity sha512-W4gHNUE++1oSJVn8Y68jPXi+mkx3fXR5ITE/Ubz6EQ3xRpCN5k2CQ4AUR8094Z7211F876TyoBACGsIveqgiGA==
   dependencies:
     fs-monkey "1.0.3"
+
+memoize-one@^5.1.0:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.2.1.tgz#8337aa3c4335581839ec01c3d594090cebe8f00e"
+  integrity sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==
 
 memoizerific@^1.11.3:
   version "1.11.3"
