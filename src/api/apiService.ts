@@ -126,16 +126,17 @@ export async function fetchDeployments(cache?: RequestCache | undefined, namespa
  * Fetches a single deployment's logs, optionally for a specific namespace and a specific number of lines
  * @param name
  * @param namespace
- * @param _lines
+ * @param lines
  */
-export async function fetchDeploymentLogs(name: string, namespace?: string, _lines?: number) {
+export async function fetchDeploymentLogs(name: string, namespace?: string, lines?: number) {
   try {
     const resp = await request.get({
-      endpoint: `${apiVersion}/deployments/${name}/logs`,
+      // endpoint: `${apiVersion}/deployments/${name}/logs`,
+      endpoint: `/integrations/${name}/logs`,
       contentType: 'application/json',
       queryParams: {
-        // lines,
         namespace: namespace ?? 'default',
+        lines,
       },
     });
 

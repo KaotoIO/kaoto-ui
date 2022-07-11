@@ -1,3 +1,5 @@
+// @ts-ignore
+import svg from '../assets/images/kaoto.svg';
 import { ISettings } from '../types';
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 
@@ -9,7 +11,9 @@ interface ISettingsProvider {
 export type IUseSettings = [ISettings, Dispatch<SetStateAction<ISettings>>];
 
 const initialOrChangedSettings: ISettings = {
+  description: '',
   dsl: 'KameletBinding',
+  icon: svg,
   name: 'integration',
   namespace: 'default',
 };
@@ -21,7 +25,10 @@ const initialOrChangedSettings: ISettings = {
  * @constructor
  */
 function SettingsProvider({ initialState, children }: ISettingsProvider) {
-  const [settings, setSettings] = useState<ISettings>(initialState ?? initialOrChangedSettings);
+  const [settings, setSettings] = useState<ISettings>({
+    ...initialOrChangedSettings,
+    ...initialState,
+  });
 
   return (
     <settingsContext.Provider value={[settings, setSettings]}>{children}</settingsContext.Provider>
