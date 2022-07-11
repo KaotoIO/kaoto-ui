@@ -30,8 +30,10 @@ export interface IDeployment {
 }
 
 export interface ISettings {
+  description?: string;
   // e.g. 'KameletBinding'
   dsl: string;
+  icon?: string;
   // name of integration or deployment
   name: string;
   // Cluster namespace

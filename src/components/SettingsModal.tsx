@@ -18,6 +18,7 @@ import {
   Modal,
   ModalVariant,
   Popover,
+  TextArea,
   TextInput,
 } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
@@ -77,6 +78,10 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
         console.error(e);
       });
   }, [integrationJson?.steps]);
+
+  const onChangeDescription = (newDesc: string) => {
+    setLocalSettings({ ...localSettings, description: newDesc });
+  };
 
   const onChangeName = (newName: string) => {
     setLocalSettings({ ...localSettings, name: newName });
@@ -158,11 +163,10 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
         <Form>
           <FormGroup
             fieldId="integration-name"
-            helperText="Give your integration a fun name."
             helperTextInvalid="Must be lowercase and alphanumeric (dashes allowed)"
             validated={nameValidation}
             isRequired
-            label="Integration name"
+            label="Name"
           >
             <TextInput
               aria-describedby="integration-name-helper"
@@ -174,6 +178,16 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
               value={localSettings.name}
               validated={nameValidation}
               aria-invalid={nameValidation === 'error'}
+            />
+          </FormGroup>
+          <FormGroup fieldId="integration-description" label="Description">
+            <TextArea
+              aria-describedby="integration-description-helper"
+              id="integration-description"
+              name="integration-description"
+              onChange={onChangeDescription}
+              type="textarea"
+              value={localSettings.description}
             />
           </FormGroup>
           <FormGroup
@@ -197,10 +211,10 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
             />
           </FormGroup>
           <FormGroup
-            label="Integration type"
+            label="Type"
             labelIcon={
               <Popover
-                headerContent={'Integration type'}
+                headerContent={'Type'}
                 bodyContent={
                   <div>
                     <p>

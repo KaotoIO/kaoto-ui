@@ -140,9 +140,9 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
 
         addAlert &&
           addAlert({
-            title: 'Deleted Deployment',
+            title: 'Delete Resource',
             variant: AlertVariant.success,
-            description: 'Successfully deleted the deployment.',
+            description: 'Deleting the resource..',
           });
       })
       .catch((e) => {
@@ -151,7 +151,7 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
           addAlert({
             title: 'Something went wrong',
             variant: AlertVariant.danger,
-            description: 'There was a problem updating the integration. Please try again later.',
+            description: 'There was a problem deleting the resource. Please try again later.',
           });
       });
   };
@@ -233,7 +233,7 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
             <Title headingLevel="h4" size="lg">
               No deployments
             </Title>
-            <EmptyStateBody>Your deployments will appear here.</EmptyStateBody>
+            <EmptyStateBody>Your resources and deployments will appear here.</EmptyStateBody>
           </EmptyState>
         )}
       </Modal>
