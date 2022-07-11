@@ -1,4 +1,3 @@
-// import { data } from '../data/log';
 import { fetchDeploymentLogs, useSettingsContext } from '../api';
 import { useDeploymentContext } from '../api/DeploymentProvider';
 import { IExpanded } from '../pages/Dashboard';
@@ -34,21 +33,28 @@ const Console = (props: IConsole) => {
   const [itemCount, setItemCount] = useState(1);
   const [currentItemCount, setCurrentItemCount] = useState(0);
   const [renderData, setRenderData] = useState('');
-  const [timer, setTimer] = useState<string | number | undefined>();
   const [settings] = useSettingsContext();
-  const [buffer, setBuffer] = useState([]);
+  const [buffer, setBuffer] = useState<string[]>([]);
   const [linesBehind, setLinesBehind] = useState(0);
   const logViewerRef = useRef<{ scrollToBottom: () => void }>();
 
   useEffect(() => {
+    setLinesBehind(0);
+    setBuffer([]);
+    setItemCount(1);
+    setCurrentItemCount(0);
+
     fetchDeploymentLogs(settings.name, settings.namespace, 50)
-      .then((body) => {
-        const reader = body.getReader();
+      .then((body: ReadableStream | unknown) => {
+        const reader = body.pipeThrough(new TextDecoderStream()).getReader();
         return new ReadableStream({
           async start(controller) {
             return pump();
             function pump() {
-              return reader.read().then(({ done, value }) => {
+              return reader.read().then(({ done, value }: { done: boolean; value: string }) => {
+                setLogs((currentArray) => [...currentArray, value]);
+                setItemCount((itemCount) => itemCount + 1);
+
                 // When no more data needs to be consumed, close the stream
                 if (done) {
                   controller.close();
@@ -62,42 +68,23 @@ const Console = (props: IConsole) => {
           },
         });
       })
-      // Create a new response out of the stream
-      .then((stream) => new Response(stream))
-      .then((res) => {
-        console.log('res: ', res);
-        console.log('res.body: ', res.body);
-        // setLogs(res.body);
-      })
       .catch((e) => {
         console.error(e);
       });
   }, [settings, deployment]);
 
   useEffect(() => {
-    setTimer(
-      window.setInterval(() => {
-        setItemCount((itemCount) => itemCount + 1);
-      }, 500)
-    );
-    return () => {
-      window.clearInterval(timer);
-    };
-  }, []);
-
-  useEffect(() => {
     if (itemCount > logs.length) {
-      window.clearInterval(timer);
-    } else {
       setBuffer(logs.slice(0, itemCount));
     }
   }, [itemCount]);
 
   useEffect(() => {
     if (!isPaused && buffer.length > 0) {
+      // if it's NOT paused, and there is a buffer.
+      // `currentItemCount` = length of the buffer
       setCurrentItemCount(buffer.length);
-      // setRenderData(buffer.join('\n'));
-      setRenderData(buffer);
+      setRenderData(buffer.join('\n'));
 
       if (logViewerRef && logViewerRef.current) {
         logViewerRef.current.scrollToBottom();
@@ -111,8 +98,7 @@ const Console = (props: IConsole) => {
 
   const onDownloadClick = () => {
     const element = document.createElement('a');
-    const dataToDownload = [logs];
-    const file = new Blob(dataToDownload, { type: 'text/plain' });
+    const file = new Blob(logs, { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
     element.download = `${settings.name}-log.txt`;
     document.body.appendChild(element);
@@ -197,8 +183,6 @@ const Console = (props: IConsole) => {
     <>
       <LogViewer
         data={renderData}
-        // data={logs}
-        id={'complex-toolbar-demo'}
         scrollToRow={currentItemCount}
         innerRef={logViewerRef}
         height={400}
