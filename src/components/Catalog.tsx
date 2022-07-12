@@ -192,7 +192,7 @@ export const Catalog = () => {
           }
         </ToolbarContent>
       </Toolbar>
-      <Gallery hasGutter={true} style={{ maxHeight: '615px', overflow: 'auto', padding: '0 10px' }}>
+      <Gallery hasGutter={true} style={{ maxHeight: 'calc(100vh - 375px)', overflow: 'auto', padding: '0 10px' }}>
         {catalogData &&
           search(catalogData).map((step, idx) => {
             return (
