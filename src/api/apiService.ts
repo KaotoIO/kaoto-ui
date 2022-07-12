@@ -241,13 +241,11 @@ export async function fetchViews(data: IStepProps[], namespace?: string) {
  */
 export async function startDeployment(integrationSource: string, name: string, namespace?: string) {
   try {
+    const params = (namespace?`?namespace=${namespace}`:'');
     const resp = await request.post({
-      endpoint: `${apiVersion}/deployments/${name.toLowerCase()}`,
+      endpoint: `${apiVersion}/deployments/${name.toLowerCase()}${params}`,
       contentType: 'text/yaml',
       body: integrationSource,
-      queryParams: {
-        namespace: namespace ?? 'default',
-      },
     });
 
     return await resp.text();
