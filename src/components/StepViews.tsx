@@ -34,7 +34,7 @@ import {
   TabTitleText,
 } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { lazy, useEffect, useRef, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 
 export interface IStepViewsProps {
   deleteStep: (e: any) => void;
@@ -56,9 +56,11 @@ const StepViews = ({
   const hasDetailView = views?.some((v) => v.id === 'detail-step');
   const detailsTabIndex = views?.length! + 1; // provide an index that won't be used by custom views
   const configTabIndex = views?.length! + 2;
-  const [activeTabKey, setActiveTabKey] = useState(detailsTabIndex);
-  const stepPropertySchema = useRef<{ [label: string]: { type: string } }>({});
-  const stepPropertyModel = useRef<{ [label: string]: any }>({});
+  const [activeTabKey, setActiveTabKey] = useState(configTabIndex);
+  const [stepPropertySchema, setStepPropertySchema] = useState<{
+    [label: string]: { type: string };
+  }>({});
+  const [stepPropertyModel, setStepPropertyModel] = useState<{ [label: string]: any }>({});
   const previousTabIndex = usePrevious(detailsTabIndex);
   const [, dispatch] = useIntegrationJsonContext();
 
@@ -92,14 +94,6 @@ const StepViews = ({
   };
 
   useEffect(() => {
-    if (previousTabIndex === detailsTabIndex) {
-      return;
-    }
-
-    setActiveTabKey(views?.some((v) => v.id === 'detail-step') ? 0 : detailsTabIndex);
-  }, [detailsTabIndex, previousTabIndex, views]);
-
-  useEffect(() => {
     let tempSchemaObject: { [label: string]: { type: string; value?: any } } = {};
     let tempModelObject: { [label: string]: any } = {};
 
@@ -112,8 +106,8 @@ const StepViews = ({
 
     step.parameters?.map(schemaProps);
 
-    stepPropertySchema.current = tempSchemaObject;
-    stepPropertyModel.current = tempModelObject;
+    setStepPropertySchema(tempSchemaObject);
+    setStepPropertyModel(tempModelObject);
   }, [step.parameters, isPanelExpanded]);
 
   const handleTabClick = (_event: any, tabIndex: any) => {
@@ -239,8 +233,8 @@ const StepViews = ({
               <Grid hasGutter>
                 {step.parameters && (
                   <JsonSchemaConfigurator
-                    schema={{ type: 'object', properties: stepPropertySchema.current }}
-                    configuration={stepPropertyModel.current}
+                    schema={{ type: 'object', properties: stepPropertySchema }}
+                    configuration={stepPropertyModel}
                     onChangeModel={(configuration, isValid) => {
                       if (isValid) {
                         saveConfig(configuration);
