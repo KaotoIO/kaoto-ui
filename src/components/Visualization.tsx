@@ -311,14 +311,12 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     }
 
     // Only set state again if the ID is not the same
-    if (selectedStep.UUID !== node.data.UUID) {
-      const findStep: IStepProps =
-        integrationJson.steps.find((step) => step.UUID === node.data.UUID) ?? selectedStep;
-      setSelectedStep(findStep);
-    }
+    const findStep: IStepProps =
+      integrationJson.steps.find((step) => step.UUID === node.data.UUID) ?? selectedStep;
+    setSelectedStep(findStep);
 
     // show/hide the panel regardless
-    setIsPanelExpanded(!isPanelExpanded);
+    if (!isPanelExpanded) setIsPanelExpanded(true);
   };
 
   /**
