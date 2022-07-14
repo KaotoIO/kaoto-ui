@@ -1,6 +1,5 @@
 import { useIntegrationJsonContext } from '../api';
 import { IStepProps, IViewProps } from '../types';
-import { usePrevious } from '../utils';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
@@ -61,7 +60,6 @@ const StepViews = ({
     [label: string]: { type: string };
   }>({});
   const [stepPropertyModel, setStepPropertyModel] = useState<{ [label: string]: any }>({});
-  const previousTabIndex = usePrevious(detailsTabIndex);
   const [, dispatch] = useIntegrationJsonContext();
 
   const { addAlert } = useAlert() || {};
