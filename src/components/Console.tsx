@@ -1,5 +1,4 @@
-import { fetchDeploymentLogs, useSettingsContext } from '../api';
-import { useDeploymentContext } from '../api/DeploymentProvider';
+import { fetchDeploymentLogs, useDeploymentContext, useSettingsContext } from '../api';
 import { IExpanded } from '../pages/Dashboard';
 import {
   Button,
@@ -46,6 +45,7 @@ const Console = (props: IConsole) => {
 
     fetchDeploymentLogs(settings.name, settings.namespace, 50)
       .then((body: ReadableStream | unknown) => {
+        // @ts-ignore
         const reader = body.pipeThrough(new TextDecoderStream()).getReader();
         return new ReadableStream({
           async start(controller) {
