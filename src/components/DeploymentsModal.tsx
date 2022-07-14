@@ -1,5 +1,4 @@
-import { fetchDeployments, stopDeployment, useSettingsContext } from '../api';
-import { useDeploymentContext } from '../api/DeploymentProvider';
+import { fetchDeployments, stopDeployment, useDeploymentContext, useSettingsContext } from '../api';
 import { IDeployment } from '../types';
 import { formatDateTime } from '../utils';
 import { CustomExclamationTriangleIcon } from './Icons';

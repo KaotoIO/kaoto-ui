@@ -1,5 +1,4 @@
-import { fetchCatalogSteps, useSettingsContext } from '../api';
-import { useDeploymentContext } from '../api/DeploymentProvider';
+import { fetchCatalogSteps, useDeploymentContext, useSettingsContext } from '../api';
 import { IStepProps } from '../types';
 import { truncateString, usePrevious } from '../utils';
 import './Catalog.css';
@@ -192,7 +191,10 @@ export const Catalog = () => {
           }
         </ToolbarContent>
       </Toolbar>
-      <Gallery hasGutter={true} style={{ maxHeight: 'calc(100vh - 375px)', overflow: 'auto', padding: '0 10px' }}>
+      <Gallery
+        hasGutter={true}
+        style={{ maxHeight: 'calc(100vh - 375px)', overflow: 'auto', padding: '0 10px' }}
+      >
         {catalogData &&
           search(catalogData).map((step, idx) => {
             return (

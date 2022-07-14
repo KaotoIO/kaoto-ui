@@ -1,10 +1,10 @@
 import {
   fetchIntegrationSourceCode,
   startDeployment,
+  useDeploymentContext,
   useIntegrationJsonContext,
   useSettingsContext,
 } from '../api';
-import { useDeploymentContext } from '../api/DeploymentProvider';
 import { IExpanded } from '../pages/Dashboard';
 import { isNameValidCheck } from '../utils/validationService';
 import { ConfirmationModal } from './ConfirmationModal';
