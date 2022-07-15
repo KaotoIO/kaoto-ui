@@ -131,6 +131,7 @@ export interface IViewData {
 }
 
 export interface IVizStepNodeData {
+  color?: string;
   connectorType: string;
   dsl: string;
   // handleUpdateViews: (newViews: IViewProps[]) => void;

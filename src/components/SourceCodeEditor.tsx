@@ -1,9 +1,9 @@
 import {
   fetchIntegrationJson,
-  useIntegrationSourceContext,
-  useIntegrationJsonContext,
-  useSettingsContext,
+  useIntegrationJsonStore,
   fetchIntegrationSourceCode,
+  useSettingsStore,
+  useSourceCodeStore,
 } from '../api';
 import { IIntegration } from '../types';
 import { usePrevious } from '../utils';
@@ -24,9 +24,9 @@ interface ISourceCodeEditor {
 
 const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<EditorDidMount['editor'] | null>(null);
-  const [sourceCode, setSourceCode] = useIntegrationSourceContext();
-  const [integrationJson, dispatch] = useIntegrationJsonContext();
-  const [settings] = useSettingsContext();
+  const { sourceCode, setSourceCode } = useSourceCodeStore();
+  const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
+  const { settings } = useSettingsStore();
   const previousName = usePrevious(settings.name);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
         .then((res: IIntegration) => {
           let tmpInt = res;
           tmpInt.metadata = { ...res.metadata, ...settings };
-          dispatch({ type: 'UPDATE_INTEGRATION', payload: tmpInt });
+          updateIntegration(tmpInt);
         })
         .catch((e) => {
           console.error(e);

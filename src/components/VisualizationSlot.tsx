@@ -1,4 +1,4 @@
-import { useIntegrationJsonContext } from '../api';
+import { useIntegrationJsonStore } from '../api';
 import { IStepProps, IVizStepNodeData } from '../types';
 import { canStepBeReplaced } from '../utils/validationService';
 import './Visualization.css';
@@ -13,7 +13,7 @@ export interface IVisualizationSlot {
 
 // Custom Node type and component for React Flow
 const VisualizationSlot = ({ data }: IVisualizationSlot) => {
-  const [integrationJson, dispatch] = useIntegrationJsonContext();
+  const { integrationJson, replaceStep } = useIntegrationJsonStore((state) => state);
   const { addAlert } = useAlert() || {};
 
   /**
@@ -27,7 +27,7 @@ const VisualizationSlot = ({ data }: IVisualizationSlot) => {
 
     if (validation.isValid) {
       // update the steps, the new node will be created automatically
-      dispatch({ type: 'REPLACE_STEP', payload: { newStep: step, oldStepIndex: data.index } });
+      replaceStep(step, data.index);
     } else {
       console.log('step CANNOT be replaced');
       addAlert &&

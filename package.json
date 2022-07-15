@@ -51,7 +51,8 @@
     "uniforms-patternfly": "^4.7.5",
     "use-debounce": "8.0.1",
     "uuid": "8.3.2",
-    "web-vitals": "2.1.4"
+    "web-vitals": "2.1.4",
+    "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^2.2.0",
