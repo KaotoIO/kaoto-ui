@@ -1,5 +1,5 @@
 FROM node:16 as appbuild
-
+ARG KAOTO_API_URL="/api"
 WORKDIR /app
 
 COPY yarn.lock .
@@ -9,7 +9,7 @@ RUN yarn install --mode=skip-build
 
 COPY . .
 
-RUN yarn run build
+RUN KAOTO_API=${KAOTO_API_URL} yarn run build
 
 FROM nginxinc/nginx-unprivileged
 

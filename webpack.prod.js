@@ -2,6 +2,7 @@
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = merge(common('production', { mode: 'production' }), {
   mode: 'production',
@@ -17,4 +18,9 @@ module.exports = merge(common('production', { mode: 'production' }), {
       }),
     ],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      KAOTO_API: JSON.stringify(process.env.KAOTO_API || '/api'),
+    }),
+  ]
 });
