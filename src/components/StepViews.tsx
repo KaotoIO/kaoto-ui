@@ -120,9 +120,16 @@ const StepViews = ({
       minSize={'150px'}
     >
       <DrawerHead>
-        <h3 className={'pf-c-title pf-m-2xl'} tabIndex={isPanelExpanded ? 0 : -1}>
-          Step Details
-        </h3>
+        <Grid>
+          <GridItem span={3}>
+            <img src={step.icon} style={{ maxHeight: '40px' }} alt={'icon'} />
+          </GridItem>
+          <GridItem span={8}><h3 className={'pf-c-title pf-m-xl'} tabIndex={isPanelExpanded ? 0 : -1}>
+            {step.title}
+          </h3>
+          </GridItem>
+
+        </Grid>
         <DrawerActions>
           <DrawerCloseButton onClick={onClosePanelClick} />
         </DrawerActions>
@@ -142,14 +149,11 @@ const StepViews = ({
                   <GridItem span={3}>
                     <b>Title</b>
                   </GridItem>
-                  <GridItem span={6}>{step.title}</GridItem>
-                  <GridItem span={3} rowSpan={2}>
-                    <img src={step.icon} style={{ maxWidth: '50%' }} alt={'icon'} />
-                  </GridItem>
+                  <GridItem span={9}>{step.title}</GridItem>
                   <GridItem span={3}>
                     <b>Description</b>
                   </GridItem>
-                  <GridItem span={6}>{step.description}</GridItem>
+                  <GridItem span={9}>{step.description}</GridItem>
                   <GridItem span={3}>
                     <b>Type</b>
                   </GridItem>
@@ -164,9 +168,6 @@ const StepViews = ({
                   </GridItem>
                 </Grid>
                 <br />
-                <Button variant={'danger'} key={step.UUID} onClick={deleteStep}>
-                  Delete
-                </Button>
               </StepErrorBoundary>
             </Tab>
           )}
@@ -242,12 +243,12 @@ const StepViews = ({
                 )}
               </Grid>
               <br />
-              <Button variant={'danger'} key={step.UUID} onClick={deleteStep}>
-                Delete
-              </Button>
             </StepErrorBoundary>
           </Tab>
         </Tabs>
+        <Button variant={'danger'} key={step.UUID} onClick={deleteStep}>
+          Delete
+        </Button>
       </DrawerPanelBody>
     </DrawerPanelContent>
   );
