@@ -146,7 +146,9 @@ export interface IVizStepNodeData {
   settings?: ISettings;
 }
 
-export interface IVizStepPropsNode extends Node {}
+export interface IVizStepPropsNode extends Node {
+  data: IVizStepNodeData;
+}
 
 export interface IVizStepPropsEdge extends Omit<Edge, 'arrowHeadType' | 'source' | 'target'> {
   arrowHeadType?: string;

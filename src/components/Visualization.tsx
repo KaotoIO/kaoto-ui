@@ -4,22 +4,15 @@ import {
   fetchIntegrationJson,
   useIntegrationJsonStore,
   useSettingsStore,
-  useSourceCodeStore,
+  useIntegrationSourceStore,
+  useVisualizationStore,
 } from '../api';
-import {
-  IStepProps,
-  IViewData,
-  IVizStepNodeData,
-  IVizStepPropsNode,
-  IVizStepPropsEdge,
-  IViewProps,
-} from '../types';
+import { IStepProps, IViewData, IVizStepPropsNode, IVizStepPropsEdge, IViewProps } from '../types';
 import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
 import '../utils';
 import { canStepBeReplaced } from '../utils/validationService';
 import { StepErrorBoundary, StepViews, VisualizationSlot, VisualizationStep } from './';
 import './Visualization.css';
-import useStore from './Visualization.store';
 import { AlertVariant, Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -40,20 +33,20 @@ const getId = () => `dndnode_${id++}`;
 const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
-  // const [nodes, setNodes] = useState<Node<IStepProps>[]>([]);
-  // const [edges, setEdges] = useState<Edge[]>([]);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({ name: '', type: '' });
-  const { sourceCode, setSourceCode } = useSourceCodeStore();
-  const { integrationJson, addStep, deleteStep, replaceStep, updateIntegration } =
-    useIntegrationJsonStore((state) => state);
-  const previousIntegrationJson = usePrevious(integrationJson);
+  const { sourceCode, setSourceCode } = useIntegrationSourceStore();
+  const { addStep, deleteStep, integrationJson, replaceStep, updateIntegration } =
+    useIntegrationJsonStore();
+  const settings = useSettingsStore((state) => state.settings);
+  const { edges, nodes, onEdgesChange, onNodesChange, setEdges, setNodes } =
+    useVisualizationStore();
+
+  const previousIntegrationJson = useRef(integrationJson);
   const shouldUpdateCodeEditor = useRef(true);
-  const { settings } = useSettingsStore((state) => state);
   const previousSettings = usePrevious(settings);
-  const { nodes, edges, onNodesChange, onEdgesChange } = useStore();
 
   const { addAlert } = useAlert() || {};
 
@@ -64,7 +57,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
   useEffect(() => {
     console.log('integration json changed..');
 
-    if (previousIntegrationJson === integrationJson) return;
+    if (previousIntegrationJson.current === integrationJson) return;
 
     console.log('not the same, keep going..');
 
@@ -80,7 +73,8 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     });
 
     // PREPARE VISUALIZATION DATA
-    prepareAndSetVizDataSteps(integrationJson.steps);
+    prepareAndSetVizDataSteps(integrationJson.steps.slice());
+    previousIntegrationJson.current = integrationJson;
   }, [integrationJson]);
 
   // checks for changes to settings (e.g. dsl, name, namespace)
@@ -88,9 +82,10 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     if (settings === previousSettings) return;
     fetchIntegrationJson(sourceCode, settings.dsl)
       .then((newIntegration) => {
-        let tmpInt = newIntegration;
-        tmpInt.metadata = { ...newIntegration.metadata, ...settings };
-        updateIntegration(tmpInt);
+        updateIntegration({
+          ...newIntegration,
+          metadata: { ...settings, ...newIntegration.metadata },
+        });
       })
       .catch((err) => {
         console.error(err);
@@ -165,17 +160,14 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
    * Creates an object for the Visualization from the Step model.
    * Contains UI-specific metadata (e.g. position).
    * Data is stored in the Elements hook.
-   * @param steps
    */
   const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
     const incrementAmt = 160;
     const stepsAsNodes: any[] = [];
     const stepEdges: any[] = [];
-    console.log('preparing viz steps...');
 
     // if there are no steps or if the first step has a `type`,
-    // but it isn't a source,
-    // create a dummy placeholder step
+    // but it isn't a source, create a dummy placeholder step
     if (steps.length === 0 || (steps.length > 0 && steps[0].type && steps[0].type !== 'START')) {
       // @ts-ignore
       steps.unshift({ name: 'ADD A STEP' });
@@ -186,23 +178,21 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
       const previousStep = stepsAsNodes[index - 1];
       let stepEdge: IVizStepPropsEdge = { id: '' };
 
-      const vizStepData: IVizStepNodeData = {
-        color: '#4FD1C5',
-        connectorType: step.type,
-        dsl: settings.dsl,
-        handleUpdateViews: handleUpdateViews,
-        icon: step.icon,
-        index: index,
-        kind: step.kind,
-        label: truncateString(step.name, 14),
-        onDropChange: onDropChange,
-        onMiniCatalogClickAdd: onSelectNewStep,
-        UUID: step.UUID,
-      };
-
       // Build the default parameters
       let inputStep: IVizStepPropsNode = {
-        data: vizStepData,
+        data: {
+          color: '#4FD1C5',
+          connectorType: step.type,
+          dsl: settings.dsl,
+          handleUpdateViews: handleUpdateViews,
+          icon: step.icon,
+          index: index,
+          kind: step.kind,
+          label: truncateString(step.name, 14),
+          onDropChange: onDropChange,
+          onMiniCatalogClickAdd: onSelectNewStep,
+          UUID: step.UUID,
+        },
         id: getId(),
         position: { x: 0, y: 250 },
         type: 'step',
@@ -253,8 +243,8 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
       return;
     });
 
-    onEdgesChange(stepEdges);
-    onNodesChange(stepsAsNodes);
+    setEdges(stepEdges);
+    setNodes(stepsAsNodes);
   };
 
   // Delete an integration step
@@ -263,6 +253,8 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     setIsPanelExpanded(false);
     setSelectedStep({ name: '', type: '' });
 
+    // here we pass integrationJson's array of steps instead of `nodes`
+    // because `deleteStep` requires the index to be from `integrationJson`
     const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, integrationJson.steps);
     // need to rely on useEffect to get up-to-date value
     shouldUpdateCodeEditor.current = true;
@@ -319,9 +311,6 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     addStep(selectedStep);
     shouldUpdateCodeEditor.current = true;
   };
-
-  // const onNodesChange = (changes: NodeChange[]) => setNodes((ns) => applyNodeChanges(changes, ns));
-  // const onEdgesChange = (changes: EdgeChange[]) => setEdges((es) => applyEdgeChanges(changes, es));
 
   const onExpandPanel = () => {
     //drawerRef.current && drawerRef.current.focus();

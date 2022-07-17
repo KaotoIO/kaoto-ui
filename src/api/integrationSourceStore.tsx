@@ -5,7 +5,7 @@ interface ISourceCodeStore {
   setSourceCode: (val?: string) => void;
 }
 
-export const useSourceCodeStore = create<ISourceCodeStore>((set) => ({
+export const useIntegrationSourceStore = create<ISourceCodeStore>((set) => ({
   sourceCode: '',
   setSourceCode: (val?: string) => set({ sourceCode: val }),
 }));

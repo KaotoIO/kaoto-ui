@@ -2,8 +2,8 @@ import {
   fetchCompatibleDSLs,
   fetchIntegrationSourceCode,
   useIntegrationJsonStore,
+  useIntegrationSourceStore,
   useSettingsStore,
-  useSourceCodeStore,
 } from '../api';
 import { ISettings, IViewProps } from '../types';
 import { usePrevious } from '../utils';
@@ -43,7 +43,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const { settings, setSettings } = useSettingsStore((state) => state);
   const [localSettings, setLocalSettings] = useState<ISettings>(settings);
   const { integrationJson } = useIntegrationJsonStore((state) => state);
-  const { setSourceCode } = useSourceCodeStore();
+  const { setSourceCode } = useIntegrationSourceStore();
   const previousIntegrationJson = usePrevious(integrationJson);
   const previousName = usePrevious(localSettings.name);
   const [nameValidation, setNameValidation] = useState<

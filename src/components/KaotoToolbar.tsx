@@ -51,9 +51,11 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
-  const { settings, setSettings } = useSettingsStore((state) => state);
+  const settings = useSettingsStore((state) => state.settings);
+  const setSettings = useSettingsStore((state) => state.setSettings);
   const [localName, setLocalName] = useState(settings.name);
-  const { integrationJson, deleteIntegration } = useIntegrationJsonStore((state) => state);
+  const integrationJson = useIntegrationJsonStore((state) => state.integrationJson);
+  const deleteIntegration = useIntegrationJsonStore((state) => state.deleteIntegration);
   const [nameValidation, setNameValidation] = useState<
     'default' | 'warning' | 'success' | 'error' | undefined
   >('default');

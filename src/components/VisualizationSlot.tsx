@@ -24,6 +24,8 @@ const VisualizationSlot = ({ data }: IVisualizationSlot) => {
     const dataJSON = e.dataTransfer.getData('text');
     const step: IStepProps = JSON.parse(dataJSON);
     const validation = canStepBeReplaced(data, step, integrationJson.steps);
+    console.log('data.index: ', data.index);
+    console.log('new step: ', step);
 
     if (validation.isValid) {
       // update the steps, the new node will be created automatically

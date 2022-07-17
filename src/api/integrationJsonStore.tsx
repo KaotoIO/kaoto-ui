@@ -1,13 +1,20 @@
-import { IIntegration, IStepProps } from '../types';
+import { IIntegration, IStepProps, IViewProps } from '../types';
+import { useDeploymentStore } from './deploymentStore';
+import { useIntegrationSourceStore } from './integrationSourceStore';
+import { useSettingsStore } from './settingsStore';
+import { useVisualizationStore } from './visualizationStore';
+import { mountStoreDevtool } from 'simple-zustand-devtools';
 import create from 'zustand';
 
 interface IIntegrationJsonStore {
-  integrationJson: IIntegration;
   addStep: (newStep: IStepProps) => void;
   deleteIntegration: () => void;
   deleteStep: (index: number) => void;
-  replaceStep: (newStep: IStepProps, oldStepIndex: number) => void;
+  integrationJson: IIntegration;
   updateIntegration: (newInt?: any) => void;
+  replaceStep: (newStep: IStepProps, oldStepIndex?: number) => void;
+  setViews: (views: IViewProps[]) => void;
+  views: IViewProps[];
 }
 
 const initialIntegration: IIntegration = {
@@ -33,7 +40,14 @@ function regenerateUuids(steps: IStepProps[]) {
 export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) => ({
   integrationJson: initialIntegration,
   addStep: (newStep) =>
-    set((state) => ({ ...state, steps: [...state.integrationJson.steps, newStep] })),
+    set((state) => {
+      return {
+        integrationJson: {
+          ...state.integrationJson,
+          steps: regenerateUuids([...state.integrationJson.steps, newStep]),
+        },
+      };
+    }),
   deleteIntegration: () => set({ integrationJson: initialIntegration }),
   deleteStep: (stepId) =>
     set((state) => ({
@@ -42,9 +56,15 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) 
         steps: regenerateUuids(state.integrationJson.steps.filter((_step, idx) => idx !== stepId)),
       },
     })),
-  replaceStep: (newStep, oldStepIndex) => {
+  replaceStep: (newStep, oldStepIndex?) => {
     let newSteps = get().integrationJson.steps.slice();
-    newSteps[oldStepIndex] = newStep;
+    if (!oldStepIndex) {
+      // replacing a slot step with no pre-existing step
+      newSteps.unshift(newStep);
+    } else {
+      // replacing an existing step
+      newSteps[oldStepIndex] = newStep;
+    }
     return set((state) => ({
       integrationJson: {
         ...state.integrationJson,
@@ -52,9 +72,21 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) 
       },
     }));
   },
+  setViews: (viewData: IViewProps[]) => {
+    set({ views: viewData });
+  },
   updateIntegration: (newInt) => {
     let newIntegration = { ...get().integrationJson, ...newInt };
     newIntegration.steps = regenerateUuids(newIntegration.steps);
     return set({ integrationJson: { ...newIntegration } });
   },
+  views: [],
 }));
+
+if (process.env.NODE_ENV === 'development') {
+  mountStoreDevtool('integrationJsonStore', useIntegrationJsonStore);
+  mountStoreDevtool('integrationSourceStore', useIntegrationSourceStore);
+  mountStoreDevtool('deploymentStore', useDeploymentStore);
+  mountStoreDevtool('settingsStore', useSettingsStore);
+  mountStoreDevtool('visualizationStore', useVisualizationStore);
+}

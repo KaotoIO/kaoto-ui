@@ -1,9 +1,9 @@
 import {
   fetchIntegrationJson,
   useIntegrationJsonStore,
+  useIntegrationSourceStore,
   fetchIntegrationSourceCode,
   useSettingsStore,
-  useSourceCodeStore,
 } from '../api';
 import { IIntegration } from '../types';
 import { usePrevious } from '../utils';
@@ -24,7 +24,7 @@ interface ISourceCodeEditor {
 
 const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<EditorDidMount['editor'] | null>(null);
-  const { sourceCode, setSourceCode } = useSourceCodeStore();
+  const { sourceCode, setSourceCode } = useIntegrationSourceStore();
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
   const { settings } = useSettingsStore();
   const previousName = usePrevious(settings.name);

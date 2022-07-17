@@ -73,16 +73,6 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
         <img src={data.icon} alt={data.label} />
       </div>
 
-      {/* TEST EXAMPLE W/ COLOR */}
-      {/*<div style={{ padding: 20 }}>*/}
-      {/*  <input*/}
-      {/*    type="color"*/}
-      {/*    defaultValue={data.color}*/}
-      {/*    onChange={(evt) => updateNodeColor(id, evt.target.value)}*/}
-      {/*    className="nodrag"*/}
-      {/*  />*/}
-      {/*</div>*/}
-
       {/* RIGHT EDGE */}
       {data.connectorType !== 'START' && (
         <Handle
