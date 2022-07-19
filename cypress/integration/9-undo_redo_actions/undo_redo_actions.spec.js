@@ -3,19 +3,18 @@ describe('Test for undo/redo actions on code-editor', () => {
         let url = Cypress.config().baseUrl;
         cy.visit(url);
     });
-
+  
     it('loads the YAML editor', () => {
         const dataTransfer = new DataTransfer();
-        cy.get('.code-editor').click();
-        cy.get('button').contains('Start from scratch').click();
+        cy.get('[data-testid="toolbar-show-code-btn"]').click();
+        cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
         cy.fixture('undo_redo.txt')
             .then((user) => {
                 cy.get('.code-editor').type(user);
                 cy.wait(2000)
                 cy.get('.code-editor')
-                    .contains('kafka-source')
-                    .should('have.text', 'kafka-source', '{backspace}')
-                    .type('{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}timer-', { delay: 500 });
+                cy.should('contain.text', 'kafka-source')
+                .type('{end}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}timer-source', { delay: 500 });
                 cy.get('[aria-label="Undo change"] > svg').click()
                 cy.get('[aria-label="Undo change"] > svg').click()
                 cy.get('[data-testid="react-flow-wrapper"]').contains('kafka-source')
@@ -25,4 +24,5 @@ describe('Test for undo/redo actions on code-editor', () => {
                 cy.wait(2000)
             })
     })
-})
+ })
+  

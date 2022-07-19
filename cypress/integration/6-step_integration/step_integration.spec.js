@@ -4,7 +4,6 @@ describe('3 step integration', () => {
       cy.visit(url);
   });
   it('add the step integration', () => {
-    //   cy.get('.stepNode').click()
       cy.get('[data-testid="react-flow-wrapper"]').contains('ADD A STEP').click();
       const dataTransfer = new DataTransfer();
       cy.get('#stepSearch').type('timer')
