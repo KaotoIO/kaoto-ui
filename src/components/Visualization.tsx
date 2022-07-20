@@ -55,11 +55,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
    * which causes Visualization nodes to all be redrawn
    */
   useEffect(() => {
-    console.log('integration json changed..');
-
     if (previousIntegrationJson.current === integrationJson) return;
-
-    console.log('not the same, keep going..');
 
     // UPDATE SOURCE CODE EDITOR
     if (shouldUpdateCodeEditor.current) {
@@ -334,7 +330,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
         newStepParameters[paramIndex!].value = value;
       });
 
-      const oldStepIdx = findStepIdxWithUUID(selectedStep.UUID!, integrationJson.steps);
+      const oldStepIdx = findStepIdxWithUUID(selectedStep?.UUID!, integrationJson.steps);
       // we'll need to update the code editor
       shouldUpdateCodeEditor.current = true;
 

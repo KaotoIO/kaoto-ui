@@ -134,7 +134,6 @@ export interface IVizStepNodeData {
   color?: string;
   connectorType: string;
   dsl: string;
-  // handleUpdateViews: (newViews: IViewProps[]) => void;
   handleUpdateViews?: (newViews: IViewProps[]) => void;
   icon?: string;
   kind?: string;
@@ -143,7 +142,6 @@ export interface IVizStepNodeData {
   index: number;
   onDropChange: (arg1: any, arg2: any) => void;
   onMiniCatalogClickAdd: (arg: any) => void;
-  settings?: ISettings;
 }
 
 export interface IVizStepPropsNode extends Node {

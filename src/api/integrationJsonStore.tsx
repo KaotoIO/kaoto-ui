@@ -39,36 +39,49 @@ function regenerateUuids(steps: IStepProps[]) {
 
 export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) => ({
   integrationJson: initialIntegration,
-  addStep: (newStep) =>
+  addStep: (newStep) => {
+    let newSteps = get().integrationJson.steps.slice();
+    // manually generate UUID for the new step
+    newStep.UUID = newStep.name + newSteps.length;
+    newSteps.push(newStep);
     set((state) => {
       return {
         integrationJson: {
           ...state.integrationJson,
-          steps: regenerateUuids([...state.integrationJson.steps, newStep]),
+          steps: newSteps,
         },
       };
-    }),
-  deleteIntegration: () => set({ integrationJson: initialIntegration }),
-  deleteStep: (stepId) =>
+    });
+  },
+  deleteIntegration: () => set({ integrationJson: { ...initialIntegration, steps: [] } }),
+  deleteStep: (stepIdx) => {
+    let stepsCopy = get().integrationJson.steps.slice();
+    const updatedSteps = stepsCopy.filter((_step: any, idx: any) => idx !== stepIdx);
+    const stepsWithNewUuids = regenerateUuids(updatedSteps);
     set((state) => ({
       integrationJson: {
         ...state.integrationJson,
-        steps: regenerateUuids(state.integrationJson.steps.filter((_step, idx) => idx !== stepId)),
+        steps: stepsWithNewUuids,
       },
-    })),
-  replaceStep: (newStep, oldStepIndex?) => {
+    }));
+  },
+  replaceStep: (newStep, oldStepIndex) => {
     let newSteps = get().integrationJson.steps.slice();
-    if (!oldStepIndex) {
+    if (oldStepIndex === undefined) {
       // replacing a slot step with no pre-existing step
+      console.log('empty slot');
       newSteps.unshift(newStep);
     } else {
       // replacing an existing step
+      console.log('existing step');
       newSteps[oldStepIndex] = newStep;
     }
+    const stepsWithNewUuids = regenerateUuids(newSteps);
+
     return set((state) => ({
       integrationJson: {
         ...state.integrationJson,
-        steps: regenerateUuids(newSteps),
+        steps: stepsWithNewUuids,
       },
     }));
   },
