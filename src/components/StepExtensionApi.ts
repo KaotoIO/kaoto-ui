@@ -77,8 +77,8 @@ const getKaotoDeployment = (name: string, namespace?: string): Promise<string | 
   });
 };
 
-const getKaotoDeploymentLogs = (name: string, lines?: number, namespace?: string) => {
-  return fetchDeploymentLogs(name, lines, namespace).then((log) => {
+const getKaotoDeploymentLogs = (name: string, namespace?: string, lines?: number) => {
+  return fetchDeploymentLogs(name, namespace, lines).then((log) => {
     return log;
   });
 };

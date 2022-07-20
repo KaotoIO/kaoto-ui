@@ -7,20 +7,23 @@ import { mountStoreDevtool } from 'simple-zustand-devtools';
 import create from 'zustand';
 
 interface IIntegrationJsonStore {
-  addStep: (newStep: IStepProps) => void;
+  addStep?: (newStep: IStepProps) => void;
   deleteIntegration: () => void;
-  deleteStep: (index: number) => void;
+  deleteStep?: (index: number) => void;
   integrationJson: IIntegration;
-  updateIntegration: (newInt?: any) => void;
-  replaceStep: (newStep: IStepProps, oldStepIndex?: number) => void;
-  setViews: (views: IViewProps[]) => void;
+  updateIntegration?: (newInt?: any) => void;
+  replaceStep?: (newStep: IStepProps, oldStepIndex?: number) => void;
+  setViews?: (views: IViewProps[]) => void;
   views: IViewProps[];
 }
 
-const initialIntegration: IIntegration = {
-  metadata: { name: 'integration', dsl: 'KameletBinding', namespace: 'default' },
-  steps: [],
-  params: [],
+const initialState = {
+  integrationJson: {
+    metadata: { name: 'integration', dsl: 'KameletBinding', namespace: 'default' },
+    steps: [],
+    params: [],
+  },
+  views: [],
 };
 
 /**
@@ -38,7 +41,7 @@ function regenerateUuids(steps: IStepProps[]) {
 }
 
 export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) => ({
-  integrationJson: initialIntegration,
+  ...initialState,
   addStep: (newStep) => {
     let newSteps = get().integrationJson.steps.slice();
     // manually generate UUID for the new step
@@ -53,7 +56,7 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) 
       };
     });
   },
-  deleteIntegration: () => set({ integrationJson: { ...initialIntegration, steps: [] } }),
+  deleteIntegration: () => set(initialState),
   deleteStep: (stepIdx) => {
     let stepsCopy = get().integrationJson.steps.slice();
     const updatedSteps = stepsCopy.filter((_step: any, idx: any) => idx !== stepIdx);
