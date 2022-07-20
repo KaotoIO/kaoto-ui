@@ -45,7 +45,6 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     useVisualizationStore();
 
   const previousIntegrationJson = useRef(integrationJson);
-  const shouldUpdateCodeEditor = useRef(true);
   const previousSettings = usePrevious(settings);
 
   const { addAlert } = useAlert() || {};
@@ -56,12 +55,6 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
    */
   useEffect(() => {
     if (previousIntegrationJson.current === integrationJson) return;
-
-    // UPDATE SOURCE CODE EDITOR
-    if (shouldUpdateCodeEditor.current) {
-      updateCodeEditor(integrationJson.steps);
-      shouldUpdateCodeEditor.current = false;
-    }
 
     // FETCH VIEWS
     fetchViews(integrationJson.steps).then((views) => {
@@ -177,9 +170,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
       // Build the default parameters
       let inputStep: IVizStepPropsNode = {
         data: {
-          color: '#4FD1C5',
           connectorType: step.type,
-          dsl: settings.dsl,
           handleUpdateViews: handleUpdateViews,
           icon: step.icon,
           index: index,
@@ -253,7 +244,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     // because `deleteStep` requires the index to be from `integrationJson`
     const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, integrationJson.steps);
     // need to rely on useEffect to get up-to-date value
-    shouldUpdateCodeEditor.current = true;
+    updateCodeEditor(integrationJson.steps);
     deleteStep(stepsIndex);
   };
 
@@ -305,11 +296,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
    */
   const onSelectNewStep = (selectedStep: IStepProps) => {
     addStep(selectedStep);
-    shouldUpdateCodeEditor.current = true;
-  };
-
-  const onExpandPanel = () => {
-    //drawerRef.current && drawerRef.current.focus();
+    updateCodeEditor(integrationJson.steps);
   };
 
   const onLoad = (_reactFlowInstance: any) => {
@@ -332,7 +319,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
 
       const oldStepIdx = findStepIdxWithUUID(selectedStep?.UUID!, integrationJson.steps);
       // we'll need to update the code editor
-      shouldUpdateCodeEditor.current = true;
+      updateCodeEditor(integrationJson.steps);
 
       // Replace step with new step
       replaceStep(newStep, oldStepIdx);
@@ -343,7 +330,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
 
   return (
     <StepErrorBoundary>
-      <Drawer isExpanded={isPanelExpanded} onExpand={onExpandPanel}>
+      <Drawer isExpanded={isPanelExpanded}>
         <DrawerContent
           panelContent={
             <StepViews

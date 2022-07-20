@@ -1,3 +1,4 @@
+import { useSettingsStore } from '../api';
 import { IVizStepNodeData } from '../types';
 import { appendableStepTypes } from '../utils/validationService';
 import { MiniCatalog } from './MiniCatalog';
@@ -6,11 +7,12 @@ import { Button, Popover } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import { Handle, Node, NodeProps, Position, useNodes } from 'react-flow-renderer';
 
+const currentDSL = useSettingsStore.getState().settings.dsl;
+
 // Custom Node type and component for React Flow
 const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const nodes: Node[] = useNodes();
   const isLastNode = nodes[nodes.length - 1].data.UUID === data.UUID;
-  // const updateNodeColor = useStore((state) => state.updateNodeColor);
 
   const borderColor =
     data.connectorType === 'START'
@@ -50,7 +52,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             <MiniCatalog
               handleSelectStep={onMiniCatalogClickAdd}
               queryParams={{
-                dsl: data.dsl,
+                dsl: currentDSL,
                 type: appendableStepTypes(data.connectorType),
               }}
             />

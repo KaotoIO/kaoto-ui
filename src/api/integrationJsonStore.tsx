@@ -7,13 +7,13 @@ import { mountStoreDevtool } from 'simple-zustand-devtools';
 import create from 'zustand';
 
 interface IIntegrationJsonStore {
-  addStep?: (newStep: IStepProps) => void;
+  addStep: (newStep: IStepProps) => void;
   deleteIntegration: () => void;
-  deleteStep?: (index: number) => void;
+  deleteStep: (index: number) => void;
   integrationJson: IIntegration;
-  updateIntegration?: (newInt?: any) => void;
-  replaceStep?: (newStep: IStepProps, oldStepIndex?: number) => void;
-  setViews?: (views: IViewProps[]) => void;
+  updateIntegration: (newInt?: any) => void;
+  replaceStep: (newStep: IStepProps, oldStepIndex?: number) => void;
+  setViews: (views: IViewProps[]) => void;
   views: IViewProps[];
 }
 
@@ -72,11 +72,9 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) 
     let newSteps = get().integrationJson.steps.slice();
     if (oldStepIndex === undefined) {
       // replacing a slot step with no pre-existing step
-      console.log('empty slot');
       newSteps.unshift(newStep);
     } else {
       // replacing an existing step
-      console.log('existing step');
       newSteps[oldStepIndex] = newStep;
     }
     const stepsWithNewUuids = regenerateUuids(newSteps);
