@@ -4,7 +4,9 @@ describe('3 step integration', () => {
       cy.visit(url);
   });
   it('add the step integration', () => {
-      cy.get('[data-testid="react-flow-wrapper"]').contains('ADD A STEP').click();
+    cy.get('.stepNode')
+    .contains('ADD A STEP')
+    .click({ force: true });
       const dataTransfer = new DataTransfer();
       cy.get('#stepSearch').type('timer')
       cy.get('.pf-c-card__body').trigger('dragstart', {

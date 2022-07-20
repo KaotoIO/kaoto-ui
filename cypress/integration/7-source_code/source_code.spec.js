@@ -25,7 +25,7 @@ describe('source code and drag and drop', () => {
         .should('contain.text', 'timer-source', '{backspace}')
         .type('{end}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}kafka-source', {
           delay: 500,
-        });
+        },{force:true});
     });
   });
 });
