@@ -5,7 +5,8 @@ describe('Settings', () => {
   });
 
   it('settings cog button is visible', () => {
-    cy.get('[data-testid="settingsButton"]').should('be.visible');
+    cy.get('.pf-c-toolbar__content-section').click();
+    cy.get('#pf-dropdown-toggle-id-6').click();
   });
 
   it('loads the settings modal', () => {
