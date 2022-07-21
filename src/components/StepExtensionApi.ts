@@ -34,7 +34,7 @@ import { IDeployment, IIntegration, IStepProps, IViewProps } from '../types';
 export interface IStepExtensionApi {
   getCatalogSteps: (namespace?: string) => Promise<IStepProps[]>;
   getDeployment: (name: string, namespace?: string) => Promise<string | unknown>;
-  getDeploymentLogs: (name: string, lines?: number, namespace?: string) => void;
+  getDeploymentLogs: (name: string, namespace?: string, lines?: number) => void;
   getDeployments: (namespace?: string) => Promise<IDeployment[]>;
   getDSLs: (namespace?: string) => Promise<{ [p: string]: string }[]>;
   getIntegrationJson: (
