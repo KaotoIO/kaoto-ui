@@ -1,12 +1,10 @@
+import { fetchIntegrationSourceCode, fetchViews, fetchIntegrationJson } from '../api';
 import {
-  fetchIntegrationSourceCode,
-  fetchViews,
-  fetchIntegrationJson,
   useIntegrationJsonStore,
   useSettingsStore,
   useIntegrationSourceStore,
   useVisualizationStore,
-} from '../api';
+} from '../store';
 import { IStepProps, IViewData, IVizStepPropsNode, IVizStepPropsEdge, IViewProps } from '../types';
 import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
 import '../utils';

@@ -1,4 +1,4 @@
-import { useSettingsStore } from '../api';
+import { useSettingsStore } from '../store';
 import { IVizStepNodeData } from '../types';
 import { appendableStepTypes } from '../utils/validationService';
 import { MiniCatalog } from './MiniCatalog';

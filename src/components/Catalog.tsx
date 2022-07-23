@@ -1,4 +1,5 @@
-import { fetchCatalogSteps, useDeploymentStore, useSettingsStore } from '../api';
+import { fetchCatalogSteps } from '../api';
+import { useDeploymentStore, useSettingsStore } from '../store';
 import { IStepProps } from '../types';
 import { truncateString, usePrevious } from '../utils';
 import './Catalog.css';

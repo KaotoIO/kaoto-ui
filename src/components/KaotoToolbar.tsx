@@ -1,12 +1,11 @@
+import { fetchIntegrationSourceCode, startDeployment } from '../api';
+import { IExpanded } from '../pages/Dashboard';
 import {
-  fetchIntegrationSourceCode,
-  startDeployment,
   useDeploymentStore,
   useIntegrationJsonStore,
   useIntegrationSourceStore,
   useSettingsStore,
-} from '../api';
-import { IExpanded } from '../pages/Dashboard';
+} from '../store';
 import { isNameValidCheck } from '../utils/validationService';
 import { ConfirmationModal } from './ConfirmationModal';
 import {

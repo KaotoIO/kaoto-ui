@@ -1,5 +1,6 @@
-import { fetchDeploymentLogs, useDeploymentStore, useSettingsStore } from '../api';
+import { fetchDeploymentLogs } from '../api';
 import { IExpanded } from '../pages/Dashboard';
+import { useDeploymentStore, useSettingsStore } from '../store';
 import {
   Button,
   Toolbar,
