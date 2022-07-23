@@ -1,4 +1,4 @@
-import { useIntegrationJsonContext } from '../api';
+import { useIntegrationJsonStore } from '../api';
 import { IStepProps, IViewProps } from '../types';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
@@ -60,7 +60,7 @@ const StepViews = ({
     [label: string]: { type: string };
   }>({});
   const [stepPropertyModel, setStepPropertyModel] = useState<{ [label: string]: any }>({});
-  const [, dispatch] = useIntegrationJsonContext();
+  const { replaceStep } = useIntegrationJsonStore((state) => state);
 
   const { addAlert } = useAlert() || {};
 
@@ -195,10 +195,7 @@ const StepViews = ({
                 stopDeployment: stopKaotoDeployment,
                 updateStep: (step: IStepProps) => {
                   // update state of step
-                  dispatch({
-                    type: 'REPLACE_STEP',
-                    payload: { newStep: step, oldStepIndex: index },
-                  });
+                  replaceStep(step, index);
                 },
               };
 
