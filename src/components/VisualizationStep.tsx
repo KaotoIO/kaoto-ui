@@ -1,6 +1,7 @@
 import { useSettingsStore } from '../store';
-import { IVizStepNodeData } from '../types';
-import { appendableStepTypes } from '../utils/validationService';
+import { IStepProps, IVizStepNodeData } from '../types';
+import { findStepIdxWithUUID } from '../utils';
+import { appendableStepTypes, insertableStepTypes } from '../utils/validationService';
 import { MiniCatalog } from './MiniCatalog';
 import './Visualization.css';
 import { Button, Popover } from '@patternfly/react-core';
@@ -13,6 +14,8 @@ const currentDSL = useSettingsStore.getState().settings.dsl;
 const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const nodes: Node[] = useNodes();
   const isLastNode = nodes[nodes.length - 1].data.UUID === data.UUID;
+  // this step will always have a UUID
+  const currentIdx = findStepIdxWithUUID(data.UUID!);
 
   const borderColor =
     data.connectorType === 'START'
@@ -24,7 +27,13 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const onDropChange = (event: any) => {
     data.onDropChange(event, data);
   };
-  const onMiniCatalogClickAdd = (selectedStep: any) => data.onMiniCatalogClickAdd(selectedStep);
+
+  const onMiniCatalogClickAdd = (selectedStep: IStepProps) =>
+    data.onMiniCatalogClickAdd(selectedStep);
+
+  const onMiniCatalogClickInsert = (selectedStep: IStepProps) => {
+    data.onMiniCatalogClickInsert(selectedStep, currentIdx);
+  };
 
   return (
     <div
@@ -63,6 +72,33 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           position={'right-start'}
         >
           <div className={'stepNode__Add nodrag'}>
+            <Button variant="plain" aria-label="Action">
+              <PlusCircleIcon />
+            </Button>
+          </div>
+        </Popover>
+      )}
+
+      {/* PLUS BUTTON TO INSERT STEP */}
+      {data.connectorType !== 'START' && (
+        <Popover
+          appendTo={() => document.body}
+          aria-label="Search for a step"
+          bodyContent={
+            <MiniCatalog
+              handleSelectStep={onMiniCatalogClickInsert}
+              queryParams={{
+                dsl: currentDSL,
+                type: insertableStepTypes(nodes[currentIdx - 1]?.data, nodes[currentIdx]?.data),
+              }}
+            />
+          }
+          enableFlip={true}
+          flipBehavior={['top-start', 'left-start']}
+          hideOnOutsideClick={true}
+          position={'right-start'}
+        >
+          <div className={'stepNode__Insert nodrag'}>
             <Button variant="plain" aria-label="Action">
               <PlusCircleIcon />
             </Button>

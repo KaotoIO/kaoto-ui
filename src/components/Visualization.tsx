@@ -36,7 +36,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({ name: '', type: '' });
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
-  const { addStep, deleteStep, integrationJson, replaceStep, updateIntegration } =
+  const { addStep, deleteStep, insertStep, integrationJson, replaceStep, updateIntegration } =
     useIntegrationJsonStore();
   const settings = useSettingsStore((state) => state.settings);
   const { edges, nodes, onEdgesChange, onNodesChange, setEdges, setNodes } =
@@ -131,7 +131,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     // Replace step
     if (validation.isValid) {
       // update the steps, the new node will be created automatically
-      replaceStep(step, data.index);
+      replaceStep(step, findStepIdxWithUUID(data.UUID));
     } else {
       // the step CANNOT be replaced, the proposed step is invalid
       addAlert &&
@@ -171,11 +171,11 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
           connectorType: step.type,
           handleUpdateViews: handleUpdateViews,
           icon: step.icon,
-          index: index,
           kind: step.kind,
           label: truncateString(step.name, 14),
           onDropChange: onDropChange,
-          onMiniCatalogClickAdd: onSelectNewStep,
+          onMiniCatalogClickAdd: onSelectAddStep,
+          onMiniCatalogClickInsert: onSelectInsertStep,
           UUID: step.UUID,
         },
         id: getId(),
@@ -292,8 +292,18 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
    * Handles selecting a step from the Mini Catalog (append step)
    * @param selectedStep
    */
-  const onSelectNewStep = (selectedStep: IStepProps) => {
+  const onSelectAddStep = (selectedStep: IStepProps) => {
     addStep(selectedStep);
+    updateCodeEditor(integrationJson.steps);
+  };
+
+  /**
+   * Handles selecting a step from the Mini Catalog (insert step)
+   * @param selectedStep
+   * @param index
+   */
+  const onSelectInsertStep = (selectedStep: IStepProps, index: number) => {
+    insertStep(selectedStep, index);
     updateCodeEditor(integrationJson.steps);
   };
 

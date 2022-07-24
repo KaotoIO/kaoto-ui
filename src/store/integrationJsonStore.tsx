@@ -10,6 +10,7 @@ interface IIntegrationJsonStore {
   addStep: (newStep: IStepProps) => void;
   deleteIntegration: () => void;
   deleteStep: (index: number) => void;
+  insertStep: (newStep: IStepProps, index: number) => void;
   integrationJson: IIntegration;
   updateIntegration: (newInt?: any) => void;
   replaceStep: (newStep: IStepProps, oldStepIndex?: number) => void;
@@ -65,6 +66,24 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) 
       integrationJson: {
         ...state.integrationJson,
         steps: stepsWithNewUuids,
+      },
+    }));
+  },
+  insertStep: (newStep, idx) => {
+    // TODO: extract updating only steps into a reusable function
+    // unlike addStep, we need to also regenerate all UUIDs
+    // because positions are changing
+    set((state) => ({
+      integrationJson: {
+        ...state.integrationJson,
+        steps: regenerateUuids([
+          // part of array before the index
+          ...state.integrationJson.steps.slice(0, idx),
+          // inserted item
+          newStep,
+          // part of array after the index
+          ...state.integrationJson.steps.slice(idx),
+        ]),
       },
     }));
   },
