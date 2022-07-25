@@ -1,10 +1,5 @@
-import {
-  fetchCompatibleDSLs,
-  fetchIntegrationSourceCode,
-  useIntegrationJsonStore,
-  useIntegrationSourceStore,
-  useSettingsStore,
-} from '../api';
+import { fetchCompatibleDSLs, fetchIntegrationSourceCode } from '../api';
+import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '../store';
 import { ISettings, IViewProps } from '../types';
 import { usePrevious } from '../utils';
 import { isNameValidCheck } from '../utils/validationService';

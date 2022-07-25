@@ -1,4 +1,4 @@
-import { useIntegrationJsonStore } from '../api';
+import { useIntegrationJsonStore } from '../store';
 import { IStepProps, IVizStepNodeData } from '../types';
 import { canStepBeReplaced } from '../utils/validationService';
 import './Visualization.css';

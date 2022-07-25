@@ -1,4 +1,4 @@
-import { useIntegrationJsonStore } from '../api';
+import { useIntegrationJsonStore } from '../store';
 import { IStepProps, IViewProps } from '../types';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
@@ -124,11 +124,11 @@ const StepViews = ({
           <GridItem span={3}>
             <img src={step.icon} style={{ maxHeight: '40px' }} alt={'icon'} />
           </GridItem>
-          <GridItem span={8}><h3 className={'pf-c-title pf-m-xl'} tabIndex={isPanelExpanded ? 0 : -1}>
-            {step.title}
-          </h3>
+          <GridItem span={8}>
+            <h3 className={'pf-c-title pf-m-xl'} tabIndex={isPanelExpanded ? 0 : -1}>
+              {step.title}
+            </h3>
           </GridItem>
-
         </Grid>
         <DrawerActions>
           <DrawerCloseButton onClick={onClosePanelClick} />

@@ -1,10 +1,5 @@
-import {
-  fetchIntegrationJson,
-  useIntegrationJsonStore,
-  useIntegrationSourceStore,
-  fetchIntegrationSourceCode,
-  useSettingsStore,
-} from '../api';
+import { fetchIntegrationJson, fetchIntegrationSourceCode } from '../api';
+import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '../store';
 import { IIntegration } from '../types';
 import { usePrevious } from '../utils';
 import { StepErrorBoundary } from './StepErrorBoundary';
