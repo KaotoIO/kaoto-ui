@@ -1,9 +1,10 @@
 import {
   fetchIntegrationSourceCode,
   startDeployment,
-  useDeploymentContext,
-  useIntegrationJsonContext,
-  useSettingsContext,
+  useDeploymentStore,
+  useIntegrationJsonStore,
+  useIntegrationSourceStore,
+  useSettingsStore,
 } from '../api';
 import { IExpanded } from '../pages/Dashboard';
 import { isNameValidCheck } from '../utils/validationService';
@@ -46,14 +47,17 @@ export interface IKaotoToolbar {
 }
 
 export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
-  const [deployment, setDeployment] = useDeploymentContext();
+  const { deployment, setDeploymentCrd } = useDeploymentStore();
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
-  const [settings, setSettings] = useSettingsContext();
+  const settings = useSettingsStore((state) => state.settings);
+  const setSettings = useSettingsStore((state) => state.setSettings);
   const [localName, setLocalName] = useState(settings.name);
-  const [integrationJson, dispatch] = useIntegrationJsonContext();
+  const integrationJson = useIntegrationJsonStore((state) => state.integrationJson);
+  const deleteIntegration = useIntegrationJsonStore((state) => state.deleteIntegration);
+  const setSourceCode = useIntegrationSourceStore((state) => state.setSourceCode);
   const [nameValidation, setNameValidation] = useState<
     'default' | 'warning' | 'success' | 'error' | undefined
   >('default');
@@ -67,7 +71,7 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
       if (typeof updatedSource === 'string') {
         startDeployment(updatedSource, settings.name, settings.namespace)
           .then((res) => {
-            setDeployment({ ...deployment, crd: res });
+            setDeploymentCrd(res);
 
             addAlert &&
               addAlert({
@@ -335,7 +339,8 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
           setIsConfirmationModalOpen(false);
         }}
         handleConfirm={() => {
-          dispatch({ type: 'DELETE_INTEGRATION', payload: null });
+          deleteIntegration();
+          setSourceCode('');
           setSettings({ dsl: 'KameletBinding', name: 'integration', namespace: 'default' });
           setIsConfirmationModalOpen(false);
         }}

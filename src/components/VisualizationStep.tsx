@@ -1,17 +1,16 @@
+import { useSettingsStore } from '../api';
 import { IVizStepNodeData } from '../types';
 import { appendableStepTypes } from '../utils/validationService';
 import { MiniCatalog } from './MiniCatalog';
 import './Visualization.css';
 import { Button, Popover } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
-import { Handle, Node, Position, useNodes } from 'react-flow-renderer';
+import { Handle, Node, NodeProps, Position, useNodes } from 'react-flow-renderer';
 
-export interface IVisualizationStep {
-  data: IVizStepNodeData;
-}
+const currentDSL = useSettingsStore.getState().settings.dsl;
 
 // Custom Node type and component for React Flow
-const VisualizationStep = ({ data }: IVisualizationStep) => {
+const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const nodes: Node[] = useNodes();
   const isLastNode = nodes[nodes.length - 1].data.UUID === data.UUID;
 
@@ -33,6 +32,7 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
       style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}
       onDrop={onDropChange}
     >
+      {/* LEFT EDGE */}
       {data.connectorType !== 'END' && !isLastNode && (
         <Handle
           isConnectable={false}
@@ -42,6 +42,8 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
           style={{ borderRadius: 0 }}
         />
       )}
+
+      {/* PLUS BUTTON TO ADD STEP */}
       {data.connectorType !== 'END' && isLastNode && (
         <Popover
           appendTo={() => document.body}
@@ -50,7 +52,7 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
             <MiniCatalog
               handleSelectStep={onMiniCatalogClickAdd}
               queryParams={{
-                dsl: data.dsl,
+                dsl: currentDSL,
                 type: appendableStepTypes(data.connectorType),
               }}
             />
@@ -67,9 +69,13 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
           </div>
         </Popover>
       )}
+
+      {/* VISUAL REPRESENTATION OF STEP WITH ICON */}
       <div className={'stepNode__Icon stepNode__clickable'}>
         <img src={data.icon} alt={data.label} />
       </div>
+
+      {/* RIGHT EDGE */}
       {data.connectorType !== 'START' && (
         <Handle
           isConnectable={false}
@@ -79,6 +85,8 @@ const VisualizationStep = ({ data }: IVisualizationStep) => {
           style={{ borderRadius: 0 }}
         />
       )}
+
+      {/* STEP LABEL */}
       <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
     </div>
   );

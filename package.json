@@ -36,10 +36,11 @@
     "@patternfly/react-table": "^4.93.1",
     "@rhoas/app-services-ui-shared": "^0.16.0",
     "ajv": "^8.8.2",
+    "immer": "^9.0.15",
     "monaco-editor": "^0.33.0",
     "monaco-editor-webpack-plugin": "^7.0.1",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
+    "react": "18.0.0",
+    "react-dom": "^18.2.0",
     "react-error-boundary": "3.1.4",
     "react-flow-renderer": "10.3.6",
     "react-monaco-editor": "^0.48.0",
@@ -51,7 +52,8 @@
     "uniforms-patternfly": "^4.7.5",
     "use-debounce": "8.0.1",
     "uuid": "8.3.2",
-    "web-vitals": "2.1.4"
+    "web-vitals": "2.1.4",
+    "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^2.2.0",
@@ -99,6 +101,7 @@
     "prettier": "2.7.1",
     "prop-types": "15.8.1",
     "rimraf": "3.0.2",
+    "simple-zustand-devtools": "^1.1.0",
     "source-map-loader": "4.0.0",
     "style-loader": "3.3.1",
     "ts-jest": "27.1.4",
