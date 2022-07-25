@@ -1,4 +1,4 @@
-import { fetchDeploymentLogs, useDeploymentContext, useSettingsContext } from '../api';
+import { fetchDeploymentLogs, useDeploymentStore, useSettingsStore } from '../api';
 import { IExpanded } from '../pages/Dashboard';
 import {
   Button,
@@ -26,13 +26,13 @@ interface IConsole {
 }
 
 const Console = (props: IConsole) => {
-  const [deployment] = useDeploymentContext();
+  const { deployment } = useDeploymentStore();
   const [logs, setLogs] = useState<string[]>([]);
   const [isPaused, setIsPaused] = useState(false);
   const [itemCount, setItemCount] = useState(1);
   const [currentItemCount, setCurrentItemCount] = useState(0);
   const [renderData, setRenderData] = useState('');
-  const [settings] = useSettingsContext();
+  const { settings } = useSettingsStore();
   const [buffer, setBuffer] = useState<string[]>([]);
   const [linesBehind, setLinesBehind] = useState(0);
   const logViewerRef = useRef<{ scrollToBottom: () => void }>();

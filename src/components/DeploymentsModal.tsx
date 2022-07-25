@@ -1,4 +1,4 @@
-import { fetchDeployments, stopDeployment, useDeploymentContext, useSettingsContext } from '../api';
+import { fetchDeployments, stopDeployment, useDeploymentStore, useSettingsStore } from '../api';
 import { IDeployment } from '../types';
 import { formatDateTime } from '../utils';
 import { CustomExclamationTriangleIcon } from './Icons';
@@ -44,12 +44,12 @@ export interface IDeploymentsModal {
  */
 export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeploymentsModal) => {
   const [deployments, setDeployments] = useState<IDeployment[]>([]);
-  const [settings] = useSettingsContext();
+  const { settings } = useSettingsStore();
   const [activeSortIndex, setActiveSortIndex] = useState<number | undefined>(2);
   const [activeSortDirection, setActiveSortDirection] = useState<'asc' | 'desc' | undefined>(
     'desc'
   );
-  const [deployment] = useDeploymentContext();
+  const { deployment } = useDeploymentStore();
 
   const { addAlert } = useAlert() || {};
 
