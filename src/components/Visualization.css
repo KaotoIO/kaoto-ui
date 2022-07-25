@@ -29,7 +29,13 @@
     width: 6px;
 }
 
-.stepNode__Add button {
+.stepNode__Add button, .stepNode__Insert button {
+    color: var(--pf-global--Color--light-300) !important;
+    padding: 0;
+}
+
+.stepNode__Add button:hover, .stepNode__Insert button:hover {
+    color: var(--pf-global--Color--400) !important;
     padding: 0;
 }
 
@@ -45,6 +51,15 @@
     pointer-events: none;
     right: 0;
     width: 40px;
+}
+
+.stepNode__Insert {
+    height: 6px;
+    position: absolute;
+    left: -3.6em;
+    top: 40%;
+    transform: translateY(-50%);
+    width: 6px;
 }
 
 .stepNode__Label {

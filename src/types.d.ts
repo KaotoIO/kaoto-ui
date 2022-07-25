@@ -137,9 +137,9 @@ export interface IVizStepNodeData {
   kind?: string;
   label: string;
   UUID?: string;
-  index: number;
   onDropChange: (arg1: any, arg2: any) => void;
-  onMiniCatalogClickAdd: (arg: any) => void;
+  onMiniCatalogClickAdd: (selectedStep: IStepProps) => void;
+  onMiniCatalogClickInsert: (selectedStep: IStepProps, idx: number) => void;
 }
 
 export interface IVizStepPropsNode extends Node {

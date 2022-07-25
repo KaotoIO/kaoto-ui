@@ -19,22 +19,6 @@ export function appendableStepTypes(existingStepType: string): string {
 }
 
 /**
- * Checks whether a proposed step can be inserted between two existing steps.
- * @param _previousStep
- * @param _insertedStep
- * @param _nextStep
- */
-export function canStepBeInserted(
-  _previousStep: any,
-  _insertedStep: any,
-  _nextStep: any
-): { isValid: boolean; message?: string } {
-  let message = undefined;
-
-  return { isValid: false, message };
-}
-
-/**
  * Checks whether a step can replace an existing step.
  * @param existingStep
  * @param proposedStep
@@ -79,6 +63,25 @@ export function canStepBeReplaced(
   }
 
   return { isValid, message };
+}
+
+/**
+ * Checks kind of steps can be appended onto an existing step.
+ * @param _prevStep
+ * @param _nextStep
+ */
+export function insertableStepTypes(_prevStep?: any, _nextStep?: any): string {
+  let possibleSteps: string[] = ['START', 'MIDDLE', 'END'];
+  if (_prevStep) {
+    // inserted step can be MIDDLE or END
+    possibleSteps = possibleSteps.filter((val) => val !== 'START');
+  }
+  if (_nextStep) {
+    // inserted step must be MIDDLE
+    possibleSteps = possibleSteps.filter((val) => val !== 'START');
+    possibleSteps = possibleSteps.filter((val) => val !== 'END');
+  }
+  return possibleSteps.join(',');
 }
 
 /**
