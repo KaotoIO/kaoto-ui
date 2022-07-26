@@ -6,9 +6,7 @@ import {
   useVisualizationStore,
 } from '../store';
 import { IStepProps, IViewData, IVizStepPropsNode, IVizStepPropsEdge, IViewProps } from '../types';
-import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
-import '../utils';
-import { canStepBeReplaced } from '../utils/validationService';
+import { canStepBeReplaced, findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
 import {
   KaotoDrawer,
   StepErrorBoundary,

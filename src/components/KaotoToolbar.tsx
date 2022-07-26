@@ -6,7 +6,7 @@ import {
   useSettingsStore,
 } from '../store';
 import { IViewProps } from '../types';
-import { isNameValidCheck } from '../utils/validationService';
+import { isNameValidCheck } from '../utils';
 import { ConfirmationModal, DeploymentsModal, SettingsModal } from './index';
 import {
   AlertVariant,

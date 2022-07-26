@@ -1,6 +1,6 @@
 import { useIntegrationJsonStore } from '../store';
 import { IStepProps, IVizStepNodeData } from '../types';
-import { canStepBeReplaced } from '../utils/validationService';
+import { canStepBeReplaced } from '../utils';
 import './Visualization.css';
 import { AlertVariant } from '@patternfly/react-core';
 import CubesIcon from '@patternfly/react-icons/dist/esm/icons/cubes-icon';

@@ -1,7 +1,7 @@
 import { useSettingsStore } from '../store';
 import { IStepProps, IVizStepNodeData } from '../types';
 import { findStepIdxWithUUID } from '../utils';
-import { appendableStepTypes, insertableStepTypes } from '../utils/validationService';
+import { appendableStepTypes, insertableStepTypes } from '../utils';
 import { MiniCatalog } from './MiniCatalog';
 import './Visualization.css';
 import { Button, Popover } from '@patternfly/react-core';
