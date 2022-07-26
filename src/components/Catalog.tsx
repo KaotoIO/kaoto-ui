@@ -10,6 +10,7 @@ import {
   CardBody,
   CardTitle,
   Gallery,
+  GalleryItem,
   Grid,
   GridItem,
   Hint,
@@ -29,8 +30,6 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useRef, useState } from 'react';
 
 export const Catalog = () => {
-  // If the catalog data won't be changing, consider removing this state
-  // const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
@@ -188,52 +187,53 @@ export const Catalog = () => {
       </Toolbar>
       <Gallery
         hasGutter={true}
-        style={{ maxHeight: 'calc(100vh - 375px)', overflow: 'auto', padding: '0 10px' }}
+        style={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto', padding: '0 10px' }}
       >
         {catalogData &&
           search(catalogData).map((step, idx) => {
             return (
-              <Card
-                key={idx}
-                className={'catalog__step'}
-                isCompact={true}
-                isSelectable={true}
-                draggable={'true'}
-                onDragStart={(e: any) => {
-                  e.dataTransfer.setData('application/reactflow', 'step');
-                  e.dataTransfer.setData('text/plain', JSON.stringify(step));
+              <GalleryItem key={idx}>
+                <Card
+                  className={'catalog__step'}
+                  isCompact={true}
+                  isSelectable={true}
+                  draggable={'true'}
+                  onDragStart={(e: any) => {
+                    e.dataTransfer.setData('application/reactflow', 'step');
+                    e.dataTransfer.setData('text/plain', JSON.stringify(step));
 
-                  e.dataTransfer.effectAllowed = 'move';
-                }}
-              >
-                <Grid md={6}>
-                  <GridItem span={2}>
-                    <Bullseye>
-                      <img
-                        src={step.icon}
-                        className={'catalog__stepImage'}
-                        alt={'Step Image'}
-                        data-testid={'catalog__stepImage'}
-                      />
-                    </Bullseye>
-                  </GridItem>
-                  <GridItem span={7}>
-                    <CardTitle>
-                      <span>{step.name}</span>
-                    </CardTitle>
-                    <CardBody>{shorten(step?.description, 60)}</CardBody>
-                  </GridItem>
-                  <GridItem span={3}>
-                    <Label
-                      color={'blue'}
-                      data-testid={'catalog__stepLabel'}
-                      style={{ marginTop: '0.8em' }}
-                    >
-                      {truncateString(step.kind, 8)}
-                    </Label>
-                  </GridItem>
-                </Grid>
-              </Card>
+                    e.dataTransfer.effectAllowed = 'move';
+                  }}
+                >
+                  <Grid md={6}>
+                    <GridItem span={2}>
+                      <Bullseye>
+                        <img
+                          src={step.icon}
+                          className={'catalog__stepImage'}
+                          alt={'Step Image'}
+                          data-testid={'catalog__stepImage'}
+                        />
+                      </Bullseye>
+                    </GridItem>
+                    <GridItem span={7}>
+                      <CardTitle>
+                        <span>{step.name}</span>
+                      </CardTitle>
+                      <CardBody>{shorten(step?.description, 60)}</CardBody>
+                    </GridItem>
+                    <GridItem span={3}>
+                      <Label
+                        color={'blue'}
+                        data-testid={'catalog__stepLabel'}
+                        style={{ marginTop: '0.8em' }}
+                      >
+                        {truncateString(step.kind, 8)}
+                      </Label>
+                    </GridItem>
+                  </Grid>
+                </Card>
+              </GalleryItem>
             );
           })}
       </Gallery>

@@ -27,7 +27,7 @@ const Dashboard = () => {
   const leftDrawerModel = useRef('catalog');
 
   const drawerCatalog = (
-    <DrawerContentBody hasPadding={false}>
+    <DrawerContentBody style={{ padding: '10px' }}>
       <Catalog />
     </DrawerContentBody>
   );

@@ -66,6 +66,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               }}
             />
           }
+          className={'miniCatalog__popover'}
           enableFlip={true}
           flipBehavior={['top-start', 'left-start']}
           hideOnOutsideClick={true}

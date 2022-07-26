@@ -5,10 +5,13 @@ import {
   AlertVariant,
   Bullseye,
   Button,
+  Gallery,
   Grid,
   GridItem,
   InputGroup,
-  TextInput,
+  SearchInput,
+  ToggleGroup,
+  ToggleGroupItem,
   Toolbar,
   ToolbarContent,
   ToolbarItem,
@@ -25,6 +28,7 @@ export interface IMiniCatalog {
 export const MiniCatalog = (props: IMiniCatalog) => {
   const [catalogData, setCatalogData] = useState<IStepProps[]>(props.steps ?? []);
   const [query, setQuery] = useState(``);
+  const [isSelected, setIsSelected] = useState('MIDDLE');
 
   const { addAlert } = useAlert() || {};
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -57,8 +61,18 @@ export const MiniCatalog = (props: IMiniCatalog) => {
     setQuery(e);
   };
 
+  const handleItemClick = (_newIsSelected: any, event: any) => {
+    setIsSelected(event.currentTarget.id);
+  };
+
   function search(items: IStepProps[]) {
-    return items.filter((item) => item.name.toLowerCase().indexOf(query.toLowerCase()) > -1);
+    return items.filter((item) => {
+      if (isSelected === item.type) {
+        return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+      } else {
+        return false;
+      }
+    });
   }
 
   function handleSelectStep(selectedStep: IStepProps) {
@@ -72,27 +86,53 @@ export const MiniCatalog = (props: IMiniCatalog) => {
       <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
         <ToolbarContent>
           {
-            <ToolbarItem className={'miniCatalog__search'}>
-              <InputGroup>
-                <TextInput
-                  name={'stepSearch'}
-                  id={'stepSearch'}
-                  type={'search'}
-                  placeholder={'search for a step...'}
-                  aria-label={'search for a step'}
-                  value={query}
-                  onChange={changeSearch}
-                  ref={searchInputRef}
-                />
-              </InputGroup>
-            </ToolbarItem>
+            <>
+              <ToolbarItem className={'miniCatalog__search'} style={{ width: '100%' }}>
+                <InputGroup>
+                  <SearchInput
+                    name={'stepSearch'}
+                    id={'stepSearch'}
+                    type={'search'}
+                    placeholder={'search for a step...'}
+                    aria-label={'search for a step'}
+                    value={query}
+                    onChange={changeSearch}
+                    ref={searchInputRef}
+                  />
+                </InputGroup>
+              </ToolbarItem>
+              <ToolbarItem style={{ width: '100%' }}>
+                <ToggleGroup aria-label={'Icon variant toggle group'} style={{ width: '100%' }}>
+                  <ToggleGroupItem
+                    text={'start'}
+                    aria-label={'sources button'}
+                    buttonId={'START'}
+                    isSelected={isSelected === 'START'}
+                    onChange={handleItemClick}
+                  />
+                  <ToggleGroupItem
+                    icon={'actions'}
+                    aria-label={'actions button'}
+                    buttonId={'MIDDLE'}
+                    isSelected={isSelected === 'MIDDLE'}
+                    onChange={handleItemClick}
+                  />
+                  <ToggleGroupItem
+                    text={'end'}
+                    aria-label={'sinks button'}
+                    buttonId={'END'}
+                    isSelected={isSelected === 'END'}
+                    onChange={handleItemClick}
+                  />
+                </ToggleGroup>
+              </ToolbarItem>
+            </>
           }
         </ToolbarContent>
       </Toolbar>
-      {catalogData &&
-        search(catalogData)
-          .slice(0, 5)
-          .map((step, idx) => {
+      <Gallery hasGutter={false} style={{ maxHeight: '200px', overflow: 'scroll' }}>
+        {catalogData &&
+          search(catalogData).map((step, idx) => {
             return (
               <Button
                 key={idx}
@@ -117,6 +157,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
               </Button>
             );
           })}
+      </Gallery>
     </section>
   );
 };
