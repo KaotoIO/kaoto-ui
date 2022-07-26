@@ -6,12 +6,16 @@ import {
   useVisualizationStore,
 } from '../store';
 import { IStepProps, IViewData, IVizStepPropsNode, IVizStepPropsEdge, IViewProps } from '../types';
-import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
-import '../utils';
-import { canStepBeReplaced } from '../utils/validationService';
-import { StepErrorBoundary, StepViews, VisualizationSlot, VisualizationStep } from './';
+import { canStepBeReplaced, findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
+import {
+  KaotoDrawer,
+  StepErrorBoundary,
+  StepViews,
+  VisualizationSlot,
+  VisualizationStep,
+} from './';
 import './Visualization.css';
-import { AlertVariant, Drawer, DrawerContent, DrawerContentBody } from '@patternfly/react-core';
+import { AlertVariant } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Controls, MiniMap, ReactFlowProvider } from 'react-flow-renderer';
@@ -336,55 +340,50 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     }
   };
 
+  const stepViewContent = (
+    <StepViews
+      step={selectedStep}
+      isPanelExpanded={isPanelExpanded}
+      deleteStep={handleDeleteStep}
+      onClosePanelClick={onClosePanelClick}
+      saveConfig={saveConfig}
+      views={views?.filter((view) => view.step === selectedStep.UUID)}
+    />
+  );
+
   return (
     <StepErrorBoundary>
-      <Drawer isExpanded={isPanelExpanded}>
-        <DrawerContent
-          panelContent={
-            <StepViews
-              step={selectedStep}
-              isPanelExpanded={isPanelExpanded}
-              deleteStep={handleDeleteStep}
-              onClosePanelClick={onClosePanelClick}
-              saveConfig={saveConfig}
-              views={views?.filter((view) => view.step === selectedStep.UUID)}
-            />
-          }
-          className={'panelCustom'}
-        >
-          <DrawerContentBody>
-            <ReactFlowProvider>
-              <div
-                className="reactflow-wrapper"
-                data-testid={'react-flow-wrapper'}
-                ref={reactFlowWrapper}
-                style={{
-                  width: window.innerWidth,
-                  height: window.innerHeight - 153,
-                }}
-              >
-                <ReactFlow
-                  nodes={nodes}
-                  edges={edges}
-                  defaultZoom={1.2}
-                  nodeTypes={nodeTypes}
-                  onDragOver={onDragOver}
-                  onNodeClick={onNodeClick}
-                  onNodesChange={onNodesChange}
-                  onEdgesChange={onEdgesChange}
-                  onLoad={onLoad}
-                  snapToGrid={true}
-                  snapGrid={[15, 15]}
-                >
-                  <MiniMap nodeBorderRadius={2} />
-                  <Controls />
-                  <Background color="#aaa" gap={16} />
-                </ReactFlow>
-              </div>
-            </ReactFlowProvider>
-          </DrawerContentBody>
-        </DrawerContent>
-      </Drawer>
+      <KaotoDrawer isExpanded={isPanelExpanded} panelContent={stepViewContent} position={'right'}>
+        <ReactFlowProvider>
+          <div
+            className="reactflow-wrapper"
+            data-testid={'react-flow-wrapper'}
+            ref={reactFlowWrapper}
+            style={{
+              width: window.innerWidth,
+              height: window.innerHeight - 153,
+            }}
+          >
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              defaultZoom={1.2}
+              nodeTypes={nodeTypes}
+              onDragOver={onDragOver}
+              onNodeClick={onNodeClick}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onLoad={onLoad}
+              snapToGrid={true}
+              snapGrid={[15, 15]}
+            >
+              <MiniMap nodeBorderRadius={2} />
+              <Controls />
+              <Background color="#aaa" gap={16} />
+            </ReactFlow>
+          </div>
+        </ReactFlowProvider>
+      </KaotoDrawer>
     </StepErrorBoundary>
   );
 };

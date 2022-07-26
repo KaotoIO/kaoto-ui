@@ -1,6 +1,6 @@
 import { StepsAndViewsProvider } from '../api';
-import steps from '../data/steps';
-import views from '../data/views';
+import steps from '../store/data/steps';
+import views from '../store/data/views';
 import { AlertProvider, Visualization } from './index';
 import { action } from '@storybook/addon-actions';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
