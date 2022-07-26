@@ -5,6 +5,8 @@ export * from './DeploymentsModal';
 export * from './ErrorBoundary';
 export * from './Extension';
 export * from './JsonSchemaConfigurator';
+export * from './KaotoDrawer';
+export * from './KaotoToolbar';
 export * from './MASAlerts';
 export * from './MASLoading';
 export * from './MiniCatalog';

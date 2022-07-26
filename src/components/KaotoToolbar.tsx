@@ -43,9 +43,16 @@ import { useEffect, useState } from 'react';
 export interface IKaotoToolbar {
   expanded: IExpanded;
   handleExpanded: (newState: IExpanded) => void;
+  toggleCatalog: () => void;
+  toggleCodeEditor: () => void;
 }
 
-export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
+export const KaotoToolbar = ({
+  expanded,
+  handleExpanded,
+  toggleCatalog,
+  toggleCodeEditor,
+}: IKaotoToolbar) => {
   const { deployment, setDeploymentCrd } = useDeploymentStore();
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
@@ -203,7 +210,7 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
                 variant="link"
                 data-testid={'toolbar-step-catalog-btn'}
                 icon={<CatalogIcon />}
-                onClick={() => handleExpanded({ catalog: !expanded.catalog, codeEditor: false })}
+                onClick={toggleCatalog}
               />
             </Tooltip>
           </ToolbarItem>
@@ -297,9 +304,10 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
           <ToolbarItem>
             <Tooltip content={<div>Source Code</div>} position={'bottom'}>
               <Button
-                variant={expanded.codeEditor ? 'primary' : 'secondary'}
+                // variant={expanded.codeEditor ? 'primary' : 'secondary'}
+                variant={'primary'}
                 data-testid={'toolbar-show-code-btn'}
-                onClick={() => handleExpanded({ codeEditor: !expanded.codeEditor, catalog: false })}
+                onClick={toggleCodeEditor}
               >
                 Code
               </Button>
