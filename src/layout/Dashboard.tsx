@@ -1,8 +1,6 @@
 import {
   Catalog,
-  DeploymentsModal,
   KaotoToolbar,
-  SettingsModal,
   Visualization,
   SourceCodeEditor,
   Console,
@@ -22,16 +20,7 @@ import {
 import { TerminalIcon } from '@patternfly/react-icons';
 import { useRef, useState } from 'react';
 
-export interface IExpanded {
-  deploymentsModal?: boolean;
-  settingsModal?: boolean;
-}
-
 const Dashboard = () => {
-  const [expanded, setExpanded] = useState<IExpanded>({
-    deploymentsModal: false,
-    settingsModal: false,
-  });
   const [bottomDrawerExpanded, setBottomDrawerExpanded] = useState(false);
   const [leftDrawerExpanded, setLeftDrawerExpanded] = useState(false);
   const [views, setViews] = useState<IViewProps[]>([]);
@@ -65,10 +54,6 @@ const Dashboard = () => {
       />
     </DrawerContentBody>
   );
-
-  const handleExpanded = (updatedState: IExpanded) => {
-    setExpanded({ ...expanded, ...updatedState });
-  };
 
   const handleToggleCatalog = () => {
     if (leftDrawerModel.current === 'catalog') {
@@ -108,8 +93,10 @@ const Dashboard = () => {
             <Page>
               <PageSection padding={{ default: 'noPadding' }}>
                 <KaotoToolbar
-                  expanded={expanded}
-                  handleExpanded={handleExpanded}
+                  handleUpdateViews={(newViews: IViewProps[]) => {
+                    if (newViews === views) return;
+                    setViews(newViews);
+                  }}
                   toggleCatalog={handleToggleCatalog}
                   toggleCodeEditor={() => {
                     if (leftDrawerModel.current === 'code') {
@@ -167,23 +154,6 @@ const Dashboard = () => {
           </FlexItem>
         </Flex>
       </Banner>
-
-      <DeploymentsModal
-        handleCloseModal={() => {
-          setExpanded({ ...expanded, deploymentsModal: !expanded.deploymentsModal });
-        }}
-        isModalOpen={expanded.deploymentsModal ?? false}
-      />
-      <SettingsModal
-        handleCloseModal={() => {
-          setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
-        }}
-        handleUpdateViews={(newViews: IViewProps[]) => {
-          if (newViews === views) return;
-          setViews(newViews);
-        }}
-        isModalOpen={expanded.settingsModal ?? false}
-      />
     </>
   );
 };

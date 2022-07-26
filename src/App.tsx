@@ -1,6 +1,6 @@
 import './App.css';
-import { AlertProvider, MASLoading } from './components';
-import { AppLayout } from './layouts/AppLayout';
+import { AlertProvider, MASLoading } from './layout';
+import { AppLayout } from './layout/AppLayout';
 import { AppRoutes } from './routes';
 import '@patternfly/patternfly/patternfly-theme-dark.css';
 import '@patternfly/patternfly/patternfly.css';

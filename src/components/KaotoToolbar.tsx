@@ -1,13 +1,13 @@
 import { startDeployment } from '../api';
-import { IExpanded } from '../pages/Dashboard';
 import {
   useDeploymentStore,
   useIntegrationJsonStore,
   useIntegrationSourceStore,
   useSettingsStore,
 } from '../store';
+import { IViewProps } from '../types';
 import { isNameValidCheck } from '../utils/validationService';
-import { ConfirmationModal } from './ConfirmationModal';
+import { ConfirmationModal, DeploymentsModal, SettingsModal } from './index';
 import {
   AlertVariant,
   Button,
@@ -41,32 +41,33 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
 export interface IKaotoToolbar {
-  expanded: IExpanded;
-  handleExpanded: (newState: IExpanded) => void;
+  handleUpdateViews: (newViews: IViewProps[]) => void;
   toggleCatalog: () => void;
   toggleCodeEditor: () => void;
 }
 
 export const KaotoToolbar = ({
-  expanded,
-  handleExpanded,
+  handleUpdateViews,
   toggleCatalog,
   toggleCodeEditor,
 }: IKaotoToolbar) => {
+  const { settings, setSettings } = useSettingsStore((state) => state);
+  const { sourceCode, setSourceCode } = useIntegrationSourceStore((state) => state);
+  const deleteIntegration = useIntegrationJsonStore((state) => state.deleteIntegration);
+
   const { deployment, setDeploymentCrd } = useDeploymentStore();
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
-  const settings = useSettingsStore((state) => state.settings);
-  const setSettings = useSettingsStore((state) => state.setSettings);
   const [localName, setLocalName] = useState(settings.name);
-  const integrationSource = useIntegrationSourceStore((state) => state.sourceCode);
-  const deleteIntegration = useIntegrationJsonStore((state) => state.deleteIntegration);
-  const setSourceCode = useIntegrationSourceStore((state) => state.setSourceCode);
   const [nameValidation, setNameValidation] = useState<
     'default' | 'warning' | 'success' | 'error' | undefined
   >('default');
+  const [expanded, setExpanded] = useState({
+    deploymentsModal: false,
+    settingsModal: false,
+  });
 
   const { addAlert } = useAlert() || {};
 
@@ -77,7 +78,7 @@ export const KaotoToolbar = ({
   }, [settings.name]);
 
   const handleDeployStartClick = () => {
-    startDeployment(integrationSource, settings.name, settings.namespace)
+    startDeployment(sourceCode, settings.name, settings.namespace)
       .then((res) => {
         setDeploymentCrd(res);
 
@@ -115,7 +116,7 @@ export const KaotoToolbar = ({
       description="Integrations that are currently running"
       icon={<CubesIcon />}
       onClick={() => {
-        handleExpanded({ ...expanded, deploymentsModal: !expanded.deploymentsModal });
+        setExpanded({ ...expanded, deploymentsModal: !expanded.deploymentsModal });
       }}
     >
       Deployments
@@ -141,7 +142,7 @@ export const KaotoToolbar = ({
   const kebabItems = [
     <DropdownItem
       key="settings"
-      onClick={() => handleExpanded({ settingsModal: !expanded.settingsModal })}
+      onClick={() => setExpanded({ ...expanded, settingsModal: !expanded.settingsModal })}
     >
       Settings
     </DropdownItem>,
@@ -360,6 +361,21 @@ export const KaotoToolbar = ({
           'This will clear the whole canvas, and you will lose your current work. Are you sure you would' +
           ' like to proceed?'
         }
+      />
+
+      <DeploymentsModal
+        handleCloseModal={() => {
+          setExpanded({ ...expanded, deploymentsModal: !expanded.deploymentsModal });
+        }}
+        isModalOpen={expanded.deploymentsModal ?? false}
+      />
+
+      <SettingsModal
+        handleCloseModal={() => {
+          setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
+        }}
+        handleUpdateViews={handleUpdateViews}
+        isModalOpen={expanded.settingsModal ?? false}
       />
     </>
   );

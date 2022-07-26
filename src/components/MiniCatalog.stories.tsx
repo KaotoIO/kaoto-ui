@@ -1,5 +1,5 @@
-import catalog from '../data/catalog';
-import { AlertProvider } from './MASAlerts';
+import { AlertProvider } from '../layout/MASAlerts';
+import catalog from '../store/data/catalog';
 import { MiniCatalog, IMiniCatalog } from './MiniCatalog';
 import { action } from '@storybook/addon-actions';
 import { ComponentStory, ComponentMeta } from '@storybook/react';

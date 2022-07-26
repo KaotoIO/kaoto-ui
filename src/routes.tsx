@@ -1,5 +1,5 @@
-import { Dashboard } from './pages/Dashboard';
-import { NotFound } from './pages/NotFound';
+import { Dashboard } from './layout/Dashboard';
+import { NotFound } from './layout/NotFound';
 import { accessibleRouteChangeHandler } from './utils';
 import { useDocumentTitle } from './utils';
 import * as React from 'react';

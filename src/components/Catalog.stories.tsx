@@ -1,7 +1,7 @@
 // For now the only view data we care about are steps
-import catalogData from '../data/catalog';
+import { AlertProvider } from '../layout/MASAlerts';
+import catalogData from '../store/data/catalog';
 import { Catalog, ICatalog } from './Catalog';
-import { AlertProvider } from './MASAlerts';
 import { Drawer, DrawerContent } from '@patternfly/react-core';
 import { action } from '@storybook/addon-actions';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
