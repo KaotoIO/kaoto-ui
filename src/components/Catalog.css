@@ -41,6 +41,7 @@ button.miniCatalog__stepItem:hover {
 }
 
 .miniCatalog__stepItem__grid {
+    font-size: smaller;
     line-height: 40px;
     padding: 2px;
 }

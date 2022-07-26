@@ -25,7 +25,6 @@ import {
   DrawerCloseButton,
   DrawerHead,
   DrawerPanelBody,
-  DrawerPanelContent,
   Grid,
   GridItem,
   Tab,
@@ -113,12 +112,7 @@ const StepViews = ({
   };
 
   return (
-    <DrawerPanelContent
-      isResizable
-      id={'right-resize-panel'}
-      defaultSize={'500px'}
-      minSize={'150px'}
-    >
+    <>
       <DrawerHead>
         <Grid>
           <GridItem span={3}>
@@ -247,7 +241,7 @@ const StepViews = ({
           Delete
         </Button>
       </DrawerPanelBody>
-    </DrawerPanelContent>
+    </>
   );
 };
 

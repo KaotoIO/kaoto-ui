@@ -1,7 +1,7 @@
 import { fetchCatalogSteps } from '../api';
 import { useDeploymentStore, useSettingsStore } from '../store';
 import { IStepProps } from '../types';
-import { truncateString, usePrevious } from '../utils';
+import { shorten, truncateString, usePrevious } from '../utils';
 import './Catalog.css';
 import {
   AlertVariant,
@@ -27,13 +27,6 @@ import {
 import { InfoCircleIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useRef, useState } from 'react';
-
-// Shorten a string to less than maxLen characters without truncating words.
-function shorten(str: string, maxLen: number, separator = ' ') {
-  if (!str) return;
-  if (str.length <= maxLen) return str;
-  return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
-}
 
 export const Catalog = () => {
   // If the catalog data won't be changing, consider removing this state

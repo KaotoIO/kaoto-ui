@@ -1,5 +1,6 @@
 import { fetchCatalogSteps } from '../api';
 import { IStepProps, IStepQueryParams } from '../types';
+import { truncateString } from '../utils';
 import {
   AlertVariant,
   Bullseye,
@@ -13,7 +14,7 @@ import {
   ToolbarItem,
 } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export interface IMiniCatalog {
   handleSelectStep?: (selectedStep: any) => void;
@@ -111,7 +112,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                       />
                     </Bullseye>
                   </GridItem>
-                  <GridItem span={9}>{step.name}</GridItem>
+                  <GridItem span={9}>{truncateString(step.name, 25)}</GridItem>
                 </Grid>
               </Button>
             );
