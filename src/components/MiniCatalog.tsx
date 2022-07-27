@@ -108,7 +108,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                     text={'start'}
                     aria-label={'sources button'}
                     buttonId={'START'}
-                    // isDisabled={!typesAllowedArray?.includes('START')}
+                    isDisabled={!typesAllowedArray?.includes('START')}
                     isSelected={isSelected === 'START'}
                     onChange={handleItemClick}
                   />
@@ -116,7 +116,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                     icon={'actions'}
                     aria-label={'actions button'}
                     buttonId={'MIDDLE'}
-                    // isDisabled={!typesAllowedArray?.includes('MIDDLE')}
+                    isDisabled={!typesAllowedArray?.includes('MIDDLE')}
                     isSelected={isSelected === 'MIDDLE'}
                     onChange={handleItemClick}
                   />
@@ -124,7 +124,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                     text={'end'}
                     aria-label={'sinks button'}
                     buttonId={'END'}
-                    // isDisabled={!typesAllowedArray?.includes('END')}
+                    isDisabled={!typesAllowedArray?.includes('END')}
                     isSelected={isSelected === 'END'}
                     onChange={handleItemClick}
                   />
