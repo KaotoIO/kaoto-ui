@@ -139,7 +139,7 @@ const StepViews = ({
             >
               <StepErrorBoundary>
                 <br />
-                <Grid hasGutter>
+                <Grid hasGutter style={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto' }}>
                   <GridItem span={3}>
                     <b>Title</b>
                   </GridItem>
@@ -220,7 +220,7 @@ const StepViews = ({
           >
             <br />
             <StepErrorBoundary>
-              <Grid hasGutter>
+              <Grid hasGutter style={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto' }}>
                 {step.parameters && (
                   <JsonSchemaConfigurator
                     schema={{ type: 'object', properties: stepPropertySchema }}
