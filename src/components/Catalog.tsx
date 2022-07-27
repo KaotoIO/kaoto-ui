@@ -152,6 +152,7 @@ export const Catalog = () => {
                     aria-label={'search for a step'}
                     value={query}
                     onChange={changeSearch}
+                    onClear={() => setQuery('')}
                     ref={searchInputRef}
                   />
                 </InputGroup>
