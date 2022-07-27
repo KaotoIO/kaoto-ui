@@ -31,6 +31,11 @@
 }
 
 /* Mini Catalog Step (from list) */
+
+.miniCatalog__stepItem {
+    padding: 0;
+}
+
 button.miniCatalog__stepItem.pf-c-button.pf-m-tertiary {
     --pf-c-button--after--BorderColor: transparent;
     width: 100%;
@@ -41,6 +46,7 @@ button.miniCatalog__stepItem:hover {
 }
 
 .miniCatalog__stepItem__grid {
+    font-size: smaller;
     line-height: 40px;
     padding: 2px;
 }

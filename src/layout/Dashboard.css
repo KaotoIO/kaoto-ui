@@ -30,3 +30,10 @@
     font-size: 12px;
     font-weight: 600;
 }
+
+/* Override for PF dropdown menu,
+   otherwise, Drawer will cover it */
+.pf-c-dropdown__menu {
+    z-index: 999;
+}
+

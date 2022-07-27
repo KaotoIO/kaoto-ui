@@ -150,7 +150,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
   /**
    * Creates an object for the Visualization from the Step model.
    * Contains UI-specific metadata (e.g. position).
-   * Data is stored in the Elements hook.
+   * Data is stored in the `nodes` and `edges` hooks.
    */
   const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
     const incrementAmt = 160;
@@ -245,7 +245,6 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     // here we pass integrationJson's array of steps instead of `nodes`
     // because `deleteStep` requires the index to be from `integrationJson`
     const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, integrationJson.steps);
-    // need to rely on useEffect to get up-to-date value
     updateCodeEditor(integrationJson.steps);
     deleteStep(stepsIndex);
   };
@@ -299,6 +298,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
   const onSelectAddStep = (selectedStep: IStepProps) => {
     addStep(selectedStep);
     updateCodeEditor(integrationJson.steps);
+    setSelectedStep(selectedStep);
   };
 
   /**
@@ -353,7 +353,15 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
 
   return (
     <StepErrorBoundary>
-      <KaotoDrawer isExpanded={isPanelExpanded} panelContent={stepViewContent} position={'right'}>
+      <KaotoDrawer
+        isExpanded={isPanelExpanded}
+        isResizable={true}
+        panelContent={stepViewContent}
+        position={'right'}
+        id={'right-resize-panel'}
+        defaultSize={'500px'}
+        minSize={'150px'}
+      >
         <ReactFlowProvider>
           <div
             className="reactflow-wrapper"
