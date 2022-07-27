@@ -28,7 +28,8 @@ export interface IMiniCatalog {
 export const MiniCatalog = (props: IMiniCatalog) => {
   const [catalogData, setCatalogData] = useState<IStepProps[]>(props.steps ?? []);
   const [query, setQuery] = useState(``);
-  const [isSelected, setIsSelected] = useState('MIDDLE');
+  const typesAllowedArray = props.queryParams?.type?.split(',');
+  const [isSelected, setIsSelected] = useState(typesAllowedArray ? typesAllowedArray[0] : 'MIDDLE');
 
   const { addAlert } = useAlert() || {};
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -107,6 +108,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                     text={'start'}
                     aria-label={'sources button'}
                     buttonId={'START'}
+                    isDisabled={!typesAllowedArray?.includes('START')}
                     isSelected={isSelected === 'START'}
                     onChange={handleItemClick}
                   />
@@ -114,6 +116,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                     icon={'actions'}
                     aria-label={'actions button'}
                     buttonId={'MIDDLE'}
+                    isDisabled={!typesAllowedArray?.includes('MIDDLE')}
                     isSelected={isSelected === 'MIDDLE'}
                     onChange={handleItemClick}
                   />
@@ -121,6 +124,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                     text={'end'}
                     aria-label={'sinks button'}
                     buttonId={'END'}
+                    isDisabled={!typesAllowedArray?.includes('END')}
                     isSelected={isSelected === 'END'}
                     onChange={handleItemClick}
                   />
