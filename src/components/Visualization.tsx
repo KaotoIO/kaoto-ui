@@ -1,4 +1,4 @@
-import { fetchIntegrationSourceCode, fetchViews, fetchIntegrationJson } from '../api';
+import { fetchViews, fetchIntegrationJson } from '../api';
 import {
   useIntegrationJsonStore,
   useSettingsStore,
@@ -39,7 +39,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
   const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({ name: '', type: '' });
-  const { sourceCode, setSourceCode } = useIntegrationSourceStore();
+  const sourceCode = useIntegrationSourceStore((state) => state.sourceCode);
   const { addStep, deleteStep, insertStep, integrationJson, replaceStep, updateIntegration } =
     useIntegrationJsonStore();
   const settings = useSettingsStore((state) => state.settings);
@@ -88,32 +88,6 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
       handleUpdateViews(newViews);
     });
   }, [settings]);
-
-  const updateCodeEditor = (integrationJsonSteps: IStepProps[]) => {
-    // Remove all "Add Step" placeholders before updating the API
-    const filteredSteps = integrationJsonSteps.filter((step) => step.type);
-    let tempInt = integrationJson;
-    tempInt.steps = filteredSteps;
-    tempInt.metadata = { ...integrationJson.metadata, ...settings };
-
-    fetchIntegrationSourceCode(tempInt)
-      .then((value) => {
-        if (typeof value === 'string') {
-          setSourceCode(value);
-        } else {
-          setSourceCode('');
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        addAlert &&
-          addAlert({
-            title: 'Something went wrong',
-            variant: AlertVariant.danger,
-            description: 'There was a problem updating the integration. Please try again later.',
-          });
-      });
-  };
 
   const nodeTypes = useMemo(() => ({ slot: VisualizationSlot, step: VisualizationStep }), []);
 
@@ -245,7 +219,6 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     // here we pass integrationJson's array of steps instead of `nodes`
     // because `deleteStep` requires the index to be from `integrationJson`
     const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, integrationJson.steps);
-    updateCodeEditor(integrationJson.steps);
     deleteStep(stepsIndex);
   };
 
@@ -297,7 +270,6 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
    */
   const onSelectAddStep = (selectedStep: IStepProps) => {
     addStep(selectedStep);
-    updateCodeEditor(integrationJson.steps);
     setSelectedStep(selectedStep);
   };
 
@@ -308,7 +280,6 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
    */
   const onSelectInsertStep = (selectedStep: IStepProps, index: number) => {
     insertStep(selectedStep, index);
-    updateCodeEditor(integrationJson.steps);
   };
 
   const onLoad = (_reactFlowInstance: any) => {
@@ -330,8 +301,6 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
       });
 
       const oldStepIdx = findStepIdxWithUUID(selectedStep?.UUID!, integrationJson.steps);
-      // we'll need to update the code editor
-      updateCodeEditor(integrationJson.steps);
 
       // Replace step with new step
       replaceStep(newStep, oldStepIdx);
