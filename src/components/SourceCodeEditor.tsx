@@ -23,6 +23,16 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
   const { settings } = useSettingsStore();
   const previousName = usePrevious(settings.name);
+  const previousJson = usePrevious(integrationJson);
+
+  useEffect(() => {
+    if (previousJson === integrationJson) return;
+    let tmpInt = integrationJson;
+    tmpInt.metadata = { ...integrationJson.metadata, ...settings };
+    fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
+      if (typeof newSrc === 'string') setSourceCode(newSrc);
+    });
+  }, [integrationJson]);
 
   useEffect(() => {
     if (previousName === settings.name) return;
