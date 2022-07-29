@@ -25,3 +25,5 @@ export const useSettingsStore = create<ISettingsStore>((set) => ({
       settings: { ...state.settings, ...vals },
     })),
 }));
+
+export default useSettingsStore;

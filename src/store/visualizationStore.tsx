@@ -50,3 +50,5 @@ export const useVisualizationStore = create<RFState>((set) => ({
       nodes: [...newNodes],
     }),
 }));
+
+export default useVisualizationStore;

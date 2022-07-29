@@ -7,12 +7,16 @@ const { dependencies, federatedModuleName } = require('./package.json');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const TarWebpackPlugin = require('tar-webpack-plugin').default;
+const CopyPlugin = require('copy-webpack-plugin');
 
 const isPatternflyStyles = (stylesheet) =>
   stylesheet.includes('@patternfly/react-styles/css/') ||
   stylesheet.includes('@patternfly/react-core/') ||
   stylesheet.includes('@patternfly/react-code-editor') ||
   stylesheet.includes('monaco-editor-webpack-plugin');
+
+const deps = require('./package.json').dependencies;
 
 module.exports = () => {
   return {
@@ -22,7 +26,7 @@ module.exports = () => {
     module: {
       rules: [
         {
-          test: /\.tsx?$/,
+          test: /\.(d.ts|tsx)?$/,
           exclude: /node_modules/,
           use: [
             {
@@ -35,7 +39,7 @@ module.exports = () => {
                   './store': './src/store/index.ts',
                   './visualizationStore': './src/store/visualizationStore.tsx',
                 },
-                typesOutputDir: '.wp_federation',
+                typesOutputDir: './dist',
               },
             },
           ],
@@ -104,8 +108,24 @@ module.exports = () => {
           document.head.appendChild(linkTag);
         },
       }),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: path.resolve(__dirname, 'src', 'types.d.ts'),
+            to: path.resolve(__dirname, 'dist', federatedModuleName, 'dts/src', 'types.d.ts'),
+          },
+        ],
+      }),
+      new TarWebpackPlugin({
+        action: 'c',
+        gzip: true,
+        cwd: path.resolve(process.cwd(), 'dist'),
+        file: path.resolve(process.cwd(), 'dist', federatedModuleName + '-dts.tgz'),
+        fileList: [federatedModuleName],
+      }),
       new webpack.container.ModuleFederationPlugin({
         name: federatedModuleName,
+        library: { type: 'var', name: federatedModuleName },
         exposes: {
           './integrationJson': './src/store/integrationJsonStore.tsx',
           './stepExtensionApi': './src/components/StepExtensionApi.ts',
@@ -113,6 +133,7 @@ module.exports = () => {
           './visualizationStore': './src/store/visualizationStore.tsx',
         },
         shared: {
+          ...deps,
           react: {
             eager: true,
             singleton: true,
