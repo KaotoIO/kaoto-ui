@@ -22,6 +22,26 @@ module.exports = () => {
     module: {
       rules: [
         {
+          test: /\.tsx?$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'dts-loader',
+              options: {
+                name: 'app',
+                exposes: {
+                  // The exposes configured in ModuleFederationPlugin
+                  './integrationJson': './src/store/integrationJsonStore.tsx',
+                  './stepExtensionApi': './src/components/StepExtensionApi.tsx',
+                  './store': './src/store/index.ts',
+                  './visualizationStore': './src/store/visualizationStore.tsx',
+                },
+                typesOutputDir: '.wp_federation',
+              },
+            },
+          ],
+        },
+        {
           test: /\.(tsx|ts|jsx)?$/,
           use: [
             {
@@ -51,7 +71,7 @@ module.exports = () => {
         },
         {
           test: /\.(svg|jpg|jpeg|png|gif)$/i,
-          type: 'asset/inline'
+          type: 'asset/inline',
         },
         {
           test: /\.yaml$/,
@@ -87,6 +107,12 @@ module.exports = () => {
       }),
       new webpack.container.ModuleFederationPlugin({
         name: federatedModuleName,
+        exposes: {
+          './integrationJson': './src/store/integrationJsonStore.tsx',
+          './stepExtensionApi': './src/components/StepExtensionApi.tsx',
+          './store': './src/store/index.ts',
+          './visualizationStore': './src/store/visualizationStore.tsx',
+        },
         shared: {
           react: {
             eager: true,
