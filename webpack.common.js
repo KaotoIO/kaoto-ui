@@ -28,11 +28,10 @@ module.exports = () => {
             {
               loader: 'dts-loader',
               options: {
-                name: 'app',
+                name: federatedModuleName,
                 exposes: {
-                  // The exposes configured in ModuleFederationPlugin
                   './integrationJson': './src/store/integrationJsonStore.tsx',
-                  './stepExtensionApi': './src/components/StepExtensionApi.tsx',
+                  './stepExtensionApi': './src/components/StepExtensionApi.ts',
                   './store': './src/store/index.ts',
                   './visualizationStore': './src/store/visualizationStore.tsx',
                 },
@@ -109,7 +108,7 @@ module.exports = () => {
         name: federatedModuleName,
         exposes: {
           './integrationJson': './src/store/integrationJsonStore.tsx',
-          './stepExtensionApi': './src/components/StepExtensionApi.tsx',
+          './stepExtensionApi': './src/components/StepExtensionApi.ts',
           './store': './src/store/index.ts',
           './visualizationStore': './src/store/visualizationStore.tsx',
         },
