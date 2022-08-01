@@ -125,6 +125,7 @@ module.exports = () => {
       }),
       new webpack.container.ModuleFederationPlugin({
         name: federatedModuleName,
+        filename: 'remoteEntry.js',
         library: { type: 'var', name: federatedModuleName },
         exposes: {
           './integrationJson': './src/store/integrationJsonStore.tsx',
