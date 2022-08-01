@@ -84,6 +84,10 @@ module.exports = () => {
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
+      publicPath: 'auto',
+    },
+    optimization: {
+      splitChunks: false,
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -129,9 +133,8 @@ module.exports = () => {
         library: { type: 'var', name: federatedModuleName },
         exposes: {
           './integrationJson': './src/store/integrationJsonStore.tsx',
-          './stepExtensionApi': './src/components/StepExtensionApi.ts',
-          './store': './src/store/index.ts',
-          './visualizationStore': './src/store/visualizationStore.tsx',
+          // './stepExtensionApi': './src/components/StepExtensionApi.ts',
+          // './visualizationStore': './src/store/visualizationStore.tsx',
         },
         shared: {
           ...deps,
@@ -150,15 +153,15 @@ module.exports = () => {
             eager: true,
             requiredVersion: dependencies['react-router-dom'],
           },
-          '@rhoas/app-services-ui-shared': {
-            eager: true,
-            singleton: true,
-            requiredVersion: dependencies['@rhoas/app-services-ui-shared'],
-          },
-          '@patternfly/quickstarts': {
-            singleton: true,
-            requiredVersion: '*',
-          },
+          // '@rhoas/app-services-ui-shared': {
+          //   eager: true,
+          //   singleton: true,
+          //   requiredVersion: dependencies['@rhoas/app-services-ui-shared'],
+          // },
+          // '@patternfly/quickstarts': {
+          //   singleton: true,
+          //   requiredVersion: '*',
+          // },
         },
       }),
     ],

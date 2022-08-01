@@ -4,7 +4,6 @@ import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import {
-  IStepExtensionApi,
   getKaotoCatalogSteps,
   getKaotoDeployment,
   getKaotoDeploymentLogs,
@@ -171,7 +170,8 @@ const StepViews = ({
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
 
-              const kaotoApi: IStepExtensionApi = {
+              // const kaotoApi: IStepExtensionApi = {
+              const kaotoApi = {
                 getCatalogSteps: getKaotoCatalogSteps,
                 getDeployment: getKaotoDeployment,
                 getDeploymentLogs: getKaotoDeploymentLogs,
@@ -186,6 +186,7 @@ const StepViews = ({
                 notifyKaoto: alertKaoto,
                 onKaotoButtonClicked,
                 startDeployment: startKaotoDeployment,
+                step,
                 stopDeployment: stopKaotoDeployment,
                 updateStep: (step: IStepProps) => {
                   // update state of step
