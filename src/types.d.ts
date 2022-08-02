@@ -1,10 +1,5 @@
 import { Edge, Node } from 'react-flow-renderer';
 
-declare module '*.yaml' {
-  const content: { [key: string]: any };
-  export default content;
-}
-
 declare global {
   interface Window {
     __remotes__: Record<string, string>;

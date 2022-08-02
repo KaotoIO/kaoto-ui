@@ -4,7 +4,6 @@ import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import {
-  IStepExtensionApi,
   getKaotoCatalogSteps,
   getKaotoDeployment,
   getKaotoDeploymentLogs,
@@ -13,6 +12,7 @@ import {
   getKaotoIntegrationJson,
   getKaotoIntegrationSource,
   getKaotoViews,
+  IStepExtensionApi,
   onKaotoButtonClicked,
   startKaotoDeployment,
   stopKaotoDeployment,
@@ -185,11 +185,13 @@ const StepViews = ({
                 getViews: getKaotoViews,
                 notifyKaoto: alertKaoto,
                 onKaotoButtonClicked,
+                saveConfig,
                 startDeployment: startKaotoDeployment,
+                step,
                 stopDeployment: stopKaotoDeployment,
-                updateStep: (step: IStepProps) => {
+                updateStep: (newStep: IStepProps) => {
                   // update state of step
-                  replaceStep(step, index);
+                  replaceStep(newStep, index);
                 },
               };
 
