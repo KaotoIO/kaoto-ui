@@ -12,6 +12,7 @@ import {
   getKaotoIntegrationJson,
   getKaotoIntegrationSource,
   getKaotoViews,
+  IStepExtensionApi,
   onKaotoButtonClicked,
   startKaotoDeployment,
   stopKaotoDeployment,
@@ -170,8 +171,7 @@ const StepViews = ({
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
 
-              // const kaotoApi: IStepExtensionApi = {
-              const kaotoApi = {
+              const kaotoApi: IStepExtensionApi = {
                 getCatalogSteps: getKaotoCatalogSteps,
                 getDeployment: getKaotoDeployment,
                 getDeploymentLogs: getKaotoDeploymentLogs,
@@ -188,9 +188,9 @@ const StepViews = ({
                 startDeployment: startKaotoDeployment,
                 step,
                 stopDeployment: stopKaotoDeployment,
-                updateStep: (step: IStepProps) => {
+                updateStep: (newStep: IStepProps) => {
                   // update state of step
-                  replaceStep(step, index);
+                  replaceStep(newStep, index);
                 },
               };
 

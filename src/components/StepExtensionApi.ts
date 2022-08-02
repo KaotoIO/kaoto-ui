@@ -56,6 +56,7 @@ export interface IStepExtensionApi {
     name: string,
     namespace?: string
   ) => Promise<string | unknown>;
+  step: IStepProps;
   stopDeployment: (name: string, namespace?: string) => void;
   updateStep: (step: IStepProps) => void;
 }
