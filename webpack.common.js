@@ -134,7 +134,6 @@ module.exports = () => {
         exposes: {
           './integrationJson': './src/store/integrationJsonStore.tsx',
           // './stepExtensionApi': './src/components/StepExtensionApi.ts',
-          // './visualizationStore': './src/store/visualizationStore.tsx',
         },
         shared: {
           ...deps,

@@ -185,6 +185,7 @@ const StepViews = ({
                 getViews: getKaotoViews,
                 notifyKaoto: alertKaoto,
                 onKaotoButtonClicked,
+                saveConfig,
                 startDeployment: startKaotoDeployment,
                 step,
                 stopDeployment: stopKaotoDeployment,

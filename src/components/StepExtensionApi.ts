@@ -51,6 +51,7 @@ export interface IStepExtensionApi {
   getViews: (data: IStepProps[], namespace?: string) => Promise<IViewProps[]>;
   notifyKaoto: (title: string, body?: string, variant?: string) => void;
   onKaotoButtonClicked: (view: IViewProps) => void;
+  saveConfig: (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => void;
   startDeployment: (
     integration: any,
     name: string,
