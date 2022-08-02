@@ -291,7 +291,6 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
    * @param newValues
    */
   const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
-    console.log('newValues: ', newValues);
     let newStep: IStepProps = selectedStep;
     const newStepParameters = newStep.parameters;
 
