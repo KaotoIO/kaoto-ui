@@ -126,7 +126,7 @@
     "*.tsx": "eslint --ext .tsx"
   },
   "resolutions": {
-    "@types/react": "17.0.44"
+    "@types/react": "18.0.0"
   },
   "bugs": {
     "url": "https://github.com/KaotoIO/kaoto-ui/issues"
