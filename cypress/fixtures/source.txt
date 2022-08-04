@@ -23,4 +23,3 @@ spec:
   {backspace}kind: Kamelet</br>
 {backspace}{backspace}storage: true</br>
 version: v1alpha1
-
