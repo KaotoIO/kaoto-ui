@@ -43,6 +43,36 @@ export interface IStepViewsProps {
   views?: IViewProps[];
 }
 
+// @ts-ignore
+const api = (alertKaoto, index, saveConfig, replaceStep, step, stepInitialValues) => {
+  const kaotoApi: IStepExtensionApi = {
+    getCatalogSteps: getKaotoCatalogSteps,
+    getDeployment: getKaotoDeployment,
+    getDeploymentLogs: getKaotoDeploymentLogs,
+    getDeployments: getKaotoDeployments,
+    getDSLs: getKaotoDSLs,
+    getIntegrationJson: getKaotoIntegrationJson,
+    getIntegrationSource: getKaotoIntegrationSource,
+    getStep: () => {
+      return step;
+    },
+    getViews: getKaotoViews,
+    notifyKaoto: alertKaoto,
+    onKaotoButtonClicked,
+    saveConfig,
+    startDeployment: startKaotoDeployment,
+    step,
+    stepInitialValues,
+    stopDeployment: stopKaotoDeployment,
+    updateStep: (newStep: IStepProps) => {
+      // update state of step
+      replaceStep(newStep, index);
+    },
+  };
+
+  return kaotoApi;
+};
+
 const StepViews = ({
   deleteStep,
   isPanelExpanded,
@@ -171,29 +201,25 @@ const StepViews = ({
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
 
-              const kaotoApi: IStepExtensionApi = {
-                getCatalogSteps: getKaotoCatalogSteps,
-                getDeployment: getKaotoDeployment,
-                getDeploymentLogs: getKaotoDeploymentLogs,
-                getDeployments: getKaotoDeployments,
-                getDSLs: getKaotoDSLs,
-                getIntegrationJson: getKaotoIntegrationJson,
-                getIntegrationSource: getKaotoIntegrationSource,
-                getStep: () => {
-                  return step;
-                },
-                getViews: getKaotoViews,
-                notifyKaoto: alertKaoto,
-                onKaotoButtonClicked,
-                saveConfig,
-                startDeployment: startKaotoDeployment,
-                step,
-                stopDeployment: stopKaotoDeployment,
-                updateStep: (newStep: IStepProps) => {
-                  // update state of step
-                  replaceStep(newStep, index);
-                },
+              const stepInitialValues = () => {
+                let tmpValues = {};
+                step.parameters?.map((p) => {
+                  const paramKey = p.title;
+                  // @ts-ignore
+                  tmpValues[paramKey] = p.value ?? p.defaultValue;
+                });
+                // console.log('from kaoto, initial values: ', tmpValues);
+                return tmpValues;
               };
+
+              const kaotoApi = api(
+                alertKaoto,
+                index,
+                replaceStep,
+                saveConfig,
+                step,
+                stepInitialValues
+              );
 
               return (
                 <Tab

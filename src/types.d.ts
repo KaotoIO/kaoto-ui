@@ -126,23 +126,25 @@ export interface IViewData {
 }
 
 export interface IVizStepNodeData {
-  connectorType: string;
-  handleUpdateViews?: (newViews: IViewProps[]) => void;
   icon?: string;
   kind?: string;
   label: string;
+  step?: IStepProps;
   UUID?: string;
-  onDropChange: (arg1: any, arg2: any) => void;
-  onMiniCatalogClickAdd: (selectedStep: IStepProps) => void;
-  onMiniCatalogClickInsert: (selectedStep: IStepProps, idx: number) => void;
 }
 
+/**
+ * Used to extend React Flow's `Node` type
+ */
 export interface IVizStepPropsNode extends Node {
   data: IVizStepNodeData;
 }
 
-export interface IVizStepPropsEdge extends Omit<Edge, 'arrowHeadType' | 'source' | 'target'> {
+/**
+ * Used to extend React Flow's `Edge` type
+ */
+export interface IVizStepPropsEdge extends Edge {
   arrowHeadType?: string;
-  source?: string;
-  target?: string;
+  // source?: string;
+  // target?: string;
 }

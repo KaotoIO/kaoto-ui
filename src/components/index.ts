@@ -13,5 +13,4 @@ export * from './StepErrorBoundary';
 export * from './StepExtensionApi';
 export * from './StepViews';
 export * from './Visualization';
-export * from './VisualizationSlot';
 export * from './VisualizationStep';
