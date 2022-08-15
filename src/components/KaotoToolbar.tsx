@@ -7,7 +7,7 @@ import {
 } from '../store';
 import { IViewProps } from '../types';
 import { isNameValidCheck } from '../utils';
-import { ConfirmationModal, DeploymentsModal, SettingsModal } from './index';
+import { AppearanceModal, ConfirmationModal, DeploymentsModal, SettingsModal } from './index';
 import {
   AlertVariant,
   Button,
@@ -65,6 +65,7 @@ export const KaotoToolbar = ({
     'default' | 'warning' | 'success' | 'error' | undefined
   >('default');
   const [expanded, setExpanded] = useState({
+    appearanceModal: false,
     deploymentsModal: false,
     settingsModal: false,
   });
@@ -145,6 +146,12 @@ export const KaotoToolbar = ({
       onClick={() => setExpanded({ ...expanded, settingsModal: !expanded.settingsModal })}
     >
       Settings
+    </DropdownItem>,
+    <DropdownItem
+      key="appearance"
+      onClick={() => setExpanded({ ...expanded, appearanceModal: !expanded.appearanceModal })}
+    >
+      Appearance
     </DropdownItem>,
     <DropdownItem key="tutorial" isDisabled>
       Tutorial
@@ -378,6 +385,15 @@ export const KaotoToolbar = ({
         }}
         handleUpdateViews={handleUpdateViews}
         isModalOpen={expanded.settingsModal ?? false}
+      />
+
+      <AppearanceModal
+        handleCloseModal={() => {
+          {
+            setExpanded({ ...expanded, appearanceModal: !expanded.appearanceModal });
+          }
+        }}
+        isModalOpen={expanded.appearanceModal ?? false}
       />
     </>
   );
