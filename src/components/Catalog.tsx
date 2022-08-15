@@ -124,7 +124,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
         <h3 className={'pf-c-title pf-m-2xl'}>
           Step Catalog&nbsp;&nbsp;
           <Tooltip content={<span>Try dragging a step onto a circle in the canvas</span>}>
-            <InfoCircleIcon />
+            <InfoCircleIcon className={'catalog__help'} />
           </Tooltip>
         </h3>
         <DrawerActions>

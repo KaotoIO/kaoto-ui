@@ -1,11 +1,8 @@
 
-.catalog__hint {
-    padding: 0.8em !important;
-    border-radius: 10px;
-}
-
-.catalog__hint .pf-c-hint__body {
-    font-size: 0.9em;
+.catalog__help {
+    /*color: var(--pf-c-form__group-label-help--Color);*/
+    color: #B8BBBE;
+    height: 0.8em;
 }
 
 .catalog__step {
