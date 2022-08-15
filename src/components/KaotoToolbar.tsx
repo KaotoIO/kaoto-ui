@@ -31,6 +31,7 @@ import {
   BellIcon,
   CatalogIcon,
   CheckIcon,
+  CodeIcon,
   CubesIcon,
   PencilAltIcon,
   PlayIcon,
@@ -187,22 +188,6 @@ export const KaotoToolbar = ({
 
           <ToolbarItem variant="separator" />
 
-          {/* DELETE/CLEAR BUTTON */}
-          <ToolbarItem>
-            <Tooltip content={<div>Clear</div>} position={'bottom'}>
-              <Button
-                tabIndex={0}
-                variant="link"
-                data-testid={'toolbar-delete-btn'}
-                icon={<TrashIcon />}
-                onClick={() => {
-                  // verify with user first
-                  setIsConfirmationModalOpen(true);
-                }}
-              />
-            </Tooltip>
-          </ToolbarItem>
-
           {/* STEP CATALOG BUTTON */}
           <ToolbarItem>
             <Tooltip content={<div>Step Catalog</div>} position={'bottom'}>
@@ -212,6 +197,18 @@ export const KaotoToolbar = ({
                 data-testid={'toolbar-step-catalog-btn'}
                 icon={<CatalogIcon />}
                 onClick={toggleCatalog}
+              />
+            </Tooltip>
+          </ToolbarItem>
+
+          {/* CODE TOGGLE BUTTON */}
+          <ToolbarItem>
+            <Tooltip content={<div>Source Code</div>} position={'bottom'}>
+              <Button
+                variant={'link'}
+                data-testid={'toolbar-show-code-btn'}
+                onClick={toggleCodeEditor}
+                icon={<CodeIcon />}
               />
             </Tooltip>
           </ToolbarItem>
@@ -287,6 +284,22 @@ export const KaotoToolbar = ({
             )}
           </ToolbarItem>
 
+          {/* DELETE/CLEAR BUTTON */}
+          <ToolbarItem>
+            <Tooltip content={<div>Clear</div>} position={'bottom'}>
+              <Button
+                tabIndex={0}
+                variant="link"
+                data-testid={'toolbar-delete-btn'}
+                icon={<TrashIcon />}
+                onClick={() => {
+                  // verify with user first
+                  setIsConfirmationModalOpen(true);
+                }}
+              />
+            </Tooltip>
+          </ToolbarItem>
+
           {/* DEPLOYMENT STATUS */}
           {deployment.crd ? (
             <ToolbarItem alignment={{ default: 'alignRight' }}>
@@ -300,20 +313,6 @@ export const KaotoToolbar = ({
           )}
 
           {deployment.crd && <ToolbarItem variant="separator" />}
-
-          {/* CODE TOGGLE BUTTON */}
-          <ToolbarItem>
-            <Tooltip content={<div>Source Code</div>} position={'bottom'}>
-              <Button
-                // variant={expanded.codeEditor ? 'primary' : 'secondary'}
-                variant={'primary'}
-                data-testid={'toolbar-show-code-btn'}
-                onClick={toggleCodeEditor}
-              >
-                Code
-              </Button>
-            </Tooltip>
-          </ToolbarItem>
 
           {/* DEPLOY BUTTON */}
           <ToolbarItem>
