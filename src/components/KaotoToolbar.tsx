@@ -34,7 +34,6 @@ import {
   CodeIcon,
   CubesIcon,
   PencilAltIcon,
-  PlayIcon,
   TimesIcon,
   TrashIcon,
 } from '@patternfly/react-icons';
@@ -328,6 +327,8 @@ export const KaotoToolbar = ({
               />
             </Tooltip>
           </ToolbarItem>
+
+          <ToolbarItem variant="separator" />
 
           {/* KEBAB DROPDOWN MENU */}
           <ToolbarItem variant="overflow-menu">

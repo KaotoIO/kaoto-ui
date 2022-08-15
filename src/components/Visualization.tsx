@@ -272,6 +272,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
 
   return (
     <StepErrorBoundary>
+      {/* RIGHT DRAWER: STEP DETAIL & EXTENSIONS */}
       <KaotoDrawer
         isExpanded={isPanelExpanded}
         isResizable={true}

@@ -9,27 +9,28 @@ import {
   Card,
   CardBody,
   CardTitle,
+  DrawerActions,
+  DrawerCloseButton,
+  DrawerHead,
   Gallery,
   GalleryItem,
   Grid,
   GridItem,
-  Hint,
-  HintBody,
   InputGroup,
   Label,
   SearchInput,
-  TextContent,
   ToggleGroup,
   ToggleGroupItem,
   Toolbar,
   ToolbarContent,
   ToolbarItem,
+  Tooltip,
 } from '@patternfly/react-core';
 import { InfoCircleIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useRef, useState } from 'react';
 
-export const Catalog = () => {
+export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
   const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
@@ -119,27 +120,20 @@ export const Catalog = () => {
 
   return (
     <div data-testid={'stepCatalog'}>
-      <div style={{ padding: '10px', marginTop: '0.7em' }}>
-        <TextContent>
-          <Hint className={'catalog__hint'}>
-            <HintBody>
-              <InfoCircleIcon />
-              &nbsp;&nbsp;You can drag a step onto a circle in the visualization
-            </HintBody>
-          </Hint>
-        </TextContent>
-      </div>
-      <Toolbar
-        id={'toolbar'}
-        style={{
-          background: 'transparent',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingTop: '0',
-        }}
-      >
-        <ToolbarContent style={{ padding: '5px' }}>
+      <DrawerHead>
+        <h3 className={'pf-c-title pf-m-2xl'}>
+          Step Catalog&nbsp;&nbsp;
+          <Tooltip content={<span>Try dragging a step onto a circle in the canvas</span>}>
+            <InfoCircleIcon />
+          </Tooltip>
+        </h3>
+        <DrawerActions>
+          <DrawerCloseButton onClick={handleClose} />
+        </DrawerActions>
+      </DrawerHead>
+
+      <Toolbar id={'toolbar'} className={'catalog__toolbar'}>
+        <ToolbarContent className={'catalog__toolbarContent'}>
           {
             <>
               <ToolbarItem style={{ padding: '0', marginRight: '0' }}>

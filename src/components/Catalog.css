@@ -23,6 +23,18 @@
     position: relative;
 }
 
+.catalog__toolbar {
+    background: transparent !important;
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    padding-top: 0;
+}
+
+.catalog__toolbarContent {
+    padding: 5px;
+}
+
 /* MINI CATALOG */
 
 /* Mini Catalog Search */
