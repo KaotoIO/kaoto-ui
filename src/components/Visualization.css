@@ -6,6 +6,17 @@
     position: relative;
 }
 
+.react-flow__attribution {
+    background: transparent !important;
+    /*color: #999;*/
+    /*color: 50%;*/
+    color: #000 !important; /* Fallback for older browsers */
+    color: rgba(0, 0, 0, 0.5) !important;
+    opacity: 0.7;
+    transform: rotate(90deg);
+    bottom: 2em !important;
+    right: -20px !important;
+}
 
 .stepNode {
     align-items: center;
