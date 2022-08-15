@@ -10,6 +10,8 @@
 .stepNode {
     align-items: center;
     background: var(--pf-global--BackgroundColor--100);
+    border: 2px solid rgb(204, 204, 204);
+    border-radius: 50%;
     display: block;
     font-family: Ubuntu, serif;
     font-size: small;
@@ -70,7 +72,16 @@
 }
 
 .stepNode__Slot {
-    /*border: 2px solid rgb(149, 213, 245);*/
     border: 2px solid var(--pf-global--BorderColor--100);
+    border-radius: 50%;
+}
+
+.stepNode__Start {
+    border: 2px solid rgb(0, 136, 206);
+    border-radius: 50%;
+}
+
+.stepNode__End {
+    border: 2px solid rgb(149, 213, 245);
     border-radius: 50%;
 }

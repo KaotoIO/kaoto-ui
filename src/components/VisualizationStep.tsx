@@ -24,13 +24,6 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
   const { addAlert } = useAlert() || {};
 
-  const borderColor =
-    data.step?.type === 'START'
-      ? 'rgb(0, 136, 206)'
-      : data.step?.type === 'END'
-      ? 'rgb(149, 213, 245)'
-      : 'rgb(204, 204, 204)';
-
   const onMiniCatalogClickAdd = (selectedStep: IStepProps) => addStep(selectedStep);
 
   const onMiniCatalogClickInsert = (selectedStep: IStepProps) =>
@@ -86,8 +79,13 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     <>
       {data.step?.UUID ? (
         <div
-          className={'stepNode'}
-          style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}
+          className={`stepNode ${
+            data.step?.type === 'START'
+              ? 'stepNode__Start'
+              : data.step?.type === 'END'
+              ? 'stepNode__End'
+              : ''
+          }`}
           onDrop={onDropReplace}
         >
           {/* LEFT EDGE */}
