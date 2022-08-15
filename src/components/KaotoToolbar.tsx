@@ -284,22 +284,6 @@ export const KaotoToolbar = ({
             )}
           </ToolbarItem>
 
-          {/* DELETE/CLEAR BUTTON */}
-          <ToolbarItem>
-            <Tooltip content={<div>Clear</div>} position={'bottom'}>
-              <Button
-                tabIndex={0}
-                variant="link"
-                data-testid={'toolbar-delete-btn'}
-                icon={<TrashIcon />}
-                onClick={() => {
-                  // verify with user first
-                  setIsConfirmationModalOpen(true);
-                }}
-              />
-            </Tooltip>
-          </ToolbarItem>
-
           {/* DEPLOYMENT STATUS */}
           {deployment.crd ? (
             <ToolbarItem alignment={{ default: 'alignRight' }}>
@@ -319,10 +303,28 @@ export const KaotoToolbar = ({
             <Tooltip content={<div>Deploy</div>} position={'bottom'}>
               <Button
                 tabIndex={0}
-                variant="link"
+                variant="primary"
                 data-testid={'toolbar-deploy-start-btn'}
-                icon={<PlayIcon />}
+                // icon={<PlayIcon />}
                 onClick={handleDeployStartClick}
+              >
+                Deploy
+              </Button>
+            </Tooltip>
+          </ToolbarItem>
+
+          {/* DELETE/CLEAR BUTTON */}
+          <ToolbarItem>
+            <Tooltip content={<div>Clear</div>} position={'bottom'}>
+              <Button
+                tabIndex={0}
+                variant="link"
+                data-testid={'toolbar-delete-btn'}
+                icon={<TrashIcon />}
+                onClick={() => {
+                  // verify with user first
+                  setIsConfirmationModalOpen(true);
+                }}
               />
             </Tooltip>
           </ToolbarItem>
