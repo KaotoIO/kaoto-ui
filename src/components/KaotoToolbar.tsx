@@ -27,13 +27,13 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import {
+  BarsIcon,
   BellIcon,
   CatalogIcon,
   CheckIcon,
   CubesIcon,
   PencilAltIcon,
   PlayIcon,
-  ThIcon,
   TimesIcon,
   TrashIcon,
 } from '@patternfly/react-icons';
@@ -176,7 +176,7 @@ export const KaotoToolbar = ({
                   aria-label="Applications"
                   id="toggle-icon-only"
                 >
-                  <ThIcon />
+                  <BarsIcon />
                 </DropdownToggle>
               }
               isOpen={appMenuIsOpen}
