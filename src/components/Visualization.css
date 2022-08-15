@@ -68,3 +68,9 @@
     position: relative;
     width: 250%;
 }
+
+.stepNode__Slot {
+    /*border: 2px solid rgb(149, 213, 245);*/
+    border: 2px solid var(--pf-global--BorderColor--100);
+    border-radius: 50%;
+}
