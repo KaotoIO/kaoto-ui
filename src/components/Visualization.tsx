@@ -14,7 +14,6 @@ import ReactFlow, {
   Background,
   Controls,
   MarkerType,
-  MiniMap,
   ReactFlowProvider,
 } from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
@@ -314,8 +313,8 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
               snapToGrid={true}
               snapGrid={[15, 15]}
             >
-              <MiniMap nodeBorderRadius={2} />
-              <Controls />
+              {/*<MiniMap nodeBorderRadius={2} className={'visualization__minimap'} />*/}
+              <Controls className={'visualization__controls'} />
               <Background color="#aaa" gap={16} />
             </ReactFlow>
           </div>

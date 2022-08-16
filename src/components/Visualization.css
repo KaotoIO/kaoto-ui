@@ -12,7 +12,7 @@
     color: rgba(0, 0, 0, 0.5) !important;
     opacity: 0.7;
     transform: rotate(90deg);
-    bottom: 2em !important;
+    bottom: 35px !important;
     right: -20px !important;
 }
 
@@ -98,4 +98,13 @@
 .stepNode__LightBlue {
     border: 2px solid rgb(149, 213, 245);
     border-radius: 50%;
+}
+
+.react-flow__controls.visualization__controls {
+    right: 15px;
+    left: unset;
+}
+
+.react-flow__minimap.visualization__minimap {
+    right: 50px;
 }
