@@ -7,7 +7,7 @@ describe('Catalog.tsx', () => {
   test('component renders correctly', () => {
     render(
       <AlertProvider>
-        <Catalog />
+        <Catalog handleClose={jest.fn()} />
       </AlertProvider>
     );
 
