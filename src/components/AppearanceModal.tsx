@@ -1,5 +1,5 @@
 import { HeaderTools } from '../layout/HeaderTools';
-import { Form, FormGroup, FormSection, Modal, ModalVariant } from '@patternfly/react-core';
+import { Form, FormSection, Modal, ModalVariant } from '@patternfly/react-core';
 
 export interface IAppearanceModal {
   handleCloseModal: () => void;

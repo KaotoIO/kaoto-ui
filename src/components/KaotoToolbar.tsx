@@ -35,7 +35,6 @@ import {
   CubesIcon,
   PencilAltIcon,
   TimesIcon,
-  TrashIcon,
 } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
@@ -153,6 +152,7 @@ export const KaotoToolbar = ({
     >
       Appearance
     </DropdownItem>,
+    <DropdownSeparator key="separator" />,
     <DropdownItem key="tutorial" isDisabled>
       Tutorial
     </DropdownItem>,
@@ -320,22 +320,22 @@ export const KaotoToolbar = ({
           </ToolbarItem>
 
           {/* DELETE/CLEAR BUTTON */}
-          <ToolbarItem>
-            <Tooltip content={<div>Clear</div>} position={'bottom'}>
-              <Button
-                tabIndex={0}
-                variant="link"
-                data-testid={'toolbar-delete-btn'}
-                icon={<TrashIcon />}
-                onClick={() => {
-                  // verify with user first
-                  setIsConfirmationModalOpen(true);
-                }}
-              />
-            </Tooltip>
-          </ToolbarItem>
+          {/*<ToolbarItem>*/}
+          {/*  <Tooltip content={<div>Clear</div>} position={'bottom'}>*/}
+          {/*    <Button*/}
+          {/*      tabIndex={0}*/}
+          {/*      variant="link"*/}
+          {/*      data-testid={'toolbar-delete-btn'}*/}
+          {/*      icon={<TrashIcon />}*/}
+          {/*      onClick={() => {*/}
+          {/*        // verify with user first*/}
+          {/*        setIsConfirmationModalOpen(true);*/}
+          {/*      }}*/}
+          {/*    />*/}
+          {/*  </Tooltip>*/}
+          {/*</ToolbarItem>*/}
 
-          <ToolbarItem variant="separator" />
+          {/*<ToolbarItem variant="separator" />*/}
 
           {/* KEBAB DROPDOWN MENU */}
           <ToolbarItem variant="overflow-menu">
