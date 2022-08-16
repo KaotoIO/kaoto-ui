@@ -10,7 +10,13 @@ import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
 import { KaotoDrawer, StepErrorBoundary, StepViews, VisualizationStep } from './';
 import './Visualization.css';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import ReactFlow, { Background, Controls, MiniMap, ReactFlowProvider } from 'react-flow-renderer';
+import ReactFlow, {
+  Background,
+  Controls,
+  MarkerType,
+  MiniMap,
+  ReactFlowProvider,
+} from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import 'react-flow-renderer/dist/theme-default.css';
 
@@ -136,6 +142,9 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
         source: '',
         target: '',
         id: '',
+        markerEnd: {
+          type: MarkerType.Arrow,
+        },
       };
 
       // Build the default parameters
