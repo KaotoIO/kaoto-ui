@@ -24,13 +24,6 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
   const { addAlert } = useAlert() || {};
 
-  const borderColor =
-    data.step?.type === 'START'
-      ? 'rgb(0, 136, 206)'
-      : data.step?.type === 'END'
-      ? 'rgb(149, 213, 245)'
-      : 'rgb(204, 204, 204)';
-
   const onMiniCatalogClickAdd = (selectedStep: IStepProps) => addStep(selectedStep);
 
   const onMiniCatalogClickInsert = (selectedStep: IStepProps) =>
@@ -85,11 +78,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   return (
     <>
       {data.step?.UUID ? (
-        <div
-          className={'stepNode'}
-          style={{ border: '2px solid ' + borderColor, borderRadius: '50%' }}
-          onDrop={onDropReplace}
-        >
+        <div className={`stepNode`} onDrop={onDropReplace}>
           {/* LEFT EDGE */}
           {data.step.type !== 'END' && !isLastNode && (
             <Handle
@@ -176,11 +165,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
         </div>
       ) : (
-        <div
-          className={'stepNode stepNode__clickable'}
-          style={{ border: '2px solid rgb(149, 213, 245)', borderRadius: '50%' }}
-          onDrop={onDropNew}
-        >
+        <div className={'stepNode stepNode__Slot stepNode__clickable'} onDrop={onDropNew}>
           <div className={'stepNode__Icon stepNode__clickable'}>
             <CubesIcon />
           </div>

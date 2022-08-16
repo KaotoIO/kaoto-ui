@@ -10,7 +10,12 @@ import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
 import { KaotoDrawer, StepErrorBoundary, StepViews, VisualizationStep } from './';
 import './Visualization.css';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import ReactFlow, { Background, Controls, MiniMap, ReactFlowProvider } from 'react-flow-renderer';
+import ReactFlow, {
+  Background,
+  Controls,
+  MarkerType,
+  ReactFlowProvider,
+} from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import 'react-flow-renderer/dist/theme-default.css';
 
@@ -136,6 +141,9 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
         source: '',
         target: '',
         id: '',
+        markerEnd: {
+          type: MarkerType.Arrow,
+        },
       };
 
       // Build the default parameters
@@ -272,6 +280,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
 
   return (
     <StepErrorBoundary>
+      {/* RIGHT DRAWER: STEP DETAIL & EXTENSIONS */}
       <KaotoDrawer
         isExpanded={isPanelExpanded}
         isResizable={true}
@@ -304,8 +313,8 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
               snapToGrid={true}
               snapGrid={[15, 15]}
             >
-              <MiniMap nodeBorderRadius={2} />
-              <Controls />
+              {/*<MiniMap nodeBorderRadius={2} className={'visualization__minimap'} />*/}
+              <Controls className={'visualization__controls'} />
               <Background color="#aaa" gap={16} />
             </ReactFlow>
           </div>

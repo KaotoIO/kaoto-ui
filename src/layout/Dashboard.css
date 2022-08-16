@@ -34,6 +34,6 @@
 /* Override for PF dropdown menu,
    otherwise, Drawer will cover it */
 .pf-c-dropdown__menu {
-    z-index: 999;
+    z-index: 999 !important;
 }
 

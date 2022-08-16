@@ -28,7 +28,7 @@ const Dashboard = () => {
 
   const drawerCatalog = (
     <DrawerContentBody style={{ padding: '10px' }}>
-      <Catalog />
+      <Catalog handleClose={() => setLeftDrawerExpanded(false)} />
     </DrawerContentBody>
   );
 
@@ -60,9 +60,8 @@ const Dashboard = () => {
       // it's already showing the catalog, just toggle it
       setLeftDrawerExpanded(!leftDrawerExpanded);
     } else {
-      // it's showing code editor content,
-      // so we should set it to catalog,
-      // and only close if it's already open
+      // currently showing code editor content;
+      // set to catalog, only close if already open
       setLeftDrawerContent(drawerCatalog);
       leftDrawerModel.current = 'catalog';
 
@@ -74,6 +73,7 @@ const Dashboard = () => {
 
   return (
     <>
+      {/* BOTTOM DRAWER: CONSOLE LOG */}
       <KaotoDrawer
         data-testid={'kaoto-bottom-drawer'}
         id={'kaoto-bottom-drawer'}
@@ -103,9 +103,8 @@ const Dashboard = () => {
                       // it's already showing the code editor, just toggle it
                       setLeftDrawerExpanded(!leftDrawerExpanded);
                     } else {
-                      // it's showing catalog content,
-                      // so we should set it to code editor,
-                      // and only close if it's already open
+                      // currently showing catalog content, set to
+                      // code editor, close if already open
                       setLeftDrawerContent(drawerCodeEditor);
                       leftDrawerModel.current = 'code';
 
@@ -115,6 +114,8 @@ const Dashboard = () => {
                     }
                   }}
                 />
+
+                {/* LEFT DRAWER: CATALOG & CODE EDITOR */}
                 <KaotoDrawer
                   colorVariant={DrawerColorVariant.light200}
                   dataTestId={'kaoto-left-drawer'}
@@ -140,6 +141,7 @@ const Dashboard = () => {
         </Flex>
       </KaotoDrawer>
 
+      {/* CONSOLE LOG */}
       <Banner isSticky={true} screenReaderText="Status">
         <Flex flexWrap={{ default: 'nowrap' }}>
           <FlexItem>

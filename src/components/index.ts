@@ -1,3 +1,4 @@
+export * from './AppearanceModal';
 export * from './Catalog';
 export * from './ConfirmationModal';
 export * from './Console';
