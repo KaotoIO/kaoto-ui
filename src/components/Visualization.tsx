@@ -7,7 +7,7 @@ import {
 } from '../store';
 import { IStepProps, IViewData, IViewProps, IVizStepPropsEdge, IVizStepPropsNode } from '../types';
 import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
-import { KaotoDrawer, StepErrorBoundary, StepViews, VisualizationStep } from './';
+import { KaotoDrawer, PlusButtonEdge, StepErrorBoundary, StepViews, VisualizationStep } from './';
 import './Visualization.css';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, {
@@ -84,6 +84,12 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
   }, [settings]);
 
   const nodeTypes = useMemo(() => ({ step: VisualizationStep }), []);
+  const edgeTypes = useMemo(
+    () => ({
+      insert: PlusButtonEdge,
+    }),
+    []
+  );
 
   /**
    * Creates an object for the Visualization from the Step model.
@@ -169,6 +175,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
 
         // even the last step needs to build the step edge before it, with itself as the target
         stepEdge.target = inputStep.id;
+        stepEdge.type = 'insert';
 
         // only add step edge if there is more than one step and not on the first step
         stepEdges.push(stepEdge);
@@ -304,6 +311,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
               nodes={nodes}
               edges={edges}
               defaultZoom={1.2}
+              edgeTypes={edgeTypes}
               nodeTypes={nodeTypes}
               onDragOver={onDragOver}
               onNodeClick={onNodeClick}

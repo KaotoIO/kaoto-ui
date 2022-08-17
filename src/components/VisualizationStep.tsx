@@ -1,17 +1,16 @@
 import { useIntegrationJsonStore, useSettingsStore } from '../store';
 import { IStepProps, IVizStepNodeData } from '../types';
 import { canStepBeReplaced, findStepIdxWithUUID } from '../utils';
-import { appendableStepTypes, insertableStepTypes } from '../utils';
+import { appendableStepTypes } from '../utils';
 import { MiniCatalog } from './MiniCatalog';
 import './Visualization.css';
-import { AlertVariant, Button, Popover } from '@patternfly/react-core';
-import { CubesIcon, PlusCircleIcon } from '@patternfly/react-icons';
+import { AlertVariant, Popover } from '@patternfly/react-core';
+import { CubesIcon, PlusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, Node, NodeProps, Position, useNodes } from 'react-flow-renderer';
 
 const currentDSL = useSettingsStore.getState().settings.dsl;
 const addStep = useIntegrationJsonStore.getState().addStep;
-const insertStep = useIntegrationJsonStore.getState().insertStep;
 const replaceStep = useIntegrationJsonStore.getState().replaceStep;
 
 // Custom Node type and component for React Flow
@@ -25,9 +24,6 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const { addAlert } = useAlert() || {};
 
   const onMiniCatalogClickAdd = (selectedStep: IStepProps) => addStep(selectedStep);
-
-  const onMiniCatalogClickInsert = (selectedStep: IStepProps) =>
-    insertStep(selectedStep, currentIdx);
 
   /**
    * Handles dropping a step onto an existing step (i.e. step replacement)
@@ -110,38 +106,9 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               hideOnOutsideClick={true}
               position={'right-start'}
             >
-              <div className={'stepNode__Add nodrag'}>
-                <Button variant="plain" aria-label="Action">
-                  <PlusCircleIcon />
-                </Button>
-              </div>
-            </Popover>
-          )}
-
-          {/* PLUS BUTTON TO INSERT STEP */}
-          {data.step.type !== 'START' && (
-            <Popover
-              appendTo={() => document.body}
-              aria-label="Search for a step"
-              bodyContent={
-                <MiniCatalog
-                  handleSelectStep={onMiniCatalogClickInsert}
-                  queryParams={{
-                    dsl: currentDSL,
-                    type: insertableStepTypes(nodes[currentIdx - 1]?.data, nodes[currentIdx]?.data),
-                  }}
-                />
-              }
-              enableFlip={true}
-              flipBehavior={['top-start', 'left-start']}
-              hideOnOutsideClick={true}
-              position={'right-start'}
-            >
-              <div className={'stepNode__Insert nodrag'}>
-                <Button variant="plain" aria-label="Action">
-                  <PlusCircleIcon />
-                </Button>
-              </div>
+              <button className="stepNode__Add plusButton nodrag">
+                <PlusIcon />
+              </button>
             </Popover>
           )}
 

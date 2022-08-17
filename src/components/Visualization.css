@@ -32,22 +32,9 @@
 }
 
 .stepNode__Add {
-    height: 6px;
     position: absolute;
-    right: -8px;
+    right: -22px;
     top: 40%;
-    transform: translateY(-50%);
-    width: 6px;
-}
-
-.stepNode__Add button, .stepNode__Insert button {
-    color: var(--pf-global--Color--light-300) !important;
-    padding: 0;
-}
-
-.stepNode__Add button:hover, .stepNode__Insert button:hover {
-    color: var(--pf-global--Color--400) !important;
-    padding: 0;
 }
 
 .stepNode__Icon {

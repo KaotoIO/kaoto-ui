@@ -7,6 +7,7 @@ export * from './Extension';
 export * from './JsonSchemaConfigurator';
 export * from './KaotoDrawer';
 export * from './KaotoToolbar';
+export * from './PlusButtonEdge';
 export * from './MiniCatalog';
 export * from './SettingsModal';
 export * from './SourceCodeEditor';
