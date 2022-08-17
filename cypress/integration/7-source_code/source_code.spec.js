@@ -7,10 +7,9 @@ describe('source code and drag and drop', () => {
     cy.viewport(2000, 1000);
     const dataTransfer = new DataTransfer();
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.get('.code-editor').click().type('{selectall} {backspace}')
-    cy.get('.pf-c-empty-state__secondary > .pf-c-button').click()
+    cy.get('.code-editor').click().type('{meta}A {backspace}');
+    cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
     cy.fixture('editor.txt').then((user) => {
-      
       cy.get('.code-editor').type(user);
       cy.wait(2000);
       cy.get('[data-testid="toolbar-show-code-btn"]').click();
@@ -30,7 +29,10 @@ describe('source code and drag and drop', () => {
       cy.get('.pf-c-code-editor__code')
         .contains('timer-source')
         .type(
-          '{end}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}kafka-source',
+          '{end}' +
+            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
+            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
+            'kafka-source',
           { delay: 500 }
         );
     });

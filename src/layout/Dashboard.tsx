@@ -6,7 +6,6 @@ import {
   Console,
   KaotoDrawer,
 } from '../components';
-import { IViewProps } from '../types';
 import './Dashboard.css';
 import {
   Page,
@@ -23,7 +22,6 @@ import { useRef, useState } from 'react';
 const Dashboard = () => {
   const [bottomDrawerExpanded, setBottomDrawerExpanded] = useState(false);
   const [leftDrawerExpanded, setLeftDrawerExpanded] = useState(false);
-  const [views, setViews] = useState<IViewProps[]>([]);
   const leftDrawerModel = useRef('catalog');
 
   const drawerCatalog = (
@@ -46,12 +44,7 @@ const Dashboard = () => {
 
   const drawerCodeEditor = (
     <DrawerContentBody hasPadding={false}>
-      <SourceCodeEditor
-        handleUpdateViews={(newViews: IViewProps[]) => {
-          if (newViews === views) return;
-          setViews(newViews);
-        }}
-      />
+      <SourceCodeEditor />
     </DrawerContentBody>
   );
 
@@ -93,10 +86,6 @@ const Dashboard = () => {
             <Page>
               <PageSection padding={{ default: 'noPadding' }}>
                 <KaotoToolbar
-                  handleUpdateViews={(newViews: IViewProps[]) => {
-                    if (newViews === views) return;
-                    setViews(newViews);
-                  }}
                   toggleCatalog={handleToggleCatalog}
                   toggleCodeEditor={() => {
                     if (leftDrawerModel.current === 'code') {
@@ -126,14 +115,7 @@ const Dashboard = () => {
                   position={'left'}
                 >
                   {/* VISUALIZATION / CANVAS */}
-                  <Visualization
-                    handleUpdateViews={(newViews: IViewProps[]) => {
-                      if (newViews === views) return;
-                      setViews(newViews);
-                    }}
-                    toggleCatalog={handleToggleCatalog}
-                    views={views}
-                  />
+                  <Visualization toggleCatalog={handleToggleCatalog} />
                 </KaotoDrawer>
               </PageSection>
             </Page>

@@ -6,7 +6,7 @@ describe('Settings', () => {
 
   it('settings cog button is visible', () => {
     cy.get('.pf-c-toolbar__content-section').click();
-    cy.get('#pf-dropdown-toggle-id-3').click();
+    cy.get('[data-testid="toolbar-kebab-dropdown-btn"]').click();
   });
 
   it('loads the settings modal', () => {

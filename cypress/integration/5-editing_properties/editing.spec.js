@@ -7,7 +7,7 @@ describe('editing properties', () => {
   it('loads the YAML editor', () => {
     cy.viewport(2000, 1000);
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.get('.code-editor').click().type('{selectall} {backspace}');
+    cy.get('.code-editor').click().type('{meta}A {backspace}');
     cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
 
     cy.fixture('source.txt')
@@ -15,10 +15,8 @@ describe('editing properties', () => {
         cy.get('.code-editor').type(user);
       })
       .then(() => {
-        cy.get('[data-testid="react-flow-wrapper"]')
-        .contains('timer-source')
-        .click()
-        cy.wait(1000)
+        cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source').click();
+        cy.wait(1000);
         cy.get('[data-testid="configurationTab"]').click();
         cy.get('input[name="period"]').type('3000');
         cy.get('.code-editor').should('contain.text', 'period');

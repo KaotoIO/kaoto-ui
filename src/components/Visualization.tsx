@@ -5,7 +5,7 @@ import {
   useSettingsStore,
   useVisualizationStore,
 } from '../store';
-import { IStepProps, IViewData, IViewProps, IVizStepPropsEdge, IVizStepPropsNode } from '../types';
+import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '../types';
 import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
 import { KaotoDrawer, PlusButtonEdge, StepErrorBoundary, StepViews, VisualizationStep } from './';
 import './Visualization.css';
@@ -20,16 +20,14 @@ import 'react-flow-renderer/dist/style.css';
 import 'react-flow-renderer/dist/theme-default.css';
 
 interface IVisualization {
-  handleUpdateViews: (newViews: IViewProps[]) => void;
   initialState?: IViewData;
   toggleCatalog?: () => void;
-  views: IViewProps[];
 }
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
-const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualization) => {
+const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
@@ -37,7 +35,8 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({ name: '', type: '' });
   const sourceCode = useIntegrationSourceStore((state) => state.sourceCode);
-  const { deleteStep, integrationJson, replaceStep, updateIntegration } = useIntegrationJsonStore();
+  const { deleteStep, integrationJson, replaceStep, setViews, updateIntegration } =
+    useIntegrationJsonStore();
   const settings = useSettingsStore((state) => state.settings);
   const { edges, nodes, deleteNode, onEdgesChange, onNodesChange, setEdges, setNodes } =
     useVisualizationStore();
@@ -54,7 +53,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
 
     // FETCH VIEWS
     fetchViews(integrationJson.steps).then((views) => {
-      handleUpdateViews(views);
+      setViews(views);
     });
 
     prepareAndSetVizDataSteps(integrationJson.steps.slice());
@@ -79,7 +78,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     // update views in case DSL change results in views change
     // i.e. CamelRoute -> KameletBinding results in loss of incompatible steps
     fetchViews(integrationJson.steps).then((newViews) => {
-      handleUpdateViews(newViews);
+      setViews(newViews);
     });
   }, [settings]);
 
@@ -274,24 +273,21 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     }
   };
 
-  const stepViewContent = (
-    <StepViews
-      step={selectedStep}
-      isPanelExpanded={isPanelExpanded}
-      deleteStep={handleDeleteStep}
-      onClosePanelClick={onClosePanelClick}
-      saveConfig={saveConfig}
-      views={views?.filter((view) => view.step === selectedStep.UUID)}
-    />
-  );
-
   return (
     <StepErrorBoundary>
       {/* RIGHT DRAWER: STEP DETAIL & EXTENSIONS */}
       <KaotoDrawer
         isExpanded={isPanelExpanded}
         isResizable={true}
-        panelContent={stepViewContent}
+        panelContent={
+          <StepViews
+            step={selectedStep}
+            isPanelExpanded={isPanelExpanded}
+            deleteStep={handleDeleteStep}
+            onClosePanelClick={onClosePanelClick}
+            saveConfig={saveConfig}
+          />
+        }
         position={'right'}
         id={'right-resize-panel'}
         defaultSize={'500px'}
@@ -320,6 +316,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
               onLoad={onLoad}
               snapToGrid={true}
               snapGrid={[15, 15]}
+              deleteKeyCode={null}
             >
               {/*<MiniMap nodeBorderRadius={2} className={'visualization__minimap'} />*/}
               <Controls className={'visualization__controls'} />

@@ -6,8 +6,8 @@ describe('Test for deleting steps', () => {
   it('loads the YAML editor', () => {
     cy.viewport(2000, 1000);
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.get('.code-editor').click().type('{selectall} {backspace}')
-    cy.get('.pf-c-empty-state__secondary > .pf-c-button').click()
+    cy.get('.code-editor').click().type('{meta}A {backspace}');
+    cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
     cy.fixture('delete.txt').then((user) => {
       cy.get('.code-editor').type(user);
       cy.wait(1000);

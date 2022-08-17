@@ -5,7 +5,6 @@ import {
   useIntegrationSourceStore,
   useSettingsStore,
 } from '../store';
-import { IViewProps } from '../types';
 import { isNameValidCheck } from '../utils';
 import { AppearanceModal, ConfirmationModal, DeploymentsModal, SettingsModal } from './index';
 import {
@@ -40,16 +39,11 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
 
 export interface IKaotoToolbar {
-  handleUpdateViews: (newViews: IViewProps[]) => void;
   toggleCatalog: () => void;
   toggleCodeEditor: () => void;
 }
 
-export const KaotoToolbar = ({
-  handleUpdateViews,
-  toggleCatalog,
-  toggleCodeEditor,
-}: IKaotoToolbar) => {
+export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar) => {
   const { settings, setSettings } = useSettingsStore((state) => state);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore((state) => state);
   const deleteIntegration = useIntegrationJsonStore((state) => state.deleteIntegration);
@@ -152,7 +146,7 @@ export const KaotoToolbar = ({
     >
       Appearance
     </DropdownItem>,
-    <DropdownSeparator key="separator" />,
+    <DropdownSeparator key="separator-01" />,
     <DropdownItem key="tutorial" isDisabled>
       Tutorial
     </DropdownItem>,
@@ -162,7 +156,7 @@ export const KaotoToolbar = ({
     <DropdownItem key="feedback" isDisabled>
       Feedback
     </DropdownItem>,
-    <DropdownSeparator key="separator" />,
+    <DropdownSeparator key="separator-02" />,
     <DropdownItem key="delete" component="button" onClick={() => setIsConfirmationModalOpen(true)}>
       Delete
     </DropdownItem>,
@@ -383,7 +377,6 @@ export const KaotoToolbar = ({
         handleCloseModal={() => {
           setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
         }}
-        handleUpdateViews={handleUpdateViews}
         isModalOpen={expanded.settingsModal ?? false}
       />
 
@@ -398,3 +391,5 @@ export const KaotoToolbar = ({
     </>
   );
 };
+
+export default KaotoToolbar;

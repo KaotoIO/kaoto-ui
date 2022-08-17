@@ -7,16 +7,19 @@ describe('Test for undo/redo actions on code-editor', () => {
   it('loads the YAML editor', () => {
     cy.viewport(2000, 1000);
     const dataTransfer = new DataTransfer();
-    cy.get('[data-testid="toolbar-show-code-btn"]').click()
-    cy.get('.code-editor').click().type('{selectall} {backspace}')
-    cy.get('.pf-c-empty-state__secondary > .pf-c-button').click()
+    cy.get('[data-testid="toolbar-show-code-btn"]').click();
+    cy.get('.code-editor').click().type('{meta}A {backspace}');
+    cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
     cy.fixture('undo_redo.txt').then((user) => {
       cy.get('.code-editor').type(user);
       cy.wait(2000);
       cy.get('.code-editor')
         .contains('kafka-source')
         .type(
-          '{end}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}timer-source',
+          '{end}' +
+            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
+            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
+            'timer-source',
           { delay: 500 }
         );
       cy.get('[aria-label="Undo change"] > svg').click();
