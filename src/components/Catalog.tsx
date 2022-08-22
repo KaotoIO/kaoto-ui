@@ -190,6 +190,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
               <GalleryItem key={idx}>
                 <Card
                   className={'catalog__step'}
+                  data-testid={`catalog-step-${step.name}`}
                   isCompact={true}
                   isSelectable={true}
                   draggable={'true'}

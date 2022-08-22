@@ -12,6 +12,11 @@
       alt="follow on Twitter"/></a>
 </p>
 
+<p align="center">
+  <a href="https://github.com/KaotoIO/kaoto-ui/actions/workflows/e2e-tests.yml">
+    <img src="https://github.com/KaotoIO/kaoto-ui/actions/workflows/e2e-tests.yml/badge.svg?event=push" alt="🏗️ E2E Tests (Cypress)"/></a>
+
+</p>
 
 # Kaoto UI
 

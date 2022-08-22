@@ -7,11 +7,7 @@ describe('SettingsModal.tsx', () => {
   test('component renders correctly', () => {
     render(
       <AlertProvider>
-        <SettingsModal
-          handleCloseModal={jest.fn()}
-          handleUpdateViews={jest.fn()}
-          isModalOpen={false}
-        />
+        <SettingsModal handleCloseModal={jest.fn()} isModalOpen={false} />
       </AlertProvider>
     );
     const element = screen.getByTestId('settings-modal');
