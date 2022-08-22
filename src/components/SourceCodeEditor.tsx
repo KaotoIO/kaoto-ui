@@ -112,6 +112,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       <CodeEditor
         code={sourceCode ?? props.initialData}
         className="code-editor"
+        emptyState={''}
         height="650px"
         language={(props.language as Language) ?? Language.yaml}
         onEditorDidMount={handleEditorDidMount}

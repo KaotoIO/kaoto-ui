@@ -6,13 +6,18 @@ describe('Test for undo/redo actions on code-editor', () => {
 
   it('loads the YAML editor', () => {
     cy.viewport(2000, 1000);
-    const dataTransfer = new DataTransfer();
+
+    // open source code editor
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.get('.code-editor').click().type('{meta}A {backspace}');
+    cy.get('.code-editor').click().type('{selectAll} {backspace}');
+
+    // select "start from scratch" in code editor's empty state
     cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
-    cy.fixture('undo_redo.txt').then((user) => {
-      cy.get('.code-editor').type(user);
-      cy.wait(2000);
+
+    // load fixture
+    cy.fixture('undo_redo.txt').then((yaml) => {
+      cy.get('.code-editor').type(yaml);
+      cy.wait(4000);
       cy.get('.code-editor')
         .contains('kafka-source')
         .type(
@@ -28,7 +33,6 @@ describe('Test for undo/redo actions on code-editor', () => {
       cy.get('[aria-label="Redo change"] > svg').click();
       cy.get('[aria-label="Redo change"] > svg').click();
       cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source');
-      cy.wait(2000);
     });
   });
 });

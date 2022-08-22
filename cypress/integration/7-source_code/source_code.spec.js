@@ -7,21 +7,25 @@ describe('source code and drag and drop', () => {
     cy.viewport(2000, 1000);
     const dataTransfer = new DataTransfer();
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.get('.code-editor').click().type('{meta}A {backspace}');
+    cy.get('.code-editor').click().type('{selectAll} {backspace}');
     cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
-    cy.fixture('editor.txt').then((user) => {
-      cy.get('.code-editor').type(user);
+    cy.fixture('kafka-to-kafka-yaml.txt').then((sourceCode) => {
+      cy.get('.code-editor').click().type('{selectAll} {backspace}').type(sourceCode);
       cy.wait(2000);
+
+      // open source code editor
       cy.get('[data-testid="toolbar-show-code-btn"]').click();
+
+      // open catalog, search for timer step
       cy.get('[data-testid="toolbar-step-catalog-btn"]').click();
       cy.get('#stepSearch').type('timer');
-      cy.get(':nth-child(2) > .pf-c-card > .pf-l-grid > .pf-m-7-col > .pf-c-card__body').trigger(
-        'dragstart',
-        {
-          dataTransfer,
-        }
-      );
-      cy.get('[data-testid="react-flow-wrapper"]').contains('kafka-source').trigger('drop', {
+
+      cy.get('[data-testid="catalog-step-timer-source"]').trigger('dragstart', {
+        dataTransfer,
+      });
+
+      // drag timer from catalog over existing kafka step
+      cy.get('[data-testid="viz-step-kafka-source"]').trigger('drop', {
         dataTransfer,
       });
       cy.get('[data-testid="toolbar-show-code-btn"]').click();
