@@ -1,11 +1,8 @@
 
-.catalog__hint {
-    padding: 0.8em !important;
-    border-radius: 10px;
-}
-
-.catalog__hint .pf-c-hint__body {
-    font-size: 0.9em;
+.catalog__help {
+    /*color: var(--pf-c-form__group-label-help--Color);*/
+    color: #B8BBBE;
+    height: 0.8em;
 }
 
 .catalog__step {
@@ -23,6 +20,18 @@
     position: relative;
 }
 
+.catalog__toolbar {
+    background: transparent !important;
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    padding-top: 0;
+}
+
+.catalog__toolbarContent {
+    padding: 5px;
+}
+
 /* MINI CATALOG */
 
 /* Mini Catalog Search */
@@ -31,6 +40,11 @@
 }
 
 /* Mini Catalog Step (from list) */
+
+.miniCatalog__stepItem {
+    padding: 0;
+}
+
 button.miniCatalog__stepItem.pf-c-button.pf-m-tertiary {
     --pf-c-button--after--BorderColor: transparent;
     width: 100%;
@@ -41,6 +55,7 @@ button.miniCatalog__stepItem:hover {
 }
 
 .miniCatalog__stepItem__grid {
+    font-size: smaller;
     line-height: 40px;
     padding: 2px;
 }

@@ -39,6 +39,13 @@ export function formatDateTime(date: string) {
   );
 }
 
+// Shorten a string to less than maxLen characters without truncating words.
+export function shorten(str: string, maxLen: number, separator = ' ') {
+  if (!str) return;
+  if (str.length <= maxLen) return str;
+  return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
+}
+
 export function truncateString(str: string, num: number) {
   if (str.length > num) {
     return str.slice(0, num) + '..';
@@ -73,3 +80,5 @@ export function usePrevious(value: any) {
   });
   return ref.current;
 }
+
+export * from './validationService';

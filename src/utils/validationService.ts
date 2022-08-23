@@ -35,28 +35,29 @@ export function canStepBeReplaced(
   // initial shallow check of step type, where the
   // existing step is treated as a first class citizen,
   // regardless if it's a slot or not
-  if (existingStep.connectorType === proposedStep.type) {
+  if ((existingStep.type || existingStep.step?.type) === proposedStep.type) {
     isValid = true;
+
     return { isValid, message: '' };
   }
 
-  switch (existingStep.connectorType) {
+  switch (existingStep.step?.type) {
     case 'START':
       isValid = proposedStep.type === 'START';
       message = 'First step must be a start step.';
       break;
     case 'MIDDLE':
     case 'END':
-      // check first that it's actually at the end of the steps array
-      // to handle edge cases where the end step has been replaced by a
-      // middle step, and now uses that for validation, meaning you
-      // cannot replace it wih a sink
+      // check if it's the last step
       if (steps[steps.length - 1].UUID === existingStep.UUID) {
         message = 'Last step must be a middle or end step.';
         isValid = proposedStep.type === 'MIDDLE' || proposedStep.type === 'END';
       } else if (existingStep.connectorType === 'MIDDLE' && proposedStep.type === 'END') {
-        // not the last step, but trying to replace a middle step with an end step
+        // not the last step, but trying to replace a MIDDLE step with an END step
         message = 'You cannot replace a middle step with an end step.';
+      } else if (existingStep.connectorType === 'MIDDLE' && proposedStep.type === 'START') {
+        // not the last step, but trying to replace a MIDDLE step with a START step
+        message = 'You cannot replace a middle step with a start step.';
       }
 
       break;

@@ -1,16 +1,16 @@
 import { AlertProvider } from '../layout';
-import { SettingsModal } from './SettingsModal';
+import { AppearanceModal } from './AppearanceModal';
 import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 
-describe('SettingsModal.tsx', () => {
+describe('AppearanceModal.tsx', () => {
   test('component renders correctly', () => {
     render(
       <AlertProvider>
-        <SettingsModal handleCloseModal={jest.fn()} isModalOpen={false} />
+        <AppearanceModal handleCloseModal={jest.fn()} isModalOpen={false} />
       </AlertProvider>
     );
-    const element = screen.getByTestId('settings-modal');
+    const element = screen.getByTestId('appearance-modal');
     expect(element).toBeInTheDocument();
   });
 });

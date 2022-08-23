@@ -4,28 +4,46 @@ describe('source code and drag and drop', () => {
     cy.visit(url);
   });
   it('loads the YAML editor', () => {
+    cy.viewport(2000, 1000);
     const dataTransfer = new DataTransfer();
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
+    cy.get('.code-editor')
+      .click({ timeout: 2000 })
+      .type('{selectAll}{backspace}', { timeout: 2000 });
     cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
-    cy.fixture('editor.txt').then((user) => {
-      cy.get('.code-editor').type(user);
+    cy.fixture('kafka-to-kafka-yaml.txt').then((sourceCode) => {
+      cy.get('.code-editor')
+        .click()
+        .type('{selectAll}{backspace}')
+        .type(sourceCode, { timeout: 1000 });
       cy.wait(2000);
+
+      // open source code editor
       cy.get('[data-testid="toolbar-show-code-btn"]').click();
+
+      // open catalog, search for timer step
       cy.get('[data-testid="toolbar-step-catalog-btn"]').click();
       cy.get('#stepSearch').type('timer');
-      cy.get('.pf-c-card__body').trigger('dragstart', {
+
+      cy.get('[data-testid="catalog-step-timer-source"]').trigger('dragstart', {
         dataTransfer,
       });
-      cy.get('[data-testid="react-flow-wrapper"]').contains('kafka-source').trigger('drop', {
+
+      // drag timer from catalog over existing kafka step
+      cy.get('[data-testid="viz-step-kafka-source"]').trigger('drop', {
         dataTransfer,
       });
       cy.get('[data-testid="toolbar-show-code-btn"]').click();
-      cy.get('.code-editor')
-      .contains('timer-source')
-        .should('contain.text', 'timer-source', '{backspace}')
-        .type('{end}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}kafka-source', {
-          delay: 500,
-        },{force:true});
+      cy.wait(2000);
+      cy.get('.pf-c-code-editor__code')
+        .contains('timer-source', { timeout: 1000 })
+        .type(
+          '{end}' +
+            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
+            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
+            'kafka-source',
+          { delay: 500 }
+        );
     });
   });
 });

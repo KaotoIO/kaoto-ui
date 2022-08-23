@@ -70,7 +70,6 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) 
     }));
   },
   insertStep: (newStep, idx) => {
-    // TODO: extract updating only steps into a reusable function
     // unlike addStep, we need to also regenerate all UUIDs
     // because positions are changing
     set((state) => ({
@@ -123,3 +122,5 @@ if (process.env.NODE_ENV === 'development') {
   mountStoreDevtool('settingsStore', useSettingsStore);
   mountStoreDevtool('visualizationStore', useVisualizationStore);
 }
+
+export default useIntegrationJsonStore;
