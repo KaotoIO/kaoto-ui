@@ -9,7 +9,7 @@ describe('Test for undo/redo actions on code-editor', () => {
 
     // open source code editor
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.get('.code-editor').click().type('{selectAll} {backspace}');
+    cy.get('.code-editor').click().type('{selectAll}{backspace}');
 
     // select "start from scratch" in code editor's empty state
     cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
@@ -18,6 +18,8 @@ describe('Test for undo/redo actions on code-editor', () => {
     cy.fixture('undo_redo.txt').then((yaml) => {
       cy.get('.code-editor').type(yaml);
       cy.wait(4000);
+
+      // the code editor should contain the loaded yaml
       cy.get('.code-editor')
         .contains('kafka-source')
         .type(

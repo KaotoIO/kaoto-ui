@@ -7,10 +7,15 @@ describe('source code and drag and drop', () => {
     cy.viewport(2000, 1000);
     const dataTransfer = new DataTransfer();
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.get('.code-editor').click().type('{selectAll} {backspace}');
+    cy.get('.code-editor')
+      .click({ timeout: 2000 })
+      .type('{selectAll}{backspace}', { timeout: 2000 });
     cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
     cy.fixture('kafka-to-kafka-yaml.txt').then((sourceCode) => {
-      cy.get('.code-editor').click().type('{selectAll} {backspace}').type(sourceCode);
+      cy.get('.code-editor')
+        .click()
+        .type('{selectAll}{backspace}')
+        .type(sourceCode, { timeout: 1000 });
       cy.wait(2000);
 
       // open source code editor
@@ -31,7 +36,7 @@ describe('source code and drag and drop', () => {
       cy.get('[data-testid="toolbar-show-code-btn"]').click();
       cy.wait(2000);
       cy.get('.pf-c-code-editor__code')
-        .contains('timer-source')
+        .contains('timer-source', { timeout: 1000 })
         .type(
           '{end}' +
             '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
