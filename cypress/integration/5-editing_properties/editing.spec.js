@@ -2,17 +2,19 @@ describe('editing properties', () => {
   beforeEach(() => {
     let url = Cypress.config().baseUrl;
     cy.visit(url);
+    cy.viewport(2000, 1000);
   });
 
   it('loads the YAML editor', () => {
-    cy.viewport(2000, 1000);
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.get('.code-editor').click().type('{selectAll} {backspace}');
+
+    // erase default yaml
+    cy.get('.code-editor').click({ timeout: 2000 }).type('{selectAll}{backspace}');
     cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
 
-    cy.fixture('source.txt')
+    cy.fixture('timer-to-kafka-yaml.txt')
       .then((yaml) => {
-        cy.get('.code-editor').click().type('{selectAll} {backspace}').type(yaml);
+        cy.get('.code-editor').click({ timeout: 2000 }).type('{selectAll}{backspace}').type(yaml);
       })
       .then(() => {
         cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source').click();
