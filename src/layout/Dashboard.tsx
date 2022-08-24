@@ -6,7 +6,6 @@ import {
   Console,
   KaotoDrawer,
 } from '../components';
-import { IViewProps } from '../types';
 import './Dashboard.css';
 import {
   Page,
@@ -23,12 +22,11 @@ import { useRef, useState } from 'react';
 const Dashboard = () => {
   const [bottomDrawerExpanded, setBottomDrawerExpanded] = useState(false);
   const [leftDrawerExpanded, setLeftDrawerExpanded] = useState(false);
-  const [views, setViews] = useState<IViewProps[]>([]);
   const leftDrawerModel = useRef('catalog');
 
   const drawerCatalog = (
     <DrawerContentBody style={{ padding: '10px' }}>
-      <Catalog />
+      <Catalog handleClose={() => setLeftDrawerExpanded(false)} />
     </DrawerContentBody>
   );
 
@@ -46,12 +44,7 @@ const Dashboard = () => {
 
   const drawerCodeEditor = (
     <DrawerContentBody hasPadding={false}>
-      <SourceCodeEditor
-        handleUpdateViews={(newViews: IViewProps[]) => {
-          if (newViews === views) return;
-          setViews(newViews);
-        }}
-      />
+      <SourceCodeEditor />
     </DrawerContentBody>
   );
 
@@ -60,9 +53,8 @@ const Dashboard = () => {
       // it's already showing the catalog, just toggle it
       setLeftDrawerExpanded(!leftDrawerExpanded);
     } else {
-      // it's showing code editor content,
-      // so we should set it to catalog,
-      // and only close if it's already open
+      // currently showing code editor content;
+      // set to catalog, only close if already open
       setLeftDrawerContent(drawerCatalog);
       leftDrawerModel.current = 'catalog';
 
@@ -74,6 +66,7 @@ const Dashboard = () => {
 
   return (
     <>
+      {/* BOTTOM DRAWER: CONSOLE LOG */}
       <KaotoDrawer
         data-testid={'kaoto-bottom-drawer'}
         id={'kaoto-bottom-drawer'}
@@ -93,19 +86,14 @@ const Dashboard = () => {
             <Page>
               <PageSection padding={{ default: 'noPadding' }}>
                 <KaotoToolbar
-                  handleUpdateViews={(newViews: IViewProps[]) => {
-                    if (newViews === views) return;
-                    setViews(newViews);
-                  }}
                   toggleCatalog={handleToggleCatalog}
                   toggleCodeEditor={() => {
                     if (leftDrawerModel.current === 'code') {
                       // it's already showing the code editor, just toggle it
                       setLeftDrawerExpanded(!leftDrawerExpanded);
                     } else {
-                      // it's showing catalog content,
-                      // so we should set it to code editor,
-                      // and only close if it's already open
+                      // currently showing catalog content, set to
+                      // code editor, close if already open
                       setLeftDrawerContent(drawerCodeEditor);
                       leftDrawerModel.current = 'code';
 
@@ -115,6 +103,8 @@ const Dashboard = () => {
                     }
                   }}
                 />
+
+                {/* LEFT DRAWER: CATALOG & CODE EDITOR */}
                 <KaotoDrawer
                   colorVariant={DrawerColorVariant.light200}
                   dataTestId={'kaoto-left-drawer'}
@@ -125,14 +115,7 @@ const Dashboard = () => {
                   position={'left'}
                 >
                   {/* VISUALIZATION / CANVAS */}
-                  <Visualization
-                    handleUpdateViews={(newViews: IViewProps[]) => {
-                      if (newViews === views) return;
-                      setViews(newViews);
-                    }}
-                    toggleCatalog={handleToggleCatalog}
-                    views={views}
-                  />
+                  <Visualization toggleCatalog={handleToggleCatalog} />
                 </KaotoDrawer>
               </PageSection>
             </Page>
@@ -140,6 +123,7 @@ const Dashboard = () => {
         </Flex>
       </KaotoDrawer>
 
+      {/* CONSOLE LOG */}
       <Banner isSticky={true} screenReaderText="Status">
         <Flex flexWrap={{ default: 'nowrap' }}>
           <FlexItem>

@@ -32,23 +32,13 @@ import { IDeployment, IIntegration, IStepProps, IViewProps } from '../types';
  * The following are methods that are exposed to a Step Extension.
  */
 export interface IStepExtensionApi {
-  getCatalogSteps: (namespace?: string) => Promise<IStepProps[]>;
   getDeployment: (name: string, namespace?: string) => Promise<string | unknown>;
-  getDeploymentLogs: (name: string, namespace?: string, lines?: number) => void;
-  getDeployments: (namespace?: string) => Promise<IDeployment[]>;
-  getDSLs: (namespace?: string) => Promise<{ [p: string]: string }[]>;
-  getIntegrationJson: (
-    sourceCode: string,
-    dsl: string,
-    namespace?: string
-  ) => Promise<IIntegration>;
   getIntegrationSource: (
     integration: IIntegration,
     dsl: string,
     namespace?: string
   ) => Promise<string | unknown>;
   getStep: () => IStepProps;
-  getViews: (data: IStepProps[], namespace?: string) => Promise<IViewProps[]>;
   notifyKaoto: (title: string, body?: string, variant?: string) => void;
   onKaotoButtonClicked: (view: IViewProps) => void;
   saveConfig: (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => void;
@@ -58,6 +48,7 @@ export interface IStepExtensionApi {
     namespace?: string
   ) => Promise<string | unknown>;
   step: IStepProps;
+  stepInitialValues: { [p: string]: any };
   stopDeployment: (name: string, namespace?: string) => void;
   updateStep: (step: IStepProps) => void;
 }

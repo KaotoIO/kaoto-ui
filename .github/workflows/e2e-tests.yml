@@ -44,60 +44,6 @@ jobs:
           if-no-files-found: error
           path: dist
           
-  test-on-firefox:
-    needs: install
-    runs-on: ubuntu-latest
-    container:
-      image: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
-      options: --user 1001
-
-    services:
-      kaoto:
-        image: kaotoio/backend:main
-        ports:
-        # will assign a random free host port
-          - 8081/tcp
-    steps:
-      - name: 👷‍♀️ Checkout
-        uses: actions/checkout@v2
-
-      - name: 🗄️ Download the build folders
-        uses: actions/download-artifact@v2
-        with:
-          name: dist
-          path: dist
-
-      - name: 🤓 Set KAOTO_API
-        run: echo "KAOTO_API=http://kaoto:8081" > .env
-      - name: 🔨 Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          browser: firefox
-          # we have already installed all dependencies above
-#          install: false
-          start: yarn start
-          record: ${{needs.install.outputs.record}}
-          wait-on: 'http://localhost:1337'
-          wait-on-timeout: 120
-        env:
-          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 💾 Save videos
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: videos-firefox
-          path: cypress/videos
-
-      - name: 💾 Save screenshots
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: screenshots-firefox
-          path: cypress/screenshots
-
   test-on-chrome:
     needs: install
     runs-on: ubuntu-latest

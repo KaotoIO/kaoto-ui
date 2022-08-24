@@ -72,3 +72,5 @@ export const KaotoDrawer = ({
     </Drawer>
   );
 };
+
+export default KaotoDrawer;

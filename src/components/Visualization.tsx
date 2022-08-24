@@ -1,38 +1,33 @@
-import { fetchViews, fetchIntegrationJson } from '../api';
+import { fetchIntegrationJson, fetchViews } from '../api';
 import {
   useIntegrationJsonStore,
-  useSettingsStore,
   useIntegrationSourceStore,
+  useSettingsStore,
   useVisualizationStore,
 } from '../store';
-import { IStepProps, IViewData, IVizStepPropsNode, IVizStepPropsEdge, IViewProps } from '../types';
-import { canStepBeReplaced, findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
-import {
-  KaotoDrawer,
-  StepErrorBoundary,
-  StepViews,
-  VisualizationSlot,
-  VisualizationStep,
-} from './';
+import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '../types';
+import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
+import { KaotoDrawer, PlusButtonEdge, StepErrorBoundary, StepViews, VisualizationStep } from './';
 import './Visualization.css';
-import { AlertVariant } from '@patternfly/react-core';
-import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import ReactFlow, { Background, Controls, MiniMap, ReactFlowProvider } from 'react-flow-renderer';
+import ReactFlow, {
+  Background,
+  Controls,
+  MarkerType,
+  ReactFlowProvider,
+} from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import 'react-flow-renderer/dist/theme-default.css';
 
 interface IVisualization {
-  handleUpdateViews: (newViews: IViewProps[]) => void;
   initialState?: IViewData;
   toggleCatalog?: () => void;
-  views: IViewProps[];
 }
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
-const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualization) => {
+const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
@@ -40,16 +35,14 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({ name: '', type: '' });
   const sourceCode = useIntegrationSourceStore((state) => state.sourceCode);
-  const { addStep, deleteStep, insertStep, integrationJson, replaceStep, updateIntegration } =
+  const { deleteStep, integrationJson, replaceStep, setViews, updateIntegration } =
     useIntegrationJsonStore();
   const settings = useSettingsStore((state) => state.settings);
-  const { edges, nodes, onEdgesChange, onNodesChange, setEdges, setNodes } =
+  const { edges, nodes, deleteNode, onEdgesChange, onNodesChange, setEdges, setNodes } =
     useVisualizationStore();
 
   const previousIntegrationJson = useRef(integrationJson);
   const previousSettings = usePrevious(settings);
-
-  const { addAlert } = useAlert() || {};
 
   /**
    * Check for changes to integrationJson,
@@ -60,11 +53,11 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
 
     // FETCH VIEWS
     fetchViews(integrationJson.steps).then((views) => {
-      handleUpdateViews(views);
+      setViews(views);
     });
 
-    // PREPARE VISUALIZATION DATA
     prepareAndSetVizDataSteps(integrationJson.steps.slice());
+
     previousIntegrationJson.current = integrationJson;
   }, [integrationJson]);
 
@@ -85,41 +78,17 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     // update views in case DSL change results in views change
     // i.e. CamelRoute -> KameletBinding results in loss of incompatible steps
     fetchViews(integrationJson.steps).then((newViews) => {
-      handleUpdateViews(newViews);
+      setViews(newViews);
     });
   }, [settings]);
 
-  const nodeTypes = useMemo(() => ({ slot: VisualizationSlot, step: VisualizationStep }), []);
-
-  /**
-   * Handles dropping a step onto an existing step (i.e. step replacement)
-   * @param event
-   * @param data
-   */
-  const onDropChange = (
-    event: { preventDefault: () => void; dataTransfer: { getData: (arg0: string) => any } },
-    data: any
-  ) => {
-    event.preventDefault();
-
-    const dataJSON = event.dataTransfer.getData('text');
-    const step: IStepProps = JSON.parse(dataJSON);
-    const validation = canStepBeReplaced(data, step, integrationJson.steps);
-
-    // Replace step
-    if (validation.isValid) {
-      // update the steps, the new node will be created automatically
-      replaceStep(step, findStepIdxWithUUID(data.UUID));
-    } else {
-      // the step CANNOT be replaced, the proposed step is invalid
-      addAlert &&
-        addAlert({
-          title: 'Replace Step Unsuccessful',
-          variant: AlertVariant.danger,
-          description: validation.message ?? 'Something went wrong, please try again later.',
-        });
-    }
-  };
+  const nodeTypes = useMemo(() => ({ step: VisualizationStep }), []);
+  const edgeTypes = useMemo(
+    () => ({
+      insert: PlusButtonEdge,
+    }),
+    []
+  );
 
   /**
    * Creates an object for the Visualization from the Step model.
@@ -128,80 +97,90 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
    */
   const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
     const incrementAmt = 160;
-    const stepsAsNodes: any[] = [];
-    const stepEdges: any[] = [];
+    const stepsAsNodes: IVizStepPropsNode[] = [];
+    const stepEdges: IVizStepPropsEdge[] = [];
+    const firstStepPosition = { x: window.innerWidth / 2 - incrementAmt - 80, y: 250 };
 
     // if there are no steps or if the first step has a `type`,
     // but it isn't a source, create a dummy placeholder step
     if (steps.length === 0 || (steps.length > 0 && steps[0].type && steps[0].type !== 'START')) {
-      // @ts-ignore
-      steps.unshift({ name: 'ADD A STEP' });
+      stepsAsNodes.unshift({
+        data: {
+          label: 'ADD A STEP',
+          step: {
+            name: '',
+            type: 'START',
+          },
+        },
+        id: getId(),
+        position: firstStepPosition,
+        type: 'step',
+      });
     }
+
+    const calculatePosition = (stepIdx: number, previousStep?: any) => {
+      // check if there is a node with the same index,
+      // use its position if there is
+      if (nodes[stepIdx]) {
+        return { ...nodes[stepIdx].position };
+      }
+      if (!previousStep) {
+        return firstStepPosition;
+      } else {
+        return { x: previousStep?.position.x + incrementAmt, y: 250 };
+      }
+    };
 
     steps.map((step, index) => {
       // Grab the previous step to use for determining position and drawing edges
-      const previousStep = stepsAsNodes[index - 1];
-      let stepEdge: IVizStepPropsEdge = { id: '' };
+      let previousStep: any;
+      // if missing a START step, accommodate for ADD A STEP placeholder
+      if (stepsAsNodes.length > 0 && stepsAsNodes[0].data.label === 'ADD A STEP') {
+        previousStep = stepsAsNodes[index];
+      } else {
+        previousStep = stepsAsNodes[index - 1];
+      }
+
+      let stepEdge: IVizStepPropsEdge = {
+        data: undefined,
+        source: '',
+        target: '',
+        id: '',
+        markerEnd: {
+          type: MarkerType.Arrow,
+        },
+      };
 
       // Build the default parameters
       let inputStep: IVizStepPropsNode = {
         data: {
-          connectorType: step.type,
-          handleUpdateViews: handleUpdateViews,
           icon: step.icon,
           kind: step.kind,
           label: truncateString(step.name, 14),
-          onDropChange: onDropChange,
-          onMiniCatalogClickAdd: onSelectAddStep,
-          onMiniCatalogClickInsert: onSelectInsertStep,
+          step,
           UUID: step.UUID,
         },
         id: getId(),
-        position: { x: 0, y: 250 },
+        position: calculatePosition(index, previousStep),
         type: 'step',
       };
 
       // add edge properties if more than one step, and not on first step
-      if (steps.length > 1 && index !== 0) {
+      if (previousStep) {
         stepEdge.arrowHeadType = 'arrowclosed';
+        // previousStep here is stale when deleting first step
         stepEdge.id = 'e' + previousStep.id + '-' + inputStep.id;
         stepEdge.source = previousStep.id;
 
         // even the last step needs to build the step edge before it, with itself as the target
         stepEdge.target = inputStep.id;
-      }
+        stepEdge.type = 'insert';
 
-      // determine position of Step, add properties
-      switch (index) {
-        case 0:
-          // first item in `steps` array
-          inputStep.position.x = window.innerWidth / 2 - incrementAmt - 80;
-          // mark as a slot if it's first in the array and not a START step
-          if (steps.length > 0 && steps[0].type !== 'START') {
-            inputStep.type = 'slot';
-          }
-          inputStep.data.connectorType = 'START';
-          break;
-        case steps.length - 1:
-          // Last item in `steps` array
-          inputStep.position.x = previousStep.position?.x + incrementAmt;
-
-          // Build edges
-          stepEdge.animated = true;
-          stepEdge.style = { stroke: 'red' };
-          break;
-        default:
-          // Middle steps in `steps` array
-          inputStep.position.x = previousStep.position?.x + incrementAmt;
-          break;
+        // only add step edge if there is more than one step and not on the first step
+        stepEdges.push(stepEdge);
       }
 
       stepsAsNodes.push(inputStep);
-
-      // only add step edge if there is more than one step and not on the first step
-      if (steps.length > 1 && index !== 0) {
-        stepEdges.push(stepEdge);
-      }
 
       return;
     });
@@ -216,9 +195,11 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     setIsPanelExpanded(false);
     setSelectedStep({ name: '', type: '' });
 
-    // here we pass integrationJson's array of steps instead of `nodes`
+    // here we pass integrationJson array of steps instead of `nodes`
     // because `deleteStep` requires the index to be from `integrationJson`
     const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, integrationJson.steps);
+
+    deleteNode(stepsIndex);
     deleteStep(stepsIndex);
   };
 
@@ -248,7 +229,8 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     // here we check if it's a node or edge
     // workaround for https://github.com/wbkd/react-flow/issues/2202
     if (!_e.target.classList.contains('stepNode__clickable')) return;
-    if (node.type === 'slot') {
+
+    if (!node.data.UUID) {
       // prevent slots from being selected,
       // passive-aggressively open the steps catalog
       if (toggleCatalog) toggleCatalog();
@@ -262,24 +244,6 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
 
     // show/hide the panel regardless
     if (!isPanelExpanded) setIsPanelExpanded(true);
-  };
-
-  /**
-   * Handles selecting a step from the Mini Catalog (append step)
-   * @param selectedStep
-   */
-  const onSelectAddStep = (selectedStep: IStepProps) => {
-    addStep(selectedStep);
-    setSelectedStep(selectedStep);
-  };
-
-  /**
-   * Handles selecting a step from the Mini Catalog (insert step)
-   * @param selectedStep
-   * @param index
-   */
-  const onSelectInsertStep = (selectedStep: IStepProps, index: number) => {
-    insertStep(selectedStep, index);
   };
 
   const onLoad = (_reactFlowInstance: any) => {
@@ -309,23 +273,21 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
     }
   };
 
-  const stepViewContent = (
-    <StepViews
-      step={selectedStep}
-      isPanelExpanded={isPanelExpanded}
-      deleteStep={handleDeleteStep}
-      onClosePanelClick={onClosePanelClick}
-      saveConfig={saveConfig}
-      views={views?.filter((view) => view.step === selectedStep.UUID)}
-    />
-  );
-
   return (
     <StepErrorBoundary>
+      {/* RIGHT DRAWER: STEP DETAIL & EXTENSIONS */}
       <KaotoDrawer
         isExpanded={isPanelExpanded}
         isResizable={true}
-        panelContent={stepViewContent}
+        panelContent={
+          <StepViews
+            step={selectedStep}
+            isPanelExpanded={isPanelExpanded}
+            deleteStep={handleDeleteStep}
+            onClosePanelClick={onClosePanelClick}
+            saveConfig={saveConfig}
+          />
+        }
         position={'right'}
         id={'right-resize-panel'}
         defaultSize={'500px'}
@@ -345,6 +307,7 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
               nodes={nodes}
               edges={edges}
               defaultZoom={1.2}
+              edgeTypes={edgeTypes}
               nodeTypes={nodeTypes}
               onDragOver={onDragOver}
               onNodeClick={onNodeClick}
@@ -353,9 +316,10 @@ const Visualization = ({ handleUpdateViews, toggleCatalog, views }: IVisualizati
               onLoad={onLoad}
               snapToGrid={true}
               snapGrid={[15, 15]}
+              deleteKeyCode={null}
             >
-              <MiniMap nodeBorderRadius={2} />
-              <Controls />
+              {/*<MiniMap nodeBorderRadius={2} className={'visualization__minimap'} />*/}
+              <Controls className={'visualization__controls'} />
               <Background color="#aaa" gap={16} />
             </ReactFlow>
           </div>
