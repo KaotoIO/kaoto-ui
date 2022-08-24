@@ -1,7 +1,7 @@
 import { fetchCompatibleDSLs, fetchIntegrationSourceCode } from '../api';
 import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '../store';
-import { ISettings } from '../types';
 import { isNameValidCheck, usePrevious } from '../utils';
+import { ISettings } from '@kaoto';
 import {
   AlertVariant,
   Button,

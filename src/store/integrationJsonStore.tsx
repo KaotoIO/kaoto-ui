@@ -1,8 +1,8 @@
-import { IIntegration, IStepProps, IViewProps } from '../types';
 import { useDeploymentStore } from './deploymentStore';
 import { useIntegrationSourceStore } from './integrationSourceStore';
 import { useSettingsStore } from './settingsStore';
 import { useVisualizationStore } from './visualizationStore';
+import { IIntegration, IStepProps, IViewProps } from '@kaoto';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 import create from 'zustand';
 

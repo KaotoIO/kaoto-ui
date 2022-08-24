@@ -1,4 +1,4 @@
-import { IStepProps } from '../types';
+import { IStepProps } from '@kaoto';
 
 /**
  * Checks kind of steps can be appended onto an existing step.

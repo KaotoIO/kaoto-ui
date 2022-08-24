@@ -6,7 +6,8 @@
     "baseUrl": ".",
     "declaration": true,
     "paths": {
-      "*": ["*", "types/*"]
+      "*": ["*", "types/*"],
+      "@kaoto": ["./src/@kaoto"]
     },
     "typeRoots": ["./node_modules/@types"]
   },

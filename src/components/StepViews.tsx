@@ -1,5 +1,4 @@
 import { useIntegrationJsonStore } from '../store';
-import { IStepProps } from '../types';
 import { findStepIdxWithUUID } from '../utils';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
@@ -7,12 +6,12 @@ import { StepErrorBoundary } from './StepErrorBoundary';
 import {
   getKaotoDeployment,
   getKaotoIntegrationSource,
-  IStepExtensionApi,
   onKaotoButtonClicked,
   startKaotoDeployment,
   stopKaotoDeployment,
 } from './StepExtensionApi';
 import { dynamicImport } from './import';
+import { IStepExtensionApi, IStepProps } from '@kaoto';
 import {
   AlertVariant,
   Button,
@@ -57,7 +56,6 @@ const StepViews = ({
   }>({});
   const [stepPropertyModel, setStepPropertyModel] = useState<{ [label: string]: any }>({});
   const { replaceStep } = useIntegrationJsonStore((state) => state);
-
   const { addAlert } = useAlert() || {};
 
   const alertKaoto = (title: string, body?: string, variant?: string) => {
@@ -124,11 +122,13 @@ const StepViews = ({
       });
       return tmpValues;
     },
+    stepParams: stepPropertyModel,
     stopDeployment: stopKaotoDeployment,
     updateStep: (newStep: IStepProps) => {
       // update state of step
       replaceStep(newStep, currentIdx);
     },
+    updateStepParams: saveConfig,
   };
 
   const handleTabClick = (_event: any, tabIndex: any) => {
@@ -153,7 +153,7 @@ const StepViews = ({
         </DrawerActions>
       </DrawerHead>
       <DrawerPanelBody>
-        <Tabs activeKey={activeTabKey} onSelect={handleTabClick}>
+        <Tabs activeKey={activeTabKey} onSelect={handleTabClick} mountOnEnter>
           {/** If the step does not have a default view, provide one */}
           {!hasDetailView && (
             <Tab
@@ -190,7 +190,6 @@ const StepViews = ({
             </Tab>
           )}
 
-          {/** Show rest of views provided **/}
           {views?.length! > 0 &&
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
@@ -229,6 +228,7 @@ const StepViews = ({
                     configuration={stepPropertyModel}
                     onChangeModel={(configuration, isValid) => {
                       if (isValid) {
+                        console.log('configuration: ', configuration);
                         saveConfig(configuration);
                       }
                     }}
@@ -239,6 +239,16 @@ const StepViews = ({
             </StepErrorBoundary>
           </Tab>
         </Tabs>
+        <Button
+          variant={'primary'}
+          key={step.UUID + '-notify'}
+          onClick={() => {
+            kaotoApi.notifyKaoto('Example', 'Hello...');
+          }}
+        >
+          Notify
+        </Button>
+        {'  '}
         <Button variant={'danger'} key={step.UUID} onClick={deleteStep}>
           Delete
         </Button>

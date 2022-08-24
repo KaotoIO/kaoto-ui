@@ -25,33 +25,7 @@ import {
   startDeployment,
   stopDeployment,
 } from '../api';
-import { IDeployment, IIntegration, IStepProps, IViewProps } from '../types';
-
-/**
- * The API for a typical Step Extension
- * The following are methods that are exposed to a Step Extension.
- */
-export interface IStepExtensionApi {
-  getDeployment: (name: string, namespace?: string) => Promise<string | unknown>;
-  getIntegrationSource: (
-    integration: IIntegration,
-    dsl: string,
-    namespace?: string
-  ) => Promise<string | unknown>;
-  getStep: () => IStepProps;
-  notifyKaoto: (title: string, body?: string, variant?: string) => void;
-  onKaotoButtonClicked: (view: IViewProps) => void;
-  saveConfig: (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => void;
-  startDeployment: (
-    integration: any,
-    name: string,
-    namespace?: string
-  ) => Promise<string | unknown>;
-  step: IStepProps;
-  stepInitialValues: { [p: string]: any };
-  stopDeployment: (name: string, namespace?: string) => void;
-  updateStep: (step: IStepProps) => void;
-}
+import { IDeployment, IIntegration, IStepProps, IViewProps } from '@kaoto';
 
 // Example demonstrating interactivity with step extension
 const onKaotoButtonClicked = (view: any) => {

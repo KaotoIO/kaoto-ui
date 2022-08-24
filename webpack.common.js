@@ -26,25 +26,6 @@ module.exports = () => {
     module: {
       rules: [
         {
-          test: /\.(d.ts|tsx)?$/,
-          exclude: /node_modules/,
-          use: [
-            {
-              loader: 'dts-loader',
-              options: {
-                name: federatedModuleName,
-                exposes: {
-                  './integrationJson': './src/store/integrationJsonStore.tsx',
-                  './stepExtensionApi': './src/components/StepExtensionApi.ts',
-                  './store': './src/store/index.ts',
-                  './visualizationStore': './src/store/visualizationStore.tsx',
-                },
-                typesOutputDir: './dist',
-              },
-            },
-          ],
-        },
-        {
           test: /\.(tsx|ts|jsx)?$/,
           use: [
             {
@@ -115,22 +96,25 @@ module.exports = () => {
       new CopyPlugin({
         patterns: [
           {
-            from: path.resolve(__dirname, 'src', 'types.d.ts'),
-            to: path.resolve(__dirname, 'dist', federatedModuleName, 'dts/src', 'types.d.ts'),
+            from: path.resolve(__dirname, 'src', '@kaoto'),
+            to: path.resolve(__dirname, 'dist', '@kaoto'),
           },
         ],
       }),
       new TarWebpackPlugin({
         action: 'c',
         gzip: true,
-        cwd: path.resolve(process.cwd(), 'dist'),
+        cwd: path.resolve(process.cwd(), 'dist', '@kaoto'),
         file: path.resolve(process.cwd(), 'dist', federatedModuleName + '-dts.tgz'),
-        fileList: [federatedModuleName],
+        fileList: ['index.d.ts'],
       }),
       new webpack.container.ModuleFederationPlugin({
         name: federatedModuleName,
         filename: 'remoteEntry.js',
         library: { type: 'var', name: federatedModuleName },
+        // exposes: {
+        //   './stepExtensionApi': './src/components/StepExtensionApi.ts',
+        // },
         shared: {
           ...deps,
           react: {

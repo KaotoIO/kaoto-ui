@@ -1,5 +1,5 @@
 import { useIntegrationJsonStore } from '../store';
-import { IDeployment, IStepProps } from '../types';
+import { IDeployment, IStepProps } from '@kaoto';
 import { useEffect, useRef } from 'react';
 
 export function accessibleRouteChangeHandler() {
