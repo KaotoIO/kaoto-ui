@@ -1,10 +1,5 @@
 import { Edge, Node } from 'react-flow-renderer';
 
-declare module '*.yaml' {
-  const content: { [key: string]: any };
-  export default content;
-}
-
 declare global {
   interface Window {
     __remotes__: Record<string, string>;
@@ -131,24 +126,25 @@ export interface IViewData {
 }
 
 export interface IVizStepNodeData {
-  connectorType: string;
-  dsl: string;
-  // handleUpdateViews: (newViews: IViewProps[]) => void;
-  handleUpdateViews?: (newViews: IViewProps[]) => void;
   icon?: string;
   kind?: string;
   label: string;
+  step?: IStepProps;
   UUID?: string;
-  index: number;
-  onDropChange: (arg1: any, arg2: any) => void;
-  onMiniCatalogClickAdd: (arg: any) => void;
-  settings?: ISettings;
 }
 
-export interface IVizStepPropsNode extends Node {}
+/**
+ * Used to extend React Flow's `Node` type
+ */
+export interface IVizStepPropsNode extends Node {
+  data: IVizStepNodeData;
+}
 
-export interface IVizStepPropsEdge extends Omit<Edge, 'arrowHeadType' | 'source' | 'target'> {
+/**
+ * Used to extend React Flow's `Edge` type
+ */
+export interface IVizStepPropsEdge extends Edge {
   arrowHeadType?: string;
-  source?: string;
-  target?: string;
+  // source?: string;
+  // target?: string;
 }

@@ -1,10 +1,5 @@
-import {
-  fetchIntegrationJson,
-  useIntegrationSourceContext,
-  useIntegrationJsonContext,
-  useSettingsContext,
-  fetchIntegrationSourceCode,
-} from '../api';
+import { fetchIntegrationJson, fetchIntegrationSourceCode } from '../api';
+import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '../store';
 import { IIntegration } from '../types';
 import { usePrevious } from '../utils';
 import { StepErrorBoundary } from './StepErrorBoundary';
@@ -15,7 +10,6 @@ import EditorDidMount from 'react-monaco-editor';
 import { useDebouncedCallback } from 'use-debounce';
 
 interface ISourceCodeEditor {
-  handleUpdateViews: (newViews: any) => void;
   // Used to mock data for stories
   initialData?: string;
   language?: Language;
@@ -24,10 +18,20 @@ interface ISourceCodeEditor {
 
 const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<EditorDidMount['editor'] | null>(null);
-  const [sourceCode, setSourceCode] = useIntegrationSourceContext();
-  const [integrationJson, dispatch] = useIntegrationJsonContext();
-  const [settings] = useSettingsContext();
+  const { sourceCode, setSourceCode } = useIntegrationSourceStore();
+  const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
+  const { settings } = useSettingsStore();
   const previousName = usePrevious(settings.name);
+  const previousJson = usePrevious(integrationJson);
+
+  useEffect(() => {
+    if (previousJson === integrationJson) return;
+    let tmpInt = integrationJson;
+    tmpInt.metadata = { ...integrationJson.metadata, ...settings };
+    fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
+      if (typeof newSrc === 'string') setSourceCode(newSrc);
+    });
+  }, [integrationJson]);
 
   useEffect(() => {
     if (previousName === settings.name) return;
@@ -52,7 +56,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
         .then((res: IIntegration) => {
           let tmpInt = res;
           tmpInt.metadata = { ...res.metadata, ...settings };
-          dispatch({ type: 'UPDATE_INTEGRATION', payload: tmpInt });
+          updateIntegration(tmpInt);
         })
         .catch((e) => {
           console.error(e);
@@ -108,6 +112,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       <CodeEditor
         code={sourceCode ?? props.initialData}
         className="code-editor"
+        emptyState={''}
         height="650px"
         language={(props.language as Language) ?? Language.yaml}
         onEditorDidMount={handleEditorDidMount}

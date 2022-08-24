@@ -32,30 +32,23 @@ import { IDeployment, IIntegration, IStepProps, IViewProps } from '../types';
  * The following are methods that are exposed to a Step Extension.
  */
 export interface IStepExtensionApi {
-  getCatalogSteps: (namespace?: string) => Promise<IStepProps[]>;
   getDeployment: (name: string, namespace?: string) => Promise<string | unknown>;
-  getDeploymentLogs: (name: string, lines?: number, namespace?: string) => void;
-  getDeployments: (namespace?: string) => Promise<IDeployment[]>;
-  getDSLs: (namespace?: string) => Promise<{ [p: string]: string }[]>;
-  getIntegrationJson: (
-    sourceCode: string,
-    dsl: string,
-    namespace?: string
-  ) => Promise<IIntegration>;
   getIntegrationSource: (
     integration: IIntegration,
     dsl: string,
     namespace?: string
   ) => Promise<string | unknown>;
   getStep: () => IStepProps;
-  getViews: (data: IStepProps[], namespace?: string) => Promise<IViewProps[]>;
   notifyKaoto: (title: string, body?: string, variant?: string) => void;
   onKaotoButtonClicked: (view: IViewProps) => void;
+  saveConfig: (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => void;
   startDeployment: (
     integration: any,
     name: string,
     namespace?: string
   ) => Promise<string | unknown>;
+  step: IStepProps;
+  stepInitialValues: { [p: string]: any };
   stopDeployment: (name: string, namespace?: string) => void;
   updateStep: (step: IStepProps) => void;
 }
@@ -77,8 +70,8 @@ const getKaotoDeployment = (name: string, namespace?: string): Promise<string | 
   });
 };
 
-const getKaotoDeploymentLogs = (name: string, lines?: number, namespace?: string) => {
-  return fetchDeploymentLogs(name, lines, namespace).then((log) => {
+const getKaotoDeploymentLogs = (name: string, namespace?: string, lines?: number) => {
+  return fetchDeploymentLogs(name, namespace, lines).then((log) => {
     return log;
   });
 };

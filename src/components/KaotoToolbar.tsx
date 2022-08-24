@@ -1,13 +1,12 @@
+import { startDeployment } from '../api';
 import {
-  fetchIntegrationSourceCode,
-  startDeployment,
-  useDeploymentContext,
-  useIntegrationJsonContext,
-  useSettingsContext,
-} from '../api';
-import { IExpanded } from '../pages/Dashboard';
-import { isNameValidCheck } from '../utils/validationService';
-import { ConfirmationModal } from './ConfirmationModal';
+  useDeploymentStore,
+  useIntegrationJsonStore,
+  useIntegrationSourceStore,
+  useSettingsStore,
+} from '../store';
+import { isNameValidCheck } from '../utils';
+import { AppearanceModal, ConfirmationModal, DeploymentsModal, SettingsModal } from './index';
 import {
   AlertVariant,
   Button,
@@ -27,67 +26,72 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import {
+  BarsIcon,
   BellIcon,
   CatalogIcon,
   CheckIcon,
+  CodeIcon,
   CubesIcon,
   PencilAltIcon,
-  PlayIcon,
-  ThIcon,
   TimesIcon,
-  TrashIcon,
 } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface IKaotoToolbar {
-  expanded: IExpanded;
-  handleExpanded: (newState: IExpanded) => void;
+  toggleCatalog: () => void;
+  toggleCodeEditor: () => void;
 }
 
-export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
-  const [deployment, setDeployment] = useDeploymentContext();
+export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar) => {
+  const { settings, setSettings } = useSettingsStore((state) => state);
+  const { sourceCode, setSourceCode } = useIntegrationSourceStore((state) => state);
+  const deleteIntegration = useIntegrationJsonStore((state) => state.deleteIntegration);
+
+  const { deployment, setDeploymentCrd } = useDeploymentStore();
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
-  const [settings, setSettings] = useSettingsContext();
   const [localName, setLocalName] = useState(settings.name);
-  const [integrationJson, dispatch] = useIntegrationJsonContext();
   const [nameValidation, setNameValidation] = useState<
     'default' | 'warning' | 'success' | 'error' | undefined
   >('default');
+  const [expanded, setExpanded] = useState({
+    appearanceModal: false,
+    deploymentsModal: false,
+    settingsModal: false,
+  });
 
   const { addAlert } = useAlert() || {};
 
-  const handleDeployStartClick = () => {
-    // workaround for a bug where the source code doesn't get updated with name change.
-    // alternative: ask API to accept JSON for deployments
-    fetchIntegrationSourceCode(integrationJson, settings.namespace).then((updatedSource) => {
-      if (typeof updatedSource === 'string') {
-        startDeployment(updatedSource, settings.name, settings.namespace)
-          .then((res) => {
-            setDeployment({ ...deployment, crd: res });
+  // change in name should update local value
+  // otherwise, on edit it will show the old value
+  useEffect(() => {
+    setLocalName(settings.name);
+  }, [settings.name]);
 
-            addAlert &&
-              addAlert({
-                title: 'Deployment started',
-                variant: AlertVariant.success,
-                description: 'Your integration is deploying..',
-              });
-          })
-          .catch((e) => {
-            console.log('error deploying integration: ', e);
-            addAlert &&
-              addAlert({
-                title: 'Deployment not started',
-                variant: AlertVariant.warning,
-                description:
-                  'There was a problem deploying your integration. Please try again later.',
-              });
+  const handleDeployStartClick = () => {
+    startDeployment(sourceCode, settings.name, settings.namespace)
+      .then((res) => {
+        setDeploymentCrd(res);
+
+        addAlert &&
+          addAlert({
+            title: 'Deployment started',
+            variant: AlertVariant.success,
+            description: 'Your integration is deploying..',
           });
-      }
-    });
+      })
+      .catch((e) => {
+        console.log('error deploying integration: ', e);
+        addAlert &&
+          addAlert({
+            title: 'Deployment not started',
+            variant: AlertVariant.warning,
+            description: 'There was a problem deploying your integration. Please try again later.',
+          });
+      });
   };
 
   const onFocusAppMenu = () => {
@@ -106,7 +110,7 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
       description="Integrations that are currently running"
       icon={<CubesIcon />}
       onClick={() => {
-        handleExpanded({ ...expanded, deploymentsModal: !expanded.deploymentsModal });
+        setExpanded({ ...expanded, deploymentsModal: !expanded.deploymentsModal });
       }}
     >
       Deployments
@@ -132,10 +136,17 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
   const kebabItems = [
     <DropdownItem
       key="settings"
-      onClick={() => handleExpanded({ settingsModal: !expanded.settingsModal })}
+      onClick={() => setExpanded({ ...expanded, settingsModal: !expanded.settingsModal })}
     >
       Settings
     </DropdownItem>,
+    <DropdownItem
+      key="appearance"
+      onClick={() => setExpanded({ ...expanded, appearanceModal: !expanded.appearanceModal })}
+    >
+      Appearance
+    </DropdownItem>,
+    <DropdownSeparator key="separator-01" />,
     <DropdownItem key="tutorial" isDisabled>
       Tutorial
     </DropdownItem>,
@@ -145,7 +156,7 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
     <DropdownItem key="feedback" isDisabled>
       Feedback
     </DropdownItem>,
-    <DropdownSeparator key="separator" />,
+    <DropdownSeparator key="separator-02" />,
     <DropdownItem key="delete" component="button" onClick={() => setIsConfirmationModalOpen(true)}>
       Delete
     </DropdownItem>,
@@ -155,7 +166,7 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
     <>
       <Toolbar className={'viz-toolbar'} data-testid={'viz-toolbar'}>
         <ToolbarContent>
-          {/* App Menu */}
+          {/* APP MENU */}
           <ToolbarItem>
             <Dropdown
               onSelect={onSelectAppMenu}
@@ -166,7 +177,7 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
                   aria-label="Applications"
                   id="toggle-icon-only"
                 >
-                  <ThIcon />
+                  <BarsIcon />
                 </DropdownToggle>
               }
               isOpen={appMenuIsOpen}
@@ -177,23 +188,7 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
 
           <ToolbarItem variant="separator" />
 
-          {/* Delete/Clear Button */}
-          <ToolbarItem>
-            <Tooltip content={<div>Clear</div>} position={'bottom'}>
-              <Button
-                tabIndex={0}
-                variant="link"
-                data-testid={'toolbar-delete-btn'}
-                icon={<TrashIcon />}
-                onClick={() => {
-                  // verify with user first
-                  setIsConfirmationModalOpen(true);
-                }}
-              />
-            </Tooltip>
-          </ToolbarItem>
-
-          {/* Step Catalog Button */}
+          {/* STEP CATALOG BUTTON */}
           <ToolbarItem>
             <Tooltip content={<div>Step Catalog</div>} position={'bottom'}>
               <Button
@@ -201,14 +196,26 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
                 variant="link"
                 data-testid={'toolbar-step-catalog-btn'}
                 icon={<CatalogIcon />}
-                onClick={() => handleExpanded({ catalog: !expanded.catalog, codeEditor: false })}
+                onClick={toggleCatalog}
+              />
+            </Tooltip>
+          </ToolbarItem>
+
+          {/* CODE TOGGLE BUTTON */}
+          <ToolbarItem>
+            <Tooltip content={<div>Source Code</div>} position={'bottom'}>
+              <Button
+                variant={'link'}
+                data-testid={'toolbar-show-code-btn'}
+                onClick={toggleCodeEditor}
+                icon={<CodeIcon />}
               />
             </Tooltip>
           </ToolbarItem>
 
           <ToolbarItem variant="separator" />
 
-          {/* Name */}
+          {/* NAME */}
           <ToolbarItem variant="label">
             {isEditingName ? (
               <InputGroup>
@@ -277,6 +284,7 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
             )}
           </ToolbarItem>
 
+          {/* DEPLOYMENT STATUS */}
           {deployment.crd ? (
             <ToolbarItem alignment={{ default: 'alignRight' }}>
               <div className="status-container" data-testid={'toolbar-deployment-status'}>
@@ -290,30 +298,40 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
 
           {deployment.crd && <ToolbarItem variant="separator" />}
 
-          <ToolbarItem>
-            <Tooltip content={<div>Source Code</div>} position={'bottom'}>
-              <Button
-                variant={expanded.codeEditor ? 'primary' : 'secondary'}
-                data-testid={'toolbar-show-code-btn'}
-                onClick={() => handleExpanded({ codeEditor: !expanded.codeEditor, catalog: false })}
-              >
-                Code
-              </Button>
-            </Tooltip>
-          </ToolbarItem>
-
+          {/* DEPLOY BUTTON */}
           <ToolbarItem>
             <Tooltip content={<div>Deploy</div>} position={'bottom'}>
               <Button
                 tabIndex={0}
-                variant="link"
+                variant="primary"
                 data-testid={'toolbar-deploy-start-btn'}
-                icon={<PlayIcon />}
+                // icon={<PlayIcon />}
                 onClick={handleDeployStartClick}
-              />
+              >
+                Deploy
+              </Button>
             </Tooltip>
           </ToolbarItem>
 
+          {/* DELETE/CLEAR BUTTON */}
+          {/*<ToolbarItem>*/}
+          {/*  <Tooltip content={<div>Clear</div>} position={'bottom'}>*/}
+          {/*    <Button*/}
+          {/*      tabIndex={0}*/}
+          {/*      variant="link"*/}
+          {/*      data-testid={'toolbar-delete-btn'}*/}
+          {/*      icon={<TrashIcon />}*/}
+          {/*      onClick={() => {*/}
+          {/*        // verify with user first*/}
+          {/*        setIsConfirmationModalOpen(true);*/}
+          {/*      }}*/}
+          {/*    />*/}
+          {/*  </Tooltip>*/}
+          {/*</ToolbarItem>*/}
+
+          {/*<ToolbarItem variant="separator" />*/}
+
+          {/* KEBAB DROPDOWN MENU */}
           <ToolbarItem variant="overflow-menu">
             <OverflowMenu breakpoint="2xl">
               <OverflowMenuControl hasAdditionalOptions>
@@ -330,12 +348,14 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
+
       <ConfirmationModal
         handleCancel={() => {
           setIsConfirmationModalOpen(false);
         }}
         handleConfirm={() => {
-          dispatch({ type: 'DELETE_INTEGRATION', payload: null });
+          deleteIntegration();
+          setSourceCode('');
           setSettings({ dsl: 'KameletBinding', name: 'integration', namespace: 'default' });
           setIsConfirmationModalOpen(false);
         }}
@@ -345,6 +365,31 @@ export const KaotoToolbar = ({ expanded, handleExpanded }: IKaotoToolbar) => {
           ' like to proceed?'
         }
       />
+
+      <DeploymentsModal
+        handleCloseModal={() => {
+          setExpanded({ ...expanded, deploymentsModal: !expanded.deploymentsModal });
+        }}
+        isModalOpen={expanded.deploymentsModal ?? false}
+      />
+
+      <SettingsModal
+        handleCloseModal={() => {
+          setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
+        }}
+        isModalOpen={expanded.settingsModal ?? false}
+      />
+
+      <AppearanceModal
+        handleCloseModal={() => {
+          {
+            setExpanded({ ...expanded, appearanceModal: !expanded.appearanceModal });
+          }
+        }}
+        isModalOpen={expanded.appearanceModal ?? false}
+      />
     </>
   );
 };
+
+export default KaotoToolbar;

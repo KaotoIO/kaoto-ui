@@ -1,5 +1,5 @@
-import { fetchDeploymentLogs, useDeploymentContext, useSettingsContext } from '../api';
-import { IExpanded } from '../pages/Dashboard';
+import { fetchDeploymentLogs } from '../api';
+import { useDeploymentStore, useSettingsStore } from '../store';
 import {
   Button,
   Toolbar,
@@ -21,18 +21,17 @@ import { LogViewer, LogViewerSearch } from '@patternfly/react-log-viewer';
 import { Fragment, useEffect, useRef, useState } from 'react';
 
 interface IConsole {
-  expanded: IExpanded;
   handleCloseConsole: () => void;
 }
 
 const Console = (props: IConsole) => {
-  const [deployment] = useDeploymentContext();
+  const { deployment } = useDeploymentStore();
   const [logs, setLogs] = useState<string[]>([]);
   const [isPaused, setIsPaused] = useState(false);
   const [itemCount, setItemCount] = useState(1);
   const [currentItemCount, setCurrentItemCount] = useState(0);
   const [renderData, setRenderData] = useState('');
-  const [settings] = useSettingsContext();
+  const { settings } = useSettingsStore();
   const [buffer, setBuffer] = useState<string[]>([]);
   const [linesBehind, setLinesBehind] = useState(0);
   const logViewerRef = useRef<{ scrollToBottom: () => void }>();
@@ -180,29 +179,27 @@ const Console = (props: IConsole) => {
   };
 
   return (
-    <>
-      <LogViewer
-        data={renderData}
-        scrollToRow={currentItemCount}
-        innerRef={logViewerRef}
-        height={400}
-        toolbar={
-          <Toolbar>
-            <ToolbarContent>
-              <ToolbarGroup alignment={{ default: 'alignLeft' }}>
-                {leftAlignedToolbarGroup}
-              </ToolbarGroup>
-              <ToolbarGroup alignment={{ default: 'alignRight' }}>
-                {rightAlignedToolbarGroup}
-              </ToolbarGroup>
-            </ToolbarContent>
-          </Toolbar>
-        }
-        overScanCount={10}
-        footer={isPaused && <FooterButton />}
-        onScroll={onScroll}
-      />
-    </>
+    <LogViewer
+      data={renderData}
+      scrollToRow={currentItemCount}
+      innerRef={logViewerRef}
+      height={400}
+      toolbar={
+        <Toolbar>
+          <ToolbarContent>
+            <ToolbarGroup alignment={{ default: 'alignLeft' }}>
+              {leftAlignedToolbarGroup}
+            </ToolbarGroup>
+            <ToolbarGroup alignment={{ default: 'alignRight' }}>
+              {rightAlignedToolbarGroup}
+            </ToolbarGroup>
+          </ToolbarContent>
+        </Toolbar>
+      }
+      overScanCount={10}
+      footer={isPaused && <FooterButton />}
+      onScroll={onScroll}
+    />
   );
 };
 

@@ -1,4 +1,4 @@
-import initialYAML from '../data/yaml';
+import initialYAML from '../store/data/yaml';
 import { SourceCodeEditor } from './index';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 

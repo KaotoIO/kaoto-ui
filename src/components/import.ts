@@ -34,6 +34,5 @@ export async function dynamicImport(
   await container.init(__webpack_share_scopes__.default);
 
   const factory = await container.get(module);
-  const Module = factory();
-  return Module;
+  return factory();
 }

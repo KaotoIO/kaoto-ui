@@ -6,10 +6,21 @@
     position: relative;
 }
 
+.react-flow__attribution {
+    background: transparent !important;
+    color: #000 !important; /* Fallback for older browsers */
+    color: rgba(0, 0, 0, 0.5) !important;
+    opacity: 0.7;
+    transform: rotate(90deg);
+    bottom: 35px !important;
+    right: -20px !important;
+}
 
 .stepNode {
     align-items: center;
     background: var(--pf-global--BackgroundColor--100);
+    border: 2px solid rgb(0, 136, 206);
+    border-radius: 50%;
     display: block;
     font-family: Ubuntu, serif;
     font-size: small;
@@ -21,16 +32,9 @@
 }
 
 .stepNode__Add {
-    height: 6px;
     position: absolute;
-    right: -8px;
+    right: -22px;
     top: 40%;
-    transform: translateY(-50%);
-    width: 6px;
-}
-
-.stepNode__Add button {
-    padding: 0;
 }
 
 .stepNode__Icon {
@@ -47,9 +51,47 @@
     width: 40px;
 }
 
+.stepNode__Insert {
+    height: 6px;
+    position: absolute;
+    left: -3.6em;
+    top: 40%;
+    transform: translateY(-50%);
+    width: 6px;
+}
+
 .stepNode__Label {
     bottom: -30px;
     left: -75%;
     position: relative;
     width: 250%;
+}
+
+.stepNode__Slot {
+    border: 2px solid var(--pf-global--BorderColor--100);
+    border-radius: 50%;
+}
+
+.stepNode__Grey {
+    border: 2px solid rgb(204, 204, 204);
+    border-radius: 50%;
+}
+
+.stepNode__DarkBlue {
+    border: 2px solid rgb(0, 136, 206);
+    border-radius: 50%;
+}
+
+.stepNode__LightBlue {
+    border: 2px solid rgb(149, 213, 245);
+    border-radius: 50%;
+}
+
+.react-flow__controls.visualization__controls {
+    right: 15px;
+    left: unset;
+}
+
+.react-flow__minimap.visualization__minimap {
+    right: 50px;
 }

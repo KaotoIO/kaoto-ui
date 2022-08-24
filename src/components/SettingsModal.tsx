@@ -1,13 +1,7 @@
-import {
-  fetchCompatibleDSLs,
-  fetchIntegrationSourceCode,
-  useIntegrationJsonContext,
-  useIntegrationSourceContext,
-  useSettingsContext,
-} from '../api';
-import { ISettings, IViewProps } from '../types';
-import { usePrevious } from '../utils';
-import { isNameValidCheck } from '../utils/validationService';
+import { fetchCompatibleDSLs, fetchIntegrationSourceCode } from '../api';
+import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '../store';
+import { ISettings } from '../types';
+import { isNameValidCheck, usePrevious } from '../utils';
 import {
   AlertVariant,
   Button,
@@ -27,7 +21,6 @@ import { useEffect, useState } from 'react';
 
 export interface ISettingsModal {
   handleCloseModal: () => void;
-  handleUpdateViews: (newViews: IViewProps[]) => void;
   isModalOpen: boolean;
 }
 
@@ -40,10 +33,10 @@ export interface ISettingsModal {
  */
 export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal) => {
   const [availableDSLs, setAvailableDSLs] = useState<string[]>([]);
-  const [settings, setSettings] = useSettingsContext();
+  const { settings, setSettings } = useSettingsStore((state) => state);
   const [localSettings, setLocalSettings] = useState<ISettings>(settings);
-  const [integrationJson] = useIntegrationJsonContext();
-  const [, setSourceCode] = useIntegrationSourceContext();
+  const { integrationJson } = useIntegrationJsonStore((state) => state);
+  const { setSourceCode } = useIntegrationSourceStore();
   const previousIntegrationJson = usePrevious(integrationJson);
   const previousName = usePrevious(localSettings.name);
   const [nameValidation, setNameValidation] = useState<

@@ -1,18 +1,13 @@
-import { useIntegrationJsonContext } from '../api';
-import { IStepProps, IViewProps } from '../types';
+import { useIntegrationJsonStore } from '../store';
+import { IStepProps } from '../types';
+import { findStepIdxWithUUID } from '../utils';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import {
-  IStepExtensionApi,
-  getKaotoCatalogSteps,
   getKaotoDeployment,
-  getKaotoDeploymentLogs,
-  getKaotoDeployments,
-  getKaotoDSLs,
-  getKaotoIntegrationJson,
   getKaotoIntegrationSource,
-  getKaotoViews,
+  IStepExtensionApi,
   onKaotoButtonClicked,
   startKaotoDeployment,
   stopKaotoDeployment,
@@ -25,7 +20,6 @@ import {
   DrawerCloseButton,
   DrawerHead,
   DrawerPanelBody,
-  DrawerPanelContent,
   Grid,
   GridItem,
   Tab,
@@ -41,7 +35,6 @@ export interface IStepViewsProps {
   onClosePanelClick: (e: any) => void;
   saveConfig: (newValues: any) => void;
   step: IStepProps;
-  views?: IViewProps[];
 }
 
 const StepViews = ({
@@ -50,17 +43,20 @@ const StepViews = ({
   onClosePanelClick,
   saveConfig,
   step,
-  views,
 }: IStepViewsProps) => {
+  const views = useIntegrationJsonStore((state) =>
+    state.views.filter((view) => view.step === step.UUID)
+  );
   const hasDetailView = views?.some((v) => v.id === 'detail-step');
   const detailsTabIndex = views?.length! + 1; // provide an index that won't be used by custom views
   const configTabIndex = views?.length! + 2;
+  const currentIdx = findStepIdxWithUUID(step.UUID!);
   const [activeTabKey, setActiveTabKey] = useState(configTabIndex);
   const [stepPropertySchema, setStepPropertySchema] = useState<{
     [label: string]: { type: string };
   }>({});
   const [stepPropertyModel, setStepPropertyModel] = useState<{ [label: string]: any }>({});
-  const [, dispatch] = useIntegrationJsonContext();
+  const { replaceStep } = useIntegrationJsonStore((state) => state);
 
   const { addAlert } = useAlert() || {};
 
@@ -108,27 +104,49 @@ const StepViews = ({
     setStepPropertyModel(tempModelObject);
   }, [step.parameters, isPanelExpanded]);
 
+  const kaotoApi: IStepExtensionApi = {
+    getDeployment: getKaotoDeployment,
+    getIntegrationSource: getKaotoIntegrationSource,
+    getStep: () => {
+      return step;
+    },
+    notifyKaoto: alertKaoto,
+    onKaotoButtonClicked,
+    saveConfig,
+    startDeployment: startKaotoDeployment,
+    step,
+    stepInitialValues: () => {
+      let tmpValues = {};
+      step.parameters?.map((p) => {
+        const paramKey = p.title;
+        // @ts-ignore
+        tmpValues[paramKey] = p.value ?? p.defaultValue;
+      });
+      return tmpValues;
+    },
+    stopDeployment: stopKaotoDeployment,
+    updateStep: (newStep: IStepProps) => {
+      // update state of step
+      replaceStep(newStep, currentIdx);
+    },
+  };
+
   const handleTabClick = (_event: any, tabIndex: any) => {
     setActiveTabKey(tabIndex);
   };
 
   return (
-    <DrawerPanelContent
-      isResizable
-      id={'right-resize-panel'}
-      defaultSize={'500px'}
-      minSize={'150px'}
-    >
+    <>
       <DrawerHead>
         <Grid>
           <GridItem span={3}>
             <img src={step.icon} style={{ maxHeight: '40px' }} alt={'icon'} />
           </GridItem>
-          <GridItem span={8}><h3 className={'pf-c-title pf-m-xl'} tabIndex={isPanelExpanded ? 0 : -1}>
-            {step.title}
-          </h3>
+          <GridItem span={8}>
+            <h3 className={'pf-c-title pf-m-xl'} tabIndex={isPanelExpanded ? 0 : -1}>
+              {step.title}
+            </h3>
           </GridItem>
-
         </Grid>
         <DrawerActions>
           <DrawerCloseButton onClick={onClosePanelClick} />
@@ -145,7 +163,7 @@ const StepViews = ({
             >
               <StepErrorBoundary>
                 <br />
-                <Grid hasGutter>
+                <Grid hasGutter style={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto' }}>
                   <GridItem span={3}>
                     <b>Title</b>
                   </GridItem>
@@ -177,31 +195,6 @@ const StepViews = ({
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
 
-              const kaotoApi: IStepExtensionApi = {
-                getCatalogSteps: getKaotoCatalogSteps,
-                getDeployment: getKaotoDeployment,
-                getDeploymentLogs: getKaotoDeploymentLogs,
-                getDeployments: getKaotoDeployments,
-                getDSLs: getKaotoDSLs,
-                getIntegrationJson: getKaotoIntegrationJson,
-                getIntegrationSource: getKaotoIntegrationSource,
-                getStep: () => {
-                  return step;
-                },
-                getViews: getKaotoViews,
-                notifyKaoto: alertKaoto,
-                onKaotoButtonClicked,
-                startDeployment: startKaotoDeployment,
-                stopDeployment: stopKaotoDeployment,
-                updateStep: (step: IStepProps) => {
-                  // update state of step
-                  dispatch({
-                    type: 'REPLACE_STEP',
-                    payload: { newStep: step, oldStepIndex: index },
-                  });
-                },
-              };
-
               return (
                 <Tab
                   eventKey={index}
@@ -229,7 +222,7 @@ const StepViews = ({
           >
             <br />
             <StepErrorBoundary>
-              <Grid hasGutter>
+              <Grid hasGutter style={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto' }}>
                 {step.parameters && (
                   <JsonSchemaConfigurator
                     schema={{ type: 'object', properties: stepPropertySchema }}
@@ -250,7 +243,7 @@ const StepViews = ({
           Delete
         </Button>
       </DrawerPanelBody>
-    </DrawerPanelContent>
+    </>
   );
 };
 

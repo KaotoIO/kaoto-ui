@@ -1,3 +1,4 @@
+import { useIntegrationJsonStore } from '../store';
 import { IDeployment, IStepProps } from '../types';
 import { useEffect, useRef } from 'react';
 
@@ -20,14 +21,29 @@ export function findDeploymentFromList(name: string, deployments: IDeployment[])
  * @param UUID
  * @param steps
  */
-export function findStepIdxWithUUID(UUID: string, steps: IStepProps[]) {
-  return steps.map((s) => s.UUID).indexOf(UUID);
+export function findStepIdxWithUUID(UUID: string, steps?: IStepProps[]) {
+  // optional steps allows for dependency injection in testing
+  if (!steps) {
+    return useIntegrationJsonStore
+      .getState()
+      .integrationJson.steps.map((s) => s.UUID)
+      .indexOf(UUID);
+  } else {
+    return steps.map((s) => s.UUID).indexOf(UUID);
+  }
 }
 
 export function formatDateTime(date: string) {
   return new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'long' }).format(
     Date.parse(date)
   );
+}
+
+// Shorten a string to less than maxLen characters without truncating words.
+export function shorten(str: string, maxLen: number, separator = ' ') {
+  if (!str) return;
+  if (str.length <= maxLen) return str;
+  return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
 }
 
 export function truncateString(str: string, num: number) {
@@ -64,3 +80,5 @@ export function usePrevious(value: any) {
   });
   return ref.current;
 }
+
+export * from './validationService';

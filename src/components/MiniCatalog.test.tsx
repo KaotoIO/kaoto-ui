@@ -1,4 +1,4 @@
-import { AlertProvider } from './MASAlerts';
+import { AlertProvider } from '../layout/MASAlerts';
 import { MiniCatalog } from './MiniCatalog';
 import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
