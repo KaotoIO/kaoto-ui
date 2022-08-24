@@ -122,3 +122,5 @@ if (process.env.NODE_ENV === 'development') {
   mountStoreDevtool('settingsStore', useSettingsStore);
   mountStoreDevtool('visualizationStore', useVisualizationStore);
 }
+
+export default useIntegrationJsonStore;

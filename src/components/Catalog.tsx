@@ -1,7 +1,7 @@
 import { fetchCatalogSteps } from '../api';
 import { useDeploymentStore, useSettingsStore } from '../store';
 import { IStepProps } from '../types';
-import { truncateString, usePrevious } from '../utils';
+import { shorten, truncateString, usePrevious } from '../utils';
 import './Catalog.css';
 import {
   AlertVariant,
@@ -9,35 +9,28 @@ import {
   Card,
   CardBody,
   CardTitle,
+  DrawerActions,
+  DrawerCloseButton,
+  DrawerHead,
   Gallery,
+  GalleryItem,
   Grid,
   GridItem,
-  Hint,
-  HintBody,
   InputGroup,
   Label,
   SearchInput,
-  TextContent,
   ToggleGroup,
   ToggleGroupItem,
   Toolbar,
   ToolbarContent,
   ToolbarItem,
+  Tooltip,
 } from '@patternfly/react-core';
 import { InfoCircleIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useRef, useState } from 'react';
 
-// Shorten a string to less than maxLen characters without truncating words.
-function shorten(str: string, maxLen: number, separator = ' ') {
-  if (!str) return;
-  if (str.length <= maxLen) return str;
-  return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
-}
-
-export const Catalog = () => {
-  // If the catalog data won't be changing, consider removing this state
-  // const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
+export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
   const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
@@ -127,27 +120,20 @@ export const Catalog = () => {
 
   return (
     <div data-testid={'stepCatalog'}>
-      <div style={{ padding: '10px', marginTop: '0.7em' }}>
-        <TextContent>
-          <Hint className={'catalog__hint'}>
-            <HintBody>
-              <InfoCircleIcon />
-              &nbsp;&nbsp;You can drag a step onto a circle in the visualization
-            </HintBody>
-          </Hint>
-        </TextContent>
-      </div>
-      <Toolbar
-        id={'toolbar'}
-        style={{
-          background: 'transparent',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingTop: '0',
-        }}
-      >
-        <ToolbarContent style={{ padding: '5px' }}>
+      <DrawerHead>
+        <h3 className={'pf-c-title pf-m-2xl'}>
+          Step Catalog&nbsp;&nbsp;
+          <Tooltip content={<span>Try dragging a step onto a circle in the canvas</span>}>
+            <InfoCircleIcon className={'catalog__help'} />
+          </Tooltip>
+        </h3>
+        <DrawerActions>
+          <DrawerCloseButton onClick={handleClose} />
+        </DrawerActions>
+      </DrawerHead>
+
+      <Toolbar id={'toolbar'} className={'catalog__toolbar'}>
+        <ToolbarContent className={'catalog__toolbarContent'}>
           {
             <>
               <ToolbarItem style={{ padding: '0', marginRight: '0' }}>
@@ -160,6 +146,7 @@ export const Catalog = () => {
                     aria-label={'search for a step'}
                     value={query}
                     onChange={changeSearch}
+                    onClear={() => setQuery('')}
                     ref={searchInputRef}
                   />
                 </InputGroup>
@@ -195,52 +182,54 @@ export const Catalog = () => {
       </Toolbar>
       <Gallery
         hasGutter={true}
-        style={{ maxHeight: 'calc(100vh - 375px)', overflow: 'auto', padding: '0 10px' }}
+        style={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto', padding: '0 10px' }}
       >
         {catalogData &&
           search(catalogData).map((step, idx) => {
             return (
-              <Card
-                key={idx}
-                className={'catalog__step'}
-                isCompact={true}
-                isSelectable={true}
-                draggable={'true'}
-                onDragStart={(e: any) => {
-                  e.dataTransfer.setData('application/reactflow', 'step');
-                  e.dataTransfer.setData('text/plain', JSON.stringify(step));
+              <GalleryItem key={idx}>
+                <Card
+                  className={'catalog__step'}
+                  data-testid={`catalog-step-${step.name}`}
+                  isCompact={true}
+                  isSelectable={true}
+                  draggable={'true'}
+                  onDragStart={(e: any) => {
+                    e.dataTransfer.setData('application/reactflow', 'step');
+                    e.dataTransfer.setData('text/plain', JSON.stringify(step));
 
-                  e.dataTransfer.effectAllowed = 'move';
-                }}
-              >
-                <Grid md={6}>
-                  <GridItem span={2}>
-                    <Bullseye>
-                      <img
-                        src={step.icon}
-                        className={'catalog__stepImage'}
-                        alt={'Step Image'}
-                        data-testid={'catalog__stepImage'}
-                      />
-                    </Bullseye>
-                  </GridItem>
-                  <GridItem span={7}>
-                    <CardTitle>
-                      <span>{step.name}</span>
-                    </CardTitle>
-                    <CardBody>{shorten(step?.description, 60)}</CardBody>
-                  </GridItem>
-                  <GridItem span={3}>
-                    <Label
-                      color={'blue'}
-                      data-testid={'catalog__stepLabel'}
-                      style={{ marginTop: '0.8em' }}
-                    >
-                      {truncateString(step.kind, 8)}
-                    </Label>
-                  </GridItem>
-                </Grid>
-              </Card>
+                    e.dataTransfer.effectAllowed = 'move';
+                  }}
+                >
+                  <Grid md={6}>
+                    <GridItem span={2}>
+                      <Bullseye>
+                        <img
+                          src={step.icon}
+                          className={'catalog__stepImage'}
+                          alt={'Step Image'}
+                          data-testid={'catalog__stepImage'}
+                        />
+                      </Bullseye>
+                    </GridItem>
+                    <GridItem span={7}>
+                      <CardTitle>
+                        <span>{step.name}</span>
+                      </CardTitle>
+                      <CardBody>{shorten(step?.description, 60)}</CardBody>
+                    </GridItem>
+                    <GridItem span={3}>
+                      <Label
+                        color={'blue'}
+                        data-testid={'catalog__stepLabel'}
+                        style={{ marginTop: '0.8em' }}
+                      >
+                        {truncateString(step.kind, 8)}
+                      </Label>
+                    </GridItem>
+                  </Grid>
+                </Card>
+              </GalleryItem>
             );
           })}
       </Gallery>

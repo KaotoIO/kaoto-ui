@@ -1,4 +1,5 @@
-group: camel.apache.org
+apiVersion: camel.apache.org/v1alpha1
+group: camel.apache.org</br>
 kind: KameletBinding
 metadata:
   additionalProperties: {}
@@ -13,14 +14,9 @@ singular: kameletbinding</br>
 spec:
   source:
 {backspace}    ref:
-  apiVersion: camel.apache.org/v1alpha1</br>
-{backspace}  name: timer-source
-{backspace}  kind: Kamelet</br>
+  name: kafka-source 
   {backspace}{backspace}  sink:
   ref:
-  {backspace}    apiVersion: camel.apache.org/v1alpha1
-  {backspace}name: kafka-sink
-  {backspace}kind: Kamelet</br>
+  name: kafka-sink
 {backspace}{backspace}storage: true</br>
 version: v1alpha1
-

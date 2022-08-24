@@ -1,6 +1,6 @@
 import { fetchCompatibleDSLs, fetchIntegrationSourceCode } from '../api';
 import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '../store';
-import { ISettings, IViewProps } from '../types';
+import { ISettings } from '../types';
 import { isNameValidCheck, usePrevious } from '../utils';
 import {
   AlertVariant,
@@ -21,7 +21,6 @@ import { useEffect, useState } from 'react';
 
 export interface ISettingsModal {
   handleCloseModal: () => void;
-  handleUpdateViews: (newViews: IViewProps[]) => void;
   isModalOpen: boolean;
 }
 

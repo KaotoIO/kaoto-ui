@@ -10,7 +10,6 @@ import EditorDidMount from 'react-monaco-editor';
 import { useDebouncedCallback } from 'use-debounce';
 
 interface ISourceCodeEditor {
-  handleUpdateViews: (newViews: any) => void;
   // Used to mock data for stories
   initialData?: string;
   language?: Language;
@@ -23,6 +22,16 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
   const { settings } = useSettingsStore();
   const previousName = usePrevious(settings.name);
+  const previousJson = usePrevious(integrationJson);
+
+  useEffect(() => {
+    if (previousJson === integrationJson) return;
+    let tmpInt = integrationJson;
+    tmpInt.metadata = { ...integrationJson.metadata, ...settings };
+    fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
+      if (typeof newSrc === 'string') setSourceCode(newSrc);
+    });
+  }, [integrationJson]);
 
   useEffect(() => {
     if (previousName === settings.name) return;
@@ -103,6 +112,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       <CodeEditor
         code={sourceCode ?? props.initialData}
         className="code-editor"
+        emptyState={''}
         height="650px"
         language={(props.language as Language) ?? Language.yaml}
         onEditorDidMount={handleEditorDidMount}
