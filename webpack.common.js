@@ -57,10 +57,6 @@ module.exports = () => {
           test: /\.(svg|jpg|jpeg|png|gif)$/i,
           type: 'asset/inline',
         },
-        {
-          test: /\.yaml$/,
-          use: 'yaml-loader',
-        },
       ],
     },
     output: {
@@ -112,9 +108,6 @@ module.exports = () => {
         name: federatedModuleName,
         filename: 'remoteEntry.js',
         library: { type: 'var', name: federatedModuleName },
-        // exposes: {
-        //   './stepExtensionApi': './src/components/StepExtensionApi.ts',
-        // },
         shared: {
           ...deps,
           react: {

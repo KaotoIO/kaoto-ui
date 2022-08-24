@@ -2,6 +2,7 @@ describe('Test for undo/redo actions on code-editor', () => {
   beforeEach(() => {
     let url = Cypress.config().baseUrl;
     cy.visit(url);
+    cy.wait(100);
   });
 
   it('loads the YAML editor', () => {
@@ -9,19 +10,21 @@ describe('Test for undo/redo actions on code-editor', () => {
 
     // open source code editor
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.get('.code-editor').click().type('{selectAll}{backspace}');
+    cy.wait(2000);
+
+    // erase default yaml
+    cy.get('[data-testid="sourceCode--clearButton"]').click();
 
     // select "start from scratch" in code editor's empty state
     cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
 
     // load fixture
     cy.fixture('undo_redo.txt').then((yaml) => {
-      cy.get('.code-editor').type(yaml);
-      cy.wait(4000);
+      cy.get('.pf-c-code-editor__code').type(yaml, { timeout: 2000 });
 
       // the code editor should contain the loaded yaml
-      cy.get('.code-editor')
-        .contains('kafka-source')
+      cy.get('.code-editor', { timeout: 200 })
+        .contains('kafka-source', { timeout: 200 })
         .type(
           '{end}' +
             '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
@@ -29,12 +32,10 @@ describe('Test for undo/redo actions on code-editor', () => {
             'timer-source',
           { delay: 500 }
         );
-      cy.get('[aria-label="Undo change"] > svg').click();
-      cy.get('[aria-label="Undo change"] > svg').click();
-      cy.get('[data-testid="react-flow-wrapper"]').contains('kafka-source');
-      cy.get('[aria-label="Redo change"] > svg').click();
-      cy.get('[aria-label="Redo change"] > svg').click();
-      cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source');
+      cy.get('[data-testid="sourceCode--undoButton"]').dblclick();
+      cy.get('.pf-c-code-editor__code').contains('kafka-source');
+      cy.get('[data-testid="sourceCode--redoButton"]').dblclick({ force: true });
+      cy.get('.pf-c-code-editor__code').contains('timer-source');
     });
   });
 });

@@ -12,7 +12,6 @@ export * from './MiniCatalog';
 export * from './SettingsModal';
 export * from './SourceCodeEditor';
 export * from './StepErrorBoundary';
-export * from './StepExtensionApi';
 export * from './StepViews';
 export * from './Visualization';
 export * from './VisualizationStep';

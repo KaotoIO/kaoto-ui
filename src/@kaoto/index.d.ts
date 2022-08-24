@@ -61,28 +61,24 @@ export interface ISettings {
 }
 
 /**
- * The API for a typical Step Extension
- * The following are methods that are exposed to a Step Extension.
+ * The API for extending Kaoto, typically via
+ * a Generic or Step Extension
  */
-export interface IStepExtensionApi {
+export interface IKaotoApi {
   getDeployment: (name: string, namespace?: string) => Promise<string | unknown>;
   getIntegrationSource: (
     integration: IIntegration,
     dsl: string,
     namespace?: string
   ) => Promise<string | unknown>;
-  getStep: () => IStepProps;
   notifyKaoto: (title: string, body?: string, variant?: string) => void;
-  onKaotoButtonClicked: (view: IViewProps) => void;
-  saveConfig: (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => void;
   startDeployment: (
     integration: any,
     name: string,
     namespace?: string
   ) => Promise<string | unknown>;
   step: IStepProps;
-  stepParams: { [s: string]: unknown };
-  stepInitialValues: { [p: string]: any };
+  stepParams: { [p: string]: any };
   stopDeployment: (name: string, namespace?: string) => void;
   updateStep: (step: IStepProps) => void;
   updateStepParams: (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => void;

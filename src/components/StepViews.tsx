@@ -1,17 +1,16 @@
+import {
+  fetchDeployment,
+  fetchIntegrationSourceCode,
+  startDeployment,
+  stopDeployment,
+} from '../api';
 import { useIntegrationJsonStore } from '../store';
 import { findStepIdxWithUUID } from '../utils';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
-import {
-  getKaotoDeployment,
-  getKaotoIntegrationSource,
-  onKaotoButtonClicked,
-  startKaotoDeployment,
-  stopKaotoDeployment,
-} from './StepExtensionApi';
 import { dynamicImport } from './import';
-import { IStepExtensionApi, IStepProps } from '@kaoto';
+import { IIntegration, IKaotoApi, IStepProps } from '@kaoto';
 import {
   AlertVariant,
   Button,
@@ -102,35 +101,6 @@ const StepViews = ({
     setStepPropertyModel(tempModelObject);
   }, [step.parameters, isPanelExpanded]);
 
-  const kaotoApi: IStepExtensionApi = {
-    getDeployment: getKaotoDeployment,
-    getIntegrationSource: getKaotoIntegrationSource,
-    getStep: () => {
-      return step;
-    },
-    notifyKaoto: alertKaoto,
-    onKaotoButtonClicked,
-    saveConfig,
-    startDeployment: startKaotoDeployment,
-    step,
-    stepInitialValues: () => {
-      let tmpValues = {};
-      step.parameters?.map((p) => {
-        const paramKey = p.title;
-        // @ts-ignore
-        tmpValues[paramKey] = p.value ?? p.defaultValue;
-      });
-      return tmpValues;
-    },
-    stepParams: stepPropertyModel,
-    stopDeployment: stopKaotoDeployment,
-    updateStep: (newStep: IStepProps) => {
-      // update state of step
-      replaceStep(newStep, currentIdx);
-    },
-    updateStepParams: saveConfig,
-  };
-
   const handleTabClick = (_event: any, tabIndex: any) => {
     setActiveTabKey(tabIndex);
   };
@@ -194,6 +164,45 @@ const StepViews = ({
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
 
+              let tmpValues = {};
+              step.parameters?.map((p) => {
+                const paramKey = p.title;
+                // @ts-ignore
+                tmpValues[paramKey] = p.value ?? p.defaultValue;
+              });
+
+              const kaotoApi: IKaotoApi = {
+                getDeployment: (name: string, namespace?: string): Promise<string | unknown> => {
+                  return fetchDeployment(name, namespace).then((deployment: string | unknown) => {
+                    return deployment;
+                  });
+                },
+                getIntegrationSource: (integration: IIntegration) => {
+                  return fetchIntegrationSourceCode(integration).then((sourceCode) => {
+                    return sourceCode;
+                  });
+                },
+                notifyKaoto: alertKaoto,
+                startDeployment: (
+                  integration: any,
+                  name: string,
+                  namespace?: string
+                ): Promise<string> => {
+                  return startDeployment(integration, name, namespace).then((res) => {
+                    return res;
+                  });
+                },
+                step,
+                stepParams: tmpValues,
+                stopDeployment: (name: string) => {
+                  return stopDeployment(name).then((res) => {
+                    return res;
+                  });
+                },
+                updateStep: (newStep: IStepProps) => replaceStep(newStep, currentIdx),
+                updateStepParams: saveConfig,
+              };
+
               return (
                 <Tab
                   eventKey={index}
@@ -228,7 +237,6 @@ const StepViews = ({
                     configuration={stepPropertyModel}
                     onChangeModel={(configuration, isValid) => {
                       if (isValid) {
-                        console.log('configuration: ', configuration);
                         saveConfig(configuration);
                       }
                     }}
@@ -239,16 +247,6 @@ const StepViews = ({
             </StepErrorBoundary>
           </Tab>
         </Tabs>
-        <Button
-          variant={'primary'}
-          key={step.UUID + '-notify'}
-          onClick={() => {
-            kaotoApi.notifyKaoto('Example', 'Hello...');
-          }}
-        >
-          Notify
-        </Button>
-        {'  '}
         <Button variant={'danger'} key={step.UUID} onClick={deleteStep}>
           Delete
         </Button>
