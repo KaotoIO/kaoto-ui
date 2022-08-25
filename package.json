@@ -52,7 +52,7 @@
     "uniforms": "^3.6.2",
     "uniforms-bridge-json-schema": "^3.9.1",
     "uniforms-patternfly": "^4.7.5",
-    "use-debounce": "8.0.1",
+    "use-debounce": "8.0.3",
     "uuid": "8.3.2",
     "web-vitals": "2.1.4",
     "zustand": "^4.0.0-rc.1"
@@ -64,7 +64,7 @@
     "@storybook/addon-links": "^6.5.9",
     "@storybook/builder-webpack5": "^6.5.9",
     "@storybook/manager-webpack5": "^6.5.9",
-    "@storybook/node-logger": "^6.5.8",
+    "@storybook/node-logger": "^6.5.10",
     "@storybook/react": "^6.5.9",
     "@testing-library/dom": "^8.14.0",
     "@testing-library/jest-dom": "^5.16.4",
