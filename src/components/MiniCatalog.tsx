@@ -1,6 +1,6 @@
 import { fetchCatalogSteps } from '../api';
-import { IStepProps, IStepQueryParams } from '../types';
 import { truncateString } from '../utils';
+import { IStepProps, IStepQueryParams } from '@kaoto';
 import {
   AlertVariant,
   Bullseye,

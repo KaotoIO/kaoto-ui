@@ -1,6 +1,6 @@
 // @ts-ignore
 import svg from '../assets/images/kaoto.svg';
-import { ISettings } from '../types';
+import { ISettings } from '@kaoto';
 import create from 'zustand';
 
 interface ISettingsStore {

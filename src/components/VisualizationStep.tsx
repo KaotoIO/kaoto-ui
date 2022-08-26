@@ -1,9 +1,9 @@
 import { useIntegrationJsonStore, useSettingsStore } from '../store';
-import { IStepProps, IVizStepNodeData } from '../types';
 import { canStepBeReplaced, findStepIdxWithUUID } from '../utils';
 import { appendableStepTypes } from '../utils';
 import { MiniCatalog } from './MiniCatalog';
 import './Visualization.css';
+import { IStepProps, IVizStepNodeData } from '@kaoto';
 import { AlertVariant, Popover } from '@patternfly/react-core';
 import { CubesIcon, PlusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';

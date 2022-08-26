@@ -1,8 +1,8 @@
 import { fetchDeployments, stopDeployment } from '../api';
 import { useDeploymentStore, useSettingsStore } from '../store';
-import { IDeployment } from '../types';
 import { formatDateTime } from '../utils';
 import { CustomExclamationTriangleIcon } from './Icons';
+import { IDeployment } from '@kaoto';
 import {
   Button,
   EmptyState,

@@ -5,10 +5,10 @@ import {
   useSettingsStore,
   useVisualizationStore,
 } from '../store';
-import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '../types';
 import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
 import { KaotoDrawer, PlusButtonEdge, StepErrorBoundary, StepViews, VisualizationStep } from './';
 import './Visualization.css';
+import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, {
   Background,

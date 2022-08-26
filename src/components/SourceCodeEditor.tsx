@@ -1,10 +1,10 @@
 import { fetchIntegrationJson, fetchIntegrationSourceCode } from '../api';
 import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '../store';
-import { IIntegration } from '../types';
 import { usePrevious } from '../utils';
 import { StepErrorBoundary } from './StepErrorBoundary';
+import { IIntegration } from '@kaoto';
 import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
-import { RedoIcon, UndoIcon } from '@patternfly/react-icons';
+import { EraserIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';
 import { useEffect, useRef } from 'react';
 import EditorDidMount from 'react-monaco-editor';
 import { useDebouncedCallback } from 'use-debounce';
@@ -21,7 +21,6 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
   const { settings } = useSettingsStore();
-  const previousName = usePrevious(settings.name);
   const previousJson = usePrevious(integrationJson);
 
   useEffect(() => {
@@ -32,16 +31,6 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       if (typeof newSrc === 'string') setSourceCode(newSrc);
     });
   }, [integrationJson]);
-
-  useEffect(() => {
-    if (previousName === settings.name) return;
-    let tmpInt = integrationJson;
-    tmpInt.metadata = { ...integrationJson.metadata, ...settings };
-
-    fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
-      if (typeof newSrc === 'string') setSourceCode(newSrc);
-    });
-  }, [settings.name]);
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
@@ -78,12 +67,29 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
     handleChanges(value);
   }, 1000);
 
+  const clearAction = () => {
+    setSourceCode('');
+  };
+
   const undoAction = () => {
     (editorRef.current?.getModel() as any)?.undo();
   };
+
   const redoAction = () => {
     (editorRef.current?.getModel() as any)?.redo();
   };
+
+  const ClearButton = (
+    <CodeEditorControl
+      key={'clearButton'}
+      icon={<EraserIcon />}
+      data-testid={'sourceCode--clearButton'}
+      toolTipText={'Clear'}
+      onClick={clearAction}
+      position={'right'}
+      isVisible={sourceCode !== ''}
+    />
+  );
 
   const UndoButton = (
     <CodeEditorControl
@@ -91,7 +97,9 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       icon={<UndoIcon />}
       aria-label="Undo change"
       toolTipText="Undo change"
+      data-testid={'sourceCode--undoButton'}
       onClick={undoAction}
+      position={'right'}
       isVisible={sourceCode !== ''}
     />
   );
@@ -102,6 +110,8 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       icon={<RedoIcon />}
       aria-label="Redo change"
       toolTipText="Redo change"
+      data-testid={'sourceCode--redoButton'}
+      position={'right'}
       onClick={redoAction}
       isVisible={sourceCode !== ''}
     />
@@ -117,7 +127,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
         language={(props.language as Language) ?? Language.yaml}
         onEditorDidMount={handleEditorDidMount}
         toolTipPosition="right"
-        customControls={[UndoButton, RedoButton]}
+        customControls={[UndoButton, RedoButton, ClearButton]}
         isCopyEnabled
         isDarkTheme
         isDownloadEnabled

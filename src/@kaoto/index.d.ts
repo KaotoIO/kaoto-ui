@@ -24,17 +24,6 @@ export interface IDeployment {
   type: string;
 }
 
-export interface ISettings {
-  description?: string;
-  // e.g. 'KameletBinding'
-  dsl: string;
-  icon?: string;
-  // name of integration or deployment
-  name: string;
-  // Cluster namespace
-  namespace: string;
-}
-
 export interface IIntegration {
   metadata: IIntegrationMetadata;
   params: IIntegrationParams[];
@@ -58,6 +47,41 @@ export interface IIntegrationParams {
   path?: boolean;
   type?: string;
   value?: {};
+}
+
+export interface ISettings {
+  description?: string;
+  // e.g. 'KameletBinding'
+  dsl: string;
+  icon?: string;
+  // name of integration or deployment
+  name: string;
+  // Cluster namespace
+  namespace: string;
+}
+
+/**
+ * The API for extending Kaoto, typically via
+ * a Generic or Step Extension
+ */
+export interface IKaotoApi {
+  getDeployment: (name: string, namespace?: string) => Promise<string | unknown>;
+  getIntegrationSource: (
+    integration: IIntegration,
+    dsl: string,
+    namespace?: string
+  ) => Promise<string | unknown>;
+  notifyKaoto: (title: string, body?: string, variant?: string) => void;
+  startDeployment: (
+    integration: any,
+    name: string,
+    namespace?: string
+  ) => Promise<string | unknown>;
+  step: IStepProps;
+  stepParams: { [p: string]: any };
+  stopDeployment: (name: string, namespace?: string) => void;
+  updateStep: (step: IStepProps) => void;
+  updateStepParams: (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => void;
 }
 
 export interface IStepProps {
