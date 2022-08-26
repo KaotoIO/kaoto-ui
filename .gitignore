@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+dist
 # no longer using yarn berry
 /.yarn
 .pnp.js
