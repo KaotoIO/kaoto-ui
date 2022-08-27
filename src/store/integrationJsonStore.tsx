@@ -1,15 +1,16 @@
-import { useDeploymentStore } from './deploymentStore';
-import { useIntegrationSourceStore } from './integrationSourceStore';
-import { useSettingsStore } from './settingsStore';
-import { useVisualizationStore } from './visualizationStore';
+// import { useDeploymentStore } from './deploymentStore';
+// import { useIntegrationSourceStore } from './integrationSourceStore';
+// import { useSettingsStore } from './settingsStore';
+// import { useVisualizationStore } from './visualizationStore';
 import { IIntegration, IStepProps, IViewProps } from '@kaoto';
-import { mountStoreDevtool } from 'simple-zustand-devtools';
+// import { mountStoreDevtool } from 'simple-zustand-devtools';
 import create from 'zustand';
 
 interface IIntegrationJsonStore {
   addStep: (newStep: IStepProps) => void;
   deleteIntegration: () => void;
   deleteStep: (index: number) => void;
+  deleteSteps: () => void;
   insertStep: (newStep: IStepProps, index: number) => void;
   integrationJson: IIntegration;
   updateIntegration: (newInt?: any) => void;
@@ -69,6 +70,14 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) 
       },
     }));
   },
+  deleteSteps: () => {
+    set((state) => ({
+      integrationJson: {
+        ...state.integrationJson,
+        steps: [],
+      },
+    }));
+  },
   insertStep: (newStep, idx) => {
     // unlike addStep, we need to also regenerate all UUIDs
     // because positions are changing
@@ -115,12 +124,12 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) 
   views: [],
 }));
 
-if (process.env.NODE_ENV === 'development') {
-  mountStoreDevtool('integrationJsonStore', useIntegrationJsonStore);
-  mountStoreDevtool('integrationSourceStore', useIntegrationSourceStore);
-  mountStoreDevtool('deploymentStore', useDeploymentStore);
-  mountStoreDevtool('settingsStore', useSettingsStore);
-  mountStoreDevtool('visualizationStore', useVisualizationStore);
-}
+// if (process.env.NODE_ENV === 'development') {
+//   mountStoreDevtool('integrationJsonStore', useIntegrationJsonStore);
+//   mountStoreDevtool('integrationSourceStore', useIntegrationSourceStore);
+//   mountStoreDevtool('deploymentStore', useDeploymentStore);
+//   mountStoreDevtool('settingsStore', useSettingsStore);
+//   mountStoreDevtool('visualizationStore', useVisualizationStore);
+// }
 
 export default useIntegrationJsonStore;

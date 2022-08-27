@@ -124,7 +124,7 @@ const Dashboard = () => {
       </KaotoDrawer>
 
       {/* CONSOLE LOG */}
-      <Banner isSticky={true} screenReaderText="Status">
+      <Banner isSticky={true}>
         <Flex flexWrap={{ default: 'nowrap' }}>
           <FlexItem>
             <a

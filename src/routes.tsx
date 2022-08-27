@@ -2,7 +2,7 @@ import { Dashboard } from './layout/Dashboard';
 import { NotFound } from './layout/NotFound';
 import { accessibleRouteChangeHandler } from './utils';
 import { useDocumentTitle } from './utils';
-import * as React from 'react';
+import { ComponentType, ReactElement, useEffect } from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { LastLocationProvider, useLastLocation } from 'react-router-last-location';
 
@@ -10,7 +10,7 @@ let routeFocusTimer: number;
 
 export interface IAppRoute {
   label?: string; // Excluding the label will exclude the route from the nav sidebar in AppLayout
-  component: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
+  component: ComponentType<RouteComponentProps<any>> | ComponentType<any>;
   exact?: boolean;
   path: string;
   title: string;
@@ -19,7 +19,7 @@ export interface IAppRoute {
 }
 
 export interface IAppRouteGroup {
-  component: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
+  component: ComponentType<RouteComponentProps<any>> | ComponentType<any>;
   path: string;
   title: string;
   label?: string;
@@ -43,7 +43,7 @@ const routes: AppRouteConfig[] = [
 // sends focus directly to relevant content
 const useA11yRouteChange = (isAsync: boolean) => {
   const lastNavigation = useLastLocation();
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isAsync && lastNavigation !== null) {
       routeFocusTimer = accessibleRouteChangeHandler();
     }
@@ -79,7 +79,7 @@ const flattenedRoutes: IAppRoute[] = routes.reduce(
   [] as IAppRoute[]
 );
 
-const AppRoutes = (): React.ReactElement => {
+const AppRoutes = (): ReactElement => {
   return (
     <LastLocationProvider>
       <Switch>

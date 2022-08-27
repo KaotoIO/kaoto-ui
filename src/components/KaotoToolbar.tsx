@@ -361,7 +361,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
         }}
         isModalOpen={isConfirmationModalOpen}
         modalBody={
-          'This will clear the whole canvas, and you will lose your current work. Are you sure you would' +
+          'This will clear the whole canvas and settings, and you will lose your current work. Are you sure you would' +
           ' like to proceed?'
         }
       />

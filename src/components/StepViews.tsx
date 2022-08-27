@@ -105,6 +105,8 @@ const StepViews = ({
     setActiveTabKey(tabIndex);
   };
 
+  console.log(__webpack_share_scopes__.default);
+
   return (
     <>
       <DrawerHead>
