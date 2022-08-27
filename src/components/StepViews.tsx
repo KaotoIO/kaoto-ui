@@ -1,18 +1,16 @@
+import {
+  fetchDeployment,
+  fetchIntegrationSourceCode,
+  startDeployment,
+  stopDeployment,
+} from '../api';
 import { useIntegrationJsonStore } from '../store';
-import { IStepProps } from '../types';
 import { findStepIdxWithUUID } from '../utils';
 import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
-import {
-  getKaotoDeployment,
-  getKaotoIntegrationSource,
-  IStepExtensionApi,
-  onKaotoButtonClicked,
-  startKaotoDeployment,
-  stopKaotoDeployment,
-} from './StepExtensionApi';
 import { dynamicImport } from './import';
+import { IIntegration, IKaotoApi, IStepProps } from '@kaoto';
 import {
   AlertVariant,
   Button,
@@ -57,7 +55,6 @@ const StepViews = ({
   }>({});
   const [stepPropertyModel, setStepPropertyModel] = useState<{ [label: string]: any }>({});
   const { replaceStep } = useIntegrationJsonStore((state) => state);
-
   const { addAlert } = useAlert() || {};
 
   const alertKaoto = (title: string, body?: string, variant?: string) => {
@@ -104,33 +101,6 @@ const StepViews = ({
     setStepPropertyModel(tempModelObject);
   }, [step.parameters, isPanelExpanded]);
 
-  const kaotoApi: IStepExtensionApi = {
-    getDeployment: getKaotoDeployment,
-    getIntegrationSource: getKaotoIntegrationSource,
-    getStep: () => {
-      return step;
-    },
-    notifyKaoto: alertKaoto,
-    onKaotoButtonClicked,
-    saveConfig,
-    startDeployment: startKaotoDeployment,
-    step,
-    stepInitialValues: () => {
-      let tmpValues = {};
-      step.parameters?.map((p) => {
-        const paramKey = p.title;
-        // @ts-ignore
-        tmpValues[paramKey] = p.value ?? p.defaultValue;
-      });
-      return tmpValues;
-    },
-    stopDeployment: stopKaotoDeployment,
-    updateStep: (newStep: IStepProps) => {
-      // update state of step
-      replaceStep(newStep, currentIdx);
-    },
-  };
-
   const handleTabClick = (_event: any, tabIndex: any) => {
     setActiveTabKey(tabIndex);
   };
@@ -153,7 +123,7 @@ const StepViews = ({
         </DrawerActions>
       </DrawerHead>
       <DrawerPanelBody>
-        <Tabs activeKey={activeTabKey} onSelect={handleTabClick}>
+        <Tabs activeKey={activeTabKey} onSelect={handleTabClick} mountOnEnter>
           {/** If the step does not have a default view, provide one */}
           {!hasDetailView && (
             <Tab
@@ -190,10 +160,48 @@ const StepViews = ({
             </Tab>
           )}
 
-          {/** Show rest of views provided **/}
           {views?.length! > 0 &&
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
+
+              let tmpValues = {};
+              step.parameters?.map((p) => {
+                const paramKey = p.title;
+                // @ts-ignore
+                tmpValues[paramKey] = p.value ?? p.defaultValue;
+              });
+
+              const kaotoApi: IKaotoApi = {
+                getDeployment: (name: string, namespace?: string): Promise<string | unknown> => {
+                  return fetchDeployment(name, namespace).then((deployment: string | unknown) => {
+                    return deployment;
+                  });
+                },
+                getIntegrationSource: (integration: IIntegration) => {
+                  return fetchIntegrationSourceCode(integration).then((sourceCode) => {
+                    return sourceCode;
+                  });
+                },
+                notifyKaoto: alertKaoto,
+                startDeployment: (
+                  integration: any,
+                  name: string,
+                  namespace?: string
+                ): Promise<string> => {
+                  return startDeployment(integration, name, namespace).then((res) => {
+                    return res;
+                  });
+                },
+                step,
+                stepParams: tmpValues,
+                stopDeployment: (name: string) => {
+                  return stopDeployment(name).then((res) => {
+                    return res;
+                  });
+                },
+                updateStep: (newStep: IStepProps) => replaceStep(newStep, currentIdx),
+                updateStepParams: saveConfig,
+              };
 
               return (
                 <Tab

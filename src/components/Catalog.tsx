@@ -1,8 +1,8 @@
 import { fetchCatalogSteps } from '../api';
 import { useDeploymentStore, useSettingsStore } from '../store';
-import { IStepProps } from '../types';
 import { shorten, truncateString, usePrevious } from '../utils';
 import './Catalog.css';
+import { IStepProps } from '@kaoto';
 import {
   AlertVariant,
   Bullseye,
@@ -111,7 +111,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
      */
     return items.filter((item) => {
       if (isSelected === item.type) {
-        return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        return item.name.toLowerCase().indexOf(query.trim().toLowerCase()) > -1;
       } else {
         return false;
       }

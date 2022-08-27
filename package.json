@@ -36,7 +36,6 @@
     "@patternfly/react-table": "^4.93.1",
     "@rhoas/app-services-ui-shared": "^0.16.0",
     "ajv": "^8.8.2",
-    "dts-loader": "^0.1.7",
     "immer": "^9.0.15",
     "monaco-editor": "^0.33.0",
     "monaco-editor-webpack-plugin": "^7.0.1",
@@ -52,7 +51,7 @@
     "uniforms": "^3.6.2",
     "uniforms-bridge-json-schema": "^3.9.1",
     "uniforms-patternfly": "^4.7.5",
-    "use-debounce": "8.0.1",
+    "use-debounce": "8.0.3",
     "uuid": "8.3.2",
     "web-vitals": "2.1.4",
     "zustand": "^4.0.0-rc.1"
@@ -117,8 +116,7 @@
     "webpack-cli": "4.10.0",
     "webpack-dev-server": "4.9.2",
     "webpack-merge": "^5.8.0",
-    "whatwg-fetch": "^3.6.2",
-    "yaml-loader": "0.8.0"
+    "whatwg-fetch": "^3.6.2"
   },
   "lint-staged": {
     "*.js": "eslint --cache --fix",

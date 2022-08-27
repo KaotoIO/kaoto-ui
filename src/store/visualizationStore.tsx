@@ -1,4 +1,4 @@
-import { IVizStepPropsEdge, IVizStepPropsNode } from '../types';
+import { IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto';
 import {
   Connection,
   EdgeChange,

@@ -1,4 +1,4 @@
-import { IDeployment } from '../types';
+import { IDeployment } from "@kaoto";
 import create from 'zustand';
 
 interface IDeploymentStore {
