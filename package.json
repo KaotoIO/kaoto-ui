@@ -46,7 +46,6 @@
     "react-monaco-editor": "^0.48.0",
     "react-router-dom": "5.2.1",
     "react-router-last-location": "2.0.1",
-    "react-shadow": "19.0.3",
     "tar-webpack-plugin": "^0.1.1",
     "uniforms": "^3.6.2",
     "uniforms-bridge-json-schema": "^3.9.1",

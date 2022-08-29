@@ -14,18 +14,13 @@ const isPatternflyStyles = (stylesheet) =>
   stylesheet.includes('@patternfly/react-styles/css/') ||
   stylesheet.includes('@patternfly/react-core/') ||
   stylesheet.includes('@patternfly/react-code-editor') ||
-  // stylesheet.includes('@patternfly/patternfly/patternfly-theme-dark.css') ||
-  // stylesheet.includes('@patternfly/patternfly/patternfly.css') ||
-  // stylesheet.includes('@patternfly/react-core/dist/styles/base.css') ||
   stylesheet.includes('monaco-editor-webpack-plugin');
 
 const deps = require('./package.json').dependencies;
 
 module.exports = () => {
   return {
-    entry: {
-      app: path.resolve(__dirname, 'src', 'index.tsx'),
-    },
+    entry: path.resolve(__dirname, 'src', 'index.tsx'),
     module: {
       rules: [
         {
@@ -138,15 +133,6 @@ module.exports = () => {
             requiredVersion: peerDependencies['@patternfly/react-core'],
             strictVersion: true,
           },
-          // '@rhoas/app-services-ui-shared': {
-          //   eager: true,
-          //   singleton: true,
-          //   requiredVersion: dependencies['@rhoas/app-services-ui-shared'],
-          // },
-          // '@patternfly/quickstarts': {
-          //   singleton: true,
-          //   requiredVersion: '*',
-          // },
         },
       }),
     ],
