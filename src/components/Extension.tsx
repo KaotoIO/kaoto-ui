@@ -8,7 +8,6 @@ import {
   Suspense,
   useEffect,
 } from 'react';
-import root from 'react-shadow';
 
 type Props = PropsWithChildren<{
   name: string;
@@ -39,9 +38,7 @@ export function Extension(props: Props) {
 
   return (
     <StepErrorBoundary>
-      <Suspense fallback={loading}>
-        <root.div>{children}</root.div>
-      </Suspense>
+      <Suspense fallback={loading}>{children}</Suspense>
     </StepErrorBoundary>
   );
 }

@@ -3,7 +3,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const { dependencies, federatedModuleName } = require('./package.json');
+const { dependencies, federatedModuleName, peerDependencies } = require('./package.json');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
@@ -11,7 +11,6 @@ const TarWebpackPlugin = require('tar-webpack-plugin').default;
 const CopyPlugin = require('copy-webpack-plugin');
 
 const isPatternflyStyles = (stylesheet) =>
-  stylesheet.includes('@patternfly/react-styles/css/') ||
   stylesheet.includes('@patternfly/react-core/') ||
   stylesheet.includes('@patternfly/react-code-editor') ||
   stylesheet.includes('monaco-editor-webpack-plugin');
@@ -20,9 +19,7 @@ const deps = require('./package.json').dependencies;
 
 module.exports = () => {
   return {
-    entry: {
-      app: path.resolve(__dirname, 'src', 'index.tsx'),
-    },
+    entry: path.resolve(__dirname, 'src', 'index.tsx'),
     module: {
       rules: [
         {
@@ -113,27 +110,26 @@ module.exports = () => {
           react: {
             eager: true,
             singleton: true,
-            requiredVersion: dependencies['react'],
+            requiredVersion: peerDependencies['react'],
           },
           'react-dom': {
             eager: true,
             singleton: true,
-            requiredVersion: dependencies['react-dom'],
+            requiredVersion: peerDependencies['react-dom'],
           },
           'react-router-dom': {
-            singleton: true,
-            eager: true,
             requiredVersion: dependencies['react-router-dom'],
           },
-          // '@rhoas/app-services-ui-shared': {
-          //   eager: true,
-          //   singleton: true,
-          //   requiredVersion: dependencies['@rhoas/app-services-ui-shared'],
-          // },
-          // '@patternfly/quickstarts': {
-          //   singleton: true,
-          //   requiredVersion: '*',
-          // },
+          '@patternfly/patternfly/': {
+            singleton: true,
+            eager: true,
+            requiredVersion: peerDependencies['@patternfly/patternfly'],
+          },
+          '@patternfly/react-core/': {
+            singleton: true,
+            eager: true,
+            requiredVersion: peerDependencies['@patternfly/react-core'],
+          },
         },
       }),
     ],

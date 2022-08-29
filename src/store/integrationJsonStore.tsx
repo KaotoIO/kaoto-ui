@@ -10,6 +10,7 @@ interface IIntegrationJsonStore {
   addStep: (newStep: IStepProps) => void;
   deleteIntegration: () => void;
   deleteStep: (index: number) => void;
+  deleteSteps: () => void;
   insertStep: (newStep: IStepProps, index: number) => void;
   integrationJson: IIntegration;
   updateIntegration: (newInt?: any) => void;
@@ -66,6 +67,14 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) 
       integrationJson: {
         ...state.integrationJson,
         steps: stepsWithNewUuids,
+      },
+    }));
+  },
+  deleteSteps: () => {
+    set((state) => ({
+      integrationJson: {
+        ...state.integrationJson,
+        steps: [],
       },
     }));
   },

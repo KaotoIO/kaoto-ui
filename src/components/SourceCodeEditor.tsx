@@ -19,7 +19,9 @@ interface ISourceCodeEditor {
 const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<EditorDidMount['editor'] | null>(null);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
-  const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
+  const { deleteSteps, integrationJson, updateIntegration } = useIntegrationJsonStore(
+    (state) => state
+  );
   const { settings } = useSettingsStore();
   const previousJson = usePrevious(integrationJson);
 
@@ -69,6 +71,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
 
   const clearAction = () => {
     setSourceCode('');
+    deleteSteps();
   };
 
   const undoAction = () => {

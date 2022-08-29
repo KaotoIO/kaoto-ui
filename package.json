@@ -28,25 +28,24 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@patternfly/patternfly": "^4.206.3",
-    "@patternfly/react-code-editor": "^4.62.3",
-    "@patternfly/react-core": "^4.231.8",
-    "@patternfly/react-icons": "4.72.3",
-    "@patternfly/react-log-viewer": "^4.69.1",
-    "@patternfly/react-table": "^4.93.1",
+    "@patternfly/patternfly": "4.206.3",
+    "@patternfly/react-code-editor": "4.43.16",
+    "@patternfly/react-core": "4.231.8",
+    "@patternfly/react-icons": "4.82.8",
+    "@patternfly/react-log-viewer": "4.76.8",
+    "@patternfly/react-table": "4.100.8",
     "@rhoas/app-services-ui-shared": "^0.16.0",
     "ajv": "^8.8.2",
     "immer": "^9.0.15",
     "monaco-editor": "^0.33.0",
     "monaco-editor-webpack-plugin": "^7.0.1",
-    "react": "18.0.0",
-    "react-dom": "^18.2.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-error-boundary": "3.1.4",
     "react-flow-renderer": "10.3.6",
     "react-monaco-editor": "^0.48.0",
     "react-router-dom": "5.3.3",
     "react-router-last-location": "2.0.1",
-    "react-shadow": "19.0.3",
     "tar-webpack-plugin": "^0.1.1",
     "uniforms": "^3.6.2",
     "uniforms-bridge-json-schema": "^3.9.1",
@@ -71,8 +70,8 @@
     "@testing-library/user-event": "^14.2.1",
     "@trivago/prettier-plugin-sort-imports": "^3.3.0",
     "@types/jest": "^27.4.1",
-    "@types/react": "18.0.0",
-    "@types/react-dom": "18.0.3",
+    "@types/react": "18.0.17",
+    "@types/react-dom": "18.0.6",
     "@types/react-router-dom": "5.3.3",
     "@types/testing-library__jest-dom": "5.14.5",
     "@types/uuid": "8.3.4",
@@ -118,13 +117,19 @@
     "webpack-merge": "^5.8.0",
     "whatwg-fetch": "^3.6.2"
   },
+  "peerDependencies": {
+    "@patternfly/patternfly": "4.206.3",
+    "@patternfly/react-core": "4.231.8",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
   "lint-staged": {
     "*.js": "eslint --cache --fix",
     "*.{tsx,ts}": "prettier --write",
     "*.tsx": "eslint --ext .tsx"
   },
   "resolutions": {
-    "@types/react": "18.0.0"
+    "@types/react": "18.0.17"
   },
   "bugs": {
     "url": "https://github.com/KaotoIO/kaoto-ui/issues"

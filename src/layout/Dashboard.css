@@ -2,6 +2,10 @@
     padding: 6px 1rem;
 }
 
+#kaoto-left-drawer {
+    height: calc(83vh);
+}
+
 .status-container {
     display: flex;
     justify-content: center;
