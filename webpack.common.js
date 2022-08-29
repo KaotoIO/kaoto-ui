@@ -11,7 +11,6 @@ const TarWebpackPlugin = require('tar-webpack-plugin').default;
 const CopyPlugin = require('copy-webpack-plugin');
 
 const isPatternflyStyles = (stylesheet) =>
-  stylesheet.includes('@patternfly/react-styles/css/') ||
   stylesheet.includes('@patternfly/react-core/') ||
   stylesheet.includes('@patternfly/react-code-editor') ||
   stylesheet.includes('monaco-editor-webpack-plugin');
@@ -119,7 +118,6 @@ module.exports = () => {
             requiredVersion: peerDependencies['react-dom'],
           },
           'react-router-dom': {
-            eager: true,
             requiredVersion: dependencies['react-router-dom'],
           },
           '@patternfly/patternfly/': {
@@ -131,7 +129,6 @@ module.exports = () => {
             singleton: true,
             eager: true,
             requiredVersion: peerDependencies['@patternfly/react-core'],
-            strictVersion: true,
           },
         },
       }),

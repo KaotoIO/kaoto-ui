@@ -1,9 +1,9 @@
-// import { useDeploymentStore } from './deploymentStore';
-// import { useIntegrationSourceStore } from './integrationSourceStore';
-// import { useSettingsStore } from './settingsStore';
-// import { useVisualizationStore } from './visualizationStore';
+import { useDeploymentStore } from './deploymentStore';
+import { useIntegrationSourceStore } from './integrationSourceStore';
+import { useSettingsStore } from './settingsStore';
+import { useVisualizationStore } from './visualizationStore';
 import { IIntegration, IStepProps, IViewProps } from '@kaoto';
-// import { mountStoreDevtool } from 'simple-zustand-devtools';
+import { mountStoreDevtool } from 'simple-zustand-devtools';
 import create from 'zustand';
 
 interface IIntegrationJsonStore {
@@ -124,12 +124,12 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) 
   views: [],
 }));
 
-// if (process.env.NODE_ENV === 'development') {
-//   mountStoreDevtool('integrationJsonStore', useIntegrationJsonStore);
-//   mountStoreDevtool('integrationSourceStore', useIntegrationSourceStore);
-//   mountStoreDevtool('deploymentStore', useDeploymentStore);
-//   mountStoreDevtool('settingsStore', useSettingsStore);
-//   mountStoreDevtool('visualizationStore', useVisualizationStore);
-// }
+if (process.env.NODE_ENV === 'development') {
+  mountStoreDevtool('integrationJsonStore', useIntegrationJsonStore);
+  mountStoreDevtool('integrationSourceStore', useIntegrationSourceStore);
+  mountStoreDevtool('deploymentStore', useDeploymentStore);
+  mountStoreDevtool('settingsStore', useSettingsStore);
+  mountStoreDevtool('visualizationStore', useVisualizationStore);
+}
 
 export default useIntegrationJsonStore;
