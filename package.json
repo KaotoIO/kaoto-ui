@@ -52,7 +52,7 @@
     "uniforms-patternfly": "^4.7.5",
     "use-debounce": "8.0.3",
     "uuid": "8.3.2",
-    "web-vitals": "2.1.4",
+    "web-vitals": "3.0.0",
     "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
@@ -65,7 +65,7 @@
     "@storybook/node-logger": "^6.5.8",
     "@storybook/react": "^6.5.9",
     "@testing-library/dom": "^8.14.0",
-    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.2.1",
     "@trivago/prettier-plugin-sort-imports": "^3.3.0",
