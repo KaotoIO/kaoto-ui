@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@patternfly/patternfly": "4.206.3",
-    "@patternfly/react-code-editor": "4.43.16",
+    "@patternfly/react-code-editor": "4.72.8",
     "@patternfly/react-core": "4.231.8",
     "@patternfly/react-icons": "4.82.8",
     "@patternfly/react-log-viewer": "4.76.8",
@@ -52,7 +52,7 @@
     "uniforms-patternfly": "^4.7.5",
     "use-debounce": "8.0.3",
     "uuid": "8.3.2",
-    "web-vitals": "2.1.4",
+    "web-vitals": "3.0.0",
     "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
