@@ -56,7 +56,7 @@
     "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
-    "@4tw/cypress-drag-drop": "^2.2.0",
+    "@4tw/cypress-drag-drop": "^2.2.1",
     "@storybook/addon-actions": "^6.5.9",
     "@storybook/addon-docs": "^6.5.9",
     "@storybook/addon-links": "^6.5.9",
