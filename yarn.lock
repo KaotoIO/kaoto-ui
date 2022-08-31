@@ -1768,18 +1768,18 @@
   resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.206.3.tgz#cdf3f42df06cd84f2a25bd5bf07e6e69d5d7af84"
   integrity sha512-2Ar6qaZAozyx/KBzlqqskoEf45HUZIbk668qFwYHWaTkuucYw/usoxw03OwnGCS4GgBlMf06X2uonHgQLhVT8A==
 
-"@patternfly/react-code-editor@4.43.16":
-  version "4.43.16"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-code-editor/-/react-code-editor-4.43.16.tgz#d77f8a75e6cdb2ef7c643fe61e40b9d5c0fc4768"
-  integrity sha512-9YxSFbGME8vftm9U9sAm3LQfBWivx4IyMe6XpKG6adbPQWL029cE+LJGULcDcSpy9Y5c2p2Vh67WqKBVukU5lg==
+"@patternfly/react-code-editor@4.72.8":
+  version "4.72.8"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-code-editor/-/react-code-editor-4.72.8.tgz#1e2c1f80efce8a6f014bd0dfcb108011b10110e8"
+  integrity sha512-kDy3hU4/WyQJ30LRr3MGCrql8wpZN55ZRrjMihjWCpCA37EVjukKB5Jtyi8Ip4DyPuiL1z1j3jrV+Bza1LmxHg==
   dependencies:
-    "@patternfly/react-core" "^4.202.16"
-    "@patternfly/react-icons" "^4.53.16"
-    "@patternfly/react-styles" "^4.52.16"
+    "@patternfly/react-core" "^4.231.8"
+    "@patternfly/react-icons" "^4.82.8"
+    "@patternfly/react-styles" "^4.81.8"
     react-dropzone "9.0.0"
     tslib "^2.0.0"
 
-"@patternfly/react-core@4.231.8", "@patternfly/react-core@^4.202.16", "@patternfly/react-core@^4.231.8":
+"@patternfly/react-core@4.231.8", "@patternfly/react-core@^4.231.8":
   version "4.231.8"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.231.8.tgz#2f9de38ecdd2fc53c63aff55433984fcf93a5fe6"
   integrity sha512-2ClqlYCvSADppMfVfkUGIA/8XlO6jX8batoClXLxZDwqGoOfr61XyUgQ6SSlE4w60czoNeX4Nf6cfQKUH4RIKw==
@@ -1792,7 +1792,7 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-icons@4.82.8", "@patternfly/react-icons@^4.53.16", "@patternfly/react-icons@^4.82.8":
+"@patternfly/react-icons@4.82.8", "@patternfly/react-icons@^4.82.8":
   version "4.82.8"
   resolved "https://registry.npmjs.org/@patternfly/react-icons/-/react-icons-4.82.8.tgz"
   integrity sha512-cKixprTiMLZRe/+kmdZ5suvYb9ly9p1f/HjlcNiWBfsiA8ZDEPmxJnVdend/YsafelC8YC9QGcQf97ay5PNhcw==
@@ -1808,7 +1808,7 @@
     memoize-one "^5.1.0"
     resize-observer-polyfill "^1.5.1"
 
-"@patternfly/react-styles@^4.52.16", "@patternfly/react-styles@^4.81.8":
+"@patternfly/react-styles@^4.81.8":
   version "4.81.8"
   resolved "https://registry.npmjs.org/@patternfly/react-styles/-/react-styles-4.81.8.tgz"
   integrity sha512-Q5FiureSSCMIuz+KLMcEm1317TzbXcwmg2q5iNDRKyf/K+5CT6tJp0Wbtk3FlfRvzli4u/7YfXipahia5TL+tA==
@@ -1845,12 +1845,12 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@rhoas/app-services-ui-shared@^0.16.0":
-  version "0.16.0"
-  resolved "https://registry.npmjs.org/@rhoas/app-services-ui-shared/-/app-services-ui-shared-0.16.0.tgz"
-  integrity sha512-ESatm/+EDlwnOAu6cmb5vg1uxktbV0HEWVn3rWUgDfUKAQGSbHNXh2ZA1OkiQIAQOUnDs/vNQBUf7iUHeYTSPA==
+"@rhoas/app-services-ui-shared@^0.16.4":
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/@rhoas/app-services-ui-shared/-/app-services-ui-shared-0.16.4.tgz#6db859462c8ab4f4021c27df893a3087ee7e0ea2"
+  integrity sha512-IPYHD1fbXQmC7bP1C5Z3O9zmAiBUg87CAGUq6JAk9y7Gp3KZxFyCJ5YDNSkDDlUiCl9Dtqf5mnCMXB6HDVlkQw==
   dependencies:
-    tslib "2.3.1"
+    tslib "2.4.0"
 
 "@sinonjs/commons@^1.7.0":
   version "1.8.3"
@@ -13036,20 +13036,15 @@ tsconfig-paths@^4.0.0:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tslib@2.3.1:
-  version "2.3.1"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
-  integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
+tslib@2.4.0, tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.2.0, tslib@^2.3.1, tslib@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.npmjs.org/tslib/-/tslib-2.4.0.tgz"
+  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
 tslib@^1.8.1:
   version "1.14.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
-
-tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.2.0, tslib@^2.3.1, tslib@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-2.4.0.tgz"
-  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
 tsutils@^3.21.0:
   version "3.21.0"
@@ -13383,10 +13378,10 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
-use-debounce@8.0.3:
-  version "8.0.3"
-  resolved "https://registry.npmjs.org/use-debounce/-/use-debounce-8.0.3.tgz"
-  integrity sha512-BV7xuVy4LS0HtzHb23sDwAjfNjdBWlc4oyjJLcdCoVAjPv1+hroZYsCXX4VfRJT+8sLaqCftBOO8l7CMQtn9Gw==
+use-debounce@8.0.4:
+  version "8.0.4"
+  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-8.0.4.tgz#27e93b2f010bd0b8ad06e9fc7de891d9ee5d6b8e"
+  integrity sha512-fGqsYQzl8kLHF2QpQSgIwgOgJmnh6j5L6SIzQiHdLfwp3q1egUL3btq5Bg2SJysH6A0ILLgT2IqXZKoNJr0nFw==
 
 use-sync-external-store@1.2.0:
   version "1.2.0"
