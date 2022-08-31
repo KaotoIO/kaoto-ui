@@ -1768,18 +1768,18 @@
   resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.206.3.tgz#cdf3f42df06cd84f2a25bd5bf07e6e69d5d7af84"
   integrity sha512-2Ar6qaZAozyx/KBzlqqskoEf45HUZIbk668qFwYHWaTkuucYw/usoxw03OwnGCS4GgBlMf06X2uonHgQLhVT8A==
 
-"@patternfly/react-code-editor@4.43.16":
-  version "4.43.16"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-code-editor/-/react-code-editor-4.43.16.tgz#d77f8a75e6cdb2ef7c643fe61e40b9d5c0fc4768"
-  integrity sha512-9YxSFbGME8vftm9U9sAm3LQfBWivx4IyMe6XpKG6adbPQWL029cE+LJGULcDcSpy9Y5c2p2Vh67WqKBVukU5lg==
+"@patternfly/react-code-editor@4.72.8":
+  version "4.72.8"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-code-editor/-/react-code-editor-4.72.8.tgz#1e2c1f80efce8a6f014bd0dfcb108011b10110e8"
+  integrity sha512-kDy3hU4/WyQJ30LRr3MGCrql8wpZN55ZRrjMihjWCpCA37EVjukKB5Jtyi8Ip4DyPuiL1z1j3jrV+Bza1LmxHg==
   dependencies:
-    "@patternfly/react-core" "^4.202.16"
-    "@patternfly/react-icons" "^4.53.16"
-    "@patternfly/react-styles" "^4.52.16"
+    "@patternfly/react-core" "^4.231.8"
+    "@patternfly/react-icons" "^4.82.8"
+    "@patternfly/react-styles" "^4.81.8"
     react-dropzone "9.0.0"
     tslib "^2.0.0"
 
-"@patternfly/react-core@4.231.8", "@patternfly/react-core@^4.202.16", "@patternfly/react-core@^4.231.8":
+"@patternfly/react-core@4.231.8", "@patternfly/react-core@^4.231.8":
   version "4.231.8"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.231.8.tgz#2f9de38ecdd2fc53c63aff55433984fcf93a5fe6"
   integrity sha512-2ClqlYCvSADppMfVfkUGIA/8XlO6jX8batoClXLxZDwqGoOfr61XyUgQ6SSlE4w60czoNeX4Nf6cfQKUH4RIKw==
@@ -1792,7 +1792,7 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-icons@4.82.8", "@patternfly/react-icons@^4.53.16", "@patternfly/react-icons@^4.82.8":
+"@patternfly/react-icons@4.82.8", "@patternfly/react-icons@^4.82.8":
   version "4.82.8"
   resolved "https://registry.npmjs.org/@patternfly/react-icons/-/react-icons-4.82.8.tgz"
   integrity sha512-cKixprTiMLZRe/+kmdZ5suvYb9ly9p1f/HjlcNiWBfsiA8ZDEPmxJnVdend/YsafelC8YC9QGcQf97ay5PNhcw==
@@ -1808,7 +1808,7 @@
     memoize-one "^5.1.0"
     resize-observer-polyfill "^1.5.1"
 
-"@patternfly/react-styles@^4.52.16", "@patternfly/react-styles@^4.81.8":
+"@patternfly/react-styles@^4.81.8":
   version "4.81.8"
   resolved "https://registry.npmjs.org/@patternfly/react-styles/-/react-styles-4.81.8.tgz"
   integrity sha512-Q5FiureSSCMIuz+KLMcEm1317TzbXcwmg2q5iNDRKyf/K+5CT6tJp0Wbtk3FlfRvzli4u/7YfXipahia5TL+tA==
@@ -5123,10 +5123,10 @@ concat-stream@^1.5.0:
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-connect-history-api-fallback@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.npmjs.org/connect-history-api-fallback/-/connect-history-api-fallback-1.6.0.tgz"
-  integrity sha512-e54B99q/OUoH64zYYRf3HBP5z24G38h5D3qXu23JGRoigpX5Ss4r9ZnDk3g0Z8uQC2x2lPaJ+UlWBc1ZWBWdLg==
+connect-history-api-fallback@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/connect-history-api-fallback/-/connect-history-api-fallback-2.0.0.tgz#647264845251a0daf25b97ce87834cace0f5f1c8"
+  integrity sha512-U73+6lQFmfiNPrYbXqr6kZ1i1wiRqXnp2nhMsINseWXO8lDau0LGEffJ8kQi4EjLZympVgRdvqjAgiZ1tgzDDA==
 
 console-browserify@^1.1.0:
   version "1.2.0"
@@ -13666,10 +13666,10 @@ webpack-dev-middleware@^5.3.1:
     range-parser "^1.2.1"
     schema-utils "^4.0.0"
 
-webpack-dev-server@4.9.2:
-  version "4.9.2"
-  resolved "https://registry.npmjs.org/webpack-dev-server/-/webpack-dev-server-4.9.2.tgz"
-  integrity sha512-H95Ns95dP24ZsEzO6G9iT+PNw4Q7ltll1GfJHV4fKphuHWgKFzGHWi4alTlTnpk1SPPk41X+l2RB7rLfIhnB9Q==
+webpack-dev-server@4.10.1:
+  version "4.10.1"
+  resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-4.10.1.tgz#124ac9ac261e75303d74d95ab6712b4aec3e12ed"
+  integrity sha512-FIzMq3jbBarz3ld9l7rbM7m6Rj1lOsgq/DyLGMX/fPEB1UBUPtf5iL/4eNfhx8YYJTRlzfv107UfWSWcBK5Odw==
   dependencies:
     "@types/bonjour" "^3.5.9"
     "@types/connect-history-api-fallback" "^1.3.5"
@@ -13683,7 +13683,7 @@ webpack-dev-server@4.9.2:
     chokidar "^3.5.3"
     colorette "^2.0.10"
     compression "^1.7.4"
-    connect-history-api-fallback "^1.6.0"
+    connect-history-api-fallback "^2.0.0"
     default-gateway "^6.0.3"
     express "^4.17.3"
     graceful-fs "^4.2.6"
