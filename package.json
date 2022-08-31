@@ -34,7 +34,7 @@
     "@patternfly/react-icons": "4.82.8",
     "@patternfly/react-log-viewer": "4.76.8",
     "@patternfly/react-table": "4.100.8",
-    "@rhoas/app-services-ui-shared": "^0.16.0",
+    "@rhoas/app-services-ui-shared": "^0.16.4",
     "ajv": "^8.8.2",
     "immer": "^9.0.15",
     "monaco-editor": "^0.33.0",
