@@ -65,7 +65,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
 
   const { addAlert } = useAlert() || {};
 
-  // change in name should update local value
+  // change in name from elsewhere should update local value
   // otherwise, on edit it will show the old value
   useEffect(() => {
     setLocalName(settings.name);
@@ -224,6 +224,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
                   id="edit-integration-name"
                   type="text"
                   onChange={(val) => {
+                    // save to local state while typing
                     setLocalName(val);
                     if (isNameValidCheck(val)) {
                       setNameValidation('success');
@@ -236,10 +237,14 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
                   validated={nameValidation}
                   aria-invalid={nameValidation === 'error'}
                   onKeyUp={(e) => {
+                    // allow users to save by pressing enter
                     if (e.key !== 'Enter') return;
                     if (isNameValidCheck(localName)) {
                       setIsEditingName(false);
-                      setSettings({ ...settings, name: localName });
+                      // only issue change if different from current settings
+                      if (localName !== settings.name) {
+                        setSettings({ ...settings, name: localName });
+                      }
                     }
                   }}
                 />
@@ -249,7 +254,10 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
                   onClick={() => {
                     if (isNameValidCheck(localName)) {
                       setIsEditingName(false);
-                      setSettings({ ...settings, name: localName });
+                      // only issue change if different from current settings
+                      if (localName !== settings.name) {
+                        setSettings({ ...settings, name: localName });
+                      }
                     }
                   }}
                   aria-disabled={nameValidation === 'error'}
@@ -305,31 +313,12 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
                 tabIndex={0}
                 variant="primary"
                 data-testid={'toolbar-deploy-start-btn'}
-                // icon={<PlayIcon />}
                 onClick={handleDeployStartClick}
               >
                 Deploy
               </Button>
             </Tooltip>
           </ToolbarItem>
-
-          {/* DELETE/CLEAR BUTTON */}
-          {/*<ToolbarItem>*/}
-          {/*  <Tooltip content={<div>Clear</div>} position={'bottom'}>*/}
-          {/*    <Button*/}
-          {/*      tabIndex={0}*/}
-          {/*      variant="link"*/}
-          {/*      data-testid={'toolbar-delete-btn'}*/}
-          {/*      icon={<TrashIcon />}*/}
-          {/*      onClick={() => {*/}
-          {/*        // verify with user first*/}
-          {/*        setIsConfirmationModalOpen(true);*/}
-          {/*      }}*/}
-          {/*    />*/}
-          {/*  </Tooltip>*/}
-          {/*</ToolbarItem>*/}
-
-          {/*<ToolbarItem variant="separator" />*/}
 
           {/* KEBAB DROPDOWN MENU */}
           <ToolbarItem variant="overflow-menu">

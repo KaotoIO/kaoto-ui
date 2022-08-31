@@ -13,9 +13,9 @@ interface IIntegrationJsonStore {
   deleteSteps: () => void;
   insertStep: (newStep: IStepProps, index: number) => void;
   integrationJson: IIntegration;
-  updateIntegration: (newInt?: any) => void;
   replaceStep: (newStep: IStepProps, oldStepIndex?: number) => void;
   setViews: (views: IViewProps[]) => void;
+  updateIntegration: (newInt?: any) => void;
   views: IViewProps[];
 }
 
