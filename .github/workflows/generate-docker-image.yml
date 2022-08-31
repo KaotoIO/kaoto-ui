@@ -15,6 +15,12 @@ jobs:
   build:
     name: 👩🏼‍🏭 Build Docker Image 👩🏼‍🏭
     runs-on: ubuntu-latest
+    services:
+      kaoto:
+        image: kaotoio/backend:main
+        ports:
+        # will assign a random free host port
+          - 8081/tcp
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -42,12 +48,30 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
         env:
           username: ${{ secrets.DOCKER_USERNAME }}
-        if: ${{env.username != ''}}
-      - name: Build and push
-        uses: docker/build-push-action@v2
+      - name: Build to test
+        uses: docker/build-push-action@v3
         with:
-          push: ${{ github.event_name != 'pull_request' }}
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          push: false
+      - name: Run built image
+        if: ${{ github.event_name == 'pull_request' }}
+        run: docker run -d --rm -e KAOTO_API="http://localhost:8081" --name kaoto-ui kaotoio/frontend:pr-${{ github.event.pull_request.number }}
+      - name: Check health
+        uses: stringbean/docker-healthcheck-action@v1
+        with:
+          container: kaoto-ui
+          wait-time: 50
+          require-status: running
+          require-healthy: true
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+

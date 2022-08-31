@@ -18,6 +18,6 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 8080
 
-HEALTHCHECK --interval=3s --start-period=10s CMD curl --fail http://localhost/ || exit 1
+HEALTHCHECK --interval=3s --start-period=10s CMD curl --fail http://localhost:8080/ || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
