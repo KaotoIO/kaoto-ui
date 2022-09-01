@@ -74,7 +74,11 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   return (
     <>
       {data.step?.UUID ? (
-        <div className={`stepNode`} onDrop={onDropReplace} data-testid={`viz-step-${data.label}`}>
+        <div
+          className={`stepNode`}
+          onDrop={onDropReplace}
+          data-testid={`viz-step-${data.step.name}`}
+        >
           {/* LEFT EDGE */}
           {data.step.type !== 'END' && !isLastNode && (
             <Handle

@@ -5,6 +5,6 @@ describe('visualization', () => {
   });
 
   it('loads the visualization canvas', () => {
-    cy.get('[data-testid="react-flow-wrapper"]').should('exist');
+    cy.get('[data-testid="react-flow-wrapper"]').should('be.visible');
   });
 });

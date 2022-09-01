@@ -14,20 +14,19 @@ export interface IAppearanceModal {
  */
 export const AppearanceModal = ({ handleCloseModal, isModalOpen }: IAppearanceModal) => {
   return (
-    <div className={'appearance-modal'} data-testid={'appearance-modal'}>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        title="Appearance Settings"
-        variant={ModalVariant.small}
-      >
-        <br />
-        <Form>
-          <FormSection title="Light/Dark Mode" titleElement="h2">
-            <HeaderTools />
-          </FormSection>
-        </Form>
-      </Modal>
-    </div>
+    <Modal
+      isOpen={isModalOpen}
+      onClose={handleCloseModal}
+      title="Appearance Settings"
+      data-testid={'appearance-modal'}
+      variant={ModalVariant.small}
+    >
+      <br />
+      <Form>
+        <FormSection title="Light/Dark Mode" titleElement="h2">
+          <HeaderTools />
+        </FormSection>
+      </Form>
+    </Modal>
   );
 };
