@@ -8,12 +8,9 @@ describe('3 step integration', () => {
     cy.get('.stepNode').contains('ADD A STEP').click({ force: true });
     const dataTransfer = new DataTransfer();
     cy.get('#stepSearch').type('timer');
-    cy.get(':nth-child(2) > .pf-c-card > .pf-l-grid > .pf-m-7-col > .pf-c-card__body').trigger(
-      'dragstart',
-      {
-        dataTransfer,
-      }
-    );
+    cy.get('[data-testid="catalog-step-timer-source"]').trigger('dragstart', {
+      dataTransfer,
+    });
     cy.get('.stepNode').trigger('drop', {
       dataTransfer,
     });

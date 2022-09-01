@@ -1,7 +1,7 @@
+import './HeaderTools.css';
 import { PageHeaderTools, Switch } from '@patternfly/react-core';
 import { MoonIcon, SunIcon } from '@patternfly/react-icons';
 import { useEffect, useState } from 'react';
-import './HeaderTools.css';
 
 const THEME_DARK_CLASS = 'pf-theme-dark';
 const LOCAL_STORAGE_THEME_KEY = 'KAOTO_UI_THEME_IS_LIGHT';
@@ -33,7 +33,13 @@ export const HeaderTools = () => {
   return (
     <PageHeaderTools className="header-tools">
       <MoonIcon size="md" />
-      <Switch aria-label="theme-switch" className="switch-theme" isChecked={isLightTheme} onChange={onToggleSwitch}/>
+      <Switch
+        aria-label="theme-switch"
+        className="switch-theme"
+        isChecked={isLightTheme}
+        onChange={onToggleSwitch}
+        data-testid={'appearance--theme-switch'}
+      />
       <SunIcon size="md" color="var(--pf-global--palette--gold-400)" />
     </PageHeaderTools>
   );

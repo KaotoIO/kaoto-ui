@@ -1,12 +1,13 @@
-import { fetchIntegrationJson, fetchViews } from '../api';
+import { fetchViews } from '../api';
+import { useIntegrationJsonStore, useVisualizationStore } from '../store';
+import { findStepIdxWithUUID, truncateString } from '../utils';
 import {
-  useIntegrationJsonStore,
-  useIntegrationSourceStore,
-  useSettingsStore,
-  useVisualizationStore,
-} from '../store';
-import { findStepIdxWithUUID, truncateString, usePrevious } from '../utils';
-import { KaotoDrawer, PlusButtonEdge, StepErrorBoundary, StepViews, VisualizationStep } from './';
+  KaotoDrawer,
+  PlusButtonEdge,
+  StepErrorBoundary,
+  VisualizationStepViews,
+  VisualizationStep,
+} from './';
 import './Visualization.css';
 import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -34,15 +35,16 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({ name: '', type: '' });
-  const sourceCode = useIntegrationSourceStore((state) => state.sourceCode);
-  const { deleteStep, integrationJson, replaceStep, setViews, updateIntegration } =
-    useIntegrationJsonStore();
-  const settings = useSettingsStore((state) => state.settings);
+  const { deleteStep, integrationJson, replaceStep, setViews } = useIntegrationJsonStore();
   const { edges, nodes, deleteNode, onEdgesChange, onNodesChange, setEdges, setNodes } =
     useVisualizationStore();
 
   const previousIntegrationJson = useRef(integrationJson);
-  const previousSettings = usePrevious(settings);
+
+  // initial loading of visualization steps
+  useEffect(() => {
+    prepareAndSetVizDataSteps(integrationJson.steps.slice());
+  }, []);
 
   /**
    * Check for changes to integrationJson,
@@ -60,27 +62,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
     previousIntegrationJson.current = integrationJson;
   }, [integrationJson]);
-
-  // checks for changes to settings (e.g. dsl, name, namespace)
-  useEffect(() => {
-    if (settings === previousSettings) return;
-    fetchIntegrationJson(sourceCode, settings.dsl)
-      .then((newIntegration) => {
-        updateIntegration({
-          ...newIntegration,
-          metadata: { ...settings, ...newIntegration.metadata },
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-
-    // update views in case DSL change results in views change
-    // i.e. CamelRoute -> KameletBinding results in loss of incompatible steps
-    fetchViews(integrationJson.steps).then((newViews) => {
-      setViews(newViews);
-    });
-  }, [settings]);
 
   const nodeTypes = useMemo(() => ({ step: VisualizationStep }), []);
   const edgeTypes = useMemo(
@@ -280,7 +261,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         isExpanded={isPanelExpanded}
         isResizable={true}
         panelContent={
-          <StepViews
+          <VisualizationStepViews
             step={selectedStep}
             isPanelExpanded={isPanelExpanded}
             deleteStep={handleDeleteStep}
