@@ -136,12 +136,14 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
   const kebabItems = [
     <DropdownItem
       key="settings"
+      data-testid={'kaotoToolbar-kebab__settings'}
       onClick={() => setExpanded({ ...expanded, settingsModal: !expanded.settingsModal })}
     >
       Settings
     </DropdownItem>,
     <DropdownItem
       key="appearance"
+      data-testid={'kaotoToolbar-kebab__appearance'}
       onClick={() => setExpanded({ ...expanded, appearanceModal: !expanded.appearanceModal })}
     >
       Appearance

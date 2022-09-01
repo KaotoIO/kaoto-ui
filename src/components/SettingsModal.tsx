@@ -113,6 +113,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
           addAlert &&
             addAlert({
               title: 'Saved Settings',
+              dataTestId: 'settings-modal--alert__success',
               variant: AlertVariant.success,
               description: 'Configuration settings saved successfully.',
             });
@@ -124,6 +125,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
         addAlert &&
           addAlert({
             title: 'Save Settings Unsuccessful',
+            dataTestId: 'settings-modal--alert__danger',
             variant: AlertVariant.danger,
             description: 'Something went wrong, please try again later.',
           });
@@ -133,141 +135,158 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   };
 
   return (
-    <div className={'settings-modal'} data-testid={'settings-modal'}>
-      <Modal
-        actions={[
-          <Button
-            key="confirm"
-            variant="primary"
-            onClick={onSave}
-            isDisabled={namespaceValidation === 'error' || nameValidation === 'error'}
-          >
-            Save
-          </Button>,
-          <Button key="cancel" variant="link" onClick={onClose}>
-            Cancel
-          </Button>,
-        ]}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        title="Settings"
-        variant={ModalVariant.small}
-      >
-        <Form>
-          <FormGroup
-            fieldId="integration-name"
-            helperTextInvalid="Must be lowercase and alphanumeric (dashes allowed)"
+    <Modal
+      actions={[
+        <Button
+          key="confirm"
+          variant="primary"
+          data-testid={'settings-modal--save'}
+          onClick={onSave}
+          isDisabled={namespaceValidation === 'error' || nameValidation === 'error'}
+        >
+          Save
+        </Button>,
+        <Button
+          key="cancel"
+          variant="link"
+          onClick={onClose}
+          data-testid={'settings-modal--cancel'}
+        >
+          Cancel
+        </Button>,
+      ]}
+      data-testid={'settings-modal'}
+      isOpen={isModalOpen}
+      onClose={handleCloseModal}
+      title="Settings"
+      variant={ModalVariant.small}
+    >
+      <Form>
+        <FormGroup
+          fieldId="integration-name"
+          helperTextInvalid="Must be lowercase and alphanumeric (dashes allowed)"
+          validated={nameValidation}
+          isRequired
+          label="Name"
+        >
+          <TextInput
+            aria-describedby="integration-name-helper"
+            data-testid={'settings--integration-name'}
+            id="integration-name"
+            isRequired
+            name="integration-name"
+            onChange={onChangeName}
+            type="text"
+            value={localSettings.name}
             validated={nameValidation}
+            aria-invalid={nameValidation === 'error'}
+          />
+        </FormGroup>
+        <FormGroup fieldId="integration-description" label="Description">
+          <TextArea
+            aria-describedby="integration-description-helper"
+            data-testid={'settings--description'}
+            id="integration-description"
+            name="integration-description"
+            onChange={onChangeDescription}
+            type="textarea"
+            value={localSettings.description}
+          />
+        </FormGroup>
+        <FormGroup
+          fieldId="namespace"
+          helperText="Specify the namespace for your cluster."
+          helperTextInvalid="Must be lowercase and alphanumeric (dashes allowed)"
+          isRequired
+          label="Namespace"
+          validated={namespaceValidation}
+        >
+          <TextInput
+            aria-describedby="namespace-helper"
+            id="namespace"
             isRequired
-            label="Name"
-          >
-            <TextInput
-              aria-describedby="integration-name-helper"
-              id="integration-name"
-              isRequired
-              name="integration-name"
-              onChange={onChangeName}
-              type="text"
-              value={localSettings.name}
-              validated={nameValidation}
-              aria-invalid={nameValidation === 'error'}
-            />
-          </FormGroup>
-          <FormGroup fieldId="integration-description" label="Description">
-            <TextArea
-              aria-describedby="integration-description-helper"
-              id="integration-description"
-              name="integration-description"
-              onChange={onChangeDescription}
-              type="textarea"
-              value={localSettings.description}
-            />
-          </FormGroup>
-          <FormGroup
-            fieldId="namespace"
-            helperText="Specify the namespace for your cluster."
-            helperTextInvalid="Must be lowercase and alphanumeric (dashes allowed)"
-            isRequired
-            label="Namespace"
+            name="namespace"
+            onChange={onChangeNamespace}
+            data-testid={'settings--namespace'}
+            type="text"
+            value={localSettings.namespace}
             validated={namespaceValidation}
-          >
-            <TextInput
-              aria-describedby="namespace-helper"
-              id="namespace"
-              isRequired
-              name="namespace"
-              onChange={onChangeNamespace}
-              type="text"
-              value={localSettings.namespace}
-              validated={namespaceValidation}
-              aria-invalid={namespaceValidation === 'error'}
-            />
-          </FormGroup>
-          <FormGroup
-            label="Type"
-            labelIcon={
-              <Popover
-                headerContent={'Type'}
-                bodyContent={
-                  <div>
-                    <p>
-                      The integration type determines what steps you have in the catalog. Not all
-                      shown here will be available to you, as it depends on the steps you currently
-                      are using.
-                    </p>
-                    <br />
-                    <ul>
-                      <li>
-                        <b>Kamelets</b>: Choose this if you want to create a connection to be used
-                        in an integration. Read more about Kamelets&nbsp;
-                        <a
-                          href={'https://camel.apache.org/camel-k/1.9.x/kamelets/kamelets.html'}
-                          target={'_blank'}
-                          rel={'noopener'}
-                        >
-                          here
-                        </a>
-                        .
-                      </li>
-                      <li>
-                        <b>KameletBindings</b>: Choose this if you want to create an integration.
-                      </li>
-                      <li>
-                        <b>Camel Routes</b> (advanced): Choose this if you want to create an
-                        advanced integration.
-                      </li>
-                    </ul>
-                  </div>
-                }
-              >
-                <button
-                  type="button"
-                  aria-label="More info for integration type"
-                  onClick={(e) => e.preventDefault()}
-                  aria-describedby="dsl-type"
-                  className="pf-c-form__group-label-help"
-                >
-                  <HelpIcon noVerticalAlign />
-                </button>
-              </Popover>
-            }
-            type="string"
-            fieldId="dsl-type"
-          >
-            <FormSelect
-              aria-label="Select Type"
-              onChange={(value) => {
-                setLocalSettings({ ...localSettings, dsl: value });
-              }}
-              value={localSettings.dsl}
+            aria-invalid={namespaceValidation === 'error'}
+          />
+        </FormGroup>
+        <FormGroup
+          label="Type"
+          labelIcon={
+            <Popover
+              headerContent={'Type'}
+              bodyContent={
+                <div data-testid={'settings--integration-type-helper'}>
+                  <p>
+                    The integration type determines what steps you have in the catalog. Not all
+                    shown here will be available to you, as it depends on the steps you currently
+                    are using.
+                  </p>
+                  <br />
+                  <ul>
+                    <li>
+                      <b>Kamelets</b>: Choose this if you want to create a connection to be used in
+                      an integration. Read more about Kamelets&nbsp;
+                      <a
+                        href={'https://camel.apache.org/camel-k/1.9.x/kamelets/kamelets.html'}
+                        target={'_blank'}
+                        rel={'noopener'}
+                      >
+                        here
+                      </a>
+                      .
+                    </li>
+                    <li>
+                      <b>KameletBindings</b>: Choose this if you want to create an integration.
+                    </li>
+                    <li>
+                      <b>Camel Routes</b> (advanced): Choose this if you want to create an advanced
+                      integration.
+                    </li>
+                  </ul>
+                </div>
+              }
             >
-              {availableDSLs.map((dsl, idx) => {
-                return <FormSelectOption key={idx} value={dsl} label={dsl} />;
-              })}
-            </FormSelect>
-          </FormGroup>
-        </Form>
-      </Modal>
-    </div>
+              <button
+                type="button"
+                aria-label="More info for integration type"
+                onClick={(e) => e.preventDefault()}
+                data-testid={'settings--integration-type-helper-btn'}
+                aria-describedby="dsl-type"
+                className="pf-c-form__group-label-help"
+              >
+                <HelpIcon noVerticalAlign />
+              </button>
+            </Popover>
+          }
+          type="string"
+          fieldId="dsl-type"
+        >
+          <FormSelect
+            aria-label="Select Type"
+            onChange={(value) => {
+              setLocalSettings({ ...localSettings, dsl: value });
+            }}
+            data-testid={'settings--integration-type'}
+            value={localSettings.dsl}
+          >
+            {availableDSLs.map((dsl, idx) => {
+              return (
+                <FormSelectOption
+                  key={idx}
+                  value={dsl}
+                  label={dsl}
+                  data-testid={`settings--integration-type__${dsl}`}
+                />
+              );
+            })}
+          </FormSelect>
+        </FormGroup>
+      </Form>
+    </Modal>
   );
 };
