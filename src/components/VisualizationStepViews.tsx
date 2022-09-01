@@ -35,7 +35,7 @@ export interface IStepViewsProps {
   step: IStepProps;
 }
 
-const StepViews = ({
+const VisualizationStepViews = ({
   deleteStep,
   isPanelExpanded,
   onClosePanelClick,
@@ -255,4 +255,4 @@ const StepViews = ({
   );
 };
 
-export { StepViews };
+export { VisualizationStepViews };
