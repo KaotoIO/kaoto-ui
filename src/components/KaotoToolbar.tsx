@@ -224,6 +224,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
                 <TextInput
                   name="edit-integration-name"
                   id="edit-integration-name"
+                  data-testid={'kaoto-toolbar--name__edit'}
                   type="text"
                   onChange={(val) => {
                     // save to local state while typing
@@ -262,6 +263,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
                       }
                     }
                   }}
+                  data-testid={'kaoto-toolbar--name__edit--save'}
                   aria-disabled={nameValidation === 'error'}
                   isDisabled={nameValidation === 'error'}
                 >
@@ -270,6 +272,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
                 <Button
                   variant="plain"
                   aria-label="close button for editing integration name"
+                  data-testid={'kaoto-toolbar--name__edit--close'}
                   onClick={() => {
                     setLocalName(settings.name);
                     setNameValidation('default');
@@ -281,9 +284,10 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
               </InputGroup>
             ) : (
               <>
-                {settings.name}&nbsp;&nbsp;
+                <span data-testid={'kaoto-toolbar--name'}>{settings.name}</span>&nbsp;&nbsp;
                 <Button
                   variant={'link'}
+                  data-testid={'kaoto-toolbar--name__edit--start'}
                   onClick={() => {
                     setIsEditingName(true);
                   }}
