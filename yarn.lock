@@ -1761,14 +1761,14 @@
   resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.210.2.tgz#3c0ba9a40897e209cf59b465baa985b7b2d739e4"
   integrity sha512-aZiW24Bxi6uVmk5RyNTp+6q6ThtlJZotNRJfWVeGuwu1UlbBuV4DFa1bpjA6jfTZpfEpX2YL5+R+4ZVSCFAVdw==
 
-"@patternfly/react-code-editor@4.72.8":
-  version "4.72.8"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-code-editor/-/react-code-editor-4.72.8.tgz#1e2c1f80efce8a6f014bd0dfcb108011b10110e8"
-  integrity sha512-kDy3hU4/WyQJ30LRr3MGCrql8wpZN55ZRrjMihjWCpCA37EVjukKB5Jtyi8Ip4DyPuiL1z1j3jrV+Bza1LmxHg==
+"@patternfly/react-code-editor@4.76.7":
+  version "4.76.7"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-code-editor/-/react-code-editor-4.76.7.tgz#08bd56cffc9f9b85163563c4a063dcf7da81de5a"
+  integrity sha512-hwLry/W121cGEqeYTd8YKdtv07odkejRVHyZCOzsoW073MeW5NFZaMpJi5rj9IKX47hLJcywywpZsSFishAlog==
   dependencies:
-    "@patternfly/react-core" "^4.231.8"
-    "@patternfly/react-icons" "^4.82.8"
-    "@patternfly/react-styles" "^4.81.8"
+    "@patternfly/react-core" "^4.235.7"
+    "@patternfly/react-icons" "^4.86.7"
+    "@patternfly/react-styles" "^4.85.7"
     react-dropzone "9.0.0"
     tslib "^2.0.0"
 
