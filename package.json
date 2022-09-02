@@ -30,7 +30,7 @@
   "dependencies": {
     "@patternfly/patternfly": "4.210.2",
     "@patternfly/react-code-editor": "4.76.7",
-    "@patternfly/react-core": "4.231.8",
+    "@patternfly/react-core": "4.235.7",
     "@patternfly/react-icons": "4.82.8",
     "@patternfly/react-log-viewer": "4.80.7",
     "@patternfly/react-table": "4.105.3",
@@ -119,7 +119,7 @@
   },
   "peerDependencies": {
     "@patternfly/patternfly": "4.210.2",
-    "@patternfly/react-core": "4.231.8",
+    "@patternfly/react-core": "4.235.7",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
