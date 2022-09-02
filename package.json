@@ -52,7 +52,7 @@
     "uniforms-patternfly": "^4.7.6",
     "use-debounce": "8.0.4",
     "uuid": "8.3.2",
-    "web-vitals": "3.0.0",
+    "web-vitals": "3.0.1",
     "zustand": "^4.1.1"
   },
   "devDependencies": {
