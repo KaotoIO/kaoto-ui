@@ -7,8 +7,8 @@ const { dependencies, federatedModuleName, peerDependencies } = require('./packa
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-const TarWebpackPlugin = require('tar-webpack-plugin').default;
 const CopyPlugin = require('copy-webpack-plugin');
+const FederatedTypesPlugin = require('@module-federation/typescript');
 
 const isPatternflyStyles = (stylesheet) =>
   stylesheet.includes('@patternfly/react-core/') ||
@@ -94,17 +94,11 @@ module.exports = () => {
           },
         ],
       }),
-      new TarWebpackPlugin({
-        action: 'c',
-        gzip: true,
-        cwd: path.resolve(process.cwd(), 'dist', '@kaoto'),
-        file: path.resolve(process.cwd(), 'dist', federatedModuleName + '-dts.tgz'),
-        fileList: ['index.d.ts'],
-      }),
       new webpack.container.ModuleFederationPlugin({
         name: federatedModuleName,
         filename: 'remoteEntry.js',
         library: { type: 'var', name: federatedModuleName },
+        exposes: ['./src/@kaoto/index.ts'],
         shared: {
           ...deps,
           react: {
@@ -132,6 +126,7 @@ module.exports = () => {
           },
         },
       }),
+      new FederatedTypesPlugin(),
     ],
     resolve: {
       extensions: ['.js', '.ts', '.tsx', '.jsx'],
