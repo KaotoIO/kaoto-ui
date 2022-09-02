@@ -49,7 +49,7 @@
     "tar-webpack-plugin": "^0.1.1",
     "uniforms": "^3.10.0",
     "uniforms-bridge-json-schema": "^3.10.0",
-    "uniforms-patternfly": "^4.7.5",
+    "uniforms-patternfly": "^4.7.6",
     "use-debounce": "8.0.4",
     "uuid": "8.3.2",
     "web-vitals": "3.0.0",
