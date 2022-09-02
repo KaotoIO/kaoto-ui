@@ -1798,10 +1798,10 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-icons@4.82.8":
-  version "4.82.8"
-  resolved "https://registry.npmjs.org/@patternfly/react-icons/-/react-icons-4.82.8.tgz"
-  integrity sha512-cKixprTiMLZRe/+kmdZ5suvYb9ly9p1f/HjlcNiWBfsiA8ZDEPmxJnVdend/YsafelC8YC9QGcQf97ay5PNhcw==
+"@patternfly/react-icons@4.86.7":
+  version "4.86.7"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.86.7.tgz#a385e052c8e4d9772e5f12bfde9698ea1a5b9609"
+  integrity sha512-QYurZzfjOKqHWRI8zeUweXy583C11NVeRAWbxVhOhPT/aFtgkd75iZNlLpv6XI1EN/uLpa9WdkZzyuLY1txYnA==
 
 "@patternfly/react-icons@^4.86.7", "@patternfly/react-icons@^4.87.3":
   version "4.87.3"
