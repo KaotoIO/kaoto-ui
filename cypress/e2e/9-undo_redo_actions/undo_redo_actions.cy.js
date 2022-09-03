@@ -1,41 +1,48 @@
 describe('Test for undo/redo actions on code-editor', () => {
   beforeEach(() => {
     let url = Cypress.config().baseUrl;
+
+    cy.intercept('/v1/integrations/dsls').as('getDSLs');
+    cy.intercept('/v1/view-definitions').as('getViewDefinitions');
+    cy.intercept('/v1/integrations*').as('getIntegration');
+    cy.intercept('/v1/deployments*').as('getDeployments');
+
     cy.visit(url);
-    cy.wait(100);
+    cy.viewport(2000, 1000);
   });
 
-  it('loads the YAML editor', () => {
-    cy.viewport(2000, 1000);
-
-    // open source code editor
+  it("undoes and redoes the user's changes, updating the visualization respectively", () => {
+    // open the source code editor
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.wait(2000);
 
-    // erase default yaml
-    cy.get('[data-testid="sourceCode--clearButton"]').click();
+    // LOAD FIRST FIXTURE
+    // attaches the file as an input, NOT drag-and-drop, as that will
+    // create a dropzone overlay that then prevents you from typing
+    cy.get('.pf-c-code-editor__main > input').attachFile('KafkaSourceSink.yaml');
 
-    // select "start from scratch" in code editor's empty state
-    cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
+    // trigger the visualization to update
+    cy.get('.pf-c-file-upload').click().type('{end}{enter}');
 
-    // load fixture
-    cy.fixture('undo_redo.txt').then((yaml) => {
-      cy.get('.pf-c-code-editor__code').type(yaml, { timeout: 2000 });
+    // wait until the API returns the updated visualization
+    cy.wait('@getIntegration');
+    cy.wait('@getDSLs');
+    cy.wait('@getViewDefinitions');
 
-      // the code editor should contain the loaded yaml
-      cy.get('.code-editor', { timeout: 200 })
-        .contains('kafka-source', { timeout: 200 })
-        .type(
-          '{end}' +
-            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-            'timer-source',
-          { delay: 500 }
-        );
-      cy.get('[data-testid="sourceCode--undoButton"]').dblclick();
-      cy.get('.pf-c-code-editor__code').contains('kafka-source');
-      cy.get('[data-testid="sourceCode--redoButton"]').dblclick({ force: true });
-      cy.get('.pf-c-code-editor__code').contains('timer-source');
-    });
+    // CHECK THE VISUALIZATION CANVAS HAS UPDATED ACCORDINGLY
+    cy.get('[data-testid="viz-step-kafka-sink"]').should('be.visible');
+    cy.get('[data-testid="viz-step-kafka-source"]').should('be.visible');
+
+    // LOAD SECOND FIXTURE
+    // now we will try to upload a different YAML spec
+    cy.get('.pf-c-code-editor__main > input').attachFile('ChuckNorris.yaml');
+    cy.get('.pf-c-file-upload').click().type('{end}{enter}');
+
+    // ...and revert to the previous one
+    // note: must click three times:
+    // 1. to undo the previous 'enter',
+    // 2. to undo the file upload, and
+    // 3. to undo the first 'enter', reverting it to the original kafka-source-sink spec)
+    cy.get('[data-testid="sourceCode--undoButton"]').click().click().click();
+    cy.get('.pf-c-code-editor__code').contains('kafka-source');
   });
 });

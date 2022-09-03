@@ -105,6 +105,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
                 />
               }
               className={'miniCatalog__popover'}
+              data-testid={'miniCatalog__popover'}
               enableFlip={true}
               flipBehavior={['top-start', 'left-start']}
               hideOnOutsideClick={true}
@@ -136,7 +137,11 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
         </div>
       ) : (
-        <div className={'stepNode stepNode__Slot stepNode__clickable'} onDrop={onDropNew}>
+        <div
+          className={'stepNode stepNode__Slot stepNode__clickable'}
+          onDrop={onDropNew}
+          data-testid={'viz-step-slot'}
+        >
           <div className={'stepNode__Icon stepNode__clickable'}>
             <CubesIcon />
           </div>
