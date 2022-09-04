@@ -1,49 +1,52 @@
 describe('source code and drag and drop', () => {
-  beforeEach(() => {
+  before(() => {
     let url = Cypress.config().baseUrl;
+
+    cy.intercept('/v1/integrations/dsls').as('getDSLs');
+    cy.intercept('/v1/view-definitions').as('getViewDefinitions');
+    cy.intercept('/v1/integrations*').as('getIntegration');
+    cy.intercept('/v1/deployments*').as('getDeployments');
+
     cy.visit(url);
-  });
-  it('loads the YAML editor', () => {
     cy.viewport(2000, 1000);
+  });
+
+  it('loads the YAML editor and synchronizes steps with visualization', () => {
     const dataTransfer = new DataTransfer();
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.get('.code-editor')
-      .click({ timeout: 2000 })
-      .type('{selectAll}{backspace}', { timeout: 2000 });
-    cy.get('.pf-c-empty-state__secondary > .pf-c-button').click();
-    cy.fixture('kafka-to-kafka-yaml.txt').then((sourceCode) => {
-      cy.get('.code-editor')
-        .click()
-        .type('{selectAll}{backspace}')
-        .type(sourceCode, { timeout: 1000 });
-      cy.wait(2000);
 
-      // open source code editor
-      cy.get('[data-testid="toolbar-show-code-btn"]').click();
+    // LOAD FIXTURE
+    // attaches the file as an input, NOT drag-and-drop, as that will
+    // create a dropzone overlay that then prevents you from typing
+    cy.get('.pf-c-code-editor__main > input').attachFile('KafkaSourceSink.yaml');
 
-      // open catalog, search for timer step
-      cy.get('[data-testid="toolbar-step-catalog-btn"]').click();
-      cy.get('#stepSearch').type('timer');
+    // trigger the visualization to update
+    cy.get('.pf-c-file-upload').click().type('{end}{enter}');
 
-      cy.get('[data-testid="catalog-step-timer-source"]').trigger('dragstart', {
-        dataTransfer,
-      });
+    // wait until the API returns the updated visualization
+    cy.wait('@getIntegration');
+    cy.wait('@getDSLs');
+    cy.wait('@getViewDefinitions');
 
-      // drag timer from catalog over existing kafka step
-      cy.get('[data-testid="viz-step-kafka-source"]').trigger('drop', {
-        dataTransfer,
-      });
-      cy.get('[data-testid="toolbar-show-code-btn"]').click();
-      cy.wait(2000);
-      cy.get('.pf-c-code-editor__code')
-        .contains('timer-source', { timeout: 1000 })
-        .type(
-          '{end}' +
-            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-            'kafka-source',
-          { delay: 500 }
-        );
+    // open catalog, search for timer step
+    cy.get('[data-testid="toolbar-step-catalog-btn"]').click();
+    cy.get('#stepSearch').type('timer-source');
+
+    cy.get('[data-testid="catalog-step-timer-source"]').trigger('dragstart', {
+      dataTransfer,
     });
+
+    // drag timer source from catalog over existing kafka step
+    cy.get('[data-testid="viz-step-kafka-source"]').trigger('drop', {
+      dataTransfer,
+    });
+
+    // wait for API to sync code editor & visualization
+    cy.wait('@getIntegration');
+
+    // verify that the code editor contains the new timer source step
+    cy.get('[data-testid="toolbar-show-code-btn"]').click();
+
+    cy.get('.pf-c-code-editor__code').contains('timer-source').should('exist');
   });
 });
