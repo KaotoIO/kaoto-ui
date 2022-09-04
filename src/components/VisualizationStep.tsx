@@ -111,7 +111,10 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               hideOnOutsideClick={true}
               position={'right-start'}
             >
-              <button className="stepNode__Add plusButton nodrag">
+              <button
+                className="stepNode__Add plusButton nodrag"
+                data-testid={'stepNode__appendStep-btn'}
+              >
                 <PlusIcon />
               </button>
             </Popover>

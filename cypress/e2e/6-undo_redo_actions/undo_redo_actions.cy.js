@@ -1,4 +1,4 @@
-describe('Test for undo/redo actions on code-editor', () => {
+describe.skip('Test for undo/redo actions on code-editor', () => {
   beforeEach(() => {
     let url = Cypress.config().baseUrl;
 
@@ -20,8 +20,10 @@ describe('Test for undo/redo actions on code-editor', () => {
     // create a dropzone overlay that then prevents you from typing
     cy.get('.pf-c-code-editor__main > input').attachFile('KafkaSourceSink.yaml');
 
+    cy.wait('@getIntegration');
+
     // trigger the visualization to update
-    cy.get('.pf-c-file-upload').click().type('{end}{enter}');
+    cy.get('.pf-c-file-upload').click().type('{end} ');
 
     // wait until the API returns the updated visualization
     cy.wait('@getIntegration');
@@ -35,14 +37,17 @@ describe('Test for undo/redo actions on code-editor', () => {
     // LOAD SECOND FIXTURE
     // now we will try to upload a different YAML spec
     cy.get('.pf-c-code-editor__main > input').attachFile('ChuckNorris.yaml');
-    cy.get('.pf-c-file-upload').click().type('{end}{enter}');
+    cy.get('.pf-c-file-upload').click().type('{end} ');
+
+    cy.wait('@getIntegration');
 
     // ...and revert to the previous one
     // note: must click three times:
     // 1. to undo the previous 'enter',
     // 2. to undo the file upload, and
     // 3. to undo the first 'enter', reverting it to the original kafka-source-sink spec)
-    cy.get('[data-testid="sourceCode--undoButton"]').click().click().click();
+    cy.get('[data-testid="sourceCode--undoButton"]').dblclick().click();
+
     cy.get('.pf-c-code-editor__code').contains('kafka-source');
   });
 });

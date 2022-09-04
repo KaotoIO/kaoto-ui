@@ -1,0 +1,25 @@
+group: camel.apache.org
+kind: KameletBinding
+metadata:
+  additionalProperties: { }
+  finalizers: [ ]
+  managedFields: [ ]
+  name: Updated integration
+  ownerReferences: [ ]
+  plural: kameletbindings
+  scope: Namespaced
+  served: true
+  singular: kameletbinding
+spec:
+  source:
+    ref:
+      apiVersion: camel.apache.org/v1alpha1
+      name: timer-source
+      kind: Kamelet
+  sink:
+    ref:
+      apiVersion: camel.apache.org/v1alpha1
+      name: kafka-sink
+      kind: Kamelet
+      storage: true
+      version: v1alpha1
