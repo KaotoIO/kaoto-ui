@@ -247,7 +247,13 @@ const VisualizationStepViews = ({
             </StepErrorBoundary>
           </Tab>
         </Tabs>
-        <Button variant={'danger'} key={step.UUID} onClick={deleteStep}>
+        <br />
+        <Button
+          variant={'danger'}
+          key={step.UUID}
+          onClick={deleteStep}
+          data-testid={'configurationTab__deleteBtn'}
+        >
           Delete
         </Button>
       </DrawerPanelBody>

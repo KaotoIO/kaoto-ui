@@ -3,12 +3,12 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const { dependencies, federatedModuleName, peerDependencies } = require('./package.json');
+const { dependencies, federatedModuleName } = require('./package.json');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-const FederatedTypesPlugin = require('@module-federation/typescript');
+// const CopyPlugin = require('copy-webpack-plugin');
+// const FederatedTypesPlugin = require('@module-federation/typescript');
 
 const isPatternflyStyles = (stylesheet) =>
   stylesheet.includes('@patternfly/react-core/') ||
@@ -30,19 +30,6 @@ module.exports = () => {
               options: {
                 transpileOnly: true,
                 experimentalWatchApi: true,
-              },
-            },
-          ],
-        },
-        {
-          test: /\.tsx?$/,
-          exclude: [/node_modules/],
-          use: [
-            {
-              loader: 'ts-loader',
-              options: {
-                // skip typechecking for speed
-                transpileOnly: true,
               },
             },
           ],
@@ -99,47 +86,24 @@ module.exports = () => {
           document.head.appendChild(linkTag);
         },
       }),
-      new CopyPlugin({
-        patterns: [
-          {
-            from: path.resolve(__dirname, 'src', '@kaoto'),
-            to: path.resolve(__dirname, 'dist', '@kaoto'),
-          },
-        ],
-      }),
+      // new CopyPlugin({
+      //   patterns: [
+      //     {
+      //       from: path.resolve(__dirname, 'src', '@kaoto'),
+      //       to: path.resolve(__dirname, 'dist', '@kaoto'),
+      //     },
+      //   ],
+      // }),
       new webpack.container.ModuleFederationPlugin({
         name: federatedModuleName,
         filename: 'remoteEntry.js',
         library: { type: 'var', name: federatedModuleName },
-        exposes: ['./src/@kaoto/index.ts'],
+        // exposes: ['./src/@kaoto/index.ts'],
         shared: {
           ...deps,
-          react: {
-            eager: true,
-            singleton: true,
-            requiredVersion: peerDependencies['react'],
-          },
-          'react-dom': {
-            eager: true,
-            singleton: true,
-            requiredVersion: peerDependencies['react-dom'],
-          },
-          'react-router-dom': {
-            requiredVersion: dependencies['react-router-dom'],
-          },
-          '@patternfly/patternfly/': {
-            singleton: true,
-            eager: true,
-            requiredVersion: peerDependencies['@patternfly/patternfly'],
-          },
-          '@patternfly/react-core/': {
-            singleton: true,
-            eager: true,
-            requiredVersion: peerDependencies['@patternfly/react-core'],
-          },
         },
       }),
-      new FederatedTypesPlugin(),
+      // new FederatedTypesPlugin(),
     ],
     resolve: {
       extensions: ['.js', '.ts', '.tsx', '.jsx'],

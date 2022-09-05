@@ -19,9 +19,7 @@ interface ISourceCodeEditor {
 const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<EditorDidMount['editor'] | null>(null);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
-  const { deleteSteps, integrationJson, updateIntegration } = useIntegrationJsonStore(
-    (state) => state
-  );
+  const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
   const { settings } = useSettingsStore();
   const previousJson = usePrevious(integrationJson);
 
@@ -57,6 +55,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
 
   const handleEditorDidMount = (editor: EditorDidMount['editor']) => {
     editorRef.current = editor;
+
     editorRef.current?.onDidChangeModelContent(() => {
       const editorYAML = editorRef.current?.getValue();
       if (editorYAML) {
@@ -71,7 +70,6 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
 
   const clearAction = () => {
     setSourceCode('');
-    deleteSteps();
   };
 
   const undoAction = () => {
@@ -125,7 +123,6 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       <CodeEditor
         code={sourceCode ?? props.initialData}
         className="code-editor"
-        emptyState={''}
         height="650px"
         language={(props.language as Language) ?? Language.yaml}
         onEditorDidMount={handleEditorDidMount}
