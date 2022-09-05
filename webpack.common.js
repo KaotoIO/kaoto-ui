@@ -35,6 +35,19 @@ module.exports = () => {
           ],
         },
         {
+          test: /\.tsx?$/,
+          exclude: [/node_modules/],
+          use: [
+            {
+              loader: 'ts-loader',
+              options: {
+                // skip typechecking for speed
+                transpileOnly: true,
+              },
+            },
+          ],
+        },
+        {
           test: /\.css|s[ac]ss$/i,
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
           include: (stylesheet) => !isPatternflyStyles(stylesheet),
