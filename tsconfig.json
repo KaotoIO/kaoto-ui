@@ -3,7 +3,6 @@
   "extends": "./tsconfig.build.json",
   "compilerOptions": {
     "allowJs": false,
-    "jsx": "react",
     "baseUrl": ".",
     "declaration": true,
     "paths": {
