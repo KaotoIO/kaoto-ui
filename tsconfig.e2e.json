@@ -18,5 +18,6 @@
       "*": ["*", "types/*"],
       "@kaoto": ["./src/@kaoto"]
     }
-  }
+  },
+  "include": ["./**/*.cy.(t|j)s"]
 }
