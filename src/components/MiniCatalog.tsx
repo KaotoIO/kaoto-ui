@@ -95,6 +95,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                     id={'stepSearch'}
                     type={'search'}
                     placeholder={'search for a step...'}
+                    data-testid={'miniCatalog__search--input'}
                     aria-label={'search for a step'}
                     value={query}
                     onChange={changeSearch}
@@ -145,6 +146,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                   handleSelectStep(step);
                 }}
                 className={'miniCatalog__stepItem'}
+                data-testid={`miniCatalog__stepItem--${step.name}`}
               >
                 <Grid md={6} className={'miniCatalog__stepItem__grid'}>
                   <GridItem span={3}>

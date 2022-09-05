@@ -103,7 +103,7 @@ const PlusButtonEdge = ({
             hideOnOutsideClick={true}
             position={'right-start'}
           >
-            <button className="plusButton">
+            <button className="plusButton" data-testid={'stepNode__insertStep-btn'}>
               <PlusIcon />
             </button>
           </Popover>

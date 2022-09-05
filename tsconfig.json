@@ -3,14 +3,13 @@
   "extends": "./tsconfig.build.json",
   "compilerOptions": {
     "allowJs": false,
-    "jsx": "react",
     "baseUrl": ".",
     "declaration": true,
     "paths": {
       "*": ["*", "types/*"],
       "@kaoto": ["./src/@kaoto"]
-    },
-    "typeRoots": ["./node_modules/@types"]
+    }
   },
-  "include": ["src", "webpack.common.js", "setupTests.ts"]
+  "include": ["src", "webpack.common.js", "setupTests.ts"],
+  "exclude": ["cypress"]
 }
