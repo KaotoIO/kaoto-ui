@@ -15,7 +15,7 @@
     "build-storybook": "build-storybook -s public",
     "chromatic": "npx chromatic",
     "clean": "rimraf dist",
-    "e2e": "cypress open",
+    "e2e": "cypress open --config-file=cypress.config.ts",
     "e2e:headless": "cypress run",
     "format": "prettier --check 'src'",
     "format:fix": "prettier --write --ignore-unknown 'src'",
