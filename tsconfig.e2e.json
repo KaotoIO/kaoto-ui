@@ -17,8 +17,7 @@
     "paths": {
       "*": ["*", "types/*"],
       "@kaoto": ["./src/@kaoto"]
-    },
-    "types": ["cypress", "@testing-library/cypress"]
+    }
   },
   "include": ["./**/*.cy.(t|j)s"]
 }

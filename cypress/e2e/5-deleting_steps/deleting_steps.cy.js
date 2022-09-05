@@ -1,4 +1,4 @@
-describe('Test for deleting steps', () => {
+describe.skip('Test for deleting steps', () => {
   before(() => {
     let url = Cypress.config().baseUrl;
 

@@ -1,4 +1,4 @@
-describe('Test for undo/redo actions on code-editor', () => {
+describe.skip('Test for undo/redo actions on code-editor', () => {
   before(() => {
     let url = Cypress.config().baseUrl;
 
