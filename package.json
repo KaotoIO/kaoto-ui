@@ -15,7 +15,7 @@
     "chromatic": "npx chromatic",
     "clean": "rimraf dist",
     "e2e": "cypress open --config-file=cypress.config.ts",
-    "e2e:headless": "cypress run",
+    "e2e:headless": "cypress run --record --key ${CYPRESS_RECORD_KEY}",
     "format": "prettier --check 'src'",
     "format:fix": "prettier --write --ignore-unknown 'src'",
     "lint": "eslint --ext .ts,.tsx,.js ./src",
