@@ -33,7 +33,7 @@
     "@patternfly/react-core": "4.235.7",
     "@patternfly/react-icons": "4.86.7",
     "@patternfly/react-log-viewer": "4.80.7",
-    "@patternfly/react-table": "4.105.6",
+    "@patternfly/react-table": "4.105.14",
     "@rhoas/app-services-ui-shared": "^0.16.4",
     "ajv": "^8.8.2",
     "immer": "^9.0.15",
