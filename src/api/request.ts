@@ -32,7 +32,7 @@ export interface IFetch {
    */
   stringifyBody?: boolean;
 }
-let apiURL = process.env.KAOTO_API;
+let apiURL = 'http://localhost:8081';
 
 // converts an object into a query string
 // ex: {type : 'Kamelet'} -> &type=Kamelet

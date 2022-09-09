@@ -6,12 +6,15 @@
   "engines": {
     "node": ">=14.x"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
   "scripts": {
     "start": "webpack serve --mode development --hot --progress --config webpack.dev.js ",
     "prod": "webpack serve --mode production --port 8080 --allowed-hosts all --progress --config webpack.prod.js ",
-    "build": "webpack --mode production --config webpack.prod.js",
+    "build": "webpack --mode production --config webpack.dev.js",
+    "build:lib": "rimraf dist/lib && npm run copy:css && npm run copy:images && tsc -p tsconfig.lib.json",
+    "copy:css": "copyfiles -u 1 \"src/**/*.{sass,scss,css}\" dist/lib/",
+    "copy:images": "cpr ./src/assets ./dist/lib/assets",
     "build-storybook": "build-storybook -s public",
     "chromatic": "npx chromatic",
     "clean": "rimraf dist",
@@ -28,6 +31,12 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@kie-tools-core/editor": "0.22.0",
+    "@kie-tools-core/guided-tour": "0.22.0",
+    "@kie-tools-core/monaco-editor": "0.22.0",
+    "@kie-tools-core/notifications": "0.22.0",
+    "@kie-tools-core/patternfly-base": "0.22.0",
+    "@kie-tools-core/workspace": "0.22.0",
     "@patternfly/patternfly": "4.210.2",
     "@patternfly/react-code-editor": "4.76.7",
     "@patternfly/react-core": "4.235.7",
@@ -117,7 +126,9 @@
     "webpack-cli": "4.10.0",
     "webpack-dev-server": "4.10.1",
     "webpack-merge": "^5.8.0",
-    "whatwg-fetch": "^3.6.2"
+    "whatwg-fetch": "^3.6.2",
+    "cpr": "^3.0.1",
+    "copyfiles": "^2.4.1"
   },
   "peerDependencies": {
     "@patternfly/patternfly": "4.210.2",
