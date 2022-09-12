@@ -1,7 +1,7 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
-  projectId: process.env.CYPRESS_PROJECT_ID,
+  projectId: 'zfop6s',
   videoUploadOnPasses: false,
   viewportHeight: 2000,
   viewportWidth: 1000,

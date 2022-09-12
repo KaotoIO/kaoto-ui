@@ -50,6 +50,11 @@ jobs:
     container:
       image: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
       options: --user 1001
+    strategy:
+      fail-fast: false
+      matrix:
+        # run copies of the current job in parallel
+        containers: [ 1, 2, 3, 4, 5 ]
 
     services:
       kaoto:
@@ -104,6 +109,11 @@ jobs:
     container:
       image: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
       options: --user 1001
+    strategy:
+      fail-fast: false
+      matrix:
+        # run copies of the current job in parallel
+        containers: [ 1, 2, 3, 4, 5 ]
 
     services:
       kaoto:
@@ -159,6 +169,11 @@ jobs:
     container:
       image: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
       options: --user 1001
+    strategy:
+      fail-fast: false
+      matrix:
+        # run copies of the current job in parallel
+        containers: [ 1, 2, 3, 4, 5 ]
 
     services:
       kaoto:

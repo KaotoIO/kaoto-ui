@@ -1,5 +1,5 @@
 {
-  "name": "@kaoto/kaoto-ui",
+  "name": "kaoto-ui",
   "version": "0.3.1",
   "federatedModuleName": "kaoto",
   "engines": {
@@ -12,10 +12,9 @@
     "prod": "webpack serve --mode production --port 8080 --allowed-hosts all --progress --config webpack.prod.js ",
     "build": "webpack --mode production --config webpack.prod.js",
     "build-storybook": "build-storybook -s public",
-    "chromatic": "npx chromatic",
     "clean": "rimraf dist",
     "e2e": "cypress open --config-file=cypress.config.ts",
-    "e2e:headless": "cypress run --record --key ${CYPRESS_RECORD_KEY}",
+    "e2e:headless": "cypress run --config video=false",
     "format": "prettier --check 'src'",
     "format:fix": "prettier --write --ignore-unknown 'src'",
     "lint": "eslint --ext .ts,.tsx,.js ./src",
