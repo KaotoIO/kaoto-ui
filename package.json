@@ -58,7 +58,7 @@
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^2.2.1",
     "@module-federation/typescript": "^0.1.9",
-    "@storybook/addon-actions": "^6.5.10",
+    "@storybook/addon-actions": "^6.5.11",
     "@storybook/addon-docs": "^6.5.9",
     "@storybook/addon-links": "^6.5.10",
     "@storybook/builder-webpack5": "^6.5.9",
