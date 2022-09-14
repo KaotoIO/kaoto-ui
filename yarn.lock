@@ -1692,35 +1692,35 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kie-tools-core/backend@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/backend/-/backend-0.22.0.tgz#221eb0724a6fa5ab03984ac15dea5999d0ac4c16"
-  integrity sha512-cAjTItNSXMTLM2BiPt03qXpXLQmU08v8QUcrtWXrcVj94aSmAeJpPZvW6IFDFWIUsfuSwuIOfwWETTu6e8LrMw==
+"@kie-tools-core/backend@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/backend/-/backend-0.23.0.tgz#3abd4a452ea1f39955792bd2c504da5669f868a1"
+  integrity sha512-CbodSMwi7CcoVNdhei3xtHPsnt9998rLpQdPEg8cCC7m486mA2dVf5nB7ExxeynVozDvofCtMoeFpqzlPFYO3w==
   dependencies:
-    "@kie-tools-core/i18n" "0.22.0"
-    "@kie-tools-core/notifications" "0.22.0"
-    "@kie-tools-core/workspace" "0.22.0"
+    "@kie-tools-core/i18n" "0.23.0"
+    "@kie-tools-core/notifications" "0.23.0"
+    "@kie-tools-core/workspace" "0.23.0"
     axios "^0.27.2"
     fast-xml-parser "^3.17.4"
     portfinder "^1.0.27"
     semver "^7.3.5"
     sinon "^11.1.1"
 
-"@kie-tools-core/editor@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/editor/-/editor-0.22.0.tgz#f8bbbb8e0b990cc24355f599b6e859b37cb12fdd"
-  integrity sha512-OpB6rattZS+oRzi1R+Ei87VFIyiyopzcpCLrnZBPoyHjqYWlIaPodVfTnshTqYXclANO3x9WQXprS9COfhgWug==
+"@kie-tools-core/editor@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/editor/-/editor-0.23.0.tgz#0e7a528c98d9b7cf81af2369138e6ca301963d6f"
+  integrity sha512-JVwttN5YiY1dTRrycw/SPPxkz+ecoSjZHuzm5dwPgeU0DthNdzcrpnpq9+9ebKbB2W/8LsGfioDT5gszHONYPQ==
   dependencies:
-    "@kie-tools-core/backend" "0.22.0"
-    "@kie-tools-core/envelope" "0.22.0"
-    "@kie-tools-core/envelope-bus" "0.22.0"
-    "@kie-tools-core/guided-tour" "0.22.0"
-    "@kie-tools-core/i18n" "0.22.0"
-    "@kie-tools-core/keyboard-shortcuts" "0.22.0"
-    "@kie-tools-core/notifications" "0.22.0"
-    "@kie-tools-core/operating-system" "0.22.0"
-    "@kie-tools-core/patternfly-base" "0.22.0"
-    "@kie-tools-core/workspace" "0.22.0"
+    "@kie-tools-core/backend" "0.23.0"
+    "@kie-tools-core/envelope" "0.23.0"
+    "@kie-tools-core/envelope-bus" "0.23.0"
+    "@kie-tools-core/guided-tour" "0.23.0"
+    "@kie-tools-core/i18n" "0.23.0"
+    "@kie-tools-core/keyboard-shortcuts" "0.23.0"
+    "@kie-tools-core/notifications" "0.23.0"
+    "@kie-tools-core/operating-system" "0.23.0"
+    "@kie-tools-core/patternfly-base" "0.23.0"
+    "@kie-tools-core/workspace" "0.23.0"
     "@patternfly/react-core" "^4.157.3"
     "@patternfly/react-icons" "^4.11.17"
     csstype "^3.0.11"
@@ -1728,86 +1728,85 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/envelope-bus@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope-bus/-/envelope-bus-0.22.0.tgz#88f06a74250c9570a4a1702ce1f7612b7541e0e9"
-  integrity sha512-IAt+O69EaWuimVC/uOqoUdz63zJVxuPYvFKKAqYnwyFv0oAcEPwnq2hIZ48VwnSVOxAskt78+hzOJ9bTmlk9eg==
+"@kie-tools-core/envelope-bus@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope-bus/-/envelope-bus-0.23.0.tgz#d7c3cab352fa40d8f997bde225624498cb990e1c"
+  integrity sha512-o1AKaX+5ODgbU1FIaODWwmc/hTy7ECuwaXu7D9KslkJU2eXMLvUzngA3BLo3x4AH4WIY1rcko5Tvxw6/xTPeTw==
   dependencies:
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/envelope@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope/-/envelope-0.22.0.tgz#a76a187a0fcbb05fdc3c5885135bc2f45a85887c"
-  integrity sha512-qzuMHV9IvaINtxvyHSeWgCEHI+5wQN9zabjCY4ng3qqn3Ac7d6ABrVxEJyA/sC2br64Xy7ReqL8bj410ukNuFw==
+"@kie-tools-core/envelope@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope/-/envelope-0.23.0.tgz#7b27ccf62e7d40a36bf23efc81f02796234c1159"
+  integrity sha512-CGocsJVOM4aXfPimzzsKa5j8Cy3j+OumQ5+WTpoG8shV4s8/AAkDpOVBN23nVCaRCsTJilXJFAbB0+0ZCA+Meg==
   dependencies:
-    "@kie-tools-core/envelope-bus" "0.22.0"
+    "@kie-tools-core/envelope-bus" "0.23.0"
     csstype "^3.0.11"
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/guided-tour@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/guided-tour/-/guided-tour-0.22.0.tgz#ad45242a2d69c977e9b4220acf670b0261c7fe84"
-  integrity sha512-JyTY1R1jEH8ILuBbrBYqd09nk3gqBQo54c6kOj0Mz3W0DHCPHJ2fmhrUyHZRS2cUjZurHs+juZPxTq/iOLBivg==
+"@kie-tools-core/guided-tour@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/guided-tour/-/guided-tour-0.23.0.tgz#a83de9d114b5cce75506ac264d6d6bf639e0f9fd"
+  integrity sha512-5OZHGem2RcBLc1VPhy8MGT0PTSjKz31B15Rzq4mjUpluLlvhl1ocsFVj5sms6zRBA2IkTQ8A1FLsNhlzIdGPYg==
   dependencies:
-    "@kie-tools-core/envelope-bus" "0.22.0"
-    "@kie-tools-core/i18n" "0.22.0"
-    "@kie-tools-core/patternfly-base" "0.22.0"
+    "@kie-tools-core/envelope-bus" "0.23.0"
+    "@kie-tools-core/i18n" "0.23.0"
+    "@kie-tools-core/patternfly-base" "0.23.0"
     "@patternfly/react-core" "^4.157.3"
     "@patternfly/react-icons" "^4.11.17"
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/i18n@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/i18n/-/i18n-0.22.0.tgz#bc8dfc052971dd2240f637f0ae4c5672e8038ac1"
-  integrity sha512-MribIZxBSgnGk67vjVRddbNBxkpaSQbkkk3gUBn+zhf/FieVXiuyRJuKG1aaSx8M8vjD6Eb4v38NRyr8qPeXKQ==
+"@kie-tools-core/i18n@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/i18n/-/i18n-0.23.0.tgz#578f9dfdcde5ca253202be92097f0a6b3820dec9"
+  integrity sha512-dZpgvxo7mYh4+aCq6p+cAM0L2VPtKNF7crizbeBqUbB8IAIUSFSXgRelCt3md/T1/mKuK+Fm8kfFYkLv9aSg8g==
   dependencies:
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/keyboard-shortcuts@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/keyboard-shortcuts/-/keyboard-shortcuts-0.22.0.tgz#e443d35b0c57bac64beef9b9ab5134c55605d7fa"
-  integrity sha512-tjxgPLCezjrzW4Iik0BEkGcfMa7KDkDHmhxpkmi4nkdXUMy5oEAzHU+ep8t4xsUMndLRP3ZySHDQWWN/kx67Dw==
+"@kie-tools-core/keyboard-shortcuts@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/keyboard-shortcuts/-/keyboard-shortcuts-0.23.0.tgz#c97c5c6361aa3960a2778963f501ca93fcfa481d"
+  integrity sha512-sUWvkYGoSXtekfDrsxvOKNYDw7KYk5MlQar1MSk98DxObU4j7hNskfQfph52Z5pkaEQNED8fpEAYQKR0TyBKJg==
   dependencies:
-    "@kie-tools-core/envelope-bus" "0.22.0"
-    "@kie-tools-core/operating-system" "0.22.0"
+    "@kie-tools-core/envelope-bus" "0.23.0"
+    "@kie-tools-core/operating-system" "0.23.0"
     react "^17.0.2"
-    react-dom "^17.0.2"
 
-"@kie-tools-core/monaco-editor@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/monaco-editor/-/monaco-editor-0.22.0.tgz#78110a9616d23cfc143e8be9f8574bd9ac7747d0"
-  integrity sha512-tD+Ofo5xbGGWLg+DaoWTHm5YuupmpkLvWdl6HY+JkiAxfZmKpfj9XGMtUbn8i9NE/i9X8NAt/gsPIAXJZ/A3jw==
+"@kie-tools-core/monaco-editor@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/monaco-editor/-/monaco-editor-0.23.0.tgz#861573c137019ea1f211bf3b7dd65cc9485e88e7"
+  integrity sha512-3UnrtmD5xmX9GCc8CfDzvDDDbQtL/MZ0/cj8ipLPiysAyzeYQkLOV6wzIs5jR/jXWtli7quYDuWBbv6xNTOINA==
   dependencies:
     monaco-editor "^0.33.0"
 
-"@kie-tools-core/notifications@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/notifications/-/notifications-0.22.0.tgz#32298eae001ffe2380f5a0dc354aeb3673ca3d1a"
-  integrity sha512-t41pH7LD3V9jKdg1ImEpUWSji6vhmGgQHkYkA6LXQWZGZ+HUQTHlb/3eD0SDs+LK77D0umcF0e8CPa8ODt6VfQ==
+"@kie-tools-core/notifications@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/notifications/-/notifications-0.23.0.tgz#503ada509f0fb202b2b0c9ea91de3c59156dd118"
+  integrity sha512-EWAMQZJJFiFpQvImtcOV6osmrCe8/zi3jZ7DDVym35Cn0BeylDclcjOGEuV775h12nOs7JuWBoNQAP5QuK48uw==
   dependencies:
-    "@kie-tools-core/i18n" "0.22.0"
-    "@kie-tools-core/workspace" "0.22.0"
+    "@kie-tools-core/i18n" "0.23.0"
+    "@kie-tools-core/workspace" "0.23.0"
 
-"@kie-tools-core/operating-system@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.22.0.tgz#e2c8d86bced7f73d5bccb40f11b319353012aaec"
-  integrity sha512-b/1ZkZsk7YrBKkF/xSthI7s2KzJ6XlOUk3ueW8OZ2oY+6QW8OeDV28Ce2cHhc89J4Ghl00wVPIM/TCiBbBKzTg==
+"@kie-tools-core/operating-system@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.23.0.tgz#623a260112799e6a6ac7581048d42972d5b7af75"
+  integrity sha512-CeWf/cKMsjJf4n7375pETQuLX0zT6yP0lRZReD1XtBgNwwMfZDzGkhewNL81l7WH9lfdKqmlHQji9T6QmbMDeg==
 
-"@kie-tools-core/patternfly-base@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.22.0.tgz#ea86c3907c505f9ea0653aacfbddaac0ea56c3a1"
-  integrity sha512-eY1u39bs/9jpd+z7zVK6zus6c+HTX8IczHLPVtvurb8pQdMChjdEUQ9uQtjAiQPuyMOvse3NMDiP0RQr9uOd7A==
+"@kie-tools-core/patternfly-base@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.23.0.tgz#fc659f062c2c5bcb33788809dde3abcd41635ff3"
+  integrity sha512-ZcJmc+jShI2okmS7p47FEHCF7mB04orP3jyduUdiy5XwUIqX374z2N6dz5MvdaM6YXT+JXyyxwVfKNXQfcspoQ==
 
-"@kie-tools-core/workspace@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/workspace/-/workspace-0.22.0.tgz#98718ba16f045380cf5344b5528c04994d991d8f"
-  integrity sha512-MZV5bhHu1Vou5dexASnmXmlaqxwb882Myd/DVxrieEWHw5wmbOEZBoknm9lT4dmBHmj80/zhKjvETDJzz8zNfg==
+"@kie-tools-core/workspace@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/workspace/-/workspace-0.23.0.tgz#09d5def8d7acca8d8703a6744aafab3f2dbb92ae"
+  integrity sha512-EdH+64yT1n/ZT2vFNR7fqFvhvNT+3v8+dySKmF2GlfCHa2f7cMK6+pZ619tFZ/dRIT5EyNi4muopckNR/ItWPw==
   dependencies:
-    "@kie-tools-core/operating-system" "0.22.0"
+    "@kie-tools-core/operating-system" "0.23.0"
 
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"

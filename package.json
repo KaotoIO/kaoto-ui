@@ -31,12 +31,12 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@kie-tools-core/editor": "0.22.0",
-    "@kie-tools-core/guided-tour": "0.22.0",
-    "@kie-tools-core/monaco-editor": "0.22.0",
-    "@kie-tools-core/notifications": "0.22.0",
-    "@kie-tools-core/patternfly-base": "0.22.0",
-    "@kie-tools-core/workspace": "0.22.0",
+    "@kie-tools-core/editor": "0.23.0",
+    "@kie-tools-core/guided-tour": "0.23.0",
+    "@kie-tools-core/monaco-editor": "0.23.0",
+    "@kie-tools-core/notifications": "0.23.0",
+    "@kie-tools-core/patternfly-base": "0.23.0",
+    "@kie-tools-core/workspace": "0.23.0",
     "@patternfly/patternfly": "4.210.2",
     "@patternfly/react-code-editor": "4.76.7",
     "@patternfly/react-core": "4.235.7",
