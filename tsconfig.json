@@ -20,10 +20,10 @@
       "@kaoto/assets": ["./src/assets"],
       "@kaoto/components": ["./src/components"],
       "@kaoto/layout": ["./src/layout"],
-      "@kaoto/types": ["./src/@kaoto"],
       "@kaoto/routes": ["./src/routes"],
       "@kaoto/services": ["./src/services"],
       "@kaoto/store": ["./src/store"],
+      "@kaoto/types": ["./src/types"],
       "@kaoto/utils": ["./src/utils"]
     },
     "strict": true,
