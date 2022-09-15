@@ -108,7 +108,7 @@ export interface IStepProps {
 }
 
 export interface IStepPropsBranch {
-  steps?: IStepProps[];
+  steps: IStepProps[];
   parameters?: IStepPropsParameters[];
 }
 

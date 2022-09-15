@@ -60,7 +60,6 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
       // update the steps, the new node will be created automatically
       replaceStep(step);
     } else {
-      console.log('step CANNOT be replaced');
       addAlert &&
         addAlert({
           title: 'Add Step Unsuccessful',
@@ -78,13 +77,13 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           onDrop={onDropReplace}
           data-testid={`viz-step-${data.step.name}`}
         >
-          {/* LEFT EDGE */}
-          {data.step.type !== 'END' && !isLastNode && (
+          {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
+          {data.step.type !== 'START' && (
             <Handle
               isConnectable={false}
-              type="source"
-              position={Position.Right}
-              id="b"
+              type="target"
+              position={Position.Left}
+              id="a"
               style={{ borderRadius: 0 }}
             />
           )}
@@ -124,19 +123,19 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             <img src={data.icon} alt={data.label} />
           </div>
 
-          {/* RIGHT EDGE */}
-          {data.step.type !== 'START' && (
+          {/* STEP LABEL */}
+          <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
+
+          {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
+          {data.step.type !== 'END' && !isLastNode && (
             <Handle
               isConnectable={false}
-              type="target"
-              position={Position.Left}
-              id="a"
+              type="source"
+              position={Position.Right}
+              id="b"
               style={{ borderRadius: 0 }}
             />
           )}
-
-          {/* STEP LABEL */}
-          <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
         </div>
       ) : (
         <div

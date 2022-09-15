@@ -7,17 +7,16 @@ import {
   VisualizationStep,
   VisualizationStepViews,
 } from '@kaoto/components';
-import { findStepIdxWithUUID } from '@kaoto/services';
+import {
+  buildBranchStepNodes,
+  buildEdges,
+  buildNodesFromSteps,
+  findStepIdxWithUUID,
+} from '@kaoto/services';
 import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
-import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto/types';
-import { truncateString } from '@kaoto/utils';
+import { IStepProps, IViewData, IVizStepPropsNode } from '@kaoto/types';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import ReactFlow, {
-  Background,
-  Controls,
-  MarkerType,
-  ReactFlowProvider,
-} from 'react-flow-renderer';
+import ReactFlow, { Background, Controls, ReactFlowProvider } from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import 'react-flow-renderer/dist/theme-default.css';
 
@@ -25,9 +24,6 @@ interface IVisualization {
   initialState?: IViewData;
   toggleCatalog?: () => void;
 }
-
-let id = 0;
-const getId = () => `dndnode_${id++}`;
 
 const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
@@ -44,10 +40,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
   // initial loading of visualization steps
   useEffect(() => {
-    const { stepEdges, stepsAsNodes } = prepareAndSetVizDataSteps(integrationJson.steps.slice());
-
-    setEdges(stepEdges);
-    setNodes(stepsAsNodes);
+    buildNodesAndEdges(integrationJson.steps.slice());
   }, []);
 
   /**
@@ -62,10 +55,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       setViews(views);
     });
 
-    const { stepEdges, stepsAsNodes } = prepareAndSetVizDataSteps(integrationJson.steps.slice());
-
-    setEdges(stepEdges);
-    setNodes(stepsAsNodes);
+    buildNodesAndEdges(integrationJson.steps.slice());
 
     previousIntegrationJson.current = integrationJson;
   }, [integrationJson]);
@@ -78,103 +68,40 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     []
   );
 
-  /**
-   * Creates an object for the Visualization from the Step model.
-   * Contains UI-specific metadata (e.g. position).
-   * Data is stored in the `nodes` and `edges` hooks.
-   */
-  const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
-    const incrementAmt = 160;
-    const stepsAsNodes: IVizStepPropsNode[] = [];
-    const stepEdges: IVizStepPropsEdge[] = [];
-    const firstStepPosition = { x: window.innerWidth / 2 - incrementAmt - 80, y: 250 };
+  function buildNodesAndEdges(steps: IStepProps[]) {
+    // contains main integration nodes
+    // + branch nodes built separately
+    const combinedNodes: IVizStepPropsNode[] = [];
 
-    // if there are no steps or if the first step has a `type`,
-    // but it isn't a source, create a dummy placeholder step
-    if (steps.length === 0 || (steps.length > 0 && steps[0].type && steps[0].type !== 'START')) {
-      stepsAsNodes.unshift({
-        data: {
-          label: 'ADD A STEP',
-          step: {
-            name: '',
-            type: 'START',
-          },
-        },
-        id: getId(),
-        position: firstStepPosition,
-        type: 'step',
-      });
-    }
+    buildNodesFromSteps(
+      steps,
+      (stepsAsNodes) => {
+        combinedNodes.push(...stepsAsNodes);
 
-    const calculatePosition = (stepIdx: number, previousStep?: any) => {
-      // check if there is a node with the same index,
-      // use its position if there is
-      if (nodes[stepIdx]) {
-        return { ...nodes[stepIdx].position };
-      }
-      if (!previousStep) {
-        return firstStepPosition;
-      } else {
-        return { x: previousStep?.position.x + incrementAmt, y: 250 };
-      }
-    };
+        // next we handle each step that contains branches
+        const nodesWithBranches = stepsAsNodes.filter((s) => s.data.step?.branches);
 
-    steps.map((step, index) => {
-      // Grab the previous step to use for determining position and drawing edges
-      let previousStep: any;
-      // if missing a START step, accommodate for ADD A STEP placeholder
-      if (stepsAsNodes.length > 0 && stepsAsNodes[0].data.label === 'ADD A STEP') {
-        previousStep = stepsAsNodes[index];
-      } else {
-        previousStep = stepsAsNodes[index - 1];
-      }
-
-      let stepEdge: IVizStepPropsEdge = {
-        data: undefined,
-        source: '',
-        target: '',
-        id: '',
-        markerEnd: {
-          type: MarkerType.Arrow,
-        },
-      };
-
-      // Build the default parameters
-      let inputStep: IVizStepPropsNode = {
-        data: {
-          icon: step.icon,
-          kind: step.kind,
-          label: truncateString(step.name, 14),
-          step,
-          UUID: step.UUID,
-        },
-        id: getId(),
-        position: calculatePosition(index, previousStep),
-        type: 'step',
-      };
-
-      // add edge properties if more than one step, and not on first step
-      if (previousStep) {
-        stepEdge.arrowHeadType = 'arrowclosed';
-        // previousStep here is stale when deleting first step
-        stepEdge.id = 'e' + previousStep.id + '-' + inputStep.id;
-        stepEdge.source = previousStep.id;
-
-        // even the last step needs to build the step edge before it, with itself as the target
-        stepEdge.target = inputStep.id;
-        stepEdge.type = 'insert';
-
-        // only add step edge if there is more than one step and not on the first step
-        stepEdges.push(stepEdge);
-      }
-
-      stepsAsNodes.push(inputStep);
-
-      return;
-    });
-
-    return { stepEdges, stepsAsNodes };
-  };
+        if (nodesWithBranches.length > 0) {
+          nodesWithBranches.map((nodeParent) => {
+            buildBranchStepNodes(
+              nodeParent,
+              nodeParent.data.step?.branches!,
+              (branchStepsAsNodes) => {
+                combinedNodes.push(...branchStepsAsNodes);
+              },
+              160
+            );
+          });
+          // then build edges separately below
+        }
+        // need to add special handling for branches in building edges
+        setEdges(buildEdges(combinedNodes));
+        setNodes(combinedNodes);
+      },
+      undefined,
+      nodes
+    );
+  }
 
   // Delete an integration step
   const handleDeleteStep = () => {
@@ -252,7 +179,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
       const oldStepIdx = findStepIdxWithUUID(selectedStep?.UUID!, integrationJson.steps);
 
-      // Replace step with new step
       replaceStep(newStep, oldStepIdx);
     } else {
       return;
