@@ -2,7 +2,7 @@ import { fetchCatalogSteps } from '../api';
 import { useDeploymentStore, useSettingsStore } from '../store';
 import { shorten, truncateString, usePrevious } from '../utils';
 import './Catalog.css';
-import { IStepProps } from '@kaoto';
+import { IStepProps } from '@kaoto/types';
 import {
   AlertVariant,
   Bullseye,

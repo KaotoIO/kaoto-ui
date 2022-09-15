@@ -89,8 +89,8 @@ module.exports = () => {
       // new CopyPlugin({
       //   patterns: [
       //     {
-      //       from: path.resolve(__dirname, 'src', '@kaoto'),
-      //       to: path.resolve(__dirname, 'dist', '@kaoto'),
+      //       from: path.resolve(__dirname, 'src', '@kaoto/types'),
+      //       to: path.resolve(__dirname, 'dist', '@kaoto/types'),
       //     },
       //   ],
       // }),

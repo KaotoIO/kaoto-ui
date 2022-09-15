@@ -95,6 +95,16 @@ export class KaotoEditor extends React.Component<Props, State> {
     this.props.newEdit(new WorkspaceEdit(content));
   }
 
+  // public updateContent(content: string): void {
+  //   this.setState((prevState, { newEdit }) => {
+  //     if (content !== prevState.content) {
+  //       newEdit(new WorkspaceEdit(content));
+  //       return { ...prevState, content: content }
+  //     }
+  //     return prevState;
+  //   });
+  // }
+
   public async undo(): Promise<void> {
     return Promise.resolve(this.state.undoCallback?.());
   }

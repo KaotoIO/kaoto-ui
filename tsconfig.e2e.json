@@ -16,7 +16,8 @@
     "noUnusedParameters": true,
     "paths": {
       "*": ["*", "types/*"],
-      "@kaoto": ["./src/@kaoto"]
+      "@kaoto/types": ["./src/types"],
+      "@kaoto/store": ["./src/store"]
     }
   },
   "include": ["./**/*.cy.(t|j)s"]

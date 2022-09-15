@@ -2,7 +2,7 @@ import { fetchIntegrationJson, fetchIntegrationSourceCode } from '../api';
 import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '../store';
 import { usePrevious } from '../utils';
 import { StepErrorBoundary } from './StepErrorBoundary';
-import { IIntegration } from '@kaoto';
+import { IIntegration } from '@kaoto/types';
 import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
 import { EraserIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';
 import { useEffect, useRef } from 'react';

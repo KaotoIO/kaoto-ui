@@ -9,7 +9,7 @@ import {
   VisualizationStep,
 } from './';
 import './Visualization.css';
-import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto';
+import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto/types';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, {
   Background,

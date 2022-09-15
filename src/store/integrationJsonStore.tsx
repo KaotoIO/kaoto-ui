@@ -2,7 +2,7 @@ import { useDeploymentStore } from './deploymentStore';
 import { useIntegrationSourceStore } from './integrationSourceStore';
 import { useSettingsStore } from './settingsStore';
 import { useVisualizationStore } from './visualizationStore';
-import { IIntegration, IStepProps, IViewProps } from '@kaoto';
+import { IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 import create from 'zustand';
 

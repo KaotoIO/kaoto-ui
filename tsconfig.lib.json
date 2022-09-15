@@ -15,7 +15,8 @@
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "paths": {
-      "@kaoto": ["./src/@kaoto"]
+      "@kaoto/types": ["./src/types"],
+      "@kaoto/store": ["./src/store"]
     }
   },
   "include": ["src"],

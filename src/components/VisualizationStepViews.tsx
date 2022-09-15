@@ -10,7 +10,7 @@ import { Extension } from './Extension';
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import { dynamicImport } from './import';
-import { IIntegration, IKaotoApi, IStepProps } from '@kaoto';
+import { IIntegration, IKaotoApi, IStepProps } from '@kaoto/types';
 import {
   AlertVariant,
   Button,
