@@ -1,15 +1,16 @@
-import { fetchViews } from '../api';
-import { useIntegrationJsonStore, useVisualizationStore } from '../store';
-import { findStepIdxWithUUID, truncateString } from '../utils';
+import './Visualization.css';
+import { fetchViews } from '@kaoto/api';
 import {
   KaotoDrawer,
   PlusButtonEdge,
   StepErrorBoundary,
-  VisualizationStepViews,
   VisualizationStep,
-} from './';
-import './Visualization.css';
-import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto';
+  VisualizationStepViews,
+} from '@kaoto/components';
+import { findStepIdxWithUUID } from '@kaoto/services';
+import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
+import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto/types';
+import { truncateString } from '@kaoto/utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, {
   Background,
@@ -39,11 +40,22 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   const { edges, nodes, deleteNode, onEdgesChange, onNodesChange, setEdges, setNodes } =
     useVisualizationStore();
 
+  const incrementAmt = 160;
+  const initialStepPosition = {
+    x: window.innerWidth / 2 - incrementAmt - 80,
+    y: 250,
+  };
   const previousIntegrationJson = useRef(integrationJson);
 
   // initial loading of visualization steps
   useEffect(() => {
-    prepareAndSetVizDataSteps(integrationJson.steps.slice());
+    const { stepEdges, stepsAsNodes } = prepareAndSetVizDataSteps(
+      integrationJson.steps.slice(),
+      initialStepPosition
+    );
+
+    setEdges(stepEdges);
+    setNodes(stepsAsNodes);
   }, []);
 
   /**
@@ -58,7 +70,14 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       setViews(views);
     });
 
-    prepareAndSetVizDataSteps(integrationJson.steps.slice());
+    // prepareAndSetVizDataSteps(integrationJson.steps.slice());
+    const { stepEdges, stepsAsNodes } = prepareAndSetVizDataSteps(
+      integrationJson.steps.slice(),
+      initialStepPosition
+    );
+
+    setEdges(stepEdges);
+    setNodes(stepsAsNodes);
 
     previousIntegrationJson.current = integrationJson;
   }, [integrationJson]);
@@ -71,16 +90,34 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     []
   );
 
+  const calculatePosition = (
+    stepIdx: number,
+    firstStepPosition: { x: number; y: number },
+    previousStep?: any
+  ) => {
+    // check if there is a node with the same index,
+    // use its position if there is
+    if (nodes[stepIdx]) {
+      return { ...nodes[stepIdx].position };
+    }
+    if (!previousStep) {
+      return firstStepPosition;
+    } else {
+      return { x: previousStep?.position.x + incrementAmt, y: 250 };
+    }
+  };
+
   /**
    * Creates an object for the Visualization from the Step model.
    * Contains UI-specific metadata (e.g. position).
    * Data is stored in the `nodes` and `edges` hooks.
    */
-  const prepareAndSetVizDataSteps = (steps: IStepProps[]) => {
-    const incrementAmt = 160;
+  const prepareAndSetVizDataSteps = (
+    steps: IStepProps[],
+    initialPosition: { x: number; y: number }
+  ) => {
     const stepsAsNodes: IVizStepPropsNode[] = [];
     const stepEdges: IVizStepPropsEdge[] = [];
-    const firstStepPosition = { x: window.innerWidth / 2 - incrementAmt - 80, y: 250 };
 
     // if there are no steps or if the first step has a `type`,
     // but it isn't a source, create a dummy placeholder step
@@ -94,23 +131,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           },
         },
         id: getId(),
-        position: firstStepPosition,
+        position: initialPosition,
         type: 'step',
       });
     }
-
-    const calculatePosition = (stepIdx: number, previousStep?: any) => {
-      // check if there is a node with the same index,
-      // use its position if there is
-      if (nodes[stepIdx]) {
-        return { ...nodes[stepIdx].position };
-      }
-      if (!previousStep) {
-        return firstStepPosition;
-      } else {
-        return { x: previousStep?.position.x + incrementAmt, y: 250 };
-      }
-    };
 
     steps.map((step, index) => {
       // Grab the previous step to use for determining position and drawing edges
@@ -142,7 +166,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           UUID: step.UUID,
         },
         id: getId(),
-        position: calculatePosition(index, previousStep),
+        position: calculatePosition(index, previousStep, initialPosition),
         type: 'step',
       };
 
@@ -166,8 +190,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       return;
     });
 
-    setEdges(stepEdges);
-    setNodes(stepsAsNodes);
+    return { stepEdges, stepsAsNodes };
   };
 
   // Delete an integration step
@@ -184,7 +207,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     deleteStep(stepsIndex);
   };
 
-  // Close Step View panel
   const onClosePanelClick = () => {
     setIsPanelExpanded(false);
   };

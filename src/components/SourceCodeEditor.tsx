@@ -1,8 +1,8 @@
-import { fetchIntegrationJson, fetchIntegrationSourceCode } from '../api';
-import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '../store';
-import { usePrevious } from '../utils';
-import { StepErrorBoundary } from './StepErrorBoundary';
-import { IIntegration } from '@kaoto';
+import { fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
+import { StepErrorBoundary } from '@kaoto/components';
+import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
+import { IIntegration } from '@kaoto/types';
+import { usePrevious } from '@kaoto/utils';
 import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
 import { EraserIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';
 import { useEffect, useRef } from 'react';
@@ -10,7 +10,6 @@ import EditorDidMount from 'react-monaco-editor';
 import { useDebouncedCallback } from 'use-debounce';
 
 interface ISourceCodeEditor {
-  // Used to mock data for stories
   initialData?: string;
   language?: Language;
   theme?: string;

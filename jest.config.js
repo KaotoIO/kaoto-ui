@@ -12,7 +12,7 @@ module.exports = {
 
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.e2e.json',
+      tsconfig: 'tsconfig.json',
     },
   },
 
@@ -24,7 +24,18 @@ module.exports = {
       __dirname,
       './src/__mocks__/reactCodeEditorMock.js'
     ),
+    '@kaoto/api': path.resolve(__dirname, './src/api'),
+    '@kaoto/assets': path.resolve(__dirname, './src/assets'),
+    '@kaoto/components': path.resolve(__dirname, './src/components'),
+    '@kaoto/layout': path.resolve(__dirname, './src/layout'),
+    '@kaoto/types': path.resolve(__dirname, './src/@kaoto'),
+    '@kaoto/routes': path.resolve(__dirname, './src/routes'),
+    '@kaoto/services': path.resolve(__dirname, './src/services'),
+    '@kaoto/store': path.resolve(__dirname, './src/store'),
+    '@kaoto/utils': path.resolve(__dirname, './src/utils'),
   },
+
+  roots: ['<rootDir>'],
 
   // A preset that is used as a base for Jest's configuration
   preset: 'ts-jest',

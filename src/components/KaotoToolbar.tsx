@@ -1,12 +1,17 @@
-import { startDeployment } from '../api';
+import { startDeployment } from '@kaoto/api';
+import {
+  AppearanceModal,
+  ConfirmationModal,
+  DeploymentsModal,
+  SettingsModal,
+} from '@kaoto/components';
+import { isNameValidCheck } from '@kaoto/services';
 import {
   useDeploymentStore,
   useIntegrationJsonStore,
   useIntegrationSourceStore,
   useSettingsStore,
-} from '../store';
-import { isNameValidCheck } from '../utils';
-import { AppearanceModal, ConfirmationModal, DeploymentsModal, SettingsModal } from './index';
+} from '@kaoto/store';
 import {
   AlertVariant,
   Button,

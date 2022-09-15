@@ -1,5 +1,5 @@
 import { fetchDeploymentLogs } from '../api';
-import { useDeploymentStore, useSettingsStore } from '../store';
+import { useDeploymentStore, useSettingsStore } from '@kaoto/store';
 import {
   Button,
   Toolbar,
