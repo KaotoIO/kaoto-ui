@@ -1,8 +1,8 @@
-import { useIntegrationJsonStore, useSettingsStore } from '../store';
-import { findStepIdxWithUUID, insertableStepTypes } from '../utils';
-import { MiniCatalog } from './MiniCatalog';
 import './PlusButtonEdge.css';
-import { IStepProps } from '@kaoto';
+import { MiniCatalog } from '@kaoto/components';
+import { findStepIdxWithUUID, insertableStepTypes } from '@kaoto/services';
+import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
+import { IStepProps } from '@kaoto/types';
 import { Popover } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
 import {

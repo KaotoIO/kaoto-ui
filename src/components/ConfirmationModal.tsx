@@ -1,6 +1,5 @@
+import { OrangeExclamationTriangleIcon } from './Icons';
 import { Button, Modal, ModalVariant } from '@patternfly/react-core';
-import { OrangeExclamationTriangleIcon } from "./Icons";
-
 
 export interface IConfirmationModal {
   handleCancel: () => void;

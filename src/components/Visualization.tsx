@@ -1,15 +1,16 @@
-import { fetchViews } from '../api';
-import { useIntegrationJsonStore, useVisualizationStore } from '../store';
-import { findStepIdxWithUUID, truncateString } from '../utils';
+import './Visualization.css';
+import { fetchViews } from '@kaoto/api';
 import {
   KaotoDrawer,
   PlusButtonEdge,
   StepErrorBoundary,
-  VisualizationStepViews,
   VisualizationStep,
-} from './';
-import './Visualization.css';
-import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto';
+  VisualizationStepViews,
+} from '@kaoto/components';
+import { findStepIdxWithUUID } from '@kaoto/services';
+import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
+import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto/types';
+import { truncateString } from '@kaoto/utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, {
   Background,
@@ -43,7 +44,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
   // initial loading of visualization steps
   useEffect(() => {
-    prepareAndSetVizDataSteps(integrationJson.steps.slice());
+    const { stepEdges, stepsAsNodes } = prepareAndSetVizDataSteps(integrationJson.steps.slice());
+
+    setEdges(stepEdges);
+    setNodes(stepsAsNodes);
   }, []);
 
   /**
@@ -58,7 +62,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       setViews(views);
     });
 
-    prepareAndSetVizDataSteps(integrationJson.steps.slice());
+    const { stepEdges, stepsAsNodes } = prepareAndSetVizDataSteps(integrationJson.steps.slice());
+
+    setEdges(stepEdges);
+    setNodes(stepsAsNodes);
 
     previousIntegrationJson.current = integrationJson;
   }, [integrationJson]);
@@ -166,8 +173,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       return;
     });
 
-    setEdges(stepEdges);
-    setNodes(stepsAsNodes);
+    return { stepEdges, stepsAsNodes };
   };
 
   // Delete an integration step
@@ -184,7 +190,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     deleteStep(stepsIndex);
   };
 
-  // Close Step View panel
   const onClosePanelClick = () => {
     setIsPanelExpanded(false);
   };

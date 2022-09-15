@@ -1,4 +1,4 @@
-import { HeaderTools } from '../layout/HeaderTools';
+import { HeaderTools } from '@kaoto/layout';
 import { Form, FormSection, Modal, ModalVariant } from '@patternfly/react-core';
 
 export interface IAppearanceModal {

@@ -1,5 +1,5 @@
 import request from './request';
-import { IIntegration, IStepProps } from '@kaoto';
+import { IIntegration, IStepProps } from '@kaoto/types';
 
 const apiVersion = '/v1';
 

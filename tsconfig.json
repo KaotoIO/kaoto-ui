@@ -1,14 +1,33 @@
 {
   "baseUrl": ".",
-  "extends": "./tsconfig.build.json",
   "compilerOptions": {
     "allowJs": false,
     "baseUrl": ".",
-    "declaration": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "jsx": "react-jsx",
+    "lib": ["dom", "esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "paths": {
       "*": ["*", "types/*"],
-      "@kaoto": ["./src/@kaoto"]
-    }
+      "@kaoto/api": ["./src/api"],
+      "@kaoto/assets": ["./src/assets"],
+      "@kaoto/components": ["./src/components"],
+      "@kaoto/layout": ["./src/layout"],
+      "@kaoto/routes": ["./src/routes"],
+      "@kaoto/services": ["./src/services"],
+      "@kaoto/store": ["./src/store"],
+      "@kaoto/types": ["./src/types"],
+      "@kaoto/utils": ["./src/utils"]
+    },
+    "strict": true,
+    "target": "es6"
   },
   "include": ["src", "webpack.common.js", "setupTests.ts"],
   "exclude": ["cypress"]
