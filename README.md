@@ -1,22 +1,21 @@
-<p align="center">
-  <a href="https://github.com/KaotoIO/kaoto-ui/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/KaotoIO/kaoto-ui" alt="license"/></a>
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/kaotoio/kaoto-ui?include_prereleases)
+[![GitHub license](https://img.shields.io/github/license/KaotoIO/kaoto-ui)](https://github.com/KaotoIO/kaoto-ui/blob/main/LICENSE)
 
-  <img src="https://img.shields.io/github/languages/code-size/KaotoIO/kaoto-ui" alt="code size"/>
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/KaotoIO/kaoto-ui)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/kaotoio/kaoto-ui)
+![GitHub contributors](https://img.shields.io/github/contributors/kaotoio/kaoto-ui)
 
-  <a href="https://github.com/KaotoIO/kaoto-ui/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/KaotoIO/kaoto-ui" alt="contributors"/></a>
+[![🧪 Unit Tests (Jest) 🧪](https://github.com/KaotoIO/kaoto-ui/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/KaotoIO/kaoto-ui/actions/workflows/unit-tests.yml)
+[![🏗️ E2E Tests (Cypress)](https://github.com/KaotoIO/kaoto-ui/actions/workflows/e2e-tests.yml/badge.svg)](https://github.com/KaotoIO/kaoto-ui/actions/workflows/e2e-tests.yml)
+[![codecov](https://codecov.io/gh/KaotoIO/kaoto-ui/branch/main/graph/badge.svg?token=QN5H8C1FWI)](https://codecov.io/gh/KaotoIO/kaoto-ui)
 
-  <a href="https://twitter.com/intent/follow?screen_name=KaotoIO">
-    <img src="https://img.shields.io/twitter/follow/KaotoIO?style=social&logo=twitter"
-      alt="follow on Twitter"/></a>
-</p>
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-ui&metric=alert_status)](https://sonarcloud.io/dashboard?id=KaotoIO_kaoto-ui)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-ui&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=KaotoIO_kaoto-ui)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-ui&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=KaotoIO_kaoto-ui)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=KaotoIO_kaoto-ui&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=KaotoIO_kaoto-ui)
 
-<p align="center">
-  <a href="https://github.com/KaotoIO/kaoto-ui/actions/workflows/e2e-tests.yml">
-    <img src="https://github.com/KaotoIO/kaoto-ui/actions/workflows/e2e-tests.yml/badge.svg?event=push" alt="🏗️ E2E Tests (Cypress)"/></a>
-
-</p>
+![Twitter Follow](https://img.shields.io/twitter/follow/kaotoio?style=social)
+![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCcWUAnL5sBYVFen0RMxbZ3A?style=social)
 
 # Kaoto UI
 
