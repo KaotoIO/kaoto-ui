@@ -5,12 +5,13 @@ import { MiniCatalog } from './MiniCatalog';
 import './Visualization.css';
 import { IStepProps, IVizStepNodeData } from '@kaoto';
 import { AlertVariant, Popover } from '@patternfly/react-core';
-import { CubesIcon, PlusIcon } from '@patternfly/react-icons';
+import { CubesIcon, PlusIcon, TrashIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, Node, NodeProps, Position, useNodes } from 'react-flow-renderer';
 
 const currentDSL = useSettingsStore.getState().settings.dsl;
 const addStep = useIntegrationJsonStore.getState().addStep;
+const deleteStep = useIntegrationJsonStore.getState().deleteStep;
 const replaceStep = useIntegrationJsonStore.getState().replaceStep;
 
 // Custom Node type and component for React Flow
@@ -24,7 +25,8 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const { addAlert } = useAlert() || {};
 
   const onMiniCatalogClickAdd = (selectedStep: IStepProps) => addStep(selectedStep);
-
+  const onMiniCatalogClickDelete = (selectedStep: number) => deleteStep(selectedStep);
+  console.log(currentIdx)
   /**
    * Handles dropping a step onto an existing step (i.e. step replacement)
    */
@@ -47,6 +49,10 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
         });
     }
   };
+
+  const handleTrashClick = () => { data.handleDeleteStep
+  }
+
 
   /**
    * Handles dropping a step onto a slot
@@ -119,6 +125,17 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               </button>
             </Popover>
           )}
+
+              <Popover bodyContent={undefined}>
+              <button
+                className="stepNode__Delete deleteButton nodrag"
+                data-testid={'configurationTab__deleteBtn'}
+                onClick={handleTrashClick}
+              >
+                <TrashIcon />
+              </button>
+            </Popover>
+          
 
           {/* VISUAL REPRESENTATION OF STEP WITH ICON */}
           <div className={'stepNode__Icon stepNode__clickable'}>

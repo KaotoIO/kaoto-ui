@@ -37,6 +37,11 @@
     top: 40%;
 }
 
+.stepNode__Delete{
+    position: absolute;
+    left: -22px;
+    top: 40%;
+}
 .stepNode__Icon {
     position: relative;
     top: 55%;
