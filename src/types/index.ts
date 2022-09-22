@@ -155,6 +155,7 @@ export interface IVizStepNodeData {
   label: string;
   step?: IStepProps;
   UUID?: string;
+  handleDeleteStep?: () => void;
 }
 
 /**

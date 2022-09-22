@@ -145,6 +145,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           icon: step.icon,
           kind: step.kind,
           label: truncateString(step.name, 14),
+          handleDeleteStep,
           step,
           UUID: step.UUID,
         },
@@ -179,7 +180,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   // Delete an integration step
   const handleDeleteStep = () => {
     if (!selectedStep.UUID) return;
-    setIsPanelExpanded(false);
+
     setSelectedStep({ name: '', type: '' });
 
     // here we pass integrationJson array of steps instead of `nodes`
@@ -269,11 +270,17 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           <VisualizationStepViews
             step={selectedStep}
             isPanelExpanded={isPanelExpanded}
-            deleteStep={handleDeleteStep}
+            deleteStep={() => {
+              handleDeleteStep();
+              setIsPanelExpanded(false);
+            }}
             onClosePanelClick={onClosePanelClick}
             saveConfig={saveConfig}
+          
           />
+            
         }
+      
         position={'right'}
         id={'right-resize-panel'}
         defaultSize={'500px'}
