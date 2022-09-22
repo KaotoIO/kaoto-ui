@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import '@patternfly/react-core/dist/styles/base.css';
 import '@patternfly/patternfly/patternfly.css';
 import '@patternfly/patternfly/patternfly-theme-dark.css';
 import '@patternfly/patternfly/utilities/Accessibility/accessibility.css';

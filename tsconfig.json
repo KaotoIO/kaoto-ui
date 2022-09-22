@@ -5,10 +5,10 @@
     "allowJs": false,
     "baseUrl": ".",
     "declaration": true,
+    "esModuleInterop": true,
     "paths": {
       "*": ["*", "types/*"],
-      "@kaoto/types": ["./src/types"],
-      "@kaoto/store": ["./src/store"],
+      "@kaoto/types": ["./src/types"]
     }
   },
   "include": ["src", "webpack.common.js", "setupTests.ts"],

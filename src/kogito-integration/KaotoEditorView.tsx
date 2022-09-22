@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-// @ts-nocheck
+//@ts-nocheck
 
-import * as React from "react";
 import {
   Editor,
   EditorInitArgs,
@@ -45,11 +44,11 @@ export class KaotoEditorView implements Editor {
   }
 
   public setContent(path: string, content: string): Promise<void> {
-    return this.self.setContent(path, content);
+    return this.self!.setContent(path, content);
   }
 
   public getContent(): Promise<string> {
-    return this.self.getContent();
+    return this.self!.getContent();
   }
 
   public getPreview(): Promise<string | undefined> {
@@ -71,15 +70,17 @@ export class KaotoEditorView implements Editor {
   }
 
   public async undo(): Promise<void> {
-    return this.self.undo();
+    console.log(" Undo??? ");
+    return this.self!.undo();
   }
 
   public async redo(): Promise<void> {
-    return this.self.redo();
+    console.log(" Redo??? ");
+    return this.self!.redo();
   }
 
   public async validate(): Promise<Notification[]> {
-    return Promise.resolve(this.self.validate());
+    return Promise.resolve([]);
   }
 
   public async setTheme(): Promise<void> {

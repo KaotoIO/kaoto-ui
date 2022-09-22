@@ -2,13 +2,13 @@ import "./KaotoEditor.css";
 import { AlertProvider, MASLoading } from "../layout";
 import { AppLayout } from "../layout/AppLayout";
 import { AppRoutes } from "../routes";
-import { Suspense } from "react";
 import { HashRouter as Router } from "react-router-dom";
 
-import * as React from "react";
+import { Suspense, Component, createRef } from "react";
 import { WorkspaceEdit } from "@kie-tools-core/workspace/dist/api";
 import { Notification } from "@kie-tools-core/notifications/dist/api";
-import { KogitoEditorIntegrationProvider } from "./KogitoEditorIntegrationProvider";
+import { KaotoIntegrationProviderRef, KogitoEditorIntegrationProvider } from "./KogitoEditorIntegrationProvider";
+import { EmptyStateNoContent } from "./EmptyStateNoContent";
 
 interface Props {
   /**
@@ -47,11 +47,10 @@ export interface State {
   path: string;
   content: string;
   originalContent: string;
-  undoCallback?: () => void;
-  redoCallback?: () => void;
+  contentReady: boolean;
 }
 
-export class KaotoEditor extends React.Component<Props, State> {
+export class KaotoEditor extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     props.exposing(this);
@@ -59,8 +58,11 @@ export class KaotoEditor extends React.Component<Props, State> {
       path: "",
       content: "",
       originalContent: "",
+      contentReady: false
     };
   }
+
+  public providerRef = createRef<KaotoIntegrationProviderRef>();
 
   public componentDidMount(): void {
     this.props.ready();
@@ -78,7 +80,7 @@ export class KaotoEditor extends React.Component<Props, State> {
   }
 
   private doSetContent(path: string, content: string): void {
-    this.setState({ path: path, content: content, originalContent: content });
+    this.setState({ path: path, content: content, originalContent: content, contentReady: true });
   }
 
   public getContent(): Promise<string> {
@@ -91,53 +93,44 @@ export class KaotoEditor extends React.Component<Props, State> {
   }
 
   public updateContent(content: string): void {
-    this.setState({ content: content });
+    this.setState({ content });
     this.props.newEdit(new WorkspaceEdit(content));
   }
 
-  // public updateContent(content: string): void {
-  //   this.setState((prevState, { newEdit }) => {
-  //     if (content !== prevState.content) {
-  //       newEdit(new WorkspaceEdit(content));
-  //       return { ...prevState, content: content }
-  //     }
-  //     return prevState;
-  //   });
-  // }
-
   public async undo(): Promise<void> {
-    return Promise.resolve(this.state.undoCallback?.());
+    console.log( " Undo ? ");
+    return Promise.resolve(this.providerRef.current?.undo());
   }
 
   public async redo(): Promise<void> {
-    return Promise.resolve(this.state.redoCallback?.());
-  }
-
-  public validate(): Notification[] {
-    return [];
-  }
-
-  public setUndoRedoCallbacks(undoCallback: () => void, redoCallback: () => void): void {
-    this.setState({ undoCallback, redoCallback });
+    console.log( " Redo ? ");
+    return Promise.resolve(this.providerRef.current?.redo());
   }
 
   public render() {
+    const { contentReady } = this.state;
     return (
-      <KogitoEditorIntegrationProvider
-        content={this.state.content}
-        updateContent={(content: string) => this.updateContent(content)}
-        setUndoRedoCallbacks={(undoCallback, redoCallback) => this.setUndoRedoCallbacks(undoCallback, redoCallback)}
-      >
-        <AlertProvider>
-          <Router>
-            <Suspense fallback={<MASLoading />}>
-              <AppLayout>
-                <AppRoutes />
-              </AppLayout>
-            </Suspense>
-          </Router>
-        </AlertProvider>
-      </KogitoEditorIntegrationProvider>
+      <>
+        {contentReady ? (
+          <KogitoEditorIntegrationProvider
+            content={this.state.content}
+            updateContent={(content: string) => this.updateContent(content)}
+            ref={this.providerRef}
+          >
+            <AlertProvider>
+              <Router>
+                <Suspense fallback={<MASLoading />}>
+                  <AppLayout>
+                    <AppRoutes />
+                  </AppLayout>
+                </Suspense>
+              </Router>
+            </AlertProvider>
+          </KogitoEditorIntegrationProvider>
+        ) : (
+          <EmptyStateNoContent />
+        )}
+      </>
     );
   }
 }
