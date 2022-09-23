@@ -1,4 +1,4 @@
-import { startDeployment } from '@kaoto/api';
+import {fetchDefaultNamespace, startDeployment} from '@kaoto/api';
 import {
   AppearanceModal,
   ConfirmationModal,
@@ -75,6 +75,15 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
   useEffect(() => {
     setLocalName(settings.name);
   }, [settings.name]);
+
+  // fetch default namespace from the API,
+  useEffect(() => {
+    fetchDefaultNamespace().then(data => {
+      const newSettings = settings;
+      newSettings.namespace = data.namespace;
+      setSettings(newSettings);
+    });
+  }, [])
 
   const handleDeployStartClick = () => {
     startDeployment(sourceCode, settings.name, settings.namespace)

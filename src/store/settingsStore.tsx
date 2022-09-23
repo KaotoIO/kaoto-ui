@@ -14,7 +14,7 @@ const initialSettings: ISettings = {
   dsl: 'KameletBinding',
   icon: svg,
   name: 'integration',
-  namespace: 'default',
+  namespace: '',
 };
 
 export const useSettingsStore = create<ISettingsStore>((set) => ({
