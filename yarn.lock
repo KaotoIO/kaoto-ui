@@ -820,10 +820,10 @@
   resolved "https://registry.npmjs.org/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@module-federation/typescript@^0.1.10":
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/@module-federation/typescript/-/typescript-0.1.10.tgz#ce3e64c9c7dd46fb0375324dede8fadd093b5ae8"
-  integrity sha512-IlvthHp/xdFDaVJeqr7QzhMRYXlOWFG6fmAwoL0unewNswiOPyMbwCSTZJv/hXSfZZvANMv90YF9xWMwrOgr3g==
+"@module-federation/typescript@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@module-federation/typescript/-/typescript-0.2.1.tgz#ad31484234229d1f2ec1965ce5cb868f74475fde"
+  integrity sha512-61Oo/v150pnuKU9t018OiI43chYEGQj8K1STc127sboacL1OJkfpn8jwGjfyQ9nDQSUjn7hirDF9MjDC3nboJA==
   dependencies:
     axios "^0.27.2"
     download "^8.0.0"
