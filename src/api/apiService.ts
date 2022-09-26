@@ -24,6 +24,18 @@ export async function fetchCapabilities(namespace?: string) {
   }
 }
 
+export async function fetchDefaultNamespace() {
+  try {
+    const resp = await request.get({
+      endpoint: `${apiVersion}/capabilities/namespace`,
+      contentType: 'application/json',
+    });
+    return await resp.json();
+  } catch (err) {
+    return err;
+  }
+}
+
 /**
  * Fetch all Catalog Steps, optionally with specified query params
  * @param queryParams

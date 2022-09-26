@@ -40,6 +40,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const { setSourceCode } = useIntegrationSourceStore();
   const previousIntegrationJson = usePrevious(integrationJson);
   const previousName = usePrevious(localSettings.name);
+  const previousNamespace = usePrevious(localSettings.namespace);
   const [nameValidation, setNameValidation] = useState<
     'default' | 'warning' | 'success' | 'error' | undefined
   >('default');
@@ -54,6 +55,12 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
     if (settings.name === previousName) return;
     setLocalSettings({ ...localSettings, name: settings.name });
   }, [settings.name]);
+
+  useEffect(() => {
+    // update settings with the default namespace fetched from the API
+    if (settings.namespace === previousNamespace) return;
+    setLocalSettings({ ...localSettings, namespace: settings.namespace });
+  }, [settings.namespace]);
 
   useEffect(() => {
     if (previousIntegrationJson === integrationJson) return;
