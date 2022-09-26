@@ -29,7 +29,7 @@
     "@patternfly/react-code-editor": "4.76.7",
     "@patternfly/react-core": "4.235.7",
     "@patternfly/react-icons": "4.86.7",
-    "@patternfly/react-log-viewer": "4.80.7",
+    "@patternfly/react-log-viewer": "4.84.0",
     "@patternfly/react-table": "4.108.1",
     "@rhoas/app-services-ui-shared": "^0.16.4",
     "ajv": "^8.8.2",
@@ -61,7 +61,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@trivago/prettier-plugin-sort-imports": "^3.3.0",
     "@types/jest": "^27.4.1",
-    "@types/react": "18.0.20",
+    "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
     "@types/react-router-dom": "5.3.3",
     "@types/testing-library__jest-dom": "5.14.5",
@@ -115,7 +115,7 @@
     "*.tsx": "eslint --ext .tsx"
   },
   "resolutions": {
-    "@types/react": "18.0.20"
+    "@types/react": "18.0.21"
   },
   "bugs": {
     "url": "https://github.com/KaotoIO/kaoto-ui/issues"
