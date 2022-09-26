@@ -15,10 +15,12 @@
  */
 
 //@ts-nocheck
+import { RefObject, createRef } from "react";
 
 import {
   Editor,
   EditorInitArgs,
+  EditorTheme,
   KogitoEditorChannelApi,
   KogitoEditorEnvelopeContextType,
 } from "@kie-tools-core/editor/dist/api";
@@ -27,7 +29,7 @@ import { Notification } from "@kie-tools-core/notifications/dist/api";
 import { KaotoEditor } from "./KaotoEditor";
 
 export class KaotoEditorView implements Editor {
-  private self: KaotoEditor;
+  private readonly editorRef: RefObject<EditorApi>;
   public af_isReact = true;
   public af_componentId: "kaoto-editor";
   public af_componentTitle: "Kaoto Editor";
@@ -36,7 +38,8 @@ export class KaotoEditorView implements Editor {
     private readonly envelopeContext: KogitoEditorEnvelopeContextType<KogitoEditorChannelApi>,
     private readonly initArgs: EditorInitArgs
   ) {
-    console.log({ initArgs });
+    envelopeContext.channelApi.notifications.kogitoEditor_stateControlCommandUpdate.subscribe(console.log);
+    this.editorRef = createRef<EditorApi>();
   }
 
   public async getElementPosition() {
@@ -44,47 +47,49 @@ export class KaotoEditorView implements Editor {
   }
 
   public setContent(path: string, content: string): Promise<void> {
-    return this.self!.setContent(path, content);
+    return this.editorRef.current!.setContent(path, content);
   }
 
   public getContent(): Promise<string> {
-    return this.self!.getContent();
+    return this.editorRef.current!.getContent();
   }
 
   public getPreview(): Promise<string | undefined> {
-    return Promise.resolve(undefined);
+    return this.editorRef.current!.getPreview();
   }
 
   public af_componentRoot() {
     return (
       <KaotoEditor
-        exposing={(s) => (this.self = s)}
-        ready={() => this.envelopeContext.channelApi.notifications.kogitoEditor_ready.send()}
-        newEdit={(edit) => this.envelopeContext.channelApi.notifications.kogitoWorkspace_newEdit.send(edit)}
+        ref={this.editorRef}
+        channelType={this.initArgs.channel}
+        onReady={() => this.envelopeContext.channelApi.notifications.kogitoEditor_ready.send()}
+        onNewEdit={(edit) => {
+          this.envelopeContext.channelApi.notifications.kogitoWorkspace_newEdit.send(edit);
+        }}
         setNotifications={(path, notifications) =>
           this.envelopeContext.channelApi.notifications.kogitoNotifications_setNotifications.send(path, notifications)
         }
-        resourcesPathPrefix={this.initArgs.resourcesPathPrefix}
+        onStateControlCommandUpdate={(command) =>
+          this.envelopeContext.channelApi.notifications.kogitoEditor_stateControlCommandUpdate.send(command)
+        }
       />
     );
   }
 
   public async undo(): Promise<void> {
-    console.log(" Undo??? ");
-    return this.self!.undo();
+    return this.editorRef.current!.undo();
   }
 
   public async redo(): Promise<void> {
-    console.log(" Redo??? ");
-    return this.self!.redo();
+    return this.editorRef.current!.redo();
   }
 
   public async validate(): Promise<Notification[]> {
-    return Promise.resolve([]);
+    return this.editorRef.current!.validate();
   }
 
-  public async setTheme(): Promise<void> {
-    // Only default theme is supported
-    return Promise.resolve();
+  public async setTheme(theme: EditorTheme) {
+    return this.editorRef.current!.setTheme(theme);
   }
 }

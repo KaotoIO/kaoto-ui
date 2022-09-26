@@ -4,133 +4,169 @@ import { AppLayout } from "../layout/AppLayout";
 import { AppRoutes } from "../routes";
 import { HashRouter as Router } from "react-router-dom";
 
-import { Suspense, Component, createRef } from "react";
+import { Suspense, forwardRef, useState, useCallback, useImperativeHandle, useEffect, useRef } from "react";
 import { WorkspaceEdit } from "@kie-tools-core/workspace/dist/api";
 import { Notification } from "@kie-tools-core/notifications/dist/api";
 import { KaotoIntegrationProviderRef, KogitoEditorIntegrationProvider } from "./KogitoEditorIntegrationProvider";
-import { EmptyStateNoContent } from "./EmptyStateNoContent";
+import { ChannelType, EditorApi, StateControlCommand } from "@kie-tools-core/editor/dist/api";
 
 interface Props {
   /**
-   * Callback to the container so that it may bind to the KaotoEditor.
-   *
-   * @returns Instance of the KaotoEditor.
-   */
-  exposing: (s: KaotoEditor) => void;
-
-  /**
    * Delegation for KogitoEditorChannelApi.kogitoEditor_ready() to signal to the Channel
-   * that the editor is ready. Increases the decoupling of the KaotoEditor from the Channel.
+   * that the editor is ready. Increases the decoupling of the DashbuilderEditor from the Channel.
    */
-  ready: () => void;
+  onReady: () => void;
 
   /**
-   * Delegation for KIEToolsWorkspaceApi.kogitoWorkspace_newEdit(edit) to signal to the Channel
-   * that a change has taken place. Increases the decoupling of the KaotoEditor from the Channel.
+   * Delegation for KogitoEditorChannelApi.kogitoEditor_stateControlCommandUpdate(command) to signal to the Channel
+   * that the editor is performing an undo/redo operation. Increases the decoupling of the DashbuilderEditor
+   * from the Channel.
+   */
+  onStateControlCommandUpdate: (command: StateControlCommand) => void;
+
+  /**
+   * Delegation for WorkspaceChannelApi.kogitoWorkspace_newEdit(edit) to signal to the Channel
+   * that a change has taken place. Increases the decoupling of the DashbuilderEditor from the Channel.
    * @param edit An object representing the unique change.
    */
-  newEdit: (edit: WorkspaceEdit) => void;
+  onNewEdit: (edit: WorkspaceEdit) => void;
 
   /**
-   * Delegation for NotificationsApi.setNotifications(path, notifications) to report all validation
-   * notifications to the Channel that  will replace existing notification for the path. Increases the
-   * decoupling of the KaotoEditor from the Channel.
+   * Delegation for NotificationsChannelApi.kogigotNotifications_setNotifications(path, notifications) to report all validation
+   * notifications to the Channel that will replace existing notification for the path. Increases the
+   * decoupling of the DashbuilderEditor from the Channel.
    * @param path The path that references the Notification
    * @param notifications List of Notifications
    */
   setNotifications: (path: string, notifications: Notification[]) => void;
 
-  resourcesPathPrefix: string;
+  /**
+   * ChannelType where the component is running.
+   */
+  channelType: ChannelType;
 }
 
-export interface State {
-  path: string;
-  content: string;
-  originalContent: string;
-  contentReady: boolean;
-}
+export const KaotoEditor = forwardRef<EditorApi, Props>((props, forwardedRef) => {
+  const [editorContent, setEditorContent] = useState("");
+  const [initialContent, setInitialContent] = useState("");
+  const providerRef = useRef<KaotoIntegrationProviderRef>(null);
 
-export class KaotoEditor extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    props.exposing(this);
-    this.state = {
-      path: "",
-      content: "",
-      originalContent: "",
-      contentReady: false
-    };
-  }
+  const isVSCode = useCallback(() => {
+    return props.channelType === ChannelType.VSCODE_DESKTOP || props.channelType === ChannelType.VSCODE_WEB;
+  }, [props]);
 
-  public providerRef = createRef<KaotoIntegrationProviderRef>();
+  /**
+   * Callback is exposed to the Channel to retrieve the current value of the Editor. It returns the value of
+   * the editorContent, which is the state that has the kaoto yaml.
+   */
+  const getContent = useCallback(() => {
+    return editorContent;
+  }, [editorContent]);
 
-  public componentDidMount(): void {
-    this.props.ready();
-  }
+  const updateEditorToInitialState = useCallback(() => {
+    setEditorContent(initialContent)
+  }, [initialContent]);
 
-  public setContent(path: string, content: string): Promise<void> {
-    console.log("Setting content from VSCode!");
-    try {
-      this.doSetContent(path, content);
-      return Promise.resolve();
-    } catch (e) {
-      console.error(e);
-      return Promise.reject();
+  /**
+   * Callback is exposed to the Channel that is called when a new file is opened. It sets the originalContent to the received value.
+   */
+  const setContent = useCallback(
+    (path: string, content: string) => {
+      setInitialContent(content);
+      updateEditorToInitialState();
+    },
+    []
+  );
+
+  const onContentChanged = useCallback((newContent: string, operation: "EDIT" | "UNDO" | "REDO") => {
+    setEditorContent(newContent);
+    if (operation === "EDIT") {
+      props.onNewEdit(new WorkspaceEdit(newContent));
+    } else if (operation === "UNDO") {
+      if (!isVSCode()) {
+        providerRef.current?.undo();
+      }
+      props.onStateControlCommandUpdate(StateControlCommand.UNDO);
+    } else if (operation === "REDO") {
+      if (!isVSCode()) {
+        providerRef.current?.redo();
+      }
+      props.onStateControlCommandUpdate(StateControlCommand.REDO);
     }
-  }
+  }, [props, isVSCode]);
 
-  private doSetContent(path: string, content: string): void {
-    this.setState({ path: path, content: content, originalContent: content, contentReady: true });
-  }
+  // /**
+  //  * Do a undo command on the State Control and update the current state of the Editor
+  //  */
+  // const undo = useCallback(() => {
+  //   stateControl.undo();
+  //   updateEditorStateWithCurrentEdit(stateControl.getCurrentCommand()?.id);
+  // }, [stateControl]);
 
-  public getContent(): Promise<string> {
-    console.log("Getting code for VSCode!");
-    return Promise.resolve(this.doGetContent());
-  }
+  // /**
+  //  * Do a redo command on the State Control and update the current state of the Editor
+  //  */
+  // const redo = useCallback(() => {
+  //   stateControl.redo();
+  //   updateEditorStateWithCurrentEdit(stateControl.getCurrentCommand()?.id);
+  // }, [stateControl]);
 
-  private doGetContent(): string {
-    return this.state.content;
-  }
+  // /**
+  //  * Update the current state of the Editor using an edit.
+  //  * If the edit is undefined which indicates that the current state is the initial one, the Editor state goes back to the initial state.
+  //  */
+  // const updateEditorStateWithCurrentEdit = useCallback((edit?: string) => {
+  //   if (edit) {
+  //     setEditorContent(edit);
+  //   } else {
+  //     updateEditorToInitialState();
+  //   }
+  // }, [updateEditorToInitialState]);
 
-  public updateContent(content: string): void {
-    this.setState({ content });
-    this.props.newEdit(new WorkspaceEdit(content));
-  }
+  /**
+   * Notify the channel that the Editor is ready after the first render. That enables it to open files.
+   */
+  useEffect(() => {
+    console.log("HERE");
+    props.onReady();
+  }, []);
 
-  public async undo(): Promise<void> {
-    console.log( " Undo ? ");
-    return Promise.resolve(this.providerRef.current?.undo());
-  }
+  /**
+   * The useImperativeHandler gives the control of the Editor component to who has it's reference, making it possible to communicate with the Editor.
+   * It returns all methods that are determined on the EditorApi.
+   */
+  useImperativeHandle(forwardedRef, () => {
+    return {
+      getContent: () => Promise.resolve(getContent()),
+      setContent: (path: string, content: string) => Promise.resolve(setContent(path, content)),
+      getPreview: () => Promise.resolve(undefined),
+      undo: (): Promise<void> => {
+        return providerRef.current?.undo() || Promise.resolve();
+      },
+      redo: (): Promise<void> => {
+        return providerRef.current?.redo() || Promise.resolve();
+      },
+      getElementPosition: () => Promise.resolve(undefined),
+      validate: () => Promise.resolve([]),
+      setTheme: () => Promise.resolve(),
+    };
+  });
 
-  public async redo(): Promise<void> {
-    console.log( " Redo ? ");
-    return Promise.resolve(this.providerRef.current?.redo());
-  }
-
-  public render() {
-    const { contentReady } = this.state;
-    return (
-      <>
-        {contentReady ? (
-          <KogitoEditorIntegrationProvider
-            content={this.state.content}
-            updateContent={(content: string) => this.updateContent(content)}
-            ref={this.providerRef}
-          >
-            <AlertProvider>
-              <Router>
-                <Suspense fallback={<MASLoading />}>
-                  <AppLayout>
-                    <AppRoutes />
-                  </AppLayout>
-                </Suspense>
-              </Router>
-            </AlertProvider>
-          </KogitoEditorIntegrationProvider>
-        ) : (
-          <EmptyStateNoContent />
-        )}
-      </>
-    );
-  }
-}
+  return (
+    <KogitoEditorIntegrationProvider
+      content={editorContent}
+      onContentChanged={onContentChanged}
+      ref={providerRef}
+    >
+      <AlertProvider>
+        <Router>
+          <Suspense fallback={<MASLoading />}>
+            <AppLayout>
+              <AppRoutes />
+            </AppLayout>
+          </Suspense>
+        </Router>
+      </AlertProvider>
+    </KogitoEditorIntegrationProvider>
+  );
+});
