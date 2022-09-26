@@ -27,7 +27,7 @@
   "dependencies": {
     "@patternfly/patternfly": "4.215.1",
     "@patternfly/react-code-editor": "4.76.7",
-    "@patternfly/react-core": "4.235.7",
+    "@patternfly/react-core": "4.239.0",
     "@patternfly/react-icons": "4.90.0",
     "@patternfly/react-log-viewer": "4.84.0",
     "@patternfly/react-table": "4.110.9",
