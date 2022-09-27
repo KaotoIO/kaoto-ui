@@ -26,7 +26,7 @@ export function buildEdge(currentStep: IVizStepPropsNode, previousStep: IVizStep
     arrowHeadType: 'arrowclosed',
 
     // previousStep here is stale when deleting first step
-    id: 'e' + previousStep.id + '-' + currentStep.id,
+    id: 'e-' + previousStep.id + '-' + currentStep.id,
 
     markerEnd: {
       type: MarkerType.Arrow,
@@ -81,21 +81,22 @@ export function buildNodesFromSteps(
   firstNodePosition?: { x: number; y: number },
   previousNodes?: IVizStepPropsNode[]
 ) {
-  const incrementAmt = 160;
+  const incrementXAmt = 160;
+  const incrementYAmt = 250;
   const nodes = previousNodes ?? useVisualizationStore.getState().nodes;
   const stepsAsNodes: IVizStepPropsNode[] = [];
   let id = 0;
-  const getId = () => `dndnode_${id++}`;
+  const getId = (uuid: string) => `${uuid}_${id++}`;
 
   const firstStepPosition = firstNodePosition ?? {
-    x: window.innerWidth / 2 - incrementAmt - 80,
-    y: 250,
+    x: window.innerWidth / 2 - incrementXAmt - 80,
+    y: incrementYAmt,
   };
 
-  // if there are no steps or if the first step has a `type`,
-  // but it isn't a source, create a dummy placeholder step
-  if (isFirstStepAndNotSource(steps)) {
-    insertAddStepPlaceholder(stepsAsNodes, { id: getId(), position: firstStepPosition });
+  // if there are no steps or if the first step isn't a
+  // START or an EIP, create a dummy placeholder step
+  if (steps.length === 0 || (!isFirstStepStart(steps) && !isFirstStepEip(steps))) {
+    insertAddStepPlaceholder(stepsAsNodes, { id: getId(''), position: firstStepPosition });
   }
 
   steps.map((step, index) => {
@@ -111,13 +112,13 @@ export function buildNodesFromSteps(
       index,
       nodes,
       firstStepPosition,
-      incrementAmt,
+      incrementXAmt,
       previousStep
     );
 
     const currentStep: IVizStepPropsNode = buildNodeDefaultParams(
       step,
-      getId(),
+      getId(step.UUID!),
       currentStepPosition
     );
 
@@ -141,18 +142,22 @@ export function calculatePosition(
   stepIdx: number,
   nodes: IVizStepPropsNode[],
   firstStepPosition: { x: number; y: number },
-  incrementAmt: number,
+  incrementXAmt: number,
   previousStep?: any
 ) {
   // check if there is a node with the same index,
   // use its position if there is
   if (nodes[stepIdx]) {
-    return { ...nodes[stepIdx].position };
+    return nodes[stepIdx].position;
   }
   if (!previousStep) {
     return firstStepPosition;
   } else {
-    return { x: previousStep?.position.x + incrementAmt, y: 250 };
+    // return previous step position + specified increment amount (or default)
+    return {
+      x: previousStep.position.x + (incrementXAmt ?? 160),
+      y: 250,
+    };
   }
 }
 
@@ -183,7 +188,7 @@ export function getNextStep(nodes: IVizStepPropsNode[], currentStep?: IVizStepPr
   return nodes[currentStepIdx + 1];
 }
 
-export function insertAddStepPlaceholder(stepsAsNodes: IVizStepPropsNode[], props: any) {
+export function insertAddStepPlaceholder(stepsAsNodes: IVizStepPropsNode[], props?: any) {
   return stepsAsNodes.unshift({
     ...props,
     data: {
@@ -197,6 +202,26 @@ export function insertAddStepPlaceholder(stepsAsNodes: IVizStepPropsNode[], prop
   });
 }
 
-export function isFirstStepAndNotSource(steps: IStepProps[]) {
-  return steps.length === 0 || (steps.length > 0 && steps[0].type && steps[0].type !== 'START');
+export function isFirstStepEip(steps: IStepProps[]): boolean {
+  return steps.length > 0 && steps[0].kind === 'EIP';
+}
+
+export function isFirstStepStart(steps: IStepProps[]): boolean {
+  return steps.length > 0 && steps[0].type === 'START';
+}
+
+export function isLastNode(nodes: IVizStepPropsNode[], UUID: string): boolean {
+  return nodes[nodes.length - 1].data.UUID === UUID;
+}
+
+export function isEndStep(step: IStepProps): boolean {
+  return step.type === 'END';
+}
+
+export function isMiddleStep(step: IStepProps): boolean {
+  return step.type === 'MIDDLE';
+}
+
+export function isStartStep(step: IStepProps): boolean {
+  return step.type === 'START';
 }

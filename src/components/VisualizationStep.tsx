@@ -1,6 +1,13 @@
 import './Visualization.css';
 import { MiniCatalog } from '@kaoto/components';
-import { appendableStepTypes, canStepBeReplaced, findStepIdxWithUUID } from '@kaoto/services';
+import {
+  appendableStepTypes,
+  canStepBeReplaced,
+  findStepIdxWithUUID,
+  isEndStep,
+  isLastNode,
+  isStartStep,
+} from '@kaoto/services';
 import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
 import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 import { AlertVariant, Popover } from '@patternfly/react-core';
@@ -15,8 +22,10 @@ const replaceStep = useIntegrationJsonStore.getState().replaceStep;
 // Custom Node type and component for React Flow
 const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const nodes: Node[] = useNodes();
-  const isLastNode = nodes[nodes.length - 1].data.UUID === data.UUID;
   // this step will always have a UUID
+  const lastNode = isLastNode(nodes, data.UUID!);
+  const startStep = isStartStep(data.step!);
+  const endStep = isEndStep(data.step!);
   const currentIdx = findStepIdxWithUUID(data.UUID!);
   const steps = useIntegrationJsonStore((state) => state.integrationJson.steps);
 
@@ -78,7 +87,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           data-testid={`viz-step-${data.step.name}`}
         >
           {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
-          {data.step.type !== 'START' && (
+          {!startStep && (
             <Handle
               isConnectable={false}
               type="target"
@@ -89,7 +98,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           )}
 
           {/* PLUS BUTTON TO ADD STEP */}
-          {data.step.type !== 'END' && isLastNode && (
+          {!endStep && lastNode && (
             <Popover
               appendTo={() => document.body}
               aria-label="Search for a step"
@@ -127,7 +136,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
 
           {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
-          {data.step.type !== 'END' && !isLastNode && (
+          {!endStep && !lastNode && (
             <Handle
               isConnectable={false}
               type="source"
