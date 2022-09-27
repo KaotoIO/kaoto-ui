@@ -880,10 +880,10 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-core@^4.239.0", "@patternfly/react-core@^4.242.4":
-  version "4.242.4"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.242.4.tgz#41bc3aa785dc77454605287d494d0ab05caf7c3b"
-  integrity sha512-mkh+uIEK0XIgZlp5UZT/qPKCSO+S1BMqG/i1fqUgPABfCblRpTTFZGVW30Urwd+OtYGpE1liLVr/aElugRw9yw==
+"@patternfly/react-core@^4.239.0", "@patternfly/react-core@^4.242.7":
+  version "4.242.7"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.242.7.tgz#c1e8703637e4f112f83e5342457dcf871f5970b2"
+  integrity sha512-EqKSl5uAqwbiclwfsyMJ10reZy9sWl9hSRz/if6MlTbQhUBVNATZ7/V0N7KlJOxyuptWTXGqRPenccUZ4Y6FuQ==
   dependencies:
     "@patternfly/react-icons" "^4.92.4"
     "@patternfly/react-styles" "^4.91.4"
@@ -919,12 +919,12 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.91.4.tgz#ad6858e971e05e6fa0c11d14eda713709652e5c9"
   integrity sha512-P5UWIZY/pn/SVfY4REF+fxMD2cH5QgDpL5X3WsQoaXG1FrE5c4WF5tt/lHxSs5jZJSZvbP6118P3u9qbYl3Evw==
 
-"@patternfly/react-table@4.110.9":
-  version "4.110.9"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-4.110.9.tgz#4ff644f6de1a708156e607c7bfef5714da865451"
-  integrity sha512-EmJSR06KTqvPZYJGwCxatuJ04dN8MXLEcfFrUYIqNPucOnNG8E4efmVomW9apvGvte7G8JRgsm77XUR2vjwc9g==
+"@patternfly/react-table@4.110.12":
+  version "4.110.12"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-4.110.12.tgz#127425fb60a2aad1d24c148e772a588c72867887"
+  integrity sha512-BYPpmW/7jymkeSYpxpBf0VIx6jn79WlYe2UQlBqBIB8/ZojrD7mx8hStArsI87lsiubnym7REF/xNe0Cj87FCA==
   dependencies:
-    "@patternfly/react-core" "^4.242.4"
+    "@patternfly/react-core" "^4.242.7"
     "@patternfly/react-icons" "^4.92.4"
     "@patternfly/react-styles" "^4.91.4"
     "@patternfly/react-tokens" "^4.93.4"
