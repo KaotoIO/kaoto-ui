@@ -30,7 +30,7 @@
     "@patternfly/react-core": "4.239.0",
     "@patternfly/react-icons": "4.90.0",
     "@patternfly/react-log-viewer": "4.84.0",
-    "@patternfly/react-table": "4.110.9",
+    "@patternfly/react-table": "4.110.12",
     "@rhoas/app-services-ui-shared": "^0.16.4",
     "ajv": "^8.8.2",
     "immer": "^9.0.15",
@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^2.2.1",
-    "@module-federation/typescript": "^0.2.1",
+    "@module-federation/typescript": "^0.2.2",
     "@testing-library/dom": "^8.18.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
