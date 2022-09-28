@@ -6,7 +6,7 @@ import create from 'zustand';
 interface ISettingsStore {
   settings: ISettings;
   setName: (val: string) => void;
-  setSettings: (vals: ISettings) => void;
+  setSettings: (vals?: Partial<ISettings>) => void;
 }
 
 const initialSettings: ISettings = {
@@ -20,7 +20,7 @@ const initialSettings: ISettings = {
 export const useSettingsStore = create<ISettingsStore>((set) => ({
   settings: initialSettings,
   setName: (val?: string) => set((state) => ({ ...state, name: val })),
-  setSettings: (vals?: ISettings) =>
+  setSettings: (vals?: Partial<ISettings>) =>
     set((state) => ({
       settings: { ...state.settings, ...vals },
     })),

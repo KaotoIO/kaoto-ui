@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { KaotoEditorView } from "./KaotoEditorView";
 import {
   Editor,
   EditorFactory,
@@ -21,6 +20,7 @@ import {
   KogitoEditorEnvelopeContextType,
   KogitoEditorChannelApi,
 } from "@kie-tools-core/editor/dist/api";
+import { KaotoEditorView } from "./KaotoEditorView";
 
 export const FACTORY_TYPE = "kaoto";
 

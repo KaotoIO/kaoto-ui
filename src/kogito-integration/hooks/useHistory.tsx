@@ -1,4 +1,4 @@
-import { Reducer, useCallback, useReducer } from "react";
+import { Reducer, useCallback, useMemo, useReducer } from "react";
 
 type HistoryAction<T> = {
   type: "CLEAR",
@@ -41,7 +41,7 @@ function reducer<T>(state: HistoryState<T>, action: HistoryAction<T>) {
       };
     case "REDO":
       const next = future[0];
-      const newFuture = future.length >= 2 ? future.slice(1) : [];
+      const newFuture = future.slice(1);
       return {
         past: [...past, present],
         present: next,
@@ -72,8 +72,8 @@ export function useStateHistory<T>(initialPresent: T) {
     ...initialState,
     present: initialPresent,
   });
-  const canUndo = state.past.length > 0;
-  const canRedo = state.future.length > 0;
+  const canUndo = useMemo(() => state.past.length > 0, [state]);
+  const canRedo = useMemo(() => state.future.length > 0, [state]);
   // Setup our callback functions
   // We memoize with useCallback to prevent unnecessary re-renders
   const undo = useCallback(() => {
@@ -90,9 +90,7 @@ export function useStateHistory<T>(initialPresent: T) {
     (newPresent: T) => dispatch({ type: "SET", newPresent }),
     [dispatch]
   );
-  const clear = useCallback(() => dispatch({ type: "CLEAR", initialPresent }), [
-    dispatch,
-  ]);
+  const clear = useCallback(() => dispatch({ type: "CLEAR", initialPresent }), [initialPresent]);
   // If needed we could also return past and future state
-  return { state: state.present, set, undo, redo, clear, canUndo, canRedo };
+  return { state: state.present, set, undo, redo, clear, canUndo, canRedo, history: state };
 };

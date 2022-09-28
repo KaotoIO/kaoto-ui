@@ -1,40 +1,37 @@
 import "./KaotoEditor.css";
+import { Suspense, forwardRef, useState, useCallback, useImperativeHandle, useRef } from "react";
+import { HashRouter as Router } from "react-router-dom";
+import { WorkspaceEdit } from "@kie-tools-core/workspace/dist/api";
+import { Notification } from "@kie-tools-core/notifications/dist/api";
+import { ChannelType, EditorApi, StateControlCommand } from "@kie-tools-core/editor/dist/api";
 import { AlertProvider, MASLoading } from "../layout";
 import { AppLayout } from "../layout/AppLayout";
 import { AppRoutes } from "../routes";
-import { HashRouter as Router } from "react-router-dom";
-
-import { Suspense, forwardRef, useState, useCallback, useImperativeHandle, useEffect, useRef, useLayoutEffect } from "react";
-import { WorkspaceEdit } from "@kie-tools-core/workspace/dist/api";
-import { Notification } from "@kie-tools-core/notifications/dist/api";
-import { KaotoIntegrationProviderRef, KogitoEditorIntegrationProvider } from "./KogitoEditorIntegrationProvider";
-import { ChannelType, EditorApi, StateControlCommand } from "@kie-tools-core/editor/dist/api";
+import { KaotoIntegrationProviderRef, KogitoEditorIntegrationProvider, ContentOperation } from "./KogitoEditorIntegrationProvider";
 
 interface Props {
   /**
    * Delegation for KogitoEditorChannelApi.kogitoEditor_ready() to signal to the Channel
-   * that the editor is ready. Increases the decoupling of the DashbuilderEditor from the Channel.
+   * that the editor is ready.
    */
   onReady: () => void;
 
   /**
    * Delegation for KogitoEditorChannelApi.kogitoEditor_stateControlCommandUpdate(command) to signal to the Channel
-   * that the editor is performing an undo/redo operation. Increases the decoupling of the DashbuilderEditor
-   * from the Channel.
+   * that the editor is performing an undo/redo operation.
    */
   onStateControlCommandUpdate: (command: StateControlCommand) => void;
 
   /**
    * Delegation for WorkspaceChannelApi.kogitoWorkspace_newEdit(edit) to signal to the Channel
-   * that a change has taken place. Increases the decoupling of the DashbuilderEditor from the Channel.
+   * that a change has taken place.
    * @param edit An object representing the unique change.
    */
   onNewEdit: (edit: WorkspaceEdit) => void;
 
   /**
    * Delegation for NotificationsChannelApi.kogigotNotifications_setNotifications(path, notifications) to report all validation
-   * notifications to the Channel that will replace existing notification for the path. Increases the
-   * decoupling of the DashbuilderEditor from the Channel.
+   * notifications to the Channel that will replace existing notification for the path.
    * @param path The path that references the Notification
    * @param notifications List of Notifications
    */
@@ -48,12 +45,8 @@ interface Props {
 
 export const KaotoEditor = forwardRef<EditorApi, Props>((props, forwardedRef) => {
   const [editorContent, setEditorContent] = useState<string | undefined>();
-  const [initialContent, setInitialContent] = useState<string | undefined>();
+  const [contentPath, setContentPath] = useState<string | undefined>();
   const providerRef = useRef<KaotoIntegrationProviderRef>(null);
-
-  const isVSCode = useCallback(() => {
-    return props.channelType === ChannelType.VSCODE_DESKTOP || props.channelType === ChannelType.VSCODE_WEB;
-  }, [props]);
 
   /**
    * Callback is exposed to the Channel to retrieve the current value of the Editor. It returns the value of
@@ -63,65 +56,28 @@ export const KaotoEditor = forwardRef<EditorApi, Props>((props, forwardedRef) =>
     return editorContent || "";
   }, [editorContent]);
 
-  const updateEditorToInitialState = useCallback(() => {
-    setEditorContent(initialContent);
-  }, [initialContent]);
 
   /**
    * Callback is exposed to the Channel that is called when a new file is opened. It sets the originalContent to the received value.
    */
   const setContent = useCallback(
     (path: string, content: string) => {
-      setInitialContent(content);
       setEditorContent(content);
+      setContentPath(path);
     },
     []
   );
 
-  const onContentChanged = useCallback((newContent: string, operation: "EDIT" | "UNDO" | "REDO") => {
+  const onContentChanged = useCallback((newContent: string, operation: ContentOperation) => {
     setEditorContent(newContent);
-    if (operation === "EDIT") {
+    if (operation === ContentOperation.EDIT) {
       props.onNewEdit(new WorkspaceEdit(newContent));
-    } else if (operation === "UNDO") {
-      if (!isVSCode()) {
-        providerRef.current?.undo();
-      }
+    } else if (operation === ContentOperation.UNDO) {
       props.onStateControlCommandUpdate(StateControlCommand.UNDO);
-    } else if (operation === "REDO") {
-      if (!isVSCode()) {
-        providerRef.current?.redo();
-      }
+    } else if (operation === ContentOperation.REDO) {
       props.onStateControlCommandUpdate(StateControlCommand.REDO);
     }
-  }, [props, isVSCode]);
-
-  // /**
-  //  * Do a undo command on the State Control and update the current state of the Editor
-  //  */
-  // const undo = useCallback(() => {
-  //   stateControl.undo();
-  //   updateEditorStateWithCurrentEdit(stateControl.getCurrentCommand()?.id);
-  // }, [stateControl]);
-
-  // /**
-  //  * Do a redo command on the State Control and update the current state of the Editor
-  //  */
-  // const redo = useCallback(() => {
-  //   stateControl.redo();
-  //   updateEditorStateWithCurrentEdit(stateControl.getCurrentCommand()?.id);
-  // }, [stateControl]);
-
-  /**
-   * Update the current state of the Editor using an edit.
-   * If the edit is undefined which indicates that the current state is the initial one, the Editor state goes back to the initial state.
-   */
-  const updateEditorStateWithCurrentEdit = useCallback((edit?: string) => {
-    if (edit) {
-      setEditorContent(edit);
-    } else {
-      updateEditorToInitialState();
-    }
-  }, [updateEditorToInitialState]);
+  }, [props]);
 
   /**
    * The useImperativeHandler gives the control of the Editor component to who has it's reference, making it possible to communicate with the Editor.
@@ -146,9 +102,10 @@ export const KaotoEditor = forwardRef<EditorApi, Props>((props, forwardedRef) =>
 
   return (
     <>
-      {editorContent !== undefined ? (
+      {editorContent !== undefined && contentPath !== undefined ? (
         <KogitoEditorIntegrationProvider
         content={editorContent}
+        contentPath={contentPath}
         onContentChanged={onContentChanged}
         onReady={props.onReady}
         ref={providerRef}
@@ -163,7 +120,7 @@ export const KaotoEditor = forwardRef<EditorApi, Props>((props, forwardedRef) =>
           </Router>
         </AlertProvider>
       </KogitoEditorIntegrationProvider>
-      ) : <div>Empty</div>}
+      ) : <MASLoading />}
     </>
   );
 });

@@ -9769,7 +9769,7 @@ lodash.get@^4.4.2:
   resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
   integrity sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==
 
-lodash.isequal@4.5.0, lodash.isequal@^4.5.0:
+lodash.isequal@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
   integrity sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==
@@ -14884,12 +14884,10 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zundo@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/zundo/-/zundo-1.6.0.tgz#31fcb7d8ff13d0a3c3325620491e45547c105ccb"
-  integrity sha512-TPZAj6uLtrZ/URPMBVrP3e8+aNtiECR+GNwx+VYK2Zrmk97pR8Go7RgEUpUb9OAO7B8Orrxay8+fUcdJfGCJmA==
-  dependencies:
-    lodash.isequal "4.5.0"
+zundo@^2.0.0-beta.5:
+  version "2.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.5.tgz#e1cb2e1a4756ac2aff79240ceead18964a0116b3"
+  integrity sha512-TgDX8SSr9P9x58nHQUQdKgfp+jcwJGmT90XfcFjLCZhCSFH/EWLWIgV03uzGG/OpUjLcjnTWZvfzDkYgHE3JyQ==
 
 zustand@^3.7.2:
   version "3.7.2"

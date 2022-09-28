@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { fetchIntegrationJson, fetchIntegrationSourceCode } from '../api';
 import { useIntegrationJsonStore, useSettingsStore } from '../store';
 import { useStateHistory } from './hooks/useHistory';
@@ -8,22 +9,28 @@ import {
   forwardRef,
   ReactNode,
   Ref,
+  useCallback,
   useEffect,
   useImperativeHandle,
-  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
+import { useCancelableEffect } from './hooks/useCancelableEffect';
 
-/**
- * Create context
- */
+// Create context
 const KogitoEditorIntegrationContext = createContext({});
+
+export enum ContentOperation {
+  EDIT = "EDIT",
+  UNDO = "UNDO",
+  REDO = "REDO"
+};
 
 interface IKogitoEditorIntegrationProvider {
   children: ReactNode;
   content: string;
-  onContentChanged: (content: string, operation: "EDIT" | "UNDO" | "REDO") => void;
+  contentPath: string;
+  onContentChanged: (content: string, operation: ContentOperation) => void;
   onReady: () => void;
 }
 
@@ -33,80 +40,99 @@ export interface KaotoIntegrationProviderRef {
 }
 
 function KogitoEditorIntegrationProviderInternal(
-  { content, onContentChanged, onReady, children }: IKogitoEditorIntegrationProvider,
+  { content, onContentChanged, onReady, children, contentPath }: IKogitoEditorIntegrationProvider,
   ref: Ref<KaotoIntegrationProviderRef>
 ) {
-  const { settings } = useSettingsStore();
+  const { settings, setSettings } = useSettingsStore();
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
-  // const { set, undo, redo, state } = useStateHistory<string>(content);
-  const previousJson = useRef(integrationJson);
-  const previousContent = useRef(content);
-  // const previousHistoryState = useRef(state);
 
+  // The history is used to keep a log of every change to the content. Then, this log is used to undo and redo content.
+  const { set, undo, redo, state } = useStateHistory<string>(content);
+
+  const previousJson = useRef(integrationJson);
+  const previousContent = useRef<string>();
+  const previousStateContent = useRef<string>();
+  const [lastAction, setLastAction] = useState<ContentOperation.UNDO | ContentOperation.REDO | undefined>();
+
+  // Set editor as Ready
   useEffect(() => {
     onReady();
   }, [onReady]);
 
+  // Update file name
+  useEffect(() => {
+    setSettings({ name: basename(contentPath) });
+  }, [contentPath, setSettings]);
+
+  // Update content after an Undo or Redo action, clearing lastAction state so that it doesn't get triggered repeatedly before another action.
+  useEffect(() => {
+    if (lastAction) {
+      onContentChanged(state, lastAction);
+      setLastAction(undefined);
+      previousStateContent.current = state;
+    }
+  }, [lastAction, onContentChanged, state]);
+
+  // Expose undo and redo callbacks to KaotoEditor.
   useImperativeHandle(
     ref,
     () => ({
       undo: () => {
-        console.log('UNDOING');
-        // undo();
+        undo();
+        setLastAction(ContentOperation.UNDO);
       },
       redo: () => {
-        console.log('REDOING');
-        // redo();
+        redo();
+        setLastAction(ContentOperation.REDO);
       },
     }),
-    []
+    [redo, undo]
   );
 
-  // useLayoutEffect(() => {
-  //   // set(content);
-  //   console.log({ state: "useLayoutEffect", content });
-  //   fetchIntegrationJson(content, settings.namespace)
-  //     .then((res: IIntegration) => {
-  //       let tmpInt = res;
-  //       tmpInt.metadata = { ...res.metadata, ...settings };
-  //       updateIntegration(tmpInt);
-  //     })
-  //     .catch((e) => {
-  //       console.error(e);
-  //     });
-  // }, []);
+  // Update KaotoEditor content after an integrationJson change (the user interacted with the Kaoto UI).
+  useCancelableEffect(
+    useCallback(
+      ({ canceled }) => {
+        if (!integrationJson || isEqual(previousJson.current, integrationJson)) return;
 
-  // useEffect(() => {
-  //   if (content === previousHistoryState.current) return;
-  //   set(content);
-  // }, [content]);
+        let tmpInt = integrationJson;
+        tmpInt.metadata = { ...integrationJson.metadata, ...settings };
+        fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
+          if (canceled.get()) return;
 
-  useEffect(() => {
-    if (!integrationJson || isEqual(previousJson.current, integrationJson)) return;
-    console.log({ state: "useEffect", integrationJson });
-    let tmpInt = integrationJson;
-    tmpInt.metadata = { ...integrationJson.metadata, ...settings };
-    fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
-      if (typeof newSrc === 'string' && newSrc !== previousContent.current && newSrc.length > 0) {
-        onContentChanged(newSrc, "EDIT");
-      }
-    });
-  }, [integrationJson, onContentChanged, settings]);
+          if (typeof newSrc === 'string' && newSrc !== previousContent.current && newSrc.length > 0) {
+            onContentChanged(newSrc, ContentOperation.EDIT);
+            previousJson.current = integrationJson;
+          }
+        });
+      }, [integrationJson, onContentChanged, settings])
+  );
 
-  useEffect(() => {
-    let tmpSource = content;
-    console.log({ state: "useEffect", content });
-    fetchIntegrationJson(tmpSource, settings.namespace)
-      .then((res: IIntegration) => {
-        let tmpInt = res;
-        tmpInt.metadata = { ...res.metadata, ...settings };
-        updateIntegration(tmpInt);
-        // onContentChanged(state);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  }, [content, settings]);
+  // Update the integrationJson to reflect an KaotoEditor content change (only if not triggered via Kaoto UI).
+  useCancelableEffect(
+    useCallback(
+      ({ canceled }) => {
+        if (previousContent.current === content) return;
+
+        fetchIntegrationJson(content, settings.namespace)
+          .then((res: IIntegration) => {
+            if (canceled.get()) return;
+
+            let tmpInt = res;
+            tmpInt.metadata = { ...res.metadata, ...settings };
+            updateIntegration(tmpInt);
+
+            if (previousStateContent.current !== content) {
+              set(content);
+            }
+
+            previousContent.current = content;
+          })
+          .catch((e) => {
+            console.error(e);
+          });
+      }, [content, set, settings, updateIntegration]
+  ));
 
   return (
     <KogitoEditorIntegrationContext.Provider value>
