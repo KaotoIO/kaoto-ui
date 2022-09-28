@@ -4,6 +4,7 @@ import {
   appendableStepTypes,
   canStepBeReplaced,
   findStepIdxWithUUID,
+  isEipStep,
   isEndStep,
   isLastNode,
   isStartStep,
@@ -16,7 +17,7 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, Node, NodeProps, Position, useNodes } from 'react-flow-renderer';
 
 const currentDSL = useSettingsStore.getState().settings.dsl;
-const addStep = useIntegrationJsonStore.getState().addStep;
+const appendStep = useIntegrationJsonStore.getState().appendStep;
 const replaceStep = useIntegrationJsonStore.getState().replaceStep;
 
 // Custom Node type and component for React Flow
@@ -24,6 +25,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const nodes: Node[] = useNodes();
   // this step will always have a UUID
   const lastNode = isLastNode(nodes, data.UUID!);
+  const eipStep = isEipStep(data.step!);
   const startStep = isStartStep(data.step!);
   const endStep = isEndStep(data.step!);
   const currentIdx = findStepIdxWithUUID(data.UUID!);
@@ -31,7 +33,10 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
   const { addAlert } = useAlert() || {};
 
-  const onMiniCatalogClickAdd = (selectedStep: IStepProps) => addStep(selectedStep);
+  const onMiniCatalogClickAdd = (selectedStep: IStepProps) => appendStep(selectedStep);
+
+  const showLeftHandle = !startStep || eipStep;
+  const showInsertPlusButton = !endStep && lastNode;
 
   /**
    * Handles dropping a step onto an existing step (i.e. step replacement)
@@ -87,7 +92,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           data-testid={`viz-step-${data.step.name}`}
         >
           {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
-          {!startStep && (
+          {showLeftHandle && (
             <Handle
               isConnectable={false}
               type="target"
@@ -96,9 +101,8 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               style={{ borderRadius: 0 }}
             />
           )}
-
           {/* PLUS BUTTON TO ADD STEP */}
-          {!endStep && lastNode && (
+          {showInsertPlusButton && (
             <Popover
               appendTo={() => document.body}
               aria-label="Search for a step"
@@ -126,25 +130,20 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               </button>
             </Popover>
           )}
-
           {/* VISUAL REPRESENTATION OF STEP WITH ICON */}
           <div className={'stepNode__Icon stepNode__clickable'}>
             <img src={data.icon} alt={data.label} />
           </div>
-
           {/* STEP LABEL */}
           <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
-
           {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
-          {!endStep && !lastNode && (
-            <Handle
-              isConnectable={false}
-              type="source"
-              position={Position.Right}
-              id="b"
-              style={{ borderRadius: 0 }}
-            />
-          )}
+          <Handle
+            isConnectable={false}
+            type="source"
+            position={Position.Right}
+            id="b"
+            style={{ borderRadius: 0 }}
+          />
         </div>
       ) : (
         <div

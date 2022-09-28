@@ -7,14 +7,9 @@ import {
   VisualizationStep,
   VisualizationStepViews,
 } from '@kaoto/components';
-import {
-  buildBranchStepNodes,
-  buildEdges,
-  buildNodesFromSteps,
-  findStepIdxWithUUID,
-} from '@kaoto/services';
+import { buildEdges, buildNodesFromSteps, findStepIdxWithUUID } from '@kaoto/services';
 import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
-import { IStepProps, IViewData, IVizStepPropsNode } from '@kaoto/types';
+import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto/types';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Controls, ReactFlowProvider } from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
@@ -40,7 +35,9 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
   // initial loading of visualization steps
   useEffect(() => {
-    buildNodesAndEdges(integrationJson.steps.slice());
+    const { combinedNodes, combinedEdges } = buildNodesAndEdges(integrationJson.steps);
+    setEdges(combinedEdges);
+    setNodes(combinedNodes);
   }, []);
 
   /**
@@ -55,7 +52,9 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       setViews(views);
     });
 
-    buildNodesAndEdges(integrationJson.steps.slice());
+    const { combinedNodes, combinedEdges } = buildNodesAndEdges(integrationJson.steps);
+    setEdges(combinedEdges);
+    setNodes(combinedNodes);
 
     previousIntegrationJson.current = integrationJson;
   }, [integrationJson]);
@@ -71,36 +70,36 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   function buildNodesAndEdges(steps: IStepProps[]) {
     // contains main integration nodes
     // + branch nodes built separately
+    const combinedEdges: IVizStepPropsEdge[] = [];
     const combinedNodes: IVizStepPropsNode[] = [];
 
-    buildNodesFromSteps(
-      steps,
-      (stepsAsNodes) => {
-        combinedNodes.push(...stepsAsNodes);
+    const stepsAsNodes = buildNodesFromSteps(steps, nodes);
+    const newEdges: IVizStepPropsEdge[] = buildEdges(stepsAsNodes);
 
-        // next we handle each step that contains branches
-        const nodesWithBranches = stepsAsNodes.filter((s) => s.data.step?.branches);
+    combinedNodes.push(...stepsAsNodes);
+    combinedEdges.push(...newEdges);
 
-        if (nodesWithBranches.length > 0) {
-          nodesWithBranches.map((nodeParent) => {
-            buildBranchStepNodes(
-              nodeParent,
-              nodeParent.data.step?.branches!,
-              (branchStepsAsNodes) => {
-                combinedNodes.push(...branchStepsAsNodes);
-              },
-              160
-            );
-          });
-          // then build edges separately below
-        }
-        // need to add special handling for branches in building edges
-        setEdges(buildEdges(combinedNodes));
-        setNodes(combinedNodes);
-      },
-      undefined,
-      nodes
-    );
+    // next we handle each step that contains branches,
+    // and build nodes separately for them
+    stepsAsNodes.forEach((s) => {
+      if (!s.data.step?.branches) return;
+      const stepBranches = s.data.step.branches;
+      const parentNode = s;
+
+      stepBranches.forEach((branch) => {
+        const branchStepsAsNodes: IVizStepPropsNode[] = buildNodesFromSteps(
+          branch.steps,
+          undefined,
+          {
+            x: parentNode.position.x,
+            y: parentNode.position.y - 160,
+          }
+        );
+        console.table(branchStepsAsNodes);
+      });
+    });
+
+    return { combinedNodes, combinedEdges };
   }
 
   // Delete an integration step

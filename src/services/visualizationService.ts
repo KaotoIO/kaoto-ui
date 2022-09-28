@@ -1,32 +1,17 @@
 import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
-import { IStepProps, IStepPropsBranch, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto/types';
+import { IStepProps, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import { MarkerType } from 'react-flow-renderer';
 
-export function buildBranchStepNodes(
-  parentNode: IVizStepPropsNode,
-  branches: IStepPropsBranch[],
-  callback: (branchStepsAsNodes: IVizStepPropsNode[]) => void,
-  incrementAmt?: number
-) {
-  branches?.map((branch) => {
-    buildNodesFromSteps(
-      branch.steps,
-      (branchStepsAsNodes: IVizStepPropsNode[]) => callback(branchStepsAsNodes),
-      {
-        x: parentNode.position.x,
-        y: parentNode.position.y - (incrementAmt ?? 160),
-      }
-    );
-  });
-}
-
-export function buildEdge(currentStep: IVizStepPropsNode, previousStep: IVizStepPropsNode) {
+export function buildEdgeDefaultParams(
+  currentStep: IVizStepPropsNode,
+  previousStep: IVizStepPropsNode
+): IVizStepPropsEdge {
   return {
     arrowHeadType: 'arrowclosed',
 
     // previousStep here is stale when deleting first step
-    id: 'e-' + previousStep.id + '-' + currentStep.id,
+    id: 'e-' + previousStep.id + '>' + currentStep.id,
 
     markerEnd: {
       type: MarkerType.Arrow,
@@ -39,13 +24,15 @@ export function buildEdge(currentStep: IVizStepPropsNode, previousStep: IVizStep
   };
 }
 
-export function buildEdges(nodes: IVizStepPropsNode[]) {
+export function buildEdges(nodes: IVizStepPropsNode[]): IVizStepPropsEdge[] {
   const stepEdges: IVizStepPropsEdge[] = [];
 
   // for every node except for the first, add an edge
-  nodes.slice(1).map((node, index) => {
+  nodes.slice(1).forEach((node, index) => {
     const previousStep = nodes[index];
-    stepEdges.push(buildEdge(node, previousStep));
+    const newEdge = buildEdgeDefaultParams(node, previousStep);
+    // special handling for branch steps
+    stepEdges.push(newEdge);
   });
 
   return stepEdges;
@@ -73,35 +60,35 @@ export function buildNodeDefaultParams(
 /**
  * Creates an object for the Visualization from the Step model.
  * Contains UI-specific metadata (e.g. position).
- * Data is stored in the `nodes` and `edges` hooks.
+ * Data is stored in the `nodes` hook.
  */
 export function buildNodesFromSteps(
   steps: IStepProps[],
-  callback: (stepsAsNodes: IVizStepPropsNode[]) => void,
-  firstNodePosition?: { x: number; y: number },
-  previousNodes?: IVizStepPropsNode[]
+  previousNodes?: IVizStepPropsNode[],
+  firstNodePosition?: { x: number; y: number }
 ) {
-  const incrementXAmt = 160;
-  const incrementYAmt = 250;
+  const incrementAmtX = 160;
+  const incrementAmtY = 250;
   const nodes = previousNodes ?? useVisualizationStore.getState().nodes;
   const stepsAsNodes: IVizStepPropsNode[] = [];
   let id = 0;
-  const getId = (uuid: string) => `${uuid}_${id++}`;
+  const getId = () => `dndnode_${id++}`;
 
   const firstStepPosition = firstNodePosition ?? {
-    x: window.innerWidth / 2 - incrementXAmt - 80,
-    y: incrementYAmt,
+    x: window.innerWidth / 2 - incrementAmtX - 80,
+    y: incrementAmtY,
   };
 
   // if there are no steps or if the first step isn't a
   // START or an EIP, create a dummy placeholder step
   if (steps.length === 0 || (!isFirstStepStart(steps) && !isFirstStepEip(steps))) {
-    insertAddStepPlaceholder(stepsAsNodes, { id: getId(''), position: firstStepPosition });
+    insertAddStepPlaceholder(stepsAsNodes, { id: getId(), position: firstStepPosition });
   }
 
-  steps.map((step, index) => {
+  steps.forEach((step, index) => {
     // Grab the previous step to use for determining position and drawing edges
     let previousStep = stepsAsNodes[index - 1];
+
     // if missing a START step, accommodate for ADD A STEP placeholder
     if (containsAddStepPlaceholder(stepsAsNodes)) {
       previousStep = stepsAsNodes[index];
@@ -112,31 +99,21 @@ export function buildNodesFromSteps(
       index,
       nodes,
       firstStepPosition,
-      incrementXAmt,
+      incrementAmtX,
       previousStep
     );
 
     const currentStep: IVizStepPropsNode = buildNodeDefaultParams(
       step,
-      getId(step.UUID!),
+      getId(),
       currentStepPosition
     );
 
     stepsAsNodes.push(currentStep);
   });
 
-  callback(stepsAsNodes);
+  return stepsAsNodes;
 }
-
-export function buildSpecialFirstEdge(
-  stepsAsNodes: IVizStepPropsNode[],
-  nodeId: string,
-  firstStepPosition: { x: number; y: number }
-) {
-  return insertAddStepPlaceholder(stepsAsNodes, { id: nodeId, position: firstStepPosition });
-}
-
-// export function buildSpecialLastEdge (stepsAsNodes: IVizStepPropsNode[], nodeId: string) {}
 
 export function calculatePosition(
   stepIdx: number,
@@ -214,6 +191,10 @@ export function isLastNode(nodes: IVizStepPropsNode[], UUID: string): boolean {
   return nodes[nodes.length - 1].data.UUID === UUID;
 }
 
+export function isEipStep(step: IStepProps): boolean {
+  return step.kind === 'EIP';
+}
+
 export function isEndStep(step: IStepProps): boolean {
   return step.type === 'END';
 }
@@ -224,4 +205,18 @@ export function isMiddleStep(step: IStepProps): boolean {
 
 export function isStartStep(step: IStepProps): boolean {
   return step.type === 'START';
+}
+
+/**
+ * Regenerate a UUID for a list of Steps
+ * Every time there is a change to steps or their positioning in the Steps array,
+ * their UUIDs need to be regenerated
+ * @param steps
+ */
+export function regenerateUuids(steps: IStepProps[]) {
+  const newSteps = steps.slice();
+  newSteps.forEach((step, idx) => {
+    step.UUID = step.name + idx;
+  });
+  return newSteps;
 }

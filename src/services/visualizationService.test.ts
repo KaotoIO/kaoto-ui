@@ -1,49 +1,116 @@
 import eipIntegration from '../store/data/branchSteps';
-import importedSteps from '../store/data/steps';
+import branchSteps from '../store/data/branchSteps';
+import nodes from '../store/data/nodes';
+import steps from '../store/data/steps';
 import {
+  buildEdgeDefaultParams,
+  buildEdges,
+  buildNodeDefaultParams,
+  buildNodesFromSteps,
   calculatePosition,
   containsAddStepPlaceholder,
   findStepIdxWithUUID,
   getNextStep,
   insertAddStepPlaceholder,
+  isEipStep,
   isEndStep,
   isFirstStepEip,
   isFirstStepStart,
   isMiddleStep,
   isStartStep,
+  regenerateUuids,
 } from './visualizationService';
 import { IVizStepPropsNode } from '@kaoto/types';
+import { truncateString } from '@kaoto/utils';
+import { MarkerType } from 'react-flow-renderer';
 
 describe('visualizationService', () => {
   /**
-   * buildBranchStepNodes
+   * buildEdgeDefaultParams
    */
-  it('should build nodes for an array of branch steps', () => {});
+  it("buildEdgeDefaultParams(): should build an edge's default parameters for a single given node", () => {
+    const currentStep = nodes[1];
+    const previousStep = nodes[0];
 
-  /**
-   * buildEdge
-   */
-  it('should build an edge for a single given node', () => {});
+    expect(buildEdgeDefaultParams(currentStep, previousStep)).toEqual({
+      arrowHeadType: 'arrowclosed',
+
+      // previousStep here is stale when deleting first step
+      id: 'e-' + previousStep.id + '>' + currentStep.id,
+
+      markerEnd: {
+        type: MarkerType.Arrow,
+      },
+      source: previousStep.id,
+
+      // even the last step needs to build the step edge before it, with itself as the target
+      target: currentStep.id,
+      type: 'insert',
+    });
+  });
 
   /**
    * buildEdges
    */
-  it('should build an edge for every node except the first, given an array of nodes', () => {});
+  it('buildEdges(): should build an edge for every node except the first, given an array of nodes', () => {
+    const nodes = [
+      { data: { label: 'aws-kinesis-source' }, id: 'dndnode_1', position: { x: 720, y: 250 } },
+      { data: { label: 'avro-deserialize-sink' }, id: 'dndnode_2', position: { x: 880, y: 250 } },
+    ];
+
+    expect(buildEdges(nodes)).toHaveLength(1);
+
+    // let's test that it works for branching too
+    const stepsAsNodes = buildNodesFromSteps(branchSteps, undefined, { x: 0, y: 0 });
+
+    expect(buildEdges(stepsAsNodes)).toHaveLength(branchSteps.length - 1);
+  });
 
   /**
    * buildNodeDefaultParams
    */
-  it('should build the default parameters for a single node, given a step', () => {});
+  it('buildNodeDefaultParams(): should build the default parameters for a single node, given a step', () => {
+    const position = { x: 0, y: 0 };
+    const step = nodes[1].data.step;
+
+    expect(buildNodeDefaultParams(step, 'dummy-id', position)).toEqual({
+      data: {
+        icon: step.icon,
+        kind: step.kind,
+        label: truncateString(step.name, 14),
+        step,
+        UUID: step.UUID,
+      },
+      id: 'dummy-id',
+      position: { x: 0, y: 0 },
+      type: 'step',
+    });
+  });
 
   /**
    * buildNodesFromSteps
    */
-  it('should build visualization nodes from an array of steps', () => {});
+  it('buildNodesFromSteps(): should build visualization nodes from an array of steps', () => {
+    const stepsAsNodes = buildNodesFromSteps(steps);
+
+    expect(stepsAsNodes[0].data.UUID).toBeDefined();
+    expect(stepsAsNodes[0].id).toEqual('dndnode_0');
+  });
+
+  /**
+   * buildNodesFromSteps for integrations with branches
+   */
+  it.skip('buildNodesFromSteps(): should build visualization nodes from an array of steps with branches', () => {
+    const stepsAsNodes = buildNodesFromSteps(branchSteps, undefined, { x: 0, y: 0 });
+
+    expect(stepsAsNodes[0].data.UUID).toBeDefined();
+    expect(stepsAsNodes).toHaveLength(branchSteps.length);
+  });
 
   /**
    * calculatePosition
    */
-  it('should calculate the very first position of a node', () => {
+  it('calculatePosition(): should calculate the very first position of a node', () => {
     // no previous step provided, use coordinates for first step provided
     expect(calculatePosition(0, [], { x: 500, y: 250 }, 160)).toEqual({
       x: 500,
@@ -54,7 +121,7 @@ describe('visualizationService', () => {
   /**
    * calculatePosition
    */
-  it('should increment the position when a previous step is provided', () => {
+  it('calculatePosition(): should increment the position when a previous step is provided', () => {
     const nodes = [
       { data: { label: 'aws-kinesis-source' }, id: 'dndnode_1', position: { x: 720, y: 250 } },
     ];
@@ -71,7 +138,7 @@ describe('visualizationService', () => {
   /**
    * calculatePosition
    */
-  it('should inherit the previous node position of same index if available', () => {
+  it('calculatePosition(): should inherit the previous node position of same index if available', () => {
     const nodes = [
       { data: { label: 'aws-kinesis-source' }, id: 'dndnode_1', position: { x: 720, y: 250 } },
       { data: { label: 'avro-deserialize-sink' }, id: 'dndnode_2', position: { x: 880, y: 250 } },
@@ -91,7 +158,7 @@ describe('visualizationService', () => {
   /**
    * containsAddStepPlaceholder
    */
-  it('should determine if there is an ADD STEP placeholder in the steps', () => {
+  it('containsAddStepPlaceholder(): should determine if there is an ADD STEP placeholder in the steps', () => {
     const nodes = [
       { data: { label: 'ADD A STEP' }, id: 'dndnode_1', position: { x: 500, y: 250 } },
       { data: { label: 'avro-deserialize-sink' }, id: 'dndnode_2', position: { x: 660, y: 250 } },
@@ -109,14 +176,14 @@ describe('visualizationService', () => {
   /**
    * findStepIdxWithUUID
    */
-  it("should find a step's index, given a particular UUID", () => {
-    expect(findStepIdxWithUUID('2caffeine-action', importedSteps)).toEqual(2);
+  it("findStepIdxWithUUID(): should find a step's index, given a particular UUID", () => {
+    expect(findStepIdxWithUUID('2caffeine-action', steps)).toEqual(2);
   });
 
   /**
    * getNextStep
    */
-  it('should get the next step', () => {
+  it('getNextStep(): should get the next step', () => {
     expect(
       getNextStep(
         [
@@ -139,7 +206,7 @@ describe('visualizationService', () => {
   /**
    * insertAddStepPlaceholder
    */
-  it('should add an ADD STEP placeholder to the beginning of the array', () => {
+  it('insertAddStepPlaceholder(): should add an ADD STEP placeholder to the beginning of the array', () => {
     const nodes: IVizStepPropsNode[] = [];
     insertAddStepPlaceholder(nodes);
     expect(nodes).toHaveLength(1);
@@ -148,7 +215,7 @@ describe('visualizationService', () => {
   /**
    * isFirstStepEip
    */
-  it('should determine if the provided step is an EIP', () => {
+  it('isFirstStepEip(): should determine if the provided step is an EIP', () => {
     const firstBranch = eipIntegration[1].branches![0];
     expect(isFirstStepEip(eipIntegration)).toBe(false);
     expect(isFirstStepEip(firstBranch.steps)).toBe(true);
@@ -157,9 +224,9 @@ describe('visualizationService', () => {
   /**
    * isFirstStepStart
    */
-  it('should determine if the first step is a START', () => {
+  it('isFirstStepStart(): should determine if the first step is a START', () => {
     // first step is a START
-    expect(isFirstStepStart(importedSteps)).toBe(true);
+    expect(isFirstStepStart(steps)).toBe(true);
 
     expect(
       isFirstStepStart([
@@ -182,7 +249,7 @@ describe('visualizationService', () => {
   /**
    * isLastNode
    */
-  it('should determine if the provided node is the last one, given an array of nodes', () => {
+  it('isLastNode(): should determine if the provided node is the last one, given an array of nodes', () => {
     const firstBranch = eipIntegration[1].branches![0];
     // the first step is just a normal Camel-Connector
     expect(isFirstStepEip(eipIntegration)).toBe(false);
@@ -190,9 +257,20 @@ describe('visualizationService', () => {
   });
 
   /**
+   * isEipStep
+   */
+  it('isEipStep(): should determine if the provided step is an EIP step', () => {
+    const firstStep = eipIntegration[0];
+    const secondBranchOfSecondStep = eipIntegration[1].branches![1];
+
+    expect(isEipStep(firstStep)).toBe(false);
+    expect(isEipStep(secondBranchOfSecondStep.steps[1])).toBe(true);
+  });
+
+  /**
    * isEndStep
    */
-  it('should determine if the provided step is of `type="END"`', () => {
+  it('isEndStep(): should determine if the provided step is an END step', () => {
     expect(isEndStep(eipIntegration[3])).toBe(true);
     expect(isEndStep(eipIntegration[0])).toBe(false);
   });
@@ -200,7 +278,7 @@ describe('visualizationService', () => {
   /**
    * isMiddleStep
    */
-  it('should determine if the provided step is of `type="MIDDLE"`', () => {
+  it('isMiddleStep(): should determine if the provided step is a MIDDLE step', () => {
     expect(isMiddleStep(eipIntegration[1])).toBe(true);
     expect(isMiddleStep(eipIntegration[0])).toBe(false);
   });
@@ -208,8 +286,17 @@ describe('visualizationService', () => {
   /**
    * isStartStep
    */
-  it('should determine if the provided step is of `type="START"`', () => {
+  it('isStartStep(): should determine if the provided step is a START step', () => {
     expect(isStartStep(eipIntegration[0])).toBe(true);
     expect(isStartStep(eipIntegration[1])).toBe(false);
+  });
+
+  /**
+   * regenerateUuids
+   */
+  it('regenerateUuids(): should regenerate UUIDs for an array of steps', () => {
+    expect(regenerateUuids(steps)[0].UUID).toBeDefined();
+    expect(regenerateUuids(branchSteps)[0].UUID).toBeDefined();
+    expect(regenerateUuids(branchSteps)[1].UUID).toBeDefined();
   });
 });
