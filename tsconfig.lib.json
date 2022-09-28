@@ -15,6 +15,7 @@
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@kaoto/types": ["./src/types"]
     }

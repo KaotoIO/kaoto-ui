@@ -130,7 +130,7 @@
 //         {contentReady ? (
 //           <KogitoEditorIntegrationProvider
 //             content={this.state.content}
-//             updateContent={(content: string) => this.updateContent(content)}
+//             onContentChanged={(content: string) => this.updateContent(content)}
 //             // ref={this.providerRef}
 //           >
 //             <AlertProvider>

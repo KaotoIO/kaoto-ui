@@ -12,6 +12,7 @@ import {
   useImperativeHandle,
   useLayoutEffect,
   useRef,
+  useState,
 } from 'react';
 
 /**
@@ -23,6 +24,7 @@ interface IKogitoEditorIntegrationProvider {
   children: ReactNode;
   content: string;
   onContentChanged: (content: string, operation: "EDIT" | "UNDO" | "REDO") => void;
+  onReady: () => void;
 }
 
 export interface KaotoIntegrationProviderRef {
@@ -31,7 +33,7 @@ export interface KaotoIntegrationProviderRef {
 }
 
 function KogitoEditorIntegrationProviderInternal(
-  { content, onContentChanged, children }: IKogitoEditorIntegrationProvider,
+  { content, onContentChanged, onReady, children }: IKogitoEditorIntegrationProvider,
   ref: Ref<KaotoIntegrationProviderRef>
 ) {
   const { settings } = useSettingsStore();
@@ -40,6 +42,10 @@ function KogitoEditorIntegrationProviderInternal(
   const previousJson = useRef(integrationJson);
   const previousContent = useRef(content);
   // const previousHistoryState = useRef(state);
+
+  useEffect(() => {
+    onReady();
+  }, [onReady]);
 
   useImperativeHandle(
     ref,
@@ -56,18 +62,19 @@ function KogitoEditorIntegrationProviderInternal(
     []
   );
 
-  useLayoutEffect(() => {
-    // set(content);
-    fetchIntegrationJson(content, settings.namespace)
-      .then((res: IIntegration) => {
-        let tmpInt = res;
-        tmpInt.metadata = { ...res.metadata, ...settings };
-        updateIntegration(tmpInt);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  }, []);
+  // useLayoutEffect(() => {
+  //   // set(content);
+  //   console.log({ state: "useLayoutEffect", content });
+  //   fetchIntegrationJson(content, settings.namespace)
+  //     .then((res: IIntegration) => {
+  //       let tmpInt = res;
+  //       tmpInt.metadata = { ...res.metadata, ...settings };
+  //       updateIntegration(tmpInt);
+  //     })
+  //     .catch((e) => {
+  //       console.error(e);
+  //     });
+  // }, []);
 
   // useEffect(() => {
   //   if (content === previousHistoryState.current) return;
@@ -76,6 +83,7 @@ function KogitoEditorIntegrationProviderInternal(
 
   useEffect(() => {
     if (!integrationJson || isEqual(previousJson.current, integrationJson)) return;
+    console.log({ state: "useEffect", integrationJson });
     let tmpInt = integrationJson;
     tmpInt.metadata = { ...integrationJson.metadata, ...settings };
     fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
@@ -87,6 +95,7 @@ function KogitoEditorIntegrationProviderInternal(
 
   useEffect(() => {
     let tmpSource = content;
+    console.log({ state: "useEffect", content });
     fetchIntegrationJson(tmpSource, settings.namespace)
       .then((res: IIntegration) => {
         let tmpInt = res;
