@@ -14884,11 +14884,6 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zundo@^2.0.0-beta.5:
-  version "2.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.5.tgz#e1cb2e1a4756ac2aff79240ceead18964a0116b3"
-  integrity sha512-TgDX8SSr9P9x58nHQUQdKgfp+jcwJGmT90XfcFjLCZhCSFH/EWLWIgV03uzGG/OpUjLcjnTWZvfzDkYgHE3JyQ==
-
 zustand@^3.7.2:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.7.2.tgz#7b44c4f4a5bfd7a8296a3957b13e1c346f42514d"

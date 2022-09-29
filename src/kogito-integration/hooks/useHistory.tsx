@@ -29,7 +29,6 @@ const initialState = {
 // Our reducer function to handle state changes based on action
 function reducer<T>(state: HistoryState<T>, action: HistoryAction<T>) {
   const { past, present, future } = state;
-  console.log({ state, action });
   switch (action.type) {
     case "UNDO":
       const previous = past[past.length - 1];

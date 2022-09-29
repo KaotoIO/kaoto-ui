@@ -119,7 +119,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
   }
 
   return (
-    <div data-testid={'stepCatalog'}>
+    <div data-testid={'stepCatalog'} className={'catalog'}>
       <DrawerHead>
         <h3 className={'pf-c-title pf-m-2xl'}>
           Step Catalog&nbsp;&nbsp;
@@ -182,7 +182,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
       </Toolbar>
       <Gallery
         hasGutter={true}
-        style={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto', padding: '0 10px' }}
+        style={{ flex: '1 1', overflow: 'auto', padding: '0 10px' }}
       >
         {catalogData &&
           search(catalogData).map((step, idx) => {
