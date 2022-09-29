@@ -178,14 +178,14 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   };
 
   // Delete an integration step
-  const handleDeleteStep = () => {
-    if (!selectedStep.UUID) return;
+  const handleDeleteStep = (UUID?: string) => {
+    if (!UUID) return;
 
     setSelectedStep({ name: '', type: '' });
 
     // here we pass integrationJson array of steps instead of `nodes`
     // because `deleteStep` requires the index to be from `integrationJson`
-    const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, integrationJson.steps);
+    const stepsIndex = findStepIdxWithUUID(UUID, integrationJson.steps);
 
     deleteNode(stepsIndex);
     deleteStep(stepsIndex);
@@ -276,11 +276,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
             }}
             onClosePanelClick={onClosePanelClick}
             saveConfig={saveConfig}
-          
           />
-            
         }
-      
         position={'right'}
         id={'right-resize-panel'}
         defaultSize={'500px'}
