@@ -30,7 +30,7 @@
     "@patternfly/react-core": "4.239.0",
     "@patternfly/react-icons": "4.90.0",
     "@patternfly/react-log-viewer": "4.84.0",
-    "@patternfly/react-table": "4.110.13",
+    "@patternfly/react-table": "4.110.19",
     "@rhoas/app-services-ui-shared": "^0.16.4",
     "ajv": "^8.8.2",
     "immer": "^9.0.15",
