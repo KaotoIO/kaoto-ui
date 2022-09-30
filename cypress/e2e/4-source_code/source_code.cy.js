@@ -1,4 +1,4 @@
-describe('source code and drag and drop', () => {
+describe.skip('source code and drag and drop', () => {
   before(() => {
     let url = Cypress.config().baseUrl;
 

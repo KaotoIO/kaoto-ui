@@ -63,14 +63,14 @@ describe('3 step integration', () => {
     // and opens the mini catalog without issues
     cy.get('[data-testid="stepNode__insertStep-btn"]').click();
     cy.get('[data-testid="miniCatalog"]').should('be.visible');
-    cy.get('[data-testid="miniCatalog__search--input"]').type('log');
-    cy.get('[data-testid="miniCatalog__stepItem--log"]').click();
+    cy.get('[data-testid="miniCatalog__search--input"]').type('chunk-template-action');
+    cy.get('[data-testid="miniCatalog__stepItem--chunk-template-action"]').click();
 
     // verify the code editor has the correct steps (postgresql-source, log, kafka-sink)
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
     cy.get('.code-editor')
       .should('contain.text', 'postgresql-source')
-      .and('contain.text', 'log')
+      .and('contain.text', 'chunk-template')
       .and('contain.text', 'kafka-sink');
   });
 });
