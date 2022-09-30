@@ -2,12 +2,13 @@ import { useDeploymentStore } from './deploymentStore';
 import { useIntegrationSourceStore } from './integrationSourceStore';
 import { useSettingsStore } from './settingsStore';
 import { useVisualizationStore } from './visualizationStore';
+import { regenerateUuids } from '@kaoto/services';
 import { IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 import create from 'zustand';
 
 interface IIntegrationJsonStore {
-  addStep: (newStep: IStepProps) => void;
+  appendStep: (newStep: IStepProps) => void;
   deleteIntegration: () => void;
   deleteStep: (index: number) => void;
   deleteSteps: () => void;
@@ -28,28 +29,14 @@ const initialState = {
   views: [],
 };
 
-/**
- * Regenerate a UUID for a list of Steps
- * Every time there is a change to steps or their positioning in the Steps array,
- * their UUIDs need to be regenerated
- * @param steps
- */
-function regenerateUuids(steps: IStepProps[]) {
-  const newSteps = steps.slice();
-  newSteps.map((step, idx) => {
-    step.UUID = step.name + idx;
-  });
-  return newSteps;
-}
-
 export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) => ({
   ...initialState,
-  addStep: (newStep) => {
-    let newSteps = get().integrationJson.steps.slice();
-    // manually generate UUID for the new step
-    newStep.UUID = newStep.name + newSteps.length;
-    newSteps.push(newStep);
+  appendStep: (newStep) => {
     set((state) => {
+      let newSteps = state.integrationJson.steps.slice();
+      // manually generate UUID for the new step
+      newStep.UUID = newStep.name + newSteps.length;
+      newSteps.push(newStep);
       return {
         integrationJson: {
           ...state.integrationJson,
@@ -79,7 +66,7 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) 
     }));
   },
   insertStep: (newStep, idx) => {
-    // unlike addStep, we need to also regenerate all UUIDs
+    // unlike appendStep, we need to also regenerate all UUIDs
     // because positions are changing
     set((state) => ({
       integrationJson: {

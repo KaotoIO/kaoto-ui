@@ -1,6 +1,14 @@
 import './Visualization.css';
 import { MiniCatalog } from '@kaoto/components';
-import { appendableStepTypes, canStepBeReplaced, findStepIdxWithUUID } from '@kaoto/services';
+import {
+  appendableStepTypes,
+  canStepBeReplaced,
+  findStepIdxWithUUID,
+  isEipStep,
+  isEndStep,
+  isLastNode,
+  isStartStep,
+} from '@kaoto/services';
 import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
 import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 import { AlertVariant, Popover } from '@patternfly/react-core';
@@ -9,20 +17,26 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, Node, NodeProps, Position, useNodes } from 'react-flow-renderer';
 
 const currentDSL = useSettingsStore.getState().settings.dsl;
-const addStep = useIntegrationJsonStore.getState().addStep;
+const appendStep = useIntegrationJsonStore.getState().appendStep;
 const replaceStep = useIntegrationJsonStore.getState().replaceStep;
 
 // Custom Node type and component for React Flow
 const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const nodes: Node[] = useNodes();
-  const isLastNode = nodes[nodes.length - 1].data.UUID === data.UUID;
   // this step will always have a UUID
+  const lastNode = isLastNode(nodes, data.UUID!);
+  const eipStep = isEipStep(data.step!);
+  const startStep = isStartStep(data.step!);
+  const endStep = isEndStep(data.step!);
   const currentIdx = findStepIdxWithUUID(data.UUID!);
   const steps = useIntegrationJsonStore((state) => state.integrationJson.steps);
 
   const { addAlert } = useAlert() || {};
 
-  const onMiniCatalogClickAdd = (selectedStep: IStepProps) => addStep(selectedStep);
+  const onMiniCatalogClickAdd = (selectedStep: IStepProps) => appendStep(selectedStep);
+
+  const showLeftHandle = !startStep || eipStep;
+  const showInsertPlusButton = !endStep && lastNode;
 
   /**
    * Handles dropping a step onto an existing step (i.e. step replacement)
@@ -60,7 +74,6 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
       // update the steps, the new node will be created automatically
       replaceStep(step);
     } else {
-      console.log('step CANNOT be replaced');
       addAlert &&
         addAlert({
           title: 'Add Step Unsuccessful',
@@ -78,19 +91,18 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           onDrop={onDropReplace}
           data-testid={`viz-step-${data.step.name}`}
         >
-          {/* LEFT EDGE */}
-          {data.step.type !== 'END' && !isLastNode && (
+          {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
+          {showLeftHandle && (
             <Handle
               isConnectable={false}
-              type="source"
-              position={Position.Right}
-              id="b"
+              type="target"
+              position={Position.Left}
+              id="a"
               style={{ borderRadius: 0 }}
             />
           )}
-
           {/* PLUS BUTTON TO ADD STEP */}
-          {data.step.type !== 'END' && isLastNode && (
+          {showInsertPlusButton && (
             <Popover
               appendTo={() => document.body}
               aria-label="Search for a step"
@@ -118,25 +130,20 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               </button>
             </Popover>
           )}
-
           {/* VISUAL REPRESENTATION OF STEP WITH ICON */}
           <div className={'stepNode__Icon stepNode__clickable'}>
             <img src={data.icon} alt={data.label} />
           </div>
-
-          {/* RIGHT EDGE */}
-          {data.step.type !== 'START' && (
-            <Handle
-              isConnectable={false}
-              type="target"
-              position={Position.Left}
-              id="a"
-              style={{ borderRadius: 0 }}
-            />
-          )}
-
           {/* STEP LABEL */}
           <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
+          {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
+          <Handle
+            isConnectable={false}
+            type="source"
+            position={Position.Right}
+            id="b"
+            style={{ borderRadius: 0 }}
+          />
         </div>
       ) : (
         <div
