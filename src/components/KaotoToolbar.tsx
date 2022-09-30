@@ -1,12 +1,17 @@
-import { startDeployment } from '../api';
+import {fetchDefaultNamespace, startDeployment} from '@kaoto/api';
+import {
+  AppearanceModal,
+  ConfirmationModal,
+  DeploymentsModal,
+  SettingsModal,
+} from '@kaoto/components';
+import { isNameValidCheck } from '@kaoto/services';
 import {
   useDeploymentStore,
   useIntegrationJsonStore,
   useIntegrationSourceStore,
   useSettingsStore,
-} from '../store';
-import { isNameValidCheck } from '../utils';
-import { AppearanceModal, ConfirmationModal, DeploymentsModal, SettingsModal } from './index';
+} from '@kaoto/store';
 import {
   AlertVariant,
   Button,
@@ -70,6 +75,15 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
   useEffect(() => {
     setLocalName(settings.name);
   }, [settings.name]);
+
+  // fetch default namespace from the API,
+  useEffect(() => {
+    fetchDefaultNamespace().then(data => {
+      const newSettings = settings;
+      newSettings.namespace = data.namespace;
+      setSettings(newSettings);
+    });
+  }, [])
 
   const handleDeployStartClick = () => {
     startDeployment(sourceCode, settings.name, settings.namespace)

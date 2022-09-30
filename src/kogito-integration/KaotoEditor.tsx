@@ -4,9 +4,8 @@ import { HashRouter as Router } from "react-router-dom";
 import { WorkspaceEdit } from "@kie-tools-core/workspace/dist/api";
 import { Notification } from "@kie-tools-core/notifications/dist/api";
 import { ChannelType, EditorApi, StateControlCommand } from "@kie-tools-core/editor/dist/api";
-import { AlertProvider, MASLoading } from "../layout";
-import { AppLayout } from "../layout/AppLayout";
-import { AppRoutes } from "../routes";
+import { AlertProvider, MASLoading, AppLayout } from "@kaoto/layout";
+import { AppRoutes } from "@kaoto/routes";
 import { KaotoIntegrationProviderRef, KogitoEditorIntegrationProvider, ContentOperation } from "./KogitoEditorIntegrationProvider";
 
 interface Props {

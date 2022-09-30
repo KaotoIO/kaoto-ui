@@ -3,6 +3,7 @@ export async function dynamicImport(
   module: string | undefined,
   url: string | undefined
 ) {
+  // @ts-ignore
   await __webpack_init_sharing__('default');
 
   await new Promise<void>((resolve, reject) => {

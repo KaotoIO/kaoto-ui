@@ -3,7 +3,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const { dependencies, federatedModuleName, peerDependencies } = require('./package.json');
+const { dependencies, federatedModuleName } = require('./package.json');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
@@ -101,29 +101,6 @@ module.exports = () => {
         // exposes: ['./src/@kaoto/index.ts'],
         shared: {
           ...deps,
-          react: {
-            eager: true,
-            singleton: true,
-            requiredVersion: peerDependencies['react'],
-          },
-          'react-dom': {
-            eager: true,
-            singleton: true,
-            requiredVersion: peerDependencies['react-dom'],
-          },
-          'react-router-dom': {
-            requiredVersion: dependencies['react-router-dom'],
-          },
-          '@patternfly/patternfly/': {
-            singleton: true,
-            eager: true,
-            requiredVersion: peerDependencies['@patternfly/patternfly'],
-          },
-          '@patternfly/react-core/': {
-            singleton: true,
-            eager: true,
-            requiredVersion: peerDependencies['@patternfly/react-core'],
-          },
         },
       }),
       // new FederatedTypesPlugin(),

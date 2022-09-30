@@ -1,6 +1,6 @@
-import { fetchCatalogSteps } from '../api';
-import { truncateString } from '../utils';
+import { fetchCatalogSteps } from '@kaoto/api';
 import { IStepProps, IStepQueryParams } from '@kaoto/types';
+import { truncateString } from '@kaoto/utils';
 import {
   AlertVariant,
   Bullseye,
@@ -88,7 +88,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
         <ToolbarContent>
           {
             <>
-              <ToolbarItem className={'miniCatalog__search'} style={{ width: '100%' }}>
+              <ToolbarItem className={'miniCatalog__search'}>
                 <InputGroup>
                   <SearchInput
                     name={'stepSearch'}
@@ -135,7 +135,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
           }
         </ToolbarContent>
       </Toolbar>
-      <Gallery hasGutter={false} style={{ maxHeight: '200px', overflow: 'scroll' }}>
+      <Gallery hasGutter={false} className={'miniCatalog__gallery'}>
         {catalogData &&
           search(catalogData).map((step, idx) => {
             return (

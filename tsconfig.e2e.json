@@ -1,23 +1,10 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
     "declaration": false,
-    "esModuleInterop": true,
-    "importHelpers": true,
-    "jsx": "react-jsx",
-    "lib": ["dom", "esnext"],
-    "module": "esnext",
-    "sourceMap": true,
-    "strict": true,
-    "moduleResolution": "node",
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "paths": {
-      "*": ["*", "types/*"],
-      "@kaoto": ["./src/types"],
-    }
+    "sourceMap": false,
+    "strict": false,
   },
   "include": ["./**/*.cy.(t|j)s"]
 }

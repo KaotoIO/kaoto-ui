@@ -1,7 +1,7 @@
-import { useIntegrationJsonStore, useSettingsStore } from '../store';
-import { findStepIdxWithUUID, insertableStepTypes } from '../utils';
-import { MiniCatalog } from './MiniCatalog';
 import './PlusButtonEdge.css';
+import { MiniCatalog } from '@kaoto/components';
+import { findStepIdxWithUUID, insertableStepTypes } from '@kaoto/services';
+import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
 import { Popover } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
@@ -44,8 +44,8 @@ const PlusButtonEdge = ({
   markerEnd,
 }: IPlusButtonEdge) => {
   const nodes: Node[] = useNodes();
-  // substring is used to remove the 'e' from the id (i.e. edndnode_2-dndnode_3)
-  const nodeIds = id.substring(1).split('-');
+  // substring is used to remove the 'e-' from the id (i.e. e-{nodeId}>{nodeId})
+  const nodeIds = id.substring(2).split('>');
   const targetNode = useReactFlow().getNode(nodeIds[1]);
   const currentIdx = findStepIdxWithUUID(targetNode?.data.UUID!);
 

@@ -1,7 +1,6 @@
 import './App.css';
-import { AlertProvider, MASLoading } from './layout';
-import { AppLayout } from './layout/AppLayout';
-import { AppRoutes } from './routes';
+import { AlertProvider, AppLayout, MASLoading } from '@kaoto/layout';
+import { AppRoutes } from '@kaoto/routes';
 import '@patternfly/patternfly/patternfly-theme-dark.css';
 import '@patternfly/patternfly/patternfly.css';
 import '@patternfly/patternfly/utilities/Accessibility/accessibility.css';

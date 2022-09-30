@@ -1,8 +1,8 @@
 import { fetchDeployments, stopDeployment } from '../api';
-import { useDeploymentStore, useSettingsStore } from '../store';
-import { formatDateTime } from '../utils';
 import { CustomExclamationTriangleIcon } from './Icons';
+import { useDeploymentStore, useSettingsStore } from '@kaoto/store';
 import { IDeployment } from '@kaoto/types';
+import { formatDateTime } from '@kaoto/utils';
 import {
   Button,
   EmptyState,
@@ -56,25 +56,29 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
 
   useEffect(() => {
     // fetch deployments
-    fetchDeployments('no-cache', settings.namespace)
-      .then((output) => {
-        setDeployments(output);
-      })
-      .catch((e) => {
-        throw Error(e);
-      });
+    if (settings.namespace !== '') {
+      fetchDeployments('no-cache', settings.namespace)
+          .then((output) => {
+            setDeployments(output);
+          })
+          .catch((e) => {
+            throw Error(e);
+          });
+    }
   }, [settings.namespace]);
 
   // on changes to deployment, re-fetch list of deployments
   useEffect(() => {
     // fetch deployments
-    fetchDeployments('no-cache', settings.namespace)
-      .then((output) => {
-        setDeployments(output);
-      })
-      .catch((e) => {
-        throw Error(e);
-      });
+    if (settings.namespace !== '') {
+      fetchDeployments('no-cache', settings.namespace)
+          .then((output) => {
+            setDeployments(output);
+          })
+          .catch((e) => {
+            throw Error(e);
+          });
+    }
   }, [deployment, settings.namespace]);
 
   const columnNames = {

@@ -1,6 +1,6 @@
 import { basename } from "path";
-import { fetchIntegrationJson, fetchIntegrationSourceCode } from '../api';
-import { useIntegrationJsonStore, useSettingsStore } from '../store';
+import { fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
+import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
 import { useStateHistory } from './hooks/useHistory';
 import { IIntegration } from '@kaoto/types';
 import isEqual from 'lodash.isequal';

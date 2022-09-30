@@ -1,7 +1,8 @@
-import { fetchCompatibleDSLs, fetchIntegrationSourceCode } from '../api';
-import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '../store';
-import { isNameValidCheck, usePrevious } from '../utils';
+import { fetchCompatibleDSLs, fetchIntegrationSourceCode } from '@kaoto/api';
+import { isNameValidCheck } from '@kaoto/services';
+import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
 import { ISettings } from '@kaoto/types';
+import { usePrevious } from '@kaoto/utils';
 import {
   AlertVariant,
   Button,
@@ -39,6 +40,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const { setSourceCode } = useIntegrationSourceStore();
   const previousIntegrationJson = usePrevious(integrationJson);
   const previousName = usePrevious(localSettings.name);
+  const previousNamespace = usePrevious(localSettings.namespace);
   const [nameValidation, setNameValidation] = useState<
     'default' | 'warning' | 'success' | 'error' | undefined
   >('default');
@@ -53,6 +55,12 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
     if (settings.name === previousName) return;
     setLocalSettings({ ...localSettings, name: settings.name });
   }, [settings.name]);
+
+  useEffect(() => {
+    // update settings with the default namespace fetched from the API
+    if (settings.namespace === previousNamespace) return;
+    setLocalSettings({ ...localSettings, namespace: settings.namespace });
+  }, [settings.namespace]);
 
   useEffect(() => {
     if (previousIntegrationJson === integrationJson) return;

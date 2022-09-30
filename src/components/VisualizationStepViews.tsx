@@ -1,15 +1,13 @@
+import { dynamicImport } from './import';
 import {
   fetchDeployment,
   fetchIntegrationSourceCode,
   startDeployment,
   stopDeployment,
-} from '../api';
-import { useIntegrationJsonStore } from '../store';
-import { findStepIdxWithUUID } from '../utils';
-import { Extension } from './Extension';
-import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
-import { StepErrorBoundary } from './StepErrorBoundary';
-import { dynamicImport } from './import';
+} from '@kaoto/api';
+import { Extension, JsonSchemaConfigurator, StepErrorBoundary } from '@kaoto/components';
+import { findStepIdxWithUUID } from '@kaoto/services';
+import { useIntegrationJsonStore } from '@kaoto/store';
 import { IIntegration, IKaotoApi, IStepProps } from '@kaoto/types';
 import {
   AlertVariant,
