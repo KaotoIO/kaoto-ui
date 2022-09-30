@@ -1,4 +1,4 @@
-describe('Settings', () => {
+describe.skip('Settings', () => {
   beforeEach(() => {
     let url = Cypress.config().baseUrl;
     cy.intercept('/v1/integrations/dsls').as('getDSLs');
