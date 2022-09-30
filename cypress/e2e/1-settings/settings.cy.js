@@ -68,11 +68,11 @@ describe('Settings', () => {
     cy.get('[data-testid="settings--integration-name"]')
       .click()
       .clear({ timeout: 6000 })
-      .type('cherry', { delay: 2000 });
+      .type('cherry', { delay: 500 });
     cy.get('[data-testid="settings--namespace"]')
       .click()
       .clear({ timeout: 6000 })
-      .type('example', { delay: 2000 });
+      .type('example', { delay: 500 });
 
     // save changes
     cy.get('[data-testid="settings-modal--save"]').click();
