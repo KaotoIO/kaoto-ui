@@ -9,7 +9,7 @@ import {
   OnConnect,
   applyNodeChanges,
   applyEdgeChanges,
-} from 'react-flow-renderer';
+} from 'reactflow';
 import create from 'zustand';
 
 export type RFState = {
