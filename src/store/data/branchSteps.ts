@@ -1,3 +1,5 @@
+import { IStepProps } from '@kaoto/types';
+
 export default [
   {
     id: 'kamelet:source',
@@ -297,4 +299,4 @@ export default [
     parameters: [],
     title: 'Kamelet Sink',
   },
-];
+] as IStepProps[];

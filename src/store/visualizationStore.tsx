@@ -1,4 +1,4 @@
-import { IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto/types';
+import { IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
 import {
   Connection,
   EdgeChange,
@@ -14,18 +14,18 @@ import create from 'zustand';
 
 export type RFState = {
   deleteNode: (nodeIndex: number) => void;
-  nodes: IVizStepPropsNode[];
+  nodes: IVizStepNode[];
   edges: IVizStepPropsEdge[];
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   setEdges: (newEdges: IVizStepPropsEdge[]) => void;
-  setNodes: (newNodes: IVizStepPropsNode[]) => void;
+  setNodes: (newNodes: IVizStepNode[]) => void;
   /**
    * Update one single node
    * @param nodeToUpdate
    */
-  updateNode: (nodeToUpdate: IVizStepPropsNode, nodeIndex: number) => void;
+  updateNode: (nodeToUpdate: IVizStepNode, nodeIndex: number) => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -53,11 +53,11 @@ export const useVisualizationStore = create<RFState>((set, get) => ({
     set({
       edges: [...newEdges],
     }),
-  setNodes: (newNodes: IVizStepPropsNode[]) =>
+  setNodes: (newNodes: IVizStepNode[]) =>
     set({
       nodes: [...newNodes],
     }),
-  updateNode: (newNode: IVizStepPropsNode, nodeIndex: number) => {
+  updateNode: (newNode: IVizStepNode, nodeIndex: number) => {
     let newNodes = get().nodes.slice();
     newNodes[nodeIndex] = newNode;
     set(() => ({ nodes: newNodes }));

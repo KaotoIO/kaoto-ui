@@ -7,15 +7,15 @@ import {
   VisualizationStep,
   VisualizationStepViews,
 } from '@kaoto/components';
-import { buildEdges, buildNodesFromSteps, findStepIdxWithUUID } from '@kaoto/services';
-import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
 import {
-  IStepProps,
-  IStepPropsBranch,
-  IViewData,
-  IVizStepPropsEdge,
-  IVizStepPropsNode,
-} from '@kaoto/types';
+  buildBranch,
+  buildBranchSpecialEdges,
+  buildEdges,
+  buildNodesFromSteps,
+  findStepIdxWithUUID,
+} from '@kaoto/services';
+import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
+import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Controls, ReactFlowProvider, Viewport } from 'reactflow';
 import 'reactflow/dist/style.css';
@@ -74,48 +74,27 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   );
 
   function buildNodesAndEdges(steps: IStepProps[]) {
-    // contains main integration nodes
-    // + branch nodes built separately
     const combinedEdges: IVizStepPropsEdge[] = [];
-    const combinedNodes: IVizStepPropsNode[] = [];
+    const combinedNodes: IVizStepNode[] = [];
 
-    const stepsAsNodes = buildNodesFromSteps(steps, nodes);
-    const newEdges: IVizStepPropsEdge[] = buildEdges(stepsAsNodes);
+    const { stepNodes, branchOriginStepNodes } = buildNodesFromSteps(steps, nodes);
+    const { branchNodes, branchStepEdges } = buildBranch(branchOriginStepNodes);
+    const stepEdges: IVizStepPropsEdge[] = buildEdges(stepNodes);
+    const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(branchNodes, stepNodes);
 
-    combinedNodes.push(...stepsAsNodes);
-    combinedEdges.push(...newEdges);
-
-    // next we handle each step that contains branches,
-    // and build nodes separately for them
-    stepsAsNodes.forEach((s) => {
-      if (!s.data.step?.branches) return;
-      const stepBranches: IStepPropsBranch[] = s.data.step.branches;
-      const parentNode = s;
-
-      stepBranches.forEach((branch) => {
-        const branchStepsAsNodes: IVizStepPropsNode[] = buildNodesFromSteps(
-          branch.steps,
-          undefined,
-          {
-            x: parentNode.position.x,
-            y: parentNode.position.y - 160,
-          }
-        );
-        console.table(branchStepsAsNodes);
-      });
-    });
+    combinedNodes.push(...stepNodes, ...branchNodes);
+    combinedEdges.push(...stepEdges, ...branchStepEdges);
+    combinedEdges.push(...branchSpecialEdges);
 
     return { combinedNodes, combinedEdges };
   }
 
-  // Delete an integration step
   const handleDeleteStep = () => {
     if (!selectedStep.UUID) return;
     setIsPanelExpanded(false);
     setSelectedStep({ name: '', type: '' });
 
-    // here we pass integrationJson array of steps instead of `nodes`
-    // because `deleteStep` requires the index to be from `integrationJson`
+    // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
     const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, integrationJson.steps);
 
     deleteNode(stepsIndex);
@@ -143,14 +122,15 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
    * @param _e
    * @param node
    */
-  const onNodeClick = (_e: any, node: any) => {
+  const onNodeClick = (_e: any, node: IVizStepNode) => {
     // here we check if it's a node or edge
     // workaround for https://github.com/wbkd/react-flow/issues/2202
     if (!_e.target.classList.contains('stepNode__clickable')) return;
 
+    if (node.data.step.kind === 'EIP') return;
+
     if (!node.data.UUID) {
-      // prevent slots from being selected,
-      // passive-aggressively open the steps catalog
+      // prevent slots from being selected, passive-aggressively open the steps catalog
       if (toggleCatalog) toggleCatalog();
       return;
     }
