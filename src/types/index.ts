@@ -1,4 +1,4 @@
-import { Edge, Node } from 'react-flow-renderer';
+import { Edge, Node } from 'reactflow';
 
 declare global {
   interface Window {
@@ -160,15 +160,15 @@ export interface IVizStepNodeData {
 /**
  * Used to extend React Flow's `Node` type
  */
-export interface IVizStepPropsNode extends Node {
+export type IVizStepPropsNode = Node & {
   data: IVizStepNodeData;
-}
+};
 
 /**
  * Used to extend React Flow's `Edge` type
  */
-export interface IVizStepPropsEdge extends Edge {
+export type IVizStepPropsEdge = Edge & {
   arrowHeadType?: string;
   // source?: string;
   // target?: string;
-}
+};

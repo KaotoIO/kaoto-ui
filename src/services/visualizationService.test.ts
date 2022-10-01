@@ -22,7 +22,7 @@ import {
 } from './visualizationService';
 import { IVizStepPropsNode } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
-import { MarkerType } from 'react-flow-renderer';
+import { MarkerType } from 'reactflow';
 
 describe('visualizationService', () => {
   /**

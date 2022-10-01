@@ -9,11 +9,16 @@ import {
 } from '@kaoto/components';
 import { buildEdges, buildNodesFromSteps, findStepIdxWithUUID } from '@kaoto/services';
 import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
-import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepPropsNode } from '@kaoto/types';
+import {
+  IStepProps,
+  IStepPropsBranch,
+  IViewData,
+  IVizStepPropsEdge,
+  IVizStepPropsNode,
+} from '@kaoto/types';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import ReactFlow, { Background, Controls, ReactFlowProvider } from 'react-flow-renderer';
-import 'react-flow-renderer/dist/style.css';
-import 'react-flow-renderer/dist/theme-default.css';
+import ReactFlow, { Background, Controls, ReactFlowProvider, Viewport } from 'reactflow';
+import 'reactflow/dist/style.css';
 
 interface IVisualization {
   initialState?: IViewData;
@@ -23,6 +28,7 @@ interface IVisualization {
 const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
+  const defaultViewport: Viewport = { x: 10, y: 15, zoom: 1.2 };
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
@@ -83,7 +89,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     // and build nodes separately for them
     stepsAsNodes.forEach((s) => {
       if (!s.data.step?.branches) return;
-      const stepBranches = s.data.step.branches;
+      const stepBranches: IStepPropsBranch[] = s.data.step.branches;
       const parentNode = s;
 
       stepBranches.forEach((branch) => {
@@ -217,7 +223,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
             <ReactFlow
               nodes={nodes}
               edges={edges}
-              defaultZoom={1.2}
+              defaultViewport={defaultViewport}
               edgeTypes={edgeTypes}
               nodeTypes={nodeTypes}
               onDragOver={onDragOver}
