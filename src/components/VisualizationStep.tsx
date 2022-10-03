@@ -1,4 +1,5 @@
 import './Visualization.css';
+import { fetchStepDetails } from '@kaoto/api';
 import { MiniCatalog } from '@kaoto/components';
 import {
   appendableStepTypes,
@@ -30,7 +31,13 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
   const { addAlert } = useAlert() || {};
 
-  const onMiniCatalogClickAdd = (selectedStep: IStepProps) => appendStep(selectedStep);
+  const onMiniCatalogClickAdd = (selectedStep: IStepProps) => {
+    // fetch parameters and other details
+    fetchStepDetails(selectedStep.id).then((step) => {
+      step.UUID = selectedStep.UUID;
+      appendStep(step);
+    });
+  };
 
   /**
    * Handles dropping a step onto an existing step (i.e. step replacement)
@@ -40,20 +47,22 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     if (data.step?.kind === 'EIP') return;
 
     const dataJSON = event.dataTransfer.getData('text');
-    const step: IStepProps = JSON.parse(dataJSON);
-    const validation = canStepBeReplaced(data, step, steps);
-
-    // Replace step
-    if (validation.isValid) {
-      replaceStep(step, currentIdx);
-    } else {
-      addAlert &&
-        addAlert({
-          title: 'Replace Step Unsuccessful',
-          variant: AlertVariant.danger,
-          description: validation.message ?? 'Something went wrong, please try again later.',
-        });
-    }
+    const stepC: IStepProps = JSON.parse(dataJSON);
+    // fetch parameters and other details
+    fetchStepDetails(stepC.id).then((step) => {
+      const validation = canStepBeReplaced(data, step, steps);
+      // Replace step
+      if (validation.isValid) {
+        replaceStep(step, currentIdx);
+      } else {
+        addAlert &&
+          addAlert({
+            title: 'Replace Step Unsuccessful',
+            variant: AlertVariant.danger,
+            description: validation.message ?? 'Something went wrong, please try again later.',
+          });
+      }
+    });
   };
 
   /**
@@ -62,20 +71,24 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
    */
   const onDropNew = (e: { dataTransfer: { getData: (arg0: string) => any } }) => {
     const dataJSON = e.dataTransfer.getData('text');
-    const step: IStepProps = JSON.parse(dataJSON);
-    const validation = canStepBeReplaced(data, step, steps);
+    const stepC: IStepProps = JSON.parse(dataJSON);
+    // fetch parameters and other details
+    fetchStepDetails(stepC.id).then((step) => {
+      step.UUID = stepC.UUID;
+      const validation = canStepBeReplaced(data, step, steps);
 
-    if (validation.isValid) {
-      // update the steps, the new node will be created automatically
-      replaceStep(step);
-    } else {
-      addAlert &&
-        addAlert({
-          title: 'Add Step Unsuccessful',
-          variant: AlertVariant.danger,
-          description: validation.message ?? 'Something went wrong, please try again later.',
-        });
-    }
+      if (validation.isValid) {
+        // update the steps, the new node will be created automatically
+        replaceStep(step);
+      } else {
+        addAlert &&
+          addAlert({
+            title: 'Add Step Unsuccessful',
+            variant: AlertVariant.danger,
+            description: validation.message ?? 'Something went wrong, please try again later.',
+          });
+      }
+    });
   };
 
   return (
