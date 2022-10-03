@@ -955,29 +955,29 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.93.5.tgz#ab777dac32a568908680eb8b6a6e76473625f766"
   integrity sha512-4DZf//F4TeiYmb0bQfBehW937NM3lQjUv/82wV80oyOIzWC7z9X8pY9U4heFrxc4HN8NLiToYGOk96ikYyfzJQ==
 
-"@reactflow/background@11.0.0-next.7":
-  version "11.0.0-next.7"
-  resolved "https://registry.yarnpkg.com/@reactflow/background/-/background-11.0.0-next.7.tgz#172bf27352bafbf703e5530a016005258457249e"
-  integrity sha512-o6A/ChbejOWCpf5DIYrdqh6covxoW1vbzTxDnckfpaepHFVra5m3cfxEuBGYf231PkB8qVtcaS9OXw/E7QTx3Q==
+"@reactflow/background@11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@reactflow/background/-/background-11.0.0.tgz#a05172d9fb4ff1ba93217de9de5d3cba9e18adf1"
+  integrity sha512-+ZrGVwJs6LGlvQAMe8iWCGR27jCvH7qNoRs6wyTPteX/kcmd+J0rEzuOVccNsydRXHBDcQU+/O9NsrJkTxoT0w==
   dependencies:
     "@babel/runtime" "^7.18.9"
-    "@reactflow/core" "11.0.0-next.7"
+    "@reactflow/core" "11.0.0"
     classcat "^5.0.3"
     zustand "^4.1.1"
 
-"@reactflow/controls@11.0.0-next.7":
-  version "11.0.0-next.7"
-  resolved "https://registry.yarnpkg.com/@reactflow/controls/-/controls-11.0.0-next.7.tgz#37e29322da637ad0be09c590b44b16498ff4023c"
-  integrity sha512-qVcloaWsH9g1jCkwx8GHaKn+E0hPWCqKzW+0ckH3hGpGqT0rk1Gwzdz8/syM3sIkZk5WYD7KwIUaErMF08V0gg==
+"@reactflow/controls@11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@reactflow/controls/-/controls-11.0.0.tgz#885a56254000cd4ebd42d3ccace1479d6b95288b"
+  integrity sha512-E+NaDKVv2x4iGIl5Ei1kg78POdtkS4aUXvFGeC/WSXSbwlpAbIiTTYiFyWZMLiaIMgpaukFquiT5H1L1E1mUSA==
   dependencies:
     "@babel/runtime" "^7.18.9"
-    "@reactflow/core" "11.0.0-next.7"
+    "@reactflow/core" "11.0.0"
     classcat "^5.0.3"
 
-"@reactflow/core@11.0.0-next.7":
-  version "11.0.0-next.7"
-  resolved "https://registry.yarnpkg.com/@reactflow/core/-/core-11.0.0-next.7.tgz#fe4d5bded36267a536aa05ac14ae92822b69f873"
-  integrity sha512-M9SZicgizGzo5Ud7r1eby5qNkvxDGu2IrM6agtFpN91rUYQEFZzfk6X9LhczgBF5RmvY+m7bmK9dBOzHZGQhQg==
+"@reactflow/core@11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@reactflow/core/-/core-11.0.0.tgz#c76a43df9c675fface777a6e7f89d13f3fbcdc9c"
+  integrity sha512-lWCzBuCEob4jlpjZXGBPko1fYqvCX/IyYxg0mrP4YEtwGvAc3fsL62sZ3PDVWF0wzFHD0Jy8Nj7H8dYkP7Zojw==
   dependencies:
     "@types/d3" "^7.4.0"
     "@types/d3-drag" "^3.0.1"
@@ -989,13 +989,13 @@
     d3-zoom "^3.0.0"
     zustand "^4.1.1"
 
-"@reactflow/minimap@11.0.0-next.7":
-  version "11.0.0-next.7"
-  resolved "https://registry.yarnpkg.com/@reactflow/minimap/-/minimap-11.0.0-next.7.tgz#22af4667c39698bde2dff219dcde3a4917de1946"
-  integrity sha512-7dmbTnD0BXyy3JOSsYa4sYrrfX6wZ8LpEeA899Z8vLsFbnJr6tvRg/TqdhmJJ3qizxqSys8DnYlkXr7e4b73XA==
+"@reactflow/minimap@11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@reactflow/minimap/-/minimap-11.0.0.tgz#a725d9d7a6f7c4ca6f7279c8d81e141d4a28d40c"
+  integrity sha512-igeWhaRm2tLgz195IqzAocuRS+WC/txFpJPEL0bNMFA5drrA9L0hrKu8t/RBTjTYDbOGCSs+qRrrEFm2r99tng==
   dependencies:
     "@babel/runtime" "^7.18.9"
-    "@reactflow/core" "11.0.0-next.7"
+    "@reactflow/core" "11.0.0"
     classcat "^5.0.3"
     zustand "^4.1.1"
 
@@ -7060,15 +7060,15 @@ react@18.2.0:
   dependencies:
     loose-envify "^1.1.0"
 
-reactflow@^11.0.0-next.13:
-  version "11.0.0-next.13"
-  resolved "https://registry.yarnpkg.com/reactflow/-/reactflow-11.0.0-next.13.tgz#ab04b32e446a2d692d3b7261b103208a8a4164f1"
-  integrity sha512-OSHG1Du3DjCvD5crgnI2HSab1VE1/ayYRf3GJHGAZqn3TncuHqLbCKMZ1U2P2IZ5djCcyMawcR/p49Z49DHL+g==
+reactflow@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/reactflow/-/reactflow-11.0.0.tgz#a49108b3164267fe7f555ff2367613c503471f94"
+  integrity sha512-QaLMcxOugB8U9qmDo+VQ73unqcWyUWNujtAJVMghxkl1wXX+hbU4idjJJjsakops+gpvw/KK5U95XTyzhorGPQ==
   dependencies:
-    "@reactflow/background" "11.0.0-next.7"
-    "@reactflow/controls" "11.0.0-next.7"
-    "@reactflow/core" "11.0.0-next.7"
-    "@reactflow/minimap" "11.0.0-next.7"
+    "@reactflow/background" "11.0.0"
+    "@reactflow/controls" "11.0.0"
+    "@reactflow/core" "11.0.0"
+    "@reactflow/minimap" "11.0.0"
 
 readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.3.0, readable-stream@^2.3.5:
   version "2.3.7"
