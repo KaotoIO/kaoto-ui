@@ -14,7 +14,7 @@ import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 import { AlertVariant, Popover } from '@patternfly/react-core';
 import { CubesIcon, PlusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { Handle, Node, NodeProps, Position, useNodes } from 'react-flow-renderer';
+import { Handle, Node, NodeProps, Position, useNodes } from 'reactflow';
 
 const currentDSL = useSettingsStore.getState().settings.dsl;
 const appendStep = useIntegrationJsonStore.getState().appendStep;

@@ -88,11 +88,6 @@
     border-radius: 50%;
 }
 
-.react-flow__controls.visualization__controls {
-    right: 15px;
-    left: unset;
-}
-
 .react-flow__minimap.visualization__minimap {
     right: 50px;
 }

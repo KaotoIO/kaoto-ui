@@ -5,14 +5,7 @@ import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
 import { Popover } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
-import {
-  getBezierPath,
-  getEdgeCenter,
-  Node,
-  Position,
-  useNodes,
-  useReactFlow,
-} from 'react-flow-renderer';
+import { getBezierPath, Node, Position, useNodes, useReactFlow } from 'reactflow';
 
 const foreignObjectSize = 40;
 
@@ -49,20 +42,13 @@ const PlusButtonEdge = ({
   const targetNode = useReactFlow().getNode(nodeIds[1]);
   const currentIdx = findStepIdxWithUUID(targetNode?.data.UUID!);
 
-  const edgePath = getBezierPath({
+  const [edgePath, edgeCenterX, edgeCenterY] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
     targetX,
     targetY,
     targetPosition,
-  });
-
-  const [edgeCenterX, edgeCenterY] = getEdgeCenter({
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
   });
 
   const onMiniCatalogClickInsert = (selectedStep: IStepProps) =>
