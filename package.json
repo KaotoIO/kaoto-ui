@@ -166,6 +166,7 @@
     "url": "https://github.com/KaotoIO/kaoto-ui.git"
   },
   "files": [
+    "node_modules",
     "dist/lib",
     "src"
   ]
