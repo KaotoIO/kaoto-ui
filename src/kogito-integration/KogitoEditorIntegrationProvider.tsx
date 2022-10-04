@@ -12,6 +12,7 @@ import {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -47,7 +48,7 @@ function KogitoEditorIntegrationProviderInternal(
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
 
   // The history is used to keep a log of every change to the content. Then, this log is used to undo and redo content.
-  const { set, undo, redo, state } = useStateHistory<string>(content);
+  const { addState: set, undo, redo, present: state } = useStateHistory((state) => state);
 
   const previousJson = useRef(integrationJson);
   const previousContent = useRef<string>();
@@ -58,6 +59,11 @@ function KogitoEditorIntegrationProviderInternal(
   useEffect(() => {
     onReady();
   }, [onReady]);
+
+  // Initialize history
+  useLayoutEffect(() => {
+    set(content);
+  }, []);
 
   // Update file name
   useEffect(() => {
