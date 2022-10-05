@@ -61,3 +61,18 @@ export function usePrevious(value: any) {
   });
   return ref.current;
 }
+
+/**
+ * A binding for undo/redo commands
+ */
+export function bindUndoRedo(undoCallback: () => void, redoCallback: () => void) {
+  document.addEventListener('keydown', function(event) {
+    if (event.ctrlKey && event.shiftKey && event.key === 'Z') {
+      redoCallback();
+    } else if (event.ctrlKey && event.key === 'z') {
+      undoCallback();
+    } else if (event.ctrlKey && event.key === 'y') {
+      redoCallback();
+    }
+  });
+}

@@ -1,7 +1,6 @@
 import { basename } from "path";
 import { fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
-import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
-import { useStateHistory } from './hooks/useHistory';
+import { useIntegrationJsonStore, useSettingsStore, useTemporalIntegrationJsonStore } from '@kaoto/store';
 import { IIntegration } from '@kaoto/types';
 import isEqual from 'lodash.isequal';
 import {
@@ -12,7 +11,6 @@ import {
   useCallback,
   useEffect,
   useImperativeHandle,
-  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -48,11 +46,10 @@ function KogitoEditorIntegrationProviderInternal(
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
 
   // The history is used to keep a log of every change to the content. Then, this log is used to undo and redo content.
-  const { addState: set, undo, redo, present: state } = useStateHistory((state) => state);
+  const { undo, redo } = useTemporalIntegrationJsonStore();
 
   const previousJson = useRef(integrationJson);
   const previousContent = useRef<string>();
-  const previousStateContent = useRef<string>();
   const [lastAction, setLastAction] = useState<ContentOperation.UNDO | ContentOperation.REDO | undefined>();
 
   // Set editor as Ready
@@ -60,24 +57,10 @@ function KogitoEditorIntegrationProviderInternal(
     onReady();
   }, [onReady]);
 
-  // Initialize history
-  useLayoutEffect(() => {
-    set(content);
-  }, []);
-
   // Update file name
   useEffect(() => {
     setSettings({ name: basename(contentPath) });
   }, [contentPath, setSettings]);
-
-  // Update content after an Undo or Redo action, clearing lastAction state so that it doesn't get triggered repeatedly before another action.
-  useEffect(() => {
-    if (lastAction) {
-      onContentChanged(state, lastAction);
-      setLastAction(undefined);
-      previousStateContent.current = state;
-    }
-  }, [lastAction, onContentChanged, state]);
 
   // Expose undo and redo callbacks to KaotoEditor.
   useImperativeHandle(
@@ -107,11 +90,16 @@ function KogitoEditorIntegrationProviderInternal(
           if (canceled.get()) return;
 
           if (typeof newSrc === 'string' && newSrc !== previousContent.current && newSrc.length > 0) {
-            onContentChanged(newSrc, ContentOperation.EDIT);
+            if (lastAction) {
+              onContentChanged(newSrc, lastAction);
+              setLastAction(undefined);
+            } else {
+              onContentChanged(newSrc, ContentOperation.EDIT);
+            }
             previousJson.current = integrationJson;
           }
         });
-      }, [integrationJson, onContentChanged, settings])
+      }, [integrationJson, lastAction, onContentChanged, settings])
   );
 
   // Update the integrationJson to reflect an KaotoEditor content change (only if not triggered via Kaoto UI).
@@ -128,16 +116,12 @@ function KogitoEditorIntegrationProviderInternal(
             tmpInt.metadata = { ...res.metadata, ...settings };
             updateIntegration(tmpInt);
 
-            if (previousStateContent.current !== content) {
-              set(content);
-            }
-
             previousContent.current = content;
           })
           .catch((e) => {
             console.error(e);
           });
-      }, [content, set, settings, updateIntegration]
+      }, [content, settings, updateIntegration]
   ));
 
   return (
