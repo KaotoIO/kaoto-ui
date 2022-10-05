@@ -993,10 +993,10 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-core@^4.239.0", "@patternfly/react-core@^4.247.1":
-  version "4.247.1"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.247.1.tgz#b85c2a5ac12f578312cd3b0b7feb005bd1df074c"
-  integrity sha512-pKsmt1CD59s48TTuVUc3x7WVkJ68X7HlwnNQJtt0dGUbQ14taN8rl/gytMuki08IzlTs1QRs4vgFnl4Cb3aEhQ==
+"@patternfly/react-core@^4.239.0", "@patternfly/react-core@^4.249.0":
+  version "4.249.0"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.249.0.tgz#eb41ac56b6df26b68f925d7bc9eb39a5b08f4616"
+  integrity sha512-gHisr/KRa3E3UNmcZZ38wGuiJBnqoT9KRbPUdma5ED4tINtTNIz5xMC/abCaYqgB2vYOgcZlVcK0J93z5CWEcw==
   dependencies:
     "@patternfly/react-icons" "^4.92.5"
     "@patternfly/react-styles" "^4.91.5"
@@ -1032,12 +1032,12 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.91.5.tgz#c9824b0fefaf1710f1049ca948e5f45b2bf7f1f9"
   integrity sha512-6JKcqfFJPYRQWhsonbkWX+iUyJQCkZHzSzVGr6f9Dnqytqt0kYpoei66zoYEJR02aW7beLtuOHpPI5Zm3VmaGA==
 
-"@patternfly/react-table@4.110.22":
-  version "4.110.22"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-4.110.22.tgz#f426576bb8d2817443c8697766b5be30f00a0fc8"
-  integrity sha512-ClddNb3bnucM4JVzlA9UDsrRj04Qu9lmhQueKeRZXBqxLiH5RAjRTQCiBh4cTaPuOTiY0w6KvdFx0hAIAWk1zA==
+"@patternfly/react-table@4.111.1":
+  version "4.111.1"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-4.111.1.tgz#9f26e591b2f52d2992aefd9e004b55df9683fdf5"
+  integrity sha512-k/rYTzprSiI87JAnc4WH/jrjDisS8YpB1mFhIQhPkt1CzOHq26WM+tphtT0+JTY6dSdncb2HCBEcbRcnvoAsCA==
   dependencies:
-    "@patternfly/react-core" "^4.247.1"
+    "@patternfly/react-core" "^4.249.0"
     "@patternfly/react-icons" "^4.92.5"
     "@patternfly/react-styles" "^4.91.5"
     "@patternfly/react-tokens" "^4.93.5"
@@ -8778,10 +8778,10 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-web-vitals@3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-3.0.2.tgz#a484109dc5d64bc4924f174267ce20e7cd4c7934"
-  integrity sha512-YygzeCdGpNrCHIjW14AI4SxMX2IcONhDvwhHc9KswCIixfSeVl08WdKDfzZaypq2ynRIG3lzGO3CO5dXYzc9+w==
+web-vitals@3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-3.0.3.tgz#e08cf4d30398baf91984f230a87872d6049e173f"
+  integrity sha512-8K6cl3alkVhwv7RQm3WAWFzvP9dBTH4CwOE7G3DfQDEnBJTdtNgX5XMqgE7aE79wac/kJ8fHWftUfH3AVxxbBw==
 
 webidl-conversions@^5.0.0:
   version "5.0.0"
