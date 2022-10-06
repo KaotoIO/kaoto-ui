@@ -66,7 +66,7 @@ export function usePrevious(value: any) {
  * A binding for undo/redo commands
  */
 export function bindUndoRedo(undoCallback: () => void, redoCallback: () => void) {
-  document.addEventListener('keydown', function(event) {
+  const callback = (event: KeyboardEvent) => {
     if (event.ctrlKey && event.shiftKey && event.key === 'Z') {
       redoCallback();
     } else if (event.ctrlKey && event.key === 'z') {
@@ -74,5 +74,11 @@ export function bindUndoRedo(undoCallback: () => void, redoCallback: () => void)
     } else if (event.ctrlKey && event.key === 'y') {
       redoCallback();
     }
-  });
+  };
+  document.addEventListener('keydown', callback);
+  return callback;
+}
+
+export function unbindUndoRedo(callback: (event: KeyboardEvent) => void) {
+  document.removeEventListener('keydown', callback);
 }

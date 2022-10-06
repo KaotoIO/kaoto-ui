@@ -13,7 +13,7 @@
     "prod": "webpack serve --mode production --port 8080 --allowed-hosts all --progress --config webpack.prod.js ",
     "build": "webpack --mode production --config webpack.prod.js",
     "build:dev": "webpack --mode production --config webpack.dev.js",
-    "build:lib": "rimraf dist/lib && yarn copy:css && yarn copy:images && tsc -p tsconfig.lib.json",
+    "build:lib": "rimraf dist/lib && yarn copy:css && yarn copy:images && tsc -p tsconfig.lib.json && node ./scripts/fixTsPathsAlias.js",
     "build:lib:watch": "tsc-watch --noClear -p tsconfig.lib.json",
     "copy:css": "copyfiles -u 1 \"src/**/*.{sass,scss,css}\" dist/lib/",
     "copy:images": "cpr ./src/assets ./dist/lib/assets",
@@ -169,6 +169,7 @@
   "files": [
     "node_modules",
     "dist/lib",
-    "src"
+    "src",
+    "tsconfig.json"
   ]
 }

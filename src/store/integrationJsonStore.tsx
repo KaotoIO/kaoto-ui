@@ -109,8 +109,7 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(temporal(
     let newIntegration = { ...get().integrationJson, ...newInt };
     newIntegration.steps = regenerateUuids(newIntegration.steps);
     return set({ integrationJson: { ...newIntegration } });
-  },
-  views: [],
+  }
 }), {
   partialize: (state) => {
     const { integrationJson } = state;

@@ -38,7 +38,6 @@ export class KaotoEditorView implements Editor {
     private readonly envelopeContext: KogitoEditorEnvelopeContextType<KogitoEditorChannelApi>,
     private readonly initArgs: EditorInitArgs
   ) {
-    envelopeContext.channelApi.notifications.kogitoEditor_stateControlCommandUpdate.subscribe(console.log);
     this.editorRef = createRef<EditorApi>();
   }
 

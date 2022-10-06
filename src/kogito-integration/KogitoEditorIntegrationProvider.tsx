@@ -46,10 +46,11 @@ function KogitoEditorIntegrationProviderInternal(
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
 
   // The history is used to keep a log of every change to the content. Then, this log is used to undo and redo content.
-  const { undo, redo } = useTemporalIntegrationJsonStore();
+  const { undo, redo, pastStates } = useTemporalIntegrationJsonStore();
 
   const previousJson = useRef(integrationJson);
   const previousContent = useRef<string>();
+  const initialIntegrationJson = useRef<IIntegration>();
   const [lastAction, setLastAction] = useState<ContentOperation.UNDO | ContentOperation.REDO | undefined>();
 
   // Set editor as Ready
@@ -67,6 +68,10 @@ function KogitoEditorIntegrationProviderInternal(
     ref,
     () => ({
       undo: () => {
+        // Avoid undoing if inital state and first past state are different
+        if (pastStates.length === 1 && !isEqual(pastStates[0], initialIntegrationJson.current)) {
+          return;
+        }
         undo();
         setLastAction(ContentOperation.UNDO);
       },
@@ -75,7 +80,7 @@ function KogitoEditorIntegrationProviderInternal(
         setLastAction(ContentOperation.REDO);
       },
     }),
-    [redo, undo]
+    [pastStates, redo, undo]
   );
 
   // Update KaotoEditor content after an integrationJson change (the user interacted with the Kaoto UI).
@@ -115,6 +120,10 @@ function KogitoEditorIntegrationProviderInternal(
             let tmpInt = res;
             tmpInt.metadata = { ...res.metadata, ...settings };
             updateIntegration(tmpInt);
+
+            if (!initialIntegrationJson.current) {
+              initialIntegrationJson.current = tmpInt;
+            }
 
             previousContent.current = content;
           })
