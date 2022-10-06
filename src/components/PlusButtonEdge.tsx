@@ -13,6 +13,7 @@ const currentDSL = useSettingsStore.getState().settings.dsl;
 const insertStep = useIntegrationJsonStore.getState().insertStep;
 
 export interface IPlusButtonEdge {
+  data?: any;
   id: string;
   sourceX: number;
   sourceY: number;

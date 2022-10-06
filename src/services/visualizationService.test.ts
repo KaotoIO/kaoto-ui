@@ -11,7 +11,9 @@ import {
   containsAddStepPlaceholder,
   findStepIdxWithUUID,
   getNextStep,
+  getRandomArbitraryNumber,
   insertAddStepPlaceholder,
+  insertBranchGroupNode,
   isEipStep,
   isEndStep,
   isFirstStepEip,
@@ -20,11 +22,13 @@ import {
   isStartStep,
   regenerateUuids,
 } from './visualizationService';
-import { IVizStepPropsNode } from '@kaoto/types';
+import { IVizStepNode } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import { MarkerType } from 'reactflow';
 
 describe('visualizationService', () => {
+  const groupWidth = 80;
+
   /**
    * buildEdgeDefaultParams
    */
@@ -61,9 +65,9 @@ describe('visualizationService', () => {
     expect(buildEdges(nodes)).toHaveLength(1);
 
     // let's test that it works for branching too
-    const stepsAsNodes = buildNodesFromSteps(branchSteps, undefined, { x: 0, y: 0 });
+    const { stepNodes } = buildNodesFromSteps(branchSteps);
 
-    expect(buildEdges(stepsAsNodes)).toHaveLength(branchSteps.length - 1);
+    expect(buildEdges(stepNodes)).toHaveLength(branchSteps.length - 1);
   });
 
   /**
@@ -91,20 +95,18 @@ describe('visualizationService', () => {
    * buildNodesFromSteps
    */
   it('buildNodesFromSteps(): should build visualization nodes from an array of steps', () => {
-    const stepsAsNodes = buildNodesFromSteps(steps);
-
-    expect(stepsAsNodes[0].data.UUID).toBeDefined();
-    expect(stepsAsNodes[0].id).toEqual('dndnode_0');
+    const { stepNodes } = buildNodesFromSteps(steps);
+    expect(stepNodes[0].data.UUID).toBeDefined();
+    expect(stepNodes[0].id).toEqual('node_0-0twitter-search-source');
   });
 
   /**
    * buildNodesFromSteps for integrations with branches
    */
   it.skip('buildNodesFromSteps(): should build visualization nodes from an array of steps with branches', () => {
-    const stepsAsNodes = buildNodesFromSteps(branchSteps, undefined, { x: 0, y: 0 });
-
-    expect(stepsAsNodes[0].data.UUID).toBeDefined();
-    expect(stepsAsNodes).toHaveLength(branchSteps.length);
+    const { stepNodes } = buildNodesFromSteps(branchSteps);
+    expect(stepNodes[0].data.UUID).toBeDefined();
+    expect(stepNodes).toHaveLength(branchSteps.length);
   });
 
   /**
@@ -112,7 +114,7 @@ describe('visualizationService', () => {
    */
   it('calculatePosition(): should calculate the very first position of a node', () => {
     // no previous step provided, use coordinates for first step provided
-    expect(calculatePosition(0, [], { x: 500, y: 250 }, 160)).toEqual({
+    expect(calculatePosition(0, { x: 500, y: 250 }, 160, 80)).toEqual({
       x: 500,
       y: 250,
     });
@@ -125,12 +127,11 @@ describe('visualizationService', () => {
     const nodes = [
       { data: { label: 'aws-kinesis-source' }, id: 'dndnode_1', position: { x: 720, y: 250 } },
     ];
-    const customIncrementXAmt = 160;
 
     // should increment from previous step, and will not inherit any position,
     // as there is no existing node with the same index
-    expect(calculatePosition(1, nodes, { x: 500, y: 250 }, customIncrementXAmt, nodes[0])).toEqual({
-      x: nodes[0].position.x + customIncrementXAmt,
+    expect(calculatePosition(1, { x: 500, y: 250 }, 160, 80, nodes, nodes[0])).toEqual({
+      x: nodes[0].position.x + 160,
       y: 250,
     });
   });
@@ -143,13 +144,14 @@ describe('visualizationService', () => {
       { data: { label: 'aws-kinesis-source' }, id: 'dndnode_1', position: { x: 720, y: 250 } },
       { data: { label: 'avro-deserialize-sink' }, id: 'dndnode_2', position: { x: 880, y: 250 } },
     ];
+    const nodeWidth = 80;
 
-    expect(calculatePosition(0, nodes, { x: 500, y: 250 }, 160)).toEqual({
+    expect(calculatePosition(0, { x: 500, y: 250 }, 160, nodeWidth, nodes)).toEqual({
       x: 720,
       y: 250,
     });
 
-    expect(calculatePosition(1, nodes, { x: 500, y: 250 }, 160)).toEqual({
+    expect(calculatePosition(1, { x: 500, y: 250 }, 160, nodeWidth, nodes)).toEqual({
       x: 880,
       y: 250,
     });
@@ -203,12 +205,32 @@ describe('visualizationService', () => {
     });
   });
 
+  it.skip('getRandomArbitraryNumber(): should get a random arbitrary number', () => {
+    const mGetRandomValues = jest.fn().mockReturnValueOnce(new Uint32Array(10));
+
+    Object.defineProperty(window, 'crypto', {
+      value: { getRandomValues: mGetRandomValues },
+    });
+
+    expect(getRandomArbitraryNumber()).toEqual(new Uint32Array(10));
+    expect(mGetRandomValues).toBeCalledWith(new Uint8Array(1));
+  });
+
   /**
    * insertAddStepPlaceholder
    */
   it('insertAddStepPlaceholder(): should add an ADD STEP placeholder to the beginning of the array', () => {
-    const nodes: IVizStepPropsNode[] = [];
+    const nodes: IVizStepNode[] = [];
     insertAddStepPlaceholder(nodes);
+    expect(nodes).toHaveLength(1);
+  });
+
+  /**
+   * insertBranchGroupNode
+   */
+  it.skip('insertBranchGroupNode', () => {
+    const nodes: IVizStepNode[] = [];
+    insertBranchGroupNode(nodes, { x: 0, y: 0 }, 150, groupWidth);
     expect(nodes).toHaveLength(1);
   });
 

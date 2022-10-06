@@ -108,6 +108,8 @@ export interface IStepProps {
 }
 
 export interface IStepPropsBranch {
+  condition: string;
+  identifier: string;
   steps: IStepProps[];
   parameters?: IStepPropsParameters[];
 }
@@ -155,12 +157,16 @@ export interface IVizStepNodeData {
   label: string;
   step?: IStepProps;
   UUID?: string;
+  branchInfo?: Partial<IStepPropsBranch> & {
+    branchUuid?: string;
+    parentUuid: string;
+  };
 }
 
 /**
  * Used to extend React Flow's `Node` type
  */
-export type IVizStepPropsNode = Node & {
+export type IVizStepNode = Node & {
   data: IVizStepNodeData;
 };
 
@@ -169,6 +175,4 @@ export type IVizStepPropsNode = Node & {
  */
 export type IVizStepPropsEdge = Edge & {
   arrowHeadType?: string;
-  // source?: string;
-  // target?: string;
 };
