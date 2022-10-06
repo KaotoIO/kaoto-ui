@@ -23,10 +23,7 @@ const replaceStep = useIntegrationJsonStore.getState().replaceStep;
 // Custom Node type and component for React Flow
 const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const nodes: Node[] = useNodes();
-  // this step will always have a UUID
   const lastNode = isLastNode(nodes, data.UUID!);
-  const eipStep = isEipStep(data.step!);
-  const startStep = isStartStep(data.step!);
   const endStep = isEndStep(data.step!);
   const currentIdx = findStepIdxWithUUID(data.UUID!);
   const steps = useIntegrationJsonStore((state) => state.integrationJson.steps);
@@ -35,14 +32,12 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
   const onMiniCatalogClickAdd = (selectedStep: IStepProps) => appendStep(selectedStep);
 
-  const showLeftHandle = !startStep || eipStep;
-  const showInsertPlusButton = !endStep && lastNode;
-
   /**
    * Handles dropping a step onto an existing step (i.e. step replacement)
    */
   const onDropReplace = (event: any) => {
     event.preventDefault();
+    if (data.step?.kind === 'EIP') return;
 
     const dataJSON = event.dataTransfer.getData('text');
     const step: IStepProps = JSON.parse(dataJSON);
@@ -85,14 +80,14 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
   return (
     <>
-      {data.step?.UUID ? (
+      {data.step && data.UUID ? (
         <div
           className={`stepNode`}
           onDrop={onDropReplace}
           data-testid={`viz-step-${data.step.name}`}
         >
           {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
-          {showLeftHandle && (
+          {!isStartStep(data.step) && (
             <Handle
               isConnectable={false}
               type="target"
@@ -102,7 +97,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             />
           )}
           {/* PLUS BUTTON TO ADD STEP */}
-          {showInsertPlusButton && (
+          {!endStep && lastNode && !isEipStep(data.step) && (
             <Popover
               appendTo={() => document.body}
               aria-label="Search for a step"
@@ -137,13 +132,15 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {/* STEP LABEL */}
           <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
           {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
-          <Handle
-            isConnectable={false}
-            type="source"
-            position={Position.Right}
-            id="b"
-            style={{ borderRadius: 0 }}
-          />
+          {!isEndStep(data.step) && (
+            <Handle
+              isConnectable={false}
+              type="source"
+              position={Position.Right}
+              id="b"
+              style={{ borderRadius: 0 }}
+            />
+          )}
         </div>
       ) : (
         <div
