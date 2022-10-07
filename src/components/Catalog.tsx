@@ -1,6 +1,6 @@
 import './Catalog.css';
 import { fetchCatalogSteps } from '@kaoto/api';
-import { useDeploymentStore, useSettingsStore } from '@kaoto/store';
+import { useSettingsStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
 import { shorten, truncateString, usePrevious } from '@kaoto/utils';
 import {
@@ -37,7 +37,6 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
   const { settings } = useSettingsStore();
   const previousDSL = usePrevious(settings.dsl);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const { deployment } = useDeploymentStore();
 
   const { addAlert } = useAlert() || {};
 
@@ -68,31 +67,6 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
     searchInputRef.current?.focus();
   }, [settings.dsl]);
 
-  useEffect(() => {
-    // verify that we actually need this, as the API
-    // isn't returning deployed kamelets in time anyway
-    fetchCatalogSteps(
-      {
-        dsl: settings.dsl,
-      },
-      'no-cache'
-    )
-      .then((value) => {
-        if (value) {
-          value.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
-          setCatalogData(value);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        addAlert &&
-          addAlert({
-            title: 'Something went wrong',
-            variant: AlertVariant.danger,
-            description: 'There was a problem fetching the catalog steps. Please try again later.',
-          });
-      });
-  }, [deployment]);
 
   const changeSearch = (e: any) => {
     setQuery(e);
