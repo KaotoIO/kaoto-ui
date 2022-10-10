@@ -1,15 +1,13 @@
 import './PlusButtonEdge.css';
 import { MiniCatalog } from '@kaoto/components';
 import { findStepIdxWithUUID, insertableStepTypes } from '@kaoto/services';
-import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
+import { useIntegrationJsonStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
 import { Popover } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { getBezierPath, Node, Position, useNodes, useReactFlow } from 'reactflow';
 
 const foreignObjectSize = 40;
-
-const currentDSL = useSettingsStore.getState().settings.dsl;
 const insertStep = useIntegrationJsonStore.getState().insertStep;
 
 export interface IPlusButtonEdge {
@@ -80,7 +78,6 @@ const PlusButtonEdge = ({
               <MiniCatalog
                 handleSelectStep={onMiniCatalogClickInsert}
                 queryParams={{
-                  dsl: currentDSL,
                   type: insertableStepTypes(nodes[currentIdx - 1]?.data, nodes[currentIdx]?.data),
                 }}
               />
