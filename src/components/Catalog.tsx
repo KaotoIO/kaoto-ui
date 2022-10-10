@@ -34,8 +34,8 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
   const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
-  const { settings } = useSettingsStore();
-  const previousDSL = usePrevious(settings.dsl);
+  const dsl = useSettingsStore((state) => state.settings.dsl);
+  const previousDSL = usePrevious(dsl);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const { addAlert } = useAlert() || {};
@@ -45,9 +45,9 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
    * Checks for changes to the settings for DSL
    */
   useEffect(() => {
-    if (previousDSL === settings.dsl) return;
+    if (previousDSL === dsl) return;
     fetchCatalogSteps({
-      dsl: settings.dsl,
+      dsl,
     })
       .then((value) => {
         if (value) {
@@ -65,8 +65,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
           });
       });
     searchInputRef.current?.focus();
-  }, [settings.dsl]);
-
+  }, [dsl]);
 
   const changeSearch = (e: any) => {
     setQuery(e);
