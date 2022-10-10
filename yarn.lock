@@ -8328,10 +8328,10 @@ uniforms-patternfly@^4.7.6:
     tslib "^2.2.0"
     uniforms "^3.5.5"
 
-uniforms@^3.10.0, uniforms@^3.5.5:
-  version "3.10.0"
-  resolved "https://registry.yarnpkg.com/uniforms/-/uniforms-3.10.0.tgz#c09d429904632b3952c7ba5e0f5f7509f8a30098"
-  integrity sha512-wp8mnm5DqRzGUQwbEIG6sfpnu5H+gCncL5g3Cmohax9E1bmn4PattsBRI88gSMLckZNZdpA79LX1f8QdQFub/g==
+uniforms@^3.10.0, uniforms@^3.10.1, uniforms@^3.5.5:
+  version "3.10.1"
+  resolved "https://registry.yarnpkg.com/uniforms/-/uniforms-3.10.1.tgz#ad58afe19174743464a09c3c3fec7e68d59c9211"
+  integrity sha512-R2FBzYVv9KbgsYaVloL13Cw+eoF9q1DeSZOePBf28WWDtHFWNrziUZBPgmd4UVbk+6oQuwkbomX7BnNJ/jdtqw==
   dependencies:
     invariant "^2.0.0"
     lodash "^4.0.0"
