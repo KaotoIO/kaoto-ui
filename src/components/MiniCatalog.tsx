@@ -1,4 +1,5 @@
 import { fetchCatalogSteps } from '@kaoto/api';
+import { useSettingsStore } from '@kaoto/store';
 import { IStepProps, IStepQueryParams } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import {
@@ -28,17 +29,22 @@ export interface IMiniCatalog {
 export const MiniCatalog = (props: IMiniCatalog) => {
   const [catalogData, setCatalogData] = useState<IStepProps[]>(props.steps ?? []);
   const [query, setQuery] = useState(``);
+  const dsl = useSettingsStore((state) => state.settings.dsl);
   const typesAllowedArray = props.queryParams?.type?.split(',');
   const [isSelected, setIsSelected] = useState(typesAllowedArray ? typesAllowedArray[0] : 'MIDDLE');
 
   const { addAlert } = useAlert() || {};
   const searchInputRef = useRef<HTMLInputElement>(null);
+
   /**
    * Sort & fetch all Steps for the Catalog
    */
   useEffect(() => {
     if (!props.steps) {
-      fetchCatalogSteps(props.queryParams)
+      fetchCatalogSteps({
+        ...props.queryParams,
+        dsl,
+      })
         .then((value) => {
           if (value) {
             value.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
@@ -56,7 +62,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
         });
     }
     searchInputRef.current?.focus();
-  }, []);
+  }, [dsl]);
 
   const changeSearch = (e: string) => {
     setQuery(e);
