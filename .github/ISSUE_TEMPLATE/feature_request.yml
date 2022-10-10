@@ -1,5 +1,5 @@
 name: 🛠 Feature Request
-description: Suggest a new feature or idea for React Flow
+description: Suggest a new feature or idea for Kaoto
 labels: feature request
 body:
   - type: textarea
