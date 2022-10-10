@@ -54,15 +54,6 @@ body:
     validations:
       required: true
   - type: textarea
-    id: expected
-    attributes:
-      label: Expected behavior
-      description: Provide a clear and concise description of what you expected to happen.
-      placeholder: |
-        As a user, I expected ___ behavior, but I am seeing ___ instead.
-    validations:
-      required: true
-  - type: textarea
     id: screenshots_or_videos
     attributes:
       label: Screenshots or Videos
