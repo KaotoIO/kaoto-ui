@@ -23,7 +23,7 @@ export enum ContentOperation {
   EDIT = "EDIT",
   UNDO = "UNDO",
   REDO = "REDO"
-};
+}
 
 interface IKogitoEditorIntegrationProvider {
   children: ReactNode;
