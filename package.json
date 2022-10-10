@@ -17,8 +17,6 @@
     "build:lib:watch": "tsc-watch --noClear -p tsconfig.lib.json",
     "copy:css": "copyfiles -u 1 \"src/**/*.{sass,scss,css}\" dist/lib/",
     "copy:images": "cpr ./src/assets ./dist/lib/assets",
-    "build-storybook": "build-storybook -s public",
-    "chromatic": "npx chromatic",
     "clean": "rimraf dist",
     "e2e": "cypress open --config-file=cypress.config.ts",
     "e2e:headless": "cypress run",
