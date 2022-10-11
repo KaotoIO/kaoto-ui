@@ -87,7 +87,7 @@ const VisualizationStepViews = ({
     let tempModelObject: { [label: string]: any } = {};
 
     const schemaProps = (parameter: { [label: string]: any }) => {
-      const propKey = parameter.title;
+      const propKey = parameter.id;
       const { type } = parameter;
       tempSchemaObject[propKey] = { type };
       tempModelObject[propKey] = parameter.value;
