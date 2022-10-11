@@ -261,6 +261,8 @@ describe('visualizationService', () => {
           group: 'PDF',
           icon: 'data:image/svg+xml;base64',
           kind: 'Kamelet',
+          maxBranches: 0,
+          minBranches: 0,
           parameters: [],
           title: 'PDF Action',
         },

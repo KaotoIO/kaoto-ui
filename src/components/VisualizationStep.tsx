@@ -3,8 +3,8 @@ import { MiniCatalog } from '@kaoto/components';
 import {
   appendableStepTypes,
   canStepBeReplaced,
+  containsBranching,
   findStepIdxWithUUID,
-  isEipStep,
   isEndStep,
   isLastNode,
   isStartStep,
@@ -97,7 +97,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             />
           )}
           {/* PLUS BUTTON TO ADD STEP */}
-          {!endStep && lastNode && !isEipStep(data.step) && (
+          {!endStep && lastNode && !containsBranching(data.step) && (
             <Popover
               appendTo={() => document.body}
               aria-label="Search for a step"

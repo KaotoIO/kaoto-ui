@@ -31,7 +31,12 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
-  const [selectedStep, setSelectedStep] = useState<IStepProps>({ name: '', type: '' });
+  const [selectedStep, setSelectedStep] = useState<IStepProps>({
+    name: '',
+    type: '',
+    maxBranches: 0,
+    minBranches: 0,
+  });
   const { deleteStep, integrationJson, replaceStep, setViews } = useIntegrationJsonStore();
   const { edges, nodes, deleteNode, onEdgesChange, onNodesChange, setEdges, setNodes } =
     useVisualizationStore();
@@ -91,7 +96,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   const handleDeleteStep = () => {
     if (!selectedStep.UUID) return;
     setIsPanelExpanded(false);
-    setSelectedStep({ name: '', type: '' });
+    setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '' });
 
     // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
     const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, integrationJson.steps);
@@ -126,7 +131,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     // workaround for https://github.com/wbkd/react-flow/issues/2202
     if (!_e.target.classList.contains('stepNode__clickable')) return;
 
-    if (node.data.step.kind === 'EIP') return;
+    // if (node.data.step.kind === 'EIP') return;
 
     if (!node.data.UUID) {
       // prevent slots from being selected, passive-aggressively open the steps catalog
