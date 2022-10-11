@@ -1,3 +1,5 @@
+import { IVizStepNode } from '@kaoto/types';
+
 export default [
   {
     data: {
@@ -13,6 +15,8 @@ export default [
         group: 'AWS Kinesis',
         icon: 'data:image/svg+xml;base64',
         kind: 'Kamelet',
+        maxBranches: 0,
+        minBranches: 0,
         parameters: [
           {
             description:
@@ -79,6 +83,8 @@ export default [
         group: 'Actions',
         icon: 'data:image/svg+xml;base64',
         kind: 'Kamelet',
+        maxBranches: 0,
+        minBranches: 0,
         parameters: [
           {
             description:
@@ -128,6 +134,8 @@ export default [
         group: 'AWS Kinesis Firehose',
         icon: 'data:image/svg+xml;base64',
         kind: 'Kamelet',
+        maxBranches: 0,
+        minBranches: 0,
         parameters: [
           {
             description: 'The name of the stream we want to send to data to',
@@ -179,4 +187,4 @@ export default [
     width: 80,
     height: 80,
   },
-];
+] as IVizStepNode[];

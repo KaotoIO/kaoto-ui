@@ -93,9 +93,13 @@ export interface IStepProps {
 
   // e.g. 'Kamelet', 'Camel-Connector', 'EIP'
   kind?: string;
+
+  // all steps, even if not EIP, contain this prop
+  maxBranches: number;
+  minBranches: number;
   name: string;
 
-  // parameters provided for this step
+  // config parameters available for this step
   parameters?: IStepPropsParameters[];
   required?: string[];
   title?: string;

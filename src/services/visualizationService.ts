@@ -156,7 +156,9 @@ export function buildEdgeDefaultParams(
     // even the last step needs to build the step edge before it, with itself as the target
     target: currentStep.id,
     type:
-      currentStep.data.kind === 'EIP' || previousStep.data.step?.branches ? 'default' : 'insert',
+      currentStep.data.step?.maxBranches !== 0 || previousStep.data.step?.branches
+        ? 'default'
+        : 'insert',
     ...props,
   };
 }
@@ -236,7 +238,7 @@ export function buildNodesFromSteps(
     }
 
     // build the default parameters for a node
-    if (step.kind === 'EIP') {
+    if (step.maxBranches !== 0) {
       // we are within a branch
       currentStep = buildBranchNodeParams(
         step,
@@ -268,7 +270,7 @@ export function buildNodesFromSteps(
 
     // if it has branches, push those to an array to deal with once all the
     // parent nodes are built and have their positions
-    if (step.branches) {
+    if (step.branches && step.maxBranches !== 0) {
       branchOriginStepNodes.push({
         ...currentStep,
         data: {
@@ -296,21 +298,18 @@ export function calculatePosition(
   // check if there is a node with the same index, use its position if there is
   if (nodes && nodes[stepIdx]) {
     return nodes[stepIdx].position;
-  }
-  if (!previousStep) {
+  } else if (!previousStep) {
     return firstStepPosition;
+  } else if (previousStep.data.step?.branches && previousStep.data.step?.maxBranches !== 0) {
+    // if it's a branch, we still haven't created a group for it,
+    // but we can "predict" the positioning
+    const positionX = calculateBranchNextStepPosition(previousStep, incrementXAmt, nodeWidth);
+    return { x: positionX, y: positionY ?? 250 };
   } else {
-    if (previousStep.data.step?.branches) {
-      // if it's a branch, we still haven't created a group for it,
-      // but we can "predict" the positioning
-      const positionX = calculateBranchNextStepPosition(previousStep, incrementXAmt, nodeWidth);
-      return { x: positionX, y: positionY ?? 250 };
-    } else {
-      return {
-        x: previousStep.position.x + (incrementXAmt ?? 160),
-        y: positionY ?? 250,
-      };
-    }
+    return {
+      x: previousStep.position.x + (incrementXAmt ?? 160),
+      y: positionY ?? 250,
+    };
   }
 }
 
@@ -359,6 +358,10 @@ export function calculateBranchGroupPosition(
 
 export function containsAddStepPlaceholder(stepNodes: IVizStepNode[]) {
   return stepNodes.length > 0 && stepNodes[0].data.label === 'ADD A STEP';
+}
+
+export function containsBranching(step: IStepProps): boolean {
+  return step.maxBranches !== 0;
 }
 
 export function containsGroupNode(stepNodes: IVizStepNode[]) {

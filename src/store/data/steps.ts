@@ -1,3 +1,5 @@
+import { IStepProps } from '@kaoto/types';
+
 export default [
   {
     id: 'twitter-search-source',
@@ -9,6 +11,8 @@ export default [
     group: 'Twitter',
     icon: 'data:image/svg+xml',
     kind: 'Kamelet',
+    maxBranches: 0,
+    minBranches: 0,
     parameters: [
       {
         description:
@@ -72,6 +76,8 @@ export default [
     group: 'PDF',
     icon: 'data:image/svg+xml',
     kind: 'Kamelet',
+    maxBranches: 0,
+    minBranches: 0,
     parameters: [
       {
         defaultValue: 'Helvetica',
@@ -115,6 +121,8 @@ export default [
     group: 'Caffeine',
     icon: 'data:image/svg+xml',
     kind: 'Kamelet',
+    maxBranches: 0,
+    minBranches: 0,
     parameters: [
       {
         defaultValue: 'caffeine-cache',
@@ -138,6 +146,8 @@ export default [
     group: 'Kafka',
     icon: 'data:image/svg+xml',
     kind: 'Kamelet',
+    maxBranches: 0,
+    minBranches: 0,
     parameters: [
       {
         description: 'Comma separated list of Kafka topic names',
@@ -196,4 +206,4 @@ export default [
     ],
     title: 'Kafka Sink',
   },
-];
+] as IStepProps[];
