@@ -131,8 +131,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     // workaround for https://github.com/wbkd/react-flow/issues/2202
     if (!_e.target.classList.contains('stepNode__clickable')) return;
 
-    // if (node.data.step.kind === 'EIP') return;
-
     if (!node.data.UUID) {
       // prevent slots from being selected, passive-aggressively open the steps catalog
       if (toggleCatalog) toggleCatalog();
