@@ -1,3 +1,5 @@
+import create from 'zustand';
+import { temporal } from 'zundo'
 import { useDeploymentStore } from './deploymentStore';
 import { useIntegrationSourceStore } from './integrationSourceStore';
 import { useSettingsStore } from './settingsStore';
@@ -5,7 +7,7 @@ import { useVisualizationStore } from './visualizationStore';
 import { regenerateUuids } from '@kaoto/services';
 import { IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
-import create from 'zustand';
+import isEqual from 'lodash.isequal';
 
 interface IIntegrationJsonStore {
   appendStep: (newStep: IStepProps) => void;
@@ -29,7 +31,7 @@ const initialState = {
   views: [],
 };
 
-export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) => ({
+export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(temporal((set, get) => ({
   ...initialState,
   appendStep: (newStep) => {
     set((state) => {
@@ -107,8 +109,13 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>((set, get) 
     let newIntegration = { ...get().integrationJson, ...newInt };
     newIntegration.steps = regenerateUuids(newIntegration.steps);
     return set({ integrationJson: { ...newIntegration } });
+  }
+}), {
+  partialize: (state) => {
+    const { integrationJson } = state;
+    return { integrationJson };
   },
-  views: [],
+  equality: (a, b) => isEqual(a, b)
 }));
 
 if (process.env.NODE_ENV === 'development') {
@@ -118,5 +125,7 @@ if (process.env.NODE_ENV === 'development') {
   mountStoreDevtool('settingsStore', useSettingsStore);
   mountStoreDevtool('visualizationStore', useVisualizationStore);
 }
+
+export const useTemporalIntegrationJsonStore = create(useIntegrationJsonStore.temporal);
 
 export default useIntegrationJsonStore;

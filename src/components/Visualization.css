@@ -1,5 +1,6 @@
 .pf-c-drawer__content.panelCustom {
     background-color: var(--pf-global--BackgroundColor--200);
+    overflow: hidden;
 }
 
 .visualization {

@@ -1,0 +1,39 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["es6", "dom", "es2018.promise", "es2019", "esnext"],
+    "outDir": "dist/lib",
+    "target": "es5",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "removeComments": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@kaoto/api": ["./src/api"],
+      "@kaoto/assets": ["./src/assets"],
+      "@kaoto/components": ["./src/components"],
+      "@kaoto/layout": ["./src/layout"],
+      "@kaoto/routes": ["./src/routes"],
+      "@kaoto/services": ["./src/services"],
+      "@kaoto/store": ["./src/store"],
+      "@kaoto/types": ["./src/types"],
+      "@kaoto/utils": ["./src/utils"]
+    }
+  },
+  "include": ["src"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/*.stories.tsx",
+    "**/*.test.ts*"
+  ]
+}

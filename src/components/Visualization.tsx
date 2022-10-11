@@ -18,7 +18,6 @@ import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Controls, ReactFlowProvider, Viewport } from 'reactflow';
-import 'reactflow/dist/style.css';
 
 interface IVisualization {
   initialState?: IViewData;
