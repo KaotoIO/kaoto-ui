@@ -88,7 +88,7 @@ yarn e2e
 yarn e2e:headless
 
 // with a specific browser
-// optons: chrome, chromium, edge, electron, firefox
+// options: chrome, chromium, edge, electron, firefox
 // or specify a path: /usr/bin/chromium
 yarn e2e --browser firefox
 ```
