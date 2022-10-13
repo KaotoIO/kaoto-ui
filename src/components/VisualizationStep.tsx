@@ -16,7 +16,7 @@ import { CubesIcon, PlusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, Node, NodeProps, Position, useNodes } from 'reactflow';
 
-const currentDSL = useSettingsStore.getState().settings.dsl;
+const currentDSL = useSettingsStore.getState().settings.dsl.name;
 const appendStep = useIntegrationJsonStore.getState().appendStep;
 const replaceStep = useIntegrationJsonStore.getState().replaceStep;
 

@@ -34,7 +34,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
   const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
-  const dsl = useSettingsStore((state) => state.settings.dsl);
+  const dsl = useSettingsStore((state) => state.settings.dsl.name);
   const previousDSL = usePrevious(dsl);
   const searchInputRef = useRef<HTMLInputElement>(null);
 

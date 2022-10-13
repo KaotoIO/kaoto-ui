@@ -1,4 +1,4 @@
-import {fetchDefaultNamespace, startDeployment} from '@kaoto/api';
+import { fetchDefaultNamespace, startDeployment } from '@kaoto/api';
 import {
   AppearanceModal,
   ConfirmationModal,
@@ -75,15 +75,14 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
   useEffect(() => {
     setLocalName(settings.name);
   }, [settings.name]);
-
   // fetch default namespace from the API,
   useEffect(() => {
-    fetchDefaultNamespace().then(data => {
+    fetchDefaultNamespace().then((data) => {
       const newSettings = settings;
       newSettings.namespace = data.namespace;
       setSettings(newSettings);
     });
-  }, [])
+  }, []);
 
   const handleDeployStartClick = () => {
     startDeployment(sourceCode, settings.name, settings.namespace)
@@ -117,6 +116,8 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
     setAppMenuIsOpen(false);
     onFocusAppMenu();
   };
+
+  const deployable = settings.dsl.deployable === 'true' ? 'true' : undefined;
 
   const appMenuItems = [
     <DropdownItem
@@ -329,14 +330,16 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
           {/* DEPLOY BUTTON */}
           <ToolbarItem>
             <Tooltip content={<div>Deploy</div>} position={'bottom'}>
-              <Button
-                tabIndex={0}
-                variant="primary"
-                data-testid={'toolbar-deploy-start-btn'}
-                onClick={handleDeployStartClick}
-              >
-                Deploy
-              </Button>
+              {deployable && (
+                <Button
+                  tabIndex={0}
+                  variant="primary"
+                  data-testid={'toolbar-deploy-start-btn'}
+                  onClick={handleDeployStartClick}
+                >
+                  Deploy
+                </Button>
+              )}
             </Tooltip>
           </ToolbarItem>
 
@@ -365,7 +368,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
         handleConfirm={() => {
           deleteIntegration();
           setSourceCode('');
-          setSettings({ dsl: 'KameletBinding', name: 'integration', namespace: 'default' });
+          setSettings({ dsl: settings.dsl, name: 'integration', namespace: 'default' });
           setIsConfirmationModalOpen(false);
         }}
         isModalOpen={isConfirmationModalOpen}

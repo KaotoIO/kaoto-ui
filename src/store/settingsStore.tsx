@@ -1,6 +1,6 @@
 // @ts-ignore
 import svg from '../assets/images/kaoto.svg';
-import { ISettings } from '@kaoto/types';
+import {IDsl, ISettings} from '@kaoto/types';
 import create from 'zustand';
 
 interface ISettingsStore {
@@ -9,9 +9,18 @@ interface ISettingsStore {
   setSettings: (vals?: Partial<ISettings>) => void;
 }
 
+const initDsl: IDsl = {
+  deployable: 'true',
+  description: '',
+  input: '',
+  output: '',
+  stepKinds: '',
+  name: 'KameletBinding'
+
+}
 const initialSettings: ISettings = {
   description: '',
-  dsl: 'KameletBinding',
+  dsl: initDsl,
   icon: svg,
   name: 'integration',
   namespace: '',

@@ -40,7 +40,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       setSourceCode(incomingData);
 
       // update integration JSON state with changes
-      fetchIntegrationJson(incomingData, settings.dsl)
+      fetchIntegrationJson(incomingData, settings.dsl.name)
         .then((res: IIntegration) => {
           let tmpInt = res;
           tmpInt.metadata = { ...res.metadata, ...settings };

@@ -52,12 +52,25 @@ export interface IIntegrationParams {
 export interface ISettings {
   description?: string;
   // e.g. 'KameletBinding'
-  dsl: string;
+  dsl: IDsl;
   icon?: string;
   // name of integration or deployment
   name: string;
   // Cluster namespace
   namespace: string;
+}
+
+export interface ICapabilities {
+  dsls: IDsl[];
+}
+
+export interface IDsl {
+  output: string;
+  input: string;
+  deployable: string;
+  name: string;
+  description: string;
+  stepKinds: string;
 }
 
 /**
