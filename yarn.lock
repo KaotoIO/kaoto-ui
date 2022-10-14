@@ -1105,10 +1105,10 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-core@^4.157.3", "@patternfly/react-core@^4.239.0", "@patternfly/react-core@^4.250.1", "@patternfly/react-core@^4.250.7":
-  version "4.250.7"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.250.7.tgz#b9de9cb2f3fb189236d9747b0db62a2e88845942"
-  integrity sha512-LZ2m/mxZ/bBv46ChGYYDjtTqSbOny1gjiOGSj2OR0DPOkVUs5rI94O7LEowWxc/2a87kTBBwI+iqIOSNxt+c+g==
+"@patternfly/react-core@^4.157.3", "@patternfly/react-core@^4.239.0", "@patternfly/react-core@^4.250.1", "@patternfly/react-core@^4.251.1":
+  version "4.251.1"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.251.1.tgz#75dc6377ccc16c142c1414d35e69ee6e7fa8e674"
+  integrity sha512-BUOQgb1s2U18IP+uzAnircm/F4ji1r43qAy5/NYyuldIEIix8hp0AI3NGWDMYwTPOIdhBuQVWjeqwLrNJzttuA==
   dependencies:
     "@patternfly/react-icons" "^4.92.6"
     "@patternfly/react-styles" "^4.91.6"
@@ -1139,12 +1139,12 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.91.6.tgz#2cd4f0d5dca7774fe6a64505b8a3e7bd2abd66c6"
   integrity sha512-3wCYkvGRgbx6u5JrCaUNcpDvyTOrgvXU/Mh2hs8s/njBUDpyuyRb+gkFoE3l3Ro3Lk0DnRLYpIjCSjl38Bd0iA==
 
-"@patternfly/react-table@4.111.10":
-  version "4.111.10"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-4.111.10.tgz#8fe052b8e130011c91ae75ded37c75e4f569bcfa"
-  integrity sha512-BKdnNJq+I31PJUEgSbF5wEvgv58Jufd9KxgckRUpThkTnnkNDvqhTzhi6L05etccUh/DMQSgzJLBbFTsl8Sj2A==
+"@patternfly/react-table@4.111.13":
+  version "4.111.13"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-4.111.13.tgz#246af79308594a702bb5baa674f26fd2dd5b00da"
+  integrity sha512-fRrnsmdZhUpofa5ajubPp1gxLbL6fl55ueLvrwh/ERD4O/7t4Bw+jo/On4+F2M6oyp7dbGcKpFVI7dhdcRZncw==
   dependencies:
-    "@patternfly/react-core" "^4.250.7"
+    "@patternfly/react-core" "^4.251.1"
     "@patternfly/react-icons" "^4.92.6"
     "@patternfly/react-styles" "^4.91.6"
     "@patternfly/react-tokens" "^4.93.6"
