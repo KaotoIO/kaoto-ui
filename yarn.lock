@@ -887,6 +887,14 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
+"@kie-tools-core/i18n@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/i18n/-/i18n-0.24.0.tgz#8be8cf3167cf1c4746e55feb7a4ff0f7ae528ff9"
+  integrity sha512-nH0F5OvOEmZzCwie/jLyfmKfVesUb5D1UCgPUv61umUlgtbx6Df/38zybNw5DgySEZ9F0Muv5wCpBFkokToXrA==
+  dependencies:
+    react "^17.0.2"
+    react-dom "^17.0.2"
+
 "@kie-tools-core/keyboard-shortcuts@0.23.0":
   version "0.23.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/keyboard-shortcuts/-/keyboard-shortcuts-0.23.0.tgz#c97c5c6361aa3960a2778963f501ca93fcfa481d"
@@ -910,6 +918,14 @@
   dependencies:
     "@kie-tools-core/i18n" "0.23.0"
     "@kie-tools-core/workspace" "0.23.0"
+
+"@kie-tools-core/notifications@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/notifications/-/notifications-0.24.0.tgz#8f68075d95bf90baf95e7cf3823106d67d52a34d"
+  integrity sha512-lGFNtZiGv8JFN0akrkphBd6PP9tw3dlhQff7Fyf0xOCaUvl8l3rqph7SXgD0IkWSMf1aYasM9ZNjuBf499nT7g==
+  dependencies:
+    "@kie-tools-core/i18n" "0.24.0"
+    "@kie-tools-core/workspace" "0.24.0"
 
 "@kie-tools-core/operating-system@0.23.0":
   version "0.23.0"
