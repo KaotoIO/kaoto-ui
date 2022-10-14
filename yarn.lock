@@ -1105,7 +1105,7 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-core@^4.157.3", "@patternfly/react-core@^4.239.0", "@patternfly/react-core@^4.250.1", "@patternfly/react-core@^4.251.1":
+"@patternfly/react-core@^4.157.3", "@patternfly/react-core@^4.250.1", "@patternfly/react-core@^4.251.1":
   version "4.251.1"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.251.1.tgz#75dc6377ccc16c142c1414d35e69ee6e7fa8e674"
   integrity sha512-BUOQgb1s2U18IP+uzAnircm/F4ji1r43qAy5/NYyuldIEIix8hp0AI3NGWDMYwTPOIdhBuQVWjeqwLrNJzttuA==
@@ -1118,23 +1118,23 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-icons@4.92.6", "@patternfly/react-icons@^4.11.17", "@patternfly/react-icons@^4.90.0", "@patternfly/react-icons@^4.92.6":
+"@patternfly/react-icons@4.92.6", "@patternfly/react-icons@^4.11.17", "@patternfly/react-icons@^4.92.6":
   version "4.92.6"
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.92.6.tgz#a1f2190edb49ab146c30ed07f8447af5d9401f13"
   integrity sha512-UdMSDqJ7fCxi/E6vlsFHuDZ3L0+kqBZ4ujRi4mjokrsvzOR4WFdaMhC+7iRy4aPNjT0DpHVjVUUUoWwKID9VqA==
 
-"@patternfly/react-log-viewer@4.84.0":
-  version "4.84.0"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-log-viewer/-/react-log-viewer-4.84.0.tgz#85eaa6b7afa6f575fd65810054c12558ee159283"
-  integrity sha512-ApWGNumu9HwtESi7nYj3g/lkSo5K7QM0KekmGVwo2A5eYLd6Cow9fJ4B7hVJ8Pl7GUXuncbwtdqD4giyOVPXHg==
+"@patternfly/react-log-viewer@4.87.21":
+  version "4.87.21"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-log-viewer/-/react-log-viewer-4.87.21.tgz#c0900b134159a41a659591fb05de183c859cee2c"
+  integrity sha512-jOS7V4bauIBdNpCmdJCPWzEnQRQLGe3FyG9wlKq/gYHsTDVFIc3hYd6oqeCMCAxrNKUSpgiO/zSK2R8oh34ZFA==
   dependencies:
-    "@patternfly/react-core" "^4.239.0"
-    "@patternfly/react-icons" "^4.90.0"
-    "@patternfly/react-styles" "^4.89.0"
+    "@patternfly/react-core" "^4.250.1"
+    "@patternfly/react-icons" "^4.92.6"
+    "@patternfly/react-styles" "^4.91.6"
     memoize-one "^5.1.0"
     resize-observer-polyfill "^1.5.1"
 
-"@patternfly/react-styles@^4.89.0", "@patternfly/react-styles@^4.91.6":
+"@patternfly/react-styles@^4.91.6":
   version "4.91.6"
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.91.6.tgz#2cd4f0d5dca7774fe6a64505b8a3e7bd2abd66c6"
   integrity sha512-3wCYkvGRgbx6u5JrCaUNcpDvyTOrgvXU/Mh2hs8s/njBUDpyuyRb+gkFoE3l3Ro3Lk0DnRLYpIjCSjl38Bd0iA==
