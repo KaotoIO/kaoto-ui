@@ -25,7 +25,7 @@ jobs:
       - uses: actions/add-to-project@v0.3.0
         with:
           project-url: https://github.com/orgs/KaotoIO/projects/10
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.MY_GITHUB_TOKEN }}
 
   assign_to_newcomers_list:
     runs-on: ubuntu-latest
