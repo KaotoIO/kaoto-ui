@@ -1,13 +1,13 @@
-import create from 'zustand';
-import { temporal } from 'zundo'
 import { useDeploymentStore } from './deploymentStore';
 import { useIntegrationSourceStore } from './integrationSourceStore';
 import { useSettingsStore } from './settingsStore';
 import { useVisualizationStore } from './visualizationStore';
 import { regenerateUuids } from '@kaoto/services';
 import { IIntegration, IStepProps, IViewProps } from '@kaoto/types';
-import { mountStoreDevtool } from 'simple-zustand-devtools';
 import isEqual from 'lodash.isequal';
+import { mountStoreDevtool } from 'simple-zustand-devtools';
+import { temporal } from 'zundo';
+import create from 'zustand';
 
 interface IIntegrationJsonStore {
   appendStep: (newStep: IStepProps) => void;
@@ -31,92 +31,97 @@ const initialState = {
   views: [],
 };
 
-export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(temporal((set, get) => ({
-  ...initialState,
-  appendStep: (newStep) => {
-    set((state) => {
-      let newSteps = state.integrationJson.steps.slice();
-      // manually generate UUID for the new step
-      newStep.UUID = newStep.name + newSteps.length;
-      newSteps.push(newStep);
-      return {
-        integrationJson: {
-          ...state.integrationJson,
-          steps: newSteps,
-        },
-      };
-    });
-  },
-  deleteIntegration: () => set(initialState),
-  deleteStep: (stepIdx) => {
-    let stepsCopy = get().integrationJson.steps.slice();
-    const updatedSteps = stepsCopy.filter((_step: any, idx: any) => idx !== stepIdx);
-    const stepsWithNewUuids = regenerateUuids(updatedSteps);
-    set((state) => ({
-      integrationJson: {
-        ...state.integrationJson,
-        steps: stepsWithNewUuids,
+export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
+  temporal(
+    (set, get) => ({
+      ...initialState,
+      appendStep: (newStep) => {
+        set((state) => {
+          let newSteps = state.integrationJson.steps.slice();
+          // manually generate UUID for the new step
+          newStep.UUID = newStep.name + newSteps.length;
+          newSteps.push(newStep);
+          return {
+            integrationJson: {
+              ...state.integrationJson,
+              steps: newSteps,
+            },
+          };
+        });
       },
-    }));
-  },
-  deleteSteps: () => {
-    set((state) => ({
-      integrationJson: {
-        ...state.integrationJson,
-        steps: [],
+      deleteIntegration: () => set(initialState),
+      deleteStep: (stepIdx) => {
+        let stepsCopy = get().integrationJson.steps.slice();
+        const updatedSteps = stepsCopy.filter((_step: any, idx: any) => idx !== stepIdx);
+        const stepsWithNewUuids = regenerateUuids(updatedSteps);
+        set((state) => ({
+          integrationJson: {
+            ...state.integrationJson,
+            steps: stepsWithNewUuids,
+          },
+        }));
       },
-    }));
-  },
-  insertStep: (newStep, idx) => {
-    // unlike appendStep, we need to also regenerate all UUIDs
-    // because positions are changing
-    set((state) => ({
-      integrationJson: {
-        ...state.integrationJson,
-        steps: regenerateUuids([
-          // part of array before the index
-          ...state.integrationJson.steps.slice(0, idx),
-          // inserted item
-          newStep,
-          // part of array after the index
-          ...state.integrationJson.steps.slice(idx),
-        ]),
+      deleteSteps: () => {
+        set((state) => ({
+          integrationJson: {
+            ...state.integrationJson,
+            steps: [],
+          },
+        }));
       },
-    }));
-  },
-  replaceStep: (newStep, oldStepIndex) => {
-    let newSteps = get().integrationJson.steps.slice();
-    if (oldStepIndex === undefined) {
-      // replacing a slot step with no pre-existing step
-      newSteps.unshift(newStep);
-    } else {
-      // replacing an existing step
-      newSteps[oldStepIndex] = newStep;
-    }
-    const stepsWithNewUuids = regenerateUuids(newSteps);
+      insertStep: (newStep, idx) => {
+        // unlike appendStep, we need to also regenerate all UUIDs
+        // because positions are changing
+        set((state) => ({
+          integrationJson: {
+            ...state.integrationJson,
+            steps: regenerateUuids([
+              // part of array before the index
+              ...state.integrationJson.steps.slice(0, idx),
+              // inserted item
+              newStep,
+              // part of array after the index
+              ...state.integrationJson.steps.slice(idx),
+            ]),
+          },
+        }));
+      },
+      replaceStep: (newStep, oldStepIndex) => {
+        let newSteps = get().integrationJson.steps.slice();
+        if (oldStepIndex === undefined) {
+          // replacing a slot step with no pre-existing step
+          newSteps.unshift(newStep);
+        } else {
+          // replacing an existing step
+          newSteps[oldStepIndex] = newStep;
+        }
+        const stepsWithNewUuids = regenerateUuids(newSteps);
 
-    return set((state) => ({
-      integrationJson: {
-        ...state.integrationJson,
-        steps: stepsWithNewUuids,
+        return set((state) => ({
+          integrationJson: {
+            ...state.integrationJson,
+            steps: stepsWithNewUuids,
+          },
+        }));
       },
-    }));
-  },
-  setViews: (viewData: IViewProps[]) => {
-    set({ views: viewData });
-  },
-  updateIntegration: (newInt) => {
-    let newIntegration = { ...get().integrationJson, ...newInt };
-    newIntegration.steps = regenerateUuids(newIntegration.steps);
-    return set({ integrationJson: { ...newIntegration } });
-  }
-}), {
-  partialize: (state) => {
-    const { integrationJson } = state;
-    return { integrationJson };
-  },
-  equality: (a, b) => isEqual(a, b)
-}));
+      setViews: (viewData: IViewProps[]) => {
+        set({ views: viewData });
+      },
+      updateIntegration: (newInt) => {
+        let newIntegration = { ...get().integrationJson, ...newInt };
+        newIntegration.steps = regenerateUuids(newIntegration.steps);
+        return set({ integrationJson: { ...newIntegration } });
+      },
+    }),
+    {
+      partialize: (state) => {
+        const { integrationJson } = state;
+        return { integrationJson };
+      },
+      equality: (a, b) => isEqual(a, b),
+    }
+  )
+);
 
 if (process.env.NODE_ENV === 'development') {
   mountStoreDevtool('integrationJsonStore', useIntegrationJsonStore);

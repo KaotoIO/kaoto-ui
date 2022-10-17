@@ -25,3 +25,31 @@
     align-items: center;
     min-height: 40px;
 }
+
+.minusButton {
+    width: 20px;
+    height: 20px;
+    background: var(--pf-global--Color--light-300);
+    color: white;
+    border: 1px solid #fff;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 12px;
+    line-height: 1;
+    padding: 1px;
+}
+
+.minusButton:hover {
+    background: var(--pf-global--Color--400);
+    box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
+}
+
+.minusButton-foreignObject span {
+    background: transparent;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40px;
+ }

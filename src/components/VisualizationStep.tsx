@@ -13,7 +13,7 @@ import {
 import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
 import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 import { AlertVariant, Popover } from '@patternfly/react-core';
-import { CubesIcon, PlusIcon } from '@patternfly/react-icons';
+import { CubesIcon, PlusIcon, TrashIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, Node, NodeProps, Position, useNodes } from 'reactflow';
 
@@ -39,6 +39,37 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     });
   };
 
+  const handleTrashClick = () => {
+    data.handleDeleteStep && data.handleDeleteStep(data.step?.UUID!);
+  };
+
+  /**
+   * Handles dropping a step onto a slot
+   * @param e
+   */
+  const onDropNew = (e: { dataTransfer: { getData: (arg0: string) => any } }) => {
+    const dataJSON = e.dataTransfer.getData('text');
+    const stepC: IStepProps = JSON.parse(dataJSON);
+
+    // fetch parameters and other details
+    fetchStepDetails(stepC.id).then((step) => {
+      step.UUID = stepC.UUID;
+      const validation = canStepBeReplaced(data, step, steps);
+
+      if (validation.isValid) {
+        // update the steps, the new node will be created automatically
+        replaceStep(step);
+      } else {
+        addAlert &&
+          addAlert({
+            title: 'Add Step Unsuccessful',
+            variant: AlertVariant.danger,
+            description: validation.message ?? 'Something went wrong, please try again later.',
+          });
+      }
+    });
+  };
+
   /**
    * Handles dropping a step onto an existing step (i.e. step replacement)
    */
@@ -58,32 +89,6 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
         addAlert &&
           addAlert({
             title: 'Replace Step Unsuccessful',
-            variant: AlertVariant.danger,
-            description: validation.message ?? 'Something went wrong, please try again later.',
-          });
-      }
-    });
-  };
-
-  /**
-   * Handles dropping a step onto a slot
-   * @param e
-   */
-  const onDropNew = (e: { dataTransfer: { getData: (arg0: string) => any } }) => {
-    const dataJSON = e.dataTransfer.getData('text');
-    const stepC: IStepProps = JSON.parse(dataJSON);
-    // fetch parameters and other details
-    fetchStepDetails(stepC.id).then((step) => {
-      step.UUID = stepC.UUID;
-      const validation = canStepBeReplaced(data, step, steps);
-
-      if (validation.isValid) {
-        // update the steps, the new node will be created automatically
-        replaceStep(step);
-      } else {
-        addAlert &&
-          addAlert({
-            title: 'Add Step Unsuccessful',
             variant: AlertVariant.danger,
             description: validation.message ?? 'Something went wrong, please try again later.',
           });
@@ -138,6 +143,15 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               </button>
             </Popover>
           )}
+
+          <button
+            className="stepNode__Delete minusButton nodrag"
+            data-testid={'configurationTab__deleteBtn'}
+            onClick={handleTrashClick}
+          >
+            <TrashIcon />
+          </button>
+
           {/* VISUAL REPRESENTATION OF STEP WITH ICON */}
           <div className={'stepNode__Icon stepNode__clickable'}>
             <img src={data.icon} alt={data.label} />
