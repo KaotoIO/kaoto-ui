@@ -29,7 +29,7 @@ export interface IMiniCatalog {
 export const MiniCatalog = (props: IMiniCatalog) => {
   const [catalogData, setCatalogData] = useState<IStepProps[]>(props.steps ?? []);
   const [query, setQuery] = useState(``);
-  const dsl = useSettingsStore((state) => state.settings.dsl);
+  const dsl = useSettingsStore((state) => state.settings.dsl.name);
   const typesAllowedArray = props.queryParams?.type?.split(',');
   const [isSelected, setIsSelected] = useState(typesAllowedArray ? typesAllowedArray[0] : 'MIDDLE');
 

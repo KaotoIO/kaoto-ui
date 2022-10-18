@@ -1,7 +1,7 @@
-import { fetchCompatibleDSLs, fetchIntegrationSourceCode } from '@kaoto/api';
+import { fetchCapabilities, fetchCompatibleDSLs, fetchIntegrationSourceCode } from '@kaoto/api';
 import { isNameValidCheck } from '@kaoto/services';
 import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
-import { ISettings } from '@kaoto/types';
+import { ICapabilities, ISettings } from '@kaoto/types';
 import { usePrevious } from '@kaoto/utils';
 import {
   AlertVariant,
@@ -92,6 +92,17 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
     } else {
       setNameValidation('error');
     }
+  };
+
+  const onChangeDsl = (value: string) => {
+    fetchCapabilities().then((capabilities: ICapabilities) => {
+      capabilities.dsls.forEach((dsl) => {
+        if (dsl.name === value) {
+          setLocalSettings({ ...localSettings, dsl: dsl });
+          return;
+        }
+      });
+    });
   };
 
   const onChangeNamespace = (newNamespace: string) => {
@@ -276,11 +287,9 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
         >
           <FormSelect
             aria-label="Select Type"
-            onChange={(value) => {
-              setLocalSettings({ ...localSettings, dsl: value });
-            }}
+            onChange={onChangeDsl}
             data-testid={'settings--integration-type'}
-            value={localSettings.dsl}
+            value={localSettings.dsl.name}
           >
             {availableDSLs.map((dsl, idx) => {
               return (
