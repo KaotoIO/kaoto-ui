@@ -1,8 +1,13 @@
-import { basename } from "path";
+import { useCancelableEffect } from './hooks/useCancelableEffect';
 import { fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
-import { useIntegrationJsonStore, useSettingsStore, useTemporalIntegrationJsonStore } from '@kaoto/store';
+import {
+  useIntegrationJsonStore,
+  useSettingsStore,
+  useTemporalIntegrationJsonStore,
+} from '@kaoto/store';
 import { IIntegration } from '@kaoto/types';
 import isEqual from 'lodash.isequal';
+import { basename } from 'path';
 import {
   createContext,
   forwardRef,
@@ -14,15 +19,14 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useCancelableEffect } from './hooks/useCancelableEffect';
 
 // Create context
 const KogitoEditorIntegrationContext = createContext({});
 
 export enum ContentOperation {
-  EDIT = "EDIT",
-  UNDO = "UNDO",
-  REDO = "REDO"
+  EDIT = 'EDIT',
+  UNDO = 'UNDO',
+  REDO = 'REDO',
 }
 
 interface IKogitoEditorIntegrationProvider {
@@ -48,10 +52,12 @@ function KogitoEditorIntegrationProviderInternal(
   // The history is used to keep a log of every change to the content. Then, this log is used to undo and redo content.
   const { undo, redo, pastStates } = useTemporalIntegrationJsonStore();
 
-  const previousJson = useRef(integrationJson);
+  const previousJson = useRef(JSON.parse(JSON.stringify(integrationJson)));
   const previousContent = useRef<string>();
   const initialIntegrationJson = useRef<IIntegration>();
-  const [lastAction, setLastAction] = useState<ContentOperation.UNDO | ContentOperation.REDO | undefined>();
+  const [lastAction, setLastAction] = useState<
+    ContentOperation.UNDO | ContentOperation.REDO | undefined
+  >();
 
   // Set editor as Ready
   useEffect(() => {
@@ -89,22 +95,34 @@ function KogitoEditorIntegrationProviderInternal(
       ({ canceled }) => {
         if (!integrationJson || isEqual(previousJson.current, integrationJson)) return;
 
-        let tmpInt = integrationJson;
-        tmpInt.metadata = { ...integrationJson.metadata, ...settings };
+        let intCopy = JSON.parse(JSON.stringify(integrationJson));
+        let tmpInt = {
+          ...integrationJson,
+          metadata: {
+            ...integrationJson.metadata,
+            ...settings,
+          },
+        };
         fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
           if (canceled.get()) return;
 
-          if (typeof newSrc === 'string' && newSrc !== previousContent.current && newSrc.length > 0) {
+          if (
+            typeof newSrc === 'string' &&
+            newSrc !== previousContent.current &&
+            newSrc.length > 0
+          ) {
             if (lastAction) {
               onContentChanged(newSrc, lastAction);
               setLastAction(undefined);
             } else {
               onContentChanged(newSrc, ContentOperation.EDIT);
             }
-            previousJson.current = integrationJson;
+            previousJson.current = intCopy;
           }
         });
-      }, [integrationJson, lastAction, onContentChanged, settings])
+      },
+      [integrationJson, lastAction, onContentChanged, settings]
+    )
   );
 
   // Update the integrationJson to reflect an KaotoEditor content change (only if not triggered via Kaoto UI).
@@ -130,8 +148,10 @@ function KogitoEditorIntegrationProviderInternal(
           .catch((e) => {
             console.error(e);
           });
-      }, [content, settings, updateIntegration]
-  ));
+      },
+      [content, settings, updateIntegration]
+    )
+  );
 
   return (
     <KogitoEditorIntegrationContext.Provider value>
