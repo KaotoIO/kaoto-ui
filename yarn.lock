@@ -894,12 +894,12 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@module-federation/typescript@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@module-federation/typescript/-/typescript-1.0.4.tgz#b85149b4384e25b3fb02d036ab0b09e8fe84192d"
-  integrity sha512-nXHeCAJTtak7EdEx/YZjHO4upzrmR1m6Vf5Rqz/z6mLv80XAUYpIhIK4WOcDdBXhL/ZEUbW6NCx9t8IHHscLRg==
+"@module-federation/typescript@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@module-federation/typescript/-/typescript-1.0.5.tgz#e4b103c8d07e8c522e2e8067aff373a55d0edade"
+  integrity sha512-f0zITCqbCY+DvQKa5NxOSLzO36EvRS3NxmLFHT3x4zSeiGWA6dOk9tl5gSPZpzUgNVNlXVajJdb9B5d590D9yg==
   dependencies:
-    "@module-federation/utilities" "0.3.3"
+    "@module-federation/utilities" "0.3.4"
     "@swc/helpers" "~0.3.3"
     axios "^0.27.2"
     download "^8.0.0"
@@ -908,10 +908,10 @@
     react "18.2.0"
     webpack "^5.74.0"
 
-"@module-federation/utilities@0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@module-federation/utilities/-/utilities-0.3.3.tgz#5fd348ac53eabe5f385f13f7b52617883b28bced"
-  integrity sha512-Nwwds6KoQFcFEk/38y0Lqoxfwd4cMWWamMs8q1S2TNR50HEf28nnqx66VeOO8zIrbgk7uoFrrfPQn8b3yeuLRw==
+"@module-federation/utilities@0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@module-federation/utilities/-/utilities-0.3.4.tgz#e1a0879f383aace7e4b291def12aba67108b3527"
+  integrity sha512-RAq7WI76PTF/PAnPpKtfDoR1HAk2y06T4WcvGit5N09GmJh9RyQI7HqSP7MeK3/ACgGg6GoJTnHj9kwfSwkc6Q==
 
 "@next/env@12.2.5":
   version "12.2.5"
