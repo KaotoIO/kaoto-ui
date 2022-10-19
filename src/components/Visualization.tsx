@@ -185,10 +185,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           <VisualizationStepViews
             step={selectedStep}
             isPanelExpanded={isPanelExpanded}
-            deleteStep={() => {
-              handleDeleteStep();
-              if (isPanelExpanded) setIsPanelExpanded(false);
-            }}
             onClosePanelClick={onClosePanelClick}
             saveConfig={saveConfig}
           />

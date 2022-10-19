@@ -11,7 +11,6 @@ import { useIntegrationJsonStore } from '@kaoto/store';
 import { IIntegration, IKaotoApi, IStepProps } from '@kaoto/types';
 import {
   AlertVariant,
-  Button,
   DrawerActions,
   DrawerCloseButton,
   DrawerHead,
@@ -26,7 +25,6 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { lazy, useEffect, useState } from 'react';
 
 export interface IStepViewsProps {
-  deleteStep: (e: any) => void;
   isPanelExpanded: boolean;
   onClosePanelClick: (e: any) => void;
   saveConfig: (newValues: any) => void;
@@ -34,7 +32,6 @@ export interface IStepViewsProps {
 }
 
 const VisualizationStepViews = ({
-  deleteStep,
   isPanelExpanded,
   onClosePanelClick,
   saveConfig,
@@ -245,15 +242,6 @@ const VisualizationStepViews = ({
             </StepErrorBoundary>
           </Tab>
         </Tabs>
-        <br />
-        <Button
-          variant={'danger'}
-          key={step.UUID}
-          onClick={deleteStep}
-          data-testid={'configurationTab__deleteBtn'}
-        >
-          Delete
-        </Button>
       </DrawerPanelBody>
     </>
   );

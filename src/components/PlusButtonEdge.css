@@ -1,4 +1,4 @@
-.plusButton {
+.trashButton, .plusButton {
     width: 20px;
     height: 20px;
     background: var(--pf-global--Color--light-300);
@@ -11,9 +11,23 @@
     padding: 1px;
 }
 
-.plusButton:hover {
+.trashButton {
+    visibility: hidden;
+}
+
+.trashButton:hover, .plusButton:hover {
     background: var(--pf-global--Color--400);
     box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
+}
+
+.trashButton-foreignObject span {
+    background: transparent;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40px;
 }
 
 .plusButton-foreignObject span {
@@ -26,30 +40,6 @@
     min-height: 40px;
 }
 
-.minusButton {
-    width: 20px;
-    height: 20px;
-    background: var(--pf-global--Color--light-300);
-    color: white;
-    border: 1px solid #fff;
-    cursor: pointer;
-    border-radius: 50%;
-    font-size: 12px;
-    line-height: 1;
-    padding: 1px;
+.stepNode:hover .trashButton {
+    visibility: visible;
 }
-
-.minusButton:hover {
-    background: var(--pf-global--Color--400);
-    box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
-}
-
-.minusButton-foreignObject span {
-    background: transparent;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 40px;
- }

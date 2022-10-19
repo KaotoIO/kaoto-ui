@@ -145,7 +145,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           )}
 
           <button
-            className="stepNode__Delete minusButton nodrag"
+            className="stepNode__Delete trashButton nodrag"
             data-testid={'configurationTab__deleteBtn'}
             onClick={handleTrashClick}
           >
