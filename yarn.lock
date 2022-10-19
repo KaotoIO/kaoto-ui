@@ -894,10 +894,10 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@module-federation/typescript@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@module-federation/typescript/-/typescript-1.0.5.tgz#e4b103c8d07e8c522e2e8067aff373a55d0edade"
-  integrity sha512-f0zITCqbCY+DvQKa5NxOSLzO36EvRS3NxmLFHT3x4zSeiGWA6dOk9tl5gSPZpzUgNVNlXVajJdb9B5d590D9yg==
+"@module-federation/typescript@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@module-federation/typescript/-/typescript-1.0.6.tgz#4fcec7cb28cdb1a4cf2d54dda9343e3dfb3a8cda"
+  integrity sha512-+gyRuL51gjvtdjbnUtjJpyVgo87uhn3X+fm2sKkabGFd5y+t2rEwvLbVspvVnBrcsvV37upT95mB1gfArKsTTA==
   dependencies:
     "@module-federation/utilities" "0.3.4"
     "@swc/helpers" "~0.3.3"
