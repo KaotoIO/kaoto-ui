@@ -187,6 +187,7 @@ export function buildNodeDefaultParams(
       label: truncateString(step.name, 14),
       step,
       icon: step.icon,
+      ...props,
     },
     id: newId,
     position,
@@ -203,8 +204,8 @@ export function buildNodeDefaultParams(
 export function buildNodesFromSteps(
   steps: IStepProps[],
   previousNodes?: IVizStepNode[],
-  branchInfo?: { branchId: string; parentNode: string; [prop: string]: any },
-  startFromIndex?: number
+  props?: { [prop: string]: any },
+  branchInfo?: { branchId: string; parentNode: string; [prop: string]: any }
 ) {
   const nodeWidth = 80;
   const incrementAmtX = nodeWidth * 2;
@@ -213,7 +214,7 @@ export function buildNodesFromSteps(
   const nodes = previousNodes ?? useVisualizationStore.getState().nodes;
   const stepNodes: IVizStepNode[] = [];
   const branchOriginStepNodes: IVizStepNode[] = [];
-  let id = startFromIndex ?? 0;
+  let id = 0;
   let getId = (uuid: string) =>
     `node_${id++}-${uuid}` + (branchInfo ? `-b_${branchInfo.parentNode}` : '');
 
@@ -256,6 +257,7 @@ export function buildNodesFromSteps(
         index,
         {
           ...branchInfo,
+          ...props,
           isFirstStep: index === 0,
           isLastStep: index === steps.length - 1,
         }
@@ -264,7 +266,8 @@ export function buildNodesFromSteps(
       currentStep = buildNodeDefaultParams(
         step,
         getId(step.UUID ?? ''),
-        calculatePosition(index, firstStepPosition, incrementAmtX, nodeWidth, nodes, previousStep)
+        calculatePosition(index, firstStepPosition, incrementAmtX, nodeWidth, nodes, previousStep),
+        props
       );
     }
 

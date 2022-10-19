@@ -84,6 +84,15 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
     });
   }, []);
 
+  // fetch default namespace from the API,
+  useEffect(() => {
+    fetchDefaultNamespace().then((data) => {
+      const newSettings = settings;
+      newSettings.namespace = data.namespace;
+      setSettings(newSettings);
+    });
+  }, []);
+
   const handleDeployStartClick = () => {
     startDeployment(sourceCode, settings.name, settings.namespace)
       .then((res) => {

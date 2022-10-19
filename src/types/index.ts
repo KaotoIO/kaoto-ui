@@ -169,15 +169,16 @@ export interface IViewData {
 }
 
 export interface IVizStepNodeData {
+  branchInfo?: Partial<IStepPropsBranch> & {
+    branchUuid?: string;
+    parentUuid: string;
+  };
+  handleDeleteStep?: (UUID: string) => void;
   icon?: string;
   kind?: string;
   label: string;
   step?: IStepProps;
   UUID?: string;
-  branchInfo?: Partial<IStepPropsBranch> & {
-    branchUuid?: string;
-    parentUuid: string;
-  };
 }
 
 /**
