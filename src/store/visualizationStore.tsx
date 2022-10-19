@@ -16,10 +16,12 @@ export type RFState = {
   deleteNode: (nodeIndex: number) => void;
   nodes: IVizStepNode[];
   edges: IVizStepPropsEdge[];
+  layout: string;
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   setEdges: (newEdges: IVizStepPropsEdge[]) => void;
+  setLayout: (newLayout: string) => void;
   setNodes: (newNodes: IVizStepNode[]) => void;
   /**
    * Update one single node
@@ -36,6 +38,7 @@ export const useVisualizationStore = create<RFState>((set, get) => ({
     set((state) => ({
       nodes: [...state.nodes.filter((_n, idx) => idx !== nodeIndex)],
     })),
+  layout: 'LR', // e.g. LR, TB
   onNodesChange: (changes: NodeChange[]) =>
     set((state) => ({
       nodes: applyNodeChanges(changes, state.nodes),
@@ -53,6 +56,7 @@ export const useVisualizationStore = create<RFState>((set, get) => ({
     set({
       edges: [...newEdges],
     }),
+  setLayout: (newLayout: string) => set({ layout: newLayout }),
   setNodes: (newNodes: IVizStepNode[]) =>
     set({
       nodes: [...newNodes],

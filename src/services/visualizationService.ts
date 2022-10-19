@@ -7,8 +7,8 @@ export function buildBranch(branchOriginStepNodes: IVizStepNode[]): {
   branchNodes: IVizStepNode[];
   branchStepEdges: IVizStepPropsEdge[];
 } {
-  const incrementAmtX = 160;
-  const nodeWidth = 80;
+  // const incrementAmtX = 160;
+  // const nodeWidth = 80;
   const allNodes: IVizStepNode[] = [];
   const groupNodes: IVizStepNode[] = [];
   const stepEdges: IVizStepPropsEdge[] = [];
@@ -21,14 +21,15 @@ export function buildBranch(branchOriginStepNodes: IVizStepNode[]): {
 
       insertBranchGroupNode(
         groupNodes,
-        calculateBranchGroupPosition(
-          nodeWidth,
-          branchOriginStepNode,
-          groupHeight,
-          incrementAmtX,
-          idx,
-          groupNodes[idx - 1]
-        ),
+        { x: 0, y: 0 },
+        // calculateBranchGroupPosition(
+        //   nodeWidth,
+        //   branchOriginStepNode,
+        //   groupHeight,
+        //   incrementAmtX,
+        //   idx,
+        //   groupNodes[idx - 1]
+        // ),
         groupHeight,
         groupWidth,
         { parentUuid: branchOriginStepNode.data.UUID, ...branch }
@@ -225,7 +226,8 @@ export function buildNodesFromSteps(
 
   // if no steps or first step isn't START or an EIP, create a dummy placeholder step
   if (steps.length === 0 || (!isFirstStepStart(steps) && !isFirstStepEip(steps))) {
-    insertAddStepPlaceholder(stepNodes, { id: getId(''), position: firstStepPosition });
+    // insertAddStepPlaceholder(stepNodes, { id: getId(''), position: firstStepPosition });
+    insertAddStepPlaceholder(stepNodes, { id: getId(''), position: { x: 0, y: 0 } });
   }
 
   steps.forEach((step, index) => {
@@ -244,15 +246,16 @@ export function buildNodesFromSteps(
       currentStep = buildBranchNodeParams(
         step,
         getId(step.UUID ?? `${step.name}${index}`),
-        calculatePosition(
-          index,
-          { x: 20, y: 15 },
-          incrementAmtX,
-          nodeWidth,
-          undefined,
-          previousStep,
-          15
-        ),
+        // calculatePosition(
+        //   index,
+        //   { x: 20, y: 15 },
+        //   incrementAmtX,
+        //   nodeWidth,
+        //   undefined,
+        //   previousStep,
+        //   15
+        // ),
+        { x: 0, y: 0 },
         branchInfo?.parentNode!,
         index,
         {
@@ -266,7 +269,8 @@ export function buildNodesFromSteps(
       currentStep = buildNodeDefaultParams(
         step,
         getId(step.UUID ?? ''),
-        calculatePosition(index, firstStepPosition, incrementAmtX, nodeWidth, nodes, previousStep),
+        // calculatePosition(index, firstStepPosition, incrementAmtX, nodeWidth, nodes, previousStep),
+        { x: 0, y: 0 },
         props
       );
     }

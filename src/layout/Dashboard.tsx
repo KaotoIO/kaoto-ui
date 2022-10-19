@@ -18,6 +18,7 @@ import {
 } from '@patternfly/react-core';
 import { TerminalIcon } from '@patternfly/react-icons';
 import { useRef, useState } from 'react';
+import { ReactFlowProvider } from 'reactflow';
 
 const Dashboard = () => {
   const [bottomDrawerExpanded, setBottomDrawerExpanded] = useState(false);
@@ -115,7 +116,9 @@ const Dashboard = () => {
                   position={'left'}
                 >
                   {/* VISUALIZATION / CANVAS */}
-                  <Visualization toggleCatalog={handleToggleCatalog} />
+                  <ReactFlowProvider>
+                    <Visualization toggleCatalog={handleToggleCatalog} />
+                  </ReactFlowProvider>
                 </KaotoDrawer>
               </PageSection>
             </Page>

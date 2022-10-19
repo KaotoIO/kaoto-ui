@@ -11,6 +11,7 @@ import {
   useIntegrationJsonStore,
   useIntegrationSourceStore,
   useSettingsStore,
+  useVisualizationStore,
 } from '@kaoto/store';
 import {
   AlertVariant,
@@ -52,6 +53,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
   const { settings, setSettings } = useSettingsStore((state) => state);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore((state) => state);
   const deleteIntegration = useIntegrationJsonStore((state) => state.deleteIntegration);
+  const setLayout = useVisualizationStore((state) => state.setLayout);
 
   const { deployment, setDeploymentCrd } = useDeploymentStore();
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
@@ -350,6 +352,32 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
                 </Button>
               )}
             </Tooltip>
+          </ToolbarItem>
+
+          <ToolbarItem variant="separator" />
+
+          {/* VERTICAL BUTTON */}
+          <ToolbarItem>
+            <Button
+              tabIndex={0}
+              variant="primary"
+              data-testid={'toolbar-deploy-start-btn'}
+              onClick={() => setLayout('TB')}
+            >
+              Vertical
+            </Button>
+          </ToolbarItem>
+
+          {/* HORIZONTAL BUTTON */}
+          <ToolbarItem>
+            <Button
+              tabIndex={0}
+              variant="primary"
+              data-testid={'toolbar-deploy-start-btn'}
+              onClick={() => setLayout('LR')}
+            >
+              Horizontal
+            </Button>
           </ToolbarItem>
 
           {/* KEBAB DROPDOWN MENU */}
