@@ -156,9 +156,7 @@ export function buildEdgeDefaultParams(
     // even the last step needs to build the step edge before it, with itself as the target
     target: currentStep.id,
     type:
-      currentStep.data.step?.maxBranches !== 0 || previousStep.data.step?.branches
-        ? 'default'
-        : 'insert',
+      currentStep.data.kind === 'EIP' || previousStep.data.step?.branches ? 'default' : 'insert',
     ...props,
   };
 }
@@ -238,7 +236,7 @@ export function buildNodesFromSteps(
     }
 
     // build the default parameters for a node
-    if (step.maxBranches !== 0) {
+    if (step.kind === 'EIP') {
       // we are within a branch
       currentStep = buildBranchNodeParams(
         step,
