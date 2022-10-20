@@ -81,7 +81,9 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     const combinedEdges: IVizStepPropsEdge[] = [];
     const combinedNodes: IVizStepNode[] = [];
 
-    const { stepNodes, branchOriginStepNodes } = buildNodesFromSteps(steps, nodes);
+    const { stepNodes, branchOriginStepNodes } = buildNodesFromSteps(steps, nodes, {
+      handleDeleteStep,
+    });
     const { branchNodes, branchStepEdges } = buildBranch(branchOriginStepNodes);
     const stepEdges: IVizStepPropsEdge[] = buildEdges(stepNodes);
     const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(branchNodes, stepNodes);
@@ -93,13 +95,14 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     return { combinedNodes, combinedEdges };
   }
 
-  const handleDeleteStep = () => {
-    if (!selectedStep.UUID) return;
-    setIsPanelExpanded(false);
+  const handleDeleteStep = (UUID?: string) => {
+    if (!UUID) return;
+
     setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '' });
+    if (isPanelExpanded) setIsPanelExpanded(false);
 
     // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
-    const stepsIndex = findStepIdxWithUUID(selectedStep.UUID, integrationJson.steps);
+    const stepsIndex = findStepIdxWithUUID(UUID, integrationJson.steps);
 
     deleteNode(stepsIndex);
     deleteStep(stepsIndex);
@@ -182,7 +185,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           <VisualizationStepViews
             step={selectedStep}
             isPanelExpanded={isPanelExpanded}
-            deleteStep={handleDeleteStep}
             onClosePanelClick={onClosePanelClick}
             saveConfig={saveConfig}
           />

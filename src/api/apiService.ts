@@ -36,22 +36,6 @@ export async function fetchDefaultNamespace() {
   }
 }
 
-export async function fetchStepDetails(id?: string, namespace?: string) {
-  try {
-    const resp = await request.get({
-      endpoint: `${apiVersion}/steps/id/${id}`,
-      queryParams: {
-        namespace: namespace ?? 'default',
-      },
-    });
-
-    return await resp.json();
-  } catch (err) {
-    console.error(err);
-    return err;
-  }
-}
-
 /**
  * Fetch all Catalog Steps, optionally with specified query params
  * @param queryParams
@@ -231,6 +215,22 @@ export async function fetchIntegrationSourceCode(newIntegration: IIntegration, n
 
     return await resp.text();
   } catch (err) {
+    return err;
+  }
+}
+
+export async function fetchStepDetails(id?: string, namespace?: string) {
+  try {
+    const resp = await request.get({
+      endpoint: `${apiVersion}/steps/id/${id}`,
+      queryParams: {
+        namespace: namespace ?? 'default',
+      },
+    });
+
+    return await resp.json();
+  } catch (err) {
+    console.error(err);
     return err;
   }
 }

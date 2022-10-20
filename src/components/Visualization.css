@@ -38,7 +38,14 @@
     top: 40%;
 }
 
-.stepNode__Icon {
+.stepNode__Delete {
+    position: absolute;
+    left: 0;
+    top: 0;
+   
+ }
+  
+ .stepNode__Icon {
     position: relative;
     top: 55%;
     transform: translateY(-50%);
