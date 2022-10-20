@@ -4,7 +4,6 @@ import { MiniCatalog } from '@kaoto/components';
 import {
   appendableStepTypes,
   canStepBeReplaced,
-  containsBranching,
   findStepIdxWithUUID,
   isEipStep,
   isEndStep,
