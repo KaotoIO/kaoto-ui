@@ -6,6 +6,7 @@ import {
   canStepBeReplaced,
   containsBranching,
   findStepIdxWithUUID,
+  isEipStep,
   isEndStep,
   isLastNode,
   isStartStep,
@@ -110,7 +111,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             />
           )}
           {/* PLUS BUTTON TO ADD STEP */}
-          {!endStep && lastNode && !containsBranching(data.step) && (
+          {!endStep && lastNode && !isEipStep(data.step) && (
             <Popover
               appendTo={() => document.body}
               aria-label="Search for a step"
