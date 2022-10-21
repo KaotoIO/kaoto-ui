@@ -19,7 +19,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<EditorDidMount['editor'] | null>(null);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
-  const { settings } = useSettingsStore();
+  const { settings, setSettings } = useSettingsStore();
   const previousJson = usePrevious(integrationJson);
 
   useEffect(() => {
@@ -43,6 +43,10 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       fetchIntegrationJson(incomingData, settings.dsl.name)
         .then((res: IIntegration) => {
           let tmpInt = res;
+          if (res.metadata.name != '') {
+            settings.name = res.metadata.name;
+            setSettings({ name: res.metadata.name });
+          }
           tmpInt.metadata = { ...res.metadata, ...settings };
           updateIntegration(tmpInt);
         })
