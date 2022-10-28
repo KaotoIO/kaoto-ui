@@ -82,3 +82,6 @@ export function bindUndoRedo(undoCallback: () => void, redoCallback: () => void)
 export function unbindUndoRedo(callback: (event: KeyboardEvent) => void) {
   document.removeEventListener('keydown', callback);
 }
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
