@@ -123,18 +123,20 @@ export function buildBranchSpecialEdges(
     ) {
       const finalStep = branchNode;
       const nextStep = stepNodes[ogNodeIndex + 1];
-
-      // it needs to merge back
-      specialEdges.push({
-        arrowHeadType: 'arrowclosed',
-        id: `e-${finalStep.id!}>${nextStep.id}`,
-        markerEnd: {
-          type: MarkerType.Arrow,
-        },
-        source: finalStep.id!,
-        target: nextStep.id,
-        type: 'default',
-      });
+      
+      if (nextStep) {
+        // it needs to merge back
+        specialEdges.push({
+          arrowHeadType: 'arrowclosed',
+          id: `e-${finalStep.id!}>${nextStep.id}`,
+          markerEnd: {
+            type: MarkerType.Arrow,
+          },
+          source: finalStep.id!,
+          target: nextStep.id,
+          type: 'default',
+        });
+      }
     }
   });
 
