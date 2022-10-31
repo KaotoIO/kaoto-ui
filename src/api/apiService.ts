@@ -20,7 +20,7 @@ export async function fetchCapabilities(namespace?: string) {
 
     return await resp.json();
   } catch (err) {
-    throw new Error(`Unable to fetch Cababilities ${err}`);
+    throw new Error(`Unable to fetch Capabilities ${err}`);
   }
 }
 
