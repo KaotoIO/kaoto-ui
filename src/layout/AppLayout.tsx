@@ -1,14 +1,15 @@
 // @ts-ignore
 import logo from '../assets/images/logo-kaoto.png';
+import WaitingPage from '../components/WaitingPage';
 import { Page, PageHeader, SkipToContent } from '@patternfly/react-core';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 interface IAppLayout {
   children: ReactNode;
 }
-
 const AppLayout = ({ children }: IAppLayout) => {
+  const [backendAvailable, setBackendAvailable] = useState(false);
   function LogoImg() {
     const history = useHistory();
     function handleClick() {
@@ -35,7 +36,7 @@ const AppLayout = ({ children }: IAppLayout) => {
   );
   return (
     <Page mainContainerId={pageId} header={Header} skipToContent={PageSkipToContent}>
-      {children}
+      {backendAvailable ? children : <WaitingPage setBackendAvailable={setBackendAvailable} />}
     </Page>
   );
 };
