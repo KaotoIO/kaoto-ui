@@ -136,6 +136,13 @@ function KogitoEditorIntegrationProviderInternal(
             if (canceled.get()) return;
 
             let tmpInt = res;
+            const name = tmpInt.metadata.name;
+
+            if (name !== '') {
+              settings.name = name;
+              setSettings({ name: name });
+            }
+
             tmpInt.metadata = { ...res.metadata, ...settings };
             updateIntegration(tmpInt);
 

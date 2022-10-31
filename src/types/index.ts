@@ -31,7 +31,6 @@ export interface IIntegration {
 }
 
 export interface IIntegrationMetadata {
-  name: string;
   [key: string]: any;
 }
 
