@@ -1,4 +1,4 @@
-import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
+import { useIntegrationJsonStore } from '@kaoto/store';
 import { IStepProps, IStepPropsBranch, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import { MarkerType } from 'reactflow';
@@ -178,7 +178,6 @@ export function buildEdges(nodes: IVizStepNode[]): IVizStepPropsEdge[] {
 export function buildNodeDefaultParams(
   step: IStepProps,
   newId: string,
-  position: { x: number; y: number },
   props?: { [prop: string]: any }
 ): IVizStepNode {
   return {
@@ -190,9 +189,12 @@ export function buildNodeDefaultParams(
       icon: step.icon,
       ...props,
     },
+    draggable: false,
     id: newId,
-    position,
+    position: { x: 0, y: 0 },
     type: 'step',
+    width: 80,
+    height: 80,
     ...props,
   };
 }
@@ -204,41 +206,22 @@ export function buildNodeDefaultParams(
  */
 export function buildNodesFromSteps(
   steps: IStepProps[],
-  previousNodes?: IVizStepNode[],
   props?: { [prop: string]: any },
   branchInfo?: { branchId: string; parentNode: string; [prop: string]: any }
 ) {
-  const nodeWidth = 80;
-  const incrementAmtX = nodeWidth * 2;
-  const incrementAmtY = 250;
-
-  const nodes = previousNodes ?? useVisualizationStore.getState().nodes;
   const stepNodes: IVizStepNode[] = [];
   const branchOriginStepNodes: IVizStepNode[] = [];
   let id = 0;
   let getId = (uuid: string) =>
     `node_${id++}-${uuid}` + (branchInfo ? `-b_${branchInfo.parentNode}` : '');
 
-  const firstStepPosition = {
-    x: window.innerWidth / 2 - incrementAmtX,
-    y: incrementAmtY,
-  };
-
   // if no steps or first step isn't START or an EIP, create a dummy placeholder step
   if (steps.length === 0 || (!isFirstStepStart(steps) && !isFirstStepEip(steps))) {
-    // insertAddStepPlaceholder(stepNodes, { id: getId(''), position: firstStepPosition });
-    insertAddStepPlaceholder(stepNodes, { id: getId(''), position: { x: 0, y: 0 } });
+    insertAddStepPlaceholder(stepNodes, { id: getId('') });
   }
 
   steps.forEach((step, index) => {
-    // Grab the previous step to use for determining position and drawing edges
-    let previousStep: IVizStepNode = stepNodes[index - 1];
     let currentStep: IVizStepNode;
-
-    // if missing a START step, accommodate for ADD A STEP placeholder
-    if (containsAddStepPlaceholder(stepNodes) || containsGroupNode(stepNodes)) {
-      previousStep = stepNodes[index];
-    }
 
     // build the default parameters for a node
     if (step.kind === 'EIP') {
@@ -246,15 +229,6 @@ export function buildNodesFromSteps(
       currentStep = buildBranchNodeParams(
         step,
         getId(step.UUID ?? `${step.name}${index}`),
-        // calculatePosition(
-        //   index,
-        //   { x: 20, y: 15 },
-        //   incrementAmtX,
-        //   nodeWidth,
-        //   undefined,
-        //   previousStep,
-        //   15
-        // ),
         { x: 0, y: 0 },
         branchInfo?.parentNode!,
         index,
@@ -266,13 +240,7 @@ export function buildNodesFromSteps(
         }
       );
     } else {
-      currentStep = buildNodeDefaultParams(
-        step,
-        getId(step.UUID ?? ''),
-        // calculatePosition(index, firstStepPosition, incrementAmtX, nodeWidth, nodes, previousStep),
-        { x: 0, y: 0 },
-        props
-      );
+      currentStep = buildNodeDefaultParams(step, getId(step.UUID ?? ''), props);
     }
 
     // if it has branches, push those to an array to deal with once all the
@@ -291,33 +259,6 @@ export function buildNodesFromSteps(
   });
 
   return { stepNodes, branchOriginStepNodes };
-}
-
-export function calculatePosition(
-  stepIdx: number,
-  firstStepPosition: { x: number; y: number },
-  incrementXAmt: number,
-  nodeWidth: number,
-  nodes?: IVizStepNode[],
-  previousStep?: IVizStepNode,
-  positionY?: number
-): { x: number; y: number } {
-  // check if there is a node with the same index, use its position if there is
-  if (nodes && nodes[stepIdx]) {
-    return nodes[stepIdx].position;
-  } else if (!previousStep) {
-    return firstStepPosition;
-  } else if (previousStep.data.step?.branches && previousStep.data.step?.maxBranches !== 0) {
-    // if it's a branch, we still haven't created a group for it,
-    // but we can "predict" the positioning
-    const positionX = calculateBranchNextStepPosition(previousStep, incrementXAmt, nodeWidth);
-    return { x: positionX, y: positionY ?? 250 };
-  } else {
-    return {
-      x: previousStep.position.x + (incrementXAmt ?? 160),
-      y: positionY ?? 250,
-    };
-  }
 }
 
 export function calculateBranchNextStepPosition(
@@ -413,7 +354,10 @@ export function insertAddStepPlaceholder(stepNodes: IVizStepNode[], props?: any)
         type: 'START',
       },
     },
+    draggable: false,
     type: 'step',
+    width: 80,
+    height: 80,
   });
 }
 
@@ -432,6 +376,7 @@ export function insertBranchGroupNode(
       ...props,
     },
     className: 'light',
+    draggable: false,
     style: {
       border: 'dashed 1px rgba(37, 150, 190, 0.8)',
       width: groupWidth,
