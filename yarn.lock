@@ -1160,7 +1160,7 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-core@^4.157.3", "@patternfly/react-core@^4.250.1", "@patternfly/react-core@^4.258.3":
+"@patternfly/react-core@^4.157.3", "@patternfly/react-core@^4.258.3":
   version "4.258.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.258.3.tgz#9b5ca051d666dfbb2c1e9d4135bb2449081b06f7"
   integrity sha512-2l+GWxuIwJinhYoNv4mQdVQOmbDXRdyPIMjBFm/HTKLXxhGLSoIYlgVGy/On/ViaBSZGh5e/I5H74aC8naMGPA==
@@ -1178,14 +1178,14 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.92.10.tgz#97f876f60378c0e969ca31dfd4f16dead7842afe"
   integrity sha512-vwCy7b+OyyuvLDSLqLUG2DkJZgMDogjld8tJTdAaG8HiEhC1sJPZac+5wD7AuS3ym/sQolS4vYtNiVDnMEORxA==
 
-"@patternfly/react-log-viewer@4.87.21":
-  version "4.87.21"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-log-viewer/-/react-log-viewer-4.87.21.tgz#c0900b134159a41a659591fb05de183c859cee2c"
-  integrity sha512-jOS7V4bauIBdNpCmdJCPWzEnQRQLGe3FyG9wlKq/gYHsTDVFIc3hYd6oqeCMCAxrNKUSpgiO/zSK2R8oh34ZFA==
+"@patternfly/react-log-viewer@4.87.50":
+  version "4.87.50"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-log-viewer/-/react-log-viewer-4.87.50.tgz#fd1c9fde75a1c6f4620beaf036cd0d329257f7f4"
+  integrity sha512-hGNZjBarpD1TMXGvWC5k08WV4wvPBLJj3VJnx76Rq8C6jdF3zTsL4HSdIhwwqH7G9RSEnm7gKi3hmN8745pm3g==
   dependencies:
-    "@patternfly/react-core" "^4.250.1"
-    "@patternfly/react-icons" "^4.92.6"
-    "@patternfly/react-styles" "^4.91.6"
+    "@patternfly/react-core" "^4.258.3"
+    "@patternfly/react-icons" "^4.92.10"
+    "@patternfly/react-styles" "^4.91.10"
     memoize-one "^5.1.0"
     resize-observer-polyfill "^1.5.1"
 
