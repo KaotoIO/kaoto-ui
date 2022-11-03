@@ -893,14 +893,6 @@
   dependencies:
     monaco-editor "^0.33.0"
 
-"@kie-tools-core/notifications@0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/notifications/-/notifications-0.24.0.tgz#8f68075d95bf90baf95e7cf3823106d67d52a34d"
-  integrity sha512-lGFNtZiGv8JFN0akrkphBd6PP9tw3dlhQff7Fyf0xOCaUvl8l3rqph7SXgD0IkWSMf1aYasM9ZNjuBf499nT7g==
-  dependencies:
-    "@kie-tools-core/i18n" "0.24.0"
-    "@kie-tools-core/workspace" "0.24.0"
-
 "@kie-tools-core/notifications@0.25.0":
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/notifications/-/notifications-0.25.0.tgz#7abd04a625ca3dbc02ed9f921ddc22532b13fcb4"
@@ -908,11 +900,6 @@
   dependencies:
     "@kie-tools-core/i18n" "0.25.0"
     "@kie-tools-core/workspace" "0.25.0"
-
-"@kie-tools-core/operating-system@0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.24.0.tgz#0508dd1a100aee068a07aac6a73eec9e550ca917"
-  integrity sha512-b5NWOwFm+QmteT6lj6bXQ7j8nc3OiZPA7G3if233Hym4pMnZ/rUBIjqgA2BNX94KgO5/ZzdCoAFLDRP4GWXomw==
 
 "@kie-tools-core/operating-system@0.25.0":
   version "0.25.0"
@@ -928,13 +915,6 @@
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.25.0.tgz#7c41583df0cdc2924663e2f015a1af7d01b0c97d"
   integrity sha512-BQTt9MjBezXpr1Rx9atoCVGgxCeYeH2ZoNCTfPtZ5xBKRyUsVhbVjZALbAIgngUu+BetwNqUrGBorTOOxET3TQ==
-
-"@kie-tools-core/workspace@0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/workspace/-/workspace-0.24.0.tgz#7082496d3c7bb14865302ab0adf88376f6bc8bcc"
-  integrity sha512-bc8xa5mAHLAOb41d+LDaawjmcVhwrnTJ6lN0OJdDDI/w+0R7DFB7l7ksS3STr28rxPC2CO5gf8oOQ3pLAaAfEA==
-  dependencies:
-    "@kie-tools-core/operating-system" "0.24.0"
 
 "@kie-tools-core/workspace@0.25.0":
   version "0.25.0"
