@@ -352,8 +352,6 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
             </Tooltip>
           </ToolbarItem>
 
-          <ToolbarItem variant="separator" />
-
           {/* KEBAB DROPDOWN MENU */}
           <ToolbarItem variant="overflow-menu">
             <OverflowMenu breakpoint="2xl">

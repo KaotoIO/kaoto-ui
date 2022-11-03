@@ -98,3 +98,8 @@
 .react-flow__minimap.visualization__minimap {
     right: 50px;
 }
+
+.visualization__controls {
+    left: unset !important;
+    right: 0;
+}

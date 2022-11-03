@@ -1,49 +1,27 @@
 import { useIntegrationJsonStore } from '@kaoto/store';
-import { IStepProps, IStepPropsBranch, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
+import { IStepProps, IStepPropsBranch, IVizStepNode, IVizStepPropsEdge } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
-import { MarkerType } from 'reactflow';
+// @ts-ignore
+import dagre from 'dagre';
+import { MarkerType, Position } from 'reactflow';
 
-export function buildBranch(branchOriginStepNodes: IVizStepNode[]): {
+export function buildBranch(
+  branchOriginStepNodes: IVizStepNode[],
+  layout: string
+): {
   branchNodes: IVizStepNode[];
   branchStepEdges: IVizStepPropsEdge[];
 } {
-  // const incrementAmtX = 160;
-  // const nodeWidth = 80;
   const allNodes: IVizStepNode[] = [];
-  const groupNodes: IVizStepNode[] = [];
   const stepEdges: IVizStepPropsEdge[] = [];
 
   // loop over step nodes that contain branches, create a branch group node for each
-  branchOriginStepNodes.forEach((branchOriginStepNode, originNodeIdx) => {
-    branchOriginStepNode.data.step.branches.forEach((branch: IStepPropsBranch, idx: number) => {
-      const groupHeight: number = 130;
-      const groupWidth: number = branch.steps.length * 140;
-
-      insertBranchGroupNode(
-        groupNodes,
-        { x: 0, y: 0 },
-        // calculateBranchGroupPosition(
-        //   nodeWidth,
-        //   branchOriginStepNode,
-        //   groupHeight,
-        //   incrementAmtX,
-        //   idx,
-        //   groupNodes[idx - 1]
-        // ),
-        groupHeight,
-        groupWidth,
-        { parentUuid: branchOriginStepNode.data.UUID, ...branch }
-      );
-
-      allNodes.push(...groupNodes);
-
+  branchOriginStepNodes.forEach((branchOriginStepNode) => {
+    branchOriginStepNode.data.step.branches.forEach((branch: IStepPropsBranch) => {
       // create nodes for individual steps within a branch group
-      const { stepNodes } = buildNodesFromSteps(branch.steps, undefined, {
-        branchId: groupNodes[idx].id!,
+      const { stepNodes } = buildNodesFromSteps(branch.steps, layout, undefined, {
         branchIdentifier: branch.identifier,
         originalStepIndex: branchOriginStepNode.data.originalStepNodeIdx,
-        // required for React Flow grouping; parentNode = branch group node ID
-        parentNode: groupNodes[originNodeIdx].id,
       });
 
       // create the per-branch-group normal step edges, special edges are handled later
@@ -62,6 +40,7 @@ export function buildBranchNodeParams(
   position: { x: number; y: number },
   branchId: string,
   index: number,
+  layout: string,
   dataProps?: { [prop: string]: any }
 ): IVizStepNode {
   return {
@@ -75,10 +54,11 @@ export function buildBranchNodeParams(
     },
     id: newId,
     position,
-    draggable: false,
+    draggable: true,
     parentNode: branchId,
+    sourcePosition: layout === 'LR' ? Position.Top : Position.Right,
+    targetPosition: layout === 'LR' ? Position.Bottom : Position.Left,
     type: 'step',
-    extent: 'parent',
   };
 }
 
@@ -95,7 +75,7 @@ export function buildBranchSpecialEdges(
     const ogNodeIndex = parseInt(branchNode.data?.originalStepIndex);
 
     // handle special first step, needs to be connected to previous step
-    if (branchNode.extent === 'parent' && branchNode.data?.isFirstStep) {
+    if (branchNode.data?.isFirstStep) {
       const ogNodeStep = stepNodes[ogNodeIndex];
       const firstStep = branchNode;
 
@@ -117,14 +97,10 @@ export function buildBranchSpecialEdges(
     }
 
     // handle special last steps
-    if (
-      branchNode.extent === 'parent' &&
-      branchNode.data.step.type === 'MIDDLE' &&
-      branchNode.data.isLastStep
-    ) {
+    if (branchNode.data?.step.type === 'MIDDLE' && branchNode.data?.isLastStep) {
       const finalStep = branchNode;
       const nextStep = stepNodes[ogNodeIndex + 1];
-      
+
       if (nextStep) {
         // it needs to merge back
         specialEdges.push({
@@ -206,8 +182,9 @@ export function buildNodeDefaultParams(
  */
 export function buildNodesFromSteps(
   steps: IStepProps[],
+  layout: string,
   props?: { [prop: string]: any },
-  branchInfo?: { branchId: string; parentNode: string; [prop: string]: any }
+  branchInfo?: { [prop: string]: any }
 ) {
   const stepNodes: IVizStepNode[] = [];
   const branchOriginStepNodes: IVizStepNode[] = [];
@@ -232,6 +209,7 @@ export function buildNodesFromSteps(
         { x: 0, y: 0 },
         branchInfo?.parentNode!,
         index,
+        layout,
         {
           ...branchInfo,
           ...props,
@@ -261,59 +239,8 @@ export function buildNodesFromSteps(
   return { stepNodes, branchOriginStepNodes };
 }
 
-export function calculateBranchNextStepPosition(
-  branchOriginStepNode: IVizStepNode,
-  incrementAmountX: number,
-  nodeWidth: number
-) {
-  const branches = branchOriginStepNode.data.step.branches;
-  let positionX: number;
-  // find the branch with the most steps in it
-  const longestBranchIndex: number = branches.reduce(
-    (p: number, c: any[], i: any[], a: any[]) => (a[p].length > c.length ? p : i),
-    0
-  );
-  // calculate the width of that group
-  const initialPosition = branchOriginStepNode.position.x + incrementAmountX;
-  // multiply by the number of steps, add the increment amount to it
-  positionX = initialPosition + branches[longestBranchIndex].steps.length * (nodeWidth * 2);
-  return positionX;
-}
-
-export function calculateBranchGroupPosition(
-  nodeWidth: number,
-  branchOriginStepNode: IVizStepNode,
-  groupHeight: number,
-  incrementAmtX: number,
-  index: number,
-  previousBranchGroupNode?: IVizStepNode
-) {
-  let position = { x: 0, y: 0 };
-  if (index === 0) {
-    position = {
-      x: branchOriginStepNode.position.x + incrementAmtX,
-      y: branchOriginStepNode.position.y - nodeWidth * 1.5,
-    };
-  } else if (previousBranchGroupNode) {
-    position = {
-      x: previousBranchGroupNode.position.x,
-      y: previousBranchGroupNode.position.y + (groupHeight + nodeWidth / 1.5),
-    };
-  }
-
-  return position;
-}
-
 export function containsAddStepPlaceholder(stepNodes: IVizStepNode[]) {
   return stepNodes.length > 0 && stepNodes[0].data.label === 'ADD A STEP';
-}
-
-export function containsBranching(step: IStepProps): boolean {
-  return step.maxBranches !== 0;
-}
-
-export function containsGroupNode(stepNodes: IVizStepNode[]) {
-  return stepNodes.length > 0 && stepNodes[0].type === 'group';
 }
 
 /**
@@ -332,6 +259,51 @@ export function findStepIdxWithUUID(UUID: string, steps?: IStepProps[]) {
   } else {
     return steps.map((s) => s.UUID).indexOf(UUID);
   }
+}
+
+export function getLayoutedElements(
+  nodes: IVizStepNode[],
+  edges: IVizStepPropsEdge[],
+  direction = 'LR'
+) {
+  const nodeWidth = 120;
+  const nodeHeight = 120;
+
+  const dagreGraph = new dagre.graphlib.Graph();
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+
+  const isHorizontal = direction === 'LR';
+  dagreGraph.setGraph({ rankdir: direction });
+
+  nodes.forEach((node) => {
+    dagreGraph.setNode(node.id, {
+      width: nodeWidth,
+      height: nodeHeight,
+    });
+  });
+
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
+
+  dagre.layout(dagreGraph);
+
+  nodes.forEach((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    node.targetPosition = isHorizontal ? Position.Left : Position.Top;
+    node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
+
+    // shift dagre node positions to the top left, to
+    // match the React Flow node anchor point (top left)
+    node.position = {
+      x: nodeWithPosition.x - nodeWidth / 2,
+      y: nodeWithPosition.y - nodeHeight / 2,
+    };
+
+    return node;
+  });
+
+  return { layoutedNodes: nodes, layoutedEdges: edges };
 }
 
 export function getNextStep(nodes: IVizStepNode[], currentStep?: IVizStepNode) {
@@ -376,7 +348,7 @@ export function insertBranchGroupNode(
       ...props,
     },
     className: 'light',
-    draggable: false,
+    draggable: true,
     style: {
       border: 'dashed 1px rgba(37, 150, 190, 0.8)',
       width: groupWidth,

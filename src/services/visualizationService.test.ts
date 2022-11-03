@@ -6,7 +6,7 @@ import {
   buildEdgeDefaultParams,
   buildEdges,
   buildNodeDefaultParams,
-  buildNodesFromSteps, // calculatePosition,
+  buildNodesFromSteps,
   containsAddStepPlaceholder,
   findStepIdxWithUUID,
   getNextStep,
@@ -64,7 +64,7 @@ describe('visualizationService', () => {
     expect(buildEdges(nodes)).toHaveLength(1);
 
     // let's test that it works for branching too
-    const { stepNodes } = buildNodesFromSteps(branchSteps);
+    const { stepNodes } = buildNodesFromSteps(branchSteps, 'LR');
 
     expect(buildEdges(stepNodes)).toHaveLength(branchSteps.length - 1);
   });
@@ -83,10 +83,17 @@ describe('visualizationService', () => {
         label: truncateString(step.name, 14),
         step,
         UUID: step.UUID,
+        x: 0,
+        y: 0,
       },
       id: 'dummy-id',
+      draggable: false,
+      height: 80,
       position: { x: 0, y: 0 },
       type: 'step',
+      width: 80,
+      x: 0,
+      y: 0,
     });
   });
 
@@ -94,7 +101,7 @@ describe('visualizationService', () => {
    * buildNodesFromSteps
    */
   it('buildNodesFromSteps(): should build visualization nodes from an array of steps', () => {
-    const { stepNodes } = buildNodesFromSteps(steps);
+    const { stepNodes } = buildNodesFromSteps(steps, 'LR');
     expect(stepNodes[0].data.UUID).toBeDefined();
     expect(stepNodes[0].id).toEqual('node_0-0twitter-search-source');
   });
@@ -103,7 +110,7 @@ describe('visualizationService', () => {
    * buildNodesFromSteps for integrations with branches
    */
   it.skip('buildNodesFromSteps(): should build visualization nodes from an array of steps with branches', () => {
-    const { stepNodes } = buildNodesFromSteps(branchSteps);
+    const { stepNodes } = buildNodesFromSteps(branchSteps, 'LR');
     expect(stepNodes[0].data.UUID).toBeDefined();
     expect(stepNodes).toHaveLength(branchSteps.length);
   });

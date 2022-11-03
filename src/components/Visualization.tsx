@@ -14,60 +14,17 @@ import {
   buildEdges,
   buildNodesFromSteps,
   findStepIdxWithUUID,
+  getLayoutedElements,
 } from '@kaoto/services';
 import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
-// @ts-ignore
-import dagre from 'dagre';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import ReactFlow, { Background, Position, Viewport } from 'reactflow';
+import ReactFlow, { Background, Viewport } from 'reactflow';
 
 interface IVisualization {
   initialState?: IViewData;
   toggleCatalog?: () => void;
 }
-
-const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
-
-const nodeWidth = 120;
-const nodeHeight = 120;
-
-const getLayoutedElements = (
-  nodes: IVizStepNode[],
-  edges: IVizStepPropsEdge[],
-  direction = 'LR'
-) => {
-  const isHorizontal = direction === 'LR';
-  dagreGraph.setGraph({ rankdir: direction });
-
-  nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
-  });
-
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target);
-  });
-
-  dagre.layout(dagreGraph);
-
-  nodes.forEach((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id);
-    node.targetPosition = isHorizontal ? Position.Left : Position.Top;
-    node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
-
-    // shift dagre node positions to the top left, to
-    // match the React Flow node anchor point (top left)
-    node.position = {
-      x: isHorizontal ? nodeWithPosition.x - nodeWidth / 2 : 0,
-      y: !isHorizontal ? nodeWithPosition.y - nodeHeight / 2 : 0,
-    };
-
-    return node;
-  });
-
-  return { layoutedNodes: nodes, layoutedEdges: edges };
-};
 
 const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
@@ -151,11 +108,12 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     const combinedEdges: IVizStepPropsEdge[] = [];
     const combinedNodes: IVizStepNode[] = [];
 
-    const { stepNodes, branchOriginStepNodes } = buildNodesFromSteps(steps, {
+    const { stepNodes, branchOriginStepNodes } = buildNodesFromSteps(steps, layout, {
       handleDeleteStep,
     });
 
-    const { branchNodes, branchStepEdges } = buildBranch(branchOriginStepNodes);
+    const { branchNodes, branchStepEdges } = buildBranch(branchOriginStepNodes, layout);
+
     const stepEdges: IVizStepPropsEdge[] = buildEdges(stepNodes);
     const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(branchNodes, stepNodes);
 
