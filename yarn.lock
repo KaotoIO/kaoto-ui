@@ -1131,10 +1131,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@patternfly/patternfly@4.217.1":
-  version "4.217.1"
-  resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.217.1.tgz#3583aa7216de9255b912fcc67a5af95ff8bd9cb3"
-  integrity sha512-uN7JgfQsyR16YHkuGRCTIcBcnyKIqKjGkB2SGk9x1XXH3yYGenL83kpAavX9Xtozqp17KppOlybJuzcKvZMrgw==
+"@patternfly/patternfly@4.219.2":
+  version "4.219.2"
+  resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.219.2.tgz#c26160620e827f0412fb51fb71ef625043f1b617"
+  integrity sha512-SZ+9ig6DVygwM6fpldYhRjoyr9KMJTit/ZMyWCUE7DfpTqEr69wQnOaGxfvNlH1UV6G7Z+ALZXeck3Dy1nb9Vw==
 
 "@patternfly/react-code-editor@4.82.55":
   version "4.82.55"
