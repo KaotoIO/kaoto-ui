@@ -1,0 +1,41 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: Kamelet
+metadata:
+  annotations:
+    camel.apache.org/kamelet.icon: whatever
+  labels:
+    camel.apache.org/kamelet.type: action
+  name: eip-action
+spec:
+  definition:
+    title: EIP Kamelet
+  dependencies:
+    - camel:core
+    - camel:kamelet
+  template:
+    from:
+      uri: kamelet:source
+      steps:
+        - choice:
+            when:
+              - simple: "{{?foo}}"
+                steps:
+                  - set-header:
+                      name: bar
+                      simple: foo
+              - simple: "{{?foo2}}"
+                steps:
+                  - set-header:
+                      name: bar
+                      simple: foo2
+              - simple: "{{?foo3}}"
+                steps:
+                  - set-header:
+                      name: bar
+                      simple: foo3
+            otherwise:
+              steps:
+                - set-body:
+                    simple: fusfusfus
+        - to:
+            uri: kamelet:sink

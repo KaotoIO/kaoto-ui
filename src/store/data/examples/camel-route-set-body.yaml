@@ -1,0 +1,8 @@
+- from:
+    uri: "direct:start"
+    steps:
+    - set-property:
+        name: test
+        expression:
+          simple: "${body}"
+    - to: "mock:result"
