@@ -88,10 +88,9 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       key={'clearButton'}
       icon={<EraserIcon />}
       data-testid={'sourceCode--clearButton'}
-      toolTipText={'Clear'}
       onClick={clearAction}
-      position={'right'}
       isVisible={sourceCode !== ''}
+      tooltipProps={{ content: 'Clear', position: 'right' }}
     />
   );
 
@@ -100,11 +99,10 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       key="undoButton"
       icon={<UndoIcon />}
       aria-label="Undo change"
-      toolTipText="Undo change"
       data-testid={'sourceCode--undoButton'}
       onClick={undoAction}
-      position={'right'}
       isVisible={sourceCode !== ''}
+      tooltipProps={{ content: 'Undo change', position: 'right' }}
     />
   );
 
@@ -113,11 +111,10 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       key="redoButton"
       icon={<RedoIcon />}
       aria-label="Redo change"
-      toolTipText="Redo change"
       data-testid={'sourceCode--redoButton'}
-      position={'right'}
       onClick={redoAction}
       isVisible={sourceCode !== ''}
+      tooltipProps={{ content: 'Redo change', position: 'right' }}
     />
   );
 
