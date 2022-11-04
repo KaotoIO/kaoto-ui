@@ -1,0 +1,8 @@
+- from:
+    uri: "direct:route"
+    steps:
+    - filter:
+        simple: "${body.startsWith(\\"a\\")}"
+        steps:
+          - to: "mock:filter"
+    - to: "mock:route"

@@ -1,0 +1,15 @@
+- from:
+    uri: "timer:start"
+    steps:
+    - choice:
+        precondition: true
+        when:
+        - simple: "{{?red}}"
+          steps:
+          - to: "log:red"
+        - simple: "{{?blue}}"
+          steps:
+          - to: "log:blue"
+        otherwise:
+          steps:
+          - to: "log:info"
