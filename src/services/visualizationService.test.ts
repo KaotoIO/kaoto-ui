@@ -7,7 +7,6 @@ import {
   buildEdges,
   buildNodeDefaultParams,
   buildNodesFromSteps,
-  calculatePosition,
   containsAddStepPlaceholder,
   findStepIdxWithUUID,
   getNextStep,
@@ -65,7 +64,7 @@ describe('visualizationService', () => {
     expect(buildEdges(nodes)).toHaveLength(1);
 
     // let's test that it works for branching too
-    const { stepNodes } = buildNodesFromSteps(branchSteps);
+    const { stepNodes } = buildNodesFromSteps(branchSteps, 'LR');
 
     expect(buildEdges(stepNodes)).toHaveLength(branchSteps.length - 1);
   });
@@ -84,10 +83,17 @@ describe('visualizationService', () => {
         label: truncateString(step.name, 14),
         step,
         UUID: step.UUID,
+        x: 0,
+        y: 0,
       },
       id: 'dummy-id',
+      draggable: false,
+      height: 80,
       position: { x: 0, y: 0 },
       type: 'step',
+      width: 80,
+      x: 0,
+      y: 0,
     });
   });
 
@@ -95,7 +101,7 @@ describe('visualizationService', () => {
    * buildNodesFromSteps
    */
   it('buildNodesFromSteps(): should build visualization nodes from an array of steps', () => {
-    const { stepNodes } = buildNodesFromSteps(steps);
+    const { stepNodes } = buildNodesFromSteps(steps, 'LR');
     expect(stepNodes[0].data.UUID).toBeDefined();
     expect(stepNodes[0].id).toEqual('node_0-0twitter-search-source');
   });
@@ -104,57 +110,9 @@ describe('visualizationService', () => {
    * buildNodesFromSteps for integrations with branches
    */
   it.skip('buildNodesFromSteps(): should build visualization nodes from an array of steps with branches', () => {
-    const { stepNodes } = buildNodesFromSteps(branchSteps);
+    const { stepNodes } = buildNodesFromSteps(branchSteps, 'LR');
     expect(stepNodes[0].data.UUID).toBeDefined();
     expect(stepNodes).toHaveLength(branchSteps.length);
-  });
-
-  /**
-   * calculatePosition
-   */
-  it('calculatePosition(): should calculate the very first position of a node', () => {
-    // no previous step provided, use coordinates for first step provided
-    expect(calculatePosition(0, { x: 500, y: 250 }, 160, 80)).toEqual({
-      x: 500,
-      y: 250,
-    });
-  });
-
-  /**
-   * calculatePosition
-   */
-  it('calculatePosition(): should increment the position when a previous step is provided', () => {
-    const nodes = [
-      { data: { label: 'aws-kinesis-source' }, id: 'dndnode_1', position: { x: 720, y: 250 } },
-    ];
-
-    // should increment from previous step, and will not inherit any position,
-    // as there is no existing node with the same index
-    expect(calculatePosition(1, { x: 500, y: 250 }, 160, 80, nodes, nodes[0])).toEqual({
-      x: nodes[0].position.x + 160,
-      y: 250,
-    });
-  });
-
-  /**
-   * calculatePosition
-   */
-  it('calculatePosition(): should inherit the previous node position of same index if available', () => {
-    const nodes = [
-      { data: { label: 'aws-kinesis-source' }, id: 'dndnode_1', position: { x: 720, y: 250 } },
-      { data: { label: 'avro-deserialize-sink' }, id: 'dndnode_2', position: { x: 880, y: 250 } },
-    ];
-    const nodeWidth = 80;
-
-    expect(calculatePosition(0, { x: 500, y: 250 }, 160, nodeWidth, nodes)).toEqual({
-      x: 720,
-      y: 250,
-    });
-
-    expect(calculatePosition(1, { x: 500, y: 250 }, 160, nodeWidth, nodes)).toEqual({
-      x: 880,
-      y: 250,
-    });
   });
 
   /**

@@ -100,7 +100,7 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
         return set((state) => ({
           integrationJson: {
             ...state.integrationJson,
-            steps: stepsWithNewUuids,
+            steps: [...stepsWithNewUuids],
           },
         }));
       },

@@ -4,6 +4,7 @@ import {
   KaotoDrawer,
   PlusButtonEdge,
   StepErrorBoundary,
+  VisualizationControls,
   VisualizationStep,
   VisualizationStepViews,
 } from '@kaoto/components';
@@ -13,11 +14,12 @@ import {
   buildEdges,
   buildNodesFromSteps,
   findStepIdxWithUUID,
+  getLayoutedElements,
 } from '@kaoto/services';
 import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import ReactFlow, { Background, Controls, ReactFlowProvider, Viewport } from 'reactflow';
+import ReactFlow, { Background, Viewport } from 'reactflow';
 
 interface IVisualization {
   initialState?: IViewData;
@@ -27,7 +29,11 @@ interface IVisualization {
 const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
-  const defaultViewport: Viewport = { x: 10, y: 15, zoom: 1.2 };
+  const defaultViewport: Viewport = {
+    x: window.innerWidth / 2 - 80,
+    y: window.innerHeight / 2 - 160,
+    zoom: 1.2,
+  };
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
@@ -38,16 +44,23 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     minBranches: 0,
   });
   const { deleteStep, integrationJson, replaceStep, setViews } = useIntegrationJsonStore();
-  const { edges, nodes, deleteNode, onEdgesChange, onNodesChange, setEdges, setNodes } =
-    useVisualizationStore();
-
+  const layout = useVisualizationStore((state) => state.layout);
   const previousIntegrationJson = useRef(integrationJson);
+  const previousLayout = useRef(layout);
+  const { nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, deleteNode } =
+    useVisualizationStore();
 
   // initial loading of visualization steps
   useEffect(() => {
     const { combinedNodes, combinedEdges } = buildNodesAndEdges(integrationJson.steps);
-    setEdges(combinedEdges);
-    setNodes(combinedNodes);
+    const { layoutedNodes, layoutedEdges } = getLayoutedElements(
+      combinedNodes,
+      combinedEdges,
+      layout
+    );
+
+    setNodes(layoutedNodes);
+    setEdges(layoutedEdges);
   }, []);
 
   /**
@@ -57,17 +70,31 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   useEffect(() => {
     if (previousIntegrationJson.current === integrationJson) return;
 
-    // FETCH VIEWS
     fetchViews(integrationJson.steps).then((views) => {
       setViews(views);
     });
 
     const { combinedNodes, combinedEdges } = buildNodesAndEdges(integrationJson.steps);
-    setEdges(combinedEdges);
-    setNodes(combinedNodes);
+    const { layoutedNodes, layoutedEdges } = getLayoutedElements(
+      combinedNodes,
+      combinedEdges,
+      layout
+    );
+
+    setNodes(layoutedNodes);
+    setEdges(layoutedEdges);
 
     previousIntegrationJson.current = integrationJson;
   }, [integrationJson]);
+
+  useEffect(() => {
+    if (previousLayout.current === layout) return;
+    const { layoutedNodes, layoutedEdges } = getLayoutedElements(nodes, edges, layout);
+
+    setNodes([...layoutedNodes]);
+    setEdges([...layoutedEdges]);
+    previousLayout.current = layout;
+  }, [layout]);
 
   const nodeTypes = useMemo(() => ({ step: VisualizationStep }), []);
   const edgeTypes = useMemo(
@@ -81,10 +108,12 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     const combinedEdges: IVizStepPropsEdge[] = [];
     const combinedNodes: IVizStepNode[] = [];
 
-    const { stepNodes, branchOriginStepNodes } = buildNodesFromSteps(steps, nodes, {
+    const { stepNodes, branchOriginStepNodes } = buildNodesFromSteps(steps, layout, {
       handleDeleteStep,
     });
-    const { branchNodes, branchStepEdges } = buildBranch(branchOriginStepNodes);
+
+    const { branchNodes, branchStepEdges } = buildBranch(branchOriginStepNodes, layout);
+
     const stepEdges: IVizStepPropsEdge[] = buildEdges(stepNodes);
     const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(branchNodes, stepNodes);
 
@@ -194,37 +223,36 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         defaultSize={'500px'}
         minSize={'150px'}
       >
-        <ReactFlowProvider>
-          <div
-            className="reactflow-wrapper"
-            data-testid={'react-flow-wrapper'}
-            ref={reactFlowWrapper}
-            style={{
-              width: window.innerWidth,
-              height: window.innerHeight - 153,
-            }}
+        <div
+          className="reactflow-wrapper"
+          data-testid={'react-flow-wrapper'}
+          ref={reactFlowWrapper}
+          style={{
+            width: window.innerWidth,
+            height: window.innerHeight - 153,
+          }}
+        >
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            defaultViewport={defaultViewport}
+            edgeTypes={edgeTypes}
+            nodeTypes={nodeTypes}
+            onDragOver={onDragOver}
+            onNodeClick={onNodeClick}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onLoad={onLoad}
+            snapToGrid={true}
+            snapGrid={[15, 15]}
+            deleteKeyCode={null}
+            zoomOnDoubleClick={false}
           >
-            <ReactFlow
-              nodes={nodes}
-              edges={edges}
-              defaultViewport={defaultViewport}
-              edgeTypes={edgeTypes}
-              nodeTypes={nodeTypes}
-              onDragOver={onDragOver}
-              onNodeClick={onNodeClick}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              onLoad={onLoad}
-              snapToGrid={true}
-              snapGrid={[15, 15]}
-              deleteKeyCode={null}
-            >
-              {/*<MiniMap nodeBorderRadius={2} className={'visualization__minimap'} />*/}
-              <Controls className={'visualization__controls'} />
-              <Background color="#aaa" gap={16} />
-            </ReactFlow>
-          </div>
-        </ReactFlowProvider>
+            {/*<MiniMap nodeBorderRadius={2} className={'visualization__minimap'} />*/}
+            <VisualizationControls />
+            <Background color="#aaa" gap={16} />
+          </ReactFlow>
+        </div>
       </KaotoDrawer>
     </StepErrorBoundary>
   );

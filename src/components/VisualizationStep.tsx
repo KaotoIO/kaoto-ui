@@ -10,7 +10,7 @@ import {
   isLastNode,
   isStartStep,
 } from '@kaoto/services';
-import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
+import { useIntegrationJsonStore, useSettingsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 import { AlertVariant, Popover } from '@patternfly/react-core';
 import { CubesIcon, PlusIcon, TrashIcon } from '@patternfly/react-icons';
@@ -27,6 +27,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const lastNode = isLastNode(nodes, data.UUID!);
   const endStep = isEndStep(data.step!);
   const currentIdx = findStepIdxWithUUID(data.UUID!);
+  const layout = useVisualizationStore((state) => state.layout);
   const steps = useIntegrationJsonStore((state) => state.integrationJson.steps);
 
   const { addAlert } = useAlert() || {};
@@ -109,7 +110,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             <Handle
               isConnectable={false}
               type="target"
-              position={Position.Left}
+              position={layout === 'LR' ? Position.Left : Position.Top}
               id="a"
               style={{ borderRadius: 0 }}
             />
@@ -163,7 +164,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             <Handle
               isConnectable={false}
               type="source"
-              position={Position.Right}
+              position={layout === 'LR' ? Position.Right : Position.Bottom}
               id="b"
               style={{ borderRadius: 0 }}
             />
@@ -180,7 +181,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           </div>
           <Handle
             type="source"
-            position={Position.Right}
+            position={layout === 'LR' ? Position.Right : Position.Bottom}
             id="b"
             style={{ borderRadius: 0 }}
             isConnectable={false}
