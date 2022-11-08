@@ -32,7 +32,7 @@
   "dependencies": {
     "@kie-tools-core/editor": "0.25.0",
     "@kie-tools-core/guided-tour": "0.25.0",
-    "@kie-tools-core/monaco-editor": "0.24.0",
+    "@kie-tools-core/monaco-editor": "0.25.0",
     "@kie-tools-core/notifications": "0.25.0",
     "@kie-tools-core/patternfly-base": "0.25.0",
     "@kie-tools-core/workspace": "0.25.0",
