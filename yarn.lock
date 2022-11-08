@@ -809,14 +809,6 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/envelope-bus@0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope-bus/-/envelope-bus-0.24.0.tgz#70afbf3a735a79d39a7f3a401124561b1dab56cf"
-  integrity sha512-22zMDGwbu2ekBiw1WYpU5GxS0GJLwcNy4Q2LxhhZr3pUbRYo0Bl3/eAlWRG1j8c6ZZNZuS5Oxb+EuYdDJRDJew==
-  dependencies:
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
 "@kie-tools-core/envelope-bus@0.25.0":
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope-bus/-/envelope-bus-0.25.0.tgz#4990c1fdafbde4db1fb4da2c8db87cb3f109c67d"
@@ -835,19 +827,6 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/guided-tour@0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/guided-tour/-/guided-tour-0.24.0.tgz#63126b24df57a45489a059c39dd03c40ffba924f"
-  integrity sha512-DAsOKvUzMMOXG5FI+jqeRa0d1gE/BXu/OZjPjRn0zagY2RxjKE+uJs4fJADqQt5Jj5DEubxN/5eo03zc1LPZcw==
-  dependencies:
-    "@kie-tools-core/envelope-bus" "0.24.0"
-    "@kie-tools-core/i18n" "0.24.0"
-    "@kie-tools-core/patternfly-base" "0.24.0"
-    "@patternfly/react-core" "^4.157.3"
-    "@patternfly/react-icons" "^4.11.17"
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
 "@kie-tools-core/guided-tour@0.25.0":
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/guided-tour/-/guided-tour-0.25.0.tgz#3317cacde1bf894af1508355bf66058c8f660fbb"
@@ -858,14 +837,6 @@
     "@kie-tools-core/patternfly-base" "0.25.0"
     "@patternfly/react-core" "^4.157.3"
     "@patternfly/react-icons" "^4.11.17"
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
-"@kie-tools-core/i18n@0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/i18n/-/i18n-0.24.0.tgz#8be8cf3167cf1c4746e55feb7a4ff0f7ae528ff9"
-  integrity sha512-nH0F5OvOEmZzCwie/jLyfmKfVesUb5D1UCgPUv61umUlgtbx6Df/38zybNw5DgySEZ9F0Muv5wCpBFkokToXrA==
-  dependencies:
     react "^17.0.2"
     react-dom "^17.0.2"
 
@@ -905,11 +876,6 @@
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.25.0.tgz#3323a14ced104310d2bda76d7be1bc4d873e9109"
   integrity sha512-Ua8KGj59ScnZSsxcuZDVXNnSbur66QYMopi54S7FzCExR3O87wdYrdzZZqhHP/V+Up0M1ZSNXWVyzCTWgOV3CQ==
-
-"@kie-tools-core/patternfly-base@0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.24.0.tgz#76352a3ea81b8db560fab771966a86a6856c1a7a"
-  integrity sha512-flN8OpRZ9Mzjp2AjDhHa5LtP9p9qKA252Nk7S7xVv9fGXwCcoEiIhYDddVKC+rfq8qxIlzN9fq96PqbZx1KNIw==
 
 "@kie-tools-core/patternfly-base@0.25.0":
   version "0.25.0"
