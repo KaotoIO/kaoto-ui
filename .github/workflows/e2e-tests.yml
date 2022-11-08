@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: 👷‍♀️ Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 🎥 Should we record?
         run: echo '::set-output name=record::${{  env.CYPRESS_PROJECT_ID != '' }}'
@@ -59,7 +59,7 @@ jobs:
           - 8081/tcp
     steps:
       - name: 👷‍♀️ Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 🗄️ Download the build folders
         uses: actions/download-artifact@v2
@@ -113,7 +113,7 @@ jobs:
           - 8081/tcp
     steps:
       - name: 👷‍♀️ Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 🗄️ Download the build folders
         uses: actions/download-artifact@v2
@@ -168,7 +168,7 @@ jobs:
           - 8081/tcp
     steps:
       - name: 👷‍♀️ Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 🗄️ Download the build folders
         uses: actions/download-artifact@v2
