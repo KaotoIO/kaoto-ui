@@ -38,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 💾 Save build folder
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dist
           if-no-files-found: error
@@ -86,14 +86,14 @@ jobs:
 
       - name: 💾 Save videos
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: videos-firefox
           path: cypress/videos
 
       - name: 💾 Save screenshots
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: screenshots-firefox
           path: cypress/screenshots
@@ -141,14 +141,14 @@ jobs:
 
       - name: 💾 Save videos
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: videos-chrome
           path: cypress/videos
 
       - name: 💾 Save screenshots
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: screenshots-chrome
           path: cypress/screenshots
@@ -196,14 +196,14 @@ jobs:
 
       - name: 💾 Save videos
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: videos-edge
           path: cypress/videos
 
       - name: 💾 Save screenshots
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: screenshots-edge
           path: cypress/screenshots
