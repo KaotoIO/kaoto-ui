@@ -155,7 +155,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
       </Toolbar>
       <Gallery
         hasGutter={true}
-        style={{ flex: '1 1', overflow: 'auto', padding: '0 10px' }}
+        style={{ flex: '1 1', overflow: 'auto', padding: '0 10px', alignContent: 'flex-start' }}
       >
         {catalogData &&
           search(catalogData).map((step, idx) => {
