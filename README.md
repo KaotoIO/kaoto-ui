@@ -36,7 +36,7 @@ If you want to run Kaoto-ui in your machine, follow these instructions. Remember
 
 ### Requirements
 
-- Node >= 14
+- Node >= 16
 - [Yarn](https://classic.yarnpkg.com/en/docs/install#mac-stable) (1.x)
 
 ### Install & Setup
