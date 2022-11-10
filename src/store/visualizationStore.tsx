@@ -38,7 +38,7 @@ export const useVisualizationStore = create<RFState>((set, get) => ({
     set((state) => ({
       nodes: [...state.nodes.filter((_n, idx) => idx !== nodeIndex)],
     })),
-  layout: 'LR', // e.g. LR, TB
+  layout: 'RIGHT', // e.g. RIGHT, DOWN
   onNodesChange: (changes: NodeChange[]) =>
     set((state) => ({
       nodes: applyNodeChanges(changes, state.nodes),

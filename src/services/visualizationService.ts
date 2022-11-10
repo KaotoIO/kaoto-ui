@@ -1,9 +1,10 @@
 import { useIntegrationJsonStore } from '@kaoto/store';
 import { IStepProps, IStepPropsBranch, IVizStepNode, IVizStepPropsEdge } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
-// @ts-ignore
-import dagre from 'dagre';
+import { ElkExtendedEdge, ElkNode } from 'elkjs';
 import { MarkerType, Position } from 'reactflow';
+
+const ELK = require('elkjs');
 
 export function buildBranch(
   branchOriginStepNodes: IVizStepNode[],
@@ -37,7 +38,6 @@ export function buildBranch(
 export function buildBranchNodeParams(
   step: IStepProps,
   newId: string,
-  position: { x: number; y: number },
   branchId: string,
   index: number,
   layout: string,
@@ -53,11 +53,11 @@ export function buildBranchNodeParams(
       ...dataProps,
     },
     id: newId,
-    position,
+    position: { x: 0, y: 0 },
     draggable: true,
     parentNode: branchId,
-    sourcePosition: layout === 'LR' ? Position.Top : Position.Right,
-    targetPosition: layout === 'LR' ? Position.Bottom : Position.Left,
+    sourcePosition: layout === 'RIGHT' ? Position.Top : Position.Right,
+    targetPosition: layout === 'RIGHT' ? Position.Bottom : Position.Left,
     type: 'step',
   };
 }
@@ -206,7 +206,6 @@ export function buildNodesFromSteps(
       currentStep = buildBranchNodeParams(
         step,
         getId(step.UUID ?? `${step.name}${index}`),
-        { x: 0, y: 0 },
         branchInfo?.parentNode!,
         index,
         layout,
@@ -261,46 +260,73 @@ export function findStepIdxWithUUID(UUID: string, steps?: IStepProps[]) {
   }
 }
 
-export function getLayoutedElements(
+export async function getLayoutedElements(
   nodes: IVizStepNode[],
   edges: IVizStepPropsEdge[],
-  direction = 'LR'
+  direction: string
 ) {
-  const nodeWidth = 120;
-  const nodeHeight = 120;
+  const DEFAULT_WIDTH_HEIGHT = 80;
+  const isHorizontal = direction === 'RIGHT';
 
-  const dagreGraph = new dagre.graphlib.Graph();
-  dagreGraph.setDefaultEdgeLabel(() => ({}));
+  const elk = new ELK({
+    defaultLayoutOptions: {
+      'elk.algorithm': 'layered',
+      'elk.direction': direction,
 
-  const isHorizontal = direction === 'LR';
-  dagreGraph.setGraph({ rankdir: direction });
+      // vertical spacing of nodes
+      'elk.spacing.nodeNode': DEFAULT_WIDTH_HEIGHT / 2,
 
-  nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, {
-      width: nodeWidth,
-      height: nodeHeight,
+      // ensures balanced, linear graph from beginning to end
+      'elk.layered.nodePlacement.bk.fixedAlignment': 'BALANCED',
+
+      // *between handles horizontal spacing
+      'elk.layered.spacing.nodeNodeBetweenLayers': DEFAULT_WIDTH_HEIGHT,
+      'spacing.componentComponent': '70',
+      spacing: '75',
+
+      // ensures correct order of nodes (particularly important for branches)
+      'elk.layered.crossingMinimization.forceNodeModelOrder': 'true',
+    },
+  });
+
+  const elkNodes: ElkNode[] = [];
+  const elkEdges: ElkExtendedEdge[] = [];
+
+  nodes.forEach((flowNode) => {
+    elkNodes.push({
+      id: flowNode.id,
+      width: flowNode.width ?? DEFAULT_WIDTH_HEIGHT,
+      height: flowNode.height ?? DEFAULT_WIDTH_HEIGHT,
     });
   });
 
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target);
+  edges.forEach((flowEdge) => {
+    elkEdges.push({
+      id: flowEdge.id,
+      targets: [flowEdge.target],
+      sources: [flowEdge.source],
+    });
   });
 
-  dagre.layout(dagreGraph);
+  const newGraph = await elk.layout({
+    id: 'root',
+    portConstraints: 'FIXED_ORDER',
+    children: elkNodes,
+    edges: elkEdges,
+  });
 
-  nodes.forEach((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id);
-    node.targetPosition = isHorizontal ? Position.Left : Position.Top;
-    node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
+  nodes.forEach((flowNode) => {
+    const node = newGraph?.children?.find((n: { id: string }) => n.id === flowNode.id);
+    if (node?.x && node?.y && node?.width && node?.height) {
+      flowNode.position = {
+        x: node.x - node.width / 2,
+        y: node.y - node.height / 2,
+      };
 
-    // shift dagre node positions to the top left, to
-    // match the React Flow node anchor point (top left)
-    node.position = {
-      x: nodeWithPosition.x - nodeWidth / 2,
-      y: nodeWithPosition.y - nodeHeight / 2,
-    };
-
-    return node;
+      flowNode.targetPosition = isHorizontal ? Position.Left : Position.Top;
+      flowNode.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
+    }
+    return flowNode;
   });
 
   return { layoutedNodes: nodes, layoutedEdges: edges };
@@ -396,6 +422,13 @@ export function regenerateUuids(steps: IStepProps[]) {
   const newSteps = steps.slice();
   newSteps.forEach((step, idx) => {
     step.UUID = step.name + idx;
+    if (step.branches) {
+      step.branches.forEach((branch, branchIdx) => {
+        branch.steps.forEach((branchStep, branchStepIdx) => {
+          branchStep.UUID = `s-${step.UUID}--b-${branchIdx}--${branchStep.name}${branchStepIdx}`;
+        });
+      });
+    }
   });
   return newSteps;
 }
