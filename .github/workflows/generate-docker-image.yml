@@ -1,4 +1,4 @@
-name: 🧐 Generate Docker image
+name: 🐳 Generate Docker image
 on:
   pull_request:
     branches:
@@ -13,7 +13,6 @@ on:
     - cron:  '12 0 * * *'
 jobs:
   build:
-    name: 👩🏼‍🏭 Build Docker Image 👩🏼‍🏭
     runs-on: ubuntu-latest
     steps:
       - name: Set up Docker Buildx

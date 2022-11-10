@@ -1,4 +1,4 @@
-name: Publish Package to npmjs
+name: 🏷 Bump Version & 📦 Publish Package to npm
 on:
   release:
     types: [created]
@@ -6,8 +6,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: 'Checkout source code'
+        uses: actions/checkout@v3
       # Setup .npmrc file to publish to npm
+      - name: 'cat package.json'
+        run: cat ./package.json
+      - name: 'Bump package.json version'
+        uses: 'phips28/gh-action-bump-version@master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          skip-tag: 'true'
+      - name: 'cat package.json'
+        run: cat ./package.json
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
@@ -15,6 +26,7 @@ jobs:
           scope: '@kaoto'
       - run: yarn
       - run: yarn build
-      - run: yarn publish
+      - name: 📦 Publish Package to npm
+        run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
