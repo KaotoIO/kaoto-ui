@@ -1,7 +1,4 @@
 name: 🏷 Bump Version & 📦 Publish Package to npm
-on:
-  release:
-    types: [created]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,7 +8,7 @@ jobs:
       - name: 'cat package.json'
         run: cat ./package.json
       - name: 'Bump package.json version'
-        uses: 'phips28/gh-action-bump-version@master'
+        uses: 'phips28/gh-action-bump-version@v9.0.42'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
