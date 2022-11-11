@@ -41,7 +41,7 @@ import {
   TimesIcon,
 } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface IKaotoToolbar {
   toggleCatalog: () => void;
@@ -58,6 +58,9 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
+  const focusIntegrationInput = useCallback(( element: HTMLInputElement ) => {
+    element?.focus();
+  }, []);
   const [localName, setLocalName] = useState(settings.name);
   const [nameValidation, setNameValidation] = useState<
     'default' | 'warning' | 'success' | 'error' | undefined
@@ -250,6 +253,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
                   id="edit-integration-name"
                   data-testid={'kaoto-toolbar--name__edit'}
                   type="text"
+                  ref={focusIntegrationInput}
                   onChange={(val) => {
                     // save to local state while typing
                     setLocalName(val);
