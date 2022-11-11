@@ -809,14 +809,6 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/envelope-bus@0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope-bus/-/envelope-bus-0.24.0.tgz#70afbf3a735a79d39a7f3a401124561b1dab56cf"
-  integrity sha512-22zMDGwbu2ekBiw1WYpU5GxS0GJLwcNy4Q2LxhhZr3pUbRYo0Bl3/eAlWRG1j8c6ZZNZuS5Oxb+EuYdDJRDJew==
-  dependencies:
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
 "@kie-tools-core/envelope-bus@0.25.0":
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope-bus/-/envelope-bus-0.25.0.tgz#4990c1fdafbde4db1fb4da2c8db87cb3f109c67d"
@@ -835,19 +827,6 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/guided-tour@0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/guided-tour/-/guided-tour-0.24.0.tgz#63126b24df57a45489a059c39dd03c40ffba924f"
-  integrity sha512-DAsOKvUzMMOXG5FI+jqeRa0d1gE/BXu/OZjPjRn0zagY2RxjKE+uJs4fJADqQt5Jj5DEubxN/5eo03zc1LPZcw==
-  dependencies:
-    "@kie-tools-core/envelope-bus" "0.24.0"
-    "@kie-tools-core/i18n" "0.24.0"
-    "@kie-tools-core/patternfly-base" "0.24.0"
-    "@patternfly/react-core" "^4.157.3"
-    "@patternfly/react-icons" "^4.11.17"
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
 "@kie-tools-core/guided-tour@0.25.0":
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/guided-tour/-/guided-tour-0.25.0.tgz#3317cacde1bf894af1508355bf66058c8f660fbb"
@@ -858,14 +837,6 @@
     "@kie-tools-core/patternfly-base" "0.25.0"
     "@patternfly/react-core" "^4.157.3"
     "@patternfly/react-icons" "^4.11.17"
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
-"@kie-tools-core/i18n@0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/i18n/-/i18n-0.24.0.tgz#8be8cf3167cf1c4746e55feb7a4ff0f7ae528ff9"
-  integrity sha512-nH0F5OvOEmZzCwie/jLyfmKfVesUb5D1UCgPUv61umUlgtbx6Df/38zybNw5DgySEZ9F0Muv5wCpBFkokToXrA==
-  dependencies:
     react "^17.0.2"
     react-dom "^17.0.2"
 
@@ -886,10 +857,10 @@
     "@kie-tools-core/operating-system" "0.25.0"
     react "^17.0.2"
 
-"@kie-tools-core/monaco-editor@0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/monaco-editor/-/monaco-editor-0.24.0.tgz#f846f84ff997b096c09a745174f3b92e1a6ec137"
-  integrity sha512-gwFP/qnJkxZ9CAgl578iK9RXqlbWoypFZgaxHSX6dlr9ilxRF5l5g63BS5PXcBgKoN0oHA8I6rWFtpzWE15AFw==
+"@kie-tools-core/monaco-editor@0.25.0":
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/monaco-editor/-/monaco-editor-0.25.0.tgz#71d6bedcdfa36d3b3bb5b29118ffaf6acc056b70"
+  integrity sha512-8ahltAfPuJjAO50R22Pa0FkEURNmQ50vStNbKeYgJr9hHVqU1iBuIfPV4Db3hmpzCuTg9lrHEK5D3oGwv69gbw==
   dependencies:
     monaco-editor "^0.33.0"
 
@@ -905,11 +876,6 @@
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.25.0.tgz#3323a14ced104310d2bda76d7be1bc4d873e9109"
   integrity sha512-Ua8KGj59ScnZSsxcuZDVXNnSbur66QYMopi54S7FzCExR3O87wdYrdzZZqhHP/V+Up0M1ZSNXWVyzCTWgOV3CQ==
-
-"@kie-tools-core/patternfly-base@0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.24.0.tgz#76352a3ea81b8db560fab771966a86a6856c1a7a"
-  integrity sha512-flN8OpRZ9Mzjp2AjDhHa5LtP9p9qKA252Nk7S7xVv9fGXwCcoEiIhYDddVKC+rfq8qxIlzN9fq96PqbZx1KNIw==
 
 "@kie-tools-core/patternfly-base@0.25.0":
   version "0.25.0"
@@ -2699,18 +2665,7 @@ browser-process-hrtime@^1.0.0:
   resolved "https://registry.yarnpkg.com/browser-process-hrtime/-/browser-process-hrtime-1.0.0.tgz#3c9b4b7d782c8121e56f10106d84c0d0ffc94626"
   integrity sha512-9o5UecI3GhkpM6DrXr69PblIuWxPKk9Y0jHBRhdocZ2y7YECBFCsHm79Pr3OyR2AvjhDkabFJaDJMYRazHgsow==
 
-browserslist@^4.0.0, browserslist@^4.14.5, browserslist@^4.16.6, browserslist@^4.20.3:
-  version "4.20.3"
-  resolved "https://registry.npmjs.org/browserslist/-/browserslist-4.20.3.tgz"
-  integrity sha512-NBhymBQl1zM0Y5dQT/O+xiLP9/rzOIQdKM/eMJBAq7yBgaB6krIYLGejrwVYnSHZdqjscB1SPuAjHwxjvN6Wdg==
-  dependencies:
-    caniuse-lite "^1.0.30001332"
-    electron-to-chromium "^1.4.118"
-    escalade "^3.1.1"
-    node-releases "^2.0.3"
-    picocolors "^1.0.0"
-
-browserslist@^4.21.3:
+browserslist@^4.0.0, browserslist@^4.14.5, browserslist@^4.16.6, browserslist@^4.20.3, browserslist@^4.21.3:
   version "4.21.4"
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.21.4.tgz#e7496bbc67b9e39dd0f98565feccdcb0d4ff6987"
   integrity sha512-CBHJJdDmgjl3daYjN5Cp5kbTf1mUhZoS+beLklHIvkOWscs83YAhLlF3Wsh/lciQYAcbBJgTOD44VtG31ZM4Hw==
@@ -2843,11 +2798,6 @@ caniuse-lite@^1.0.0:
   version "1.0.30001346"
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001346.tgz"
   integrity sha512-q6ibZUO2t88QCIPayP/euuDREq+aMAxFE5S70PkrLh0iTDj/zEhgvJRKC2+CvXY6EWc6oQwUR48lL5vCW6jiXQ==
-
-caniuse-lite@^1.0.30001332:
-  version "1.0.30001414"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001414.tgz#5f1715e506e71860b4b07c50060ea6462217611e"
-  integrity sha512-t55jfSaWjCdocnFdKQoO+d2ct9C59UZg4dY3OnUlSZ447r8pUtIKdp0hpAzrGFultmTC+Us+KpKi4GZl/LXlFg==
 
 caniuse-lite@^1.0.30001400:
   version "1.0.30001412"
@@ -3828,11 +3778,6 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
-
-electron-to-chromium@^1.4.118:
-  version "1.4.269"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.269.tgz#93ea2724b07f5f562daa7dd3740a1d28572b028b"
-  integrity sha512-7mHFONwp7MNvdyto1v70fCwk28NJMFgsK79op+iYHzz1BLE8T66a1B2qW5alb8XgE0yi3FL3ZQjSYZpJpF6snw==
 
 electron-to-chromium@^1.4.251:
   version "1.4.266"
@@ -6272,9 +6217,9 @@ loader-runner@^4.2.0:
   integrity sha512-3R/1M+yS3j5ou80Me59j7F9IMs4PXs3VqRrm0TU3AbKPxlmpoY1TNscJV/oGJXo8qCatFGTfDbY6W6ipGOYXfg==
 
 loader-utils@^2.0.0, loader-utils@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-2.0.2.tgz#d6e3b4fb81870721ae4e0868ab11dd638368c129"
-  integrity sha512-TM57VeHptv569d/GKh6TAYdzKblwDNiumOdkFnejjD0XwTH87K90w3O7AiJRqdQoXygvi1VQTJTLGhJl7WqA7A==
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-2.0.3.tgz#d4b15b8504c63d1fc3f2ade52d41bc8459d6ede1"
+  integrity sha512-THWqIsn8QRnvLl0shHYVBN9syumU8pYWEHPTmkiVGd+7K5eFNVSY6AJhRvgGF70gg1Dz+l/k8WicvFCxdEs60A==
   dependencies:
     big.js "^5.2.2"
     emojis-list "^3.0.0"
@@ -6706,7 +6651,7 @@ node-int64@^0.4.0:
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
   integrity sha512-O5lz91xSOeoXP6DulyHfllpq+Eg00MWitZIbtPfoSEvqIHdl5gfcY6hYzDWnj0qD5tz52PI08u9qUvSVeUBeHw==
 
-node-releases@^2.0.3, node-releases@^2.0.6:
+node-releases@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.6.tgz#8a7088c63a55e493845683ebf3c828d8c51c5503"
   integrity sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==
@@ -9221,10 +9166,10 @@ webpack-sources@^3.2.3:
   resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-3.2.3.tgz#2d4daab8451fd4b240cc27055ff6a0c2ccea0cde"
   integrity sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==
 
-webpack@5.74.0, webpack@^5.74.0:
-  version "5.74.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.74.0.tgz#02a5dac19a17e0bb47093f2be67c695102a55980"
-  integrity sha512-A2InDwnhhGN4LYctJj6M1JEaGL7Luj6LOmyBHjcI8529cm5p6VXiTIW2sn6ffvEAKmveLzvu4jrihwXtPojlAA==
+webpack@5.75.0, webpack@^5.74.0:
+  version "5.75.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.75.0.tgz#1e440468647b2505860e94c9ff3e44d5b582c152"
+  integrity sha512-piaIaoVJlqMsPtX/+3KTTO6jfvrSYgauFVdt8cr9LTHKmcq/AMd4mhzsiP7ZF/PGRNPGA8336jldh9l2Kt2ogQ==
   dependencies:
     "@types/eslint-scope" "^3.7.3"
     "@types/estree" "^0.0.51"
