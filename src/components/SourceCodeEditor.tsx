@@ -58,13 +58,6 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
 
   const handleEditorDidMount = (editor: EditorDidMount['editor']) => {
     editorRef.current = editor;
-
-    editorRef.current?.onDidChangeModelContent(() => {
-      const editorYAML = editorRef.current?.getValue();
-      if (editorYAML) {
-        debounced(editorYAML);
-      }
-    });
   };
 
   const debounced = useDebouncedCallback((value: string) => {
@@ -123,7 +116,8 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       <CodeEditor
         code={sourceCode ?? props.initialData}
         className="code-editor"
-        height="650px"
+        height="80vh"
+        onCodeChange={debounced}
         language={(props.language as Language) ?? Language.yaml}
         onEditorDidMount={handleEditorDidMount}
         toolTipPosition="right"
