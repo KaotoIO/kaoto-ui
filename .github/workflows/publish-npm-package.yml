@@ -1,0 +1,29 @@
+name: 🏷 Bump Version & 📦 Publish Package to npm
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout source code'
+        uses: actions/checkout@v3
+      - name: 'cat package.json'
+        run: cat ./package.json
+      - name: 'Bump package.json version'
+        uses: 'phips28/gh-action-bump-version@v9.0.42'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          skip-tag: 'true'
+      - name: 'cat package.json'
+        run: cat ./package.json
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@kaoto'
+      - run: yarn
+      - run: yarn build
+      - name: 📦 Publish Package to npm
+        run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

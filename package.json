@@ -4,7 +4,7 @@
   "private": false,
   "federatedModuleName": "kaoto",
   "engines": {
-    "node": ">=14.x"
+    "node": ">=16.x"
   },
   "main": "dist/lib/index.js",
   "types": "dist/lib/index.d.ts",
