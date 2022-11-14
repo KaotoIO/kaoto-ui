@@ -1,6 +1,6 @@
 {
   "name": "@kaoto/kaoto-ui",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "private": false,
   "federatedModuleName": "kaoto",
   "engines": {
@@ -167,7 +167,7 @@
   },
   "files": [
     "node_modules",
-    "dist/lib",
+    "dist",
     "src",
     "tsconfig.json"
   ]
