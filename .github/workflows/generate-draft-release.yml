@@ -1,0 +1,16 @@
+name: 🏷 Generate Draft Release 🎁
+
+on:
+  push:
+    tags:
+      - 'v*'
+    
+jobs:
+  build:
+    name: Create draft release
+    runs-on: ubuntu-latest 
+    steps:
+    - name: Create Release
+      uses: ncipollo/release-action@v1.11.2
+      with:
+        draft: true
