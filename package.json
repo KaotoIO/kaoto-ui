@@ -43,7 +43,7 @@
     "@patternfly/react-log-viewer": "4.87.50",
     "@patternfly/react-table": "4.111.33",
     "@rhoas/app-services-ui-shared": "^0.16.4",
-    "ajv": "^8.8.2",
+    "ajv": "^8.11.2",
     "dagre": "^0.8.5",
     "immer": "^9.0.16",
     "lodash.isequal": "^4.5.0",
