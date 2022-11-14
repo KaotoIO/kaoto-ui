@@ -1,4 +1,4 @@
-name: 🧪 Unit Tests (Jest) 🧪
+name: 🧪 Unit Tests (Jest)
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
 
 jobs:
   build:
+    name: 🧪 Unit Tests (Jest)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
