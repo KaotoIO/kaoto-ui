@@ -1,4 +1,4 @@
-name: 🏷 Generate Draft Release 🎁
+name: 🏷 Generate Draft Release
 
 on:
   push:
