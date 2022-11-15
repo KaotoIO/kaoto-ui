@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🛂 Find the right frontend major and minor version
-        run: 'echo "frontend_version=echo "${{ env.release.tag_name }}" | sed -En 's/v([0-9]+\.)([0-9]+\.)?([0-9]+)/v\1\2/p'" >> $GITHUB_ENV'
+        run: 'echo "frontend_version=echo ${{ env.release.tag_name }}" | sed -En "s/v([0-9]+\.)([0-9]+\.)?([0-9]+)/v\1\2/p" >> $GITHUB_ENV'
       - name: 🛃 Find the right backend version
         run: 'echo "backend_version=$(git tag --list | grep ${{ env.frontend_version }} | tail -n 1)" >> $GITHUB_ENV'
       - name: 🚟 Checkout backend
