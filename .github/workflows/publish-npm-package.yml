@@ -15,6 +15,7 @@ jobs:
           scope: '@kaoto'
       - run: yarn
       - run: yarn build
+      - run: yarn build:lib
       - name: 📦 Publish Package to npm
         run: yarn publish
         env:
