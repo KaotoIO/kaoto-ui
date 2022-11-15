@@ -9,7 +9,7 @@ jobs:
     name: 👷‍♀️ Build Frontend
     runs-on: ubuntu-latest
     steps:
-      - name: 🚟 Checkout backend
+      - name: 🚟 Checkout frontend
         uses: actions/checkout@v3
       - name: 🚀 Setup Node
         uses: actions/setup-node@v3
@@ -56,7 +56,7 @@ jobs:
           java-version: 17
           check-latest: true
       - name: 🔥 Cache Maven packages
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -88,7 +88,7 @@ jobs:
             file: api-1.0.0-SNAPSHOT-runner
     steps:
       - name: 🛂 Find the right frontend major and minor version
-        run: 'echo "frontend_version=echo "${{ env.release.tag_name }}" | sed -En 's/v([0-9]+\.)([0-9]+\.)?([0-9]+)/v\1\2/p'" >> $GITHUB_ENV'
+        run: 'echo "frontend_version=${{ env.release.tag_name }}" | sed -En "s/v([0-9]+\.)([0-9]+\.)?([0-9]+)/v\1\2/p" >> $GITHUB_ENV'
       - name: 🛃 Find the right backend version
         run: 'echo "backend_version=$(git tag --list | grep ${{ env.frontend_version }} | tail -n 1)" >> $GITHUB_ENV'
       - name: 🚟 Checkout backend
@@ -115,7 +115,7 @@ jobs:
           version: '22.2.0'
           cache: 'maven'
       - name: 🔥 Cache Maven packages
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
