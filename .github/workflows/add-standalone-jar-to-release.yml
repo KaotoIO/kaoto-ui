@@ -1,0 +1,131 @@
+name: 👩‍💻 Add Standalone Jar to Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-frontend:
+    name: 👷‍♀️ Build Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚟 Checkout backend
+        uses: actions/checkout@v3
+      - name: 🚀 Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@kaoto'
+      - name: 🛸 Build Frontend
+        run: yarn install --mode=skip-build && KAOTO_API="" yarn run build
+      - name: 📩 Save dist folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: /app/kaoto-ui/dist/
+          retention-days: 1
+
+  build-standalone-jar:
+    name: 👩‍🏭 Build standalone jar
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛂 Find the right frontend major and minor version
+        run: 'echo "frontend_version=echo "${{ env.release.tag_name }}" | sed -En 's/v([0-9]+\.)([0-9]+\.)?([0-9]+)/v\1\2/p'" >> $GITHUB_ENV'
+      - name: 🛃 Find the right backend version
+        run: 'echo "backend_version=$(git tag --list | grep ${{ env.frontend_version }} | tail -n 1)" >> $GITHUB_ENV'
+      - name: 🚟 Checkout backend
+        uses: actions/checkout@v3
+        with:
+          repository: 'KaotoIO/kaoto-backend'
+          ref: '${{ env.backend_version }}'
+          path: 'backend'
+      - name: 🚧 Remove default html resources
+        run: 'rm -r api/src/main/resources/META-INF/resources/'
+      - name: 📨 Retrieve saved dist folder
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: api/src/main/resources/META-INF/
+      - name: 👩🏻‍💼 Move frontend to proper folder
+        run: 'mv api/src/main/resources/META-INF/dist/ api/src/main/resources/META-INF/resources/'
+      - name: 🥸 Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: 17
+          check-latest: true
+      - name: 🔥 Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: 🤳 Build Jar
+        run: mvn install -DskipTests
+      - name: 📦 Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: api/target/api-1.0.0-SNAPSHOT.jar
+          asset_name: standalone-jar
+          tag: ${{ github.ref }}
+
+  build-native:
+    name: 👩🏼‍🏭 Build Native Quarkus for ${{ matrix.os }} 👩🏼‍🏭
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset_name: kaoto-linux-amd64
+            file: api-1.0.0-SNAPSHOT-runner
+          - os: windows-latest
+            asset_name: kaoto-windows-amd64
+            file: api-1.0.0-SNAPSHOT-runner.exe
+          - os: macos-latest
+            asset_name: kaoto-macos-amd64
+            file: api-1.0.0-SNAPSHOT-runner
+    steps:
+      - name: 🛂 Find the right frontend major and minor version
+        run: 'echo "frontend_version=echo "${{ env.release.tag_name }}" | sed -En 's/v([0-9]+\.)([0-9]+\.)?([0-9]+)/v\1\2/p'" >> $GITHUB_ENV'
+      - name: 🛃 Find the right backend version
+        run: 'echo "backend_version=$(git tag --list | grep ${{ env.frontend_version }} | tail -n 1)" >> $GITHUB_ENV'
+      - name: 🚟 Checkout backend
+        uses: actions/checkout@v3
+        with:
+          repository: 'KaotoIO/kaoto-backend'
+          ref: '${{ env.backend_version }}'
+          path: 'backend'
+      - name: 🚧 Remove default html resources
+        run: 'rm -r api/src/main/resources/META-INF/resources/'
+      - name: 📨 Retrieve saved dist folder
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: api/src/main/resources/META-INF/
+      - name: 👩🏻‍💼 Move frontend to proper folder
+        run: 'mv api/src/main/resources/META-INF/dist/ api/src/main/resources/META-INF/resources/'
+      - name: 🥸 Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: '22.2.0'
+          cache: 'maven'
+      - name: 🔥 Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: 🤳 Build Native Quarkus
+        run: mvn install -Pnative -DskipTests
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: api/target/${{ matrix.file }}
+          asset_name: ${{ matrix.asset_name }}
+          tag: ${{ github.ref }}
