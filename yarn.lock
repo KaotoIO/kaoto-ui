@@ -9354,10 +9354,10 @@ yauzl@^2.10.0, yauzl@^2.4.2:
     buffer-crc32 "~0.2.3"
     fd-slicer "~1.1.0"
 
-zundo@^2.0.0-beta.5:
-  version "2.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.5.tgz#e1cb2e1a4756ac2aff79240ceead18964a0116b3"
-  integrity sha512-TgDX8SSr9P9x58nHQUQdKgfp+jcwJGmT90XfcFjLCZhCSFH/EWLWIgV03uzGG/OpUjLcjnTWZvfzDkYgHE3JyQ==
+zundo@^2.0.0-beta.6:
+  version "2.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.6.tgz#6a6a5fd42178b8d2f64fed46b70c758c35510804"
+  integrity sha512-t9rYHfDRWFzI9Ecng1sdn8Ll2W45IT9bE+xCbjXnzoOedtrf1zqAIBz1FoEQfFFsKzPRWFDV3IHzQLcYanfi1A==
 
 zustand@^4.1.1, zustand@^4.1.4:
   version "4.1.4"
