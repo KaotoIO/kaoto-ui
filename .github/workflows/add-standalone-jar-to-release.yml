@@ -34,6 +34,8 @@ jobs:
         run: 'echo "frontend_version=${{ env.release.tag_name }}" | sed -En "s/v([0-9]+\.)([0-9]+\.)?([0-9]+)/v\1\2/p" >> $GITHUB_ENV'
       - name: 🛃 Find the right backend version
         run: 'echo "backend_version=$(git tag --list | grep ${{ env.frontend_version }} | tail -n 1)" >> $GITHUB_ENV'
+      - name: 🛃 Find the version based on code
+        run: 'echo "api_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
       - name: 🚟 Checkout backend
         uses: actions/checkout@v3
         with:
@@ -67,7 +69,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: api/target/api-1.0.0-SNAPSHOT.jar
+          file: api/target/api-${{ env.api_version }}.jar
           asset_name: standalone-jar
           tag: ${{ github.ref }}
 
@@ -79,18 +81,20 @@ jobs:
         include:
           - os: ubuntu-latest
             asset_name: kaoto-linux-amd64
-            file: api-1.0.0-SNAPSHOT-runner
+            file: -runner
           - os: windows-latest
             asset_name: kaoto-windows-amd64
-            file: api-1.0.0-SNAPSHOT-runner.exe
+            file: -runner.exe
           - os: macos-latest
             asset_name: kaoto-macos-amd64
-            file: api-1.0.0-SNAPSHOT-runner
+            file: -runner
     steps:
       - name: 🛂 Find the right frontend major and minor version
         run: 'echo "frontend_version=${{ env.release.tag_name }}" | sed -En "s/v([0-9]+\.)([0-9]+\.)?([0-9]+)/v\1\2/p" >> $GITHUB_ENV'
       - name: 🛃 Find the right backend version
         run: 'echo "backend_version=$(git tag --list | grep ${{ env.frontend_version }} | tail -n 1)" >> $GITHUB_ENV'
+      - name: 🛃 Find the version based on code
+        run: 'echo "api_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
       - name: 🚟 Checkout backend
         uses: actions/checkout@v3
         with:
@@ -126,6 +130,6 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: api/target/${{ matrix.file }}
+          file: api/target/api-${{ env.api_version }}${{ matrix.file }}
           asset_name: ${{ matrix.asset_name }}
           tag: ${{ github.ref }}
