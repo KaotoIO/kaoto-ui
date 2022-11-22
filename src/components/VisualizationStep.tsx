@@ -110,7 +110,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             <Handle
               isConnectable={false}
               type="target"
-              position={layout === 'LR' ? Position.Left : Position.Top}
+              position={layout === 'RIGHT' ? Position.Left : Position.Top}
               id="a"
               style={{ borderRadius: 0 }}
             />
@@ -164,7 +164,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             <Handle
               isConnectable={false}
               type="source"
-              position={layout === 'LR' ? Position.Right : Position.Bottom}
+              position={layout === 'RIGHT' ? Position.Right : Position.Bottom}
               id="b"
               style={{ borderRadius: 0 }}
             />
@@ -181,7 +181,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           </div>
           <Handle
             type="source"
-            position={layout === 'LR' ? Position.Right : Position.Bottom}
+            position={layout === 'RIGHT' ? Position.Right : Position.Bottom}
             id="b"
             style={{ borderRadius: 0 }}
             isConnectable={false}

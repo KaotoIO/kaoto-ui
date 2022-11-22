@@ -29,8 +29,9 @@ interface IVisualization {
 const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
+  // const rendererSize = getBoundingClientRect();
   const defaultViewport: Viewport = {
-    x: window.innerWidth / 2 - 80,
+    x: window.innerWidth / 2,
     y: window.innerHeight / 2 - 160,
     zoom: 1.2,
   };
@@ -53,14 +54,13 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   // initial loading of visualization steps
   useEffect(() => {
     const { combinedNodes, combinedEdges } = buildNodesAndEdges(integrationJson.steps);
-    const { layoutedNodes, layoutedEdges } = getLayoutedElements(
-      combinedNodes,
-      combinedEdges,
-      layout
-    );
-
-    setNodes(layoutedNodes);
-    setEdges(layoutedEdges);
+    getLayoutedElements(combinedNodes, combinedEdges, layout)
+      .then((res) => {
+        const { layoutedNodes, layoutedEdges } = res;
+        setNodes(layoutedNodes);
+        setEdges(layoutedEdges);
+      })
+      .catch((e) => console.error(e));
   }, []);
 
   /**
@@ -75,24 +75,28 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     });
 
     const { combinedNodes, combinedEdges } = buildNodesAndEdges(integrationJson.steps);
-    const { layoutedNodes, layoutedEdges } = getLayoutedElements(
-      combinedNodes,
-      combinedEdges,
-      layout
-    );
-
-    setNodes(layoutedNodes);
-    setEdges(layoutedEdges);
+    getLayoutedElements(combinedNodes, combinedEdges, layout)
+      .then((res) => {
+        const { layoutedNodes, layoutedEdges } = res;
+        setNodes(layoutedNodes);
+        setEdges(layoutedEdges);
+      })
+      .catch((e) => console.error(e));
 
     previousIntegrationJson.current = integrationJson;
   }, [integrationJson]);
 
   useEffect(() => {
     if (previousLayout.current === layout) return;
-    const { layoutedNodes, layoutedEdges } = getLayoutedElements(nodes, edges, layout);
 
-    setNodes([...layoutedNodes]);
-    setEdges([...layoutedEdges]);
+    getLayoutedElements(nodes, edges, layout)
+      .then((res) => {
+        const { layoutedNodes, layoutedEdges } = res;
+        setNodes(layoutedNodes);
+        setEdges(layoutedEdges);
+      })
+      .catch((e) => console.error(e));
+
     previousLayout.current = layout;
   }, [layout]);
 
