@@ -1,20 +1,23 @@
 import {
   Catalog,
-  KaotoToolbar,
-  Visualization,
-  SourceCodeEditor,
   Console,
   KaotoDrawer,
+  KaotoToolbar,
+  SourceCodeEditor,
+  Visualization,
 } from '../components';
+import { SourceCodeEditorModal } from '../components/SourceCodeEditorModal';
 import './Dashboard.css';
+import { useSettingsStore } from '@kaoto/store';
+import { CodeEditorMode } from '@kaoto/types';
 import {
-  Page,
-  PageSection,
+  Banner,
+  DrawerColorVariant,
+  DrawerContentBody,
   Flex,
   FlexItem,
-  Banner,
-  DrawerContentBody,
-  DrawerColorVariant,
+  Page,
+  PageSection,
 } from '@patternfly/react-core';
 import { TerminalIcon } from '@patternfly/react-icons';
 import { useRef, useState } from 'react';
@@ -24,6 +27,8 @@ const Dashboard = () => {
   const [bottomDrawerExpanded, setBottomDrawerExpanded] = useState(false);
   const [leftDrawerExpanded, setLeftDrawerExpanded] = useState(false);
   const leftDrawerModel = useRef('catalog');
+  const [codeEditMode, setCodeEditMode] = useState(false);
+  const { settings } = useSettingsStore((state) => state);
 
   const drawerCatalog = (
     <DrawerContentBody style={{ padding: '10px' }}>
@@ -45,10 +50,28 @@ const Dashboard = () => {
 
   const drawerCodeEditor = (
     <DrawerContentBody hasPadding={false}>
-      <SourceCodeEditor />
+      <SourceCodeEditor
+        mode={settings.editorMode}
+        // we want to have editable editor in TWO_WAY_SYNC mode
+        editable={settings.editorMode === CodeEditorMode.TWO_WAY_SYNC}
+        editAction={() => {
+          setLeftDrawerExpanded(false);
+          setCodeEditMode(true);
+        }}
+      />
     </DrawerContentBody>
   );
 
+  const handleToggleCodeEditor = () => {
+    if (leftDrawerModel.current === 'code') {
+      // it's already showing the code editor, just toggle it
+      setLeftDrawerExpanded(!leftDrawerExpanded);
+    } else {
+      setLeftDrawerContent(drawerCodeEditor);
+      leftDrawerModel.current = 'code';
+      setLeftDrawerExpanded(true);
+    }
+  };
   const handleToggleCatalog = () => {
     if (leftDrawerModel.current === 'catalog') {
       // it's already showing the catalog, just toggle it
@@ -88,24 +111,19 @@ const Dashboard = () => {
               <PageSection padding={{ default: 'noPadding' }}>
                 <KaotoToolbar
                   toggleCatalog={handleToggleCatalog}
-                  toggleCodeEditor={() => {
-                    if (leftDrawerModel.current === 'code') {
-                      // it's already showing the code editor, just toggle it
-                      setLeftDrawerExpanded(!leftDrawerExpanded);
-                    } else {
-                      // currently showing catalog content, set to
-                      // code editor, close if already open
-                      setLeftDrawerContent(drawerCodeEditor);
-                      leftDrawerModel.current = 'code';
-
-                      if (!leftDrawerExpanded) {
-                        setLeftDrawerExpanded(!leftDrawerExpanded);
-                      }
-                    }
-                  }}
+                  toggleCodeEditor={handleToggleCodeEditor}
                 />
 
                 {/* LEFT DRAWER: CATALOG & CODE EDITOR */}
+                {codeEditMode && settings.editorMode === CodeEditorMode.FREE_EDIT && (
+                  <SourceCodeEditorModal
+                    isOpen={codeEditMode}
+                    close={() => {
+                      setCodeEditMode(false);
+                      setLeftDrawerExpanded(true);
+                    }}
+                  />
+                )}
                 <KaotoDrawer
                   colorVariant={DrawerColorVariant.light200}
                   dataTestId={'kaoto-left-drawer'}
