@@ -68,7 +68,7 @@
     "zustand": "^4.1.4"
   },
   "devDependencies": {
-    "@4tw/cypress-drag-drop": "^2.2.1",
+    "@4tw/cypress-drag-drop": "^2.2.2",
     "@module-federation/typescript": "^2.0.0",
     "@testing-library/dom": "^8.19.0",
     "@testing-library/jest-dom": "^5.16.5",
