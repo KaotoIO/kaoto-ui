@@ -9,7 +9,6 @@ import {
   VisualizationStepViews,
 } from '@kaoto/components';
 import {
-  buildBranch,
   buildBranchSpecialEdges,
   buildEdges,
   buildNodesFromSteps,
@@ -29,7 +28,6 @@ interface IVisualization {
 const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
-  // const rendererSize = getBoundingClientRect();
   const defaultViewport: Viewport = {
     x: window.innerWidth / 2,
     y: window.innerHeight / 2 - 160,
@@ -53,9 +51,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
   // initial loading of visualization steps
   useEffect(() => {
-    // const { combinedNodes, combinedEdges } = buildNodesAndEdges(integrationJson.steps);
     const { stepNodes, stepEdges } = buildNodesAndEdges(integrationJson.steps);
-    // getLayoutedElements(combinedNodes, combinedEdges, layout)
+
     getLayoutedElements(stepNodes, stepEdges, layout)
       .then((res) => {
         const { layoutedNodes, layoutedEdges } = res;
@@ -76,9 +73,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       setViews(views);
     });
 
-    // const { combinedNodes, combinedEdges } = buildNodesAndEdges(integrationJson.steps);
     const { stepNodes, stepEdges } = buildNodesAndEdges(integrationJson.steps);
-    // getLayoutedElements(combinedNodes, combinedEdges, layout)
     getLayoutedElements(stepNodes, stepEdges, layout)
       .then((res) => {
         const { layoutedNodes, layoutedEdges } = res;
@@ -113,36 +108,22 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   );
 
   function buildNodesAndEdges(steps: IStepProps[]) {
-    // const combinedEdges: IVizStepPropsEdge[] = [];
-    // const combinedNodes: IVizStepNode[] = [];
-
-    // const { stepNodes, branchOriginStepNodes } = buildNodesFromSteps(steps, layout, {
-    //   handleDeleteStep,
-    // });
     const stepNodes = buildNodesFromSteps(steps, layout, {
       handleDeleteStep,
     });
 
-    // const { branchNodes, branchStepEdges } = buildBranch(branchOriginStepNodes, layout);
+    const filteredNodes = stepNodes.filter((node) => !node.data.branchStep);
+    // console.table(filteredNodes);
+    let stepEdges: IVizStepPropsEdge[] = buildEdges(filteredNodes);
 
-    let stepEdges: IVizStepPropsEdge[] = buildEdges(stepNodes);
-    // const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(branchNodes, stepNodes);
     const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(stepNodes);
     // console.table(branchSpecialEdges);
     stepEdges = stepEdges.concat(...branchSpecialEdges);
-    console.table(stepEdges);
-
-    // combinedNodes.push(...stepNodes, ...branchNodes);
-    // combinedEdges.push(...stepEdges, ...branchStepEdges);
-    // combinedEdges.push(...branchSpecialEdges);
-
-    // console.table(combinedNodes);
-    // console.table(combinedEdges);
+    // console.table(stepEdges);
 
     // console.table(stepNodes);
     // console.table(stepEdges);
 
-    // return { combinedNodes, combinedEdges };
     return { stepNodes, stepEdges };
   }
 
