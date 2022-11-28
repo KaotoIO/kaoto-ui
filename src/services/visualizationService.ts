@@ -1,43 +1,15 @@
 import { useIntegrationJsonStore } from '@kaoto/store';
-import { IStepProps, IStepPropsBranch, IVizStepNode, IVizStepPropsEdge } from '@kaoto/types';
+import { IStepProps, IVizStepNode, IVizStepPropsEdge } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import { ElkExtendedEdge, ElkNode } from 'elkjs';
 import { MarkerType, Position } from 'reactflow';
 
 const ELK = require('elkjs');
 
-export function buildBranch(
-  branchOriginStepNodes: IVizStepNode[],
-  layout: string
-): {
-  branchNodes: IVizStepNode[];
-  branchStepEdges: IVizStepPropsEdge[];
-} {
-  const allNodes: IVizStepNode[] = [];
-  const stepEdges: IVizStepPropsEdge[] = [];
-
-  // loop over step nodes that contain branches, create a branch group node for each
-  branchOriginStepNodes.forEach((branchOriginStepNode) => {
-    branchOriginStepNode.data.step.branches.forEach((branch: IStepPropsBranch) => {
-      // create nodes for individual steps within a branch group
-      const stepNodes = buildNodesFromSteps(branch.steps, layout, undefined, {
-        branchIdentifier: branch.identifier,
-        originalStepIndex: branchOriginStepNode.data.originalStepNodeIdx,
-      });
-
-      // create the per-branch-group normal step edges, special edges are handled later
-      stepEdges.push(...buildEdges(stepNodes));
-      allNodes.push(...stepNodes);
-    });
-  });
-
-  return { branchNodes: allNodes, branchStepEdges: stepEdges };
-}
-
 // for nodes within a branch
 export function buildBranchNodeParams(
   step: IStepProps,
-  newId: string,
+  nodeId: string,
   layout: string,
   dataProps?: { [prop: string]: any }
 ): IVizStepNode {
@@ -49,74 +21,50 @@ export function buildBranchNodeParams(
       icon: step.icon,
       ...dataProps,
     },
-    id: newId,
+    id: nodeId,
     position: { x: 0, y: 0 },
     draggable: true,
     sourcePosition: layout === 'RIGHT' ? Position.Top : Position.Right,
     targetPosition: layout === 'RIGHT' ? Position.Bottom : Position.Left,
     type: 'step',
-  };
+  } as IVizStepNode;
 }
 
 // Builds ONLY the edge cases where we need to connect branches to prev/next steps
 export function buildBranchSpecialEdges(stepNodes: IVizStepNode[]): IVizStepPropsEdge[] {
   const specialEdges: IVizStepPropsEdge[] = [];
-  console.table(stepNodes);
 
   stepNodes.forEach((node) => {
     if (node.type === 'group') return;
 
-    // const ogNodeIndex = findNodeIdxWithUUID(node.data?.branchParentUuid, stepNodes);
-    const parentNodeIndex = findNodeIdxWithUUID(node.data?.parentUuid, stepNodes);
-    const ogNodeNextIndex = findNodeIdxWithUUID(node.data?.branchParentNextUuid, stepNodes);
+    const parentNodeIndex = findNodeIdxWithUUID(node.data.parentUuid, stepNodes);
+    const ogNodeNextIndex = findNodeIdxWithUUID(node.data.branchParentNextUuid, stepNodes);
 
     // handle all "normal" steps within a branch
-    if (node.data?.branchStep && !node.data?.isLastStep) {
-      const branchStepNextIdx = findNodeIdxWithUUID(node.data?.nextStepUuid, stepNodes);
+    if (node.data.branchStep && !node.data.isLastStep && !containsBranches(node.data.step)) {
+      const branchStepNextIdx = findNodeIdxWithUUID(node.data.nextStepUuid, stepNodes);
       if (stepNodes[branchStepNextIdx]) {
-        specialEdges.push(buildEdgeDefaultParams(node, stepNodes[branchStepNextIdx]));
+        specialEdges.push(buildEdgeParams(node, stepNodes[branchStepNextIdx], 'default'));
       }
     }
 
     // handle special first step, needs to be connected to its immediate parent
-    if (node.data?.isFirstStep) {
+    if (node.data.isFirstStep) {
       const ogNodeStep = stepNodes[parentNodeIndex];
-      const firstStep = node;
+      let edgeProps = buildEdgeParams(ogNodeStep, node, 'default');
 
-      let edgeProps: { id: string; source: string; target: string; [prop: string]: any } = {
-        arrowHeadType: 'arrowclosed',
-        id: `e-${ogNodeStep?.id}>${firstStep.id!}`,
-        markerEnd: {
-          type: MarkerType.Arrow,
-        },
-        source: ogNodeStep?.id,
-        target: firstStep.id!,
-        // users should not be able to add steps in between
-        type: 'default',
-      };
-
-      if (node.data?.branchIdentifier) edgeProps.label = node.data.branchIdentifier;
+      if (node.data.branchIdentifier) edgeProps.label = node.data.branchIdentifier;
 
       specialEdges.push(edgeProps);
     }
 
     // handle special last steps
-    if (node.data?.isLastStep) {
-      const finalStep = node;
+    if (node.data.isLastStep) {
       const nextStep = stepNodes[ogNodeNextIndex];
 
       if (nextStep) {
         // it needs to merge back
-        specialEdges.push({
-          arrowHeadType: 'arrowclosed',
-          id: `e-${finalStep.id!}>${nextStep.id}`,
-          markerEnd: {
-            type: MarkerType.Arrow,
-          },
-          source: finalStep.id!,
-          target: nextStep.id,
-          type: 'default',
-        });
+        specialEdges.push(buildEdgeParams(node, nextStep, 'default'));
       }
     }
   });
@@ -124,21 +72,20 @@ export function buildBranchSpecialEdges(stepNodes: IVizStepNode[]): IVizStepProp
   return specialEdges;
 }
 
-export function buildEdgeDefaultParams(
-  currentStep: IVizStepNode,
-  nextStep: IVizStepNode,
-  props?: { [prop: string]: any }
+export function buildEdgeParams(
+  sourceStep: IVizStepNode,
+  targetStep: IVizStepNode,
+  type?: string
 ): IVizStepPropsEdge {
   return {
     arrowHeadType: 'arrowclosed',
-    id: `e-${currentStep.id}>${nextStep.id}`,
+    id: `e-${sourceStep.id}>${targetStep.id}`,
     markerEnd: {
       type: MarkerType.Arrow,
     },
-    source: currentStep.id,
-    target: nextStep.id,
-    type: currentStep.data.kind === 'EIP' || currentStep.data.step?.branches ? 'default' : 'insert',
-    ...props,
+    source: sourceStep.id,
+    target: targetStep.id,
+    type: type ?? 'default',
   };
 }
 
@@ -152,8 +99,15 @@ export function buildEdges(nodes: IVizStepNode[]): IVizStepPropsEdge[] {
 
   nodes.forEach((node) => {
     const nextNodeIdx = findNodeIdxWithUUID(node.data.nextStepUuid, nodes);
-    if (nodes[nextNodeIdx] && !(node.data.step.branches?.length > 0)) {
-      stepEdges.push(buildEdgeDefaultParams(node, nodes[nextNodeIdx]));
+
+    if (node.data.step && nodes[nextNodeIdx] && !containsBranches(node.data.step)) {
+      stepEdges.push(
+        buildEdgeParams(
+          node,
+          nodes[nextNodeIdx],
+          node.data.branchInfo || node.data.step.branches ? 'default' : 'insert'
+        )
+      );
     }
   });
 
@@ -168,7 +122,6 @@ export function buildNodeDefaultParams(
 ): IVizStepNode {
   return {
     data: {
-      // UUID: step.UUID,
       kind: step.kind,
       label: truncateString(step.name, 14),
       step,
@@ -183,7 +136,7 @@ export function buildNodeDefaultParams(
     width: 80,
     height: 80,
     ...props,
-  };
+  } as IVizStepNode;
 }
 
 /**
@@ -199,33 +152,27 @@ export function buildNodesFromSteps(
 ) {
   let stepNodes: IVizStepNode[] = [];
   let id = 0;
-  let getId = (uuid: string) => `node_${id++}-${uuid}-${getRandomIntInclusive(100, 999)}`;
+  let getId = (uuid: string) => `node_${id++}-${uuid}-${getRandomArbitraryNumber()}`;
 
   // if no steps or first step isn't START or an EIP, create a dummy placeholder step
   if (steps.length === 0 || (!isFirstStepStart(steps) && !isFirstStepEip(steps) && !branchInfo)) {
-    insertAddStepPlaceholder(stepNodes, { id: getId('') });
+    insertAddStepPlaceholder(stepNodes, { id: getId(''), nextStepUuid: steps[0]?.UUID });
   }
 
   steps.forEach((step, index) => {
     let currentStep: IVizStepNode;
 
     // build the default parameters for a node
-    // if (step.kind === 'EIP') {
     if (branchInfo) {
       // we are within a branch
-      currentStep = buildBranchNodeParams(
-        step,
-        getId(step.UUID ?? `${step.name}${index}`),
-        layout,
-        {
-          ...props,
-          ...branchInfo,
-          branchStep: true,
-          isFirstStep: index === 0,
-          isLastStep: index === steps.length - 1,
-          nextStepUuid: steps[index + 1]?.UUID,
-        }
-      );
+      currentStep = buildBranchNodeParams(step, getId(step.UUID), layout, {
+        ...props,
+        ...branchInfo,
+        branchStep: true,
+        isFirstStep: index === 0,
+        isLastStep: index === steps.length - 1 && !step.branches?.length,
+        nextStepUuid: steps[index + 1]?.UUID,
+      });
       stepNodes.push(currentStep);
     } else {
       currentStep = buildNodeDefaultParams(step, getId(step.UUID ?? ''), {
@@ -242,12 +189,11 @@ export function buildNodesFromSteps(
             branchIdentifier: branch.identifier,
 
             // branchParentUuid is the parent for a first branch step,
-            // and grandparent for a second (sub) branch step
+            // and grandparent for n branch step
             branchParentUuid: branchInfo?.branchParentUuid ?? steps[index].UUID,
             branchParentNextUuid: branchInfo?.branchParentNextUuid ?? steps[index + 1]?.UUID,
 
-            // parentUuid is always the parent of the branch step, no matter
-            // how nested
+            // parentUuid is always the parent of the branch step, no matter how nested
             parentUuid: steps[index].UUID,
           })
         );
@@ -258,8 +204,24 @@ export function buildNodesFromSteps(
   return stepNodes;
 }
 
+/**
+ * Checks if an array of nodes contains an ADD A STEP placeholder step
+ * @param stepNodes
+ */
 export function containsAddStepPlaceholder(stepNodes: IVizStepNode[]) {
   return stepNodes.length > 0 && stepNodes[0].data.label === 'ADD A STEP';
+}
+
+/**
+ * Checks if a Step contains branches
+ * @param step
+ */
+export function containsBranches(step: IStepProps): boolean {
+  let containsBranching = false;
+  if (step.branches && step.branches.length > 0) {
+    containsBranching = true;
+  }
+  return containsBranching;
 }
 
 /**
@@ -361,37 +323,35 @@ export async function getLayoutedElements(
   return { layoutedNodes: nodes, layoutedEdges: edges };
 }
 
-export function getNextStep(nodes: IVizStepNode[], currentStep?: IVizStepNode) {
-  const currentStepIdx = nodes.map((s) => s.data.UUID).indexOf(currentStep?.data.UUID);
-  return nodes[currentStepIdx + 1];
-}
-
 export function getRandomArbitraryNumber(): number {
   const crypto = window.crypto;
   return Math.floor(crypto?.getRandomValues(new Uint32Array(1))[0]);
 }
 
-export function getRandomIntInclusive(min: number = 10000, max: number = 99999): number {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
-}
-
-export function insertAddStepPlaceholder(stepNodes: IVizStepNode[], props?: any) {
+export function insertAddStepPlaceholder(
+  stepNodes: IVizStepNode[],
+  props: { id: string; nextStepUuid: string }
+) {
   return stepNodes.unshift({
     ...props,
     data: {
       label: 'ADD A STEP',
       step: {
+        maxBranches: 0,
+        minBranches: 0,
         name: '',
         type: 'START',
+        UUID: '',
       },
+      nextStepUuid: props.nextStepUuid,
     },
+    id: props.id,
     draggable: false,
+    position: { x: 0, y: 0 },
     type: 'step',
     width: 80,
     height: 80,
-  });
+  } as IVizStepNode);
 }
 
 export function insertBranchGroupNode(
@@ -428,7 +388,7 @@ export function isFirstStepStart(steps: IStepProps[]): boolean {
 }
 
 export function isLastNode(nodes: IVizStepNode[], UUID: string): boolean {
-  return nodes[nodes.length - 1].data.UUID === UUID;
+  return nodes[nodes.length - 1].data.step.UUID === UUID;
 }
 
 export function isEipStep(step: IStepProps): boolean {
@@ -452,16 +412,17 @@ export function isStartStep(step: IStepProps): boolean {
  * Every time there is a change to steps or their positioning in the Steps array,
  * their UUIDs need to be regenerated
  * @param steps
+ * @param branchSteps
  */
-export function regenerateUuids(steps: IStepProps[]) {
-  const newSteps = steps.slice();
+export function regenerateUuids(steps: IStepProps[], branchSteps: boolean = false) {
+  let newSteps = steps.slice();
+
   newSteps.forEach((step, idx) => {
-    step.UUID = step.name + idx;
+    step.UUID = `${step.name}-${idx}`;
+    if (branchSteps) step.UUID = `${step.name}-${idx}-${getRandomArbitraryNumber()}`;
     if (step.branches) {
-      step.branches.forEach((branch, branchIdx) => {
-        branch.steps.forEach((branchStep, branchStepIdx) => {
-          branchStep.UUID = `s-${step.UUID}--b-${branchIdx}--${branchStep.name}${branchStepIdx}`;
-        });
+      step.branches.forEach((branch) => {
+        return newSteps.concat(regenerateUuids(branch.steps, true));
       });
     }
   });

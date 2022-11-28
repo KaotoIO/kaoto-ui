@@ -37,10 +37,11 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({
-    name: '',
-    type: '',
     maxBranches: 0,
     minBranches: 0,
+    name: '',
+    type: '',
+    UUID: '',
   });
   const { deleteStep, integrationJson, replaceStep, setViews } = useIntegrationJsonStore();
   const layout = useVisualizationStore((state) => state.layout);
@@ -113,16 +114,11 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     });
 
     const filteredNodes = stepNodes.filter((node) => !node.data.branchStep);
-    // console.table(filteredNodes);
     let stepEdges: IVizStepPropsEdge[] = buildEdges(filteredNodes);
 
     const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(stepNodes);
-    // console.table(branchSpecialEdges);
-    stepEdges = stepEdges.concat(...branchSpecialEdges);
-    console.table(stepEdges);
 
-    // console.table(stepNodes);
-    // console.table(stepEdges);
+    stepEdges = stepEdges.concat(...branchSpecialEdges);
 
     return { stepNodes, stepEdges };
   }
@@ -130,7 +126,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   const handleDeleteStep = (UUID?: string) => {
     if (!UUID) return;
 
-    setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '' });
+    setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '' });
     if (isPanelExpanded) setIsPanelExpanded(false);
 
     // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
@@ -166,7 +162,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     // workaround for https://github.com/wbkd/react-flow/issues/2202
     if (!_e.target.classList.contains('stepNode__clickable')) return;
 
-    if (!node.data.UUID) {
+    if (!node.data.step.UUID) {
       // prevent slots from being selected, passive-aggressively open the steps catalog
       if (toggleCatalog) toggleCatalog();
       return;
@@ -174,7 +170,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
     // Only set state again if the ID is not the same
     const findStep: IStepProps =
-      integrationJson.steps.find((step) => step.UUID === node.data.UUID) ?? selectedStep;
+      integrationJson.steps.find((step) => step.UUID === node.data.step.UUID) ?? selectedStep;
     setSelectedStep(findStep);
 
     // show/hide the panel regardless

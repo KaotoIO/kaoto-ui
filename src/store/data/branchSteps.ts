@@ -13,6 +13,7 @@ export default [
     minBranches: 0,
     parameters: [],
     title: 'Kamelet Source',
+    UUID: 'kamelet:source-233189',
   },
   {
     id: 'choice',
@@ -63,6 +64,7 @@ export default [
             ],
             required: ['name'],
             title: 'Set Header',
+            UUID: 'set-header-337596',
           },
         ],
       },
@@ -110,6 +112,7 @@ export default [
             ],
             required: ['name'],
             title: 'Set Property',
+            UUID: 'set-property-00823',
           },
           {
             id: 'remove-property',
@@ -132,6 +135,7 @@ export default [
             ],
             required: ['name'],
             title: 'Remove Property',
+            UUID: 'remove-property-2403409',
           },
         ],
       },
@@ -161,6 +165,7 @@ export default [
               },
             ],
             title: 'Transform',
+            UUID: 'transform-208704',
           },
         ],
       },
@@ -189,6 +194,7 @@ export default [
               },
             ],
             title: 'Set Body',
+            UUID: 'set-body-28904309',
           },
           {
             id: 'remove-header',
@@ -211,6 +217,7 @@ export default [
             ],
             required: ['name'],
             title: 'Remove Header',
+            UUID: 'remove-header-281047',
           },
         ],
       },
@@ -234,6 +241,7 @@ export default [
       },
     ],
     title: 'Content Based Router.',
+    UUID: 'choice-344294',
   },
   {
     id: 'filter',
@@ -266,6 +274,7 @@ export default [
               },
             ],
             title: 'Set Body',
+            UUID: 'set-body-12334',
           },
         ],
       },
@@ -289,6 +298,7 @@ export default [
       },
     ],
     title: 'Filter',
+    UUID: 'filter-3923735',
   },
   {
     id: 'kamelet:sink',
@@ -302,5 +312,6 @@ export default [
     minBranches: 0,
     parameters: [],
     title: 'Kamelet Sink',
+    UUID: 'kamelet:sink-559424',
   },
 ] as IStepProps[];

@@ -25,12 +25,10 @@
     "lint": "eslint --ext .ts,.tsx,.js ./src",
     "lint:fix": "yarn lint --fix",
     "lint-staged": "yarn lint:fix && yarn format:fix",
-    "test": "jest src/**/*.test.ts*",
-    "test:coverage": "jest --coverage --watchAll=false",
+    "test": "jest --coverage src/**/*.test.ts*",
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@deepsource/shifty": "^1.0.0",
     "@kie-tools-core/editor": "0.25.0",
     "@kie-tools-core/guided-tour": "0.25.0",
     "@kie-tools-core/monaco-editor": "0.25.0",
@@ -82,7 +80,6 @@
     "@types/react-dom": "18.0.9",
     "@types/react-router-dom": "5.3.3",
     "@types/testing-library__jest-dom": "5.14.5",
-    "@types/uuid": "8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "5.45.0",
     "copy-webpack-plugin": "^11.0.0",

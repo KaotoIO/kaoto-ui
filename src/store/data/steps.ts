@@ -5,7 +5,7 @@ export default [
     id: 'twitter-search-source',
     name: 'twitter-search-source',
     type: 'START',
-    UUID: '0twitter-search-source',
+    UUID: 'twitter-search-source-0',
     description:
       'Allows to get all tweets on particular keywords from Twitter.\n\nIt requires tokens that can be obtained by creating an application \nin the Twitter developer portal: https://developer.twitter.com/.',
     group: 'Twitter',
@@ -71,7 +71,7 @@ export default [
     id: 'pdf-action',
     name: 'pdf-action',
     type: 'MIDDLE',
-    UUID: '1pdf-action',
+    UUID: 'pdf-action-1',
     description: 'Create a PDF',
     group: 'PDF',
     icon: 'data:image/svg+xml',
@@ -115,7 +115,7 @@ export default [
     id: 'caffeine-action',
     name: 'caffeine-action',
     type: 'MIDDLE',
-    UUID: '2caffeine-action',
+    UUID: 'caffeine-action-2',
     description:
       "Perform operations on a caffeine cache\n\nThe Kamelet expects the following headers to be set:\n\n- `caffeine-key` / `ce-caffeinekey`: as the cache key used in the operation\n\n- `caffeine-operation` / `ce-caffeineoperation`: as the operation to perform. It can be PUT, GET, INVALIDATE and CLEANUP.\n\nIf the caffeine-key header won't be set the exchange ID will be used as key.\n\nIf the caffeine-operation header won't be set, the GET operation will be performed.",
     group: 'Caffeine',
@@ -140,7 +140,7 @@ export default [
     id: 'kafka-sink',
     name: 'kafka-sink',
     type: 'END',
-    UUID: '3kafka-sink',
+    UUID: 'kafka-sink-3',
     description:
       'Send data to Kafka topics.\n\nThe Kamelet is able to understand the following headers to be set:\n\n- `key` / `ce-key`: as message key\n\n- `partition-key` / `ce-partitionkey`: as message partition key\n\nBoth the headers are optional.',
     group: 'Kafka',

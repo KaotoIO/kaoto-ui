@@ -39,7 +39,7 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
         set((state) => {
           let newSteps = state.integrationJson.steps.slice();
           // manually generate UUID for the new step
-          newStep.UUID = newStep.name + newSteps.length;
+          newStep.UUID = `${newStep.name}-${newSteps.length}`;
           newSteps.push(newStep);
           return {
             integrationJson: {
@@ -52,7 +52,7 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
       deleteIntegration: () => set(initialState),
       deleteStep: (stepIdx) => {
         let stepsCopy = get().integrationJson.steps.slice();
-        const updatedSteps = stepsCopy.filter((_step: any, idx: any) => idx !== stepIdx);
+        const updatedSteps = stepsCopy.filter((_step: IStepProps, idx: number) => idx !== stepIdx);
         const stepsWithNewUuids = regenerateUuids(updatedSteps);
         set((state) => ({
           integrationJson: {
@@ -107,7 +107,7 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
       setViews: (viewData: IViewProps[]) => {
         set({ views: viewData });
       },
-      updateIntegration: (newInt) => {
+      updateIntegration: (newInt: IIntegration) => {
         let newIntegration = { ...get().integrationJson, ...newInt };
         newIntegration.steps = regenerateUuids(newIntegration.steps);
         return set({ integrationJson: { ...newIntegration } });
