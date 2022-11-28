@@ -119,7 +119,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(stepNodes);
     // console.table(branchSpecialEdges);
     stepEdges = stepEdges.concat(...branchSpecialEdges);
-    // console.table(stepEdges);
+    console.table(stepEdges);
 
     // console.table(stepNodes);
     // console.table(stepEdges);

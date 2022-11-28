@@ -69,7 +69,8 @@ export function buildBranchSpecialEdges(stepNodes: IVizStepNode[]): IVizStepProp
   stepNodes.forEach((node) => {
     if (node.type === 'group') return;
 
-    const ogNodeIndex = findNodeIdxWithUUID(node.data?.branchParentUuid, stepNodes);
+    // const ogNodeIndex = findNodeIdxWithUUID(node.data?.branchParentUuid, stepNodes);
+    const parentNodeIndex = findNodeIdxWithUUID(node.data?.parentUuid, stepNodes);
     const ogNodeNextIndex = findNodeIdxWithUUID(node.data?.branchParentNextUuid, stepNodes);
 
     // handle all "normal" steps within a branch
@@ -80,9 +81,9 @@ export function buildBranchSpecialEdges(stepNodes: IVizStepNode[]): IVizStepProp
       }
     }
 
-    // handle special first step, needs to be connected to parent step
+    // handle special first step, needs to be connected to its immediate parent
     if (node.data?.isFirstStep) {
-      const ogNodeStep = stepNodes[ogNodeIndex];
+      const ogNodeStep = stepNodes[parentNodeIndex];
       const firstStep = node;
 
       let edgeProps: { id: string; source: string; target: string; [prop: string]: any } = {
@@ -242,8 +243,15 @@ export function buildNodesFromSteps(
         stepNodes = stepNodes.concat(
           buildNodesFromSteps(branch.steps, layout, props, {
             branchIdentifier: branch.identifier,
+
+            // branchParentUuid is the parent for a first branch step,
+            // and grandparent for a second (sub) branch step
             branchParentUuid: branchInfo?.branchParentUuid ?? steps[index].UUID,
             branchParentNextUuid: branchInfo?.branchParentNextUuid ?? steps[index + 1]?.UUID,
+
+            // parentUuid is always the parent of the branch step, no matter
+            // how nested
+            parentUuid: steps[index].UUID,
           })
         );
       });
