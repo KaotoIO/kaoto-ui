@@ -99,7 +99,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
   return (
     <>
-      {data.step && data.UUID ? (
+      {data.step && data.step.UUID ? (
         <div
           className={`stepNode`}
           onDrop={onDropReplace}

@@ -1,4 +1,3 @@
-import Shifty from '@deepsource/shifty';
 import { useIntegrationJsonStore } from '@kaoto/store';
 import { IStepProps, IStepPropsBranch, IVizStepNode, IVizStepPropsEdge } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
@@ -42,10 +41,8 @@ export function buildBranchNodeParams(
   layout: string,
   dataProps?: { [prop: string]: any }
 ): IVizStepNode {
-  const shifty = new Shifty(false);
   return {
     data: {
-      UUID: `b_${step.name}-s${shifty.generate(16)}`,
       kind: step.kind,
       label: truncateString(step.name, 14),
       step,
@@ -171,7 +168,7 @@ export function buildNodeDefaultParams(
 ): IVizStepNode {
   return {
     data: {
-      UUID: step.UUID,
+      // UUID: step.UUID,
       kind: step.kind,
       label: truncateString(step.name, 14),
       step,
@@ -289,7 +286,7 @@ export function findStepIdxWithUUID(UUID: string, steps?: IStepProps[]) {
  * @param nodes
  */
 export function findNodeIdxWithUUID(UUID: string, nodes: IVizStepNode[]) {
-  return nodes.map((n) => n.data.UUID).indexOf(UUID);
+  return nodes.map((n) => n.data.step.UUID).indexOf(UUID);
 }
 
 export async function getLayoutedElements(
