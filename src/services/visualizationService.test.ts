@@ -15,7 +15,6 @@ import {
   getRandomArbitraryNumber,
   insertAddStepPlaceholder,
   insertBranchGroupNode,
-  isEipStep,
   isEndStep,
   isFirstStepEip,
   isFirstStepStart,
@@ -298,17 +297,6 @@ describe('visualizationService', () => {
     // the first step is just a normal Camel-Connector
     expect(isFirstStepEip(eipIntegration)).toBe(false);
     expect(isFirstStepEip(firstBranch.steps)).toBe(true);
-  });
-
-  /**
-   * isEipStep
-   */
-  it('isEipStep(): should determine if the provided step is an EIP step', () => {
-    const firstStep = eipIntegration[0];
-    const secondBranchOfSecondStep = eipIntegration[1].branches![1];
-
-    expect(isEipStep(firstStep)).toBe(false);
-    expect(isEipStep(secondBranchOfSecondStep.steps[1])).toBe(true);
   });
 
   /**

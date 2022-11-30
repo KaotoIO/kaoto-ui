@@ -113,7 +113,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       handleDeleteStep,
     });
 
-    const filteredNodes = stepNodes.filter((node) => !node.data.branchStep);
+    const filteredNodes = stepNodes.filter((node) => !node.data.branchInfo?.branchStep);
     let stepEdges: IVizStepPropsEdge[] = buildEdges(filteredNodes);
 
     const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(stepNodes);

@@ -1,5 +1,5 @@
 import { useIntegrationJsonStore } from '@kaoto/store';
-import { IStepProps, IVizStepNode, IVizStepPropsEdge } from '@kaoto/types';
+import { IStepProps, IVizStepNode, IVizStepNodeDataBranch, IVizStepPropsEdge } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import { ElkExtendedEdge, ElkNode } from 'elkjs';
 import { MarkerType, Position } from 'reactflow';
@@ -37,11 +37,18 @@ export function buildBranchSpecialEdges(stepNodes: IVizStepNode[]): IVizStepProp
   stepNodes.forEach((node) => {
     if (node.type === 'group') return;
 
-    const parentNodeIndex = findNodeIdxWithUUID(node.data.parentUuid, stepNodes);
-    const ogNodeNextIndex = findNodeIdxWithUUID(node.data.branchParentNextUuid, stepNodes);
+    const parentNodeIndex = findNodeIdxWithUUID(node.data.branchInfo?.parentUuid, stepNodes);
+    const ogNodeNextIndex = findNodeIdxWithUUID(
+      node.data.branchInfo?.branchParentNextUuid,
+      stepNodes
+    );
 
     // handle all "normal" steps within a branch
-    if (node.data.branchStep && !node.data.isLastStep && !containsBranches(node.data.step)) {
+    if (
+      node.data.branchInfo?.branchStep &&
+      !node.data.isLastStep &&
+      !containsBranches(node.data.step)
+    ) {
       const branchStepNextIdx = findNodeIdxWithUUID(node.data.nextStepUuid, stepNodes);
       if (stepNodes[branchStepNextIdx]) {
         specialEdges.push(buildEdgeParams(node, stepNodes[branchStepNextIdx], 'default'));
@@ -53,7 +60,8 @@ export function buildBranchSpecialEdges(stepNodes: IVizStepNode[]): IVizStepProp
       const ogNodeStep = stepNodes[parentNodeIndex];
       let edgeProps = buildEdgeParams(ogNodeStep, node, 'default');
 
-      if (node.data.branchIdentifier) edgeProps.label = node.data.branchIdentifier;
+      if (node.data.branchInfo?.branchIdentifier)
+        edgeProps.label = node.data.branchInfo?.branchIdentifier;
 
       specialEdges.push(edgeProps);
     }
@@ -118,7 +126,7 @@ export function buildNodeDefaultParams(
   step: IStepProps,
   newId: string,
   props?: { [prop: string]: any },
-  branchInfo?: { [prop: string]: any }
+  branchInfo?: IVizStepNodeDataBranch
 ): IVizStepNode {
   return {
     data: {
@@ -148,7 +156,7 @@ export function buildNodesFromSteps(
   steps: IStepProps[],
   layout: string,
   props?: { [prop: string]: any },
-  branchInfo?: { [prop: string]: any }
+  branchInfo?: IVizStepNodeDataBranch
 ) {
   let stepNodes: IVizStepNode[] = [];
   let id = 0;
@@ -167,8 +175,8 @@ export function buildNodesFromSteps(
       // we are within a branch
       currentStep = buildBranchNodeParams(step, getId(step.UUID), layout, {
         ...props,
-        ...branchInfo,
-        branchStep: true,
+        branchInfo,
+
         isFirstStep: index === 0,
         isLastStep: index === steps.length - 1 && !step.branches?.length,
         nextStepUuid: steps[index + 1]?.UUID,
@@ -176,8 +184,8 @@ export function buildNodesFromSteps(
       stepNodes.push(currentStep);
     } else {
       currentStep = buildNodeDefaultParams(step, getId(step.UUID ?? ''), {
-        ...props,
         nextStepUuid: steps[index + 1]?.UUID,
+        ...props,
       });
       stepNodes.push(currentStep);
     }
@@ -192,6 +200,7 @@ export function buildNodesFromSteps(
             // and grandparent for n branch step
             branchParentUuid: branchInfo?.branchParentUuid ?? steps[index].UUID,
             branchParentNextUuid: branchInfo?.branchParentNextUuid ?? steps[index + 1]?.UUID,
+            branchStep: true,
 
             // parentUuid is always the parent of the branch step, no matter how nested
             parentUuid: steps[index].UUID,
@@ -389,10 +398,6 @@ export function isFirstStepStart(steps: IStepProps[]): boolean {
 
 export function isLastNode(nodes: IVizStepNode[], UUID: string): boolean {
   return nodes[nodes.length - 1].data.step.UUID === UUID;
-}
-
-export function isEipStep(step: IStepProps): boolean {
-  return step.kind === 'EIP';
 }
 
 export function isEndStep(step: IStepProps): boolean {
