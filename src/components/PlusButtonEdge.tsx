@@ -39,7 +39,7 @@ const PlusButtonEdge = ({
   // substring is used to remove the 'e-' from the id (i.e. e-{nodeId}>{nodeId})
   const nodeIds = id.substring(2).split('>');
   const targetNode = useReactFlow().getNode(nodeIds[1]);
-  const currentIdx = findStepIdxWithUUID(targetNode?.data.UUID!);
+  const currentIdx = findStepIdxWithUUID(targetNode?.data.step.UUID!);
 
   const [edgePath, edgeCenterX, edgeCenterY] = getBezierPath({
     sourceX,

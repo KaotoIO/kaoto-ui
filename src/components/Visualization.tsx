@@ -9,7 +9,6 @@ import {
   VisualizationStepViews,
 } from '@kaoto/components';
 import {
-  buildBranch,
   buildBranchSpecialEdges,
   buildEdges,
   buildNodesFromSteps,
@@ -29,7 +28,6 @@ interface IVisualization {
 const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
-  // const rendererSize = getBoundingClientRect();
   const defaultViewport: Viewport = {
     x: window.innerWidth / 2,
     y: window.innerHeight / 2 - 160,
@@ -39,10 +37,11 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   const [, setReactFlowInstance] = useState(null);
   const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({
-    name: '',
-    type: '',
     maxBranches: 0,
     minBranches: 0,
+    name: '',
+    type: '',
+    UUID: '',
   });
   const { deleteStep, integrationJson, replaceStep, setViews } = useIntegrationJsonStore();
   const layout = useVisualizationStore((state) => state.layout);
@@ -53,8 +52,9 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
   // initial loading of visualization steps
   useEffect(() => {
-    const { combinedNodes, combinedEdges } = buildNodesAndEdges(integrationJson.steps);
-    getLayoutedElements(combinedNodes, combinedEdges, layout)
+    const { stepNodes, stepEdges } = buildNodesAndEdges(integrationJson.steps);
+
+    getLayoutedElements(stepNodes, stepEdges, layout)
       .then((res) => {
         const { layoutedNodes, layoutedEdges } = res;
         setNodes(layoutedNodes);
@@ -74,8 +74,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       setViews(views);
     });
 
-    const { combinedNodes, combinedEdges } = buildNodesAndEdges(integrationJson.steps);
-    getLayoutedElements(combinedNodes, combinedEdges, layout)
+    const { stepNodes, stepEdges } = buildNodesAndEdges(integrationJson.steps);
+    getLayoutedElements(stepNodes, stepEdges, layout)
       .then((res) => {
         const { layoutedNodes, layoutedEdges } = res;
         setNodes(layoutedNodes);
@@ -109,29 +109,24 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   );
 
   function buildNodesAndEdges(steps: IStepProps[]) {
-    const combinedEdges: IVizStepPropsEdge[] = [];
-    const combinedNodes: IVizStepNode[] = [];
-
-    const { stepNodes, branchOriginStepNodes } = buildNodesFromSteps(steps, layout, {
+    const stepNodes = buildNodesFromSteps(steps, layout, {
       handleDeleteStep,
     });
 
-    const { branchNodes, branchStepEdges } = buildBranch(branchOriginStepNodes, layout);
+    const filteredNodes = stepNodes.filter((node) => !node.data.branchStep);
+    let stepEdges: IVizStepPropsEdge[] = buildEdges(filteredNodes);
 
-    const stepEdges: IVizStepPropsEdge[] = buildEdges(stepNodes);
-    const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(branchNodes, stepNodes);
+    const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(stepNodes);
 
-    combinedNodes.push(...stepNodes, ...branchNodes);
-    combinedEdges.push(...stepEdges, ...branchStepEdges);
-    combinedEdges.push(...branchSpecialEdges);
+    stepEdges = stepEdges.concat(...branchSpecialEdges);
 
-    return { combinedNodes, combinedEdges };
+    return { stepNodes, stepEdges };
   }
 
   const handleDeleteStep = (UUID?: string) => {
     if (!UUID) return;
 
-    setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '' });
+    setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '' });
     if (isPanelExpanded) setIsPanelExpanded(false);
 
     // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
@@ -167,7 +162,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     // workaround for https://github.com/wbkd/react-flow/issues/2202
     if (!_e.target.classList.contains('stepNode__clickable')) return;
 
-    if (!node.data.UUID) {
+    if (!node.data.step.UUID) {
       // prevent slots from being selected, passive-aggressively open the steps catalog
       if (toggleCatalog) toggleCatalog();
       return;
@@ -175,7 +170,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
     // Only set state again if the ID is not the same
     const findStep: IStepProps =
-      integrationJson.steps.find((step) => step.UUID === node.data.UUID) ?? selectedStep;
+      integrationJson.steps.find((step) => step.UUID === node.data.step.UUID) ?? selectedStep;
     setSelectedStep(findStep);
 
     // show/hide the panel regardless

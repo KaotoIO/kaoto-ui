@@ -24,9 +24,9 @@ const replaceStep = useIntegrationJsonStore.getState().replaceStep;
 // Custom Node type and component for React Flow
 const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const nodes: Node[] = useNodes();
-  const lastNode = isLastNode(nodes, data.UUID!);
+  const lastNode = isLastNode(nodes, data.step?.UUID);
   const endStep = isEndStep(data.step!);
-  const currentIdx = findStepIdxWithUUID(data.UUID!);
+  const currentIdx = findStepIdxWithUUID(data.step?.UUID);
   const layout = useVisualizationStore((state) => state.layout);
   const steps = useIntegrationJsonStore((state) => state.integrationJson.steps);
 
@@ -41,7 +41,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   };
 
   const handleTrashClick = () => {
-    data.handleDeleteStep && data.handleDeleteStep(data.step?.UUID!);
+    data.handleDeleteStep && data.handleDeleteStep(data.step?.UUID);
   };
 
   /**
@@ -99,7 +99,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
   return (
     <>
-      {data.step && data.UUID ? (
+      {data.step?.UUID ? (
         <div
           className={`stepNode`}
           onDrop={onDropReplace}

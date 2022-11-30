@@ -58,7 +58,6 @@ export default [
         title: 'AWS Kinesis Source',
         UUID: 'aws-kinesis-source0',
       },
-      UUID: 'aws-kinesis-source0',
     },
     id: 'dndnode_4',
     position: {
@@ -109,7 +108,6 @@ export default [
         title: 'Avro Deserialize Action',
         UUID: 'avro-deserialize-action1',
       },
-      UUID: 'avro-deserialize-action1',
     },
     id: 'dndnode_5',
     position: {
@@ -176,7 +174,6 @@ export default [
         title: 'AWS Kinesis Firehose Sink',
         UUID: 'aws-kinesis-firehose-sink3',
       },
-      UUID: 'aws-kinesis-firehose-sink2',
     },
     id: 'dndnode_6',
     position: {

@@ -3,13 +3,15 @@ import branchSteps from '../store/data/branchSteps';
 import nodes from '../store/data/nodes';
 import steps from '../store/data/steps';
 import {
-  buildEdgeDefaultParams,
+  buildBranchNodeParams,
+  buildEdgeParams,
   buildEdges,
   buildNodeDefaultParams,
   buildNodesFromSteps,
   containsAddStepPlaceholder,
+  containsBranches,
+  findNodeIdxWithUUID,
   findStepIdxWithUUID,
-  getNextStep,
   getRandomArbitraryNumber,
   insertAddStepPlaceholder,
   insertBranchGroupNode,
@@ -23,32 +25,67 @@ import {
 } from './visualizationService';
 import { IVizStepNode } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
-import { MarkerType } from 'reactflow';
+import { MarkerType, Position } from 'reactflow';
 
 describe('visualizationService', () => {
   const groupWidth = 80;
+  const baseStep = { UUID: '', name: '', maxBranches: 0, minBranches: 0, type: '' };
 
   /**
-   * buildEdgeDefaultParams
+   * buildBranchNodeParams
    */
-  it("buildEdgeDefaultParams(): should build an edge's default parameters for a single given node", () => {
+  it('buildBranchNodeParams(): should build params for a branch node', () => {
+    const currentStep = steps[3];
+    const nodeId = 'node_example-1234';
+
+    expect(buildBranchNodeParams(currentStep, nodeId, 'RIGHT')).toEqual({
+      data: {
+        kind: currentStep.kind,
+        label: truncateString(currentStep.name, 14),
+        step: currentStep,
+        icon: currentStep.icon,
+      },
+      id: nodeId,
+      position: { x: 0, y: 0 },
+      draggable: true,
+      sourcePosition: Position.Top,
+      targetPosition: Position.Bottom,
+      type: 'step',
+    });
+
+    // Check that the `sourcePosition` and `targetPosition` change with the layout
+    expect(buildBranchNodeParams(currentStep, nodeId, 'DOWN')).toEqual({
+      data: {
+        kind: currentStep.kind,
+        label: truncateString(currentStep.name, 14),
+        step: currentStep,
+        icon: currentStep.icon,
+      },
+      id: nodeId,
+      position: { x: 0, y: 0 },
+      draggable: true,
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
+      type: 'step',
+    });
+  });
+
+  /**
+   * buildEdgeParams
+   */
+  it("buildEdgeParams(): should build an edge's default parameters for a single given node", () => {
     const currentStep = nodes[1];
     const previousStep = nodes[0];
 
-    expect(buildEdgeDefaultParams(currentStep, previousStep)).toEqual({
+    expect(buildEdgeParams(currentStep, previousStep)).toEqual({
       arrowHeadType: 'arrowclosed',
-
-      // previousStep here is stale when deleting first step
-      id: 'e-' + previousStep.id + '>' + currentStep.id,
-
+      id: 'e-' + currentStep.id + '>' + previousStep.id,
       markerEnd: {
         type: MarkerType.Arrow,
       },
-      source: previousStep.id,
-
-      // even the last step needs to build the step edge before it, with itself as the target
-      target: currentStep.id,
-      type: 'insert',
+      source: currentStep.id,
+      target: previousStep.id,
+      type: 'default',
     });
   });
 
@@ -57,14 +94,26 @@ describe('visualizationService', () => {
    */
   it('buildEdges(): should build an edge for every node except the first, given an array of nodes', () => {
     const nodes = [
-      { data: { label: 'aws-kinesis-source' }, id: 'dndnode_1', position: { x: 720, y: 250 } },
-      { data: { label: 'avro-deserialize-sink' }, id: 'dndnode_2', position: { x: 880, y: 250 } },
+      {
+        data: {
+          label: 'aws-kinesis-source',
+          step: { ...baseStep, UUID: 'example-1234' },
+          nextStepUuid: 'example-1235',
+        },
+        id: 'dndnode_1',
+        position: { x: 720, y: 250 },
+      },
+      {
+        data: { label: 'avro-deserialize-sink', step: { ...baseStep, UUID: 'example-1235' } },
+        id: 'dndnode_2',
+        position: { x: 880, y: 250 },
+      },
     ];
 
     expect(buildEdges(nodes)).toHaveLength(1);
 
     // let's test that it works for branching too
-    const { stepNodes } = buildNodesFromSteps(branchSteps, 'LR');
+    const stepNodes = buildNodesFromSteps(branchSteps, 'RIGHT');
 
     expect(buildEdges(stepNodes)).toHaveLength(branchSteps.length - 1);
   });
@@ -82,7 +131,6 @@ describe('visualizationService', () => {
         kind: step.kind,
         label: truncateString(step.name, 14),
         step,
-        UUID: step.UUID,
         x: 0,
         y: 0,
       },
@@ -101,17 +149,17 @@ describe('visualizationService', () => {
    * buildNodesFromSteps
    */
   it('buildNodesFromSteps(): should build visualization nodes from an array of steps', () => {
-    const { stepNodes } = buildNodesFromSteps(steps, 'LR');
-    expect(stepNodes[0].data.UUID).toBeDefined();
-    expect(stepNodes[0].id).toEqual('node_0-0twitter-search-source');
+    const stepNodes = buildNodesFromSteps(steps, 'RIGHT');
+    expect(stepNodes[0].data.step.UUID).toBeDefined();
+    expect(stepNodes[0].id).toContain(stepNodes[0].data.step.UUID);
   });
 
   /**
    * buildNodesFromSteps for integrations with branches
    */
   it.skip('buildNodesFromSteps(): should build visualization nodes from an array of steps with branches', () => {
-    const { stepNodes } = buildNodesFromSteps(branchSteps, 'LR');
-    expect(stepNodes[0].data.UUID).toBeDefined();
+    const stepNodes = buildNodesFromSteps(branchSteps, 'RIGHT');
+    expect(stepNodes[0].data.step.UUID).toBeDefined();
     expect(stepNodes).toHaveLength(branchSteps.length);
   });
 
@@ -120,47 +168,61 @@ describe('visualizationService', () => {
    */
   it('containsAddStepPlaceholder(): should determine if there is an ADD STEP placeholder in the steps', () => {
     const nodes = [
-      { data: { label: 'ADD A STEP' }, id: 'dndnode_1', position: { x: 500, y: 250 } },
-      { data: { label: 'avro-deserialize-sink' }, id: 'dndnode_2', position: { x: 660, y: 250 } },
+      {
+        data: {
+          label: 'ADD A STEP',
+          step: baseStep,
+        },
+        id: 'dndnode_1',
+        position: { x: 500, y: 250 },
+      },
+      {
+        data: {
+          label: 'avro-deserialize-sink',
+          step: baseStep,
+        },
+        id: 'dndnode_2',
+        position: { x: 660, y: 250 },
+      },
     ];
 
     expect(containsAddStepPlaceholder(nodes)).toBe(true);
 
     expect(
       containsAddStepPlaceholder([
-        { data: { label: 'avro-deserialize-sink' }, id: 'dndnode_2', position: { x: 660, y: 250 } },
+        {
+          data: {
+            label: 'avro-deserialize-sink',
+            step: baseStep,
+          },
+          id: 'dndnode_2',
+          position: { x: 660, y: 250 },
+        },
       ])
     ).toBe(false);
+  });
+
+  /**
+   * containsBranches
+   */
+  it('containsBranches(): should determine if a given step contains branches', () => {
+    expect(containsBranches(branchSteps[0])).toBe(false);
+    expect(containsBranches(branchSteps[1])).toBe(true);
+  });
+
+  /**
+   * findNodeIdxWithUUID
+   */
+  it('findNodeIdxWithUUID(): should find a node from an array of nodes, given a UUID', () => {
+    expect(findNodeIdxWithUUID(nodes[0].data.step.UUID, nodes)).toBe(0);
+    expect(findNodeIdxWithUUID(nodes[1].data.step.UUID, nodes)).toBe(1);
   });
 
   /**
    * findStepIdxWithUUID
    */
   it("findStepIdxWithUUID(): should find a step's index, given a particular UUID", () => {
-    expect(findStepIdxWithUUID('2caffeine-action', steps)).toEqual(2);
-  });
-
-  /**
-   * getNextStep
-   */
-  it('getNextStep(): should get the next step', () => {
-    expect(
-      getNextStep(
-        [
-          { data: { label: 'aws-kinesis-source' }, id: 'dndnode_1', position: { x: 720, y: 250 } },
-          {
-            data: { label: 'avro-deserialize-sink' },
-            id: 'dndnode_2',
-            position: { x: 880, y: 250 },
-          },
-        ],
-        { data: { label: 'aws-kinesis-source' }, id: 'dndnode_1', position: { x: 720, y: 250 } }
-      )
-    ).toEqual({
-      data: { label: 'avro-deserialize-sink' },
-      id: 'dndnode_2',
-      position: { x: 880, y: 250 },
-    });
+    expect(findStepIdxWithUUID('caffeine-action-2', steps)).toEqual(2);
   });
 
   it.skip('getRandomArbitraryNumber(): should get a random arbitrary number', () => {
@@ -179,7 +241,7 @@ describe('visualizationService', () => {
    */
   it('insertAddStepPlaceholder(): should add an ADD STEP placeholder to the beginning of the array', () => {
     const nodes: IVizStepNode[] = [];
-    insertAddStepPlaceholder(nodes);
+    insertAddStepPlaceholder(nodes, { id: '', nextStepUuid: '' });
     expect(nodes).toHaveLength(1);
   });
 
@@ -214,7 +276,7 @@ describe('visualizationService', () => {
           id: 'pdf-action',
           name: 'pdf-action',
           type: 'MIDDLE',
-          UUID: '1pdf-action',
+          UUID: 'pdf-action-1',
           description: 'Create a PDF',
           group: 'PDF',
           icon: 'data:image/svg+xml;base64',
