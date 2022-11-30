@@ -75,6 +75,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       );
     });
 
+    editor?.revealLine(editor.getModel()?.getLineCount() ?? 0);
     editorRef.current = editor;
   };
 
@@ -172,6 +173,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
         code={sourceCode ?? props.initialData}
         className="code-editor"
         height="80vh"
+        width={'100%'}
         onCodeChange={debounced}
         language={(props.language as Language) ?? Language.yaml}
         onEditorDidMount={handleEditorDidMount}
@@ -181,9 +183,14 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
         isDarkTheme
         isDownloadEnabled
         isLanguageLabelVisible
+        allowFullScreen={true}
         isUploadEnabled
         options={{
           readOnly: props.mode === CodeEditorMode.READ_ONLY || !props.editable,
+          scrollbar: {
+            horizontal: 'visible',
+            vertical: 'visible',
+          },
         }}
       />
     </StepErrorBoundary>
