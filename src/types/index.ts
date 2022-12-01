@@ -8,6 +8,11 @@ declare global {
   // const __webpack_init_sharing__: any;
   const __webpack_share_scopes__: any;
 }
+export enum CodeEditorMode {
+  FREE_EDIT = 0,
+  READ_ONLY = 1,
+  TWO_WAY_SYNC = 2,
+}
 
 export interface IDeployment {
   // yaml CRD of deployment
@@ -57,6 +62,7 @@ export interface ISettings {
   name: string;
   // Cluster namespace
   namespace: string;
+  editorMode: CodeEditorMode;
 }
 
 export interface ICapabilities {

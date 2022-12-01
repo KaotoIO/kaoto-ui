@@ -1,6 +1,6 @@
 // @ts-ignore
 import svg from '../assets/images/kaoto.svg';
-import { IDsl, ISettings } from '@kaoto/types';
+import { CodeEditorMode, IDsl, ISettings } from '@kaoto/types';
 import create from 'zustand';
 
 interface ISettingsStore {
@@ -23,6 +23,7 @@ const initialSettings: ISettings = {
   icon: svg,
   name: 'integration',
   namespace: '',
+  editorMode: CodeEditorMode.FREE_EDIT,
 };
 
 export const useSettingsStore = create<ISettingsStore>((set) => ({
