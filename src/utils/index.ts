@@ -1,4 +1,3 @@
-import { IDeployment } from '@kaoto/types';
 import { useEffect, useRef } from 'react';
 
 export function accessibleRouteChangeHandler() {
@@ -8,10 +7,6 @@ export function accessibleRouteChangeHandler() {
       mainContainer.focus();
     }
   }, 50);
-}
-
-export function findDeploymentFromList(name: string, deployments: IDeployment[]) {
-  return deployments.find((dep) => dep.name === name);
 }
 
 export function formatDateTime(date: string) {

@@ -23,7 +23,7 @@ export function buildBranchNodeParams(
     },
     id: nodeId,
     position: { x: 0, y: 0 },
-    draggable: true,
+    draggable: false,
     sourcePosition: layout === 'RIGHT' ? Position.Top : Position.Right,
     targetPosition: layout === 'RIGHT' ? Position.Bottom : Position.Left,
     type: 'step',
@@ -67,7 +67,7 @@ export function buildBranchSpecialEdges(stepNodes: IVizStepNode[]): IVizStepProp
     }
 
     // handle special last steps
-    if (node.data.isLastStep) {
+    if (node.data.isLastStep || isEndStep(node.data.step)) {
       const nextStep = stepNodes[ogNodeNextIndex];
 
       if (nextStep) {
@@ -148,7 +148,7 @@ export function buildNodeDefaultParams(
 }
 
 /**
- * Creates an object for the Visualization from the Step model.
+ * Creates an array for the Visualization from the Step model.
  * Contains UI-specific metadata (e.g. position).
  * Data is stored in the `nodes` hook.
  */
@@ -157,7 +157,7 @@ export function buildNodesFromSteps(
   layout: string,
   props?: { [prop: string]: any },
   branchInfo?: IVizStepNodeDataBranch
-) {
+): IVizStepNode[] {
   let stepNodes: IVizStepNode[] = [];
   let id = 0;
   let getId = (uuid: string) => `node_${id++}-${uuid}-${getRandomArbitraryNumber()}`;
@@ -176,14 +176,13 @@ export function buildNodesFromSteps(
       currentStep = buildBranchNodeParams(step, getId(step.UUID), layout, {
         ...props,
         branchInfo,
-
         isFirstStep: index === 0,
         isLastStep: index === steps.length - 1 && !step.branches?.length,
         nextStepUuid: steps[index + 1]?.UUID,
       });
       stepNodes.push(currentStep);
     } else {
-      currentStep = buildNodeDefaultParams(step, getId(step.UUID ?? ''), {
+      currentStep = buildNodeDefaultParams(step, getId(step.UUID), {
         nextStepUuid: steps[index + 1]?.UUID,
         ...props,
       });
@@ -260,6 +259,13 @@ export function findNodeIdxWithUUID(UUID: string, nodes: IVizStepNode[]) {
   return nodes.map((n) => n.data.step.UUID).indexOf(UUID);
 }
 
+/**
+ * Accepts an array of React Flow nodes and edges,
+ * build a new ELK layout graph with them
+ * @param nodes
+ * @param edges
+ * @param direction
+ */
 export async function getLayoutedElements(
   nodes: IVizStepNode[],
   edges: IVizStepPropsEdge[],
