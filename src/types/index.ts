@@ -173,17 +173,29 @@ export interface IViewData {
   views: IViewProps[];
 }
 
-export interface IVizStepNodeData {
-  branchInfo?: Partial<IStepPropsBranch> & {
-    branchUuid?: string;
-    parentUuid: string;
-  };
-  handleDeleteStep?: (UUID: string) => void;
-  icon?: string;
-  kind?: string;
-  label: string;
-  step: IStepProps;
-}
+export type IVizStepNodeDataBranch = Partial<IStepPropsBranch> & {
+  /**
+   * An optional label for the branch (e.g. 'if', 'else', 'otherwise')
+   */
+  branchIdentifier?: string;
+
+  /**
+   * The UUID of the original (n=1) branch's parent node
+   */
+  branchParentUuid: string;
+
+  /**
+   * The UUID of the node *after* the original (n=1) branch's
+   * parent node (used for connecting branch steps back)
+   */
+  branchParentNextUuid: string;
+  branchStep: boolean;
+
+  /**
+   * The branch node's immediate parent
+   */
+  parentUuid?: string;
+};
 
 /**
  * Used to extend React Flow's `Node` type
@@ -191,6 +203,18 @@ export interface IVizStepNodeData {
 export type IVizStepNode = Node & {
   data: IVizStepNodeData;
 };
+
+export interface IVizStepNodeData {
+  branchInfo?: IVizStepNodeDataBranch;
+  handleDeleteStep?: (UUID: string) => void;
+  icon?: string;
+  isFirstStep?: boolean;
+  isLastStep?: boolean;
+  kind?: string;
+  label: string;
+  nextStepUuid?: string;
+  step: IStepProps;
+}
 
 /**
  * Used to extend React Flow's `Edge` type
