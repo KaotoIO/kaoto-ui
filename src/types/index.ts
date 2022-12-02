@@ -102,6 +102,13 @@ export interface IKaotoApi {
   updateStepParams: (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => void;
 }
 
+export interface INestedStep {
+  branchUuid?: string;
+  originStepUuid: string;
+  path: string[] | undefined;
+  stepUuid: string;
+}
+
 export interface IStepProps {
   branches?: IStepPropsBranch[];
   description?: string;
@@ -130,7 +137,7 @@ export interface IStepProps {
 }
 
 export interface IStepPropsBranch {
-  condition: string;
+  condition?: string;
   identifier: string;
   steps: IStepProps[];
   parameters?: IStepPropsParameters[];
@@ -195,6 +202,7 @@ export type IVizStepNodeDataBranch = Partial<IStepPropsBranch> & {
    * The branch node's immediate parent
    */
   parentUuid?: string;
+  // pathToStep: string[] | undefined;
 };
 
 /**

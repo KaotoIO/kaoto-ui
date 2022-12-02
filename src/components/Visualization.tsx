@@ -13,11 +13,13 @@ import {
   buildEdges,
   buildNodesFromSteps,
   findStepIdxWithUUID,
+  flattenSteps,
   getLayoutedElements,
   containsAddStepPlaceholder,
 } from '@kaoto/services';
-import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
+import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
+import { pathToString } from '@kaoto/utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
 
@@ -46,6 +48,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     UUID: '',
   });
   const { deleteStep, integrationJson, replaceStep, setViews } = useIntegrationJsonStore();
+  const { nestedSteps } = useNestedStepsStore();
   const layout = useVisualizationStore((state) => state.layout);
   const previousIntegrationJson = useRef(integrationJson);
   const previousLayout = useRef(layout);
@@ -205,15 +208,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       return;
     }
 
-    // Only set state again if the ID is not the same
-    // const findStep: IStepProps =
-    //   integrationJson.steps.find((step) => step.UUID === node.data.step.UUID) ?? selectedStep;
+    const flatSteps = flattenSteps(integrationJson.steps);
+    const stepIdx = flatSteps.map((s: IStepProps) => s.UUID).indexOf(node.data.step.UUID);
 
-    // find the step in integrationJson, use that, otherwise use existing selectedStep
-    const findStepIdx = findStepIdxWithUUID(node.data.step.UUID);
-    if (findStepIdx !== -1) {
-      setSelectedStep(integrationJson.steps[findStepIdx]);
-    }
+    if (stepIdx !== -1) setSelectedStep(flatSteps[stepIdx]);
 
     if (!isPanelExpanded) setIsPanelExpanded(true);
   };
@@ -228,7 +226,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
    */
   const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
     let newStep: IStepProps = selectedStep;
-    const newStepParameters = newStep.parameters;
+    const newStepParameters = newStep.parameters?.slice();
 
     if (newStepParameters && newStepParameters.length > 0) {
       Object.entries(newValues).map(([key, value]) => {
@@ -236,9 +234,29 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         newStepParameters[paramIndex!].value = value;
       });
 
-      const oldStepIdx = findStepIdxWithUUID(selectedStep?.UUID!, integrationJson.steps);
-
-      replaceStep(newStep, oldStepIdx);
+      // is the old step a nested step?
+      if (nestedSteps.some((ns) => ns.stepUuid === newStep.UUID)) {
+        // it's a nested step
+        // console.log(true);
+        // use its path to replace only this part of the original step
+        const currentStepNested = nestedSteps.find((ns) => ns.stepUuid === newStep.UUID);
+        if (currentStepNested) {
+          const oldStepIdx = findStepIdxWithUUID(
+            currentStepNested.originStepUuid,
+            integrationJson.steps
+          );
+          // const oldStep = integrationJson.steps[oldStepIdx];
+          //
+          // const oldStepNewPath = integrationJson.steps[currentStepNested.path];
+          // replaceStep({ ...oldStep, ...newStep }, oldStepIdx);
+          console.log('path: ', pathToString(currentStepNested.path));
+          replaceStep(newStep, oldStepIdx, pathToString(currentStepNested.path));
+        }
+      } else {
+        // console.log(false);
+        const oldStepIdx = findStepIdxWithUUID(newStep.UUID, integrationJson.steps);
+        replaceStep(newStep, oldStepIdx);
+      }
     } else {
       return;
     }

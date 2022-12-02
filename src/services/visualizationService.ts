@@ -1,6 +1,12 @@
 import { useIntegrationJsonStore } from '@kaoto/store';
-import { IStepProps, IVizStepNode, IVizStepNodeDataBranch, IVizStepPropsEdge } from '@kaoto/types';
-import { truncateString } from '@kaoto/utils';
+import {
+  INestedStep,
+  IStepProps,
+  IVizStepNode,
+  IVizStepNodeDataBranch,
+  IVizStepPropsEdge,
+} from '@kaoto/types';
+import { findPath, truncateString } from '@kaoto/utils';
 import { ElkExtendedEdge, ElkNode } from 'elkjs';
 import { MarkerType, Position } from 'reactflow';
 
@@ -130,12 +136,12 @@ export function buildNodeDefaultParams(
 ): IVizStepNode {
   return {
     data: {
+      branchInfo,
       kind: step.kind,
       label: truncateString(step.name, 14),
       step,
-      icon: step.icon,
       ...props,
-      ...branchInfo,
+      icon: step.icon,
     },
     draggable: false,
     id: newId,
@@ -189,6 +195,7 @@ export function buildNodesFromSteps(
       stepNodes.push(currentStep);
     }
 
+    // recursively build nodes for branch steps
     if (step.branches && step.maxBranches !== 0) {
       step.branches.forEach((branch) => {
         stepNodes = stepNodes.concat(
@@ -233,12 +240,50 @@ export function containsBranches(step: IStepProps): boolean {
 }
 
 /**
+ * Given an array of Steps, return an array containing *only*
+ * the steps which are nested
+ * @param steps
+ */
+export function extractNestedSteps(steps: IStepProps[]) {
+  let tempSteps = steps.slice();
+  let nestedSteps: INestedStep[] = [];
+
+  const loopOverSteps = (steps: IStepProps[], originalStepUuid?: string) => {
+    steps.forEach((step) => {
+      if (originalStepUuid) {
+        // this is a nested step
+        nestedSteps.push({
+          stepUuid: step.UUID,
+          originStepUuid: originalStepUuid,
+          path: findPath(tempSteps, step.UUID, 'UUID'),
+        });
+      }
+
+      if (step.branches) {
+        step.branches.forEach((branch) => {
+          // it contains nested steps; we will need to store the branch info
+          // and the path to it, for each of those steps
+          return loopOverSteps(branch.steps, step.UUID);
+        });
+      }
+    });
+  };
+
+  // 1. loop over each step from the original steps array
+  // 2. loop over each step's branches
+  // 3. loop over each step branch's steps
+  loopOverSteps(tempSteps);
+
+  return nestedSteps;
+}
+
+/**
  * Returns a Step index when provided with the `UUID`.
  * `UUID` is originally set using the Step UUID.
  * @param UUID
  * @param steps
  */
-export function findStepIdxWithUUID(UUID: string, steps?: IStepProps[]) {
+export function findStepIdxWithUUID(UUID: string, steps?: IStepProps[]): number {
   // optional steps allows for dependency injection in testing
   if (!steps) {
     return useIntegrationJsonStore
@@ -257,6 +302,25 @@ export function findStepIdxWithUUID(UUID: string, steps?: IStepProps[]) {
  */
 export function findNodeIdxWithUUID(UUID: string, nodes: IVizStepNode[]) {
   return nodes.map((n) => n.data.step.UUID).indexOf(UUID);
+}
+
+/**
+ * Flattens a deeply nested array of Steps and their respective
+ * branches, and their Steps, into a single array.
+ * Typically used for quickly fetching a Step.
+ */
+export function flattenSteps(steps: IStepProps[]): IStepProps[] {
+  let children: IStepProps[] = [];
+  const flattenMembers = steps.map((s) => {
+    if (s.branches && s.branches.length) {
+      s.branches.map((b) => {
+        children = [...children, ...b.steps];
+      });
+    }
+    return s;
+  });
+
+  return flattenMembers.concat(children.length ? flattenSteps(children) : children);
 }
 
 /**
@@ -394,6 +458,10 @@ export function insertBranchGroupNode(
   });
 }
 
+export function isEndStep(step: IStepProps): boolean {
+  return step.type === 'END';
+}
+
 export function isFirstStepEip(steps: IStepProps[]): boolean {
   return steps.length > 0 && steps[0].kind === 'EIP';
 }
@@ -404,10 +472,6 @@ export function isFirstStepStart(steps: IStepProps[]): boolean {
 
 export function isLastNode(nodes: IVizStepNode[], UUID: string): boolean {
   return nodes[nodes.length - 1].data.step.UUID === UUID;
-}
-
-export function isEndStep(step: IStepProps): boolean {
-  return step.type === 'END';
 }
 
 export function isMiddleStep(step: IStepProps): boolean {
