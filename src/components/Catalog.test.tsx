@@ -67,6 +67,7 @@ const mockedValue = [
 
 let method: jest.Mock;
 describe('Catalog.tsx', () => {
+  const user = userEvent.setup();
   beforeAll(() => {
     method = (fetchCatalogSteps as jest.Mock).mockResolvedValue(mockedValue);
   });
@@ -85,14 +86,14 @@ describe('Catalog.tsx', () => {
 
     element = await screen.findByText('actions');
     expect(element).toBeInTheDocument();
-    element.click();
+    user.click(element);
 
     element = await screen.findByText('claim-check');
     expect(element).toBeInTheDocument();
 
     element = await screen.findByText('end');
     expect(element).toBeInTheDocument();
-    element.click();
+    user.click(element);
 
     element = await screen.findByText('end-step');
     expect(element).toBeInTheDocument();
@@ -117,6 +118,7 @@ describe('Catalog.tsx', () => {
 
     expect(screen.queryByText('claim-check')).not.toBeInTheDocument();
     expect(screen.getByText('unmarshal')).toBeInTheDocument();
+
   });
 
   test('Alert is fired when there is an error with fetching', async () => {
