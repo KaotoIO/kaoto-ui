@@ -1,8 +1,20 @@
-.trashButton, .plusButton {
+.plusButton {
     width: 20px;
     height: 20px;
-    background: var(--pf-global--Color--light-300);
-    color: white;
+    background: var(--pf-global--Color--light-200);
+    color: rgb(38, 134, 75);
+    border: 1px solid #fff;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 12px;
+    line-height: 1;
+    padding: 1px;
+}
+.trashButton{
+    width: 20px;
+    height: 20px;
+    background: var(--pf-global--Color--light-200);
+    color: rgb(129, 32, 19);
     border: 1px solid #fff;
     cursor: pointer;
     border-radius: 50%;
