@@ -65,7 +65,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       let reactFlowWrapperRect;
 
       if (reactFlowWrapper) {
-        reactFlowWrapperRect = reactFlowWrapper?.getBoundingClientRect();
+        reactFlowWrapperRect = reactFlowWrapper.getBoundingClientRect();
       }
 
       if (
