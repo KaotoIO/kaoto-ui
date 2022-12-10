@@ -15,6 +15,7 @@ import {
   findStepIdxWithUUID,
   getLayoutedElements,
 } from '@kaoto/services';
+import { containsAddStepPlaceholder } from '@kaoto/services';
 import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -29,13 +30,14 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
   const defaultViewport: Viewport = {
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2 - 160,
+    x: 0,
+    y: 0,
     zoom: 1.2,
   };
+
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [, setReactFlowInstance] = useState(null);
-  const reactFlowWrapper = useRef(null);
+  const reactFlowWrapperRef = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({
     maxBranches: 0,
     minBranches: 0,
@@ -50,7 +52,42 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   const { nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, deleteNode } =
     useVisualizationStore();
 
-  // initial loading of visualization steps
+  /**
+   * Center first node if it is the initial `add a step `
+   * node into react flow viewport.
+   */
+  useEffect(() => {
+    const isAddStepPlaceholder = containsAddStepPlaceholder(nodes);
+
+    if (isAddStepPlaceholder) {
+      const reactFlowWrapper = reactFlowWrapperRef?.current as any;
+
+      let reactFlowWrapperRect;
+
+      if (reactFlowWrapper) {
+        reactFlowWrapperRect = reactFlowWrapper?.getBoundingClientRect();
+      }
+
+      if (
+        nodes[0]?.width &&
+        nodes[0]?.height &&
+        reactFlowWrapperRect?.width &&
+        reactFlowWrapperRect?.height
+      ) {
+        const firstNodeWidth = nodes[0].width;
+        const firstNodeHeight = nodes[0].height;
+        const reactFlowWrapperRectWidth = reactFlowWrapperRect.width;
+        const reactFlowWrapperRectHeight = reactFlowWrapperRect.height;
+
+        nodes[0].position.x = (reactFlowWrapperRectWidth / 2 - firstNodeWidth / 2) * 0.8;
+        nodes[0].position.y = (reactFlowWrapperRectHeight / 2 - firstNodeHeight / 2) * 0.8;
+      }
+    }
+  });
+
+  /**
+   * Initial loading of visualization steps
+   */
   useEffect(() => {
     const { stepNodes, stepEdges } = buildNodesAndEdges(integrationJson.steps);
 
@@ -225,7 +262,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         <div
           className="reactflow-wrapper"
           data-testid={'react-flow-wrapper'}
-          ref={reactFlowWrapper}
+          ref={reactFlowWrapperRef}
           style={{
             width: window.innerWidth,
             height: window.innerHeight - 153,
@@ -234,8 +271,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           <ReactFlow
             nodes={nodes}
             edges={edges}
-            defaultViewport={defaultViewport}
             edgeTypes={edgeTypes}
+            defaultViewport={defaultViewport}
             nodeTypes={nodeTypes}
             onDragOver={onDragOver}
             onNodeClick={onNodeClick}
