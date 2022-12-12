@@ -11,6 +11,6 @@ jobs:
     runs-on: ubuntu-latest 
     steps:
     - name: Create Release
-      uses: ncipollo/release-action@v1.11.2
+      uses: ncipollo/release-action@v1.12.0
       with:
         draft: true
