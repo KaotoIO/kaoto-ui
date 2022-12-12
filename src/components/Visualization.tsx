@@ -37,7 +37,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
 
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [, setReactFlowInstance] = useState(null);
-  const reactFlowWrapperRef = useRef(null);
+  const reactFlowWrapperRef = useRef<HTMLDivElement>(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({
     maxBranches: 0,
     minBranches: 0,
@@ -60,7 +60,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     const isAddStepPlaceholder = containsAddStepPlaceholder(nodes);
 
     if (isAddStepPlaceholder) {
-      const reactFlowWrapper = reactFlowWrapperRef?.current as any;
+      const reactFlowWrapper = reactFlowWrapperRef.current;
 
       let reactFlowWrapperRect;
 
