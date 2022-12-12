@@ -14,8 +14,8 @@ import {
   buildNodesFromSteps,
   findStepIdxWithUUID,
   getLayoutedElements,
+  containsAddStepPlaceholder,
 } from '@kaoto/services';
-import { containsAddStepPlaceholder } from '@kaoto/services';
 import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
 import { useEffect, useMemo, useRef, useState } from 'react';
