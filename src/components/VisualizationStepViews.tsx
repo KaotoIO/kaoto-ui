@@ -80,13 +80,16 @@ const VisualizationStepViews = ({
   };
 
   useEffect(() => {
-    let tempSchemaObject: { [label: string]: { type: string; value?: any } } = {};
+    let tempSchemaObject: { [label: string]: { type: string; value?: any; description?: string } } = {};
+
     let tempModelObject: { [label: string]: any } = {};
 
     const schemaProps = (parameter: { [label: string]: any }) => {
       const propKey = parameter.id;
-      const { type } = parameter;
-      tempSchemaObject[propKey] = { type };
+      const description = parameter.description;
+      const type = parameter.type;
+
+      tempSchemaObject[propKey] = { type, description };
       tempModelObject[propKey] = parameter.value;
     };
 

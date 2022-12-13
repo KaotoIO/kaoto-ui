@@ -1,8 +1,8 @@
 import Ajv from 'ajv';
 import { useRef } from 'react';
 import { AutoForm } from 'uniforms';
-import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
 import { AutoFields, ErrorsField } from 'uniforms-patternfly';
+import { CustomJsonSchemaBridge } from './CustomJsonSchemaBridge';
 
 const ajv = new Ajv({
   allErrors: true,
@@ -33,7 +33,7 @@ export const JsonSchemaConfigurator = ({
 }: JsonSchemaConfiguratorProps) => {
   schema.type = schema.type || 'object';
   const schemaValidator = createValidator(schema);
-  const bridge = new JSONSchemaBridge(schema, schemaValidator);
+  const bridge = new CustomJsonSchemaBridge(schema, schemaValidator);
   const previousModel = useRef(configuration);
   return (
     <AutoForm
