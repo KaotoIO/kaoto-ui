@@ -2,6 +2,7 @@ export * from './AppearanceModal';
 export * from './Catalog';
 export * from './ConfirmationModal';
 export * from './Console';
+export * from './CustomJsonSchemaBridge';
 export * from './DeploymentsModal';
 export * from './Extension';
 export * from './JsonSchemaConfigurator';
