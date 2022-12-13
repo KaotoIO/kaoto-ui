@@ -1,6 +1,12 @@
-name: 👩‍💻 Add Standalone Jar to Release
+name: 👩‍💻 Add Builds to Release
 
 on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag to use (frontend)'
+        required: true
+        type: string
   release:
     types: [published]
 
@@ -11,6 +17,8 @@ jobs:
     steps:
       - name: 🚟 Checkout frontend
         uses: actions/checkout@v3
+        with:
+          ref: '${{ env.release.tag_name }}${{ inputs.tag_name }}'
       - name: 🚀 Setup Node
         uses: actions/setup-node@v3
         with:
@@ -18,45 +26,47 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@kaoto'
       - name: 🛸 Build Frontend
-        run: yarn install --mode=skip-build && KAOTO_API="" yarn run build
+        run: yarn install && KAOTO_API="" yarn build
       - name: 📩 Save dist folder
         uses: actions/upload-artifact@v3
         with:
           name: dist
-          path: /app/kaoto-ui/dist/
+          path: dist/
           retention-days: 1
 
   build-standalone-jar:
     name: 👩‍🏭 Build standalone jar
     runs-on: ubuntu-latest
+    needs: build-frontend
     steps:
       - name: 🛂 Find the right frontend major and minor version
-        run: 'echo "frontend_version=${{ env.release.tag_name }}" | sed -En "s/v([0-9]+\.)([0-9]+\.)?([0-9]+)/v\1\2/p" >> $GITHUB_ENV'
-      - name: 🛃 Find the right backend version
-        run: 'echo "backend_version=$(git tag --list | grep ${{ env.frontend_version }} | tail -n 1)" >> $GITHUB_ENV'
-      - name: 🛃 Find the version based on code
-        run: 'echo "api_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
+        run: 'echo "frontend_version=${{ env.release.tag_name }}${{ inputs.tag_name }}" | sed -En "s/v([0-9]+\.)([0-9]+\.)?([0-9]+)/v\1\2/p" >> $GITHUB_ENV'
       - name: 🚟 Checkout backend
         uses: actions/checkout@v3
         with:
           repository: 'KaotoIO/kaoto-backend'
-          ref: '${{ env.backend_version }}'
-          path: 'backend'
-      - name: 🚧 Remove default html resources
-        run: 'rm -r api/src/main/resources/META-INF/resources/'
-      - name: 📨 Retrieve saved dist folder
-        uses: actions/download-artifact@v3
-        with:
-          name: dist
-          path: api/src/main/resources/META-INF/
-      - name: 👩🏻‍💼 Move frontend to proper folder
-        run: 'mv api/src/main/resources/META-INF/dist/ api/src/main/resources/META-INF/resources/'
+          fetch-depth: '0'
       - name: 🥸 Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
           java-version: 17
           check-latest: true
+      - name: 🛃 Find the right backend version
+        run: 'echo "backend_version=$(git tag --list | grep ${{ env.frontend_version }} | tail -n 1)" >> $GITHUB_ENV'
+      - name: 🛂 Checkout the right backend version
+        run: 'git checkout ${{ env.backend_version }}'
+      - name: 🛃 Find the version based on code
+        run: 'echo "api_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
+      - name: 🚧 Remove default html resources
+        run: 'rm api/src/main/resources/META-INF/resources/index.html'
+      - name: 📨 Retrieve saved dist folder
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+      - name: 👩🏻‍💼 Move frontend to proper folder
+        run: 'mv dist/* api/src/main/resources/META-INF/resources/'
       - name: 🔥 Cache Maven packages
         uses: actions/cache@v3
         with:
@@ -64,60 +74,63 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: 🤳 Build Jar
-        run: mvn install -DskipTests
+        run: mvn install -DskipTests; mvn install -DskipTests -Dquarkus.package.type=uber-jar -pl api
       - name: 📦 Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: api/target/api-${{ env.api_version }}.jar
-          asset_name: standalone-jar
+          file: api/target/api-${{ env.api_version }}-runner.jar
+          asset_name: kaoto-${{ env.api_version }}-runner.jar
           tag: ${{ github.ref }}
 
   build-native:
     name: 👩🏼‍🏭 Build Native Quarkus for ${{ matrix.os }} 👩🏼‍🏭
     runs-on: ${{ matrix.os }}
+    needs: build-frontend
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
             asset_name: kaoto-linux-amd64
             file: -runner
-          - os: windows-latest
-            asset_name: kaoto-windows-amd64
-            file: -runner.exe
+#          - os: windows-latest
+#            asset_name: kaoto-windows-amd64
+#            file: -runner.exe
           - os: macos-latest
             asset_name: kaoto-macos-amd64
             file: -runner
     steps:
-      - name: 🛂 Find the right frontend major and minor version
-        run: 'echo "frontend_version=${{ env.release.tag_name }}" | sed -En "s/v([0-9]+\.)([0-9]+\.)?([0-9]+)/v\1\2/p" >> $GITHUB_ENV'
-      - name: 🛃 Find the right backend version
-        run: 'echo "backend_version=$(git tag --list | grep ${{ env.frontend_version }} | tail -n 1)" >> $GITHUB_ENV'
-      - name: 🛃 Find the version based on code
-        run: 'echo "api_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
       - name: 🚟 Checkout backend
         uses: actions/checkout@v3
         with:
           repository: 'KaotoIO/kaoto-backend'
-          ref: '${{ env.backend_version }}'
-          path: 'backend'
-      - name: 🚧 Remove default html resources
-        run: 'rm -r api/src/main/resources/META-INF/resources/'
-      - name: 📨 Retrieve saved dist folder
-        uses: actions/download-artifact@v3
-        with:
-          name: dist
-          path: api/src/main/resources/META-INF/
-      - name: 👩🏻‍💼 Move frontend to proper folder
-        run: 'mv api/src/main/resources/META-INF/dist/ api/src/main/resources/META-INF/resources/'
+          fetch-depth: '0'
+      - name: 🛂 Find the right frontend major and minor version
+        run: 'echo "frontend_version=${{ env.release.tag_name }}${{ inputs.tag_name }}" | sed -En "s/v([0-9]+\.)([0-9]+\.)?([0-9]+)/v\1\2/p" >> $GITHUB_ENV'
       - name: 🥸 Set up GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
           java-version: '17'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: '22.2.0'
+          version: 'latest'
           cache: 'maven'
+      - name: 🛃 Find the right backend version
+        run: 'echo "backend_version=$(git tag --list | grep ${{ env.frontend_version }} | tail -n 1)" >> $GITHUB_ENV'
+      - name: 🛂 Checkout the right backend version
+        run: 'git checkout ${{ env.backend_version }}'
+      - name: 🛃 Find the version based on code
+        run: 'echo "api_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV'
+      - name: 🚧 Remove default html resources
+        run: 'rm api/src/main/resources/META-INF/resources/index.html'
+      - name: 📨 Retrieve saved dist folder
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+      - name: 👩🏻‍💼 Move frontend to proper folder
+        run: 'mv dist/* api/src/main/resources/META-INF/resources/'
       - name: 🔥 Cache Maven packages
         uses: actions/cache@v3
         with:
