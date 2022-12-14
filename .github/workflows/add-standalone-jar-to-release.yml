@@ -114,7 +114,7 @@ jobs:
           java-version: '17'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 'latest'
+          version: '22.2.0'
           cache: 'maven'
       - name: 🛃 Find the right backend version
         run: 'echo "backend_version=$(git tag --list | grep ${{ env.frontend_version }} | tail -n 1)" >> $GITHUB_ENV'
