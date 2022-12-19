@@ -36,7 +36,7 @@
     "@kie-tools-core/patternfly-base": "0.25.0",
     "@kie-tools-core/workspace": "0.25.0",
     "@patternfly/patternfly": "4.222.4",
-    "@patternfly/react-code-editor": "4.82.67",
+    "@patternfly/react-code-editor": "4.82.82",
     "@patternfly/react-core": "4.267.6",
     "@patternfly/react-icons": "4.93.3",
     "@patternfly/react-log-viewer": "4.87.77",
