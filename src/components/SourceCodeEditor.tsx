@@ -53,7 +53,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       fetchIntegrationJson(incomingData, settings.dsl.name)
         .then((res: IIntegration) => {
           let tmpInt = res;
-          if (res.metadata.name != '') {
+          if (typeof res.metadata?.name === 'string' && res.metadata.name !== '') {
             settings.name = res.metadata.name;
             setSettings({ name: res.metadata.name });
           }
