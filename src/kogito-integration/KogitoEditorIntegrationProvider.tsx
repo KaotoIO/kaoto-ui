@@ -136,11 +136,10 @@ function KogitoEditorIntegrationProviderInternal(
             if (canceled.get()) return;
 
             let tmpInt = res;
-            const name = tmpInt.metadata.name;
 
-            if (name !== '') {
-              settings.name = name;
-              setSettings({ name: name });
+            if (typeof res.metadata?.name === 'string' && res.metadata.name !== '') {
+              settings.name = res.metadata.name;
+              setSettings({ name: res.metadata.name });
             }
 
             tmpInt.metadata = { ...res.metadata, ...settings };
