@@ -1093,7 +1093,7 @@
     react-dropzone "9.0.0"
     tslib "^2.0.0"
 
-"@patternfly/react-core@4.267.6", "@patternfly/react-core@^4.157.3", "@patternfly/react-core@^4.264.0", "@patternfly/react-core@^4.267.6":
+"@patternfly/react-core@4.267.6", "@patternfly/react-core@^4.157.3", "@patternfly/react-core@^4.267.6":
   version "4.267.6"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.267.6.tgz#d9a755e627fa333647ace30c15c400db47046799"
   integrity sha512-4sb0OeGHLSLfFzrs5Tn3IXHuu6VLb+6v/FG4vcMccnGq7j/Bocns40g5mPkxC9KVbWHq7lT34wfKzS5kyIBHKQ==
@@ -1106,7 +1106,7 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-icons@4.93.3", "@patternfly/react-icons@^4.11.17", "@patternfly/react-icons@^4.93.0", "@patternfly/react-icons@^4.93.3":
+"@patternfly/react-icons@4.93.3", "@patternfly/react-icons@^4.11.17", "@patternfly/react-icons@^4.93.3":
   version "4.93.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.93.3.tgz#ba617b1daefce81ba903bc702ff66060413e2a9f"
   integrity sha512-OIEeTc4Noi9XOIRF3OB3sz9dRnxr1h4eNIzIeZwRd8xXWCQxYcrllxPV98F3+RpL4ZCH2QWb/2gG4mHrVyX+0A==
@@ -1122,7 +1122,7 @@
     memoize-one "^5.1.0"
     resize-observer-polyfill "^1.5.1"
 
-"@patternfly/react-styles@^4.92.0", "@patternfly/react-styles@^4.92.3":
+"@patternfly/react-styles@^4.92.3":
   version "4.92.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.92.3.tgz#046acee6e38c996cf41c288819eca17c3634a782"
   integrity sha512-jC8F71trFWVYM7YVTP/3MBLwLZDCY3tgHeAmSKdcw6R607LK4rtCzfw5lt2IHNmAjQ0ggqDlJGWsJAfGMe4iPA==
@@ -9369,10 +9369,10 @@ yauzl@^2.10.0, yauzl@^2.4.2:
     buffer-crc32 "~0.2.3"
     fd-slicer "~1.1.0"
 
-zundo@^2.0.0-beta.6:
-  version "2.0.0-beta.6"
-  resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.6.tgz#6a6a5fd42178b8d2f64fed46b70c758c35510804"
-  integrity sha512-t9rYHfDRWFzI9Ecng1sdn8Ll2W45IT9bE+xCbjXnzoOedtrf1zqAIBz1FoEQfFFsKzPRWFDV3IHzQLcYanfi1A==
+zundo@^2.0.0-beta.8:
+  version "2.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.8.tgz#093bd24d964b91cb8ff8b0742b1524e4a806cbc5"
+  integrity sha512-J88U4ApZc+utZC8/y/b6fR/J8obxjMYq/0ZhpDkmUp/x7tCr9juITa0iBMJAhRB/yLAP4oHJh9gaZmAdsBu1JA==
 
 zustand@^4.1.1, zustand@^4.1.5:
   version "4.1.5"
