@@ -894,13 +894,13 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@module-federation/typescript@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@module-federation/typescript/-/typescript-2.0.2.tgz#c9d4899a3a6de8163c009789cd3faca2ae931a83"
-  integrity sha512-7IWCDhVne5MF1JsMK81xdv+ty9wtzWtfnGgtoQDIH6deivJvcphuQWFRsZkY4ZmSCwFYTtEP37bq7zN9ooHI1w==
+"@module-federation/typescript@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@module-federation/typescript/-/typescript-2.0.3.tgz#50adb74c617a5dc48218f1a69c06f6f69c751e22"
+  integrity sha512-t1WRWigzzzLmghK2BtNzoz6HfJN1CTpJFVjvgR3BDHtJOODGMJIxAVhCB7vkmH7NPmbu6HoQmV6gArgKu0qplg==
   dependencies:
     "@module-federation/utilities" "1.0.1"
-    "@swc/helpers" "~0.3.3"
+    "@swc/helpers" "~0.4.0"
     axios "^0.27.2"
     download "^8.0.0"
     lodash.get "^4.4.2"
@@ -1093,7 +1093,7 @@
     react-dropzone "9.0.0"
     tslib "^2.0.0"
 
-"@patternfly/react-core@4.267.6", "@patternfly/react-core@^4.157.3", "@patternfly/react-core@^4.264.0", "@patternfly/react-core@^4.267.6":
+"@patternfly/react-core@4.267.6", "@patternfly/react-core@^4.157.3", "@patternfly/react-core@^4.267.6":
   version "4.267.6"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.267.6.tgz#d9a755e627fa333647ace30c15c400db47046799"
   integrity sha512-4sb0OeGHLSLfFzrs5Tn3IXHuu6VLb+6v/FG4vcMccnGq7j/Bocns40g5mPkxC9KVbWHq7lT34wfKzS5kyIBHKQ==
@@ -1106,7 +1106,7 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-icons@4.93.3", "@patternfly/react-icons@^4.11.17", "@patternfly/react-icons@^4.93.0", "@patternfly/react-icons@^4.93.3":
+"@patternfly/react-icons@4.93.3", "@patternfly/react-icons@^4.11.17", "@patternfly/react-icons@^4.93.3":
   version "4.93.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.93.3.tgz#ba617b1daefce81ba903bc702ff66060413e2a9f"
   integrity sha512-OIEeTc4Noi9XOIRF3OB3sz9dRnxr1h4eNIzIeZwRd8xXWCQxYcrllxPV98F3+RpL4ZCH2QWb/2gG4mHrVyX+0A==
@@ -1122,7 +1122,7 @@
     memoize-one "^5.1.0"
     resize-observer-polyfill "^1.5.1"
 
-"@patternfly/react-styles@^4.92.0", "@patternfly/react-styles@^4.92.3":
+"@patternfly/react-styles@^4.92.3":
   version "4.92.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.92.3.tgz#046acee6e38c996cf41c288819eca17c3634a782"
   integrity sha512-jC8F71trFWVYM7YVTP/3MBLwLZDCY3tgHeAmSKdcw6R607LK4rtCzfw5lt2IHNmAjQ0ggqDlJGWsJAfGMe4iPA==
@@ -1268,10 +1268,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@swc/helpers@~0.3.3":
-  version "0.3.17"
-  resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.3.17.tgz#7c1b91f43c77e2bba99492162a498d465ef253d5"
-  integrity sha512-tb7Iu+oZ+zWJZ3HJqwx8oNwSDIU440hmVMDPhpACWQWnrZHK99Bxs70gT1L2dnr5Hg50ZRWEFkQCAnOVVV0z1Q==
+"@swc/helpers@~0.4.0":
+  version "0.4.14"
+  resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.4.14.tgz#1352ac6d95e3617ccb7c1498ff019654f1e12a74"
+  integrity sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==
   dependencies:
     tslib "^2.4.0"
 
