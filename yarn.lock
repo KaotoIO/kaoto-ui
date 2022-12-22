@@ -893,14 +893,6 @@
   dependencies:
     monaco-editor "^0.33.0"
 
-"@kie-tools-core/notifications@0.25.0":
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/notifications/-/notifications-0.25.0.tgz#7abd04a625ca3dbc02ed9f921ddc22532b13fcb4"
-  integrity sha512-BP0sXArwhJlNsVuK7RYNlyoNd7J4QhXMzGgxNBQKkvl9+eeKC8kIv6OTtEbDB/6gK+rpSMTM/zRdc3PYtowVeQ==
-  dependencies:
-    "@kie-tools-core/i18n" "0.25.0"
-    "@kie-tools-core/workspace" "0.25.0"
-
 "@kie-tools-core/notifications@0.26.0":
   version "0.26.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/notifications/-/notifications-0.26.0.tgz#74c6d53393641c3520fa63cf24376053a0b0189a"
