@@ -31,6 +31,9 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
   const { settings, setSettings } = useSettingsStore();
   const previousJson = usePrevious(integrationJson);
+  const schemaUri = settings.dsl.validationSchema
+    ? process.env.KAOTO_API + settings.dsl.validationSchema
+    : '';
 
   useEffect(() => {
     if (previousJson === integrationJson) return;
@@ -67,6 +70,22 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
   };
 
   const handleEditorDidMount = (editor: EditorDidMount['editor']) => {
+    import('monaco-yaml').then((im) => {
+      im.setDiagnosticsOptions({
+        enableSchemaRequest: settings.dsl.validationSchema != '',
+        hover: false,
+        completion: true,
+        validate: settings.dsl.validationSchema != '',
+        format: true,
+        schemas: [
+          {
+            uri: schemaUri,
+            fileMatch: ['*'],
+          },
+        ],
+      });
+    });
+
     const messageContribution: any = editor?.getContribution('editor.contrib.messageController');
     editor?.onDidAttemptReadOnlyEdit(() => {
       messageContribution?.showMessage(
@@ -175,7 +194,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
         height="80vh"
         width={'100%'}
         onCodeChange={debounced}
-        language={(props.language as Language) ?? Language.yaml}
+        language={Language.yaml}
         onEditorDidMount={handleEditorDidMount}
         toolTipPosition="right"
         customControls={customControls}
@@ -191,6 +210,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
             horizontal: 'visible',
             vertical: 'visible',
           },
+          quickSuggestions: { other: true, strings: true },
         }}
       />
     </StepErrorBoundary>

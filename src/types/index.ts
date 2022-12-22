@@ -76,6 +76,7 @@ export interface IDsl {
   name: string;
   description: string;
   stepKinds: string;
+  validationSchema: string;
 }
 
 /**
