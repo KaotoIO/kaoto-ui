@@ -809,14 +809,6 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/envelope-bus@0.25.0":
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope-bus/-/envelope-bus-0.25.0.tgz#4990c1fdafbde4db1fb4da2c8db87cb3f109c67d"
-  integrity sha512-FKba7GeAR5HyzBq5ph4ur1LYXWXCLhjwKar2WHJdvJEUR5BIBL1OCm8/MjuZBCdEXSXvKYU1jR5NbauFvo1GcA==
-  dependencies:
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
 "@kie-tools-core/envelope-bus@0.26.0":
   version "0.26.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope-bus/-/envelope-bus-0.26.0.tgz#c50ab8b13223ce1d6ba6e168d2e9a2e1099ba5f1"
@@ -832,19 +824,6 @@
   dependencies:
     "@kie-tools-core/envelope-bus" "0.26.0"
     csstype "^3.0.11"
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
-"@kie-tools-core/guided-tour@0.25.0":
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/guided-tour/-/guided-tour-0.25.0.tgz#3317cacde1bf894af1508355bf66058c8f660fbb"
-  integrity sha512-7bCsV3YC2kROoRHeEw25vQ+v4GhbhQCB/ekxv8AXJ9eyOAsKNGpiIoqTfvafICwAU92DfdjEmSz4uk+qGi2MEg==
-  dependencies:
-    "@kie-tools-core/envelope-bus" "0.25.0"
-    "@kie-tools-core/i18n" "0.25.0"
-    "@kie-tools-core/patternfly-base" "0.25.0"
-    "@patternfly/react-core" "^4.157.3"
-    "@patternfly/react-icons" "^4.11.17"
     react "^17.0.2"
     react-dom "^17.0.2"
 
@@ -918,11 +897,6 @@
   version "0.26.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.26.0.tgz#6633591fb8177c1b29ae2af22958bf9f617cf873"
   integrity sha512-A8BWq/QlZjCLEB7UUdM20f2sIdj3Af7SxLrQludPZ2rdFh96LcXpc4vtP1TU7PyY1LDuVQEJOPzSLB0epKijEQ==
-
-"@kie-tools-core/patternfly-base@0.25.0":
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.25.0.tgz#7c41583df0cdc2924663e2f015a1af7d01b0c97d"
-  integrity sha512-BQTt9MjBezXpr1Rx9atoCVGgxCeYeH2ZoNCTfPtZ5xBKRyUsVhbVjZALbAIgngUu+BetwNqUrGBorTOOxET3TQ==
 
 "@kie-tools-core/patternfly-base@0.26.0":
   version "0.26.0"
