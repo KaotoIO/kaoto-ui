@@ -840,14 +840,6 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/i18n@0.25.0":
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/i18n/-/i18n-0.25.0.tgz#d02fe3b1e77d74ad4b4642cab19ab1fc1c2c8f74"
-  integrity sha512-WdCYIREVPsGA6ecgf9GfJtorUSBjBUJbeeUojsaOuf9ftTud0bhMapDSBbobbxWe9G2XA/GPBD6286HHcC4GVA==
-  dependencies:
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
 "@kie-tools-core/i18n@0.26.0":
   version "0.26.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/i18n/-/i18n-0.26.0.tgz#963d39027952854fb9f799227e4d4bb429b27d43"
@@ -880,11 +872,6 @@
     "@kie-tools-core/i18n" "0.26.0"
     "@kie-tools-core/workspace" "0.26.0"
 
-"@kie-tools-core/operating-system@0.25.0":
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.25.0.tgz#3323a14ced104310d2bda76d7be1bc4d873e9109"
-  integrity sha512-Ua8KGj59ScnZSsxcuZDVXNnSbur66QYMopi54S7FzCExR3O87wdYrdzZZqhHP/V+Up0M1ZSNXWVyzCTWgOV3CQ==
-
 "@kie-tools-core/operating-system@0.26.0":
   version "0.26.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.26.0.tgz#6633591fb8177c1b29ae2af22958bf9f617cf873"
@@ -894,13 +881,6 @@
   version "0.26.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.26.0.tgz#1127ae2806a463e92cb2a3072bdd76e7d33214da"
   integrity sha512-Sivp0eMMe5uVqWJ0vwjyBvCfs/S5y3VzS+slNK5v55AYAHfuad4VM07SvR3Md34RW2u6Xgj+KZ8CsWkJCKfuvg==
-
-"@kie-tools-core/workspace@0.25.0":
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/workspace/-/workspace-0.25.0.tgz#354ba11ed950752014ff76b32a218b52bdea4113"
-  integrity sha512-lVeIQP8h1kjqNeKbB+39kpMr8ZDi+EeHtKWJxBhyb2qq1CNr6Kspt94Xd3V+Aoe1Jvb93Mklshp9UeUrjLuwOA==
-  dependencies:
-    "@kie-tools-core/operating-system" "0.25.0"
 
 "@kie-tools-core/workspace@0.26.0":
   version "0.26.0"
@@ -8899,10 +8879,10 @@ uniforms-bridge-json-schema@^3.10.1:
     tslib "^2.2.0"
     uniforms "^3.10.1"
 
-uniforms-patternfly@^4.7.6:
-  version "4.7.6"
-  resolved "https://registry.yarnpkg.com/uniforms-patternfly/-/uniforms-patternfly-4.7.6.tgz#d3d7f38eb8dbaf0e909760731069148956802183"
-  integrity sha512-94VAf3YtG7t9vnnm1BMxCQ9t6ha8+w1LI+57pS6h9e8U4GJ5e92xNZWkCPNDnigPrRA78VOasDpOR4wEcOwE8g==
+uniforms-patternfly@^4.7.7:
+  version "4.7.7"
+  resolved "https://registry.yarnpkg.com/uniforms-patternfly/-/uniforms-patternfly-4.7.7.tgz#3fa756f5a558bfc3151c8691f17cfe6156470fef"
+  integrity sha512-+wgLDmxUL2FivIT2YI5rzS6t2o8dFXs0LLQSlGnYVt+ZWH5bfRgYJU7JhgqHfeDaGXeY2IMAAY6UekLcB4Uuhw==
   dependencies:
     classnames "^2.0.0"
     invariant "^2.0.0"
