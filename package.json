@@ -59,7 +59,7 @@
     "tar-webpack-plugin": "^0.1.1",
     "uniforms": "^3.10.0",
     "uniforms-bridge-json-schema": "^3.10.1",
-    "uniforms-patternfly": "^4.7.6",
+    "uniforms-patternfly": "^4.7.7",
     "use-debounce": "9.0.2",
     "web-vitals": "3.1.0",
     "zundo": "^2.0.0-beta.8",
