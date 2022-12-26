@@ -57,7 +57,7 @@
     "reactflow": "^11.4.0",
     "simple-zustand-devtools": "^1.1.0",
     "tar-webpack-plugin": "^0.1.1",
-    "uniforms": "^3.10.0",
+    "uniforms": "^3.10.2",
     "uniforms-bridge-json-schema": "^3.10.1",
     "uniforms-patternfly": "^4.7.7",
     "use-debounce": "9.0.2",
