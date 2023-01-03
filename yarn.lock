@@ -9413,9 +9413,9 @@ zundo@^2.0.0-beta.8:
   resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.8.tgz#093bd24d964b91cb8ff8b0742b1524e4a806cbc5"
   integrity sha512-J88U4ApZc+utZC8/y/b6fR/J8obxjMYq/0ZhpDkmUp/x7tCr9juITa0iBMJAhRB/yLAP4oHJh9gaZmAdsBu1JA==
 
-zustand@^4.1.1, zustand@^4.1.5:
-  version "4.1.5"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.1.5.tgz#7402b511f5b23ccb0f9ba6d20ae01ec817e16eb6"
-  integrity sha512-PsdRT8Bvq22Yyh1tvpgdHNE7OAeFKqJXUxtJvj1Ixw2B9O2YZ1M34ImQ+xyZah4wZrR4lENMoDUutKPpyXCQ/Q==
+zustand@^4.1.1, zustand@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.2.0.tgz#f6ef9e63794eda9b296979578538a6df6be3e1b0"
+  integrity sha512-eNwaDoD2FYVnMgtNxiMUhTJO780wonZUzJrPQTLYI0erSIMZF8cniWFW22kGQUECd8rdHRJ/ZJL2XO54c9Ttuw==
   dependencies:
     use-sync-external-store "1.2.0"
