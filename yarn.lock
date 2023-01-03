@@ -8884,10 +8884,10 @@ uniforms-bridge-json-schema@^3.10.2:
     tslib "^2.2.0"
     uniforms "^3.10.2"
 
-uniforms-patternfly@^4.7.7:
-  version "4.7.7"
-  resolved "https://registry.yarnpkg.com/uniforms-patternfly/-/uniforms-patternfly-4.7.7.tgz#3fa756f5a558bfc3151c8691f17cfe6156470fef"
-  integrity sha512-+wgLDmxUL2FivIT2YI5rzS6t2o8dFXs0LLQSlGnYVt+ZWH5bfRgYJU7JhgqHfeDaGXeY2IMAAY6UekLcB4Uuhw==
+uniforms-patternfly@^4.7.8:
+  version "4.7.8"
+  resolved "https://registry.yarnpkg.com/uniforms-patternfly/-/uniforms-patternfly-4.7.8.tgz#7da68e0d1c80d5cd66346929b54aa5410b5aaaf1"
+  integrity sha512-9imqVxcmZOi8QVFO7IDWpiQymNt5D91BGOkqmKA7v0whSQjD/zNMqZb30avfUwtyljhCTnQnAYBs0Nc5pw/2pg==
   dependencies:
     classnames "^2.0.0"
     invariant "^2.0.0"
