@@ -63,7 +63,7 @@
     "use-debounce": "9.0.2",
     "web-vitals": "3.1.0",
     "zundo": "^2.0.0-beta.8",
-    "zustand": "^4.1.5"
+    "zustand": "^4.2.0"
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^2.2.3",
