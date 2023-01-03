@@ -8874,15 +8874,15 @@ unbzip2-stream@^1.0.9:
     buffer "^5.2.1"
     through "^2.3.8"
 
-uniforms-bridge-json-schema@^3.10.1:
-  version "3.10.1"
-  resolved "https://registry.yarnpkg.com/uniforms-bridge-json-schema/-/uniforms-bridge-json-schema-3.10.1.tgz#7d134a6fc1d3585570ab313bd5df602fa03f8aa6"
-  integrity sha512-AVC+HSTQplF28o7f7Cvc+ezTr07dO+OkRSYaG7Ip8VyGi7BSmORYOKCU8LMkKlLm3Ez3QhHCGnDdLwy9d9Vqgw==
+uniforms-bridge-json-schema@^3.10.2:
+  version "3.10.2"
+  resolved "https://registry.yarnpkg.com/uniforms-bridge-json-schema/-/uniforms-bridge-json-schema-3.10.2.tgz#61740cab4a567eca85557b824de7ef32fdbb5b5d"
+  integrity sha512-J2RG0WQrMH39M9124lhopXnbR/ycuLJk9IkA/ix9Dxpk1dQ7EuHLg/CeXTeZTeQiF2KZrKMYXxUswEmFh7kIMQ==
   dependencies:
     invariant "^2.0.0"
     lodash "^4.0.0"
     tslib "^2.2.0"
-    uniforms "^3.10.1"
+    uniforms "^3.10.2"
 
 uniforms-patternfly@^4.7.7:
   version "4.7.7"
@@ -8895,7 +8895,7 @@ uniforms-patternfly@^4.7.7:
     tslib "^2.2.0"
     uniforms "^3.5.5"
 
-uniforms@^3.10.1, uniforms@^3.10.2, uniforms@^3.5.5:
+uniforms@^3.10.2, uniforms@^3.5.5:
   version "3.10.2"
   resolved "https://registry.yarnpkg.com/uniforms/-/uniforms-3.10.2.tgz#6e5cd6e629c0ca76e65bd74e7fe791b7a8c7fb4b"
   integrity sha512-5FIqpAqyWDmDhaNkmXOxuz8dJ09jPg0gTpn13O6WiqtCY+nmVtHK4yGSpFU1UIjwBt9KfbRPFFmCAbYlCyV4bw==
