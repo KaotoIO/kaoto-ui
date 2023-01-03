@@ -44,7 +44,7 @@
     "@rhoas/app-services-ui-shared": "^0.16.6",
     "ajv": "^8.11.2",
     "elkjs": "^0.8.2",
-    "immer": "^9.0.16",
+    "immer": "^9.0.17",
     "lodash.isequal": "^4.5.0",
     "monaco-editor": "^0.34.1",
     "monaco-editor-webpack-plugin": "^7.0.1",
