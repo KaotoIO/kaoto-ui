@@ -10,10 +10,8 @@ module.exports = {
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
 
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json',
-    },
+  transform: {
+    '\\.(ts|tsx)$': 'ts-jest',
   },
 
   moduleNameMapper: {

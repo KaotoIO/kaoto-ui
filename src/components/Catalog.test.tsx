@@ -65,11 +65,11 @@ const mockedValue = [
   },
 ];
 
-let method: jest.Mock;
+let method: jest.Mock<typeof fetchCatalogSteps>;
 describe('Catalog.tsx', () => {
   const user = userEvent.setup();
   beforeAll(() => {
-    method = (fetchCatalogSteps as jest.Mock).mockResolvedValue(mockedValue);
+    method = (fetchCatalogSteps as jest.Mock<typeof fetchCatalogSteps>).mockResolvedValue(mockedValue);
   });
 
   test('component renders correctly', async () => {
@@ -122,7 +122,8 @@ describe('Catalog.tsx', () => {
   });
 
   test('Alert is fired when there is an error with fetching', async () => {
-    method = (fetchCatalogSteps as jest.Mock).mockImplementation(() => Promise.reject('fail'));
+    jest.spyOn(console, 'error').mockImplementationOnce(() => { return; });
+    method = (fetchCatalogSteps as jest.Mock<typeof fetchCatalogSteps>).mockImplementation(() => Promise.reject('fail'));
     render(
       <AlertProvider>
         <Catalog handleClose={jest.fn()} />
