@@ -74,7 +74,6 @@
     "@testing-library/user-event": "^14.4.3",
     "@trivago/prettier-plugin-sort-imports": "^3.4.0",
     "@types/jest": "^27.4.1",
-    "@types/lodash.get": "^4.4.7",
     "@types/lodash.isequal": "^4.5.6",
     "@types/node": "^18.11.18",
     "@types/react": "18.0.26",

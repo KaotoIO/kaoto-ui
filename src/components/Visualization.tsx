@@ -19,7 +19,6 @@ import {
 } from '@kaoto/services';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
-import { pathToString } from '@kaoto/utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
 
@@ -234,10 +233,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         newStepParameters[paramIndex!].value = value;
       });
 
-      // is the old step a nested step?
+      // check if the step being modified is nested
       if (nestedSteps.some((ns) => ns.stepUuid === newStep.UUID)) {
-        // it's a nested step
-        // console.log(true);
         // use its path to replace only this part of the original step
         const currentStepNested = nestedSteps.find((ns) => ns.stepUuid === newStep.UUID);
         if (currentStepNested) {
@@ -245,15 +242,10 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
             currentStepNested.originStepUuid,
             integrationJson.steps
           );
-          // const oldStep = integrationJson.steps[oldStepIdx];
-          //
-          // const oldStepNewPath = integrationJson.steps[currentStepNested.path];
-          // replaceStep({ ...oldStep, ...newStep }, oldStepIdx);
-          console.log('path: ', pathToString(currentStepNested.path));
-          replaceStep(newStep, oldStepIdx, pathToString(currentStepNested.path));
+
+          replaceStep(newStep, oldStepIdx, currentStepNested.path);
         }
       } else {
-        // console.log(false);
         const oldStepIdx = findStepIdxWithUUID(newStep.UUID, integrationJson.steps);
         replaceStep(newStep, oldStepIdx);
       }

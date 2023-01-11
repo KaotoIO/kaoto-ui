@@ -36,6 +36,6 @@ spec:
             otherwise:
               steps:
                 - set-body:
-                    simple: cheesecubez
+                    simple: fusfusfus
         - to:
             uri: kamelet:sink

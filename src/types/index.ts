@@ -202,7 +202,6 @@ export type IVizStepNodeDataBranch = Partial<IStepPropsBranch> & {
    * The branch node's immediate parent
    */
   parentUuid?: string;
-  // pathToStep: string[] | undefined;
 };
 
 /**

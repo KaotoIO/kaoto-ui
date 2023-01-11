@@ -5,8 +5,7 @@ import { useSettingsStore } from './settingsStore';
 import { useVisualizationStore } from './visualizationStore';
 import { extractNestedSteps, regenerateUuids } from '@kaoto/services';
 import { IIntegration, IStepProps, IViewProps } from '@kaoto/types';
-// @ts-ignore
-import _get from 'lodash.get';
+import { setDeepValue } from '@kaoto/utils';
 import isEqual from 'lodash.isequal';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 import { temporal } from 'zundo';
@@ -19,7 +18,7 @@ interface IIntegrationJsonStore {
   deleteSteps: () => void;
   insertStep: (newStep: IStepProps, index: number) => void;
   integrationJson: IIntegration;
-  replaceStep: (newStep: IStepProps, oldStepIndex?: number, path?: string) => void;
+  replaceStep: (newStep: IStepProps, oldStepIndex?: number, path?: string[]) => void;
   setViews: (views: IViewProps[]) => void;
   updateIntegration: (newInt?: any) => void;
   views: IViewProps[];
@@ -105,29 +104,16 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
           // replacing a slot step with no pre-existing step
           newSteps.unshift(newStep);
         } else if (path) {
-          newSteps[oldStepIndex] = {
-            ...newSteps[oldStepIndex],
-            [path]: { ...newStep },
-          };
-          // newSteps[oldStepIndex][path] = {...newStep};
-          // console.table({ ..._get(newSteps[oldStepIndex], path), ...newStep });
-          console.table({
-            ...newSteps[oldStepIndex],
-            [path]: { ...newStep },
-          });
+          // replacing a deeply nested step
+          newSteps = setDeepValue(newSteps, path, newStep);
         } else {
           // replacing an existing step
           newSteps[oldStepIndex] = newStep;
         }
+
         const stepsWithNewUuids = regenerateUuids(newSteps);
         const { updateSteps } = useNestedStepsStore.getState();
         updateSteps(extractNestedSteps(stepsWithNewUuids));
-
-        // return set(
-        //   produce((state) => {
-        //     state.integrationJson[path] = newStep;
-        //   })
-        // );
 
         return set((state) => ({
           integrationJson: {

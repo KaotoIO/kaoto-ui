@@ -1,4 +1,3 @@
-/** @jest-environment jsdom */
 import eipIntegration from '../store/data/branchSteps';
 import branchSteps from '../store/data/branchSteps';
 import nestedBranch from '../store/data/kamelet.nested-branch.steps';

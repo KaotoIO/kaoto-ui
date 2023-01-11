@@ -137,11 +137,11 @@ export function buildNodeDefaultParams(
   return {
     data: {
       branchInfo,
+      icon: step.icon,
       kind: step.kind,
       label: truncateString(step.name, 14),
       step,
       ...props,
-      icon: step.icon,
     },
     draggable: false,
     id: newId,
@@ -269,9 +269,6 @@ export function extractNestedSteps(steps: IStepProps[]) {
     });
   };
 
-  // 1. loop over each step from the original steps array
-  // 2. loop over each step's branches
-  // 3. loop over each step branch's steps
   loopOverSteps(tempSteps);
 
   return nestedSteps;
@@ -313,7 +310,7 @@ export function flattenSteps(steps: IStepProps[]): IStepProps[] {
   let children: IStepProps[] = [];
   const flattenMembers = steps.map((s) => {
     if (s.branches && s.branches.length) {
-      s.branches.map((b) => {
+      s.branches.forEach((b) => {
         children = [...children, ...b.steps];
       });
     }
