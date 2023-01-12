@@ -54,7 +54,7 @@
     "react-monaco-editor": "^0.48.0",
     "react-router-dom": "5.3.4",
     "react-router-last-location": "2.0.1",
-    "reactflow": "^11.4.1",
+    "reactflow": "^11.4.2",
     "simple-zustand-devtools": "^1.1.0",
     "tar-webpack-plugin": "^0.1.1",
     "uniforms": "^3.10.2",
