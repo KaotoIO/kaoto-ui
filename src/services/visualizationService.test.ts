@@ -1,5 +1,6 @@
 import eipIntegration from '../store/data/branchSteps';
 import branchSteps from '../store/data/branchSteps';
+import nestedBranch from '../store/data/kamelet.nested-branch.steps';
 import nodes from '../store/data/nodes';
 import steps from '../store/data/steps';
 import {
@@ -10,8 +11,10 @@ import {
   buildNodesFromSteps,
   containsAddStepPlaceholder,
   containsBranches,
+  extractNestedSteps,
   findNodeIdxWithUUID,
   findStepIdxWithUUID,
+  flattenSteps,
   getRandomArbitraryNumber,
   insertAddStepPlaceholder,
   insertBranchGroupNode,
@@ -210,6 +213,13 @@ describe('visualizationService', () => {
   });
 
   /**
+   * extractNestedSteps
+   */
+  it('extractNestedSteps(): should create an array of properties for all nested steps', () => {
+    expect(extractNestedSteps(nestedBranch)).toHaveLength(6);
+  });
+
+  /**
    * findNodeIdxWithUUID
    */
   it('findNodeIdxWithUUID(): should find a node from an array of nodes, given a UUID', () => {
@@ -222,6 +232,19 @@ describe('visualizationService', () => {
    */
   it("findStepIdxWithUUID(): should find a step's index, given a particular UUID", () => {
     expect(findStepIdxWithUUID('caffeine-action-2', steps)).toEqual(2);
+  });
+
+  /**
+   * flattenSteps
+   */
+  it('flattenSteps(): should flatten an array of deeply nested steps', () => {
+    expect(nestedBranch).toHaveLength(4);
+    const deeplyNestedBranchStepUuid = 'set-body-877932';
+    expect(nestedBranch.some((s) => s.UUID === deeplyNestedBranchStepUuid)).toBeFalsy();
+
+    const flattenedSteps = flattenSteps(nestedBranch);
+    expect(flattenedSteps).toHaveLength(10);
+    expect(flattenedSteps.some((s) => s.UUID === deeplyNestedBranchStepUuid)).toBeTruthy();
   });
 
   it.skip('getRandomArbitraryNumber(): should get a random arbitrary number', () => {

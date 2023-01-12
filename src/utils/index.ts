@@ -9,10 +9,47 @@ export function accessibleRouteChangeHandler() {
   }, 50);
 }
 
+/**
+ * Finds the path to a given target within a deeply nested object
+ * @param o
+ * @param target
+ * @param key
+ */
+export function findPath(o: any, target: string, key: string): string[] | undefined {
+  if (o === target) return [];
+
+  // if it's an array just return the index
+  if (!o || typeof o !== 'object') return;
+
+  // iterate over each object keys
+  for (const k in o) {
+    // get the path for each object key's
+    const temp: any | undefined[] = findPath(o[k], target, key);
+    // if path exists, return the key and path,
+    // unless it's for the key specified
+    if (temp && k === key) return [...temp];
+    if (temp) return [k, ...temp];
+  }
+}
+
 export function formatDateTime(date: string) {
   return new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'long' }).format(
     Date.parse(date)
   );
+}
+
+export function setDeepValue(obj: any, path: any, value: any) {
+  const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g);
+
+  return pathArray.reduce((acc: { [x: string]: any }, key: any, i: number) => {
+    // if the key doesn't exist, create it
+    if (acc[key] === undefined) acc[key] = {};
+    if (i === pathArray.length - 1) {
+      acc[key] = value;
+      return obj;
+    }
+    return acc[key];
+  }, obj);
 }
 
 // Shorten a string to less than maxLen characters without truncating words.
