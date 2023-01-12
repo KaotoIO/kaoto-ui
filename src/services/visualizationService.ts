@@ -2,6 +2,7 @@ import { useIntegrationJsonStore } from '@kaoto/store';
 import {
   INestedStep,
   IStepProps,
+  IStepPropsBranch,
   IVizStepNode,
   IVizStepNodeDataBranch,
   IVizStepPropsEdge,
@@ -275,6 +276,39 @@ export function extractNestedSteps(steps: IStepProps[]) {
 }
 
 /**
+ * Given an array of steps and a function with a condition,
+ * return a new filtered array
+ * @param steps
+ * @param predicate
+ */
+export function filterNestedSteps(steps: IStepProps[], predicate: (step: IStepProps) => boolean) {
+  return !steps
+    ? null
+    : steps.reduce((list: IStepProps[], step: IStepProps) => {
+        let clone: IStepProps | null = null;
+
+        if (predicate(step) && steps.some((s) => s.UUID === step.UUID)) {
+          // clone the step if it matches the condition and isn't a nested step
+          clone = Object.assign({}, step);
+        }
+
+        // overwrite the branch if one of its steps contains a match
+        if (clone && clone.branches) {
+          clone.branches.forEach((branch, idx) => {
+            const filteredBranchSteps = filterNestedSteps(branch.steps, predicate);
+            if (filteredBranchSteps && clone && clone.branches) {
+              clone.branches[idx].steps = filteredBranchSteps;
+            }
+          });
+        }
+
+        // if there's a cloned step, push it to the output list
+        clone && list.push(clone);
+        return list;
+      }, []);
+}
+
+/**
  * Returns a Step index when provided with the `UUID`.
  * `UUID` is originally set using the Step UUID.
  * @param UUID
@@ -290,6 +324,30 @@ export function findStepIdxWithUUID(UUID: string, steps?: IStepProps[]): number 
   } else {
     return steps.map((s) => s.UUID).indexOf(UUID);
   }
+}
+
+/**
+ * Given a step and a function with a condition,
+ * return a new step with filtered branch steps
+ * @param step
+ * @param predicate
+ */
+export function filterStepWithBranches(step: IStepProps, predicate: (step: IStepProps) => boolean) {
+  const stepCopy: IStepProps = { ...step };
+  const loopOverBranches = (branches: IStepPropsBranch[]) => {
+    if (step.branches?.length === 0) return;
+    branches.forEach((branch, idx) => {
+      const branchCopy = { ...branch };
+      if (stepCopy.branches && stepCopy.branches[idx].steps) {
+        const filtered = filterNestedSteps(branchCopy.steps, predicate);
+        if (filtered) stepCopy.branches[idx].steps = filtered;
+      }
+    });
+  };
+
+  if (stepCopy.branches) loopOverBranches(stepCopy.branches);
+
+  return stepCopy;
 }
 
 /**

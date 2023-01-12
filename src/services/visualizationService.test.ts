@@ -12,6 +12,8 @@ import {
   containsAddStepPlaceholder,
   containsBranches,
   extractNestedSteps,
+  filterNestedSteps,
+  filterStepWithBranches,
   findNodeIdxWithUUID,
   findStepIdxWithUUID,
   flattenSteps,
@@ -25,7 +27,7 @@ import {
   isStartStep,
   regenerateUuids,
 } from './visualizationService';
-import { IVizStepNode } from '@kaoto/types';
+import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import { MarkerType, Position } from 'reactflow';
 
@@ -216,7 +218,49 @@ describe('visualizationService', () => {
    * extractNestedSteps
    */
   it('extractNestedSteps(): should create an array of properties for all nested steps', () => {
-    expect(extractNestedSteps(nestedBranch)).toHaveLength(6);
+    const nested = nestedBranch.slice();
+    expect(extractNestedSteps(nested)).toHaveLength(6);
+  });
+
+  /**
+   * filterNestedSteps
+   */
+  it('filterNestedSteps(): should filter an array of steps given a conditional function', () => {
+    const nestedSteps = [
+      { branches: [{ steps: [{ branches: [{ steps: [{ UUID: 'log-340230' }] }] }] }] },
+    ] as IStepProps[];
+    expect(nestedSteps[0].branches![0].steps[0].branches![0].steps).toHaveLength(1);
+
+    const filtered = filterNestedSteps(nestedSteps, (step) => step.UUID !== 'log-340230');
+    expect(filtered![0].branches![0].steps[0].branches![0].steps).toHaveLength(0);
+  });
+
+  /**
+   * filterStepWithBranches
+   */
+  it('filterStepWithBranches(): should filter the branch steps for a given step and conditional', () => {
+    const step = {
+      branches: [
+        {
+          steps: [
+            {
+              UUID: 'step-one',
+              branches: [{ steps: [{ UUID: 'strawberry' }, { UUID: 'banana' }] }],
+            },
+            { UUID: 'step-two', branches: [{ steps: [{ UUID: 'cherry' }] }] },
+          ],
+        },
+      ],
+    } as IStepProps;
+
+    expect(step.branches![0].steps[0].branches![0].steps).toHaveLength(2);
+
+    const filtered = filterStepWithBranches(
+      step,
+      (step: { UUID: string }) => step.UUID !== 'banana'
+    );
+
+    expect(filtered.branches![0].steps[0].branches![0].steps).toHaveLength(1);
   });
 
   /**
