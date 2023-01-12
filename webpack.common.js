@@ -75,6 +75,16 @@ module.exports = () => {
       new MonacoWebpackPlugin({
         languages: ['yaml'],
         globalAPI: true,
+        customLanguages: [
+          {
+            label: 'yaml',
+            entry: 'monaco-yaml',
+            worker: {
+              id: 'monaco-yaml/yamlWorker',
+              entry: 'monaco-yaml/yaml.worker',
+            },
+          },
+        ],
       }),
       new MiniCssExtractPlugin({
         insert: (linkTag) => {
