@@ -61,7 +61,7 @@
     "uniforms": "^3.10.2",
     "uniforms-bridge-json-schema": "^3.10.2",
     "uniforms-patternfly": "^4.7.8",
-    "use-debounce": "9.0.2",
+    "use-debounce": "9.0.3",
     "web-vitals": "3.1.1",
     "zundo": "^2.0.0-beta.8",
     "zustand": "^4.2.0"
