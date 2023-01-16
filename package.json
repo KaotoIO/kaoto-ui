@@ -63,7 +63,7 @@
     "uniforms-patternfly": "^4.7.8",
     "use-debounce": "9.0.3",
     "web-vitals": "3.1.1",
-    "zundo": "^2.0.0-beta.8",
+    "zundo": "^2.0.0-beta.9",
     "zustand": "^4.2.0"
   },
   "devDependencies": {
