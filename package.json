@@ -107,7 +107,7 @@
     "lint-staged": "12.4.3",
     "mini-css-extract-plugin": "2.7.2",
     "null-loader": "^4.0.1",
-    "prettier": "2.8.2",
+    "prettier": "2.8.3",
     "prop-types": "15.8.1",
     "react-refresh": "^0.14.0",
     "rimraf": "4.0.7",
