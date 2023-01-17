@@ -115,7 +115,13 @@ export function buildEdges(nodes: IVizStepNode[]): IVizStepPropsEdge[] {
   nodes.forEach((node) => {
     const nextNodeIdx = findNodeIdxWithUUID(node.data.nextStepUuid, nodes);
 
-    if (node.data.step && nodes[nextNodeIdx] && !containsBranches(node.data.step)) {
+    if (
+      node.data.step &&
+      nodes[nextNodeIdx] &&
+      (!containsBranches(node.data.step) ||
+        (containsBranches(node.data.step) &&
+          node.data.step.branches.some((b: IStepPropsBranch) => b.steps.length === 0)))
+    ) {
       stepEdges.push(
         buildEdgeParams(
           node,
@@ -170,7 +176,10 @@ export function buildNodesFromSteps(
   let getId = (uuid: string) => `node_${id++}-${uuid}-${getRandomArbitraryNumber()}`;
 
   // if no steps or first step isn't START or an EIP, create a dummy placeholder step
-  if (steps.length === 0 || (!isFirstStepStart(steps) && !isFirstStepEip(steps) && !branchInfo)) {
+  if (
+    (steps.length === 0 && !branchInfo) ||
+    (!isFirstStepStart(steps) && !isFirstStepEip(steps) && !branchInfo)
+  ) {
     insertAddStepPlaceholder(stepNodes, { id: getId(''), nextStepUuid: steps[0]?.UUID });
   }
 

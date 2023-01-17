@@ -185,7 +185,6 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
       );
 
       deleteBranchStep(updatedParentStep, parentStepIdx);
-      // how to delete the node? what is the index?
     } else {
       // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
       const stepsIndex = findStepIdxWithUUID(UUID, integrationJson.steps);
