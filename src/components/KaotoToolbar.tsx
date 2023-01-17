@@ -1,3 +1,5 @@
+// @ts-ignore
+import logo from '../assets/images/logo-kaoto-dark.png';
 import { fetchDefaultNamespace, startDeployment } from '@kaoto/api';
 import {
   AppearanceModal,
@@ -47,6 +49,9 @@ export interface IKaotoToolbar {
   toggleCatalog: () => void;
   toggleCodeEditor: () => void;
 }
+function LogoImg() {
+  return <img data-testid={'kaoto-logo'} src={logo} alt="Kaoto Logo" style={{ height: '30px' }} />;
+}
 
 export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar) => {
   const { settings, setSettings } = useSettingsStore((state) => state);
@@ -58,7 +63,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
-  const focusIntegrationInput = useCallback(( element: HTMLInputElement ) => {
+  const focusIntegrationInput = useCallback((element: HTMLInputElement) => {
     element?.focus();
   }, []);
   const [localName, setLocalName] = useState(settings.name);
@@ -196,6 +201,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
       <Toolbar className={'viz-toolbar'} data-testid={'viz-toolbar'}>
         <ToolbarContent>
           {/* APP MENU */}
+          <LogoImg />
           <ToolbarItem>
             <Dropdown
               onSelect={onSelectAppMenu}

@@ -279,7 +279,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           ref={reactFlowWrapperRef}
           style={{
             width: window.innerWidth,
-            height: window.innerHeight - 153,
+            height: window.innerHeight - 77,
           }}
         >
           <ReactFlow

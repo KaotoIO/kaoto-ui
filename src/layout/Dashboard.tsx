@@ -98,7 +98,7 @@ const Dashboard = () => {
         isResizable={true}
         panelContent={drawerConsole}
         position="bottom"
-        style={{ maxHeight: window.innerHeight - 105 }}
+        style={{ maxHeight: window.innerHeight - 28 }}
       >
         <Flex
           direction={{ default: 'column' }}
