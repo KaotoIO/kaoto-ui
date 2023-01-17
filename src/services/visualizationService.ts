@@ -115,13 +115,7 @@ export function buildEdges(nodes: IVizStepNode[]): IVizStepPropsEdge[] {
   nodes.forEach((node) => {
     const nextNodeIdx = findNodeIdxWithUUID(node.data.nextStepUuid, nodes);
 
-    if (
-      node.data.step &&
-      nodes[nextNodeIdx] &&
-      (!containsBranches(node.data.step) ||
-        (containsBranches(node.data.step) &&
-          node.data.step.branches.some((b: IStepPropsBranch) => b.steps.length === 0)))
-    ) {
+    if (shouldAddEdge(node, nodes[nextNodeIdx])) {
       stepEdges.push(
         buildEdgeParams(
           node,
@@ -233,7 +227,7 @@ export function buildNodesFromSteps(
  * Checks if an array of nodes contains an ADD A STEP placeholder step
  * @param stepNodes
  */
-export function containsAddStepPlaceholder(stepNodes: IVizStepNode[]) {
+export function containsAddStepPlaceholder(stepNodes: IVizStepNode[]): boolean {
   return stepNodes.length > 0 && stepNodes[0].data.label === 'ADD A STEP';
 }
 
@@ -305,7 +299,7 @@ export function filterNestedSteps(steps: IStepProps[], predicate: (step: IStepPr
         if (clone && clone.branches) {
           clone.branches.forEach((branch, idx) => {
             const filteredBranchSteps = filterNestedSteps(branch.steps, predicate);
-            if (filteredBranchSteps && clone && clone.branches) {
+            if (filteredBranchSteps && clone?.branches) {
               clone.branches[idx].steps = filteredBranchSteps;
             }
           });
@@ -553,7 +547,7 @@ export function isStartStep(step: IStepProps): boolean {
  * @param steps
  * @param branchSteps
  */
-export function regenerateUuids(steps: IStepProps[], branchSteps: boolean = false) {
+export function regenerateUuids(steps: IStepProps[], branchSteps: boolean = false): IStepProps[] {
   let newSteps = steps.slice();
 
   newSteps.forEach((step, idx) => {
@@ -566,4 +560,20 @@ export function regenerateUuids(steps: IStepProps[], branchSteps: boolean = fals
     }
   });
   return newSteps;
+}
+
+/**
+ * Given a node, determines if an edge should be created for it
+ * @param node
+ * @param nextNode
+ */
+export function shouldAddEdge(node: IVizStepNode, nextNode?: IVizStepNode): boolean {
+  return (
+    node.data.step &&
+    nextNode &&
+    // it either contains no branches, or those branches don't have any steps in them
+    (!containsBranches(node.data.step) ||
+      (containsBranches(node.data.step) &&
+        node.data.step.branches.some((b: IStepPropsBranch) => b.steps.length === 0)))
+  );
 }
