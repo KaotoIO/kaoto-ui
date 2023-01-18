@@ -12,7 +12,7 @@ import {
 import { useIntegrationJsonStore, useSettingsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 import { AlertVariant, Popover } from '@patternfly/react-core';
-import { CubesIcon, PlusIcon, TrashIcon } from '@patternfly/react-icons';
+import { CubesIcon, PlusIcon, MinusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, Node, NodeProps, Position, useNodes } from 'reactflow';
 
@@ -149,7 +149,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             data-testid={'configurationTab__deleteBtn'}
             onClick={handleTrashClick}
           >
-            <TrashIcon />
+            <MinusIcon />
           </button>
 
           {/* VISUAL REPRESENTATION OF STEP WITH ICON */}

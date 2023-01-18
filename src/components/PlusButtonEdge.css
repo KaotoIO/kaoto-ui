@@ -1,8 +1,20 @@
-.trashButton, .plusButton {
+.plusButton {
     width: 20px;
     height: 20px;
-    background: var(--pf-global--Color--light-300);
-    color: white;
+    background: var(--pf-global--Color--light-200);
+    color: rgb(0, 0, 0);
+    border: 1px solid #fff;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 12px;
+    line-height: 1;
+    padding: 1px;
+}
+.trashButton{
+    width: 20px;
+    height: 20px;
+    background: var(--pf-global--Color--light-200);
+    color: rgb(0, 0, 0);
     border: 1px solid #fff;
     cursor: pointer;
     border-radius: 50%;
@@ -15,11 +27,15 @@
     visibility: hidden;
 }
 
-.trashButton:hover, .plusButton:hover {
-    background: var(--pf-global--Color--400);
+.trashButton:hover {
+    background: #B2A3FF;
     box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
 }
 
+.plusButton:hover {
+    background:#F4C145;
+    box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
+}
 .trashButton-foreignObject span {
     background: transparent;
     width: 40px;
