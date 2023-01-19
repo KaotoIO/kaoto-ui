@@ -13,6 +13,7 @@ import create from 'zustand';
 
 interface IIntegrationJsonStore {
   appendStep: (newStep: IStepProps) => void;
+  deleteBranchStep: (newStep: IStepProps, originalStepIndex: number) => void;
   deleteIntegration: () => void;
   deleteStep: (index: number) => void;
   deleteSteps: () => void;
@@ -53,6 +54,22 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
         });
       },
       deleteIntegration: () => set(initialState),
+      deleteBranchStep: (newStep: IStepProps, originalStepIndex: number) => {
+        let newSteps = get().integrationJson.steps.slice();
+        // replacing the origin parent of a deeply nested step
+        newSteps[originalStepIndex] = newStep;
+
+        const stepsWithNewUuids = regenerateUuids(newSteps);
+        const { updateSteps } = useNestedStepsStore.getState();
+        updateSteps(extractNestedSteps(stepsWithNewUuids));
+
+        return set((state) => ({
+          integrationJson: {
+            ...state.integrationJson,
+            steps: [...stepsWithNewUuids],
+          },
+        }));
+      },
       deleteStep: (stepIdx) => {
         let stepsCopy = get().integrationJson.steps.slice();
         const updatedSteps = stepsCopy.filter((_step: IStepProps, idx: number) => idx !== stepIdx);

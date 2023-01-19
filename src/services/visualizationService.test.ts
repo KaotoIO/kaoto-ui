@@ -12,6 +12,8 @@ import {
   containsAddStepPlaceholder,
   containsBranches,
   extractNestedSteps,
+  filterNestedSteps,
+  filterStepWithBranches,
   findNodeIdxWithUUID,
   findStepIdxWithUUID,
   flattenSteps,
@@ -24,8 +26,9 @@ import {
   isMiddleStep,
   isStartStep,
   regenerateUuids,
+  shouldAddEdge,
 } from './visualizationService';
-import { IVizStepNode } from '@kaoto/types';
+import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import { MarkerType, Position } from 'reactflow';
 
@@ -216,7 +219,49 @@ describe('visualizationService', () => {
    * extractNestedSteps
    */
   it('extractNestedSteps(): should create an array of properties for all nested steps', () => {
-    expect(extractNestedSteps(nestedBranch)).toHaveLength(6);
+    const nested = nestedBranch.slice();
+    expect(extractNestedSteps(nested)).toHaveLength(6);
+  });
+
+  /**
+   * filterNestedSteps
+   */
+  it('filterNestedSteps(): should filter an array of steps given a conditional function', () => {
+    const nestedSteps = [
+      { branches: [{ steps: [{ branches: [{ steps: [{ UUID: 'log-340230' }] }] }] }] },
+    ] as IStepProps[];
+    expect(nestedSteps[0].branches![0].steps[0].branches![0].steps).toHaveLength(1);
+
+    const filtered = filterNestedSteps(nestedSteps, (step) => step.UUID !== 'log-340230');
+    expect(filtered![0].branches![0].steps[0].branches![0].steps).toHaveLength(0);
+  });
+
+  /**
+   * filterStepWithBranches
+   */
+  it('filterStepWithBranches(): should filter the branch steps for a given step and conditional', () => {
+    const step = {
+      branches: [
+        {
+          steps: [
+            {
+              UUID: 'step-one',
+              branches: [{ steps: [{ UUID: 'strawberry' }, { UUID: 'banana' }] }],
+            },
+            { UUID: 'step-two', branches: [{ steps: [{ UUID: 'cherry' }] }] },
+          ],
+        },
+      ],
+    } as IStepProps;
+
+    expect(step.branches![0].steps[0].branches![0].steps).toHaveLength(2);
+
+    const filtered = filterStepWithBranches(
+      step,
+      (step: { UUID: string }) => step.UUID !== 'banana'
+    );
+
+    expect(filtered.branches![0].steps[0].branches![0].steps).toHaveLength(1);
   });
 
   /**
@@ -353,5 +398,90 @@ describe('visualizationService', () => {
     expect(regenerateUuids(steps)[0].UUID).toBeDefined();
     expect(regenerateUuids(branchSteps)[0].UUID).toBeDefined();
     expect(regenerateUuids(branchSteps)[1].UUID).toBeDefined();
+  });
+
+  /**
+   * shouldAddEdge
+   */
+  it('shouldAddEdge(): given a node, should determine whether to add an edge for it', () => {
+    const nodeWithoutBranches = {
+      id: 'node-without-branches',
+      position: { x: 0, y: 0 },
+      data: { label: '', step: { UUID: '', name: '', maxBranches: 0, minBranches: 0, type: '' } },
+    };
+
+    const nextNode = {
+      id: 'next-node',
+      position: { x: 0, y: 0 },
+      data: {
+        label: 'Next Node',
+        step: { UUID: '', name: '', maxBranches: 0, minBranches: 0, type: '' },
+      },
+    };
+
+    // there is no next node, so it should be false
+    expect(shouldAddEdge(nodeWithoutBranches)).toBeFalsy();
+    expect(shouldAddEdge(nodeWithoutBranches, nextNode)).toBeTruthy();
+
+    const nodeWithBranches = {
+      id: 'node-with-branches',
+      position: { x: 0, y: 0 },
+      data: {
+        label: '',
+        step: {
+          UUID: '',
+          name: '',
+          maxBranches: 0,
+          minBranches: 0,
+          type: '',
+          branches: [
+            {
+              identifier: 'branch-1',
+              steps: [{ UUID: 'abcd', name: 'abcd', maxBranches: 0, minBranches: 0, type: '' }],
+            },
+            {
+              identifier: 'branch-2',
+              steps: [{ UUID: 'efgh', name: 'efgh', maxBranches: 0, minBranches: 0, type: '' }],
+            },
+          ],
+        },
+      },
+    };
+
+    // there is no next node, so it should be false
+    expect(shouldAddEdge(nodeWithBranches)).toBeFalsy();
+
+    // it has branches with steps, so it should be false because
+    // the steps will connect with the next step later on
+    expect(shouldAddEdge(nodeWithBranches, nextNode)).toBeFalsy();
+
+    const nodeWithEmptyBranch = {
+      id: 'node-with-empty-branch',
+      position: { x: 0, y: 0 },
+      data: {
+        label: '',
+        step: {
+          UUID: '',
+          name: '',
+          maxBranches: 0,
+          minBranches: 0,
+          type: '',
+          branches: [
+            {
+              identifier: 'branch-1',
+              steps: [],
+            },
+            {
+              identifier: 'branch-2',
+              steps: [],
+            },
+          ],
+        },
+      },
+    };
+
+    // there is no next node, so it should be false
+    expect(shouldAddEdge(nodeWithEmptyBranch)).toBeFalsy();
+    expect(shouldAddEdge(nodeWithoutBranches, nextNode)).toBeTruthy();
   });
 });

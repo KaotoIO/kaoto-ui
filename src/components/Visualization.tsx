@@ -16,6 +16,7 @@ import {
   flattenSteps,
   getLayoutedElements,
   containsAddStepPlaceholder,
+  filterStepWithBranches,
 } from '@kaoto/services';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
@@ -46,7 +47,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     type: '',
     UUID: '',
   });
-  const { deleteStep, integrationJson, replaceStep, setViews } = useIntegrationJsonStore();
+  const { deleteBranchStep, deleteStep, integrationJson, replaceStep, setViews } =
+    useIntegrationJsonStore();
   const { nestedSteps } = useNestedStepsStore();
   const layout = useVisualizationStore((state) => state.layout);
   const previousIntegrationJson = useRef(integrationJson);
@@ -168,11 +170,28 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '' });
     if (isPanelExpanded) setIsPanelExpanded(false);
 
-    // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
-    const stepsIndex = findStepIdxWithUUID(UUID, integrationJson.steps);
+    // check if the step being modified is nested
+    const currentStepNested = nestedSteps.find((ns) => ns.stepUuid === UUID);
+    if (currentStepNested) {
+      const parentStepIdx = findStepIdxWithUUID(
+        currentStepNested.originStepUuid,
+        integrationJson.steps
+      );
 
-    deleteNode(stepsIndex);
-    deleteStep(stepsIndex);
+      // update the original parent step, without the child step
+      const updatedParentStep = filterStepWithBranches(
+        integrationJson.steps[parentStepIdx],
+        (step: { UUID: string }) => step.UUID !== UUID
+      );
+
+      deleteBranchStep(updatedParentStep, parentStepIdx);
+    } else {
+      // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
+      const stepsIndex = findStepIdxWithUUID(UUID, integrationJson.steps);
+
+      deleteNode(stepsIndex);
+      deleteStep(stepsIndex);
+    }
   };
 
   const onClosePanelClick = () => {
