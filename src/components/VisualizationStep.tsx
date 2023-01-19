@@ -9,7 +9,12 @@ import {
   isLastNode,
   isStartStep,
 } from '@kaoto/services';
-import { useIntegrationJsonStore, useSettingsStore, useVisualizationStore } from '@kaoto/store';
+import {
+  useIntegrationJsonStore,
+  useNestedStepsStore,
+  useSettingsStore,
+  useVisualizationStore,
+} from '@kaoto/store';
 import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 import { AlertVariant, Popover } from '@patternfly/react-core';
 import { CubesIcon, PlusIcon, TrashIcon } from '@patternfly/react-icons';
@@ -26,6 +31,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const lastNode = isLastNode(nodes, data.step?.UUID);
   const endStep = isEndStep(data.step!);
   const currentIdx = findStepIdxWithUUID(data.step?.UUID);
+  const { nestedSteps } = useNestedStepsStore();
   const layout = useVisualizationStore((state) => state.layout);
   const steps = useIntegrationJsonStore((state) => state.integrationJson.steps);
 
@@ -75,16 +81,23 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
    */
   const onDropReplace = (event: any) => {
     event.preventDefault();
-    if (data.step?.kind === 'EIP') return;
 
     const dataJSON = event.dataTransfer.getData('text');
     const stepC: IStepProps = JSON.parse(dataJSON);
     // fetch parameters and other details
-    fetchStepDetails(stepC.id).then((step) => {
-      const validation = canStepBeReplaced(data, step, steps);
+    fetchStepDetails(stepC.id).then((newStep) => {
+      const validation = canStepBeReplaced(data, newStep, steps);
       // Replace step
       if (validation.isValid) {
-        replaceStep(step, currentIdx);
+        if (data.branchInfo) {
+          const currentStepNested = nestedSteps.find((ns) => ns.stepUuid === data.step.UUID);
+          if (currentStepNested) {
+            const oldStepIdx = findStepIdxWithUUID(currentStepNested.originStepUuid, steps);
+            replaceStep(newStep, oldStepIdx, currentStepNested.path);
+          }
+        } else {
+          replaceStep(newStep, currentIdx);
+        }
       } else {
         addAlert &&
           addAlert({
