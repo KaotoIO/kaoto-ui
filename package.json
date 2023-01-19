@@ -119,7 +119,7 @@
     "tsc-watch": "^6.0.0",
     "tsconfig-paths-webpack-plugin": "4.0.0",
     "tslib": "^2.4.1",
-    "typescript": "4.4.4",
+    "typescript": "^4.9.4",
     "url-loader": "4.1.1",
     "web-worker": "^1.2.0",
     "webpack": "5.75.0",
