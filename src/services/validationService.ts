@@ -71,7 +71,7 @@ export function canStepBeReplaced(
  * @param _prevStep
  * @param _nextStep
  */
-export function insertableStepTypes(_prevStep?: any, _nextStep?: any): string {
+export function insertableStepTypes(_prevStep?: IStepProps, _nextStep?: IStepProps): string {
   let possibleSteps: string[] = ['START', 'MIDDLE', 'END'];
   if (_prevStep) {
     // inserted step can be MIDDLE or END

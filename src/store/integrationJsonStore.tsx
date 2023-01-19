@@ -3,7 +3,7 @@ import { useIntegrationSourceStore } from './integrationSourceStore';
 import { useNestedStepsStore } from './nestedStepsStore';
 import { useSettingsStore } from './settingsStore';
 import { useVisualizationStore } from './visualizationStore';
-import { extractNestedSteps, regenerateUuids } from '@kaoto/services';
+import { extractNestedSteps, insertStep, regenerateUuids } from '@kaoto/services';
 import { IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { setDeepValue } from '@kaoto/utils';
 import isEqual from 'lodash.isequal';
@@ -17,7 +17,7 @@ interface IIntegrationJsonStore {
   deleteIntegration: () => void;
   deleteStep: (index: number) => void;
   deleteSteps: () => void;
-  insertStep: (newStep: IStepProps, index: number) => void;
+  insertStep: (newStep: IStepProps, insertIndex: number) => void;
   integrationJson: IIntegration;
   replaceStep: (newStep: IStepProps, oldStepIndex?: number, path?: string[]) => void;
   setViews: (views: IViewProps[]) => void;
@@ -91,20 +91,9 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
           },
         }));
       },
-      insertStep: (newStep, currentStepIdx) => {
+      insertStep: (newStep, insertIndex) => {
         let steps = get().integrationJson.steps.slice();
-
-        // unlike appendStep, we need to also regenerate all UUIDs
-        // because positions are changing
-        const stepsWithNewUuids = regenerateUuids([
-          // part of array before the index
-          ...steps.slice(0, currentStepIdx),
-          // inserted item
-          newStep,
-          // part of array after the index
-          ...steps.slice(currentStepIdx),
-        ]);
-
+        const stepsWithNewUuids = regenerateUuids(insertStep(steps, insertIndex, newStep));
         const updateSteps = useNestedStepsStore.getState().updateSteps;
         updateSteps(extractNestedSteps(stepsWithNewUuids));
 

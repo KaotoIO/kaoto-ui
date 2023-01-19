@@ -20,6 +20,7 @@ import {
   getRandomArbitraryNumber,
   insertAddStepPlaceholder,
   insertBranchGroupNode,
+  insertStep,
   isEndStep,
   isFirstStepEip,
   isFirstStepStart,
@@ -319,6 +320,22 @@ describe('visualizationService', () => {
     const nodes: IVizStepNode[] = [];
     insertBranchGroupNode(nodes, { x: 0, y: 0 }, 150, groupWidth);
     expect(nodes).toHaveLength(1);
+  });
+
+  /**
+   * insertStep
+   */
+  it('insertStep(): should insert the provided step at the index specified, in a given array of steps', () => {
+    const steps = [
+      {
+        name: 'strawberry',
+      },
+      {
+        name: 'blueberry',
+      },
+    ] as IStepProps[];
+
+    expect(insertStep(steps, 2, { name: 'peach' } as IStepProps)).toHaveLength(3);
   });
 
   /**

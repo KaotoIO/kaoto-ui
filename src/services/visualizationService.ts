@@ -58,7 +58,7 @@ export function buildBranchSpecialEdges(stepNodes: IVizStepNode[]): IVizStepProp
     ) {
       const branchStepNextIdx = findNodeIdxWithUUID(node.data.nextStepUuid, stepNodes);
       if (stepNodes[branchStepNextIdx]) {
-        specialEdges.push(buildEdgeParams(node, stepNodes[branchStepNextIdx], 'default'));
+        specialEdges.push(buildEdgeParams(node, stepNodes[branchStepNextIdx], 'insert'));
       }
     }
 
@@ -514,6 +514,24 @@ export function insertBranchGroupNode(
       backgroundColor: 'rgba(37, 150, 190, 0.1)',
     },
   });
+}
+
+/**
+ * Insert the given step at the specified index of
+ * an array of provided steps
+ * @param steps
+ * @param insertIndex
+ * @param newStep
+ */
+export function insertStep(steps: IStepProps[], insertIndex: number, newStep: IStepProps) {
+  return [
+    // part of array before the index
+    ...steps.slice(0, insertIndex),
+    // inserted item
+    newStep,
+    // part of array after the index
+    ...steps.slice(insertIndex),
+  ];
 }
 
 export function isEndStep(step: IStepProps): boolean {
