@@ -15,7 +15,6 @@ import {
   findStepIdxWithUUID,
   flattenSteps,
   getLayoutedElements,
-  containsAddStepPlaceholder,
   filterStepWithBranches,
 } from '@kaoto/services';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
@@ -31,9 +30,11 @@ interface IVisualization {
 const Visualization = ({ toggleCatalog }: IVisualization) => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
+
   const defaultViewport: Viewport = {
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2 - 160,
+    // 80/2 means half of the size of the icon so the placeholder icon can be centered
+    x: window.innerWidth / 2 - 80 / 2,
+    y: (window.innerHeight - 77) / 2 - 80 / 2,
     zoom: 1.2,
   };
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
