@@ -42,7 +42,9 @@ const VisualizationStepViews = ({
   );
   const hasDetailView = views?.some((v) => v.id === 'detail-step');
   const detailsTabIndex = views?.length! + 1; // provide an index that won't be used by custom views
-  const configTabIndex = views?.length! + 2;
+  const extensionConfigViewIndex = views?.findIndex((v) => v.name === 'Config');
+  const hasConfigView = extensionConfigViewIndex !== -1
+  const configTabIndex = !hasConfigView ? views?.length! + 2 : extensionConfigViewIndex;
   const currentIdx = findStepIdxWithUUID(step.UUID!);
   const [activeTabKey, setActiveTabKey] = useState(configTabIndex);
   const [stepPropertySchema, setStepPropertySchema] = useState<{
@@ -206,7 +208,7 @@ const VisualizationStepViews = ({
                   eventKey={index}
                   key={index}
                   title={<TabTitleText>{view.name}</TabTitleText>}
-                  data-testid={'stepExtensionTab'}
+                  data-testid={view.name === 'Config' ? 'configurationTab' : 'stepExtensionTab'}
                 >
                   <StepErrorBoundary>
                     <Extension
@@ -221,29 +223,32 @@ const VisualizationStepViews = ({
               );
             })}
 
-          <Tab
-            eventKey={configTabIndex}
-            title={<TabTitleText>Config</TabTitleText>}
-            data-testid={'configurationTab'}
-          >
-            <br />
-            <StepErrorBoundary>
-              <Grid hasGutter style={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto' }}>
-                {step.parameters && (
-                  <JsonSchemaConfigurator
-                    schema={{ type: 'object', properties: stepPropertySchema }}
-                    configuration={stepPropertyModel}
-                    onChangeModel={(configuration, isValid) => {
-                      if (isValid) {
-                        saveConfig(configuration);
-                      }
-                    }}
-                  />
-                )}
-              </Grid>
+          {/** If the step does not have an overriding Config view, provide the default one */}
+          {!hasConfigView && (
+            <Tab
+              eventKey={configTabIndex}
+              title={<TabTitleText>Config</TabTitleText>}
+              data-testid={'configurationTab'}
+            >
               <br />
-            </StepErrorBoundary>
-          </Tab>
+              <StepErrorBoundary>
+                <Grid hasGutter style={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto' }}>
+                  {step.parameters && (
+                    <JsonSchemaConfigurator
+                      schema={{ type: 'object', properties: stepPropertySchema }}
+                      configuration={stepPropertyModel}
+                      onChangeModel={(configuration, isValid) => {
+                        if (isValid) {
+                          saveConfig(configuration);
+                        }
+                      }}
+                    />
+                  )}
+                </Grid>
+                <br />
+              </StepErrorBoundary>
+            </Tab>
+          )}
         </Tabs>
       </DrawerPanelBody>
     </>
