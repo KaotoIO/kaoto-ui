@@ -9507,10 +9507,10 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zundo@^2.0.0-beta.9:
-  version "2.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.9.tgz#a6754931f88419c0451850efd846ffe2bb705c87"
-  integrity sha512-5Kde1sj1DDLP4tqwueUkZrF+K8GAcFEkG+wFA77b8gS8Jt3bJy+wazkQSHFnbZeYX+X33FfCPOZSVmCVB/GAzQ==
+zundo@^2.0.0-beta.10:
+  version "2.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.10.tgz#1cbf87bf9acfd293068954c2e15dca95a82926ae"
+  integrity sha512-0AlWe9p1Wrw+Z9vcr5diPex3E2n5gzCWa0MzEWy+HREdFpgLaZ/Jj4O7f+8sOkjmjYrP5n/vCNtBJ1HNqHT9xw==
 
 zustand@^4.3.1, zustand@^4.3.2:
   version "4.3.2"
