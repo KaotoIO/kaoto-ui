@@ -9,7 +9,7 @@ import { setDeepValue } from '@kaoto/utils';
 import isEqual from 'lodash.isequal';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 import { temporal } from 'zundo';
-import create from 'zustand';
+import { create } from 'zustand';
 
 interface IIntegrationJsonStore {
   appendStep: (newStep: IStepProps) => void;

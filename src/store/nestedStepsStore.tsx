@@ -1,5 +1,5 @@
 import { INestedStep } from '@kaoto/types';
-import create from 'zustand';
+import { create } from 'zustand';
 
 interface INestedStepStore {
   addStep: (newStep: INestedStep) => void;
