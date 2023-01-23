@@ -22,17 +22,18 @@ describe('utils', () => {
    */
   it('filterNestedSteps(): should filter an array of steps given a conditional function', () => {
     const nestedBranchCopy = nestedBranch.slice();
-    // @ts-ignore
-    expect(nestedBranchCopy[1].branches[0].steps[0].branches[0].steps).toHaveLength(1);
+    expect(nestedBranchCopy[1].branches![0].steps[0].branches![0].steps).toHaveLength(1);
 
     const filteredNestedBranch = filterNestedSteps(
       nestedBranchCopy,
       (step) => step.UUID !== 'log-340230'
     );
-    // @ts-ignore
-    expect(filteredNestedBranch[1].branches[0].steps[0].branches[0].steps).toHaveLength(0);
+    expect(filteredNestedBranch![1].branches![0].steps[0].branches![0].steps).toHaveLength(0);
   });
 
+  /**
+   * setDeepValue
+   */
   it('setDeepValue(): given a path, should modify only a deeply nested value within a complex object', () => {
     const object = { a: [{ bar: { c: 3 }, baz: { d: 2 } }] };
 
