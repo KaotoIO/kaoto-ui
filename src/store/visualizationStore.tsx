@@ -10,7 +10,7 @@ import {
   applyNodeChanges,
   applyEdgeChanges,
 } from 'reactflow';
-import create from 'zustand';
+import { create } from 'zustand';
 
 export type RFState = {
   deleteNode: (nodeIndex: number) => void;

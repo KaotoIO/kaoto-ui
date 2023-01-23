@@ -1,7 +1,7 @@
 // @ts-ignore
 import svg from '../assets/images/kaoto.svg';
 import { CodeEditorMode, IDsl, ISettings } from '@kaoto/types';
-import create from 'zustand';
+import { create } from 'zustand';
 
 interface ISettingsStore {
   settings: ISettings;
