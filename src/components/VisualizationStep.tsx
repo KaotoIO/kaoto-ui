@@ -6,7 +6,6 @@ import {
   canStepBeReplaced,
   findStepIdxWithUUID,
   isEndStep,
-  isLastNode,
   isStartStep,
 } from '@kaoto/services';
 import {
@@ -16,10 +15,11 @@ import {
   useVisualizationStore,
 } from '@kaoto/store';
 import { IStepProps, IVizStepNodeData } from '@kaoto/types';
+import { findPath, getDeepValue, setDeepValue } from '@kaoto/utils';
 import { AlertVariant, Popover } from '@patternfly/react-core';
 import { CubesIcon, PlusIcon, MinusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { Handle, Node, NodeProps, Position, useNodes } from 'reactflow';
+import { Handle, NodeProps, Position } from 'reactflow';
 
 const currentDSL = useSettingsStore.getState().settings.dsl.name;
 const appendStep = useIntegrationJsonStore.getState().appendStep;
@@ -27,21 +27,34 @@ const replaceStep = useIntegrationJsonStore.getState().replaceStep;
 
 // Custom Node type and component for React Flow
 const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
-  const nodes: Node[] = useNodes();
-  const lastNode = isLastNode(nodes, data.step?.UUID);
   const endStep = isEndStep(data.step!);
   const currentIdx = findStepIdxWithUUID(data.step?.UUID);
   const { nestedSteps } = useNestedStepsStore();
   const layout = useVisualizationStore((state) => state.layout);
   const steps = useIntegrationJsonStore((state) => state.integrationJson.steps);
+  const currentStepNested = nestedSteps.find((ns) => ns.stepUuid === data.step.UUID);
 
   const { addAlert } = useAlert() || {};
 
-  const onMiniCatalogClickAdd = (selectedStep: IStepProps) => {
+  const onMiniCatalogClickAppend = (selectedStep: IStepProps) => {
     // fetch parameters and other details
     fetchStepDetails(selectedStep.id).then((step) => {
       step.UUID = selectedStep.UUID;
-      appendStep(step);
+      if (currentStepNested) {
+        // special handling for branch steps
+        const rootStepIdx = findStepIdxWithUUID(currentStepNested.originStepUuid);
+        const stepsCopy = steps.slice();
+        const stepCopy = stepsCopy[rootStepIdx];
+        // find path to the branch, for easy modification of its steps
+        const pathToBranch = findPath(stepCopy, currentStepNested.branchUuid, 'branchUuid');
+        let newBranch = getDeepValue(stepCopy, pathToBranch);
+        newBranch.steps = [...newBranch.steps, step];
+        // here we are building a new root step, with a new array of those branch steps
+        const newRootStep = setDeepValue(stepCopy, pathToBranch, newBranch);
+        replaceStep(newRootStep, rootStepIdx);
+      } else {
+        appendStep(step);
+      }
     });
   };
 
@@ -90,10 +103,9 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
       // Replace step
       if (validation.isValid) {
         if (data.branchInfo) {
-          const currentStepNested = nestedSteps.find((ns) => ns.stepUuid === data.step.UUID);
           if (currentStepNested) {
             const oldStepIdx = findStepIdxWithUUID(currentStepNested.originStepUuid, steps);
-            replaceStep(newStep, oldStepIdx, currentStepNested.path);
+            replaceStep(newStep, oldStepIdx, currentStepNested.pathToStep);
           }
         } else {
           replaceStep(newStep, currentIdx);
@@ -127,14 +139,14 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               style={{ borderRadius: 0 }}
             />
           )}
-          {/* PLUS BUTTON TO ADD STEP */}
-          {!endStep && lastNode && !data.branchInfo?.branchStep && (
+          {/* PLUS BUTTON TO ADD/APPEND STEP */}
+          {!endStep && data.isLastStep && (
             <Popover
               appendTo={() => document.body}
               aria-label="Search for a step"
               bodyContent={
                 <MiniCatalog
-                  handleSelectStep={onMiniCatalogClickAdd}
+                  handleSelectStep={onMiniCatalogClickAppend}
                   queryParams={{
                     dsl: currentDSL,
                     type: appendableStepTypes(data.step.type),

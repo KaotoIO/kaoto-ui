@@ -38,6 +38,33 @@ export function formatDateTime(date: string) {
   );
 }
 
+/**
+ * Given a complex array or object and a path,
+ * returns the value located at the path
+ * @param obj
+ * @param path
+ */
+export function getDeepValue(obj: any, path: any) {
+  // If path is not defined or it has false value
+  if (!path) return undefined;
+  // Check if path is string or array. Regex : ensure that we do not have '.' and brackets.
+  // Regex explained: https://regexr.com/58j0k
+  const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g);
+  // Find value
+  return pathArray.reduce(
+    (prevObj: { [x: string]: any }, key: string | number) => prevObj && prevObj[key],
+    obj
+  );
+}
+
+/**
+ * Given a complex array or object, a path, and a value to modify,
+ * it will update the object at that path with the provided value.
+ * Returns the complex array or object with the new value.
+ * @param obj
+ * @param path
+ * @param value
+ */
 export function setDeepValue(obj: any, path: any, value: any) {
   const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g);
 

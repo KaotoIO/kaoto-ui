@@ -104,20 +104,20 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
           },
         }));
       },
-      replaceStep: (newStep, oldStepIndex, path) => {
-        let newSteps = get().integrationJson.steps.slice();
+      replaceStep: (newStep, oldStepIndex, pathToStep) => {
+        let stepsCopy = get().integrationJson.steps.slice();
         if (oldStepIndex === undefined) {
           // replacing a slot step with no pre-existing step
-          newSteps.unshift(newStep);
-        } else if (path) {
+          stepsCopy.unshift(newStep);
+        } else if (pathToStep) {
           // replacing a deeply nested step
-          newSteps = setDeepValue(newSteps, path, newStep);
+          stepsCopy = setDeepValue(stepsCopy, pathToStep, newStep);
         } else {
           // replacing an existing step
-          newSteps[oldStepIndex] = newStep;
+          stepsCopy[oldStepIndex] = newStep;
         }
 
-        const stepsWithNewUuids = regenerateUuids(newSteps);
+        const stepsWithNewUuids = regenerateUuids(stepsCopy);
         const { updateSteps } = useNestedStepsStore.getState();
         updateSteps(extractNestedSteps(stepsWithNewUuids));
 
