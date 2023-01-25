@@ -7,7 +7,11 @@ describe('KaotoToolbar.tsx', () => {
   test('component renders correctly', () => {
     render(
       <AlertProvider>
-        <KaotoToolbar toggleCatalog={jest.fn()} toggleCodeEditor={jest.fn()} />
+        <KaotoToolbar
+          toggleCatalog={jest.fn()}
+          toggleCodeEditor={jest.fn()}
+          hideLeftPanel={jest.fn()}
+        />
       </AlertProvider>
     );
     const element = screen.getByTestId('viz-toolbar');
@@ -17,7 +21,11 @@ describe('KaotoToolbar.tsx', () => {
   test('logo renders correctly', () => {
     render(
       <AlertProvider>
-        <KaotoToolbar toggleCatalog={jest.fn()} toggleCodeEditor={jest.fn()} />
+        <KaotoToolbar
+          toggleCatalog={jest.fn()}
+          toggleCodeEditor={jest.fn()}
+          hideLeftPanel={jest.fn()}
+        />
       </AlertProvider>
     );
     const element = screen.getByTestId('kaoto-logo');
