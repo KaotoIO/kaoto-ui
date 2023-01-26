@@ -227,7 +227,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
             integrationJson.steps
           );
 
-          replaceStep(newStep, oldStepIdx, currentStepNested.path);
+          replaceStep(newStep, oldStepIdx, currentStepNested.pathToStep);
         }
       } else {
         const oldStepIdx = findStepIdxWithUUID(newStep.UUID, integrationJson.steps);

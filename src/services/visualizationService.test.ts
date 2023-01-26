@@ -361,27 +361,12 @@ describe('visualizationService', () => {
           name: 'pdf-action',
           type: 'MIDDLE',
           UUID: 'pdf-action-1',
-          description: 'Create a PDF',
           group: 'PDF',
-          icon: 'data:image/svg+xml;base64',
           kind: 'Kamelet',
-          maxBranches: 0,
-          minBranches: 0,
-          parameters: [],
           title: 'PDF Action',
-        },
+        } as IStepProps,
       ])
     ).toBe(false);
-  });
-
-  /**
-   * isLastNode
-   */
-  it('isLastNode(): should determine if the provided node is the last one, given an array of nodes', () => {
-    const firstBranch = eipIntegration[1].branches![0];
-    // the first step is just a normal Camel-Connector
-    expect(isFirstStepEip(eipIntegration)).toBe(false);
-    expect(isFirstStepEip(firstBranch.steps)).toBe(true);
   });
 
   /**
@@ -423,18 +408,16 @@ describe('visualizationService', () => {
   it('shouldAddEdge(): given a node, should determine whether to add an edge for it', () => {
     const nodeWithoutBranches = {
       id: 'node-without-branches',
-      position: { x: 0, y: 0 },
-      data: { label: '', step: { UUID: '', name: '', maxBranches: 0, minBranches: 0, type: '' } },
-    };
+      data: { label: '', step: { UUID: '' } },
+    } as IVizStepNode;
 
     const nextNode = {
       id: 'next-node',
-      position: { x: 0, y: 0 },
       data: {
         label: 'Next Node',
-        step: { UUID: '', name: '', maxBranches: 0, minBranches: 0, type: '' },
+        step: { UUID: '' },
       },
-    };
+    } as IVizStepNode;
 
     // there is no next node, so it should be false
     expect(shouldAddEdge(nodeWithoutBranches)).toBeFalsy();
@@ -442,28 +425,21 @@ describe('visualizationService', () => {
 
     const nodeWithBranches = {
       id: 'node-with-branches',
-      position: { x: 0, y: 0 },
       data: {
-        label: '',
         step: {
-          UUID: '',
-          name: '',
-          maxBranches: 0,
-          minBranches: 0,
-          type: '',
           branches: [
             {
               identifier: 'branch-1',
-              steps: [{ UUID: 'abcd', name: 'abcd', maxBranches: 0, minBranches: 0, type: '' }],
+              steps: [{ UUID: 'abcd', name: 'abcd' }],
             },
             {
               identifier: 'branch-2',
-              steps: [{ UUID: 'efgh', name: 'efgh', maxBranches: 0, minBranches: 0, type: '' }],
+              steps: [{ UUID: 'efgh', name: 'efgh' }],
             },
           ],
         },
       },
-    };
+    } as IVizStepNode;
 
     // there is no next node, so it should be false
     expect(shouldAddEdge(nodeWithBranches)).toBeFalsy();
@@ -474,15 +450,8 @@ describe('visualizationService', () => {
 
     const nodeWithEmptyBranch = {
       id: 'node-with-empty-branch',
-      position: { x: 0, y: 0 },
       data: {
-        label: '',
         step: {
-          UUID: '',
-          name: '',
-          maxBranches: 0,
-          minBranches: 0,
-          type: '',
           branches: [
             {
               identifier: 'branch-1',
@@ -495,7 +464,7 @@ describe('visualizationService', () => {
           ],
         },
       },
-    };
+    } as IVizStepNode;
 
     // there is no next node, so it should be false
     expect(shouldAddEdge(nodeWithEmptyBranch)).toBeFalsy();

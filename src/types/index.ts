@@ -104,9 +104,9 @@ export interface IKaotoApi {
 }
 
 export interface INestedStep {
-  branchUuid?: string;
+  branchUuid: string;
   originStepUuid: string;
-  path: string[] | undefined;
+  pathToStep: string[] | undefined;
   stepUuid: string;
 }
 
@@ -138,6 +138,7 @@ export interface IStepProps {
 }
 
 export interface IStepPropsBranch {
+  branchUuid: string;
   condition?: string;
   identifier: string;
   steps: IStepProps[];

@@ -1,5 +1,5 @@
 import nestedBranch from '../store/data/kamelet.nested-branch.steps';
-import { findPath, setDeepValue } from './index';
+import { findPath, getDeepValue, setDeepValue } from './index';
 import { filterNestedSteps } from '@kaoto/services';
 
 describe('utils', () => {
@@ -29,6 +29,17 @@ describe('utils', () => {
       (step) => step.UUID !== 'log-340230'
     );
     expect(filteredNestedBranch![1].branches![0].steps[0].branches![0].steps).toHaveLength(0);
+  });
+
+  /**
+   * getDeepValue
+   */
+  it('getDeepValue(): given a complex object & path, should return the value of the object at the path', () => {
+    const object = { a: [{ bar: { c: 3 }, baz: { d: 2 } }] };
+    expect(getDeepValue(object, 'a[0].baz.d')).toEqual(2);
+
+    const objectArray = [object];
+    expect(getDeepValue(objectArray, '[0].a[0].bar.c')).toEqual(3);
   });
 
   /**

@@ -37,7 +37,7 @@ export function buildBranchNodeParams(
   } as IVizStepNode;
 }
 
-// Builds ONLY the edge cases where we need to connect branches to prev/next steps
+// Builds branch step edges and edges that need to connect branches to prev/next steps
 export function buildBranchSpecialEdges(stepNodes: IVizStepNode[]): IVizStepPropsEdge[] {
   const specialEdges: IVizStepPropsEdge[] = [];
 
@@ -193,6 +193,7 @@ export function buildNodesFromSteps(
       stepNodes.push(currentStep);
     } else {
       currentStep = buildNodeDefaultParams(step, getId(step.UUID), {
+        isLastStep: index === steps.length - 1,
         nextStepUuid: steps[index + 1]?.UUID,
         ...props,
       });
@@ -252,22 +253,23 @@ export function extractNestedSteps(steps: IStepProps[]) {
   let tempSteps = steps.slice();
   let nestedSteps: INestedStep[] = [];
 
-  const loopOverSteps = (steps: IStepProps[], originalStepUuid?: string) => {
+  const loopOverSteps = (steps: IStepProps[], originalStepUuid?: string, branchUuid?: string) => {
     steps.forEach((step) => {
       if (originalStepUuid) {
         // this is a nested step
         nestedSteps.push({
+          branchUuid,
           stepUuid: step.UUID,
           originStepUuid: originalStepUuid,
-          path: findPath(tempSteps, step.UUID, 'UUID'),
-        });
+          pathToStep: findPath(tempSteps, step.UUID, 'UUID'),
+        } as INestedStep);
       }
 
       if (step.branches) {
         step.branches.forEach((branch) => {
           // it contains nested steps; we will need to store the branch info
           // and the path to it, for each of those steps
-          return loopOverSteps(branch.steps, step.UUID);
+          return loopOverSteps(branch.steps, step.UUID, branch.branchUuid);
         });
       }
     });
@@ -546,10 +548,6 @@ export function isFirstStepStart(steps: IStepProps[]): boolean {
   return steps.length > 0 && steps[0].type === 'START';
 }
 
-export function isLastNode(nodes: IVizStepNode[], UUID: string): boolean {
-  return nodes[nodes.length - 1].data.step.UUID === UUID;
-}
-
 export function isMiddleStep(step: IStepProps): boolean {
   return step.type === 'MIDDLE';
 }
@@ -573,6 +571,7 @@ export function regenerateUuids(steps: IStepProps[], branchSteps: boolean = fals
     if (branchSteps) step.UUID = `${step.name}-${idx}-${getRandomArbitraryNumber()}`;
     if (step.branches) {
       step.branches.forEach((branch) => {
+        branch.branchUuid = `b-${idx}-${getRandomArbitraryNumber()}`;
         return newSteps.concat(regenerateUuids(branch.steps, true));
       });
     }
