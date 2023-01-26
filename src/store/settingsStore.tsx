@@ -24,6 +24,7 @@ const initialSettings: ISettings = {
   icon: svg,
   name: 'integration',
   namespace: '',
+  editorIsLightMode: false,
   editorMode: CodeEditorMode.FREE_EDIT,
 };
 

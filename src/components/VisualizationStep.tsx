@@ -182,7 +182,13 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             <img src={data.icon} alt={data.label} />
           </div>
           {/* STEP LABEL */}
-          <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
+          <div
+            className={`${
+              layout === 'RIGHT' ? 'stepNode__Label' : 'stepNode__Label-vertical'
+            } stepNode__clickable`}
+          >
+            <span>{data.label}</span>
+          </div>
           {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
           {!isEndStep(data.step) && (
             <Handle

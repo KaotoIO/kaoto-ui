@@ -57,12 +57,14 @@ export interface ISettings {
   description?: string;
   // e.g. 'KameletBinding'
   dsl: IDsl;
+  editorIsLightMode: boolean;
+  editorMode: CodeEditorMode;
+
   icon?: string;
   // name of integration or deployment
   name: string;
   // Cluster namespace
   namespace: string;
-  editorMode: CodeEditorMode;
 }
 
 export interface ICapabilities {
