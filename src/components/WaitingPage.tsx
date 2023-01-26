@@ -53,7 +53,8 @@ const WaitingPage = ({ setBackendAvailable }: ILoadingScreen) => {
           hasGutter
           style={{
             display: 'flex',
-            height: '100%',
+            height: '100vh',
+            width: '100vw',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
