@@ -1,5 +1,5 @@
 import WaitingPage from '../components/WaitingPage';
-import { Page, SkipToContent } from '@patternfly/react-core';
+import { Panel } from '@patternfly/react-core';
 import { ReactNode, useState } from 'react';
 
 interface IAppLayout {
@@ -8,24 +8,10 @@ interface IAppLayout {
 const AppLayout = ({ children }: IAppLayout) => {
   const [backendAvailable, setBackendAvailable] = useState(false);
 
-  const pageId = 'primary-app-container';
-
-  const PageSkipToContent = (
-    <SkipToContent
-      onClick={(event) => {
-        event.preventDefault();
-        const primaryContentContainer = document.getElementById(pageId);
-        primaryContentContainer && primaryContentContainer.focus();
-      }}
-      href={`#${pageId}`}
-    >
-      Skip to Content
-    </SkipToContent>
-  );
   return (
-    <Page mainContainerId={pageId} skipToContent={PageSkipToContent}>
+    <Panel style={{ flexGrow: 1 }}>
       {backendAvailable ? children : <WaitingPage setBackendAvailable={setBackendAvailable} />}
-    </Page>
+    </Panel>
   );
 };
 

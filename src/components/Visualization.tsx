@@ -262,8 +262,8 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
           data-testid={'react-flow-wrapper'}
           ref={reactFlowWrapper}
           style={{
-            width: window.innerWidth,
-            height: window.innerHeight - 77,
+            width: '100vw',
+            height: 'calc(100vh - 77px )',
           }}
         >
           <ReactFlow
