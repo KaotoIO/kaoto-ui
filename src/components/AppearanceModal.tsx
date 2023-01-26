@@ -1,4 +1,5 @@
-import { ThemeSwitcher } from '@kaoto/layout';
+import { ThemeSwitcher } from './ThemeSwitcher';
+import LOCAL_STORAGE_EDITOR_THEME_KEY from '@kaoto/constants';
 import { useSettingsStore } from '@kaoto/store';
 import {
   Form,
@@ -16,43 +17,25 @@ export interface IAppearanceModal {
   isModalOpen: boolean;
 }
 
-const LOCAL_STORAGE_EDITOR_THEME_KEY = 'KAOTO_EDITOR_THEME_IS_LIGHT';
-
 /**
  * Contains the contents for the Appearance modal.
  * @param handleCloseModal
  * @param isModalOpen
  * @constructor
  */
-export const AppearanceModal = ({ handleCloseModal, isModalOpen }: IAppearanceModal) => {
+const AppearanceModal = ({ handleCloseModal, isModalOpen }: IAppearanceModal) => {
   const storedTheme = localStorage.getItem(LOCAL_STORAGE_EDITOR_THEME_KEY);
   const { settings, setSettings } = useSettingsStore();
-  // const localThemeisLight = !storedTheme || storedTheme === 'true';
-  // const localThemeisLight = !storedTheme || storedTheme === 'false';
-  // const localThemeisLight = !storedTheme || storedTheme === (!settings.editorIsDarkMode).toString();
-  // const localThemeisLight = !storedTheme || storedTheme === (!settings.editorIsDarkMode).toString();
-  // const [isLightTheme, setIsLightTheme] = useState(localThemeisLight);
 
   useEffect(() => {
-    // loadThemeSetting(localThemeisLight);
     localStorage.setItem(
       LOCAL_STORAGE_EDITOR_THEME_KEY,
       storedTheme ?? settings.editorIsLightMode.toString()
     );
-  }, []);
-
-  const loadThemeSetting = (isThemeLight: boolean): void => {
-    if (isThemeLight) {
-      // setSettings({ ...settings, editorIsDarkMode: settings.isThemeLight });
-    } else {
-      // setSettings({ ...settings, editorIsDarkMode: settings.isThemeLight });
-    }
-  };
+  }, [settings.editorIsLightMode, storedTheme]);
 
   const onToggleSwitchEditorTheme = (newCheckedState: boolean) => {
     setSettings({ ...settings, editorIsLightMode: newCheckedState });
-    // setIsLightTheme(newCheckedState);
-    loadThemeSetting(newCheckedState);
     localStorage.setItem(LOCAL_STORAGE_EDITOR_THEME_KEY, `${newCheckedState}`);
   };
 
@@ -75,7 +58,6 @@ export const AppearanceModal = ({ handleCloseModal, isModalOpen }: IAppearanceMo
             <Switch
               aria-label="theme-editor-switch"
               className="switch-theme"
-              // isChecked={isLightTheme}
               isChecked={settings.editorIsLightMode}
               onChange={onToggleSwitchEditorTheme}
               data-testid={'appearance--theme-editor-switch'}
@@ -87,3 +69,5 @@ export const AppearanceModal = ({ handleCloseModal, isModalOpen }: IAppearanceMo
     </Modal>
   );
 };
+
+export { AppearanceModal };

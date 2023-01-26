@@ -75,14 +75,7 @@
     width: 250%;
 }
 
-.stepNode__Label-vertical {
-    bottom: -30px;
-    left: -75%;
-    position: relative;
-    width: 250%;
-}
-
-.stepNode__Label-vertical span {
+.stepNode__Label span {
     background: var(--pf-global--BackgroundColor--150);
     border-radius: 15%;
     padding: 0.4em;

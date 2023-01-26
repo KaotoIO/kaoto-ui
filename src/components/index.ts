@@ -13,6 +13,7 @@ export * from './MiniCatalog';
 export * from './SettingsModal';
 export * from './SourceCodeEditor';
 export * from './StepErrorBoundary';
+export * from './ThemeSwitcher';
 export * from './VisualizationControls';
 export * from './VisualizationStepViews';
 export * from './Visualization';

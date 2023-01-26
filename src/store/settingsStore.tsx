@@ -1,5 +1,6 @@
 // @ts-ignore
 import svg from '../assets/images/kaoto.svg';
+import LOCAL_STORAGE_EDITOR_THEME_KEY from '@kaoto/constants';
 import { CodeEditorMode, IDsl, ISettings } from '@kaoto/types';
 import { create } from 'zustand';
 
@@ -24,7 +25,7 @@ const initialSettings: ISettings = {
   icon: svg,
   name: 'integration',
   namespace: '',
-  editorIsLightMode: false,
+  editorIsLightMode: localStorage.getItem(LOCAL_STORAGE_EDITOR_THEME_KEY) === 'true',
   editorMode: CodeEditorMode.FREE_EDIT,
 };
 

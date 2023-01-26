@@ -20,6 +20,7 @@
       "@kaoto/api": ["./src/api"],
       "@kaoto/assets": ["./src/assets"],
       "@kaoto/components": ["./src/components"],
+      "@kaoto/constants": ["./src/store/constants"],
       "@kaoto/layout": ["./src/layout"],
       "@kaoto/routes": ["./src/routes"],
       "@kaoto/services": ["./src/services"],
