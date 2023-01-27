@@ -526,7 +526,11 @@ export function insertBranchGroupNode(
  * @param insertIndex
  * @param newStep
  */
-export function insertStep(steps: IStepProps[], insertIndex: number, newStep: IStepProps) {
+export function insertStep(
+  steps: IStepProps[],
+  insertIndex: number,
+  newStep: IStepProps
+): IStepProps[] {
   return [
     // part of array before the index
     ...steps.slice(0, insertIndex),
@@ -555,6 +559,18 @@ export function isMiddleStep(step: IStepProps): boolean {
 
 export function isStartStep(step: IStepProps): boolean {
   return step.type === 'START';
+}
+
+/**
+ * Inserts the given step at the beginning of the
+ * array of provided steps, returning the modified array
+ * @param steps
+ * @param newStep
+ */
+export function prependStep(steps: IStepProps[], newStep: IStepProps): IStepProps[] {
+  const newSteps = [...steps];
+  newSteps.unshift(newStep);
+  return newSteps;
 }
 
 /**

@@ -7,6 +7,8 @@ import {
   findStepIdxWithUUID,
   isEndStep,
   isStartStep,
+  prependableStepTypes,
+  prependStep,
 } from '@kaoto/services';
 import {
   useIntegrationJsonStore,
@@ -49,6 +51,28 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
         const pathToBranch = findPath(stepCopy, currentStepNested.branchUuid, 'branchUuid');
         let newBranch = getDeepValue(stepCopy, pathToBranch);
         newBranch.steps = [...newBranch.steps, step];
+        // here we are building a new root step, with a new array of those branch steps
+        const newRootStep = setDeepValue(stepCopy, pathToBranch, newBranch);
+        replaceStep(newRootStep, rootStepIdx);
+      } else {
+        appendStep(step);
+      }
+    });
+  };
+
+  const onMiniCatalogClickPrepend = (selectedStep: IStepProps): void => {
+    // fetch parameters and other details
+    fetchStepDetails(selectedStep.id).then((step) => {
+      step.UUID = selectedStep.UUID;
+      if (currentStepNested) {
+        // special handling for branch steps
+        const rootStepIdx = findStepIdxWithUUID(currentStepNested.originStepUuid);
+        const stepsCopy = steps.slice();
+        const stepCopy = stepsCopy[rootStepIdx];
+        // find path to the branch, for easy modification of its steps
+        const pathToBranch = findPath(stepCopy, currentStepNested.branchUuid, 'branchUuid');
+        let newBranch = getDeepValue(stepCopy, pathToBranch);
+        newBranch.steps = prependStep([...newBranch.steps], step);
         // here we are building a new root step, with a new array of those branch steps
         const newRootStep = setDeepValue(stepCopy, pathToBranch, newBranch);
         replaceStep(newRootStep, rootStepIdx);
@@ -129,6 +153,36 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           onDrop={onDropReplace}
           data-testid={`viz-step-${data.step.name}`}
         >
+          {/* PREPEND STEP BUTTON */}
+          {!endStep && data.isFirstStep && (
+            <Popover
+              appendTo={() => document.body}
+              aria-label="Search for a step"
+              bodyContent={
+                <MiniCatalog
+                  handleSelectStep={onMiniCatalogClickPrepend}
+                  queryParams={{
+                    dsl: currentDSL,
+                    type: prependableStepTypes(),
+                  }}
+                />
+              }
+              className={'miniCatalog__popover'}
+              data-testid={'miniCatalog__popover'}
+              enableFlip={true}
+              flipBehavior={['top-start', 'left-start']}
+              hideOnOutsideClick={true}
+              position={'left-start'}
+            >
+              <button
+                className="stepNode__Prepend plusButton nodrag"
+                data-testid={'stepNode__prependStep-btn'}
+              >
+                <PlusIcon />
+              </button>
+            </Popover>
+          )}
+
           {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
           {!isStartStep(data.step) && (
             <Handle
@@ -138,35 +192,6 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               id="a"
               style={{ borderRadius: 0 }}
             />
-          )}
-          {/* PLUS BUTTON TO ADD/APPEND STEP */}
-          {!endStep && data.isLastStep && (
-            <Popover
-              appendTo={() => document.body}
-              aria-label="Search for a step"
-              bodyContent={
-                <MiniCatalog
-                  handleSelectStep={onMiniCatalogClickAppend}
-                  queryParams={{
-                    dsl: currentDSL,
-                    type: appendableStepTypes(data.step.type),
-                  }}
-                />
-              }
-              className={'miniCatalog__popover'}
-              data-testid={'miniCatalog__popover'}
-              enableFlip={true}
-              flipBehavior={['top-start', 'left-start']}
-              hideOnOutsideClick={true}
-              position={'right-start'}
-            >
-              <button
-                className="stepNode__Add plusButton nodrag"
-                data-testid={'stepNode__appendStep-btn'}
-              >
-                <PlusIcon />
-              </button>
-            </Popover>
           )}
 
           <button
@@ -194,6 +219,36 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               id="b"
               style={{ borderRadius: 0 }}
             />
+          )}
+
+          {/* ADD/APPEND STEP BUTTON */}
+          {!endStep && data.isLastStep && (
+            <Popover
+              appendTo={() => document.body}
+              aria-label="Search for a step"
+              bodyContent={
+                <MiniCatalog
+                  handleSelectStep={onMiniCatalogClickAppend}
+                  queryParams={{
+                    dsl: currentDSL,
+                    type: appendableStepTypes(data.step.type),
+                  }}
+                />
+              }
+              className={'miniCatalog__popover'}
+              data-testid={'miniCatalog__popover'}
+              enableFlip={true}
+              flipBehavior={['top-start', 'left-start']}
+              hideOnOutsideClick={true}
+              position={'right-start'}
+            >
+              <button
+                className="stepNode__Add plusButton nodrag"
+                data-testid={'stepNode__appendStep-btn'}
+              >
+                <PlusIcon />
+              </button>
+            </Popover>
           )}
         </div>
       ) : (
