@@ -6,10 +6,8 @@ import {
   SourceCodeEditor,
   Visualization,
 } from '../components';
-import { SourceCodeEditorModal } from '../components/SourceCodeEditorModal';
 import './Dashboard.css';
 import { useSettingsStore } from '@kaoto/store';
-import { CodeEditorMode } from '@kaoto/types';
 import {
   Banner,
   DrawerColorVariant,
@@ -27,7 +25,6 @@ const Dashboard = () => {
   const [bottomDrawerExpanded, setBottomDrawerExpanded] = useState(false);
   const [leftDrawerExpanded, setLeftDrawerExpanded] = useState(false);
   const leftDrawerModel = useRef('catalog');
-  const [codeEditMode, setCodeEditMode] = useState(false);
   const { settings } = useSettingsStore((state) => state);
 
   const drawerCatalog = (
@@ -50,15 +47,7 @@ const Dashboard = () => {
 
   const drawerCodeEditor = (
     <DrawerContentBody hasPadding={false}>
-      <SourceCodeEditor
-        mode={settings.editorMode}
-        // we want to have editable editor in TWO_WAY_SYNC mode
-        editable={settings.editorMode === CodeEditorMode.TWO_WAY_SYNC}
-        editAction={() => {
-          setLeftDrawerExpanded(false);
-          setCodeEditMode(true);
-        }}
-      />
+      <SourceCodeEditor mode={settings.editorMode} schemaUri={settings.dsl.validationSchema} />
     </DrawerContentBody>
   );
 
@@ -113,18 +102,12 @@ const Dashboard = () => {
                 <KaotoToolbar
                   toggleCatalog={handleToggleCatalog}
                   toggleCodeEditor={handleToggleCodeEditor}
+                  hideLeftPanel={() => {
+                    setLeftDrawerExpanded(false);
+                  }}
                 />
 
                 {/* LEFT DRAWER: CATALOG & CODE EDITOR */}
-                {codeEditMode && settings.editorMode === CodeEditorMode.FREE_EDIT && (
-                  <SourceCodeEditorModal
-                    isOpen={codeEditMode}
-                    close={() => {
-                      setCodeEditMode(false);
-                      setLeftDrawerExpanded(true);
-                    }}
-                  />
-                )}
                 <KaotoDrawer
                   colorVariant={DrawerColorVariant.light200}
                   dataTestId={'kaoto-left-drawer'}

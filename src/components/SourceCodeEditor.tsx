@@ -4,14 +4,9 @@ import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } 
 import { CodeEditorMode, IIntegration } from '@kaoto/types';
 import { usePrevious } from '@kaoto/utils';
 import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
-import {
-  CheckCircleIcon,
-  EraserIcon,
-  PencilAltIcon,
-  RedoIcon,
-  UndoIcon,
-} from '@patternfly/react-icons';
-import { ReactNode, useEffect, useRef } from 'react';
+import { Alert } from '@patternfly/react-core';
+import { CheckCircleIcon, EraserIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';
+import { useEffect, useRef, useState } from 'react';
 import EditorDidMount from 'react-monaco-editor';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -20,14 +15,15 @@ interface ISourceCodeEditor {
   language?: Language;
   theme?: string;
   mode?: CodeEditorMode | CodeEditorMode.FREE_EDIT;
+  schemaUri?: string;
   editable?: boolean | false;
-  editAction?: (code: string, event?: any) => void;
   syncAction?: () => {};
 }
 
 const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<EditorDidMount['editor'] | null>(null);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
+  const [syncedCode, setSyncedCode] = useState('');
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
   const { settings, setSettings } = useSettingsStore();
   const previousJson = usePrevious(integrationJson);
@@ -40,7 +36,10 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
     let tmpInt = integrationJson;
     tmpInt.metadata = { ...integrationJson.metadata, ...settings };
     fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
-      if (typeof newSrc === 'string') setSourceCode(newSrc);
+      if (typeof newSrc === 'string') {
+        setSourceCode(newSrc);
+        setSyncedCode(newSrc);
+      }
     });
   }, [integrationJson]);
 
@@ -49,33 +48,29 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
    * Returns JSON to be displayed in the visualization
    */
   const handleChanges = (incomingData: string) => {
-    if (sourceCode !== incomingData) {
-      setSourceCode(incomingData);
-
-      // update integration JSON state with changes
-      fetchIntegrationJson(incomingData, settings.dsl.name)
-        .then((res: IIntegration) => {
-          let tmpInt = res;
-          if (typeof res.metadata?.name === 'string' && res.metadata.name !== '') {
-            settings.name = res.metadata.name;
-            setSettings({ name: res.metadata.name });
-          }
-          tmpInt.metadata = { ...res.metadata, ...settings };
-          updateIntegration(tmpInt);
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-    }
+    // update integration JSON state with changes
+    fetchIntegrationJson(incomingData, settings.dsl.name)
+      .then((res: IIntegration) => {
+        let tmpInt = res;
+        if (typeof res.metadata?.name === 'string' && res.metadata.name !== '') {
+          settings.name = res.metadata.name;
+          setSettings({ name: res.metadata.name });
+        }
+        tmpInt.metadata = { ...res.metadata, ...settings };
+        updateIntegration(tmpInt);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
   const handleEditorDidMount = (editor: EditorDidMount['editor']) => {
     import('monaco-yaml').then((im) => {
       im.setDiagnosticsOptions({
-        enableSchemaRequest: settings.dsl.validationSchema != '',
+        enableSchemaRequest: props.schemaUri !== '',
         hover: false,
         completion: true,
-        validate: settings.dsl.validationSchema != '',
+        validate: props.schemaUri !== '',
         format: true,
         schemas: [
           {
@@ -99,11 +94,15 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
   };
 
   const debounced = useDebouncedCallback((value: string) => {
-    // if editor is in read only mode file can be still uploaded.
-    if (props.mode !== CodeEditorMode.FREE_EDIT) {
+    if (props.mode === CodeEditorMode.TWO_WAY_SYNC) {
       handleChanges(value);
     }
   }, 1000);
+
+  const syncChanges = (value: string) => {
+    setSourceCode(value);
+    debounced(value);
+  };
 
   const clearAction = () => {
     setSourceCode('');
@@ -130,16 +129,6 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       onClick={clearAction}
       isVisible={sourceCode !== ''}
       tooltipProps={{ content: 'Clear', position: 'right' }}
-    />
-  );
-  const EditButton = (
-    <CodeEditorControl
-      key={'editButton'}
-      icon={<PencilAltIcon color="#0066CC" />}
-      data-testid={'sourceCode--editButton'}
-      onClick={props.editAction ?? (() => {})}
-      isVisible={props.mode === CodeEditorMode.FREE_EDIT}
-      tooltipProps={{ content: 'Edit the source code', position: 'right' }}
     />
   );
 
@@ -175,29 +164,29 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       data-testid={'sourceCode--applyButton'}
       onClick={updateModelFromTheEditor}
       tooltipProps={{ content: 'Sync your code', position: 'right' }}
-      isVisible={sourceCode !== ''}
+      isVisible={sourceCode !== '' && props.mode === CodeEditorMode.FREE_EDIT}
     />
   );
 
-  let customControls: ReactNode[] = [EditButton];
-  if (props.mode === CodeEditorMode.TWO_WAY_SYNC) {
-    customControls = [UndoButton, RedoButton, ClearButton];
-  } else if (props.mode === CodeEditorMode.FREE_EDIT && props.editable) {
-    customControls = [UndoButton, RedoButton, ClearButton, UpdateButton];
-  }
-
   return (
     <StepErrorBoundary>
+      {syncedCode !== sourceCode && (
+        <Alert
+          title="Any invalid code will be replaced after sync. If you don't want to lose your changes
+          please make a backup."
+          variant="warning"
+        ></Alert>
+      )}
       <CodeEditor
         code={sourceCode ?? props.initialData}
         className="code-editor"
         height="80vh"
         width={'100%'}
-        onCodeChange={debounced}
+        onCodeChange={syncChanges}
         language={Language.yaml}
         onEditorDidMount={handleEditorDidMount}
         toolTipPosition="right"
-        customControls={customControls}
+        customControls={[UndoButton, RedoButton, ClearButton, UpdateButton]}
         isCopyEnabled
         isDarkTheme={!settings.editorIsLightMode}
         isDownloadEnabled
@@ -205,7 +194,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
         allowFullScreen={true}
         isUploadEnabled
         options={{
-          readOnly: props.mode === CodeEditorMode.READ_ONLY || !props.editable,
+          readOnly: props.mode === CodeEditorMode.READ_ONLY,
           scrollbar: {
             horizontal: 'visible',
             vertical: 'visible',

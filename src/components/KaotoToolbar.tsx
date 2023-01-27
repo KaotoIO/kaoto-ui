@@ -48,12 +48,13 @@ import { useCallback, useEffect, useState } from 'react';
 export interface IKaotoToolbar {
   toggleCatalog: () => void;
   toggleCodeEditor: () => void;
+  hideLeftPanel: () => void;
 }
 function LogoImg() {
   return <img data-testid={'kaoto-logo'} src={logo} alt="Kaoto Logo" style={{ height: '30px' }} />;
 }
 
-export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar) => {
+export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel }: IKaotoToolbar) => {
   const { settings, setSettings } = useSettingsStore((state) => state);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore((state) => state);
   const deleteIntegration = useIntegrationJsonStore((state) => state.deleteIntegration);
@@ -169,7 +170,10 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor }: IKaotoToolbar)
     <DropdownItem
       key="settings"
       data-testid={'kaotoToolbar-kebab__settings'}
-      onClick={() => setExpanded({ ...expanded, settingsModal: !expanded.settingsModal })}
+      onClick={() => {
+        setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
+        hideLeftPanel();
+      }}
     >
       Settings
     </DropdownItem>,

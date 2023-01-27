@@ -16,7 +16,7 @@ const initDsl: IDsl = {
   output: '',
   stepKinds: '',
   name: 'KameletBinding',
-  validationSchema: '',
+  validationSchema: '/v1/capabilities/KameletBinding/schema',
 };
 
 const initialSettings: ISettings = {
