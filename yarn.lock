@@ -1041,10 +1041,10 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@module-federation/typescript@^2.1.5":
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/@module-federation/typescript/-/typescript-2.1.5.tgz#3f8c598d4049dfa5034ce3560c390336dbe48795"
-  integrity sha512-4MFd0jh4l/vb0LXVKlf6WpWEWoVYPzXavUL2mIUIl9S92cPxfare5hz+fREFq3R5ANpFF31BvyEFvfmQIw+gCw==
+"@module-federation/typescript@^2.1.6":
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/@module-federation/typescript/-/typescript-2.1.6.tgz#0add34ca28067d7fd3cfac9836e427a00b03ec1a"
+  integrity sha512-KGr/hBN6DU+FE1+RxbkaZtecSjnbBxFztxYaCABzg6IW5sCAxRFPrRzPGy1nU6B+kO2fFiss+flj3gBgNeGw/Q==
   dependencies:
     "@module-federation/utilities" "1.1.2"
     "@swc/helpers" "0.4.14"
