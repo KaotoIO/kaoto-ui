@@ -75,6 +75,12 @@
     width: 250%;
 }
 
+.stepNode__Label span {
+    background: var(--pf-global--BackgroundColor--150);
+    border-radius: 15%;
+    padding: 0.4em;
+}
+
 .stepNode__Slot {
     border: 2px solid var(--pf-global--BorderColor--100);
     border-radius: 50%;

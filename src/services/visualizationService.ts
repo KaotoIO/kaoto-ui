@@ -411,6 +411,7 @@ export async function getLayoutedElements(
 
       // *between handles horizontal spacing
       'elk.layered.spacing.nodeNodeBetweenLayers': DEFAULT_WIDTH_HEIGHT,
+      'elk.layered.spacing.edgeEdgeBetweenLayers': DEFAULT_WIDTH_HEIGHT * 1.5,
       'spacing.componentComponent': '70',
       spacing: '75',
 

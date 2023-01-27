@@ -199,7 +199,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
         toolTipPosition="right"
         customControls={customControls}
         isCopyEnabled
-        isDarkTheme
+        isDarkTheme={!settings.editorIsLightMode}
         isDownloadEnabled
         isLanguageLabelVisible
         allowFullScreen={true}
