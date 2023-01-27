@@ -48,7 +48,7 @@
     "lodash.isequal": "^4.5.0",
     "monaco-editor": "^0.34.1",
     "monaco-editor-webpack-plugin": "^7.0.1",
-    "monaco-yaml": "^4.0.2",
+    "monaco-yaml": "^4.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-error-boundary": "3.1.4",

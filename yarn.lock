@@ -6588,10 +6588,10 @@ monaco-worker-manager@^2.0.0:
   resolved "https://registry.yarnpkg.com/monaco-worker-manager/-/monaco-worker-manager-2.0.1.tgz#f67c54dfca34ed4b225d5de84e77b24b4e36de8a"
   integrity sha512-kdPL0yvg5qjhKPNVjJoym331PY/5JC11aPJXtCZNwWRvBr6jhkIamvYAyiY5P1AWFmNOy0aRDRoMdZfa71h8kg==
 
-monaco-yaml@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/monaco-yaml/-/monaco-yaml-4.0.2.tgz#c08ff8ac661a94d0a306fc113c308f3afb8069ab"
-  integrity sha512-Wxn6CblkQDLOUusfi0eZ3qZhkuKYIrK7fXlkJOOG+W18zgKePbuZW0XNWpczlxDC27D753dB18pMnx4U7MZ3yg==
+monaco-yaml@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/monaco-yaml/-/monaco-yaml-4.0.3.tgz#0dcef7dbb0dabf8cc8190c4ad0af93d70113d481"
+  integrity sha512-1ETgObQGkbKeciaIRCUPSx7zP4JsQc+feCVNlt3Eb1gQfQy2iUSIXUuTqQU8t0belp6cEEzt2DXqgw4VCYn4LA==
   dependencies:
     "@types/json-schema" "^7.0.0"
     jsonc-parser "^3.0.0"
