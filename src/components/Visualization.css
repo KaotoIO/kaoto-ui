@@ -81,6 +81,12 @@
     padding: 0.4em;
 }
 
+.stepNode__Prepend {
+    position: absolute;
+    left: -24px;
+    top: 38%;
+}
+
 .stepNode__Slot {
     border: 2px solid var(--pf-global--BorderColor--100);
     border-radius: 50%;

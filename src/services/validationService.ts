@@ -94,3 +94,10 @@ export function isNameValidCheck(name: string) {
   const regexPattern = /^[a-z\d]([-a-z\d]*[a-z\d])?(\.[a-z\d]([-a-z\d]*[a-z\d])?)*$/gm;
   return regexPattern.test(name);
 }
+
+/**
+ * Returns the step types that can be prepended to a step.
+ */
+export function prependableStepTypes(): string {
+  return 'MIDDLE';
+}

@@ -26,6 +26,7 @@ import {
   isFirstStepStart,
   isMiddleStep,
   isStartStep,
+  prependStep,
   regenerateUuids,
   shouldAddEdge,
 } from './visualizationService';
@@ -336,6 +337,8 @@ describe('visualizationService', () => {
     ] as IStepProps[];
 
     expect(insertStep(steps, 2, { name: 'peach' } as IStepProps)).toHaveLength(3);
+    // does it insert it at the correct spot?
+    expect(insertStep(steps, 2, { name: 'peach' } as IStepProps)[2]).toEqual({ name: 'peach' });
   });
 
   /**
@@ -391,6 +394,23 @@ describe('visualizationService', () => {
   it('isStartStep(): should determine if the provided step is a START step', () => {
     expect(isStartStep(eipIntegration[0])).toBe(true);
     expect(isStartStep(eipIntegration[1])).toBe(false);
+  });
+
+  /**
+   * prependStep
+   */
+  it('prependStep(): should insert the provided step at the beginning of a given array of steps', () => {
+    const steps = [
+      {
+        name: 'strawberry',
+      },
+      {
+        name: 'blueberry',
+      },
+    ] as IStepProps[];
+
+    expect(prependStep(steps, { name: 'peach' } as IStepProps)).toHaveLength(3);
+    expect(prependStep(steps, { name: 'mango' } as IStepProps)[0]).toEqual({ name: 'mango' });
   });
 
   /**
