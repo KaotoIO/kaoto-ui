@@ -19,7 +19,8 @@ interface IIntegrationJsonStore {
   deleteSteps: () => void;
   insertStep: (newStep: IStepProps, insertIndex: number) => void;
   integrationJson: IIntegration;
-  replaceStep: (newStep: IStepProps, oldStepIndex?: number, path?: string[]) => void;
+  replaceBranchStep: (newStep: IStepProps, pathToOldStep: string[] | undefined) => void;
+  replaceStep: (newStep: IStepProps, oldStepIndex?: number) => void;
   setViews: (views: IViewProps[]) => void;
   updateIntegration: (newInt?: any) => void;
   views: IViewProps[];
@@ -105,14 +106,26 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
           },
         }));
       },
-      replaceStep: (newStep, oldStepIndex, pathToStep) => {
+      replaceBranchStep: (newStep, pathToOldStep) => {
+        let stepsCopy = get().integrationJson.steps.slice();
+        stepsCopy = setDeepValue(stepsCopy, pathToOldStep, newStep);
+
+        const stepsWithNewUuids = regenerateUuids(stepsCopy);
+        const { updateSteps } = useNestedStepsStore.getState();
+        updateSteps(extractNestedSteps(stepsWithNewUuids));
+
+        return set((state) => ({
+          integrationJson: {
+            ...state.integrationJson,
+            steps: [...stepsWithNewUuids],
+          },
+        }));
+      },
+      replaceStep: (newStep, oldStepIndex) => {
         let stepsCopy = get().integrationJson.steps.slice();
         if (oldStepIndex === undefined) {
           // replacing a slot step with no pre-existing step
           stepsCopy.unshift(newStep);
-        } else if (pathToStep) {
-          // replacing a deeply nested step
-          stepsCopy = setDeepValue(stepsCopy, pathToStep, newStep);
         } else {
           // replacing an existing step
           stepsCopy[oldStepIndex] = newStep;

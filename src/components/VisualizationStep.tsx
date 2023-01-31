@@ -26,15 +26,16 @@ import { Handle, NodeProps, Position } from 'reactflow';
 const currentDSL = useSettingsStore.getState().settings.dsl.name;
 const appendStep = useIntegrationJsonStore.getState().appendStep;
 const replaceStep = useIntegrationJsonStore.getState().replaceStep;
+const replaceBranchStep = useIntegrationJsonStore.getState().replaceBranchStep;
 
 // Custom Node type and component for React Flow
 const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const endStep = isEndStep(data.step!);
-  const currentIdx = findStepIdxWithUUID(data.step?.UUID);
   const { nestedSteps } = useNestedStepsStore();
   const layout = useVisualizationStore((state) => state.layout);
   const steps = useIntegrationJsonStore((state) => state.integrationJson.steps);
   const currentStepNested = nestedSteps.find((ns) => ns.stepUuid === data.step.UUID);
+  const currentIdx = findStepIdxWithUUID(data.step?.UUID);
 
   const { addAlert } = useAlert() || {};
 
@@ -97,11 +98,19 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     // fetch parameters and other details
     fetchStepDetails(stepC.id).then((step) => {
       step.UUID = stepC.UUID;
-      const validation = canStepBeReplaced(data, step, steps);
+      const validation = canStepBeReplaced(data, step);
 
       if (validation.isValid) {
         // update the steps, the new node will be created automatically
-        replaceStep(step);
+        if (data.branchInfo) {
+          if (data.isPlaceholder) {
+            const pathToBranch = findPath(steps, data.branchInfo.branchUuid!, 'branchUuid');
+            const newPath = pathToBranch?.concat('steps', '0');
+            replaceBranchStep(step, newPath);
+          }
+        } else {
+          replaceStep(step);
+        }
       } else {
         addAlert &&
           addAlert({
@@ -123,13 +132,12 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     const stepC: IStepProps = JSON.parse(dataJSON);
     // fetch parameters and other details
     fetchStepDetails(stepC.id).then((newStep) => {
-      const validation = canStepBeReplaced(data, newStep, steps);
+      const validation = canStepBeReplaced(data, newStep);
       // Replace step
       if (validation.isValid) {
         if (data.branchInfo) {
           if (currentStepNested) {
-            const oldStepIdx = findStepIdxWithUUID(currentStepNested.originStepUuid, steps);
-            replaceStep(newStep, oldStepIdx, currentStepNested.pathToStep);
+            replaceBranchStep(newStep, currentStepNested.pathToStep);
           }
         } else {
           replaceStep(newStep, currentIdx);
@@ -147,7 +155,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
   return (
     <>
-      {data.step?.UUID ? (
+      {!data.isPlaceholder ? (
         <div
           className={`stepNode`}
           onDrop={onDropReplace}
@@ -257,9 +265,23 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           onDrop={onDropNew}
           data-testid={'viz-step-slot'}
         >
+          {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
+          {(!isStartStep(data.step) || data.branchInfo) && (
+            <Handle
+              isConnectable={false}
+              type="target"
+              position={layout === 'RIGHT' ? Position.Left : Position.Top}
+              id="a"
+              style={{ borderRadius: 0 }}
+            />
+          )}
+
+          {/* VISUAL REPRESENTATION OF PLACEHOLDER STEP */}
           <div className={'stepNode__Icon stepNode__clickable'}>
             <CubesIcon />
           </div>
+
+          {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
           <Handle
             type="source"
             position={layout === 'RIGHT' ? Position.Right : Position.Bottom}
