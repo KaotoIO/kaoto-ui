@@ -1,3 +1,4 @@
+import './DeploymentsModal.css';
 import { fetchDeployments, stopDeployment } from '../api';
 import { CustomExclamationTriangleIcon } from './Icons';
 import { useDeploymentStore, useSettingsStore } from '@kaoto/store';
@@ -15,6 +16,11 @@ import {
   Title,
   AlertVariant,
   Badge,
+  Toolbar,
+  ToolbarContent,
+  ToolbarItem,
+  InputGroup,
+  SearchInput,
 } from '@patternfly/react-core';
 import { CubesIcon, HelpIcon } from '@patternfly/react-icons';
 import {
@@ -29,7 +35,7 @@ import {
   ActionsColumn,
 } from '@patternfly/react-table';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export interface IDeploymentsModal {
   handleCloseModal: () => void;
@@ -45,17 +51,19 @@ export interface IDeploymentsModal {
  */
 export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeploymentsModal) => {
   const [deployments, setDeployments] = useState<IDeployment[]>([]);
+  const [query, setQuery] = useState(``);
   const { settings } = useSettingsStore();
   const [activeSortIndex, setActiveSortIndex] = useState<number | undefined>(2);
   const [activeSortDirection, setActiveSortDirection] = useState<'asc' | 'desc' | undefined>(
     'desc'
   );
   const { deployment } = useDeploymentStore();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const { addAlert } = useAlert() || {};
 
   useEffect(() => {
-    // fetch deployments
+    // fetch deployments and on changes to deployment, re-fetch list of deployments
     if (settings.namespace !== '') {
       fetchDeployments('no-cache', settings.namespace)
           .then((output) => {
@@ -65,20 +73,7 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
             throw Error(e);
           });
     }
-  }, [settings.namespace]);
-
-  // on changes to deployment, re-fetch list of deployments
-  useEffect(() => {
-    // fetch deployments
-    if (settings.namespace !== '') {
-      fetchDeployments('no-cache', settings.namespace)
-          .then((output) => {
-            setDeployments(output);
-          })
-          .catch((e) => {
-            throw Error(e);
-          });
-    }
+    searchInputRef.current?.focus();
   }, [deployment, settings.namespace]);
 
   const columnNames = {
@@ -106,7 +101,7 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
 
   let sortedDeployments = deployments;
 
-  if (activeSortIndex) {
+  if (typeof activeSortIndex !== 'undefined') {
     sortedDeployments = deployments.sort((a, b) => {
       const aValue = getSortableRowValues(a)[activeSortIndex];
       const bValue = getSortableRowValues(b)[activeSortIndex];
@@ -129,6 +124,16 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
     },
     columnIndex,
   });
+
+  function search(items: IDeployment[]) {
+    return items.filter((item) => {
+      return item.name.toLowerCase().indexOf(query.trim().toLowerCase()) > -1;
+    });
+  }
+
+  const changeSearch = (e: any) => {
+    setQuery(e);
+  };
 
   const handleDeleteDeployment = (deployment: IDeployment) => {
     stopDeployment(deployment.name, settings.namespace)
@@ -185,54 +190,76 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
         variant={ModalVariant.large}
       >
         {deployments.length > 0 ? (
-          <TableComposable aria-label="List of deployments">
-            <Thead>
-              <Tr>
-                <Th sort={getSortParams(0)}>{columnNames.name}</Th>
-                <Th modifier="wrap" info={{ tooltip: 'Cluster namespace' }}>
-                  {columnNames.namespace}
-                </Th>
-                <Th modifier="wrap" sort={getSortParams(2)}>
-                  {columnNames.date}
-                </Th>
-                <Th modifier="wrap">{columnNames.errors}</Th>
-                <Th modifier="wrap">{columnNames.status}</Th>
-                <Th modifier="wrap">{columnNames.type}</Th>
-                <Th></Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {sortedDeployments.map((dep, rowIndex) => (
-                <Tr key={rowIndex}>
-                  <Td dataLabel={columnNames.name}>
-                    <b>{dep.name}</b>
-                  </Td>
-                  <Td dataLabel={columnNames.namespace}>{dep.namespace}</Td>
-                  <Td dataLabel={columnNames.date}>{formatDateTime(dep.date)}</Td>
-                  <Td dataLabel={columnNames.errors}>
-                    {dep.errors.length > 0 && (
-                      <span>
-                        <CustomExclamationTriangleIcon color="red" />
-                        &nbsp;&nbsp;
-                      </span>
-                    )}
-                    {dep.errors.length}
-                  </Td>
-                  <Td dataLabel={columnNames.status}>{dep.status}</Td>
-                  <Td dataLabel={columnNames.type}>
-                    <Badge key={rowIndex} isRead>
-                      {dep.type}
-                    </Badge>
-                  </Td>
-                  <Td isActionCell>
-                    <ActionsColumn items={defaultActions(dep)} />
-                  </Td>
+          <>
+            <Toolbar>
+              <ToolbarContent>
+                <ToolbarItem style={{ padding: '0', marginRight: '0' }}>
+                  <InputGroup>
+                    <SearchInput
+                      name={'deploymentSearch'}
+                      id={'deploymentSearch'}
+                      type={'search'}
+                      placeholder={'search for deployment...'}
+                      aria-label={'search for deployment'}
+                      value={query}
+                      onChange={changeSearch}
+                      onClear={() => setQuery('')}
+                      ref={searchInputRef}
+                    />
+                  </InputGroup>
+                </ToolbarItem>
+              </ToolbarContent>
+            </Toolbar>
+            <TableComposable aria-label="List of deployments"
+            >
+              <Thead>
+                <Tr>
+                  <Th sort={getSortParams(0)}>{columnNames.name}</Th>
+                  <Th modifier="wrap" info={{ tooltip: 'Cluster namespace' }}>
+                    {columnNames.namespace}
+                  </Th>
+                  <Th modifier="wrap" sort={getSortParams(2)}>
+                    {columnNames.date}
+                  </Th>
+                  <Th modifier="wrap">{columnNames.errors}</Th>
+                  <Th modifier="wrap" sort={getSortParams(4)}>{columnNames.status}</Th>
+                  <Th modifier="wrap" sort={getSortParams(5)}>{columnNames.type}</Th>
+                  <Th></Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </TableComposable>
+              </Thead>
+              <Tbody>
+                {sortedDeployments && search(sortedDeployments).map((dep, rowIndex) => (
+                  <Tr key={rowIndex}>
+                    <Td dataLabel={columnNames.name}>
+                      <b>{dep.name}</b>
+                    </Td>
+                    <Td dataLabel={columnNames.namespace}>{dep.namespace}</Td>
+                    <Td dataLabel={columnNames.date}>{formatDateTime(dep.date)}</Td>
+                    <Td dataLabel={columnNames.errors}>
+                      {dep.errors.length > 0 && (
+                        <span>
+                          <CustomExclamationTriangleIcon color="red" />
+                          &nbsp;&nbsp;
+                        </span>
+                      )}
+                      {dep.errors.length}
+                    </Td>
+                    <Td dataLabel={columnNames.status}>{dep.status}</Td>
+                    <Td dataLabel={columnNames.type}>
+                      <Badge key={rowIndex} isRead>
+                        {dep.type}
+                      </Badge>
+                    </Td>
+                    <Td isActionCell>
+                      <ActionsColumn items={defaultActions(dep)} />
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </TableComposable>
+          </>
         ) : (
-          <EmptyState variant={EmptyStateVariant.small}>
+          <EmptyState isFullHeight={true} variant={EmptyStateVariant.small}>
             <EmptyStateIcon icon={CubesIcon} />
             <Title headingLevel="h4" size="lg">
               No deployments
