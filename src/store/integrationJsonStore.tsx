@@ -28,7 +28,8 @@ interface IIntegrationJsonStore {
 const initialState = {
   branchSteps: {},
   integrationJson: {
-    metadata: { name: 'integration', dsl: 'KameletBinding', namespace: 'default' },
+    dsl: 'KameletBinding',
+    metadata: { name: 'integration', namespace: 'default' },
     steps: [],
     params: [],
   },

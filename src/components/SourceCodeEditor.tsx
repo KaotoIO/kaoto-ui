@@ -1,7 +1,7 @@
-import { fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
+import { fetchCapabilities, fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
 import { StepErrorBoundary } from '@kaoto/components';
 import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
-import { CodeEditorMode, IIntegration } from '@kaoto/types';
+import { CodeEditorMode, ICapabilities, IIntegration, ISettings } from '@kaoto/types';
 import { usePrevious } from '@kaoto/utils';
 import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
 import { Alert } from '@patternfly/react-core';
@@ -32,17 +32,39 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
     : '';
 
   useEffect(() => {
+    let tmpInt: IIntegration = integrationJson;
     if (previousJson === integrationJson) return;
-    let tmpInt = integrationJson;
-    tmpInt.metadata = { ...integrationJson.metadata, ...settings };
-    fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
+
+    if (tmpInt.dsl != null && tmpInt.dsl !== settings.dsl.name) {
+      fetchCapabilities().then((capabilities: ICapabilities) => {
+        capabilities.dsls.forEach((dsl) => {
+          if (dsl.name === tmpInt.dsl) {
+            const tmpSettings = { ...settings, dsl: dsl };
+            setSettings(tmpSettings);
+            fetchTheSourceCode(tmpInt, tmpSettings);
+            return;
+          }
+        });
+      });
+    } else {
+      fetchTheSourceCode(integrationJson, settings);
+    }
+  }, [integrationJson]);
+
+  const fetchTheSourceCode = (integration: IIntegration, settings: ISettings) => {
+    const tmpIntegration = {
+      ...integration,
+      metadata: { ...integrationJson.metadata, ...settings },
+      dsl: settings.dsl.name,
+    };
+
+    fetchIntegrationSourceCode(tmpIntegration, settings.namespace).then((newSrc) => {
       if (typeof newSrc === 'string') {
         setSourceCode(newSrc);
         setSyncedCode(newSrc);
       }
     });
-  }, [integrationJson]);
-
+  };
   /**
    * On detected changes to YAML state, issue POST to external endpoint
    * Returns JSON to be displayed in the visualization

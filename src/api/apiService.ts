@@ -205,7 +205,7 @@ export async function fetchIntegrationJson(
 export async function fetchIntegrationSourceCode(newIntegration: IIntegration, namespace?: string) {
   try {
     const resp = await request.post({
-      endpoint: `${apiVersion}/integrations?dsl=${newIntegration.metadata.dsl.name}`,
+      endpoint: `${apiVersion}/integrations?dsl=${newIntegration.dsl}`,
       contentType: 'application/json',
       body: newIntegration,
       queryParams: {

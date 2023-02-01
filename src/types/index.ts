@@ -30,6 +30,7 @@ export interface IDeployment {
 }
 
 export interface IIntegration {
+  dsl: string;
   metadata: IIntegrationMetadata;
   params: IIntegrationParams[];
   steps: IStepProps[];
