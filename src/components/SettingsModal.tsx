@@ -36,7 +36,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const [availableDSLs, setAvailableDSLs] = useState<string[]>([]);
   const { settings, setSettings } = useSettingsStore((state) => state);
   const [localSettings, setLocalSettings] = useState<ISettings>(settings);
-  const { integrationJson } = useIntegrationJsonStore((state) => state);
+  const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
   const { setSourceCode } = useIntegrationSourceStore();
   const previousIntegrationJson = usePrevious(integrationJson);
   const previousName = usePrevious(localSettings.name);
@@ -99,6 +99,8 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
       capabilities.dsls.forEach((dsl) => {
         if (dsl.name === value) {
           setLocalSettings({ ...localSettings, dsl: dsl });
+          const tmpIntegration = { ...integrationJson, dsl: dsl.name };
+          updateIntegration(tmpIntegration);
           return;
         }
       });

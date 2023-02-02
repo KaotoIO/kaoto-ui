@@ -1,6 +1,6 @@
 import { AlertProvider } from '../layout';
 import { SettingsModal } from './SettingsModal';
-import { screen } from '@testing-library/dom';
+import { fireEvent, screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 
 describe('SettingsModal.tsx', () => {
@@ -22,5 +22,18 @@ describe('SettingsModal.tsx', () => {
     );
     const element = screen.queryByTestId('settings-modal');
     expect(element).not.toBeInTheDocument();
+  });
+
+  test('handleCloseModal is called', () => {
+    const mockClose = jest.fn();
+
+    render(
+      <AlertProvider>
+        <SettingsModal handleCloseModal={mockClose} isModalOpen={true} />
+      </AlertProvider>
+    );
+    const saveButton = screen.getByTestId('settings-modal--save');
+    fireEvent.click(saveButton);
+    expect(mockClose).toHaveBeenCalled();
   });
 });
