@@ -42,7 +42,6 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
             const tmpSettings = { ...settings, dsl: dsl };
             setSettings(tmpSettings);
             fetchTheSourceCode(tmpInt, tmpSettings);
-            return;
           }
         });
       });
