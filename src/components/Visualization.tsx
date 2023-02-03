@@ -47,8 +47,14 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     type: '',
     UUID: '',
   });
-  const { deleteBranchStep, deleteStep, integrationJson, replaceStep, setViews } =
-    useIntegrationJsonStore();
+  const {
+    deleteBranchStep,
+    deleteStep,
+    integrationJson,
+    replaceBranchStep,
+    replaceStep,
+    setViews,
+  } = useIntegrationJsonStore();
   const { nestedSteps } = useNestedStepsStore();
   const layout = useVisualizationStore((state) => state.layout);
   const previousIntegrationJson = useRef(integrationJson);
@@ -115,13 +121,16 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
   );
 
   function buildNodesAndEdges(steps: IStepProps[]) {
+    // build all nodes
     const stepNodes = buildNodesFromSteps(steps, layout, {
       handleDeleteStep,
     });
 
+    // build edges only for main nodes
     const filteredNodes = stepNodes.filter((node) => !node.data.branchInfo?.branchStep);
     let stepEdges: IVizStepPropsEdge[] = buildEdges(filteredNodes);
 
+    // build edges for branch nodes
     const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(stepNodes);
 
     stepEdges = stepEdges.concat(...branchSpecialEdges);
@@ -185,7 +194,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     // workaround for https://github.com/wbkd/react-flow/issues/2202
     if (!_e.target.classList.contains('stepNode__clickable')) return;
 
-    if (!node.data.step.UUID) {
+    if (node.data.isPlaceholder) {
       // prevent slots from being selected, passive-aggressively open the steps catalog
       if (toggleCatalog) toggleCatalog();
       return;
@@ -222,12 +231,7 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
         // use its path to replace only this part of the original step
         const currentStepNested = nestedSteps.find((ns) => ns.stepUuid === newStep.UUID);
         if (currentStepNested) {
-          const oldStepIdx = findStepIdxWithUUID(
-            currentStepNested.originStepUuid,
-            integrationJson.steps
-          );
-
-          replaceStep(newStep, oldStepIdx, currentStepNested.pathToStep);
+          replaceBranchStep(newStep, currentStepNested.pathToStep);
         }
       } else {
         const oldStepIdx = findStepIdxWithUUID(newStep.UUID, integrationJson.steps);

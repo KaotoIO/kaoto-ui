@@ -5,6 +5,7 @@ import nodes from '../store/data/nodes';
 import steps from '../store/data/steps';
 import {
   buildBranchNodeParams,
+  buildBranchSingleStepEdges,
   buildEdgeParams,
   buildEdges,
   buildNodeDefaultParams,
@@ -77,6 +78,23 @@ describe('visualizationService', () => {
     });
   });
 
+  it('buildBranchSingleStepEdges(): should build edges before and after a branch with only one step', () => {
+    const node = {
+      data: {
+        step: {
+          branches: [
+            {
+              steps: [{ UUID: 'single-step' }],
+            },
+          ],
+        },
+      },
+    } as IVizStepNode;
+    const rootNode = {} as IVizStepNode;
+    const rootNodeNext = {} as IVizStepNode;
+    expect(buildBranchSingleStepEdges(node, rootNode, rootNodeNext)).toHaveLength(2);
+  });
+
   /**
    * buildEdgeParams
    */
@@ -130,11 +148,13 @@ describe('visualizationService', () => {
    */
   it('buildNodeDefaultParams(): should build the default parameters for a single node, given a step', () => {
     const position = { x: 0, y: 0 };
-    const step = nodes[1].data.step;
+    const step = { name: 'avro-deserialize-action', icon: '', kind: 'Kamelet' } as IStepProps;
 
     expect(buildNodeDefaultParams(step, 'dummy-id', position)).toEqual({
       data: {
+        branchInfo: undefined,
         icon: step.icon,
+        isPlaceholder: false,
         kind: step.kind,
         label: truncateString(step.name, 14),
         step,
@@ -310,7 +330,7 @@ describe('visualizationService', () => {
    */
   it('insertAddStepPlaceholder(): should add an ADD STEP placeholder to the beginning of the array', () => {
     const nodes: IVizStepNode[] = [];
-    insertAddStepPlaceholder(nodes, { id: '', nextStepUuid: '' });
+    insertAddStepPlaceholder(nodes, '', { nextStepUuid: '' });
     expect(nodes).toHaveLength(1);
   });
 

@@ -222,6 +222,7 @@ export interface IVizStepNodeData {
   icon?: string;
   isFirstStep?: boolean;
   isLastStep?: boolean;
+  isPlaceholder?: boolean;
   kind?: string;
   label: string;
   nextStepUuid?: string;

@@ -1,4 +1,4 @@
-import { IStepProps } from '@kaoto/types';
+import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 
 /**
  * Checks kind of steps can be appended onto an existing step.
@@ -20,28 +20,37 @@ export function appendableStepTypes(existingStepType: string): string {
 
 /**
  * Checks whether a step can replace an existing step.
- * @param existingStep
+ * @param existingNode
  * @param proposedStep
- * @param steps
  */
 export function canStepBeReplaced(
-  existingStep: any,
-  proposedStep: IStepProps,
-  steps: IStepProps[]
+  existingNode: IVizStepNodeData,
+  proposedStep: IStepProps
 ): { isValid: boolean; message?: string } {
   let isValid = false;
   let message = undefined;
 
+  // if step is a placeholder and within a branch,
+  // this requires special handling
+  if (existingNode.isPlaceholder && existingNode.branchInfo) {
+    // placeholders will always be the first step
+    if (proposedStep.type === 'MIDDLE' || proposedStep.type === 'END') {
+      return { isValid: true };
+    } else {
+      return { isValid: false, message: 'Branches must start with a middle or end step.' };
+    }
+  }
+
   // initial shallow check of step type, where the
   // existing step is treated as a first class citizen,
   // regardless if it's a slot or not
-  if ((existingStep.type || existingStep.step?.type) === proposedStep.type) {
+  if (existingNode.step.type === proposedStep.type) {
     isValid = true;
 
     return { isValid, message: '' };
   }
 
-  switch (existingStep.step?.type) {
+  switch (existingNode.step.type) {
     case 'START':
       isValid = proposedStep.type === 'START';
       message = 'First step must be a start step.';
@@ -49,13 +58,13 @@ export function canStepBeReplaced(
     case 'MIDDLE':
     case 'END':
       // check if it's the last step
-      if (steps[steps.length - 1].UUID === existingStep.UUID) {
+      if (existingNode.isLastStep) {
         message = 'Last step must be a middle or end step.';
         isValid = proposedStep.type === 'MIDDLE' || proposedStep.type === 'END';
-      } else if (existingStep.connectorType === 'MIDDLE' && proposedStep.type === 'END') {
+      } else if (existingNode.step.type === 'MIDDLE' && proposedStep.type === 'END') {
         // not the last step, but trying to replace a MIDDLE step with an END step
         message = 'You cannot replace a middle step with an end step.';
-      } else if (existingStep.connectorType === 'MIDDLE' && proposedStep.type === 'START') {
+      } else if (existingNode.step.type === 'MIDDLE' && proposedStep.type === 'START') {
         // not the last step, but trying to replace a MIDDLE step with a START step
         message = 'You cannot replace a middle step with a start step.';
       }
