@@ -212,7 +212,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
           {/* VISUAL REPRESENTATION OF STEP WITH ICON */}
           <div className={'stepNode__Icon stepNode__clickable'}>
-            <img src={data.icon} alt={data.label} />
+            <img src={data.step.icon} alt={data.label} />
           </div>
           {/* STEP LABEL */}
           <div className={'stepNode__Label stepNode__clickable'}>
