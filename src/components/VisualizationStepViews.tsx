@@ -235,7 +235,7 @@ const VisualizationStepViews = ({
                 <Grid hasGutter style={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto' }}>
                   {step.parameters && (
                     <JsonSchemaConfigurator
-                      schema={{ type: 'object', properties: stepPropertySchema }}
+                      schema={{ type: 'object', properties: stepPropertySchema, required: step.required }}
                       configuration={stepPropertyModel}
                       onChangeModel={(configuration, isValid) => {
                         if (isValid) {
