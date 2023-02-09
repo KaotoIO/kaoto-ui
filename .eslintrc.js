@@ -2,7 +2,8 @@ module.exports = {
   extends: [
     'plugin:jest-dom/recommended',
     'plugin:react-hooks/recommended',
-    'prettier', // this needs to stay last to be able to override other configs
+    'prettier',
+    'plugin:storybook/recommended',
   ],
   overrides: [
     {
