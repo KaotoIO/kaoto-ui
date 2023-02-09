@@ -1,5 +1,4 @@
 import './Visualization.css';
-import { fetchViews } from '@kaoto/api';
 import {
   KaotoDrawer,
   PlusButtonEdge,
@@ -8,17 +7,9 @@ import {
   VisualizationStep,
   VisualizationStepViews,
 } from '@kaoto/components';
-import {
-  buildBranchSpecialEdges,
-  buildEdges,
-  buildNodesFromSteps,
-  findStepIdxWithUUID,
-  flattenSteps,
-  getLayoutedElements,
-  filterStepWithBranches,
-} from '@kaoto/services';
+import { StepsService, VisualizationService } from '@kaoto/services';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
-import { IStepProps, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
+import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
 
@@ -42,31 +33,17 @@ const Visualization = () => {
     type: '',
     UUID: '',
   });
-  const {
-    deleteBranchStep,
-    deleteStep,
-    integrationJson,
-    replaceBranchStep,
-    replaceStep,
-    setViews,
-  } = useIntegrationJsonStore();
-  const { nestedSteps } = useNestedStepsStore();
-  const layout = useVisualizationStore((state) => state.layout);
-  const previousIntegrationJson = useRef(integrationJson);
-  const previousLayout = useRef(layout);
-  const { nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, deleteNode } =
-    useVisualizationStore();
+  const integrationJsonStore = useIntegrationJsonStore();
+  const nestedStepsStore = useNestedStepsStore();
+  const visualizationStore = useVisualizationStore();
+  const previousLayout = useRef(visualizationStore.layout);
+  const previousIntegrationJson = useRef(integrationJsonStore.integrationJson);
+  const visualizationService = new VisualizationService(integrationJsonStore, visualizationStore);
+  const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
 
   // initial loading of visualization steps
   useEffect(() => {
-    const { stepNodes, stepEdges } = buildNodesAndEdges(integrationJson.steps);
-
-    getLayoutedElements(stepNodes, stepEdges, layout)
-      .then((res) => {
-        const { layoutedNodes, layoutedEdges } = res;
-        setNodes(layoutedNodes);
-        setEdges(layoutedEdges);
-      })
+    visualizationService.redrawDiagram(handleDeleteStep, true)
       .catch((e) => console.error(e));
   }, []);
 
@@ -75,37 +52,23 @@ const Visualization = () => {
    * which causes Visualization nodes to all be redrawn
    */
   useEffect(() => {
-    if (previousIntegrationJson.current === integrationJson) return;
+    if (previousIntegrationJson.current === integrationJsonStore.integrationJson) return;
 
-    fetchViews(integrationJson.steps).then((views) => {
-      setViews(views);
-    });
-
-    const { stepNodes, stepEdges } = buildNodesAndEdges(integrationJson.steps);
-    getLayoutedElements(stepNodes, stepEdges, layout)
-      .then((res) => {
-        const { layoutedNodes, layoutedEdges } = res;
-        setNodes(layoutedNodes);
-        setEdges(layoutedEdges);
-      })
+    stepsService.updateViews();
+    visualizationService.redrawDiagram(handleDeleteStep, true)
       .catch((e) => console.error(e));
 
-    previousIntegrationJson.current = integrationJson;
-  }, [integrationJson]);
+    previousIntegrationJson.current = integrationJsonStore.integrationJson;
+  }, [integrationJsonStore.integrationJson]);
 
   useEffect(() => {
-    if (previousLayout.current === layout) return;
+    if (previousLayout.current === visualizationStore.layout) return;
 
-    getLayoutedElements(nodes, edges, layout)
-      .then((res) => {
-        const { layoutedNodes, layoutedEdges } = res;
-        setNodes(layoutedNodes);
-        setEdges(layoutedEdges);
-      })
+    visualizationService.redrawDiagram(handleDeleteStep, false)
       .catch((e) => console.error(e));
 
-    previousLayout.current = layout;
-  }, [layout]);
+    previousLayout.current = visualizationStore.layout;
+  }, [visualizationStore.layout]);
 
   const nodeTypes = useMemo(() => ({ step: VisualizationStep }), []);
   const edgeTypes = useMemo(
@@ -115,52 +78,13 @@ const Visualization = () => {
     []
   );
 
-  function buildNodesAndEdges(steps: IStepProps[]) {
-    // build all nodes
-    const stepNodes = buildNodesFromSteps(steps, layout, {
-      handleDeleteStep,
-    });
-
-    // build edges only for main nodes
-    const filteredNodes = stepNodes.filter((node) => !node.data.branchInfo?.branchStep);
-    let stepEdges: IVizStepPropsEdge[] = buildEdges(filteredNodes);
-
-    // build edges for branch nodes
-    const branchSpecialEdges: IVizStepPropsEdge[] = buildBranchSpecialEdges(stepNodes);
-
-    stepEdges = stepEdges.concat(...branchSpecialEdges);
-
-    return { stepNodes, stepEdges };
-  }
-
   const handleDeleteStep = (UUID?: string) => {
     if (!UUID) return;
 
     setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '' });
     if (isPanelExpanded) setIsPanelExpanded(false);
 
-    // check if the step being modified is nested
-    const currentStepNested = nestedSteps.find((ns) => ns.stepUuid === UUID);
-    if (currentStepNested) {
-      const parentStepIdx = findStepIdxWithUUID(
-        currentStepNested.originStepUuid,
-        integrationJson.steps
-      );
-
-      // update the original parent step, without the child step
-      const updatedParentStep = filterStepWithBranches(
-        integrationJson.steps[parentStepIdx],
-        (step: { UUID: string }) => step.UUID !== UUID
-      );
-
-      deleteBranchStep(updatedParentStep, parentStepIdx);
-    } else {
-      // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
-      const stepsIndex = findStepIdxWithUUID(UUID, integrationJson.steps);
-
-      deleteNode(stepsIndex);
-      deleteStep(stepsIndex);
-    }
+    stepsService.deleteStep(UUID);
   };
 
   const onClosePanelClick = () => {
@@ -190,10 +114,8 @@ const Visualization = () => {
     if (!_e.target.classList.contains('stepNode__clickable')) return;
 
     if (!node.data.isPlaceholder) {
-      const flatSteps = flattenSteps(integrationJson.steps);
-      const stepIdx = flatSteps.map((s: IStepProps) => s.UUID).indexOf(node.data.step.UUID);
-
-      if (stepIdx !== -1) setSelectedStep(flatSteps[stepIdx]);
+      const step = stepsService.findStepWithUUID(node.data.step.UUID);
+      if (step) setSelectedStep(step);
 
       if (!isPanelExpanded) setIsPanelExpanded(true);
     }
@@ -208,29 +130,7 @@ const Visualization = () => {
    * @param newValues
    */
   const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
-    let newStep: IStepProps = selectedStep;
-    const newStepParameters = newStep.parameters?.slice();
-
-    if (newStepParameters && newStepParameters.length > 0) {
-      Object.entries(newValues).map(([key, value]) => {
-        const paramIndex = newStepParameters.findIndex((p) => p.id === key);
-        newStepParameters[paramIndex!].value = value;
-      });
-
-      // check if the step being modified is nested
-      if (nestedSteps.some((ns) => ns.stepUuid === newStep.UUID)) {
-        // use its path to replace only this part of the original step
-        const currentStepNested = nestedSteps.find((ns) => ns.stepUuid === newStep.UUID);
-        if (currentStepNested) {
-          replaceBranchStep(newStep, currentStepNested.pathToStep);
-        }
-      } else {
-        const oldStepIdx = findStepIdxWithUUID(newStep.UUID, integrationJson.steps);
-        replaceStep(newStep, oldStepIdx);
-      }
-    } else {
-      return;
-    }
+    stepsService.updateStepParameters(selectedStep, newValues);
   };
 
   return (
@@ -262,15 +162,15 @@ const Visualization = () => {
           }}
         >
           <ReactFlow
-            nodes={nodes}
-            edges={edges}
+            nodes={visualizationStore.nodes}
+            edges={visualizationStore.edges}
             defaultViewport={defaultViewport}
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
             onDragOver={onDragOver}
             onNodeClick={onNodeClick}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
+            onNodesChange={visualizationStore.onNodesChange}
+            onEdgesChange={visualizationStore.onEdgesChange}
             onLoad={onLoad}
             snapToGrid={true}
             snapGrid={[15, 15]}

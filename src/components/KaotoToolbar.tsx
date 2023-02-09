@@ -7,7 +7,7 @@ import {
   DeploymentsModal,
   SettingsModal,
 } from '@kaoto/components';
-import { isNameValidCheck } from '@kaoto/services';
+import { ValidationService } from '@kaoto/services';
 import {
   useDeploymentStore,
   useIntegrationJsonStore,
@@ -267,7 +267,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel }:
                   onChange={(val) => {
                     // save to local state while typing
                     setLocalName(val);
-                    if (isNameValidCheck(val)) {
+                    if (ValidationService.isNameValidCheck(val)) {
                       setNameValidation('success');
                     } else {
                       setNameValidation('error');
@@ -280,7 +280,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel }:
                   onKeyUp={(e) => {
                     // allow users to save by pressing enter
                     if (e.key !== 'Enter') return;
-                    if (isNameValidCheck(localName)) {
+                    if (ValidationService.isNameValidCheck(localName)) {
                       setIsEditingName(false);
                       // only issue change if different from current settings
                       if (localName !== settings.name) {
@@ -293,7 +293,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel }:
                   variant="plain"
                   aria-label="save button for editing integration name"
                   onClick={() => {
-                    if (isNameValidCheck(localName)) {
+                    if (ValidationService.isNameValidCheck(localName)) {
                       setIsEditingName(false);
                       // only issue change if different from current settings
                       if (localName !== settings.name) {
