@@ -216,14 +216,14 @@ export function buildNodesFromSteps(
     (steps.length === 0 && !branchInfo) ||
     (!isFirstStepStart(steps) && !isFirstStepEip(steps) && !branchInfo)
   ) {
-    insertAddStepPlaceholder(stepNodes, getId(''), {
+    insertAddStepPlaceholder(stepNodes, getId(''), 'START', {
       nextStepUuid: steps[0]?.UUID,
     });
   }
 
   // build EIP placeholder
   if (branchInfo && steps.length === 0 && !isFirstStepStart(steps)) {
-    insertAddStepPlaceholder(stepNodes, getId(''), {
+    insertAddStepPlaceholder(stepNodes, getId(''), 'MIDDLE', {
       branchInfo,
       nextStepUuid: steps[0]?.UUID,
     });
@@ -524,6 +524,7 @@ export function getRandomArbitraryNumber(): number {
 export function insertAddStepPlaceholder(
   stepNodes: IVizStepNode[],
   id: string,
+  type: string,
   props: { [prop: string]: any }
 ) {
   return stepNodes.unshift({
@@ -533,7 +534,7 @@ export function insertAddStepPlaceholder(
         maxBranches: 0,
         minBranches: 0,
         name: '',
-        type: 'START',
+        type: type,
         UUID: `placeholder-${getRandomArbitraryNumber()}`,
       },
       isPlaceholder: true,

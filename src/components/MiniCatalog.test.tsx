@@ -14,4 +14,14 @@ describe('MiniCatalog.tsx', () => {
     const element = screen.getByTestId('miniCatalog');
     expect(element).toBeInTheDocument();
   });
+  test('component renders correctly', () => {
+    render(
+      <AlertProvider>
+        <MiniCatalog />
+      </AlertProvider>
+    );
+
+    const element = screen.getByText('start');
+    expect(element).toBeInTheDocument();
+  });
 });

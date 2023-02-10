@@ -330,7 +330,7 @@ describe('visualizationService', () => {
    */
   it('insertAddStepPlaceholder(): should add an ADD STEP placeholder to the beginning of the array', () => {
     const nodes: IVizStepNode[] = [];
-    insertAddStepPlaceholder(nodes, '', { nextStepUuid: '' });
+    insertAddStepPlaceholder(nodes, '', 'START', { nextStepUuid: '' });
     expect(nodes).toHaveLength(1);
   });
 

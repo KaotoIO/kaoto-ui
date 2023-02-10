@@ -119,7 +119,7 @@ const Dashboard = () => {
                 >
                   {/* VISUALIZATION / CANVAS */}
                   <ReactFlowProvider>
-                    <Visualization toggleCatalog={handleToggleCatalog} />
+                    <Visualization />
                   </ReactFlowProvider>
                 </KaotoDrawer>
               </PageSection>

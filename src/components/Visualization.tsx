@@ -18,16 +18,11 @@ import {
   filterStepWithBranches,
 } from '@kaoto/services';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
-import { IStepProps, IViewData, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
+import { IStepProps, IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
 
-interface IVisualization {
-  initialState?: IViewData;
-  toggleCatalog?: () => void;
-}
-
-const Visualization = ({ toggleCatalog }: IVisualization) => {
+const Visualization = () => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
 
@@ -194,18 +189,14 @@ const Visualization = ({ toggleCatalog }: IVisualization) => {
     // workaround for https://github.com/wbkd/react-flow/issues/2202
     if (!_e.target.classList.contains('stepNode__clickable')) return;
 
-    if (node.data.isPlaceholder) {
-      // prevent slots from being selected, passive-aggressively open the steps catalog
-      if (toggleCatalog) toggleCatalog();
-      return;
+    if (!node.data.isPlaceholder) {
+      const flatSteps = flattenSteps(integrationJson.steps);
+      const stepIdx = flatSteps.map((s: IStepProps) => s.UUID).indexOf(node.data.step.UUID);
+
+      if (stepIdx !== -1) setSelectedStep(flatSteps[stepIdx]);
+
+      if (!isPanelExpanded) setIsPanelExpanded(true);
     }
-
-    const flatSteps = flattenSteps(integrationJson.steps);
-    const stepIdx = flatSteps.map((s: IStepProps) => s.UUID).indexOf(node.data.step.UUID);
-
-    if (stepIdx !== -1) setSelectedStep(flatSteps[stepIdx]);
-
-    if (!isPanelExpanded) setIsPanelExpanded(true);
   };
 
   const onLoad = (_reactFlowInstance: any) => {
