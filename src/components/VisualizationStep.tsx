@@ -1,3 +1,4 @@
+import { BranchBuilder } from './BranchBuilder';
 import './Visualization.css';
 import { MiniCatalog } from '@kaoto/components';
 import { StepsService, ValidationService } from '@kaoto/services';
@@ -29,16 +30,15 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     stepsService.handleAppendStep(data.step, selectedStep);
   };
   const replacePlaceholderStep = (stepC: IStepProps) => {
-    stepsService.replacePlaceholderStep(data, stepC)
-      .then((validation) => {
-        !validation?.isValid &&
+    stepsService.replacePlaceholderStep(data, stepC).then((validation) => {
+      !validation?.isValid &&
         addAlert &&
         addAlert({
           title: 'Add Step Unsuccessful',
           variant: AlertVariant.danger,
           description: validation.message ?? 'Something went wrong, please try again later.',
         });
-      });
+    });
   };
   const onMiniCatalogClickAdd = (stepC: IStepProps) => {
     replacePlaceholderStep(stepC);
@@ -46,6 +46,10 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
   const onMiniCatalogClickPrepend = (selectedStep: IStepProps): void => {
     stepsService.handlePrependStep(data.step, selectedStep);
+  };
+
+  const handleAddBranch = () => {
+    stepsService.addBranch(data.step, { branchUuid: '', identifier: '', steps: [] });
   };
 
   const handleTrashClick = () => {
@@ -70,16 +74,15 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
     const dataJSON = event.dataTransfer.getData('text');
     const stepC: IStepProps = JSON.parse(dataJSON);
-    stepsService.handleDropOnExistingStep(data, data.step, stepC)
-      .then((validation) => {
-        !validation.isValid &&
+    stepsService.handleDropOnExistingStep(data, data.step, stepC).then((validation) => {
+      !validation.isValid &&
         addAlert &&
         addAlert({
           title: 'Replace Step Unsuccessful',
           variant: AlertVariant.danger,
           description: validation.message ?? 'Something went wrong, please try again later.',
         });
-      })
+    });
   };
 
   return (
@@ -97,19 +100,21 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               aria-label="Search for a step"
               bodyContent={
                 <MiniCatalog
+                  children={<BranchBuilder handleAddBranch={handleAddBranch} />}
                   handleSelectStep={onMiniCatalogClickPrepend}
                   queryParams={{
                     dsl: currentDSL,
                     type: ValidationService.prependableStepTypes(),
                   }}
+                  step={data.step}
                 />
               }
               className={'miniCatalog__popover'}
               data-testid={'miniCatalog__popover'}
-              enableFlip={true}
-              flipBehavior={['top-start', 'left-start']}
+              hasAutoWidth
               hideOnOutsideClick={true}
               position={'left-start'}
+              showClose={false}
             >
               <button
                 className="stepNode__Prepend plusButton nodrag"
@@ -165,19 +170,23 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               aria-label="Search for a step"
               bodyContent={
                 <MiniCatalog
+                  children={<BranchBuilder handleAddBranch={handleAddBranch} />}
                   handleSelectStep={onMiniCatalogClickAppend}
                   queryParams={{
                     dsl: currentDSL,
                     type: ValidationService.appendableStepTypes(data.step.type),
                   }}
+                  step={data.step}
                 />
               }
               className={'miniCatalog__popover'}
               data-testid={'miniCatalog__popover'}
               enableFlip={true}
               flipBehavior={['top-start', 'left-start']}
+              hasAutoWidth
               hideOnOutsideClick={true}
               position={'right-start'}
+              showClose={false}
             >
               <button
                 className="stepNode__Add plusButton nodrag"
@@ -194,19 +203,21 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           aria-label="Search for a step"
           bodyContent={
             <MiniCatalog
+              children={<BranchBuilder handleAddBranch={handleAddBranch} />}
               handleSelectStep={onMiniCatalogClickAdd}
               queryParams={{
                 dsl: currentDSL,
                 type: data.step.type,
               }}
+              step={data.step}
             />
           }
           className={'miniCatalog__popover'}
           data-testid={'miniCatalog__popover'}
-          enableFlip={true}
-          flipBehavior={['top-start', 'left-start']}
+          hasAutoWidth
           hideOnOutsideClick={true}
-          position={'right-start'}
+          position={'auto'}
+          showClose={false}
         >
           <div
             className={'stepNode stepNode__Slot stepNode__clickable'}

@@ -1,9 +1,9 @@
-import {IStepProps, IVizStepNode, IVizStepNodeDataBranch, IVizStepPropsEdge,} from '@kaoto/types';
-import {IIntegrationJsonStore, RFState} from "@kaoto/store";
-import {getRandomArbitraryNumber, truncateString} from '@kaoto/utils';
-import {ElkExtendedEdge, ElkNode} from 'elkjs';
-import {MarkerType, Position} from 'reactflow';
-import {StepsService} from './stepsService';
+import { StepsService } from './stepsService';
+import { IIntegrationJsonStore, RFState } from '@kaoto/store';
+import { IStepProps, IVizStepNode, IVizStepNodeDataBranch, IVizStepPropsEdge } from '@kaoto/types';
+import { getRandomArbitraryNumber, truncateString } from '@kaoto/utils';
+import { ElkExtendedEdge, ElkNode } from 'elkjs';
+import { MarkerType, Position } from 'reactflow';
 
 const ELK = require('elkjs');
 
@@ -18,11 +18,10 @@ const ELK = require('elkjs');
  *  @see StepsService
  */
 export class VisualizationService {
-
   constructor(
     private integrationJsonStore: IIntegrationJsonStore,
     private visualizationStore: RFState
-  ) {};
+  ) {}
 
   /**
    * for nodes within a branch
@@ -65,7 +64,10 @@ export class VisualizationService {
     stepNodes.forEach((node) => {
       if (node.type === 'group') return;
 
-      const parentNodeIndex = VisualizationService.findNodeIdxWithUUID(node.data.branchInfo?.parentUuid, stepNodes);
+      const parentNodeIndex = VisualizationService.findNodeIdxWithUUID(
+        node.data.branchInfo?.parentUuid,
+        stepNodes
+      );
       const ogNodeNextIndex = VisualizationService.findNodeIdxWithUUID(
         node.data.branchInfo?.branchParentNextUuid,
         stepNodes
@@ -79,9 +81,14 @@ export class VisualizationService {
           !node.data.isPlaceholder &&
           !StepsService.containsBranches(node.data.step)
         ) {
-          const branchStepNextIdx = VisualizationService.findNodeIdxWithUUID(node.data.nextStepUuid, stepNodes);
+          const branchStepNextIdx = VisualizationService.findNodeIdxWithUUID(
+            node.data.nextStepUuid,
+            stepNodes
+          );
           if (stepNodes[branchStepNextIdx]) {
-            specialEdges.push(VisualizationService.buildEdgeParams(node, stepNodes[branchStepNextIdx], 'insert'));
+            specialEdges.push(
+              VisualizationService.buildEdgeParams(node, stepNodes[branchStepNextIdx], 'insert')
+            );
           }
         }
 
@@ -143,7 +150,9 @@ export class VisualizationService {
     branchPlaceholderEdges.push(edgeProps);
 
     if (rootNextNode) {
-      branchPlaceholderEdges.push(VisualizationService.buildEdgeParams(node, rootNextNode, 'default'));
+      branchPlaceholderEdges.push(
+        VisualizationService.buildEdgeParams(node, rootNextNode, 'default')
+      );
     }
 
     return branchPlaceholderEdges;
@@ -410,8 +419,6 @@ export class VisualizationService {
       data: {
         label: 'ADD A STEP',
         step: {
-          maxBranches: 0,
-          minBranches: 0,
           name: '',
           type: type,
           UUID: `placeholder-${getRandomArbitraryNumber()}`,
@@ -471,7 +478,7 @@ export class VisualizationService {
     const layout = this.visualizationStore.layout;
     // build all nodes
     const stepNodes = VisualizationService.buildNodesFromSteps(steps, layout, {
-      handleDeleteStep
+      handleDeleteStep,
     });
 
     // build edges only for main nodes
@@ -499,14 +506,16 @@ export class VisualizationService {
     if (rebuildNodes) {
       const ne = this.buildNodesAndEdges(handleDeleteStep);
       stepNodes = ne.stepNodes;
-      stepEdges = ne.stepEdges
+      stepEdges = ne.stepEdges;
     }
-    VisualizationService.getLayoutedElements(stepNodes, stepEdges, this.visualizationStore.layout)
-      .then((res) => {
-        const { layoutedNodes, layoutedEdges } = res;
-        this.visualizationStore.setNodes(layoutedNodes);
-        this.visualizationStore.setEdges(layoutedEdges);
-      })
+    VisualizationService.getLayoutedElements(
+      stepNodes,
+      stepEdges,
+      this.visualizationStore.layout
+    ).then((res) => {
+      const { layoutedNodes, layoutedEdges } = res;
+      this.visualizationStore.setNodes(layoutedNodes);
+      this.visualizationStore.setEdges(layoutedEdges);
+    });
   }
-
 }
