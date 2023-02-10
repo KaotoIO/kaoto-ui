@@ -60,6 +60,36 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
       }
     });
   };
+  const replacePlaceholderStep = (stepC: IStepProps) => {
+    // fetch parameters and other details
+    fetchStepDetails(stepC.id).then((step) => {
+      step.UUID = stepC.UUID;
+      const validation = canStepBeReplaced(data, step);
+
+      if (validation.isValid) {
+        // update the steps, the new node will be created automatically
+        if (data.branchInfo) {
+          if (data.isPlaceholder) {
+            const pathToBranch = findPath(steps, data.branchInfo.branchUuid!, 'branchUuid');
+            const newPath = pathToBranch?.concat('steps', '0');
+            replaceBranchStep(step, newPath);
+          }
+        } else {
+          replaceStep(step);
+        }
+      } else {
+        addAlert &&
+          addAlert({
+            title: 'Add Step Unsuccessful',
+            variant: AlertVariant.danger,
+            description: validation.message ?? 'Something went wrong, please try again later.',
+          });
+      }
+    });
+  };
+  const onMiniCatalogClickAdd = (stepC: IStepProps) => {
+    replacePlaceholderStep(stepC);
+  };
 
   const onMiniCatalogClickPrepend = (selectedStep: IStepProps): void => {
     // fetch parameters and other details
@@ -94,32 +124,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const onDropNew = (e: { dataTransfer: { getData: (arg0: string) => any } }) => {
     const dataJSON = e.dataTransfer.getData('text');
     const stepC: IStepProps = JSON.parse(dataJSON);
-
-    // fetch parameters and other details
-    fetchStepDetails(stepC.id).then((step) => {
-      step.UUID = stepC.UUID;
-      const validation = canStepBeReplaced(data, step);
-
-      if (validation.isValid) {
-        // update the steps, the new node will be created automatically
-        if (data.branchInfo) {
-          if (data.isPlaceholder) {
-            const pathToBranch = findPath(steps, data.branchInfo.branchUuid!, 'branchUuid');
-            const newPath = pathToBranch?.concat('steps', '0');
-            replaceBranchStep(step, newPath);
-          }
-        } else {
-          replaceStep(step);
-        }
-      } else {
-        addAlert &&
-          addAlert({
-            title: 'Add Step Unsuccessful',
-            variant: AlertVariant.danger,
-            description: validation.message ?? 'Something went wrong, please try again later.',
-          });
-      }
-    });
+    replacePlaceholderStep(stepC);
   };
 
   /**
@@ -260,37 +265,57 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           )}
         </div>
       ) : (
-        <div
-          className={'stepNode stepNode__Slot stepNode__clickable'}
-          onDrop={onDropNew}
-          data-testid={'viz-step-slot'}
-        >
-          {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
-          {(!isStartStep(data.step) || data.branchInfo) && (
-            <Handle
-              isConnectable={false}
-              type="target"
-              position={layout === 'RIGHT' ? Position.Left : Position.Top}
-              id="a"
-              style={{ borderRadius: 0 }}
+        <Popover
+          appendTo={() => document.body}
+          aria-label="Search for a step"
+          bodyContent={
+            <MiniCatalog
+              handleSelectStep={onMiniCatalogClickAdd}
+              queryParams={{
+                dsl: currentDSL,
+                type: data.step.type,
+              }}
             />
-          )}
+          }
+          className={'miniCatalog__popover'}
+          data-testid={'miniCatalog__popover'}
+          enableFlip={true}
+          flipBehavior={['top-start', 'left-start']}
+          hideOnOutsideClick={true}
+          position={'right-start'}
+        >
+          <div
+            className={'stepNode stepNode__Slot stepNode__clickable'}
+            onDrop={onDropNew}
+            data-testid={'viz-step-slot'}
+          >
+            {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
+            {(!isStartStep(data.step) || data.branchInfo) && (
+              <Handle
+                isConnectable={false}
+                type="target"
+                position={layout === 'RIGHT' ? Position.Left : Position.Top}
+                id="a"
+                style={{ borderRadius: 0 }}
+              />
+            )}
 
-          {/* VISUAL REPRESENTATION OF PLACEHOLDER STEP */}
-          <div className={'stepNode__Icon stepNode__clickable'}>
-            <CubesIcon />
+            {/* VISUAL REPRESENTATION OF PLACEHOLDER STEP */}
+            <div className={'stepNode__Icon stepNode__clickable'}>
+              <CubesIcon />
+            </div>
+
+            {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
+            <Handle
+              type="source"
+              position={layout === 'RIGHT' ? Position.Right : Position.Bottom}
+              id="b"
+              style={{ borderRadius: 0 }}
+              isConnectable={false}
+            />
+            <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
           </div>
-
-          {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
-          <Handle
-            type="source"
-            position={layout === 'RIGHT' ? Position.Right : Position.Bottom}
-            id="b"
-            style={{ borderRadius: 0 }}
-            isConnectable={false}
-          />
-          <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
-        </div>
+        </Popover>
       )}
     </>
   );

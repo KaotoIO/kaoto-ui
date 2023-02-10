@@ -180,11 +180,6 @@ export interface IViewProps {
   url?: string;
 }
 
-export interface IViewData {
-  steps: IStepProps[];
-  views: IViewProps[];
-}
-
 export type IVizStepNodeDataBranch = Partial<IStepPropsBranch> & {
   /**
    * An optional label for the branch (e.g. 'if', 'else', 'otherwise')
