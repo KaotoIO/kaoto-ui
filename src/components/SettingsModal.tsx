@@ -1,5 +1,5 @@
 import { fetchCapabilities, fetchCompatibleDSLs, fetchIntegrationSourceCode } from '@kaoto/api';
-import { isNameValidCheck } from '@kaoto/services';
+import { ValidationService } from '@kaoto/services';
 import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
 import { ICapabilities, ISettings } from '@kaoto/types';
 import { usePrevious } from '@kaoto/utils';
@@ -87,7 +87,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const onChangeName = (newName: string) => {
     setLocalSettings({ ...localSettings, name: newName });
 
-    if (isNameValidCheck(newName)) {
+    if (ValidationService.isNameValidCheck(newName)) {
       setNameValidation('success');
     } else {
       setNameValidation('error');
@@ -110,7 +110,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const onChangeNamespace = (newNamespace: string) => {
     setLocalSettings({ ...localSettings, namespace: newNamespace });
 
-    if (isNameValidCheck(newNamespace)) {
+    if (ValidationService.isNameValidCheck(newNamespace)) {
       setNamespaceValidation('success');
     } else {
       setNamespaceValidation('error');

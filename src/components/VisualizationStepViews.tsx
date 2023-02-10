@@ -6,8 +6,8 @@ import {
   stopDeployment,
 } from '@kaoto/api';
 import { Extension, JsonSchemaConfigurator, StepErrorBoundary } from '@kaoto/components';
-import { findStepIdxWithUUID } from '@kaoto/services';
-import { useIntegrationJsonStore } from '@kaoto/store';
+import { StepsService } from '@kaoto/services';
+import {useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore} from '@kaoto/store';
 import { IIntegration, IKaotoApi, IStepProps } from '@kaoto/types';
 import {
   AlertVariant,
@@ -37,15 +37,18 @@ const VisualizationStepViews = ({
   saveConfig,
   step,
 }: IStepViewsProps) => {
-  const views = useIntegrationJsonStore((state) =>
-    state.views.filter((view) => view.step === step.UUID)
-  );
+  const integrationJsonStore = useIntegrationJsonStore();
+  const views = integrationJsonStore.views.filter((view) => view.step === step.UUID);
+
   const hasDetailView = views?.some((v) => v.id === 'detail-step');
   const detailsTabIndex = views?.length! + 1; // provide an index that won't be used by custom views
   const extensionConfigViewIndex = views?.findIndex((v) => v.name === 'Config');
   const hasConfigView = extensionConfigViewIndex !== -1
   const configTabIndex = !hasConfigView ? views?.length! + 2 : extensionConfigViewIndex;
-  const currentIdx = findStepIdxWithUUID(step.UUID!);
+  const nestedStepsStore = useNestedStepsStore();
+  const visualizationStore = useVisualizationStore();
+  const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
+  const currentIdx = stepsService.findStepIdxWithUUID(step.UUID);
   const [activeTabKey, setActiveTabKey] = useState(configTabIndex);
   const [stepPropertySchema, setStepPropertySchema] = useState<{
     [label: string]: { type: string };

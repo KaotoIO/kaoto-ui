@@ -1,6 +1,6 @@
 import nestedBranch from '../store/data/kamelet.nested-branch.steps';
-import { findPath, getDeepValue, setDeepValue } from './index';
-import { filterNestedSteps } from '@kaoto/services';
+import {findPath, getDeepValue, getRandomArbitraryNumber, setDeepValue} from './index';
+import { StepsService } from '@kaoto/services';
 
 describe('utils', () => {
   it('findPath(): should find the path from a deeply nested object, given a value', () => {
@@ -24,7 +24,7 @@ describe('utils', () => {
     const nestedBranchCopy = nestedBranch.slice();
     expect(nestedBranchCopy[1].branches![0].steps[0].branches![0].steps).toHaveLength(1);
 
-    const filteredNestedBranch = filterNestedSteps(
+    const filteredNestedBranch = StepsService.filterNestedSteps(
       nestedBranchCopy,
       (step) => step.UUID !== 'log-340230'
     );
@@ -62,4 +62,16 @@ describe('utils', () => {
       { a: [{ bar: { c: 6 }, baz: { d: 2 } }], x: { '0': { y: { z: 5 } } } },
     ]);
   });
+
+  it.skip('getRandomArbitraryNumber(): should get a random arbitrary number', () => {
+    const mGetRandomValues = jest.fn().mockReturnValueOnce(new Uint32Array(10));
+
+    Object.defineProperty(window, 'crypto', {
+      value: { getRandomValues: mGetRandomValues },
+    });
+
+    expect(getRandomArbitraryNumber()).toEqual(new Uint32Array(10));
+    expect(mGetRandomValues).toBeCalledWith(new Uint8Array(1));
+  });
+
 });

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import {useEffect, useRef} from 'react';
 
 export function accessibleRouteChangeHandler() {
   return window.setTimeout(() => {
@@ -143,4 +143,9 @@ export function unbindUndoRedo(callback: (event: KeyboardEvent) => void) {
 }
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function getRandomArbitraryNumber(): number {
+  const crypto = window.crypto;
+  return Math.floor(crypto?.getRandomValues(new Uint32Array(1))[0]);
 }
