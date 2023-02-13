@@ -111,6 +111,8 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               }
               className={'miniCatalog__popover'}
               data-testid={'miniCatalog__popover'}
+              enableFlip={true}
+              flipBehavior={['top-start', 'left-start']}
               hasAutoWidth
               hideOnOutsideClick={true}
               position={'left-start'}
@@ -214,10 +216,11 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           }
           className={'miniCatalog__popover'}
           data-testid={'miniCatalog__popover'}
+          enableFlip={true}
+          flipBehavior={['top-start', 'left-start']}
           hasAutoWidth
           hideOnOutsideClick={true}
-          position={'auto'}
-          showClose={false}
+          position={'right-start'}
         >
           <div
             className={'stepNode stepNode__Slot stepNode__clickable'}
