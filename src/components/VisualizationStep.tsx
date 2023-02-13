@@ -1,7 +1,7 @@
 import { BranchBuilder } from './BranchBuilder';
 import './Visualization.css';
 import { MiniCatalog } from '@kaoto/components';
-import { StepsService, ValidationService } from '@kaoto/services';
+import { StepsService, ValidationService, VisualizationService } from '@kaoto/services';
 import {
   useIntegrationJsonStore,
   useNestedStepsStore,
@@ -94,7 +94,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           data-testid={`viz-step-${data.step.name}`}
         >
           {/* PREPEND STEP BUTTON */}
-          {!endStep && data.isFirstStep && (
+          {VisualizationService.showPrependStepButton(data, endStep) && (
             <Popover
               appendTo={() => document.body}
               aria-label="Search for a step"
@@ -166,7 +166,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           )}
 
           {/* ADD/APPEND STEP BUTTON */}
-          {!endStep && data.isLastStep && (
+          {VisualizationService.showAppendStepButton(data, endStep) && (
             <Popover
               appendTo={() => document.body}
               aria-label="Search for a step"

@@ -1,6 +1,12 @@
 import { StepsService } from './stepsService';
 import { IIntegrationJsonStore, RFState } from '@kaoto/store';
-import { IStepProps, IVizStepNode, IVizStepNodeDataBranch, IVizStepPropsEdge } from '@kaoto/types';
+import {
+  IStepProps,
+  IVizStepNode,
+  IVizStepNodeData,
+  IVizStepNodeDataBranch,
+  IVizStepPropsEdge,
+} from '@kaoto/types';
 import { getRandomArbitraryNumber, truncateString } from '@kaoto/utils';
 import { ElkExtendedEdge, ElkNode } from 'elkjs';
 import { MarkerType, Position } from 'reactflow';
@@ -470,7 +476,7 @@ export class VisualizationService {
   }
 
   /**
-   * Builds Reaat Flow nodes and edges from current integration JSON.
+   * Builds React Flow nodes and edges from current integration JSON.
    * @param handleDeleteStep
    */
   buildNodesAndEdges(handleDeleteStep: (uuid: string) => void) {
@@ -494,9 +500,27 @@ export class VisualizationService {
   }
 
   /**
+   * Determines whether to show a button for appending a step or inserting a branch
+   * @param nodeData
+   * @param isEndStep
+   */
+  static showAppendStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
+    return !isEndStep && (nodeData.isLastStep || nodeData.step.branches);
+  }
+
+  /**
+   * Determines whether to show a button for prepending a step
+   * @param nodeData
+   * @param isEndStep
+   */
+  static showPrependStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
+    return !isEndStep && nodeData.isFirstStep;
+  }
+
+  /**
    * Redraw integration diagram on the canvas. If {@link rebuildNodes} is true,
    * It rebuilds the nodes and edges from integration JSON store and re-layout the diagram.
-   * Otherwise it only performs re-layout.
+   * Otherwise, it only performs re-layout.
    * @param handleDeleteStep
    * @param rebuildNodes
    */
