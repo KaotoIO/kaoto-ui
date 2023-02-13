@@ -24,9 +24,7 @@ import {
   Toolbar,
   ToolbarContent,
   ToolbarItem,
-  Tooltip,
 } from '@patternfly/react-core';
-import { InfoCircleIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useRef, useState } from 'react';
 
@@ -96,10 +94,8 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
       <DrawerHead>
         <h3 className={'pf-c-title pf-m-2xl'}>
           Step Catalog&nbsp;&nbsp;
-          <Tooltip content={<span>Try dragging a step onto a circle in the canvas</span>}>
-            <InfoCircleIcon className={'catalog__help'} />
-          </Tooltip>
         </h3>
+        <span>Try dragging a step onto a circle in the canvas</span>
         <DrawerActions>
           <DrawerCloseButton onClick={handleClose} />
         </DrawerActions>
