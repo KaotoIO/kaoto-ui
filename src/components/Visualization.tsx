@@ -117,7 +117,15 @@ const Visualization = () => {
       const step = stepsService.findStepWithUUID(node.data.step.UUID);
       if (step) setSelectedStep(step);
 
+      /** If the details panel is collapsed, we expanded for the user */
       if (!isPanelExpanded) setIsPanelExpanded(true);
+
+      /**
+       * If the details panel is already expanded and the step it's already
+       * selected, we collapse it for the user */
+      if (isPanelExpanded && selectedStep.UUID === node.data.step.UUID) {
+        setIsPanelExpanded(false);
+      }
     }
   };
 
@@ -138,6 +146,7 @@ const Visualization = () => {
       {/* RIGHT DRAWER: STEP DETAIL & EXTENSIONS */}
       <KaotoDrawer
         isExpanded={isPanelExpanded}
+        data-expanded={isPanelExpanded}
         isResizable={true}
         panelContent={
           <VisualizationStepViews
