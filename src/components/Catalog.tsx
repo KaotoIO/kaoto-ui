@@ -65,7 +65,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
     searchInputRef.current?.focus();
   }, [dsl]);
 
-  const changeSearch = (e: any) => {
+  const changeSearch = (e: string) => {
     setQuery(e);
   };
 
@@ -92,9 +92,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
   return (
     <div data-testid={'stepCatalog'} className={'catalog'}>
       <DrawerHead>
-        <h3 className={'pf-c-title pf-m-2xl'}>
-          Step Catalog&nbsp;&nbsp;
-        </h3>
+        <h3 className={'pf-c-title pf-m-2xl'}>Step Catalog&nbsp;&nbsp;</h3>
         <span>Try dragging a step onto a circle in the canvas</span>
         <DrawerActions>
           <DrawerCloseButton onClick={handleClose} />
@@ -114,7 +112,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
                     placeholder={'search for a step...'}
                     aria-label={'search for a step'}
                     value={query}
-                    onChange={changeSearch}
+                    onChange={(_e, s) => changeSearch(s)}
                     onClear={() => setQuery('')}
                     ref={searchInputRef}
                   />
