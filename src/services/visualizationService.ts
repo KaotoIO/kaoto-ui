@@ -1,9 +1,15 @@
-import {IStepProps, IVizStepNode, IVizStepNodeDataBranch, IVizStepPropsEdge,} from '@kaoto/types';
-import {IIntegrationJsonStore, RFState} from "@kaoto/store";
-import {getRandomArbitraryNumber, truncateString} from '@kaoto/utils';
-import {ElkExtendedEdge, ElkNode} from 'elkjs';
-import {MarkerType, Position} from 'reactflow';
-import {StepsService} from './stepsService';
+import { StepsService } from './stepsService';
+import { IIntegrationJsonStore, RFState } from '@kaoto/store';
+import {
+  IStepProps,
+  IVizStepNode,
+  IVizStepNodeData,
+  IVizStepNodeDataBranch,
+  IVizStepPropsEdge,
+} from '@kaoto/types';
+import { getRandomArbitraryNumber, truncateString } from '@kaoto/utils';
+import { ElkExtendedEdge, ElkNode } from 'elkjs';
+import { MarkerType, Position } from 'reactflow';
 
 const ELK = require('elkjs');
 
@@ -18,11 +24,10 @@ const ELK = require('elkjs');
  *  @see StepsService
  */
 export class VisualizationService {
-
   constructor(
     private integrationJsonStore: IIntegrationJsonStore,
     private visualizationStore: RFState
-  ) {};
+  ) {}
 
   /**
    * for nodes within a branch
@@ -65,7 +70,10 @@ export class VisualizationService {
     stepNodes.forEach((node) => {
       if (node.type === 'group') return;
 
-      const parentNodeIndex = VisualizationService.findNodeIdxWithUUID(node.data.branchInfo?.parentUuid, stepNodes);
+      const parentNodeIndex = VisualizationService.findNodeIdxWithUUID(
+        node.data.branchInfo?.parentUuid,
+        stepNodes
+      );
       const ogNodeNextIndex = VisualizationService.findNodeIdxWithUUID(
         node.data.branchInfo?.branchParentNextUuid,
         stepNodes
@@ -79,9 +87,14 @@ export class VisualizationService {
           !node.data.isPlaceholder &&
           !StepsService.containsBranches(node.data.step)
         ) {
-          const branchStepNextIdx = VisualizationService.findNodeIdxWithUUID(node.data.nextStepUuid, stepNodes);
+          const branchStepNextIdx = VisualizationService.findNodeIdxWithUUID(
+            node.data.nextStepUuid,
+            stepNodes
+          );
           if (stepNodes[branchStepNextIdx]) {
-            specialEdges.push(VisualizationService.buildEdgeParams(node, stepNodes[branchStepNextIdx], 'insert'));
+            specialEdges.push(
+              VisualizationService.buildEdgeParams(node, stepNodes[branchStepNextIdx], 'insert')
+            );
           }
         }
 
@@ -143,7 +156,9 @@ export class VisualizationService {
     branchPlaceholderEdges.push(edgeProps);
 
     if (rootNextNode) {
-      branchPlaceholderEdges.push(VisualizationService.buildEdgeParams(node, rootNextNode, 'default'));
+      branchPlaceholderEdges.push(
+        VisualizationService.buildEdgeParams(node, rootNextNode, 'default')
+      );
     }
 
     return branchPlaceholderEdges;
@@ -410,8 +425,6 @@ export class VisualizationService {
       data: {
         label: 'ADD A STEP',
         step: {
-          maxBranches: 0,
-          minBranches: 0,
           name: '',
           type: type,
           UUID: `placeholder-${getRandomArbitraryNumber()}`,
@@ -463,7 +476,7 @@ export class VisualizationService {
   }
 
   /**
-   * Builds Reaat Flow nodes and edges from current integration JSON.
+   * Builds React Flow nodes and edges from current integration JSON.
    * @param handleDeleteStep
    */
   buildNodesAndEdges(handleDeleteStep: (uuid: string) => void) {
@@ -471,7 +484,7 @@ export class VisualizationService {
     const layout = this.visualizationStore.layout;
     // build all nodes
     const stepNodes = VisualizationService.buildNodesFromSteps(steps, layout, {
-      handleDeleteStep
+      handleDeleteStep,
     });
 
     // build edges only for main nodes
@@ -487,9 +500,27 @@ export class VisualizationService {
   }
 
   /**
+   * Determines whether to show a button for appending a step or inserting a branch
+   * @param nodeData
+   * @param isEndStep
+   */
+  static showAppendStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
+    return !isEndStep && (nodeData.isLastStep || nodeData.step.branches);
+  }
+
+  /**
+   * Determines whether to show a button for prepending a step
+   * @param nodeData
+   * @param isEndStep
+   */
+  static showPrependStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
+    return !isEndStep && nodeData.isFirstStep;
+  }
+
+  /**
    * Redraw integration diagram on the canvas. If {@link rebuildNodes} is true,
    * It rebuilds the nodes and edges from integration JSON store and re-layout the diagram.
-   * Otherwise it only performs re-layout.
+   * Otherwise, it only performs re-layout.
    * @param handleDeleteStep
    * @param rebuildNodes
    */
@@ -499,14 +530,16 @@ export class VisualizationService {
     if (rebuildNodes) {
       const ne = this.buildNodesAndEdges(handleDeleteStep);
       stepNodes = ne.stepNodes;
-      stepEdges = ne.stepEdges
+      stepEdges = ne.stepEdges;
     }
-    VisualizationService.getLayoutedElements(stepNodes, stepEdges, this.visualizationStore.layout)
-      .then((res) => {
-        const { layoutedNodes, layoutedEdges } = res;
-        this.visualizationStore.setNodes(layoutedNodes);
-        this.visualizationStore.setEdges(layoutedEdges);
-      })
+    VisualizationService.getLayoutedElements(
+      stepNodes,
+      stepEdges,
+      this.visualizationStore.layout
+    ).then((res) => {
+      const { layoutedNodes, layoutedEdges } = res;
+      this.visualizationStore.setNodes(layoutedNodes);
+      this.visualizationStore.setEdges(layoutedEdges);
+    });
   }
-
 }

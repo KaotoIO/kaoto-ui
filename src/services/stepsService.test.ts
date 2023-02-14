@@ -1,12 +1,11 @@
 import branchSteps from '../store/data/branchSteps';
 import nestedBranch from '../store/data/kamelet.nested-branch.steps';
 import steps from '../store/data/steps';
+import { StepsService } from './stepsService';
+import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
-import { StepsService } from "./stepsService";
-import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from "@kaoto/store";
 
 describe('stepsService', () => {
-
   const stepsService = new StepsService(
     useIntegrationJsonStore.getState(),
     useNestedStepsStore.getState(),
@@ -38,7 +37,10 @@ describe('stepsService', () => {
     ] as IStepProps[];
     expect(nestedSteps[0].branches![0].steps[0].branches![0].steps).toHaveLength(1);
 
-    const filtered = StepsService.filterNestedSteps(nestedSteps, (step) => step.UUID !== 'log-340230');
+    const filtered = StepsService.filterNestedSteps(
+      nestedSteps,
+      (step) => step.UUID !== 'log-340230'
+    );
     expect(filtered![0].branches![0].steps[0].branches![0].steps).toHaveLength(0);
   });
 
@@ -105,7 +107,9 @@ describe('stepsService', () => {
 
     expect(StepsService.insertStep(steps, 2, { name: 'peach' } as IStepProps)).toHaveLength(3);
     // does it insert it at the correct spot?
-    expect(StepsService.insertStep(steps, 2, { name: 'peach' } as IStepProps)[2]).toEqual({ name: 'peach' });
+    expect(StepsService.insertStep(steps, 2, { name: 'peach' } as IStepProps)[2]).toEqual({
+      name: 'peach',
+    });
   });
 
   /**
@@ -177,7 +181,9 @@ describe('stepsService', () => {
     ] as IStepProps[];
 
     expect(StepsService.prependStep(steps, { name: 'peach' } as IStepProps)).toHaveLength(3);
-    expect(StepsService.prependStep(steps, { name: 'mango' } as IStepProps)[0]).toEqual({ name: 'mango' });
+    expect(StepsService.prependStep(steps, { name: 'mango' } as IStepProps)[0]).toEqual({
+      name: 'mango',
+    });
   });
 
   /**
@@ -189,4 +195,15 @@ describe('stepsService', () => {
     expect(StepsService.regenerateUuids(branchSteps)[1].UUID).toBeDefined();
   });
 
+  it('supportsBranching(): should determine if the provided step supports branching', () => {
+    expect(
+      StepsService.supportsBranching({
+        UUID: 'with-branches',
+        minBranches: 0,
+        maxBranches: -1,
+      } as IStepProps)
+    ).toBeTruthy();
+
+    expect(StepsService.supportsBranching({ UUID: 'no-branches' } as IStepProps)).toBeFalsy();
+  });
 });

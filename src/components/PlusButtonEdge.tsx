@@ -1,7 +1,7 @@
 import './PlusButtonEdge.css';
-import { MiniCatalog } from '@kaoto/components';
+import { BranchBuilder, MiniCatalog } from '@kaoto/components';
 import { StepsService, ValidationService } from '@kaoto/services';
-import {useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore} from '@kaoto/store';
+import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { Popover } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
@@ -55,10 +55,16 @@ const PlusButtonEdge = ({
     targetPosition,
   });
 
+  const handleAddBranch = () => {
+    stepsService.addBranch(sourceNode?.data.step, { branchUuid: '', identifier: '', steps: [] });
+  };
+
   const onMiniCatalogClickInsert = (selectedStep: IStepProps) => {
     if (targetNode?.data.branchInfo) {
       const rootStepIdx = stepsService.findStepIdxWithUUID(targetNode?.data.branchInfo.parentUuid);
-      const currentStepNested = nestedStepsStore.nestedSteps.map((ns) => ns.stepUuid === targetNode?.data.step.UUID);
+      const currentStepNested = nestedStepsStore.nestedSteps.map(
+        (ns) => ns.stepUuid === targetNode?.data.step.UUID
+      );
 
       if (currentStepNested) {
         // 1. make a copy of the steps, get the root step
@@ -103,14 +109,20 @@ const PlusButtonEdge = ({
             aria-label="Search for a step"
             bodyContent={
               <MiniCatalog
+                children={<BranchBuilder handleAddBranch={handleAddBranch} />}
                 handleSelectStep={onMiniCatalogClickInsert}
                 queryParams={{
-                  type: ValidationService.insertableStepTypes(sourceNode?.data.step, targetNode?.data.step),
+                  type: ValidationService.insertableStepTypes(
+                    sourceNode?.data.step,
+                    targetNode?.data.step
+                  ),
                 }}
+                step={sourceNode?.data.step}
               />
             }
             enableFlip={true}
             flipBehavior={['top-start', 'left-start']}
+            hasAutoWidth
             hideOnOutsideClick={true}
             position={'right-start'}
           >

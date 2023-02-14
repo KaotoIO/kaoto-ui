@@ -2,7 +2,7 @@ import branchSteps from '../store/data/branchSteps';
 import nodes from '../store/data/nodes';
 import steps from '../store/data/steps';
 import { VisualizationService } from './visualizationService';
-import { IStepProps, IVizStepNode } from '@kaoto/types';
+import { IStepProps, IStepPropsBranch, IVizStepNode, IVizStepNodeData } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import { MarkerType, Position } from 'reactflow';
 
@@ -63,7 +63,9 @@ describe('visualizationService', () => {
     } as IVizStepNode;
     const rootNode = {} as IVizStepNode;
     const rootNodeNext = {} as IVizStepNode;
-    expect(VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext)).toHaveLength(2);
+    expect(
+      VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext)
+    ).toHaveLength(2);
   });
 
   /**
@@ -293,5 +295,72 @@ describe('visualizationService', () => {
     // there is no next node, so it should be false
     expect(VisualizationService.shouldAddEdge(nodeWithEmptyBranch)).toBeFalsy();
     expect(VisualizationService.shouldAddEdge(nodeWithoutBranches, nextNode)).toBeTruthy();
+  });
+
+  it('showAppendStepButton(): given a node, should determine whether to show an append step button for it', () => {
+    // it cannot be an end step, AND it must either be the last step or have a branch
+    const stepWithNoBranch: IVizStepNodeData = {
+      label: '',
+      isLastStep: true,
+      step: {} as IStepProps,
+    };
+
+    // is the last step, is an end step, no branch
+    expect(VisualizationService.showAppendStepButton(stepWithNoBranch, true)).toBeFalsy();
+
+    // is the last step, is not an end step, no branch
+    expect(VisualizationService.showAppendStepButton(stepWithNoBranch, false)).toBeTruthy();
+
+    const lastStepWithBranch: IVizStepNodeData = {
+      label: '',
+      isLastStep: true,
+      step: {
+        branches: [] as IStepPropsBranch[],
+        maxBranches: -1,
+        minBranches: 0,
+      } as IStepProps,
+    };
+
+    // is last step, is an end step, has branches
+    expect(VisualizationService.showAppendStepButton(lastStepWithBranch, true)).toBeFalsy();
+
+    // is last step, is not an end step, has branches
+    expect(VisualizationService.showAppendStepButton(lastStepWithBranch, false)).toBeTruthy();
+
+    // is not the last step, is not an end step, has branches
+    expect(
+      VisualizationService.showAppendStepButton(
+        {
+          ...lastStepWithBranch,
+          isLastStep: false,
+        },
+        false
+      )
+    ).toBeTruthy();
+  });
+
+  it('showPrependStepButton(): given a node, should determine whether to show a prepend step button for it', () => {
+    // it cannot be an end step, and it must be a first step
+    const node: IVizStepNodeData = {
+      label: '',
+      isFirstStep: true,
+      step: {} as IStepProps,
+    };
+
+    // is a first step, is an end step
+    expect(VisualizationService.showPrependStepButton(node, true)).toBeFalsy();
+
+    // is a first step, is not an end step
+    expect(VisualizationService.showPrependStepButton(node, false)).toBeTruthy();
+
+    // is not a first step, is not an end step
+    expect(
+      VisualizationService.showPrependStepButton({ ...node, isFirstStep: false }, false)
+    ).toBeFalsy();
+
+    // is not a first step, is an end step
+    expect(
+      VisualizationService.showPrependStepButton({ ...node, isFirstStep: false }, true)
+    ).toBeFalsy();
   });
 });
