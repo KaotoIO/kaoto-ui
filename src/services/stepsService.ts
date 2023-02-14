@@ -25,6 +25,7 @@ export class StepsService {
     const currentStepNested = this.getStepNested(step);
     if (currentStepNested) {
       const newStep = { ...step };
+      // if branches array does not exist, create it
       if (!newStep.branches) {
         newStep.branches = [branch];
       } else {
@@ -52,10 +53,31 @@ export class StepsService {
    */
   static containsBranches(step: IStepProps): boolean {
     let containsBranching = false;
-    if (step.branches) {
+    if (step.branches && step.branches.length > 0) {
       containsBranching = true;
     }
     return containsBranching;
+  }
+
+  deleteBranch(step: IStepProps, branchUuid: string) {
+    const currentStepNested = this.getStepNested(step);
+    if (currentStepNested) {
+      const newStep = {
+        ...step,
+        branches: step.branches?.filter((b) => b.branchUuid !== branchUuid),
+      };
+      this.integrationJsonStore.replaceBranchStep(newStep, currentStepNested.pathToStep);
+    } else {
+      const oldStepIdx = this.findStepIdxWithUUID(
+        step.UUID,
+        this.integrationJsonStore.integrationJson.steps
+      );
+      const newStep = {
+        ...step,
+        branches: step.branches?.filter((b) => b.branchUuid !== branchUuid),
+      };
+      this.integrationJsonStore.replaceStep(newStep, oldStepIdx);
+    }
   }
 
   deleteStep(UUID: string) {
@@ -107,8 +129,8 @@ export class StepsService {
           } as INestedStep);
         }
 
-        if (step.branches) {
-          step.branches.forEach((branch) => {
+        if (this.supportsBranching(step) && this.containsBranches(step)) {
+          step.branches!.forEach((branch) => {
             // it contains nested steps; we will need to store the branch info
             // and the path to it, for each of those steps
             return loopOverSteps(branch.steps, step.UUID, branch.branchUuid);
@@ -140,11 +162,11 @@ export class StepsService {
       }
 
       // overwrite the branch if one of its steps contains a match
-      if (clone && clone.branches) {
+      if (clone && clone.branches && clone.branches.length > 0) {
         clone.branches.forEach((branch, idx) => {
           const filteredBranchSteps = StepsService.filterNestedSteps(branch.steps, predicate);
-          if (filteredBranchSteps && clone?.branches) {
-            clone.branches[idx].steps = filteredBranchSteps;
+          if (filteredBranchSteps && clone!.branches) {
+            clone!.branches[idx].steps = filteredBranchSteps;
           }
         });
       }
@@ -164,7 +186,7 @@ export class StepsService {
   static filterStepWithBranches(step: IStepProps, predicate: (step: IStepProps) => boolean) {
     const stepCopy: IStepProps = { ...step };
     const loopOverBranches = (branches: IStepPropsBranch[]) => {
-      if (step.branches?.length === 0) return;
+      if (step.branches?.length === 0 || !step.branches) return;
       branches.forEach((branch, idx) => {
         const branchCopy = { ...branch };
         if (stepCopy.branches && stepCopy.branches[idx].steps) {
@@ -213,8 +235,8 @@ export class StepsService {
   static flattenSteps(steps: IStepProps[]): IStepProps[] {
     let children: IStepProps[] = [];
     const flattenMembers = steps.map((s) => {
-      if (s.branches && s.branches.length) {
-        s.branches.forEach((b) => {
+      if (this.supportsBranching(s) && this.containsBranches(s)) {
+        s.branches!.forEach((b) => {
           children = [...children, ...b.steps];
         });
       }
@@ -382,8 +404,8 @@ export class StepsService {
     newSteps.forEach((step, idx) => {
       step.UUID = `${step.name}-${idx}`;
       if (branchSteps) step.UUID = `${step.name}-${idx}-${getRandomArbitraryNumber()}`;
-      if (step.branches) {
-        step.branches.forEach((branch) => {
+      if (this.containsBranches(step)) {
+        step.branches!.forEach((branch) => {
           branch.branchUuid = `b-${idx}-${getRandomArbitraryNumber()}`;
           return newSteps.concat(StepsService.regenerateUuids(branch.steps, true));
         });
@@ -423,6 +445,10 @@ export class StepsService {
     });
   }
 
+  /**
+   * Determines if a given step supports branching at all
+   * @param step
+   */
   static supportsBranching(step?: IStepProps) {
     if (!step) return false;
     return !!(step.minBranches || step.maxBranches);
