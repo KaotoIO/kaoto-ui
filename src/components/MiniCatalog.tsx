@@ -119,7 +119,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                         data-testid={'miniCatalog__search--input'}
                         aria-label={'search for a step'}
                         value={query}
-                        onChange={changeSearch}
+                        onChange={(_e, s) => changeSearch(s)}
                         ref={searchInputRef}
                       />
                     </InputGroup>
