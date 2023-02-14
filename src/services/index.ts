@@ -1,2 +1,3 @@
-export * from './validationService';
-export * from './visualizationService';
+export { StepsService } from "./stepsService";
+export { ValidationService } from './validationService';
+export { VisualizationService } from './visualizationService';

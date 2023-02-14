@@ -41,6 +41,7 @@ export const KaotoDrawer = ({
   panelContent,
   position,
   style,
+  ...rest
 }: IKaotoDrawer) => {
   const consoleDrawerRef = useRef<HTMLSpanElement | null>(null);
 
@@ -65,7 +66,7 @@ export const KaotoDrawer = ({
   );
 
   return (
-    <Drawer id={id} isExpanded={isExpanded} onExpand={onExpand} position={position} style={style}>
+    <Drawer id={id} isExpanded={isExpanded} onExpand={onExpand} position={position} style={style} {...rest}>
       <DrawerContent panelContent={panelContentWrapper} className={'panelCustom'}>
         <DrawerContentBody>{children}</DrawerContentBody>
       </DrawerContent>

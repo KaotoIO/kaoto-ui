@@ -1,23 +1,23 @@
-import { canStepBeReplaced, prependableStepTypes } from './validationService';
+import { ValidationService } from './validationService';
 import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 
 describe('validationService', () => {
   it('canStepBeReplaced(): should return a boolean to determine if a step can be replaced', () => {
     // start steps
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         { step: { type: 'START' } } as IVizStepNodeData,
         { type: 'START' } as IStepProps
       ).isValid
     ).toBeTruthy();
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         { step: { type: 'START' } } as IVizStepNodeData,
         { type: 'MIDDLE' } as IStepProps
       ).isValid
     ).toBeFalsy();
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         { step: { type: 'START' } } as IVizStepNodeData,
         { type: 'END' } as IStepProps
       ).isValid
@@ -25,25 +25,25 @@ describe('validationService', () => {
 
     // middle steps
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         { step: { type: 'MIDDLE' } } as IVizStepNodeData,
         { type: 'START' } as IStepProps
       ).isValid
     ).toBeFalsy();
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         { step: { type: 'MIDDLE' } } as IVizStepNodeData,
         { type: 'MIDDLE' } as IStepProps
       ).isValid
     ).toBeTruthy();
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         { step: { type: 'MIDDLE' }, isLastStep: false } as IVizStepNodeData,
         { type: 'END' } as IStepProps
       ).isValid
     ).toBeFalsy();
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         { step: { type: 'MIDDLE' }, isLastStep: true } as IVizStepNodeData,
         { type: 'END' } as IStepProps
       ).isValid
@@ -51,19 +51,19 @@ describe('validationService', () => {
 
     // end steps
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         { step: { type: 'END' } } as IVizStepNodeData,
         { type: 'START' } as IStepProps
       ).isValid
     ).toBeFalsy();
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         { step: { type: 'END' }, isLastStep: true } as IVizStepNodeData,
         { type: 'MIDDLE' } as IStepProps
       ).isValid
     ).toBeTruthy();
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         { step: { type: 'END' }, isLastStep: true } as IVizStepNodeData,
         { type: 'END' } as IStepProps
       ).isValid
@@ -71,19 +71,19 @@ describe('validationService', () => {
 
     // branch placeholder step
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         { step: { type: 'START' }, branchInfo: {}, isPlaceholder: true } as IVizStepNodeData,
         { type: 'START' } as IStepProps
       ).isValid
     ).toBeFalsy();
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         { step: { type: 'START' }, branchInfo: {}, isPlaceholder: true } as IVizStepNodeData,
         { type: 'MIDDLE' } as IStepProps
       ).isValid
     ).toBeTruthy();
     expect(
-      canStepBeReplaced(
+      ValidationService.canStepBeReplaced(
         {
           step: { type: 'START' },
           branchInfo: {},
@@ -95,6 +95,6 @@ describe('validationService', () => {
   });
 
   it('prependableStepTypes(): should return a comma-separated string of step types that can be prepended to a step', () => {
-    expect(prependableStepTypes()).toEqual('MIDDLE');
+    expect(ValidationService.prependableStepTypes()).toEqual('MIDDLE');
   });
 });

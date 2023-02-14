@@ -1,5 +1,3 @@
-import { fetchCapabilities } from '@kaoto/api';
-import { sleep } from '@kaoto/utils';
 import {
   Grid,
   GridItem,
@@ -12,40 +10,12 @@ import {
   TextVariants,
 } from '@patternfly/react-core';
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
-import { useEffect, useState } from 'react';
 
 interface ILoadingScreen {
-  setBackendAvailable: (b: boolean) => void;
+  fetching: boolean;
+  message: string;
 }
-const WaitingPage = ({ setBackendAvailable }: ILoadingScreen) => {
-  const [message, setMessage] = useState('Trying to reach the Kaoto API');
-  const [fetching, setFetching] = useState(true);
-
-  // Method that tries to connect to capabilities endpoint and evaluate if the API is available
-  const tryApiAvailable = (retries: number) => {
-    fetchCapabilities()
-      .then((resp) => {
-        if (resp) {
-          setBackendAvailable(true);
-        }
-      })
-      .catch(() => {
-        if (retries > 0) {
-          sleep(1000).then(() => {
-            tryApiAvailable(retries - 1);
-          });
-        } else {
-          setBackendAvailable(false);
-          setMessage('Kaoto API is unreachable');
-          setFetching(false);
-        }
-      });
-  };
-
-  useEffect(() => {
-    // try to fetch api for 120seconds
-    tryApiAvailable(120);
-  }, []);
+export const WaitingPage = ({ fetching, message }: ILoadingScreen) => {
   return (
     <Page>
       <PageSection isFilled={true}>
@@ -80,5 +50,3 @@ const WaitingPage = ({ setBackendAvailable }: ILoadingScreen) => {
     </Page>
   );
 };
-
-export default WaitingPage;

@@ -1,37 +1,8 @@
-import eipIntegration from '../store/data/branchSteps';
 import branchSteps from '../store/data/branchSteps';
-import nestedBranch from '../store/data/kamelet.nested-branch.steps';
 import nodes from '../store/data/nodes';
 import steps from '../store/data/steps';
-import {
-  buildBranchNodeParams,
-  buildBranchSingleStepEdges,
-  buildEdgeParams,
-  buildEdges,
-  buildNodeDefaultParams,
-  buildNodesFromSteps,
-  containsAddStepPlaceholder,
-  containsBranches,
-  extractNestedSteps,
-  filterNestedSteps,
-  filterStepWithBranches,
-  findNodeIdxWithUUID,
-  findStepIdxWithUUID,
-  flattenSteps,
-  getRandomArbitraryNumber,
-  insertAddStepPlaceholder,
-  insertBranchGroupNode,
-  insertStep,
-  isEndStep,
-  isFirstStepEip,
-  isFirstStepStart,
-  isMiddleStep,
-  isStartStep,
-  prependStep,
-  regenerateUuids,
-  shouldAddEdge,
-} from './visualizationService';
-import { IStepProps, IVizStepNode } from '@kaoto/types';
+import { VisualizationService } from './visualizationService';
+import { IStepProps, IStepPropsBranch, IVizStepNode, IVizStepNodeData } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import { MarkerType, Position } from 'reactflow';
 
@@ -46,7 +17,7 @@ describe('visualizationService', () => {
     const currentStep = steps[3];
     const nodeId = 'node_example-1234';
 
-    expect(buildBranchNodeParams(currentStep, nodeId, 'RIGHT')).toEqual({
+    expect(VisualizationService.buildBranchNodeParams(currentStep, nodeId, 'RIGHT')).toEqual({
       data: {
         kind: currentStep.kind,
         label: truncateString(currentStep.name, 14),
@@ -62,7 +33,7 @@ describe('visualizationService', () => {
     });
 
     // Check that the `sourcePosition` and `targetPosition` change with the layout
-    expect(buildBranchNodeParams(currentStep, nodeId, 'DOWN')).toEqual({
+    expect(VisualizationService.buildBranchNodeParams(currentStep, nodeId, 'DOWN')).toEqual({
       data: {
         kind: currentStep.kind,
         label: truncateString(currentStep.name, 14),
@@ -92,7 +63,9 @@ describe('visualizationService', () => {
     } as IVizStepNode;
     const rootNode = {} as IVizStepNode;
     const rootNodeNext = {} as IVizStepNode;
-    expect(buildBranchSingleStepEdges(node, rootNode, rootNodeNext)).toHaveLength(2);
+    expect(
+      VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext)
+    ).toHaveLength(2);
   });
 
   /**
@@ -102,7 +75,7 @@ describe('visualizationService', () => {
     const currentStep = nodes[1];
     const previousStep = nodes[0];
 
-    expect(buildEdgeParams(currentStep, previousStep)).toEqual({
+    expect(VisualizationService.buildEdgeParams(currentStep, previousStep)).toEqual({
       arrowHeadType: 'arrowclosed',
       id: 'e-' + currentStep.id + '>' + previousStep.id,
       markerEnd: {
@@ -135,12 +108,12 @@ describe('visualizationService', () => {
       },
     ];
 
-    expect(buildEdges(nodes)).toHaveLength(1);
+    expect(VisualizationService.buildEdges(nodes)).toHaveLength(1);
 
     // let's test that it works for branching too
-    const stepNodes = buildNodesFromSteps(branchSteps, 'RIGHT');
+    const stepNodes = VisualizationService.buildNodesFromSteps(branchSteps, 'RIGHT');
 
-    expect(buildEdges(stepNodes)).toHaveLength(branchSteps.length - 1);
+    expect(VisualizationService.buildEdges(stepNodes)).toHaveLength(branchSteps.length - 1);
   });
 
   /**
@@ -150,7 +123,7 @@ describe('visualizationService', () => {
     const position = { x: 0, y: 0 };
     const step = { name: 'avro-deserialize-action', icon: '', kind: 'Kamelet' } as IStepProps;
 
-    expect(buildNodeDefaultParams(step, 'dummy-id', position)).toEqual({
+    expect(VisualizationService.buildNodeDefaultParams(step, 'dummy-id', position)).toEqual({
       data: {
         branchInfo: undefined,
         icon: step.icon,
@@ -176,7 +149,7 @@ describe('visualizationService', () => {
    * buildNodesFromSteps
    */
   it('buildNodesFromSteps(): should build visualization nodes from an array of steps', () => {
-    const stepNodes = buildNodesFromSteps(steps, 'RIGHT');
+    const stepNodes = VisualizationService.buildNodesFromSteps(steps, 'RIGHT');
     expect(stepNodes[0].data.step.UUID).toBeDefined();
     expect(stepNodes[0].id).toContain(stepNodes[0].data.step.UUID);
   });
@@ -185,7 +158,7 @@ describe('visualizationService', () => {
    * buildNodesFromSteps for integrations with branches
    */
   it.skip('buildNodesFromSteps(): should build visualization nodes from an array of steps with branches', () => {
-    const stepNodes = buildNodesFromSteps(branchSteps, 'RIGHT');
+    const stepNodes = VisualizationService.buildNodesFromSteps(branchSteps, 'RIGHT');
     expect(stepNodes[0].data.step.UUID).toBeDefined();
     expect(stepNodes).toHaveLength(branchSteps.length);
   });
@@ -213,10 +186,10 @@ describe('visualizationService', () => {
       },
     ];
 
-    expect(containsAddStepPlaceholder(nodes)).toBe(true);
+    expect(VisualizationService.containsAddStepPlaceholder(nodes)).toBe(true);
 
     expect(
-      containsAddStepPlaceholder([
+      VisualizationService.containsAddStepPlaceholder([
         {
           data: {
             label: 'avro-deserialize-sink',
@@ -230,99 +203,11 @@ describe('visualizationService', () => {
   });
 
   /**
-   * containsBranches
-   */
-  it('containsBranches(): should determine if a given step contains branches', () => {
-    expect(containsBranches(branchSteps[0])).toBe(false);
-    expect(containsBranches(branchSteps[1])).toBe(true);
-  });
-
-  /**
-   * extractNestedSteps
-   */
-  it('extractNestedSteps(): should create an array of properties for all nested steps', () => {
-    const nested = nestedBranch.slice();
-    expect(extractNestedSteps(nested)).toHaveLength(6);
-  });
-
-  /**
-   * filterNestedSteps
-   */
-  it('filterNestedSteps(): should filter an array of steps given a conditional function', () => {
-    const nestedSteps = [
-      { branches: [{ steps: [{ branches: [{ steps: [{ UUID: 'log-340230' }] }] }] }] },
-    ] as IStepProps[];
-    expect(nestedSteps[0].branches![0].steps[0].branches![0].steps).toHaveLength(1);
-
-    const filtered = filterNestedSteps(nestedSteps, (step) => step.UUID !== 'log-340230');
-    expect(filtered![0].branches![0].steps[0].branches![0].steps).toHaveLength(0);
-  });
-
-  /**
-   * filterStepWithBranches
-   */
-  it('filterStepWithBranches(): should filter the branch steps for a given step and conditional', () => {
-    const step = {
-      branches: [
-        {
-          steps: [
-            {
-              UUID: 'step-one',
-              branches: [{ steps: [{ UUID: 'strawberry' }, { UUID: 'banana' }] }],
-            },
-            { UUID: 'step-two', branches: [{ steps: [{ UUID: 'cherry' }] }] },
-          ],
-        },
-      ],
-    } as IStepProps;
-
-    expect(step.branches![0].steps[0].branches![0].steps).toHaveLength(2);
-
-    const filtered = filterStepWithBranches(
-      step,
-      (step: { UUID: string }) => step.UUID !== 'banana'
-    );
-
-    expect(filtered.branches![0].steps[0].branches![0].steps).toHaveLength(1);
-  });
-
-  /**
    * findNodeIdxWithUUID
    */
   it('findNodeIdxWithUUID(): should find a node from an array of nodes, given a UUID', () => {
-    expect(findNodeIdxWithUUID(nodes[0].data.step.UUID, nodes)).toBe(0);
-    expect(findNodeIdxWithUUID(nodes[1].data.step.UUID, nodes)).toBe(1);
-  });
-
-  /**
-   * findStepIdxWithUUID
-   */
-  it("findStepIdxWithUUID(): should find a step's index, given a particular UUID", () => {
-    expect(findStepIdxWithUUID('caffeine-action-2', steps)).toEqual(2);
-  });
-
-  /**
-   * flattenSteps
-   */
-  it('flattenSteps(): should flatten an array of deeply nested steps', () => {
-    expect(nestedBranch).toHaveLength(4);
-    const deeplyNestedBranchStepUuid = 'set-body-877932';
-    expect(nestedBranch.some((s) => s.UUID === deeplyNestedBranchStepUuid)).toBeFalsy();
-
-    const flattenedSteps = flattenSteps(nestedBranch);
-    expect(flattenedSteps).toHaveLength(10);
-    expect(flattenedSteps.some((s) => s.UUID === deeplyNestedBranchStepUuid)).toBeTruthy();
-  });
-
-  it.skip('getRandomArbitraryNumber(): should get a random arbitrary number', () => {
-    const mGetRandomValues = jest.fn().mockReturnValueOnce(new Uint32Array(10));
-
-    Object.defineProperty(window, 'crypto', {
-      value: { getRandomValues: mGetRandomValues },
-    });
-
-    expect(getRandomArbitraryNumber()).toEqual(new Uint32Array(10));
-    expect(mGetRandomValues).toBeCalledWith(new Uint8Array(1));
+    expect(VisualizationService.findNodeIdxWithUUID(nodes[0].data.step.UUID, nodes)).toBe(0);
+    expect(VisualizationService.findNodeIdxWithUUID(nodes[1].data.step.UUID, nodes)).toBe(1);
   });
 
   /**
@@ -330,7 +215,7 @@ describe('visualizationService', () => {
    */
   it('insertAddStepPlaceholder(): should add an ADD STEP placeholder to the beginning of the array', () => {
     const nodes: IVizStepNode[] = [];
-    insertAddStepPlaceholder(nodes, '', { nextStepUuid: '' });
+    VisualizationService.insertAddStepPlaceholder(nodes, '', 'START', { nextStepUuid: '' });
     expect(nodes).toHaveLength(1);
   });
 
@@ -339,107 +224,8 @@ describe('visualizationService', () => {
    */
   it.skip('insertBranchGroupNode', () => {
     const nodes: IVizStepNode[] = [];
-    insertBranchGroupNode(nodes, { x: 0, y: 0 }, 150, groupWidth);
+    VisualizationService.insertBranchGroupNode(nodes, { x: 0, y: 0 }, 150, groupWidth);
     expect(nodes).toHaveLength(1);
-  });
-
-  /**
-   * insertStep
-   */
-  it('insertStep(): should insert the provided step at the index specified, in a given array of steps', () => {
-    const steps = [
-      {
-        name: 'strawberry',
-      },
-      {
-        name: 'blueberry',
-      },
-    ] as IStepProps[];
-
-    expect(insertStep(steps, 2, { name: 'peach' } as IStepProps)).toHaveLength(3);
-    // does it insert it at the correct spot?
-    expect(insertStep(steps, 2, { name: 'peach' } as IStepProps)[2]).toEqual({ name: 'peach' });
-  });
-
-  /**
-   * isFirstStepEip
-   */
-  it('isFirstStepEip(): should determine if the provided step is an EIP', () => {
-    const firstBranch = eipIntegration[1].branches![0];
-    expect(isFirstStepEip(eipIntegration)).toBe(false);
-    expect(isFirstStepEip(firstBranch.steps)).toBe(true);
-  });
-
-  /**
-   * isFirstStepStart
-   */
-  it('isFirstStepStart(): should determine if the first step is a START', () => {
-    // first step is a START
-    expect(isFirstStepStart(steps)).toBe(true);
-
-    expect(
-      isFirstStepStart([
-        {
-          id: 'pdf-action',
-          name: 'pdf-action',
-          type: 'MIDDLE',
-          UUID: 'pdf-action-1',
-          group: 'PDF',
-          kind: 'Kamelet',
-          title: 'PDF Action',
-        } as IStepProps,
-      ])
-    ).toBe(false);
-  });
-
-  /**
-   * isEndStep
-   */
-  it('isEndStep(): should determine if the provided step is an END step', () => {
-    expect(isEndStep(eipIntegration[3])).toBe(true);
-    expect(isEndStep(eipIntegration[0])).toBe(false);
-  });
-
-  /**
-   * isMiddleStep
-   */
-  it('isMiddleStep(): should determine if the provided step is a MIDDLE step', () => {
-    expect(isMiddleStep(eipIntegration[1])).toBe(true);
-    expect(isMiddleStep(eipIntegration[0])).toBe(false);
-  });
-
-  /**
-   * isStartStep
-   */
-  it('isStartStep(): should determine if the provided step is a START step', () => {
-    expect(isStartStep(eipIntegration[0])).toBe(true);
-    expect(isStartStep(eipIntegration[1])).toBe(false);
-  });
-
-  /**
-   * prependStep
-   */
-  it('prependStep(): should insert the provided step at the beginning of a given array of steps', () => {
-    const steps = [
-      {
-        name: 'strawberry',
-      },
-      {
-        name: 'blueberry',
-      },
-    ] as IStepProps[];
-
-    expect(prependStep(steps, { name: 'peach' } as IStepProps)).toHaveLength(3);
-    expect(prependStep(steps, { name: 'mango' } as IStepProps)[0]).toEqual({ name: 'mango' });
-  });
-
-  /**
-   * regenerateUuids
-   */
-  it('regenerateUuids(): should regenerate UUIDs for an array of steps', () => {
-    expect(regenerateUuids(steps)[0].UUID).toBeDefined();
-    expect(regenerateUuids(branchSteps)[0].UUID).toBeDefined();
-    expect(regenerateUuids(branchSteps)[1].UUID).toBeDefined();
   });
 
   /**
@@ -460,8 +246,8 @@ describe('visualizationService', () => {
     } as IVizStepNode;
 
     // there is no next node, so it should be false
-    expect(shouldAddEdge(nodeWithoutBranches)).toBeFalsy();
-    expect(shouldAddEdge(nodeWithoutBranches, nextNode)).toBeTruthy();
+    expect(VisualizationService.shouldAddEdge(nodeWithoutBranches)).toBeFalsy();
+    expect(VisualizationService.shouldAddEdge(nodeWithoutBranches, nextNode)).toBeTruthy();
 
     const nodeWithBranches = {
       id: 'node-with-branches',
@@ -482,11 +268,11 @@ describe('visualizationService', () => {
     } as IVizStepNode;
 
     // there is no next node, so it should be false
-    expect(shouldAddEdge(nodeWithBranches)).toBeFalsy();
+    expect(VisualizationService.shouldAddEdge(nodeWithBranches)).toBeFalsy();
 
     // it has branches with steps, so it should be false because
     // the steps will connect with the next step later on
-    expect(shouldAddEdge(nodeWithBranches, nextNode)).toBeFalsy();
+    expect(VisualizationService.shouldAddEdge(nodeWithBranches, nextNode)).toBeFalsy();
 
     const nodeWithEmptyBranch = {
       id: 'node-with-empty-branch',
@@ -507,7 +293,74 @@ describe('visualizationService', () => {
     } as IVizStepNode;
 
     // there is no next node, so it should be false
-    expect(shouldAddEdge(nodeWithEmptyBranch)).toBeFalsy();
-    expect(shouldAddEdge(nodeWithoutBranches, nextNode)).toBeTruthy();
+    expect(VisualizationService.shouldAddEdge(nodeWithEmptyBranch)).toBeFalsy();
+    expect(VisualizationService.shouldAddEdge(nodeWithoutBranches, nextNode)).toBeTruthy();
+  });
+
+  it('showAppendStepButton(): given a node, should determine whether to show an append step button for it', () => {
+    // it cannot be an end step, AND it must either be the last step or have a branch
+    const stepWithNoBranch: IVizStepNodeData = {
+      label: '',
+      isLastStep: true,
+      step: {} as IStepProps,
+    };
+
+    // is the last step, is an end step, no branch
+    expect(VisualizationService.showAppendStepButton(stepWithNoBranch, true)).toBeFalsy();
+
+    // is the last step, is not an end step, no branch
+    expect(VisualizationService.showAppendStepButton(stepWithNoBranch, false)).toBeTruthy();
+
+    const lastStepWithBranch: IVizStepNodeData = {
+      label: '',
+      isLastStep: true,
+      step: {
+        branches: [] as IStepPropsBranch[],
+        maxBranches: -1,
+        minBranches: 0,
+      } as IStepProps,
+    };
+
+    // is last step, is an end step, has branches
+    expect(VisualizationService.showAppendStepButton(lastStepWithBranch, true)).toBeFalsy();
+
+    // is last step, is not an end step, has branches
+    expect(VisualizationService.showAppendStepButton(lastStepWithBranch, false)).toBeTruthy();
+
+    // is not the last step, is not an end step, has branches
+    expect(
+      VisualizationService.showAppendStepButton(
+        {
+          ...lastStepWithBranch,
+          isLastStep: false,
+        },
+        false
+      )
+    ).toBeTruthy();
+  });
+
+  it('showPrependStepButton(): given a node, should determine whether to show a prepend step button for it', () => {
+    // it cannot be an end step, and it must be a first step
+    const node: IVizStepNodeData = {
+      label: '',
+      isFirstStep: true,
+      step: {} as IStepProps,
+    };
+
+    // is a first step, is an end step
+    expect(VisualizationService.showPrependStepButton(node, true)).toBeFalsy();
+
+    // is a first step, is not an end step
+    expect(VisualizationService.showPrependStepButton(node, false)).toBeTruthy();
+
+    // is not a first step, is not an end step
+    expect(
+      VisualizationService.showPrependStepButton({ ...node, isFirstStep: false }, false)
+    ).toBeFalsy();
+
+    // is not a first step, is an end step
+    expect(
+      VisualizationService.showPrependStepButton({ ...node, isFirstStep: false }, true)
+    ).toBeFalsy();
   });
 });

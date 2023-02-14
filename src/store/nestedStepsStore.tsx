@@ -1,7 +1,7 @@
 import { INestedStep } from '@kaoto/types';
 import { create } from 'zustand';
 
-interface INestedStepStore {
+export interface INestedStepStore {
   addStep: (newStep: INestedStep) => void;
   clearNestedSteps: () => void;
   deleteStep: (stepUuid: string) => void;
