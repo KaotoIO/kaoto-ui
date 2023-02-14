@@ -9,6 +9,7 @@ import { findPath, getDeepValue, getRandomArbitraryNumber, setDeepValue } from '
  * which is represented by a collection of "Step".
  * This class focuses on handling logical model objects. For handling visualization,
  * see {@link VisualizationService}.
+ * Note: Methods are declared in alphabetical order.
  * @see IStepProps
  * @see IStepPropsBranch
  * @see VisualizationService
@@ -20,6 +21,31 @@ export class StepsService {
     private visualizationStore: RFState
   ) {}
 
+  addBranch(step: IStepProps, branch: IStepPropsBranch) {
+    const currentStepNested = this.getStepNested(step);
+    if (currentStepNested) {
+      const newStep = { ...step };
+      if (!newStep.branches) {
+        newStep.branches = [branch];
+      } else {
+        newStep.branches = newStep.branches.concat(branch);
+      }
+      this.integrationJsonStore.replaceBranchStep(newStep, currentStepNested.pathToStep);
+    } else {
+      const oldStepIdx = this.findStepIdxWithUUID(
+        step.UUID,
+        this.integrationJsonStore.integrationJson.steps
+      );
+      const newStep = { ...step };
+      if (!newStep.branches) {
+        newStep.branches = [branch];
+      } else {
+        newStep.branches = newStep.branches.concat(branch);
+      }
+      this.integrationJsonStore.replaceStep(newStep, oldStepIdx);
+    }
+  }
+
   /**
    * Checks if a Step contains branches
    * @param step
@@ -30,6 +56,34 @@ export class StepsService {
       containsBranching = true;
     }
     return containsBranching;
+  }
+
+  deleteStep(UUID: string) {
+    // check if the step being modified is nested
+    const currentStepNested = this.nestedStepsStore.nestedSteps.find((ns) => ns.stepUuid === UUID);
+    if (currentStepNested) {
+      const parentStepIdx = this.findStepIdxWithUUID(
+        currentStepNested.originStepUuid,
+        this.integrationJsonStore.integrationJson.steps
+      );
+
+      // update the original parent step, without the child step
+      const updatedParentStep = StepsService.filterStepWithBranches(
+        this.integrationJsonStore.integrationJson.steps[parentStepIdx],
+        (step: { UUID: string }) => step.UUID !== UUID
+      );
+
+      this.integrationJsonStore.deleteBranchStep(updatedParentStep, parentStepIdx);
+    } else {
+      // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
+      const stepsIndex = this.findStepIdxWithUUID(
+        UUID,
+        this.integrationJsonStore.integrationJson.steps
+      );
+
+      this.visualizationStore.deleteNode(stepsIndex);
+      this.integrationJsonStore.deleteStep(stepsIndex);
+    }
   }
 
   /**
@@ -171,6 +225,101 @@ export class StepsService {
   }
 
   /**
+   * Gets a step nested.
+   * @param step
+   */
+  getStepNested(step: IStepProps) {
+    return this.nestedStepsStore.nestedSteps.find((ns) => ns.stepUuid === step.UUID);
+  }
+
+  /**
+   * Appends a selected step to the current step.
+   * @param currentStep
+   * @param selectedStep
+   */
+  handleAppendStep(currentStep: IStepProps, selectedStep: IStepProps) {
+    // fetch parameters and other details
+    fetchStepDetails(selectedStep.id).then((step) => {
+      step.UUID = selectedStep.UUID;
+      const currentStepNested = this.getStepNested(currentStep);
+      if (currentStepNested) {
+        // special handling for branch steps
+        const rootStepIdx = this.findStepIdxWithUUID(currentStepNested.originStepUuid);
+        const stepsCopy = this.integrationJsonStore.integrationJson.steps.slice();
+        const stepCopy = stepsCopy[rootStepIdx];
+        // find path to the branch, for easy modification of its steps
+        const pathToBranch = findPath(stepCopy, currentStepNested.branchUuid, 'branchUuid');
+        let newBranch = getDeepValue(stepCopy, pathToBranch);
+        newBranch.steps = [...newBranch.steps, step];
+        // here we are building a new root step, with a new array of those branch steps
+        const newRootStep = setDeepValue(stepCopy, pathToBranch, newBranch);
+        this.integrationJsonStore.replaceStep(newRootStep, rootStepIdx);
+      } else {
+        this.integrationJsonStore.appendStep(step);
+      }
+    });
+  }
+
+  /**
+   * Replace an existing step through Drag and Drop.
+   * @todo {@link node} is a React Flow related object that should be handled in {@link VisualizationService}, while this does modify the logical step structure. Could we retrieve same info from something else than {@link node}?
+   * @param node
+   * @param currentStep
+   * @param stepC
+   */
+  async handleDropOnExistingStep(
+    node: IVizStepNodeData,
+    currentStep: IStepProps,
+    stepC: IStepProps
+  ) {
+    // fetch parameters and other details
+    return fetchStepDetails(stepC.id).then((newStep) => {
+      const validation = ValidationService.canStepBeReplaced(node, newStep);
+      // Replace step
+      if (validation.isValid) {
+        if (node.branchInfo) {
+          const currentStepNested = this.getStepNested(currentStep);
+          if (currentStepNested) {
+            this.integrationJsonStore.replaceBranchStep(newStep, currentStepNested.pathToStep);
+          }
+        } else {
+          const currentIdx = this.findStepIdxWithUUID(currentStep.UUID);
+          this.integrationJsonStore.replaceStep(newStep, currentIdx);
+        }
+      }
+      return validation;
+    });
+  }
+
+  /**
+   * Prepends a selected step to the current step.
+   * @param currentStep
+   * @param selectedStep
+   */
+  handlePrependStep(currentStep: IStepProps, selectedStep: IStepProps) {
+    // fetch parameters and other details
+    fetchStepDetails(selectedStep.id).then((step) => {
+      step.UUID = selectedStep.UUID;
+      const currentStepNested = this.getStepNested(currentStep);
+      if (currentStepNested) {
+        // special handling for branch steps
+        const rootStepIdx = this.findStepIdxWithUUID(currentStepNested.originStepUuid);
+        const stepsCopy = this.integrationJsonStore.integrationJson.steps.slice();
+        const stepCopy = stepsCopy[rootStepIdx];
+        // find path to the branch, for easy modification of its steps
+        const pathToBranch = findPath(stepCopy, currentStepNested.branchUuid, 'branchUuid');
+        let newBranch = getDeepValue(stepCopy, pathToBranch);
+        newBranch.steps = StepsService.prependStep([...newBranch.steps], step);
+        // here we are building a new root step, with a new array of those branch steps
+        const newRootStep = setDeepValue(stepCopy, pathToBranch, newBranch);
+        this.integrationJsonStore.replaceStep(newRootStep, rootStepIdx);
+      } else {
+        this.integrationJsonStore.appendStep(step);
+      }
+    });
+  }
+
+  /**
    * Insert the given step at the specified index of
    * an array of provided steps
    * @param steps
@@ -209,6 +358,18 @@ export class StepsService {
   }
 
   /**
+   * Inserts the given step at the beginning of the
+   * array of provided steps, returning the modified array
+   * @param steps
+   * @param newStep
+   */
+  static prependStep(steps: IStepProps[], newStep: IStepProps): IStepProps[] {
+    const newSteps = [...steps];
+    newSteps.unshift(newStep);
+    return newSteps;
+  }
+
+  /**
    * Regenerate a UUID for a list of Steps
    * Every time there is a change to steps or their positioning in the Steps array,
    * their UUIDs need to be regenerated
@@ -232,43 +393,39 @@ export class StepsService {
   }
 
   /**
-   * Inserts the given step at the beginning of the
-   * array of provided steps, returning the modified array
-   * @param steps
-   * @param newStep
+   * Adds a new step onto a placeholder from mini catalog.
+   * @param node
+   * @param stepC
    */
-  static prependStep(steps: IStepProps[], newStep: IStepProps): IStepProps[] {
-    const newSteps = [...steps];
-    newSteps.unshift(newStep);
-    return newSteps;
+  async replacePlaceholderStep(node: IVizStepNodeData, stepC: IStepProps) {
+    // fetch parameters and other details
+    return fetchStepDetails(stepC.id).then((step) => {
+      step.UUID = stepC.UUID;
+      const validation = ValidationService.canStepBeReplaced(node, step);
+
+      if (validation.isValid) {
+        // update the steps, the new node will be created automatically
+        if (node.branchInfo) {
+          if (node.isPlaceholder) {
+            const pathToBranch = findPath(
+              this.integrationJsonStore.integrationJson.steps,
+              node.branchInfo.branchUuid!,
+              'branchUuid'
+            );
+            const newPath = pathToBranch?.concat('steps', '0');
+            this.integrationJsonStore.replaceBranchStep(step, newPath);
+          }
+        } else {
+          this.integrationJsonStore.replaceStep(step);
+        }
+      }
+      return validation;
+    });
   }
 
-  deleteStep(UUID: string) {
-    // check if the step being modified is nested
-    const currentStepNested = this.nestedStepsStore.nestedSteps.find((ns) => ns.stepUuid === UUID);
-    if (currentStepNested) {
-      const parentStepIdx = this.findStepIdxWithUUID(
-        currentStepNested.originStepUuid,
-        this.integrationJsonStore.integrationJson.steps
-      );
-
-      // update the original parent step, without the child step
-      const updatedParentStep = StepsService.filterStepWithBranches(
-        this.integrationJsonStore.integrationJson.steps[parentStepIdx],
-        (step: { UUID: string }) => step.UUID !== UUID
-      );
-
-      this.integrationJsonStore.deleteBranchStep(updatedParentStep, parentStepIdx);
-    } else {
-      // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
-      const stepsIndex = this.findStepIdxWithUUID(
-        UUID,
-        this.integrationJsonStore.integrationJson.steps
-      );
-
-      this.visualizationStore.deleteNode(stepsIndex);
-      this.integrationJsonStore.deleteStep(stepsIndex);
-    }
+  static supportsBranching(step?: IStepProps) {
+    if (!step) return false;
+    return !!(step.minBranches || step.maxBranches);
   }
 
   /**
@@ -314,161 +471,5 @@ export class StepsService {
     fetchViews(this.integrationJsonStore.integrationJson.steps).then((views) => {
       this.integrationJsonStore.setViews(views);
     });
-  }
-
-  /**
-   * Gets a step nested.
-   * @param step
-   */
-  getStepNested(step: IStepProps) {
-    return this.nestedStepsStore.nestedSteps.find((ns) => ns.stepUuid === step.UUID);
-  }
-
-  /**
-   * Appends a selected step to the current step.
-   * @param currentStep
-   * @param selectedStep
-   */
-  handleAppendStep(currentStep: IStepProps, selectedStep: IStepProps) {
-    // fetch parameters and other details
-    fetchStepDetails(selectedStep.id).then((step) => {
-      step.UUID = selectedStep.UUID;
-      const currentStepNested = this.getStepNested(currentStep);
-      if (currentStepNested) {
-        // special handling for branch steps
-        const rootStepIdx = this.findStepIdxWithUUID(currentStepNested.originStepUuid);
-        const stepsCopy = this.integrationJsonStore.integrationJson.steps.slice();
-        const stepCopy = stepsCopy[rootStepIdx];
-        // find path to the branch, for easy modification of its steps
-        const pathToBranch = findPath(stepCopy, currentStepNested.branchUuid, 'branchUuid');
-        let newBranch = getDeepValue(stepCopy, pathToBranch);
-        newBranch.steps = [...newBranch.steps, step];
-        // here we are building a new root step, with a new array of those branch steps
-        const newRootStep = setDeepValue(stepCopy, pathToBranch, newBranch);
-        this.integrationJsonStore.replaceStep(newRootStep, rootStepIdx);
-      } else {
-        this.integrationJsonStore.appendStep(step);
-      }
-    });
-  }
-
-  /**
-   * Prepends a selected step to the current step.
-   * @param currentStep
-   * @param selectedStep
-   */
-  handlePrependStep(currentStep: IStepProps, selectedStep: IStepProps) {
-    // fetch parameters and other details
-    fetchStepDetails(selectedStep.id).then((step) => {
-      step.UUID = selectedStep.UUID;
-      const currentStepNested = this.getStepNested(currentStep);
-      if (currentStepNested) {
-        // special handling for branch steps
-        const rootStepIdx = this.findStepIdxWithUUID(currentStepNested.originStepUuid);
-        const stepsCopy = this.integrationJsonStore.integrationJson.steps.slice();
-        const stepCopy = stepsCopy[rootStepIdx];
-        // find path to the branch, for easy modification of its steps
-        const pathToBranch = findPath(stepCopy, currentStepNested.branchUuid, 'branchUuid');
-        let newBranch = getDeepValue(stepCopy, pathToBranch);
-        newBranch.steps = StepsService.prependStep([...newBranch.steps], step);
-        // here we are building a new root step, with a new array of those branch steps
-        const newRootStep = setDeepValue(stepCopy, pathToBranch, newBranch);
-        this.integrationJsonStore.replaceStep(newRootStep, rootStepIdx);
-      } else {
-        this.integrationJsonStore.appendStep(step);
-      }
-    });
-  }
-
-  /**
-   * Adds a new step onto a placeholder from mini catalog.
-   * @param node
-   * @param stepC
-   */
-  async replacePlaceholderStep(node: IVizStepNodeData, stepC: IStepProps) {
-    // fetch parameters and other details
-    return fetchStepDetails(stepC.id).then((step) => {
-      step.UUID = stepC.UUID;
-      const validation = ValidationService.canStepBeReplaced(node, step);
-
-      if (validation.isValid) {
-        // update the steps, the new node will be created automatically
-        if (node.branchInfo) {
-          if (node.isPlaceholder) {
-            const pathToBranch = findPath(
-              this.integrationJsonStore.integrationJson.steps,
-              node.branchInfo.branchUuid!,
-              'branchUuid'
-            );
-            const newPath = pathToBranch?.concat('steps', '0');
-            this.integrationJsonStore.replaceBranchStep(step, newPath);
-          }
-        } else {
-          this.integrationJsonStore.replaceStep(step);
-        }
-      }
-      return validation;
-    });
-  }
-
-  /**
-   * Replace an existing step through Drag and Drop.
-   * @todo {@link node} is a React Flow related object that should be handled in {@link VisualizationService}, while this does modify the logical step structure. Could we retrieve same info from something else than {@link node}?
-   * @param node
-   * @param currentStep
-   * @param stepC
-   */
-  async handleDropOnExistingStep(
-    node: IVizStepNodeData,
-    currentStep: IStepProps,
-    stepC: IStepProps
-  ) {
-    // fetch parameters and other details
-    return fetchStepDetails(stepC.id).then((newStep) => {
-      const validation = ValidationService.canStepBeReplaced(node, newStep);
-      // Replace step
-      if (validation.isValid) {
-        if (node.branchInfo) {
-          const currentStepNested = this.getStepNested(currentStep);
-          if (currentStepNested) {
-            this.integrationJsonStore.replaceBranchStep(newStep, currentStepNested.pathToStep);
-          }
-        } else {
-          const currentIdx = this.findStepIdxWithUUID(currentStep.UUID);
-          this.integrationJsonStore.replaceStep(newStep, currentIdx);
-        }
-      }
-      return validation;
-    });
-  }
-
-  addBranch(step: IStepProps, branch: IStepPropsBranch) {
-    const currentStepNested = this.getStepNested(step);
-    if (currentStepNested) {
-      const newStep = { ...step };
-      if (!newStep.branches) {
-        newStep.branches = [branch];
-      } else {
-        newStep.branches = newStep.branches.concat(branch);
-      }
-      this.integrationJsonStore.replaceBranchStep(newStep, currentStepNested.pathToStep);
-    } else {
-      const oldStepIdx = this.findStepIdxWithUUID(
-        step.UUID,
-        this.integrationJsonStore.integrationJson.steps
-      );
-      const newStep = { ...step };
-      if (!newStep.branches) {
-        newStep.branches = [branch];
-      } else {
-        newStep.branches = newStep.branches.concat(branch);
-      }
-      this.integrationJsonStore.replaceStep(newStep, oldStepIdx);
-    }
-  }
-
-  static supportsBranching(step?: IStepProps) {
-    if (!step) return false;
-    return !!(step.minBranches || step.maxBranches);
   }
 }

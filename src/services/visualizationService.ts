@@ -19,6 +19,7 @@ const ELK = require('elkjs');
  * it is to manage React Flow "nodes" and "edges".
  * We use ELK to layout steps in the canvas. See {@link getLayoutedElements} for details.
  * This class focuses on visualization. For handling internal Step model objects, see {@link StepsService}.
+ * Note: Methods are declared in alphabetical order.
  *  @see IVizStepNode
  *  @see IVizStepPropsEdge
  *  @see StepsService
@@ -57,6 +58,35 @@ export class VisualizationService {
       targetPosition: layout === 'RIGHT' ? Position.Bottom : Position.Left,
       type: 'step',
     } as IVizStepNode;
+  }
+
+  /**
+   * Builds edges for branches with only a single step
+   * i.e. for placeholders within a branch
+   * @param node
+   * @param rootNode
+   * @param rootNextNode
+   */
+  static buildBranchSingleStepEdges(
+    node: IVizStepNode,
+    rootNode: IVizStepNode,
+    rootNextNode: IVizStepNode
+  ): IVizStepPropsEdge[] {
+    const branchPlaceholderEdges: IVizStepPropsEdge[] = [];
+    let edgeProps = VisualizationService.buildEdgeParams(rootNode, node, 'default');
+
+    if (node.data.branchInfo?.branchIdentifier)
+      edgeProps.label = node.data.branchInfo?.branchIdentifier;
+
+    branchPlaceholderEdges.push(edgeProps);
+
+    if (rootNextNode) {
+      branchPlaceholderEdges.push(
+        VisualizationService.buildEdgeParams(node, rootNextNode, 'default')
+      );
+    }
+
+    return branchPlaceholderEdges;
   }
 
   //
@@ -136,35 +166,6 @@ export class VisualizationService {
   }
 
   /**
-   * Builds edges for branches with only a single step
-   * i.e. for placeholders within a branch
-   * @param node
-   * @param rootNode
-   * @param rootNextNode
-   */
-  static buildBranchSingleStepEdges(
-    node: IVizStepNode,
-    rootNode: IVizStepNode,
-    rootNextNode: IVizStepNode
-  ): IVizStepPropsEdge[] {
-    const branchPlaceholderEdges: IVizStepPropsEdge[] = [];
-    let edgeProps = VisualizationService.buildEdgeParams(rootNode, node, 'default');
-
-    if (node.data.branchInfo?.branchIdentifier)
-      edgeProps.label = node.data.branchInfo?.branchIdentifier;
-
-    branchPlaceholderEdges.push(edgeProps);
-
-    if (rootNextNode) {
-      branchPlaceholderEdges.push(
-        VisualizationService.buildEdgeParams(node, rootNextNode, 'default')
-      );
-    }
-
-    return branchPlaceholderEdges;
-  }
-
-  /**
    * @param sourceStep
    * @param targetStep
    * @param type
@@ -235,6 +236,30 @@ export class VisualizationService {
       height: 80,
       ...props,
     } as IVizStepNode;
+  }
+
+  /**
+   * Builds React Flow nodes and edges from current integration JSON.
+   * @param handleDeleteStep
+   */
+  buildNodesAndEdges(handleDeleteStep: (uuid: string) => void) {
+    const steps = this.integrationJsonStore.integrationJson.steps;
+    const layout = this.visualizationStore.layout;
+    // build all nodes
+    const stepNodes = VisualizationService.buildNodesFromSteps(steps, layout, {
+      handleDeleteStep,
+    });
+
+    // build edges only for main nodes
+    const filteredNodes = stepNodes.filter((node) => !node.data.branchInfo?.branchStep);
+    let stepEdges: IVizStepPropsEdge[] = VisualizationService.buildEdges(filteredNodes);
+
+    // build edges for branch nodes
+    const branchSpecialEdges: IVizStepPropsEdge[] = this.buildBranchSpecialEdges(stepNodes);
+
+    stepEdges = stepEdges.concat(...branchSpecialEdges);
+
+    return { stepNodes, stepEdges };
   }
 
   /**
@@ -467,57 +492,6 @@ export class VisualizationService {
   }
 
   /**
-   * Given a node, determines if an edge should be created for it
-   * @param node
-   * @param nextNode
-   */
-  static shouldAddEdge(node: IVizStepNode, nextNode?: IVizStepNode): boolean {
-    return node.data.step && nextNode && !StepsService.containsBranches(node.data.step);
-  }
-
-  /**
-   * Builds React Flow nodes and edges from current integration JSON.
-   * @param handleDeleteStep
-   */
-  buildNodesAndEdges(handleDeleteStep: (uuid: string) => void) {
-    const steps = this.integrationJsonStore.integrationJson.steps;
-    const layout = this.visualizationStore.layout;
-    // build all nodes
-    const stepNodes = VisualizationService.buildNodesFromSteps(steps, layout, {
-      handleDeleteStep,
-    });
-
-    // build edges only for main nodes
-    const filteredNodes = stepNodes.filter((node) => !node.data.branchInfo?.branchStep);
-    let stepEdges: IVizStepPropsEdge[] = VisualizationService.buildEdges(filteredNodes);
-
-    // build edges for branch nodes
-    const branchSpecialEdges: IVizStepPropsEdge[] = this.buildBranchSpecialEdges(stepNodes);
-
-    stepEdges = stepEdges.concat(...branchSpecialEdges);
-
-    return { stepNodes, stepEdges };
-  }
-
-  /**
-   * Determines whether to show a button for appending a step or inserting a branch
-   * @param nodeData
-   * @param isEndStep
-   */
-  static showAppendStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
-    return !isEndStep && (nodeData.isLastStep || nodeData.step.branches);
-  }
-
-  /**
-   * Determines whether to show a button for prepending a step
-   * @param nodeData
-   * @param isEndStep
-   */
-  static showPrependStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
-    return !isEndStep && nodeData.isFirstStep;
-  }
-
-  /**
    * Redraw integration diagram on the canvas. If {@link rebuildNodes} is true,
    * It rebuilds the nodes and edges from integration JSON store and re-layout the diagram.
    * Otherwise, it only performs re-layout.
@@ -541,5 +515,32 @@ export class VisualizationService {
       this.visualizationStore.setNodes(layoutedNodes);
       this.visualizationStore.setEdges(layoutedEdges);
     });
+  }
+
+  /**
+   * Given a node, determines if an edge should be created for it
+   * @param node
+   * @param nextNode
+   */
+  static shouldAddEdge(node: IVizStepNode, nextNode?: IVizStepNode): boolean {
+    return node.data.step && nextNode && !StepsService.containsBranches(node.data.step);
+  }
+
+  /**
+   * Determines whether to show a button for appending a step or inserting a branch
+   * @param nodeData
+   * @param isEndStep
+   */
+  static showAppendStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
+    return !isEndStep && (nodeData.isLastStep || nodeData.step.branches);
+  }
+
+  /**
+   * Determines whether to show a button for prepending a step
+   * @param nodeData
+   * @param isEndStep
+   */
+  static showPrependStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
+    return !isEndStep && nodeData.isFirstStep;
   }
 }
