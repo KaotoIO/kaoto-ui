@@ -220,6 +220,7 @@ export interface IVizStepNodeData {
   isPlaceholder?: boolean;
   kind?: string;
   label: string;
+  previousStepUuid?: string;
   nextStepUuid?: string;
   step: IStepProps;
 }

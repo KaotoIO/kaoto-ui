@@ -22,6 +22,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const nestedStepsStore = useNestedStepsStore();
   const visualizationStore = useVisualizationStore();
   const integrationJsonStore = useIntegrationJsonStore();
+  const visualizationService = new VisualizationService(integrationJsonStore, visualizationStore);
   const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
 
   const { addAlert } = useAlert() || {};
@@ -96,7 +97,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           data-testid={`viz-step-${data.step.name}`}
         >
           {/* PREPEND STEP BUTTON */}
-          {VisualizationService.showPrependStepButton(data, endStep) && (
+          {visualizationService.showPrependStepButton(data) && (
             <Popover
               appendTo={() => document.body}
               aria-label="Search for a step"
