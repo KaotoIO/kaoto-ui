@@ -1,14 +1,8 @@
 import { dynamicImport } from './import';
-import {
-  fetchDeployment,
-  fetchIntegrationSourceCode,
-  startDeployment,
-  stopDeployment,
-} from '@kaoto/api';
 import { Extension, JsonSchemaConfigurator, StepErrorBoundary } from '@kaoto/components';
 import { StepsService } from '@kaoto/services';
-import {useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore} from '@kaoto/store';
-import { IIntegration, IKaotoApi, IStepProps } from '@kaoto/types';
+import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
+import { IStepProps } from '@kaoto/types';
 import {
   AlertVariant,
   DrawerActions,
@@ -43,18 +37,16 @@ const VisualizationStepViews = ({
   const hasDetailView = views?.some((v) => v.id === 'detail-step');
   const detailsTabIndex = views?.length! + 1; // provide an index that won't be used by custom views
   const extensionConfigViewIndex = views?.findIndex((v) => v.name === 'Config');
-  const hasConfigView = extensionConfigViewIndex !== -1
+  const hasConfigView = extensionConfigViewIndex !== -1;
   const configTabIndex = !hasConfigView ? views?.length! + 2 : extensionConfigViewIndex;
   const nestedStepsStore = useNestedStepsStore();
   const visualizationStore = useVisualizationStore();
   const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
-  const currentIdx = stepsService.findStepIdxWithUUID(step.UUID);
   const [activeTabKey, setActiveTabKey] = useState(configTabIndex);
   const [stepPropertySchema, setStepPropertySchema] = useState<{
     [label: string]: { type: string };
   }>({});
   const [stepPropertyModel, setStepPropertyModel] = useState<{ [label: string]: any }>({});
-  const { replaceStep } = useIntegrationJsonStore((state) => state);
   const { addAlert } = useAlert() || {};
 
   const alertKaoto = (title: string, body?: string, variant?: string) => {
@@ -85,7 +77,8 @@ const VisualizationStepViews = ({
   };
 
   useEffect(() => {
-    let tempSchemaObject: { [label: string]: { type: string; value?: any; description?: string } } = {};
+    let tempSchemaObject: { [label: string]: { type: string; value?: any; description?: string } } =
+      {};
 
     let tempModelObject: { [label: string]: any } = {};
 
@@ -166,45 +159,7 @@ const VisualizationStepViews = ({
           {views?.length! > 0 &&
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
-
-              let tmpValues = {};
-              step.parameters?.map((p) => {
-                const paramKey = p.title;
-                // @ts-ignore
-                tmpValues[paramKey] = p.value ?? p.defaultValue;
-              });
-
-              const kaotoApi: IKaotoApi = {
-                getDeployment: (name: string, namespace?: string): Promise<string | unknown> => {
-                  return fetchDeployment(name, namespace).then((deployment: string | unknown) => {
-                    return deployment;
-                  });
-                },
-                getIntegrationSource: (integration: IIntegration) => {
-                  return fetchIntegrationSourceCode(integration).then((sourceCode) => {
-                    return sourceCode;
-                  });
-                },
-                notifyKaoto: alertKaoto,
-                startDeployment: (
-                  integration: any,
-                  name: string,
-                  namespace?: string
-                ): Promise<string> => {
-                  return startDeployment(integration, name, namespace).then((res) => {
-                    return res;
-                  });
-                },
-                step,
-                stepParams: tmpValues,
-                stopDeployment: (name: string) => {
-                  return stopDeployment(name).then((res) => {
-                    return res;
-                  });
-                },
-                updateStep: (newStep: IStepProps) => replaceStep(newStep, currentIdx),
-                updateStepParams: saveConfig,
-              };
+              const kaotoApi = stepsService.createKaotoApi(step, saveConfig, alertKaoto);
 
               return (
                 <Tab
@@ -238,7 +193,11 @@ const VisualizationStepViews = ({
                 <Grid hasGutter style={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto' }}>
                   {step.parameters && (
                     <JsonSchemaConfigurator
-                      schema={{ type: 'object', properties: stepPropertySchema, required: step.required }}
+                      schema={{
+                        type: 'object',
+                        properties: stepPropertySchema,
+                        required: step.required,
+                      }}
                       configuration={stepPropertyModel}
                       onChangeModel={(configuration, isValid) => {
                         if (isValid) {

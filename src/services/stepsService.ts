@@ -1,7 +1,21 @@
 import { ValidationService } from './validationService';
-import { fetchStepDetails, fetchViews } from '@kaoto/api';
+import {
+  fetchDeployment,
+  fetchIntegrationSourceCode,
+  fetchStepDetails,
+  fetchViews,
+  startDeployment,
+  stopDeployment,
+} from '@kaoto/api';
 import { IIntegrationJsonStore, INestedStepStore, RFState } from '@kaoto/store';
-import { INestedStep, IStepProps, IStepPropsBranch, IVizStepNodeData } from '@kaoto/types';
+import {
+  IIntegration,
+  IKaotoApi,
+  INestedStep,
+  IStepProps,
+  IStepPropsBranch,
+  IVizStepNodeData,
+} from '@kaoto/types';
 import { findPath, getDeepValue, getRandomArbitraryNumber, setDeepValue } from '@kaoto/utils';
 
 /**
@@ -78,6 +92,55 @@ export class StepsService {
       };
       this.integrationJsonStore.replaceStep(newStep, oldStepIdx);
     }
+  }
+
+  /**
+   * Creates a {@link IKaotoApi} instance for the target step.
+   * @param step target step
+   * @param saveConfig Kaoto save config callback
+   * @param alertKaoto Kaoto alert callback
+   */
+  createKaotoApi(
+    step: IStepProps,
+    saveConfig: (values: any) => void,
+    alertKaoto: (title: string, body?: string, variant?: string) => void
+  ): IKaotoApi {
+    let tmpValues = {};
+    step.parameters?.map((p) => {
+      const paramKey = p.title;
+      // @ts-ignore
+      tmpValues[paramKey] = p.value ?? p.defaultValue;
+    });
+    const currentIdx = this.findStepIdxWithUUID(step.UUID);
+
+    return {
+      getDeployment: (name: string, namespace?: string): Promise<string | unknown> => {
+        return fetchDeployment(name, namespace).then((deployment: string | unknown) => {
+          return deployment;
+        });
+      },
+      getIntegrationSource: (integration: IIntegration) => {
+        return fetchIntegrationSourceCode(integration).then((sourceCode) => {
+          return sourceCode;
+        });
+      },
+      notifyKaoto: alertKaoto,
+      startDeployment: (integration: any, name: string, namespace?: string): Promise<string> => {
+        return startDeployment(integration, name, namespace).then((res) => {
+          return res;
+        });
+      },
+      step,
+      stepParams: tmpValues,
+      stopDeployment: (name: string) => {
+        return stopDeployment(name).then((res) => {
+          return res;
+        });
+      },
+      updateStep: (newStep: IStepProps) =>
+        this.integrationJsonStore.replaceStep(newStep, currentIdx),
+      updateStepParams: saveConfig,
+    };
   }
 
   deleteStep(UUID: string) {
