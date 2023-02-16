@@ -336,7 +336,8 @@ export class StepsService {
         const newRootStep = setDeepValue(stepCopy, pathToBranch, newBranch);
         this.integrationJsonStore.replaceStep(newRootStep, rootStepIdx);
       } else {
-        this.integrationJsonStore.appendStep(step);
+        const currentStepIdx = this.findStepIdxWithUUID(currentStep.UUID);
+        this.integrationJsonStore.prependStep(currentStepIdx, step);
       }
     });
   }

@@ -2,6 +2,7 @@ import branchSteps from '../store/data/branchSteps';
 import nodes from '../store/data/nodes';
 import steps from '../store/data/steps';
 import { VisualizationService } from './visualizationService';
+import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IStepPropsBranch, IVizStepNode, IVizStepNodeData } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import { MarkerType, Position } from 'reactflow';
@@ -350,6 +351,29 @@ describe('visualizationService', () => {
   });
 
   it('showPrependStepButton(): given a node, should determine whether to show a prepend step button for it', () => {
+    const vizStoreState = useVisualizationStore.getState();
+    useVisualizationStore.setState({
+      nodes: [
+        ...vizStoreState.nodes,
+        {
+          data: {
+            isFirstStep: true,
+            step: { branches: [{}], UUID: 'step-one' } as IStepProps,
+          },
+        } as IVizStepNode,
+        {
+          data: {
+            isFirstStep: false,
+            step: { UUID: 'step-two' } as IStepProps,
+          },
+        } as IVizStepNode,
+      ],
+    });
+    const visualizationService = new VisualizationService(
+      useIntegrationJsonStore.getState(),
+      useVisualizationStore.getState()
+    );
+
     // it cannot be an end step, and it must be a first step
     const node: IVizStepNodeData = {
       label: '',
@@ -358,19 +382,44 @@ describe('visualizationService', () => {
     };
 
     // is a first step, is an end step
-    expect(VisualizationService.showPrependStepButton(node, true)).toBeFalsy();
+    expect(
+      visualizationService.showPrependStepButton({ ...node, step: { ...node.step, type: 'END' } })
+    ).toBeFalsy();
 
     // is a first step, is not an end step
-    expect(VisualizationService.showPrependStepButton(node, false)).toBeTruthy();
+    expect(
+      visualizationService.showPrependStepButton({
+        ...node,
+        step: { ...node.step, type: 'MIDDLE' },
+      })
+    ).toBeTruthy();
 
     // is not a first step, is not an end step
     expect(
-      VisualizationService.showPrependStepButton({ ...node, isFirstStep: false }, false)
+      visualizationService.showPrependStepButton({
+        ...node,
+        step: { ...node.step, type: 'MIDDLE' },
+        isFirstStep: false,
+      })
     ).toBeFalsy();
 
     // is not a first step, is an end step
     expect(
-      VisualizationService.showPrependStepButton({ ...node, isFirstStep: false }, true)
+      visualizationService.showPrependStepButton({
+        ...node,
+        step: { ...node.step, type: 'END' },
+        isFirstStep: false,
+      })
     ).toBeFalsy();
+
+    // current step is NOT an end step, but its previous step contains a branch
+    expect(
+      visualizationService.showPrependStepButton({
+        label: '',
+        isFirstStep: false,
+        previousStepUuid: 'step-one',
+        step: { ...node.step, type: 'MIDDLE' } as IStepProps,
+      })
+    ).toBeTruthy();
   });
 });

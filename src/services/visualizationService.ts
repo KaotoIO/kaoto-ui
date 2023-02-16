@@ -251,7 +251,7 @@ export class VisualizationService {
     });
 
     // build edges only for main nodes
-    const filteredNodes = stepNodes.filter((node) => !node.data.branchInfo?.branchStep);
+    const filteredNodes = stepNodes.filter((node) => !node.data.branchInfo);
     let stepEdges: IVizStepPropsEdge[] = VisualizationService.buildEdges(filteredNodes);
 
     // build edges for branch nodes
@@ -306,6 +306,7 @@ export class VisualizationService {
           isFirstStep: index === 0,
           isLastStep: index === steps.length - 1 && !step.branches?.length,
           nextStepUuid: steps[index + 1]?.UUID,
+          previousStepUuid: steps[index - 1]?.UUID,
           ...props,
         });
         stepNodes.push(currentStep);
@@ -313,6 +314,7 @@ export class VisualizationService {
         currentStep = VisualizationService.buildNodeDefaultParams(step, getId(step.UUID), {
           isLastStep: index === steps.length - 1,
           nextStepUuid: steps[index + 1]?.UUID,
+          previousStepUuid: steps[index - 1]?.UUID,
           ...props,
         });
         stepNodes.push(currentStep);
@@ -543,11 +545,24 @@ export class VisualizationService {
   }
 
   /**
-   * Determines whether to show a button for prepending a step
+   * Determines whether to show a button for prepending a step.
+   * Currently, this is for either steps that are not an end step,
+   * or steps whose previous step contains branching.
    * @param nodeData
-   * @param isEndStep
    */
-  static showPrependStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
-    return !isEndStep && nodeData.isFirstStep;
+  showPrependStepButton(nodeData: IVizStepNodeData) {
+    if (nodeData.previousStepUuid) {
+      // check if the previous step contains (nested) branches.
+      const prevNodeIdx = VisualizationService.findNodeIdxWithUUID(
+        nodeData.previousStepUuid,
+        this.visualizationStore.nodes
+      );
+      return !!(
+        this.visualizationStore.nodes[prevNodeIdx] &&
+        this.visualizationStore.nodes[prevNodeIdx]?.data.step.branches?.length
+      );
+    } else if (!StepsService.isEndStep(nodeData.step) && nodeData.isFirstStep) {
+      return true;
+    }
   }
 }

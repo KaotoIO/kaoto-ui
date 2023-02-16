@@ -19,6 +19,7 @@ export interface IIntegrationJsonStore {
   deleteSteps: () => void;
   insertStep: (newStep: IStepProps, insertIndex: number) => void;
   integrationJson: IIntegration;
+  prependStep: (currentStepIdx: number, newStep: IStepProps) => void;
   replaceBranchStep: (newStep: IStepProps, pathToOldStep: string[] | undefined) => void;
   replaceStep: (newStep: IStepProps, oldStepIndex?: number) => void;
   setViews: (views: IViewProps[]) => void;
@@ -95,7 +96,9 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
       },
       insertStep: (newStep, insertIndex) => {
         let steps = get().integrationJson.steps.slice();
-        const stepsWithNewUuids = StepsService.regenerateUuids(StepsService.insertStep(steps, insertIndex, newStep));
+        const stepsWithNewUuids = StepsService.regenerateUuids(
+          StepsService.insertStep(steps, insertIndex, newStep)
+        );
         const updateSteps = useNestedStepsStore.getState().updateSteps;
         updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
@@ -105,6 +108,21 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
             steps: stepsWithNewUuids,
           },
         }));
+      },
+      prependStep: (currentStepIdx, newStep) => {
+        set((state) => {
+          return {
+            integrationJson: {
+              ...state.integrationJson,
+              steps: [
+                ...state.integrationJson.steps.slice(0, currentStepIdx),
+                // manually generate UUID for the new step
+                { ...newStep, UUID: `${newStep.name}-${state.integrationJson.steps.length}` },
+                ...state.integrationJson.steps.slice(currentStepIdx),
+              ],
+            },
+          };
+        });
       },
       replaceBranchStep: (newStep, pathToOldStep) => {
         let stepsCopy = get().integrationJson.steps.slice();
