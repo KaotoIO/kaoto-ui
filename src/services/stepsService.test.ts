@@ -3,7 +3,7 @@ import nestedBranch from '../store/data/kamelet.nested-branch.steps';
 import steps from '../store/data/steps';
 import { StepsService } from './stepsService';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
-import { IStepProps } from '@kaoto/types';
+import { IStepProps, IStepPropsBranch } from '@kaoto/types';
 
 describe('stepsService', () => {
   const stepsService = new StepsService(
@@ -203,6 +203,15 @@ describe('stepsService', () => {
         maxBranches: -1,
       } as IStepProps)
     ).toBeTruthy();
+
+    // we should NOT rely on the `branches` array to determine if a step supports branching,
+    // in case we ever decide to return empty branches for all steps
+    expect(
+      StepsService.supportsBranching({
+        UUID: 'no-min-max-props',
+        branches: [] as IStepPropsBranch[],
+      } as IStepProps)
+    ).toBeFalsy();
 
     expect(StepsService.supportsBranching({ UUID: 'no-branches' } as IStepProps)).toBeFalsy();
   });

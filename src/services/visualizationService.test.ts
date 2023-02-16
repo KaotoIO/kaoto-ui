@@ -298,36 +298,37 @@ describe('visualizationService', () => {
   });
 
   it('showAppendStepButton(): given a node, should determine whether to show an append step button for it', () => {
-    // it cannot be an end step, AND it must either be the last step or have a branch
+    // it cannot be an END step, it must be the last step in the array,
+    // OR it must support branching & contain at least one step
     const stepWithNoBranch: IVizStepNodeData = {
       label: '',
       isLastStep: true,
       step: {} as IStepProps,
     };
 
-    // is the last step, is an end step, no branch
+    // is the last step, is an end step, no branching support
     expect(VisualizationService.showAppendStepButton(stepWithNoBranch, true)).toBeFalsy();
 
-    // is the last step, is not an end step, no branch
+    // is the last step, is not an end step, no branching support
     expect(VisualizationService.showAppendStepButton(stepWithNoBranch, false)).toBeTruthy();
 
     const lastStepWithBranch: IVizStepNodeData = {
       label: '',
       isLastStep: true,
       step: {
-        branches: [] as IStepPropsBranch[],
+        branches: [{}] as IStepPropsBranch[],
         maxBranches: -1,
         minBranches: 0,
       } as IStepProps,
     };
 
-    // is last step, is an end step, has branches
-    expect(VisualizationService.showAppendStepButton(lastStepWithBranch, true)).toBeFalsy();
+    // is last step, is an end step, supports branching
+    expect(VisualizationService.showAppendStepButton(lastStepWithBranch, true)).toBeTruthy();
 
-    // is last step, is not an end step, has branches
+    // is last step, is not an end step, supports branching
     expect(VisualizationService.showAppendStepButton(lastStepWithBranch, false)).toBeTruthy();
 
-    // is not the last step, is not an end step, has branches
+    // is not the last step, is not an end step, supports branching
     expect(
       VisualizationService.showAppendStepButton(
         {
@@ -337,6 +338,15 @@ describe('visualizationService', () => {
         false
       )
     ).toBeTruthy();
+
+    // a trick step at the end of an array, an END step, with a branches array but no min/max branching.
+    // NOTE: this is unlikely to happen, but added for catching edge cases
+    expect(
+      VisualizationService.showAppendStepButton(
+        { isLastStep: true, step: { branches: [{}] as IStepPropsBranch[] } } as IVizStepNodeData,
+        true
+      )
+    ).toBeFalsy();
   });
 
   it('showPrependStepButton(): given a node, should determine whether to show a prepend step button for it', () => {

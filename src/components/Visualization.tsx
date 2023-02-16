@@ -1,5 +1,6 @@
 import './Visualization.css';
 import {
+  DeleteButtonEdge,
   KaotoDrawer,
   PlusButtonEdge,
   StepErrorBoundary,
@@ -43,8 +44,7 @@ const Visualization = () => {
 
   // initial loading of visualization steps
   useEffect(() => {
-    visualizationService.redrawDiagram(handleDeleteStep, true)
-      .catch((e) => console.error(e));
+    visualizationService.redrawDiagram(handleDeleteStep, true).catch((e) => console.error(e));
   }, []);
 
   /**
@@ -55,8 +55,7 @@ const Visualization = () => {
     if (previousIntegrationJson.current === integrationJsonStore.integrationJson) return;
 
     stepsService.updateViews();
-    visualizationService.redrawDiagram(handleDeleteStep, true)
-      .catch((e) => console.error(e));
+    visualizationService.redrawDiagram(handleDeleteStep, true).catch((e) => console.error(e));
 
     previousIntegrationJson.current = integrationJsonStore.integrationJson;
   }, [integrationJsonStore.integrationJson]);
@@ -64,8 +63,7 @@ const Visualization = () => {
   useEffect(() => {
     if (previousLayout.current === visualizationStore.layout) return;
 
-    visualizationService.redrawDiagram(handleDeleteStep, false)
-      .catch((e) => console.error(e));
+    visualizationService.redrawDiagram(handleDeleteStep, false).catch((e) => console.error(e));
 
     previousLayout.current = visualizationStore.layout;
   }, [visualizationStore.layout]);
@@ -73,6 +71,7 @@ const Visualization = () => {
   const nodeTypes = useMemo(() => ({ step: VisualizationStep }), []);
   const edgeTypes = useMemo(
     () => ({
+      delete: DeleteButtonEdge,
       insert: PlusButtonEdge,
     }),
     []

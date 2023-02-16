@@ -131,7 +131,7 @@ export class VisualizationService {
         // handle special first step, needs to be connected to its immediate parent
         if (node.data.isFirstStep) {
           const ogNodeStep = stepNodes[parentNodeIndex];
-          let edgeProps = VisualizationService.buildEdgeParams(ogNodeStep, node, 'default');
+          let edgeProps = VisualizationService.buildEdgeParams(ogNodeStep, node, 'delete');
 
           if (node.data.branchInfo?.branchIdentifier)
             edgeProps.label = node.data.branchInfo?.branchIdentifier;
@@ -203,7 +203,7 @@ export class VisualizationService {
           VisualizationService.buildEdgeParams(
             node,
             nodes[nextNodeIdx],
-            node.data.branchInfo || node.data.step.branches ? 'default' : 'insert'
+            node.data.branchInfo || node.data.step.branches?.length > 0 ? 'default' : 'insert'
           )
         );
       }
@@ -319,7 +319,7 @@ export class VisualizationService {
       }
 
       // recursively build nodes for branch steps
-      if (step.branches && step.maxBranches !== 0) {
+      if (step.branches && step.branches.length > 0 && step.maxBranches !== 0) {
         step.branches.forEach((branch) => {
           stepNodes = stepNodes.concat(
             VisualizationService.buildNodesFromSteps(branch.steps, layout, props, {
@@ -532,7 +532,14 @@ export class VisualizationService {
    * @param isEndStep
    */
   static showAppendStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
-    return !isEndStep && (nodeData.isLastStep || nodeData.step.branches);
+    // it cannot be an END step, it must be the last step in the array,
+    // OR it must support branching AND contain at least one branch, otherwise users will
+    // be able to add a branch through INSERT step
+    const supportsBranching = !!(nodeData.step.minBranches || nodeData.step.maxBranches);
+    if (isEndStep && !supportsBranching) return false;
+    if (supportsBranching && nodeData.step.branches && nodeData.step.branches.length > 0) {
+      return true;
+    } else return !!(nodeData.isLastStep && !isEndStep);
   }
 
   /**
