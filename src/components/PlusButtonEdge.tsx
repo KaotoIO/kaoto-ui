@@ -1,4 +1,4 @@
-import './PlusButtonEdge.css';
+import './CustomEdge.css';
 import { BranchBuilder, MiniCatalog } from '@kaoto/components';
 import { StepsService, ValidationService } from '@kaoto/services';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';

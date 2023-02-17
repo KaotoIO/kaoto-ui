@@ -22,6 +22,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const nestedStepsStore = useNestedStepsStore();
   const visualizationStore = useVisualizationStore();
   const integrationJsonStore = useIntegrationJsonStore();
+  const visualizationService = new VisualizationService(integrationJsonStore, visualizationStore);
   const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
 
   const { addAlert } = useAlert() || {};
@@ -29,6 +30,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const onMiniCatalogClickAppend = (selectedStep: IStepProps) => {
     stepsService.handleAppendStep(data.step, selectedStep);
   };
+
   const replacePlaceholderStep = (stepC: IStepProps) => {
     stepsService.replacePlaceholderStep(data, stepC).then((validation) => {
       !validation?.isValid &&
@@ -40,6 +42,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
         });
     });
   };
+
   const onMiniCatalogClickAdd = (stepC: IStepProps) => {
     replacePlaceholderStep(stepC);
   };
@@ -94,7 +97,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           data-testid={`viz-step-${data.step.name}`}
         >
           {/* PREPEND STEP BUTTON */}
-          {VisualizationService.showPrependStepButton(data, endStep) && (
+          {visualizationService.showPrependStepButton(data) && (
             <Popover
               appendTo={() => document.body}
               aria-label="Search for a step"
@@ -138,6 +141,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             />
           )}
 
+          {/* DELETE STEP BUTTON */}
           <button
             className="stepNode__Delete trashButton nodrag"
             data-testid={'configurationTab__deleteBtn'}
@@ -166,7 +170,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           )}
 
           {/* ADD/APPEND STEP BUTTON */}
-          {VisualizationService.showAppendStepButton(data, endStep) && (
+          {VisualizationService.showAppendStepButton(data, endStep) ? (
             <Popover
               appendTo={() => document.body}
               aria-label="Search for a step"
@@ -197,6 +201,8 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
                 <PlusIcon />
               </button>
             </Popover>
+          ) : (
+            <></>
           )}
         </div>
       ) : (

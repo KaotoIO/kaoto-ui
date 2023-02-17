@@ -131,7 +131,7 @@ export class VisualizationService {
         // handle special first step, needs to be connected to its immediate parent
         if (node.data.isFirstStep) {
           const ogNodeStep = stepNodes[parentNodeIndex];
-          let edgeProps = VisualizationService.buildEdgeParams(ogNodeStep, node, 'default');
+          let edgeProps = VisualizationService.buildEdgeParams(ogNodeStep, node, 'delete');
 
           if (node.data.branchInfo?.branchIdentifier)
             edgeProps.label = node.data.branchInfo?.branchIdentifier;
@@ -203,7 +203,7 @@ export class VisualizationService {
           VisualizationService.buildEdgeParams(
             node,
             nodes[nextNodeIdx],
-            node.data.branchInfo || node.data.step.branches ? 'default' : 'insert'
+            node.data.branchInfo || node.data.step.branches?.length > 0 ? 'default' : 'insert'
           )
         );
       }
@@ -251,7 +251,7 @@ export class VisualizationService {
     });
 
     // build edges only for main nodes
-    const filteredNodes = stepNodes.filter((node) => !node.data.branchInfo?.branchStep);
+    const filteredNodes = stepNodes.filter((node) => !node.data.branchInfo);
     let stepEdges: IVizStepPropsEdge[] = VisualizationService.buildEdges(filteredNodes);
 
     // build edges for branch nodes
@@ -306,6 +306,7 @@ export class VisualizationService {
           isFirstStep: index === 0,
           isLastStep: index === steps.length - 1 && !step.branches?.length,
           nextStepUuid: steps[index + 1]?.UUID,
+          previousStepUuid: steps[index - 1]?.UUID,
           ...props,
         });
         stepNodes.push(currentStep);
@@ -313,13 +314,14 @@ export class VisualizationService {
         currentStep = VisualizationService.buildNodeDefaultParams(step, getId(step.UUID), {
           isLastStep: index === steps.length - 1,
           nextStepUuid: steps[index + 1]?.UUID,
+          previousStepUuid: steps[index - 1]?.UUID,
           ...props,
         });
         stepNodes.push(currentStep);
       }
 
       // recursively build nodes for branch steps
-      if (step.branches && step.maxBranches !== 0) {
+      if (step.branches && step.branches.length > 0 && step.maxBranches !== 0) {
         step.branches.forEach((branch) => {
           stepNodes = stepNodes.concat(
             VisualizationService.buildNodesFromSteps(branch.steps, layout, props, {
@@ -532,15 +534,35 @@ export class VisualizationService {
    * @param isEndStep
    */
   static showAppendStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
-    return !isEndStep && (nodeData.isLastStep || nodeData.step.branches);
+    // it cannot be an END step, it must be the last step in the array,
+    // OR it must support branching AND contain at least one branch, otherwise users will
+    // be able to add a branch through INSERT step
+    const supportsBranching = !!(nodeData.step.minBranches || nodeData.step.maxBranches);
+    if (isEndStep && !supportsBranching) return false;
+    if (supportsBranching && nodeData.step.branches && nodeData.step.branches.length > 0) {
+      return true;
+    } else return !!(nodeData.isLastStep && !isEndStep);
   }
 
   /**
-   * Determines whether to show a button for prepending a step
+   * Determines whether to show a button for prepending a step.
+   * Currently, this is for either steps that are not an end step,
+   * or steps whose previous step contains branching.
    * @param nodeData
-   * @param isEndStep
    */
-  static showPrependStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
-    return !isEndStep && nodeData.isFirstStep;
+  showPrependStepButton(nodeData: IVizStepNodeData) {
+    if (nodeData.previousStepUuid) {
+      // check if the previous step contains (nested) branches.
+      const prevNodeIdx = VisualizationService.findNodeIdxWithUUID(
+        nodeData.previousStepUuid,
+        this.visualizationStore.nodes
+      );
+      return !!(
+        this.visualizationStore.nodes[prevNodeIdx] &&
+        this.visualizationStore.nodes[prevNodeIdx]?.data.step.branches?.length
+      );
+    } else if (!StepsService.isEndStep(nodeData.step) && nodeData.isFirstStep) {
+      return true;
+    }
   }
 }
