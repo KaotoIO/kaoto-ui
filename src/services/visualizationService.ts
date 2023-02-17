@@ -89,7 +89,6 @@ export class VisualizationService {
     return branchPlaceholderEdges;
   }
 
-  //
   /**
    * Builds branch step edges and edges that need to connect branches to prev/next steps
    * @param stepNodes
@@ -564,5 +563,22 @@ export class VisualizationService {
     } else if (!StepsService.isEndStep(nodeData.step) && nodeData.isFirstStep) {
       return true;
     }
+  }
+
+  /**
+   * Determines whether to show the Branches tab in the mini catalog
+   * @param nodeData
+   */
+  static showBranchesTab(nodeData: IVizStepNodeData): boolean {
+    return StepsService.supportsBranching(nodeData.step);
+  }
+
+  /**
+   * Determines whether to show the Steps tab in the mini catalog
+   * @param nodeData
+   */
+  static showStepsTab(nodeData: IVizStepNodeData): boolean {
+    if (StepsService.containsBranches(nodeData.step) && !nodeData.nextStepUuid) return true;
+    return !StepsService.containsBranches(nodeData.step);
   }
 }

@@ -1,6 +1,6 @@
 import './CustomEdge.css';
 import { BranchBuilder, MiniCatalog } from '@kaoto/components';
-import { StepsService, ValidationService } from '@kaoto/services';
+import { StepsService, ValidationService, VisualizationService } from '@kaoto/services';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { Popover } from '@patternfly/react-core';
@@ -110,6 +110,10 @@ const PlusButtonEdge = ({
             bodyContent={
               <MiniCatalog
                 children={<BranchBuilder handleAddBranch={handleAddBranch} />}
+                disableBranchesTab={!VisualizationService.showBranchesTab(sourceNode?.data)}
+                disableBranchesTabMsg={"This step doesn't support branching."}
+                disableStepsTab={!VisualizationService.showStepsTab(sourceNode?.data)}
+                disableStepsTabMsg={"You can't add a step between a step and a branch."}
                 handleSelectStep={onMiniCatalogClickInsert}
                 queryParams={{
                   type: ValidationService.insertableStepTypes(
