@@ -149,7 +149,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       data-testid={'sourceCode--clearButton'}
       onClick={clearAction}
       isVisible={sourceCode !== ''}
-      tooltipProps={{ content: 'Clear', position: 'right' }}
+      tooltipProps={{ content: 'Clear', position: 'top' }}
     />
   );
 
@@ -161,7 +161,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       data-testid={'sourceCode--undoButton'}
       onClick={undoAction}
       isVisible={sourceCode !== ''}
-      tooltipProps={{ content: 'Undo change', position: 'right' }}
+      tooltipProps={{ content: 'Undo change', position: 'top' }}
     />
   );
 
@@ -173,7 +173,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       data-testid={'sourceCode--redoButton'}
       onClick={redoAction}
       isVisible={sourceCode !== ''}
-      tooltipProps={{ content: 'Redo change', position: 'right' }}
+      tooltipProps={{ content: 'Redo change', position: 'top' }}
     />
   );
 
@@ -184,7 +184,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       aria-label="Apply the code"
       data-testid={'sourceCode--applyButton'}
       onClick={updateModelFromTheEditor}
-      tooltipProps={{ content: 'Sync your code', position: 'right' }}
+      tooltipProps={{ content: 'Sync your code', position: 'top' }}
       isVisible={sourceCode !== '' && props.mode === CodeEditorMode.FREE_EDIT}
     />
   );
@@ -206,7 +206,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
         onCodeChange={syncChanges}
         language={Language.yaml}
         onEditorDidMount={handleEditorDidMount}
-        toolTipPosition="right"
+        toolTipPosition="top"
         customControls={[UndoButton, RedoButton, ClearButton, UpdateButton]}
         isCopyEnabled
         isDarkTheme={!settings.editorIsLightMode}
