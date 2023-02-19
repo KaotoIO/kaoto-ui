@@ -3,8 +3,6 @@ import { defineConfig } from 'cypress';
 export default defineConfig({
   projectId: 'zfop6s',
   videoUploadOnPasses: false,
-  viewportHeight: 2000,
-  viewportWidth: 1000,
 
   e2e: {
     // We've imported your old cypress plugins here.
@@ -14,6 +12,8 @@ export default defineConfig({
     },
     baseUrl: 'http://localhost:1337',
     specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
+    viewportWidth: 1920,
+    viewportHeight: 1080,
   },
 
   component: {

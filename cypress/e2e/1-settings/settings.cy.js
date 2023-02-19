@@ -1,4 +1,4 @@
-describe.skip('Settings', () => {
+describe('Settings', () => {
   beforeEach(() => {
     let url = Cypress.config().baseUrl;
     cy.intercept('/v1/integrations/dsls').as('getDSLs');
@@ -7,7 +7,6 @@ describe.skip('Settings', () => {
     cy.intercept('/v1/deployments*').as('getDeployments');
 
     cy.visit(url);
-    cy.viewport(2000, 1000);
 
     cy.get('.pf-c-toolbar__content-section').click();
     cy.get('[data-testid="toolbar-kebab-dropdown-btn"]').click();
@@ -25,7 +24,6 @@ describe.skip('Settings', () => {
     cy.get('[data-testid="settings-modal"]').should('not.exist');
 
     // reopen to test other close button
-    cy.get('.pf-c-toolbar__content-section').click();
     cy.get('[data-testid="toolbar-kebab-dropdown-btn"]').click();
     cy.get('[data-testid="kaotoToolbar-kebab__settings"]').click();
     cy.get('[data-testid="settings-modal--cancel"]').click();
@@ -40,14 +38,8 @@ describe.skip('Settings', () => {
 
     // add a step
     cy.get('.stepNode').contains('ADD A STEP').click({ force: true });
-    const dataTransfer = new DataTransfer();
     cy.get('#stepSearch').type('timer');
-    cy.get('[data-testid="catalog-step-timer-source"]').trigger('dragstart', {
-      dataTransfer,
-    });
-    cy.get('.stepNode').trigger('drop', {
-      dataTransfer,
-    });
+    cy.get('[data-testid="miniCatalog__stepItem--timer-source"]').click();
 
     cy.wait('@getDSLs');
     cy.wait('@getViewDefinitions');
@@ -78,7 +70,7 @@ describe.skip('Settings', () => {
     cy.get('[data-testid="settings-modal--save"]').click();
 
     // verify that steps are still there
-    cy.get('[data-testid="catalog-step-timer-source"]').should('be.visible');
+    cy.get('[data-testid="viz-step-timer-source"]').should('be.visible');
 
     // verify that toolbar contains new name
     cy.get('[data-testid="kaoto-toolbar--name"]').should('have.text', 'cherry');
@@ -98,28 +90,41 @@ describe.skip('Settings', () => {
     cy.get('[data-testid="settings--namespace"]').should('have.value', 'example');
   });
 
+  it('Settings helper and close', () => {
+    // test the helper
+    cy.get('[data-testid="settings--integration-type-helper-btn"]').click();
+    cy.get('[data-testid="settings--integration-type-helper"]').should('be.visible');
+    cy.get('[data-testid="settings--integration-type-helper-btn"]').click();
+    // close modal
+    cy.get('[data-testid="settings-modal--cancel"]').click();
+    cy.get('[data-testid="settings-modal"]').should('not.exist');
+  });
+
+  it('Insert description', () => {
+    const description = 'Sample description';
+    cy.get('[data-testid="settings--description"]').type(description);
+    cy.get('[data-testid="settings-modal--save"]').click();
+
+    cy.get('[data-testid="toolbar-kebab-dropdown-btn"]').click();
+    cy.get('[data-testid="kaotoToolbar-kebab__settings"]').click();
+    cy.get('[data-testid="settings--description"]').should('have.text', description);
+  });
+
   // DSL ("INTEGRATION TYPE")
   // for example, if using anything other than 'kamelet' as a step, KameletBinding
   // should not be available in the DSL dropdown
   it('only shows relevant DSLs', () => {
-    // test the helper
-    cy.get('[data-testid="settings--integration-type-helper-btn"]').click();
-    cy.get('[data-testid="settings--integration-type-helper"]').should('be.visible');
-
-    // close modal
-    cy.get('[data-testid="settings-modal--cancel"]').click();
+    cy.get('[data-testid="settings--integration-type"]')
+      .select('Integration')
+      .should('have.value', 'Integration');
+    cy.get('[data-testid="settings-modal--save"]').click();
     cy.get('[data-testid="settings-modal"]').should('not.exist');
 
     // add a non-Kamelet step
-    cy.get('.stepNode').contains('ADD A STEP').click();
-    const dataTransfer = new DataTransfer();
+    cy.get('.stepNode').contains('ADD A STEP').click({ force: true });
     cy.get('#stepSearch').type('timer');
-    cy.get('[data-testid="catalog-step-timer-source"]').trigger('dragstart', {
-      dataTransfer,
-    });
-    cy.get('.stepNode').trigger('drop', {
-      dataTransfer,
-    });
+    cy.get('[data-testid="miniCatalog__stepItem--timer"]').click();
+
     cy.wait('@getDSLs');
     cy.wait('@getViewDefinitions');
 
@@ -127,47 +132,43 @@ describe.skip('Settings', () => {
     cy.get('[data-testid="toolbar-kebab-dropdown-btn"]').click();
     cy.get('[data-testid="kaotoToolbar-kebab__settings"]').click();
 
-    // attempt to select integration type
-    cy.get('[data-testid="settings--integration-type"]').select('KameletBinding');
-
-    // Kamelet DSL should not be available to select
-    cy.get('[data-testid="settings--integration-type__Kamelet"]').should('not.exist');
+    // KameletBinding DSL should not be available to select
+    cy.get('[data-testid="settings--integration-type__KameletBinding"]').should('not.exist');
   });
 
   // UPDATE THE DSL ("INTEGRATION TYPE")
   it('updates the DSL', () => {
     // close modal
-    cy.get('[data-testid="settings-modal--cancel"]').click();
+    cy.get('[data-testid="settings--integration-type"]')
+      .select('Integration')
+      .should('have.value', 'Integration');
+    cy.get('[data-testid="settings-modal--save"]').click();
     cy.get('[data-testid="settings-modal"]').should('not.exist');
 
     // add a Kamelet step
-    cy.get('.stepNode').contains('ADD A STEP').click();
-    const dataTransfer = new DataTransfer();
+    cy.get('.stepNode').contains('ADD A STEP').click({ force: true });
     cy.get('#stepSearch').type('kamelet');
-    cy.get('[data-testid="catalog-step-kamelet:source"]').trigger('dragstart', {
-      dataTransfer,
-    });
-    cy.get('.stepNode').trigger('drop', {
-      dataTransfer,
-    });
+    cy.get('[data-testid="miniCatalog__stepItem--kamelet"]').click();
 
     cy.wait('@getDSLs');
     cy.wait('@getViewDefinitions');
 
-    cy.get('[data-testid="viz-step-kamelet:source"]').should('be.visible');
+    cy.get('[data-testid="viz-step-kamelet"]').should('be.visible');
 
     // reopen modal, make changes, save and close again
     cy.get('[data-testid="toolbar-kebab-dropdown-btn"]').click();
     cy.get('[data-testid="kaotoToolbar-kebab__settings"]').click();
 
     // select Kamelet
-    cy.get('[data-testid="settings--integration-type"]').select('Kamelet');
+    cy.get('[data-testid="settings--integration-type"]')
+      .select('Kamelet')
+      .should('have.value', 'Kamelet');
 
     cy.get('[data-testid="settings-modal--save"]').click();
     cy.get('.pf-c-alert__action > .pf-c-button').click();
 
     // verify that steps are still there
-    cy.get('[data-testid="viz-step-kamelet:source"]').should('be.visible');
+    cy.get('[data-testid="viz-step-kamelet"]').should('be.visible');
 
     // reopen modal, verify that value is still changed accordingly
     cy.get('[data-testid="toolbar-kebab-dropdown-btn"]').click();

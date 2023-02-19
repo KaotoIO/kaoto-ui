@@ -2,7 +2,6 @@ describe('3 step integration', () => {
   beforeEach(() => {
     let url = Cypress.config().baseUrl;
     cy.visit(url);
-    cy.viewport(2000, 1000);
   });
 
   it('add the step integration', () => {
@@ -11,12 +10,7 @@ describe('3 step integration', () => {
     // add timer-source via drag and drop from the catalog
     const dataTransfer = new DataTransfer();
     cy.get('#stepSearch').type('timer');
-    cy.get('[data-testid="catalog-step-timer-source"]').trigger('dragstart', {
-      dataTransfer,
-    });
-    cy.get('.stepNode').trigger('drop', {
-      dataTransfer,
-    });
+    cy.get('[data-testid="miniCatalog__stepItem--timer-source"]').click();
 
     // verify the code editor contains the new timer source step
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
@@ -39,8 +33,10 @@ describe('3 step integration', () => {
     cy.get('.code-editor').should('contain.text', 'kafka-sink');
 
     // delete middle step
-    cy.get('[data-testid="react-flow-wrapper"]').contains('extract-field-..').click();
-    cy.get('[data-ouia-component-id="OUIA-Generated-Button-danger-1"]').click();
+    cy.get('[data-testid="viz-step-extract-field-action"]').trigger('mouseover');
+    cy.get(
+      '[data-testid="viz-step-extract-field-action"] > [data-testid="configurationTab__deleteBtn"]'
+    ).click({ force: true });
 
     // open step catalog, replace timer-source with postgresql-source
     cy.get('[data-testid="toolbar-step-catalog-btn"]').click();
@@ -55,10 +51,14 @@ describe('3 step integration', () => {
 
     // verify the visualization has the correct steps (postgresql-source)
     // and configuration loads as expected
-    cy.get('[data-testid="react-flow-wrapper"]').contains('postgresql-sou').click();
-    cy.get('[data-testid="configurationTab"]').click();
-    cy.get('.pf-c-drawer__close > .pf-c-button > svg').click({ multiple: true });
-
+    cy.get('[data-testid="viz-step-postgresql-source"]').click();
+    cy.get('[data-testid="configurationTab"]').should('be.visible');
+    cy.get('[data-testid="kaoto-left-drawer"]').within(() => {
+      cy.get('.pf-c-drawer__close > .pf-c-button').click();
+    });
+    cy.get('[data-testid="kaoto-right-drawer"]').within(() => {
+      cy.get('.pf-c-drawer__close > .pf-c-button').click();
+    });
     // verify inserting a step updates both the visualization and code editor,
     // and opens the mini catalog without issues
     cy.get('[data-testid="stepNode__insertStep-btn"]').click();

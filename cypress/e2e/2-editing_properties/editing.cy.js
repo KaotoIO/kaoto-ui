@@ -8,7 +8,6 @@ describe('editing properties', () => {
     cy.intercept('/v1/deployments*').as('getDeployments');
 
     cy.visit(url);
-    cy.viewport(2000, 1000);
   });
 
   it('loads the YAML editor', () => {
@@ -16,10 +15,11 @@ describe('editing properties', () => {
     // attaches the file as an input, NOT drag-and-drop, as that will
     // create a dropzone overlay that then prevents you from typing
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
+    cy.get('.pf-c-code-editor__main').should('be.visible');
     cy.get('.pf-c-code-editor__main > input').attachFile('TimerKafka.yaml');
 
     // trigger the visualization to update
-    cy.get('.code-editor').click().type('{end}{enter}');
+    cy.get('[data-testid="sourceCode--applyButton"]').click();
 
     // wait until the API returns the updated visualization
     cy.wait('@getIntegration');
@@ -28,7 +28,7 @@ describe('editing properties', () => {
 
     // verify the visualization & code editor both contain the
     // new step (timer-source)
-    cy.get('[data-testid="react-flow-wrapper"]').contains('timer-source').click();
+    cy.get('[data-testid="viz-step-timer-source"]').click();
     cy.get('[data-testid="configurationTab"]').click();
     cy.get('input[name="period"]').type('3000');
 
@@ -36,7 +36,7 @@ describe('editing properties', () => {
     cy.get('.pf-c-drawer__close > .pf-c-button').click();
 
     // verify the visualization contains kafka-sink
-    cy.get('[data-testid="react-flow-wrapper"]').contains('kafka-sink').click();
+    cy.get('[data-testid="viz-step-kafka-sink"]').click();
     cy.get('[data-testid="configurationTab"]').click();
     cy.get('[data-testid="json-schema-configurator"]').click();
 
