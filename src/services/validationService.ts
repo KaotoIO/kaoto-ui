@@ -81,6 +81,12 @@ export class ValidationService {
     return { isValid, message };
   }
 
+  /**
+   * Get the message to display in a tooltip
+   * for the button to add a step or branch
+   * @param showBranchesTab
+   * @param showStepsTab
+   */
   static getPlusButtonTooltipMsg(showBranchesTab: boolean, showStepsTab: boolean): string {
     if (showStepsTab && showBranchesTab) {
       return 'Add a step or branch';

@@ -149,13 +149,15 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           )}
 
           {/* DELETE STEP BUTTON */}
-          <button
-            className="stepNode__Delete trashButton nodrag"
-            data-testid={'configurationTab__deleteBtn'}
-            onClick={handleTrashClick}
-          >
-            <MinusIcon />
-          </button>
+          <Tooltip content={'Delete step'}>
+            <button
+              className="stepNode__Delete trashButton nodrag"
+              data-testid={'configurationTab__deleteBtn'}
+              onClick={handleTrashClick}
+            >
+              <MinusIcon />
+            </button>
+          </Tooltip>
 
           {/* VISUAL REPRESENTATION OF STEP WITH ICON */}
           <div className={'stepNode__Icon stepNode__clickable'}>

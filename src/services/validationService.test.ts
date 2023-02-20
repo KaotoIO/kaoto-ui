@@ -94,6 +94,13 @@ describe('validationService', () => {
     ).toBeTruthy();
   });
 
+  it('getPlusButtonTooltipMsg(): should return the tooltip message for the plus button to add a step or branch', () => {
+    expect(ValidationService.getPlusButtonTooltipMsg(true, true)).toBe('Add a step or branch');
+    expect(ValidationService.getPlusButtonTooltipMsg(true, false)).toBe('Add a branch');
+    expect(ValidationService.getPlusButtonTooltipMsg(false, true)).toBe('Add a step');
+    expect(ValidationService.getPlusButtonTooltipMsg(false, false)).toBe('');
+  });
+
   it('prependableStepTypes(): should return a comma-separated string of step types that can be prepended to a step', () => {
     expect(ValidationService.prependableStepTypes()).toEqual('MIDDLE');
   });
