@@ -21,4 +21,33 @@ const Template: ComponentStory<typeof MiniCatalog> = (args) => {
 };
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  disableBranchesTab: false,
+  disableStepsTab: false,
+};
+
+export const DisableStepsTab = Template.bind({});
+DisableStepsTab.args = {
+  disableBranchesTab: false,
+  disableStepsTab: true,
+};
+
+export const DisableBranchesTab = Template.bind({});
+DisableBranchesTab.args = {
+  disableBranchesTab: true,
+  disableStepsTab: false,
+};
+
+export const DisableBranchesTabTooltip = Template.bind({});
+DisableBranchesTabTooltip.args = {
+  disableBranchesTab: true,
+  disableBranchesTabMsg: "This step doesn't support branching.",
+  disableStepsTab: false,
+};
+
+export const DisableStepsTabTooltip = Template.bind({});
+DisableStepsTabTooltip.args = {
+  disableBranchesTab: false,
+  disableStepsTab: true,
+  disableStepsTabMsg: "You can't add a step between a step and a branch.",
+};

@@ -100,10 +100,13 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {visualizationService.showPrependStepButton(data) && (
             <Popover
               appendTo={() => document.body}
-              aria-label="Search for a step"
+              aria-label="Add a step"
               bodyContent={
                 <MiniCatalog
                   children={<BranchBuilder handleAddBranch={handleAddBranch} />}
+                  disableBranchesTab={true}
+                  disableBranchesTabMsg={"You can't add a branch from here."}
+                  disableStepsTab={!VisualizationService.showStepsTab(data)}
                   handleSelectStep={onMiniCatalogClickPrepend}
                   queryParams={{
                     dsl: currentDSL,
@@ -177,6 +180,10 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               bodyContent={
                 <MiniCatalog
                   children={<BranchBuilder handleAddBranch={handleAddBranch} />}
+                  disableBranchesTab={!VisualizationService.showBranchesTab(data)}
+                  disableBranchesTabMsg={"This step doesn't support branching."}
+                  disableStepsTab={!VisualizationService.showStepsTab(data)}
+                  disableStepsTabMsg={"You can't add a step between a step and a branch."}
                   handleSelectStep={onMiniCatalogClickAppend}
                   queryParams={{
                     dsl: currentDSL,
@@ -208,10 +215,13 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
       ) : (
         <Popover
           appendTo={() => document.body}
-          aria-label="Search for a step"
+          aria-label="Add a step"
           bodyContent={
             <MiniCatalog
               children={<BranchBuilder handleAddBranch={handleAddBranch} />}
+              disableBranchesTab={!VisualizationService.showBranchesTab(data)}
+              disableBranchesTabMsg={"This step doesn't support branching."}
+              disableStepsTab={!VisualizationService.showStepsTab(data)}
               handleSelectStep={onMiniCatalogClickAdd}
               queryParams={{
                 dsl: currentDSL,
