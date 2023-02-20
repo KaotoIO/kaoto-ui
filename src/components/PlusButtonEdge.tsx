@@ -3,7 +3,7 @@ import { BranchBuilder, MiniCatalog } from '@kaoto/components';
 import { StepsService, ValidationService, VisualizationService } from '@kaoto/services';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IVizStepNode } from '@kaoto/types';
-import { Popover } from '@patternfly/react-core';
+import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { getBezierPath, Position, useReactFlow } from 'reactflow';
 
@@ -45,6 +45,8 @@ const PlusButtonEdge = ({
   const visualizationStore = useVisualizationStore();
   const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
   const currentIdx = stepsService.findStepIdxWithUUID(targetNode?.data.step.UUID);
+  const showBranchesTab = VisualizationService.showBranchesTab(sourceNode?.data);
+  const showStepsTab = VisualizationService.showStepsTab(sourceNode?.data);
 
   const [edgePath, edgeCenterX, edgeCenterY] = getBezierPath({
     sourceX,
@@ -110,9 +112,9 @@ const PlusButtonEdge = ({
             bodyContent={
               <MiniCatalog
                 children={<BranchBuilder handleAddBranch={handleAddBranch} />}
-                disableBranchesTab={!VisualizationService.showBranchesTab(sourceNode?.data)}
+                disableBranchesTab={!showBranchesTab}
                 disableBranchesTabMsg={"This step doesn't support branching."}
-                disableStepsTab={!VisualizationService.showStepsTab(sourceNode?.data)}
+                disableStepsTab={!showStepsTab}
                 disableStepsTabMsg={"You can't add a step between a step and a branch."}
                 handleSelectStep={onMiniCatalogClickInsert}
                 queryParams={{
@@ -130,9 +132,13 @@ const PlusButtonEdge = ({
             hideOnOutsideClick={true}
             position={'right-start'}
           >
-            <button className="plusButton" data-testid={'stepNode__insertStep-btn'}>
-              <PlusIcon />
-            </button>
+            <Tooltip
+              content={ValidationService.getPlusButtonTooltipMsg(showBranchesTab, showStepsTab)}
+            >
+              <button className="plusButton" data-testid={'stepNode__insertStep-btn'}>
+                <PlusIcon />
+              </button>
+            </Tooltip>
           </Popover>
         </span>
       </foreignObject>

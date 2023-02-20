@@ -9,7 +9,7 @@ import {
   useVisualizationStore,
 } from '@kaoto/store';
 import { IStepProps, IVizStepNodeData } from '@kaoto/types';
-import { AlertVariant, Popover } from '@patternfly/react-core';
+import { AlertVariant, Popover, Tooltip } from '@patternfly/react-core';
 import { CubesIcon, PlusIcon, MinusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, NodeProps, Position } from 'reactflow';
@@ -24,6 +24,8 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const integrationJsonStore = useIntegrationJsonStore();
   const visualizationService = new VisualizationService(integrationJsonStore, visualizationStore);
   const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
+  const showBranchesTab = VisualizationService.showBranchesTab(data);
+  const showStepsTab = VisualizationService.showStepsTab(data);
 
   const { addAlert } = useAlert() || {};
 
@@ -106,7 +108,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
                   children={<BranchBuilder handleAddBranch={handleAddBranch} />}
                   disableBranchesTab={true}
                   disableBranchesTabMsg={"You can't add a branch from here."}
-                  disableStepsTab={!VisualizationService.showStepsTab(data)}
+                  disableStepsTab={!showStepsTab}
                   handleSelectStep={onMiniCatalogClickPrepend}
                   queryParams={{
                     dsl: currentDSL,
@@ -124,12 +126,14 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               position={'left-start'}
               showClose={false}
             >
-              <button
-                className="stepNode__Prepend plusButton nodrag"
-                data-testid={'stepNode__prependStep-btn'}
-              >
-                <PlusIcon />
-              </button>
+              <Tooltip content={ValidationService.getPlusButtonTooltipMsg(false, showStepsTab)}>
+                <button
+                  className="stepNode__Prepend plusButton nodrag"
+                  data-testid={'stepNode__prependStep-btn'}
+                >
+                  <PlusIcon />
+                </button>
+              </Tooltip>
             </Popover>
           )}
 
@@ -180,9 +184,9 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               bodyContent={
                 <MiniCatalog
                   children={<BranchBuilder handleAddBranch={handleAddBranch} />}
-                  disableBranchesTab={!VisualizationService.showBranchesTab(data)}
+                  disableBranchesTab={!showBranchesTab}
                   disableBranchesTabMsg={"This step doesn't support branching."}
-                  disableStepsTab={!VisualizationService.showStepsTab(data)}
+                  disableStepsTab={!showStepsTab}
                   disableStepsTabMsg={"You can't add a step between a step and a branch."}
                   handleSelectStep={onMiniCatalogClickAppend}
                   queryParams={{
@@ -201,12 +205,16 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               position={'right-start'}
               showClose={false}
             >
-              <button
-                className="stepNode__Add plusButton nodrag"
-                data-testid={'stepNode__appendStep-btn'}
+              <Tooltip
+                content={ValidationService.getPlusButtonTooltipMsg(showBranchesTab, showStepsTab)}
               >
-                <PlusIcon />
-              </button>
+                <button
+                  className="stepNode__Add plusButton nodrag"
+                  data-testid={'stepNode__appendStep-btn'}
+                >
+                  <PlusIcon />
+                </button>
+              </Tooltip>
             </Popover>
           ) : (
             <></>
@@ -219,9 +227,9 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           bodyContent={
             <MiniCatalog
               children={<BranchBuilder handleAddBranch={handleAddBranch} />}
-              disableBranchesTab={!VisualizationService.showBranchesTab(data)}
+              disableBranchesTab={!showBranchesTab}
               disableBranchesTabMsg={"This step doesn't support branching."}
-              disableStepsTab={!VisualizationService.showStepsTab(data)}
+              disableStepsTab={!showStepsTab}
               handleSelectStep={onMiniCatalogClickAdd}
               queryParams={{
                 dsl: currentDSL,

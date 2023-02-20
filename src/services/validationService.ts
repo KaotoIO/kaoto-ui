@@ -81,6 +81,18 @@ export class ValidationService {
     return { isValid, message };
   }
 
+  static getPlusButtonTooltipMsg(showBranchesTab: boolean, showStepsTab: boolean): string {
+    if (showStepsTab && showBranchesTab) {
+      return 'Add a step or branch';
+    } else if (showBranchesTab) {
+      return 'Add a branch';
+    } else if (showStepsTab) {
+      return 'Add a step';
+    } else {
+      return '';
+    }
+  }
+
   /**
    * Checks kind of steps can be appended onto an existing step.
    * @param _prevStep
