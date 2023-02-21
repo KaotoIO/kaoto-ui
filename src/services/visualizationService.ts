@@ -493,6 +493,15 @@ export class VisualizationService {
   }
 
   /**
+   * Determines if a node is the first and only node.
+   * NOTE: Applies to both placeholders and normal steps.
+   * @param stepNodeData
+   */
+  static isFirstAndOnlyNode(stepNodeData: IVizStepNodeData): boolean {
+    return !stepNodeData.nextStepUuid && !stepNodeData.previousStepUuid && !stepNodeData.branchInfo;
+  }
+
+  /**
    * Redraw integration diagram on the canvas. If {@link rebuildNodes} is true,
    * It rebuilds the nodes and edges from integration JSON store and re-layout the diagram.
    * Otherwise, it only performs re-layout.

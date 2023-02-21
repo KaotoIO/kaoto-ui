@@ -253,6 +253,13 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             onDrop={onDropNew}
             data-testid={'viz-step-slot'}
           >
+            {/* PLACEHOLDER HINT FOR EMPTY STATE */}
+            {VisualizationService.isFirstAndOnlyNode(data) && (
+              <div className={'nodeHintWrapper'} data-testid={'placeholderHint'}>
+                <div className={'nodeHintArrow'}>⤹</div>
+                <div>click on a node to add a step.</div>
+              </div>
+            )}
             {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
             {(!StepsService.isStartStep(data.step) || data.branchInfo) && (
               <Handle
