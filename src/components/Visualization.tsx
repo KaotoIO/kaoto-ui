@@ -147,6 +147,7 @@ const Visualization = () => {
         isExpanded={isPanelExpanded}
         data-expanded={isPanelExpanded}
         isResizable={true}
+        dataTestId={'kaoto-right-drawer'}
         panelContent={
           <VisualizationStepViews
             step={selectedStep}

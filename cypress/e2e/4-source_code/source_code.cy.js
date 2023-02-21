@@ -1,4 +1,4 @@
-describe.skip('source code and drag and drop', () => {
+describe('source code and drag and drop', () => {
   before(() => {
     let url = Cypress.config().baseUrl;
 
@@ -7,7 +7,6 @@ describe.skip('source code and drag and drop', () => {
     cy.intercept('/v1/integrations*').as('getIntegration');
 
     cy.visit(url);
-    cy.viewport(2000, 1000);
   });
 
   it('loads the YAML editor and synchronizes steps with visualization', () => {
@@ -17,10 +16,11 @@ describe.skip('source code and drag and drop', () => {
     // LOAD FIXTURE
     // attaches the file as an input, NOT drag-and-drop, as that will
     // create a dropzone overlay that then prevents you from typing
+    cy.get('.pf-c-code-editor__main').should('be.visible');
     cy.get('.pf-c-code-editor__main > input').attachFile('KafkaSourceSink.yaml');
 
     // trigger the visualization to update
-    cy.get('.pf-c-file-upload').click().type('{end}{enter}');
+    cy.get('[data-testid="sourceCode--applyButton"]').click();
 
     // wait until the API returns the updated visualization
     cy.wait('@getIntegration');
