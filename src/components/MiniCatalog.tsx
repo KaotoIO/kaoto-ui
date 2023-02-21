@@ -1,5 +1,4 @@
 import { fetchCatalogSteps } from '@kaoto/api';
-import { StepsService } from '@kaoto/services';
 import { useSettingsStore } from '@kaoto/store';
 import { IStepProps, IStepQueryParams } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
@@ -27,6 +26,10 @@ import { createRef, ReactNode, useEffect, useRef, useState } from 'react';
 
 export interface IMiniCatalog {
   children?: ReactNode;
+  disableBranchesTab?: boolean;
+  disableBranchesTabMsg?: string;
+  disableStepsTab?: boolean;
+  disableStepsTabMsg?: string;
   handleSelectStep?: (selectedStep: any) => void;
   queryParams?: IStepQueryParams;
   step?: IStepProps;
@@ -36,11 +39,12 @@ export interface IMiniCatalog {
 export const MiniCatalog = (props: IMiniCatalog) => {
   const [catalogData, setCatalogData] = useState<IStepProps[]>(props.steps ?? []);
   const [query, setQuery] = useState(``);
-  const [activeTabKey, setActiveTabKey] = useState();
+  const [activeTabKey, setActiveTabKey] = useState(props.disableStepsTab ? 1 : 0);
   const dsl = useSettingsStore((state) => state.settings.dsl.name);
   const typesAllowedArray = props.queryParams?.type?.split(',');
   const [isSelected, setIsSelected] = useState(typesAllowedArray ? typesAllowedArray[0] : 'MIDDLE');
-  const tooltipRef = createRef();
+  const branchTooltipRef = createRef();
+  const stepTooltipRef = createRef();
 
   const { addAlert } = useAlert() || {};
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -104,7 +108,19 @@ export const MiniCatalog = (props: IMiniCatalog) => {
   return (
     <section data-testid={'miniCatalog'} className={'nodrag'}>
       <Tabs activeKey={activeTabKey} onSelect={handleTabClick} isBox={false}>
-        <Tab eventKey={0} title={<TabTitleText>Steps</TabTitleText>}>
+        <Tab
+          eventKey={0}
+          title={<TabTitleText>Steps</TabTitleText>}
+          isAriaDisabled={props.disableStepsTab}
+          ref={stepTooltipRef}
+        >
+          {props.disableStepsTab && props.disableStepsTabMsg && (
+            <Tooltip
+              content={props.disableStepsTabMsg}
+              reference={stepTooltipRef}
+              position={'top'}
+            />
+          )}
           <Toolbar id={'toolbar'} style={{ background: 'transparent' }}>
             <ToolbarContent>
               {
@@ -189,14 +205,14 @@ export const MiniCatalog = (props: IMiniCatalog) => {
         <Tab
           eventKey={1}
           title={<TabTitleText>Branches</TabTitleText>}
-          isAriaDisabled={!StepsService.supportsBranching(props.step)}
-          ref={tooltipRef}
+          isAriaDisabled={props.disableBranchesTab}
+          ref={branchTooltipRef}
         >
-          {!StepsService.supportsBranching(props.step) && (
+          {props.disableBranchesTab && props.disableBranchesTabMsg && (
             <Tooltip
-              content="This step does not support branching."
-              reference={tooltipRef}
-              position="right"
+              content={props.disableBranchesTabMsg}
+              reference={branchTooltipRef}
+              position="top"
             />
           )}
           <div style={{ padding: '50px' }}>{props.children}</div>

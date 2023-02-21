@@ -3,7 +3,7 @@ import { OrangeExclamationTriangleIcon } from './Icons';
 import { StepsService } from '@kaoto/services';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
 import { IVizStepNode } from '@kaoto/types';
-import { Button, Popover } from '@patternfly/react-core';
+import { Button, Popover, Tooltip } from '@patternfly/react-core';
 import { MinusIcon } from '@patternfly/react-icons';
 import { getBezierPath, Position, useReactFlow } from 'reactflow';
 
@@ -104,9 +104,11 @@ const DeleteButtonEdge = ({
             hideOnOutsideClick={true}
             position={'right-start'}
           >
-            <button className="deleteButton" data-testid={'stepNode__insertStep-btn'}>
-              <MinusIcon />
-            </button>
+            <Tooltip content={'Delete branch'}>
+              <button className="deleteButton" data-testid={'stepNode__deleteBranch-btn'}>
+                <MinusIcon />
+              </button>
+            </Tooltip>
           </Popover>
         </span>
       </foreignObject>

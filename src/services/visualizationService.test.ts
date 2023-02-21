@@ -422,4 +422,54 @@ describe('visualizationService', () => {
       })
     ).toBeTruthy();
   });
+
+  it('showBranchesTab(): given node data, should determine whether to show the branches tab in mini catalog', () => {
+    const step: IVizStepNodeData = {
+      label: '',
+      step: {} as IStepProps,
+    };
+
+    expect(VisualizationService.showBranchesTab(step)).toBeFalsy();
+    // has branches but not branch support
+    expect(
+      VisualizationService.showBranchesTab({
+        ...step,
+        step: { ...step.step, branches: [] },
+      })
+    ).toBeFalsy();
+
+    expect(
+      VisualizationService.showBranchesTab({
+        ...step,
+        step: { ...step.step, branches: [], minBranches: 0, maxBranches: -1 },
+      })
+    ).toBeTruthy();
+  });
+
+  it('showStepsTab(): given node data, should determine whether to show the steps tab in mini catalog', () => {
+    const step: IVizStepNodeData = {
+      label: '',
+      step: {} as IStepProps,
+    };
+
+    // contains no branches
+    expect(VisualizationService.showStepsTab(step)).toBeTruthy();
+
+    // contains branches, has no next step, should show steps tab
+    expect(
+      VisualizationService.showStepsTab({
+        ...step,
+        step: { ...step.step, branches: [{} as IStepPropsBranch] },
+      })
+    ).toBeTruthy();
+
+    // contains branches, has a next step, should not show steps tab
+    expect(
+      VisualizationService.showStepsTab({
+        ...step,
+        step: { ...step.step, branches: [{} as IStepPropsBranch] },
+        nextStepUuid: 'some-dummy-node-uuid',
+      })
+    ).toBeFalsy();
+  });
 });
