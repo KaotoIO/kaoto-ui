@@ -3,7 +3,13 @@ import nodes from '../store/data/nodes';
 import steps from '../store/data/steps';
 import { VisualizationService } from './visualizationService';
 import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
-import { IStepProps, IStepPropsBranch, IVizStepNode, IVizStepNodeData } from '@kaoto/types';
+import {
+  IStepProps,
+  IStepPropsBranch,
+  IVizStepNode,
+  IVizStepNodeData,
+  IVizStepNodeDataBranch,
+} from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import { MarkerType, Position } from 'reactflow';
 
@@ -227,6 +233,19 @@ describe('visualizationService', () => {
     const nodes: IVizStepNode[] = [];
     VisualizationService.insertBranchGroupNode(nodes, { x: 0, y: 0 }, 150, groupWidth);
     expect(nodes).toHaveLength(1);
+  });
+
+  it('isFirstAndOnlyNode()', () => {
+    const nodeData: IVizStepNodeData = { label: '', step: {} as IStepProps };
+    expect(VisualizationService.isFirstAndOnlyNode(nodeData)).toBeTruthy();
+    expect(
+      VisualizationService.isFirstAndOnlyNode({
+        ...nodeData,
+        branchInfo: {} as IVizStepNodeDataBranch,
+        nextStepUuid: 'some-next-step',
+        previousStepUuid: 'some-previous-step',
+      })
+    ).toBeFalsy();
   });
 
   /**
