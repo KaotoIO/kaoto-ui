@@ -43,7 +43,7 @@ export class ValidationService {
       if (proposedStep.type === 'MIDDLE' || proposedStep.type === 'END') {
         return { isValid: true };
       } else {
-        return { isValid: false, message: 'Branches must start with a middle or end step.' };
+        return { isValid: false, message: 'Branches must start with an action or end step.' };
       }
     }
 
