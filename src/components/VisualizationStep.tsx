@@ -26,6 +26,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
   const showBranchesTab = VisualizationService.showBranchesTab(data);
   const showStepsTab = VisualizationService.showStepsTab(data);
+  const supportsBranching = StepsService.supportsBranching(data.step);
 
   const { addAlert } = useAlert() || {};
 
@@ -94,8 +95,24 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     <>
       {!data.isPlaceholder ? (
         <div
-          className={`stepNode`}
+          className={
+            `stepNode` +
+            `${VisualizationService.shouldHighlightNode(
+              visualizationStore.hoverStepUuid,
+              data.branchInfo?.branchParentUuid ?? data.step.UUID
+            )}`
+          }
           onDrop={onDropReplace}
+          onMouseEnter={() => {
+            if (data.branchInfo || supportsBranching) {
+              visualizationStore.setHoverStepUuid(
+                data.branchInfo?.branchParentUuid ?? data.step.UUID
+              );
+            } else {
+              visualizationStore.setHoverStepUuid(data.step.UUID);
+            }
+          }}
+          onMouseLeave={() => visualizationStore.setHoverStepUuid('')}
           data-testid={`viz-step-${data.step.name}`}
         >
           {/* PREPEND STEP BUTTON */}
@@ -260,6 +277,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
                 <div>click on a node to add a step.</div>
               </div>
             )}
+
             {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
             {(!StepsService.isStartStep(data.step) || data.branchInfo) && (
               <Handle
