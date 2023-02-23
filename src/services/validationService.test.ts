@@ -94,6 +94,16 @@ describe('validationService', () => {
     ).toBeTruthy();
   });
 
+  it('getBranchTooltipMsg(): should return tooltip message for a disabled branch tab', () => {
+    expect(ValidationService.getBranchTabTooltipMsg(false, 0, 0)).toBe(
+      "This step doesn't support branching"
+    );
+    expect(ValidationService.getBranchTabTooltipMsg(true, 5, 5)).toBe(
+      'Max number of branches reached'
+    );
+    expect(ValidationService.getBranchTabTooltipMsg(true, 5, 1)).toBe('');
+  });
+
   it('getPlusButtonTooltipMsg(): should return the tooltip message for the plus button to add a step or branch', () => {
     expect(ValidationService.getPlusButtonTooltipMsg(true, true)).toBe('Add a step or branch');
     expect(ValidationService.getPlusButtonTooltipMsg(true, false)).toBe('Add a branch');
@@ -103,5 +113,22 @@ describe('validationService', () => {
 
   it('prependableStepTypes(): should return a comma-separated string of step types that can be prepended to a step', () => {
     expect(ValidationService.prependableStepTypes()).toEqual('MIDDLE');
+  });
+
+  it('reachedMaxBranches(): given a step, should determine whether the max number of branches has been reached', () => {
+    // below max
+    expect(ValidationService.reachedMaxBranches(1, 2)).toBeFalsy();
+
+    // at max
+    expect(ValidationService.reachedMaxBranches(2, 2)).toBeTruthy();
+
+    // infinite
+    expect(ValidationService.reachedMaxBranches(4, -1)).toBeFalsy();
+  });
+
+  it('reachedMinBranches(): given a step, should determine whether the threshold for min branches has been reached', () => {
+    expect(ValidationService.reachedMinBranches(1, 2)).toBeFalsy();
+    expect(ValidationService.reachedMinBranches(2, 2)).toBeFalsy();
+    expect(ValidationService.reachedMinBranches(3, 2)).toBeTruthy();
   });
 });

@@ -1,4 +1,5 @@
 import { StepsService } from './stepsService';
+import { ValidationService } from './validationService';
 import { IIntegrationJsonStore, RFState } from '@kaoto/store';
 import {
   IStepProps,
@@ -66,14 +67,16 @@ export class VisualizationService {
    * @param node
    * @param rootNode
    * @param rootNextNode
+   * @param edgeType
    */
   static buildBranchSingleStepEdges(
     node: IVizStepNode,
     rootNode: IVizStepNode,
-    rootNextNode: IVizStepNode
+    rootNextNode: IVizStepNode,
+    edgeType?: string
   ): IVizStepPropsEdge[] {
     const branchPlaceholderEdges: IVizStepPropsEdge[] = [];
-    let edgeProps = VisualizationService.buildEdgeParams(rootNode, node, 'default');
+    let edgeProps = VisualizationService.buildEdgeParams(rootNode, node, edgeType ?? 'default');
 
     if (node.data.branchInfo?.branchIdentifier)
       edgeProps.label = node.data.branchInfo?.branchIdentifier;
@@ -82,7 +85,7 @@ export class VisualizationService {
 
     if (rootNextNode) {
       branchPlaceholderEdges.push(
-        VisualizationService.buildEdgeParams(node, rootNextNode, 'default')
+        VisualizationService.buildEdgeParams(node, rootNextNode, edgeType ?? 'default')
       );
     }
 
@@ -103,8 +106,8 @@ export class VisualizationService {
         node.data.branchInfo?.parentUuid,
         stepNodes
       );
-      const ogNodeNextIndex = VisualizationService.findNodeIdxWithUUID(
-        node.data.branchInfo?.branchParentNextUuid,
+      const rootStepNextIndex = VisualizationService.findNodeIdxWithUUID(
+        node.data.branchInfo?.rootStepNextUuid,
         stepNodes
       );
 
@@ -129,8 +132,16 @@ export class VisualizationService {
 
         // handle special first step, needs to be connected to its immediate parent
         if (node.data.isFirstStep) {
-          const ogNodeStep = stepNodes[parentNodeIndex];
-          let edgeProps = VisualizationService.buildEdgeParams(ogNodeStep, node, 'delete');
+          const parentStepNode: IVizStepNode = stepNodes[parentNodeIndex];
+          const showDeleteEdge = ValidationService.reachedMinBranches(
+            parentStepNode.data.step.branches.length,
+            parentStepNode.data.step.minBranches
+          );
+          let edgeProps = VisualizationService.buildEdgeParams(
+            parentStepNode,
+            node,
+            showDeleteEdge ? 'delete' : 'default'
+          );
 
           if (node.data.branchInfo?.branchIdentifier)
             edgeProps.label = node.data.branchInfo?.branchIdentifier;
@@ -140,18 +151,25 @@ export class VisualizationService {
 
         // handle placeholder steps within a branch
         if (node.data.branchInfo?.branchStep && node.data.isPlaceholder) {
+          const parentStepNode: IVizStepNode = stepNodes[parentNodeIndex];
+          const showDeleteEdge = ValidationService.reachedMinBranches(
+            parentStepNode.data.step.branches.length,
+            parentStepNode.data.step.minBranches
+          );
+
           specialEdges.push(
             ...VisualizationService.buildBranchSingleStepEdges(
               node,
               stepNodes[parentNodeIndex],
-              stepNodes[ogNodeNextIndex]
+              stepNodes[rootStepNextIndex],
+              showDeleteEdge ? 'delete' : 'default'
             )
           );
         }
 
         // handle special last steps
         if (node.data.isLastStep && !StepsService.isEndStep(node.data.step)) {
-          const nextStep = stepNodes[ogNodeNextIndex];
+          const nextStep = stepNodes[rootStepNextIndex];
 
           if (nextStep) {
             // it needs to merge back
@@ -326,10 +344,10 @@ export class VisualizationService {
             VisualizationService.buildNodesFromSteps(branch.steps, layout, props, {
               branchIdentifier: branch.identifier,
 
-              // branchParentUuid is the parent for a first branch step,
+              // rootStepUuid is the parent for a first branch step,
               // and grandparent for n branch step
-              branchParentUuid: branchInfo?.branchParentUuid ?? steps[index].UUID,
-              branchParentNextUuid: branchInfo?.branchParentNextUuid ?? steps[index + 1]?.UUID,
+              rootStepUuid: branchInfo?.rootStepUuid ?? steps[index].UUID,
+              rootStepNextUuid: branchInfo?.rootStepNextUuid ?? steps[index + 1]?.UUID,
               branchStep: true,
               branchUuid: branch.branchUuid,
 
@@ -556,13 +574,22 @@ export class VisualizationService {
    * @param isEndStep
    */
   static showAppendStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
-    // it cannot be an END step, it must be the last step in the array,
-    // OR it must support branching AND contain at least one branch, otherwise users will
-    // be able to add a branch through INSERT step
     const supportsBranching = !!(nodeData.step.minBranches || nodeData.step.maxBranches);
+    // if it's an end step and there's no chance of adding a branch, there is nothing to append
     if (isEndStep && !supportsBranching) return false;
+
+    // if it supports branching AND contains at least one branch, show it. otherwise users will
+    // be able to add a branch through INSERT step, or append if it's the last in the array
     if (supportsBranching && nodeData.step.branches && nodeData.step.branches.length > 0) {
-      return true;
+      // if max branches reached AND there is a next step, hide it, otherwise show it
+      return !(
+        ValidationService.reachedMaxBranches(
+          nodeData.step.branches.length,
+          nodeData.step.maxBranches
+        ) && nodeData.nextStepUuid
+      );
+
+      // handles when it's not an END step, but it's the last step in the array
     } else return !!(nodeData.isLastStep && !isEndStep);
   }
 
@@ -593,7 +620,10 @@ export class VisualizationService {
    * @param nodeData
    */
   static showBranchesTab(nodeData: IVizStepNodeData): boolean {
-    return StepsService.supportsBranching(nodeData.step);
+    return (
+      StepsService.supportsBranching(nodeData.step) &&
+      nodeData.step.branches?.length !== nodeData.step.maxBranches
+    );
   }
 
   /**

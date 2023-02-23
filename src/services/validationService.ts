@@ -43,7 +43,7 @@ export class ValidationService {
       if (proposedStep.type === 'MIDDLE' || proposedStep.type === 'END') {
         return { isValid: true };
       } else {
-        return { isValid: false, message: 'Branches must start with an action or end step.' };
+        return { isValid: false, message: 'Branches must start with an action or end step' };
       }
     }
 
@@ -59,26 +59,47 @@ export class ValidationService {
     switch (existingNode.step.type) {
       case 'START':
         isValid = proposedStep.type === 'START';
-        message = 'First step must be a start step.';
+        message = 'First step must be a start step';
         break;
       case 'MIDDLE':
       case 'END':
         // check if it's the last step
         if (existingNode.isLastStep) {
-          message = 'Last step must be a middle or end step.';
+          message = 'Last step must be a middle or end step';
           isValid = proposedStep.type === 'MIDDLE' || proposedStep.type === 'END';
         } else if (existingNode.step.type === 'MIDDLE' && proposedStep.type === 'END') {
           // not the last step, but trying to replace a MIDDLE step with an END step
-          message = 'You cannot replace a middle step with an end step.';
+          message = 'You cannot replace a middle step with an end step';
         } else if (existingNode.step.type === 'MIDDLE' && proposedStep.type === 'START') {
           // not the last step, but trying to replace a MIDDLE step with a START step
-          message = 'You cannot replace a middle step with a start step.';
+          message = 'You cannot replace a middle step with a start step';
         }
 
         break;
     }
 
     return { isValid, message };
+  }
+
+  /**
+   * Get the message to display in a tooltip when
+   * the branches tab is disabled in the mini catalog
+   * @param supportsBranching
+   * @param maxBranches
+   * @param branchesLength
+   */
+  static getBranchTabTooltipMsg(
+    supportsBranching: boolean,
+    maxBranches: number,
+    branchesLength: number | undefined
+  ): string {
+    if (!supportsBranching) {
+      return "This step doesn't support branching";
+    } else if (branchesLength === maxBranches) {
+      return 'Max number of branches reached';
+    } else {
+      return '';
+    }
   }
 
   /**
@@ -133,5 +154,24 @@ export class ValidationService {
    */
   static prependableStepTypes(): string {
     return 'MIDDLE';
+  }
+
+  /**
+   * Determines if the maximum number of branches has been reached
+   * @param branchLength
+   * @param maxBranches
+   */
+  static reachedMaxBranches(branchLength: number, maxBranches: number): boolean {
+    return branchLength === maxBranches;
+  }
+
+  /**
+   * Determines whether the number of minimum
+   * branches has been reached (gone above the minimum)
+   * @param branchLength
+   * @param minBranches
+   */
+  static reachedMinBranches(branchLength: number, minBranches: number): boolean {
+    return branchLength >= minBranches + 1;
   }
 }

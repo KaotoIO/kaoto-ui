@@ -102,7 +102,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const getHoverClass = (): string => {
     return VisualizationService.getNodeClass(
       visualizationStore.hoverStepUuid,
-      data.branchInfo?.branchParentUuid ?? data.step.UUID,
+      data.branchInfo?.rootStepUuid ?? data.step.UUID,
       ' stepNode__Hover'
     );
   };
@@ -115,9 +115,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           onDrop={onDropReplace}
           onMouseEnter={() => {
             if (data.branchInfo || supportsBranching) {
-              visualizationStore.setHoverStepUuid(
-                data.branchInfo?.branchParentUuid ?? data.step.UUID
-              );
+              visualizationStore.setHoverStepUuid(data.branchInfo?.rootStepUuid ?? data.step.UUID);
             } else {
               visualizationStore.setHoverStepUuid(data.step.UUID);
             }
@@ -209,12 +207,16 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {VisualizationService.showAppendStepButton(data, endStep) ? (
             <Popover
               appendTo={() => document.body}
-              aria-label="Search for a step"
+              aria-label="Add a step or branch"
               bodyContent={
                 <MiniCatalog
                   children={<BranchBuilder handleAddBranch={handleAddBranch} />}
                   disableBranchesTab={!showBranchesTab}
-                  disableBranchesTabMsg={"This step doesn't support branching."}
+                  disableBranchesTabMsg={ValidationService.getBranchTabTooltipMsg(
+                    supportsBranching,
+                    data.step.maxBranches,
+                    data.step.branches?.length
+                  )}
                   disableStepsTab={!showStepsTab}
                   disableStepsTabMsg={"You can't add a step between a step and a branch."}
                   handleSelectStep={onMiniCatalogClickAppend}
