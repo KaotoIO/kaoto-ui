@@ -1,3 +1,4 @@
+import { initDsl, initialSettings } from './settingsStore';
 import { IDeployment } from '@kaoto/types';
 import { create } from 'zustand';
 
@@ -10,10 +11,10 @@ const initialDeployment: IDeployment = {
   crd: '',
   date: '',
   errors: [],
-  name: 'integration',
-  namespace: 'default',
+  name: initialSettings.name,
+  namespace: initialSettings.namespace,
   status: 'Stopped',
-  type: 'KameletBinding',
+  type: initDsl.name,
 };
 
 export const useDeploymentStore = create<IDeploymentStore>((set) => ({
