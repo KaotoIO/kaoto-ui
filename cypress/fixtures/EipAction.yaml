@@ -1,0 +1,61 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: Kamelet
+metadata:
+  annotations:
+    camel.apache.org/kamelet.icon: cherry
+  labels:
+    camel.apache.org/kamelet.type: action
+  name: eip-action
+spec:
+  definition:
+    title: EIP Kamelet
+    description: Used to test all EIP we implement
+    properties: {}
+  dependencies:
+    - camel:core
+    - camel:kamelet
+  template:
+    from:
+      uri: kamelet:source
+      steps:
+        - loop:
+            constant: "3"
+            copy: true
+            steps:
+              - delay:
+                  expression:
+                    simple: ${body}
+                  async-delayed: true
+        - choice:
+            when:
+              - simple: "{{?foo}}"
+                steps:
+                  - to:
+                      uri: digitalocean:null
+                  - set-header:
+                      name: bar
+                      simple: foo
+              - simple: "{{?bar}}"
+                steps:
+                  - delay: {}
+                  - marshal:
+                      json:
+                        library: Gson
+              - simple: "{{?baz}}"
+                steps:
+                  - choice:
+                      when: []
+                  - log:
+                      message: test
+                      logging-level: INFO
+                      log-name: yaml
+            otherwise:
+              steps:
+                - pipeline:
+                    steps:
+                      - aggregate: {}
+        - filter:
+            simple: "{{?foo}}"
+            steps: []
+        - to:
+            uri: kamelet:sink
