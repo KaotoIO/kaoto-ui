@@ -574,18 +574,22 @@ export class VisualizationService {
    * @param isEndStep
    */
   static showAppendStepButton(nodeData: IVizStepNodeData, isEndStep: boolean) {
-    // it cannot be an END step, it must be the last step in the array,
-    // OR it must support branching AND contain at least one branch, otherwise users will
-    // be able to add a branch through INSERT step
     const supportsBranching = !!(nodeData.step.minBranches || nodeData.step.maxBranches);
+    // if it's an end step and there's no chance of adding a branch, there is nothing to append
     if (isEndStep && !supportsBranching) return false;
+
+    // if it supports branching AND contains at least one branch, show it. otherwise users will
+    // be able to add a branch through INSERT step, or append if it's the last in the array
     if (supportsBranching && nodeData.step.branches && nodeData.step.branches.length > 0) {
-      // check if max branches reached
-      return ValidationService.reachedMaxBranches(
-        nodeData.step.branches.length,
-        nodeData.step.maxBranches
+      // if max branches reached AND there is a next step, hide it, otherwise show it
+      return !(
+        ValidationService.reachedMaxBranches(
+          nodeData.step.branches.length,
+          nodeData.step.maxBranches
+        ) && nodeData.nextStepUuid
       );
-      // return true;
+
+      // handles when it's not an END step, but it's the last step in the array
     } else return !!(nodeData.isLastStep && !isEndStep);
   }
 

@@ -128,7 +128,7 @@ describe('validationService', () => {
 
   it('reachedMinBranches(): given a step, should determine whether the threshold for min branches has been reached', () => {
     expect(ValidationService.reachedMinBranches(1, 2)).toBeFalsy();
-    expect(ValidationService.reachedMinBranches(2, -1)).toBeFalsy();
+    expect(ValidationService.reachedMinBranches(2, 2)).toBeFalsy();
     expect(ValidationService.reachedMinBranches(3, 2)).toBeTruthy();
   });
 });
