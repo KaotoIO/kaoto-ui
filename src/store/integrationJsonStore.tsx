@@ -1,7 +1,7 @@
 import { useDeploymentStore } from './deploymentStore';
 import { useIntegrationSourceStore } from './integrationSourceStore';
 import { useNestedStepsStore } from './nestedStepsStore';
-import { useSettingsStore } from './settingsStore';
+import { initDsl, initialSettings, useSettingsStore } from './settingsStore';
 import { useVisualizationStore } from './visualizationStore';
 import { StepsService } from '@kaoto/services';
 import { IIntegration, IStepProps, IViewProps } from '@kaoto/types';
@@ -30,8 +30,8 @@ export interface IIntegrationJsonStore {
 const initialState = {
   branchSteps: {},
   integrationJson: {
-    dsl: 'KameletBinding',
-    metadata: { name: 'integration', namespace: 'default' },
+    dsl: initDsl.name,
+    metadata: { name: initialSettings.name, namespace: initialSettings.namespace },
     steps: [],
     params: [],
   },

@@ -9,17 +9,17 @@ interface ISettingsStore {
   setSettings: (vals?: Partial<ISettings>) => void;
 }
 
-const initDsl: IDsl = {
-  deployable: 'true',
+export const initDsl: IDsl = {
+  deployable: 'false',
   description: '',
   input: '',
   output: '',
   stepKinds: '',
-  name: 'KameletBinding',
-  validationSchema: '/v1/capabilities/KameletBinding/schema',
+  name: 'Camel Route',
+  validationSchema: '/v1/capabilities/Camel%20Route/schema',
 };
 
-const initialSettings: ISettings = {
+export const initialSettings: ISettings = {
   description: '',
   dsl: initDsl,
   icon: svg,
