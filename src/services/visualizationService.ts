@@ -441,6 +441,20 @@ export class VisualizationService {
     return { layoutedNodes: nodes, layoutedEdges: edges };
   }
 
+  /**
+   * Accepts two UUIDs to compare, and a class name to use if they match
+   * @param firstUuid
+   * @param secondUuid
+   * @param className
+   */
+  static getNodeClass(firstUuid: string, secondUuid: string, className: string): string {
+    if (firstUuid === secondUuid) {
+      return className;
+    } else {
+      return '';
+    }
+  }
+
   static insertAddStepPlaceholder(
     stepNodes: IVizStepNode[],
     id: string,
@@ -534,14 +548,6 @@ export class VisualizationService {
    */
   static shouldAddEdge(node: IVizStepNode, nextNode?: IVizStepNode): boolean {
     return node.data.step && nextNode && !StepsService.containsBranches(node.data.step);
-  }
-
-  static shouldHighlightNode(hoverUuid: string, stepUuid: string) {
-    if (hoverUuid === stepUuid) {
-      return ' stepNode__Hover';
-    } else {
-      return '';
-    }
   }
 
   /**

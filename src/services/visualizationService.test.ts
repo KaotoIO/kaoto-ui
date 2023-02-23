@@ -217,6 +217,20 @@ describe('visualizationService', () => {
     expect(VisualizationService.findNodeIdxWithUUID(nodes[1].data.step.UUID, nodes)).toBe(1);
   });
 
+  it('getNodeClass(): given two strings to compare and a class name, returns the class name if they match', () => {
+    const something = 'something';
+    const nothing = undefined;
+    expect(VisualizationService.getNodeClass('example', 'example', ' stepNode__Hover')).toEqual(
+      ' stepNode__Hover'
+    );
+    expect(
+      VisualizationService.getNodeClass(something, nothing ?? 'example', ' stepNode__Hover')
+    ).toEqual('');
+    expect(
+      VisualizationService.getNodeClass(something, nothing ?? something, ' stepNode__Hover')
+    ).toEqual(' stepNode__Hover');
+  });
+
   /**
    * insertAddStepPlaceholder
    */
@@ -315,18 +329,6 @@ describe('visualizationService', () => {
     // there is no next node, so it should be false
     expect(VisualizationService.shouldAddEdge(nodeWithEmptyBranch)).toBeFalsy();
     expect(VisualizationService.shouldAddEdge(nodeWithoutBranches, nextNode)).toBeTruthy();
-  });
-
-  it('shouldHighlightNode(): determines if node should be highlighted', () => {
-    const something = 'something';
-    const nothing = undefined;
-    expect(VisualizationService.shouldHighlightNode('example', 'example')).toEqual(
-      ' stepNode__Hover'
-    );
-    expect(VisualizationService.shouldHighlightNode(something, nothing ?? 'example')).toEqual('');
-    expect(VisualizationService.shouldHighlightNode(something, nothing ?? something)).toEqual(
-      ' stepNode__Hover'
-    );
   });
 
   it('showAppendStepButton(): given a node, should determine whether to show an append step button for it', () => {

@@ -113,7 +113,6 @@ const Visualization = () => {
     // here we check if it's a node or edge
     // workaround for https://github.com/wbkd/react-flow/issues/2202
     if (!e.target.classList.contains('stepNode__clickable')) return;
-    e.preventDefault();
 
     if (!node.data.isPlaceholder) {
       const step = stepsService.findStepWithUUID(node.data.step.UUID);
