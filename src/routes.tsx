@@ -34,7 +34,7 @@ const routes: AppRouteConfig[] = [
     exact: true,
     label: 'Dashboard',
     path: '/',
-    title: 'Kaoto | Main Dashboard',
+    title: 'Kaoto',
   },
 ];
 

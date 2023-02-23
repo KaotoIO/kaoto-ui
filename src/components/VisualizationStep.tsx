@@ -91,17 +91,27 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     });
   };
 
+  const getSelectedClass = (): string => {
+    return VisualizationService.getNodeClass(
+      visualizationStore.selectedStepUuid,
+      data.step.UUID,
+      ' stepNode__Selected'
+    );
+  };
+
+  const getHoverClass = (): string => {
+    return VisualizationService.getNodeClass(
+      visualizationStore.hoverStepUuid,
+      data.branchInfo?.branchParentUuid ?? data.step.UUID,
+      ' stepNode__Hover'
+    );
+  };
+
   return (
     <>
       {!data.isPlaceholder ? (
         <div
-          className={
-            `stepNode` +
-            `${VisualizationService.shouldHighlightNode(
-              visualizationStore.hoverStepUuid,
-              data.branchInfo?.branchParentUuid ?? data.step.UUID
-            )}`
-          }
+          className={`stepNode` + getSelectedClass() + getHoverClass()}
           onDrop={onDropReplace}
           onMouseEnter={() => {
             if (data.branchInfo || supportsBranching) {

@@ -81,6 +81,7 @@ const Visualization = () => {
     if (!UUID) return;
 
     setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '' });
+    visualizationStore.setSelectedStepUuid('');
     if (isPanelExpanded) setIsPanelExpanded(false);
 
     stepsService.deleteStep(UUID);
@@ -88,6 +89,7 @@ const Visualization = () => {
 
   const onClosePanelClick = () => {
     setIsPanelExpanded(false);
+    visualizationStore.setSelectedStepUuid('');
   };
 
   /**
@@ -104,17 +106,20 @@ const Visualization = () => {
 
   /**
    * Called when a React Flow node is clicked
-   * @param _e
+   * @param e
    * @param node
    */
-  const onNodeClick = (_e: any, node: IVizStepNode) => {
+  const onNodeClick = (e: any, node: IVizStepNode) => {
     // here we check if it's a node or edge
     // workaround for https://github.com/wbkd/react-flow/issues/2202
-    if (!_e.target.classList.contains('stepNode__clickable')) return;
+    if (!e.target.classList.contains('stepNode__clickable')) return;
 
     if (!node.data.isPlaceholder) {
       const step = stepsService.findStepWithUUID(node.data.step.UUID);
-      if (step) setSelectedStep(step);
+      if (step) {
+        setSelectedStep(step);
+        visualizationStore.setSelectedStepUuid(step.UUID);
+      }
 
       /** If the details panel is collapsed, we expanded for the user */
       if (!isPanelExpanded) setIsPanelExpanded(true);
@@ -124,6 +129,7 @@ const Visualization = () => {
        * selected, we collapse it for the user */
       if (isPanelExpanded && selectedStep.UUID === node.data.step.UUID) {
         setIsPanelExpanded(false);
+        visualizationStore.setSelectedStepUuid('');
       }
     }
   };
