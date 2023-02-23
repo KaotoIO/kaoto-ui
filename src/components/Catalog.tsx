@@ -122,6 +122,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
                 <ToggleGroup aria-label={'Icon variant toggle group'}>
                   <ToggleGroupItem
                     text={'start'}
+                    data-testid={`catalog-step-start`}
                     aria-label={'sources button'}
                     buttonId={'START'}
                     isSelected={isSelected === 'START'}
@@ -129,6 +130,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
                   />
                   <ToggleGroupItem
                     icon={'actions'}
+                    data-testid={`catalog-step-actions`}
                     aria-label={'actions button'}
                     buttonId={'MIDDLE'}
                     isSelected={isSelected === 'MIDDLE'}
@@ -136,6 +138,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
                   />
                   <ToggleGroupItem
                     text={'end'}
+                    data-testid={`catalog-step-end`}
                     aria-label={'sinks button'}
                     buttonId={'END'}
                     isSelected={isSelected === 'END'}

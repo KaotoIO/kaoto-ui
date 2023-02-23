@@ -40,6 +40,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
         addAlert &&
         addAlert({
           title: 'Add Step Unsuccessful',
+          dataTestId: 'alert-box-add-unsuccessful',
           variant: AlertVariant.danger,
           description: validation.message ?? 'Something went wrong, please try again later.',
         });
@@ -85,6 +86,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
         addAlert &&
         addAlert({
           title: 'Replace Step Unsuccessful',
+          dataTestId: 'alert-box-replace-unsuccessful',
           variant: AlertVariant.danger,
           description: validation.message ?? 'Something went wrong, please try again later.',
         });
