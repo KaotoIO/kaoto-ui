@@ -1,4 +1,5 @@
 import { StepsService } from './stepsService';
+import { ValidationService } from './validationService';
 import { IIntegrationJsonStore, RFState } from '@kaoto/store';
 import {
   IStepProps,
@@ -132,8 +133,9 @@ export class VisualizationService {
         // handle special first step, needs to be connected to its immediate parent
         if (node.data.isFirstStep) {
           const parentStepNode: IVizStepNode = stepNodes[parentNodeIndex];
-          const showDeleteEdge = VisualizationService.showDeleteBranchEdge(
-            parentStepNode.data.step
+          const showDeleteEdge = ValidationService.reachedMinBranches(
+            parentStepNode.data.step.branches.length,
+            parentStepNode.data.step.minBranches
           );
           let edgeProps = VisualizationService.buildEdgeParams(
             parentStepNode,
@@ -150,8 +152,9 @@ export class VisualizationService {
         // handle placeholder steps within a branch
         if (node.data.branchInfo?.branchStep && node.data.isPlaceholder) {
           const parentStepNode: IVizStepNode = stepNodes[parentNodeIndex];
-          const showDeleteEdge = VisualizationService.showDeleteBranchEdge(
-            parentStepNode.data.step
+          const showDeleteEdge = ValidationService.reachedMinBranches(
+            parentStepNode.data.step.branches.length,
+            parentStepNode.data.step.minBranches
           );
 
           specialEdges.push(
@@ -577,17 +580,13 @@ export class VisualizationService {
     const supportsBranching = !!(nodeData.step.minBranches || nodeData.step.maxBranches);
     if (isEndStep && !supportsBranching) return false;
     if (supportsBranching && nodeData.step.branches && nodeData.step.branches.length > 0) {
-      return true;
+      // check if max branches reached
+      return ValidationService.reachedMaxBranches(
+        nodeData.step.branches.length,
+        nodeData.step.maxBranches
+      );
+      // return true;
     } else return !!(nodeData.isLastStep && !isEndStep);
-  }
-
-  /**
-   * Given a step, determines whether to show the edge to
-   * delete a branch, based on the required number of branches.
-   * @param step
-   */
-  static showDeleteBranchEdge(step: IStepProps): boolean {
-    return step.branches!.length > step.minBranches;
   }
 
   /**
