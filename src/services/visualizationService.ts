@@ -536,6 +536,14 @@ export class VisualizationService {
     return node.data.step && nextNode && !StepsService.containsBranches(node.data.step);
   }
 
+  static shouldHighlightNode(hoverUuid: string, stepUuid: string) {
+    if (hoverUuid === stepUuid) {
+      return ' stepNode__Active';
+    } else {
+      return '';
+    }
+  }
+
   /**
    * Determines whether to show a button for appending a step or inserting a branch
    * @param nodeData

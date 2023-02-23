@@ -20,7 +20,7 @@
 .stepNode {
     align-items: center;
     background: var(--pf-global--BackgroundColor--100);
-    border: 2px solid rgb(0, 136, 206);
+    border: 2px solid var(--pf-global--BorderColor--100);
     border-radius: 50%;
     display: block;
     font-family: Ubuntu, serif;
@@ -30,6 +30,10 @@
     padding: 10px;
     text-align: center;
     width: 80px;
+}
+
+.stepNode__Active {
+    border: 2px solid rgb(0, 136, 206);
 }
 
 .stepNode__Add {

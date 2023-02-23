@@ -317,6 +317,18 @@ describe('visualizationService', () => {
     expect(VisualizationService.shouldAddEdge(nodeWithoutBranches, nextNode)).toBeTruthy();
   });
 
+  it('shouldHighlightNode(): determines if node should be highlighted', () => {
+    const something = 'something';
+    const nothing = undefined;
+    expect(VisualizationService.shouldHighlightNode('example', 'example')).toEqual(
+      ' stepNode__Active'
+    );
+    expect(VisualizationService.shouldHighlightNode(something, nothing ?? 'example')).toEqual('');
+    expect(VisualizationService.shouldHighlightNode(something, nothing ?? something)).toEqual(
+      ' stepNode__Active'
+    );
+  });
+
   it('showAppendStepButton(): given a node, should determine whether to show an append step button for it', () => {
     // it cannot be an END step, it must be the last step in the array,
     // OR it must support branching & contain at least one step

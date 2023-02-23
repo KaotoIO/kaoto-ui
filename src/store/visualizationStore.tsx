@@ -16,11 +16,13 @@ export type RFState = {
   deleteNode: (nodeIndex: number) => void;
   nodes: IVizStepNode[];
   edges: IVizStepPropsEdge[];
+  hoverStepUuid: string;
   layout: string;
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   setEdges: (newEdges: IVizStepPropsEdge[]) => void;
+  setHoverStepUuid: (stepUuid: string) => void;
   setLayout: (newLayout: string) => void;
   setNodes: (newNodes: IVizStepNode[]) => void;
   /**
@@ -38,6 +40,7 @@ export const useVisualizationStore = create<RFState>((set, get) => ({
     set((state) => ({
       nodes: [...state.nodes.filter((_n, idx) => idx !== nodeIndex)],
     })),
+  hoverStepUuid: '',
   layout: 'RIGHT', // e.g. RIGHT, DOWN
   onNodesChange: (changes: NodeChange[]) =>
     set((state) => ({
@@ -56,6 +59,7 @@ export const useVisualizationStore = create<RFState>((set, get) => ({
     set({
       edges: [...newEdges],
     }),
+  setHoverStepUuid: (stepUuid: string) => set({ hoverStepUuid: stepUuid }),
   setLayout: (newLayout: string) => set({ layout: newLayout }),
   setNodes: (newNodes: IVizStepNode[]) =>
     set({
