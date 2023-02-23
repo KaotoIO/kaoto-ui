@@ -100,7 +100,8 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             `${VisualizationService.shouldHighlightNode(
               visualizationStore.hoverStepUuid,
               data.branchInfo?.branchParentUuid ?? data.step.UUID
-            )}`
+            )}` +
+            `${visualizationStore.selectedStepUuid === data.step.UUID ? ' stepNode__Selected' : ''}`
           }
           onDrop={onDropReplace}
           onMouseEnter={() => {

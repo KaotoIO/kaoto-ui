@@ -321,11 +321,11 @@ describe('visualizationService', () => {
     const something = 'something';
     const nothing = undefined;
     expect(VisualizationService.shouldHighlightNode('example', 'example')).toEqual(
-      ' stepNode__Active'
+      ' stepNode__Hover'
     );
     expect(VisualizationService.shouldHighlightNode(something, nothing ?? 'example')).toEqual('');
     expect(VisualizationService.shouldHighlightNode(something, nothing ?? something)).toEqual(
-      ' stepNode__Active'
+      ' stepNode__Hover'
     );
   });
 

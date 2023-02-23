@@ -32,8 +32,12 @@
     width: 80px;
 }
 
-.stepNode__Active {
+.stepNode__Hover {
     border: 2px solid rgb(0, 136, 206);
+}
+
+.stepNode__Selected {
+    border: 3px solid rgb(0, 136, 206);
 }
 
 .stepNode__Add {

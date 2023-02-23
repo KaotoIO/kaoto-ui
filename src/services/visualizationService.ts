@@ -538,7 +538,7 @@ export class VisualizationService {
 
   static shouldHighlightNode(hoverUuid: string, stepUuid: string) {
     if (hoverUuid === stepUuid) {
-      return ' stepNode__Active';
+      return ' stepNode__Hover';
     } else {
       return '';
     }
