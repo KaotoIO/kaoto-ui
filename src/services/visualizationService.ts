@@ -617,7 +617,10 @@ export class VisualizationService {
    * @param nodeData
    */
   static showBranchesTab(nodeData: IVizStepNodeData): boolean {
-    return StepsService.supportsBranching(nodeData.step);
+    return (
+      StepsService.supportsBranching(nodeData.step) &&
+      nodeData.step.branches?.length !== nodeData.step.maxBranches
+    );
   }
 
   /**

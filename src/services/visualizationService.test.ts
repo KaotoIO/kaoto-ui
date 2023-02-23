@@ -383,7 +383,43 @@ describe('visualizationService', () => {
     ).toBeFalsy();
   });
 
-  it('showDeleteBranchEdge()', () => {
+  it('showBranchesTab(): given node data, should determine whether to show the branches tab in mini catalog', () => {
+    const step: IVizStepNodeData = {
+      label: '',
+      step: {} as IStepProps,
+    };
+
+    expect(VisualizationService.showBranchesTab(step)).toBeFalsy();
+    // has branches but not branch support
+    expect(
+      VisualizationService.showBranchesTab({
+        ...step,
+        step: { ...step.step, branches: [] },
+      })
+    ).toBeFalsy();
+
+    expect(
+      VisualizationService.showBranchesTab({
+        ...step,
+        step: { ...step.step, branches: [], minBranches: 0, maxBranches: -1 },
+      })
+    ).toBeTruthy();
+
+    // if step has maximum number of branches already
+    expect(
+      VisualizationService.showBranchesTab({
+        ...step,
+        step: {
+          ...step.step,
+          branches: [{}, {}] as IStepPropsBranch[],
+          minBranches: 0,
+          maxBranches: 2,
+        },
+      })
+    ).toBeFalsy();
+  });
+
+  it('showDeleteBranchEdge(): given a step, should determine whether to show the ability to delete branches', () => {
     expect(
       VisualizationService.showDeleteBranchEdge({
         branches: [{}] as IStepPropsBranch[],
@@ -391,6 +427,7 @@ describe('visualizationService', () => {
         maxBranches: -1,
       } as IStepProps)
     ).toBeFalsy();
+
     expect(
       VisualizationService.showDeleteBranchEdge({
         branches: [{}, {}, {}] as IStepPropsBranch[],
@@ -469,29 +506,6 @@ describe('visualizationService', () => {
         isFirstStep: false,
         previousStepUuid: 'step-one',
         step: { ...node.step, type: 'MIDDLE' } as IStepProps,
-      })
-    ).toBeTruthy();
-  });
-
-  it('showBranchesTab(): given node data, should determine whether to show the branches tab in mini catalog', () => {
-    const step: IVizStepNodeData = {
-      label: '',
-      step: {} as IStepProps,
-    };
-
-    expect(VisualizationService.showBranchesTab(step)).toBeFalsy();
-    // has branches but not branch support
-    expect(
-      VisualizationService.showBranchesTab({
-        ...step,
-        step: { ...step.step, branches: [] },
-      })
-    ).toBeFalsy();
-
-    expect(
-      VisualizationService.showBranchesTab({
-        ...step,
-        step: { ...step.step, branches: [], minBranches: 0, maxBranches: -1 },
       })
     ).toBeTruthy();
   });
