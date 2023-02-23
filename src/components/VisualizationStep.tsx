@@ -102,7 +102,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const getHoverClass = (): string => {
     return VisualizationService.getNodeClass(
       visualizationStore.hoverStepUuid,
-      data.branchInfo?.branchParentUuid ?? data.step.UUID,
+      data.branchInfo?.rootStepUuid ?? data.step.UUID,
       ' stepNode__Hover'
     );
   };
@@ -115,9 +115,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           onDrop={onDropReplace}
           onMouseEnter={() => {
             if (data.branchInfo || supportsBranching) {
-              visualizationStore.setHoverStepUuid(
-                data.branchInfo?.branchParentUuid ?? data.step.UUID
-              );
+              visualizationStore.setHoverStepUuid(data.branchInfo?.rootStepUuid ?? data.step.UUID);
             } else {
               visualizationStore.setHoverStepUuid(data.step.UUID);
             }

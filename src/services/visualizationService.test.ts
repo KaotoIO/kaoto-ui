@@ -383,6 +383,23 @@ describe('visualizationService', () => {
     ).toBeFalsy();
   });
 
+  it('showDeleteBranchEdge()', () => {
+    expect(
+      VisualizationService.showDeleteBranchEdge({
+        branches: [{}] as IStepPropsBranch[],
+        minBranches: 2,
+        maxBranches: -1,
+      } as IStepProps)
+    ).toBeFalsy();
+    expect(
+      VisualizationService.showDeleteBranchEdge({
+        branches: [{}, {}, {}] as IStepPropsBranch[],
+        minBranches: 2,
+        maxBranches: -1,
+      } as IStepProps)
+    ).toBeTruthy();
+  });
+
   it('showPrependStepButton(): given a node, should determine whether to show a prepend step button for it', () => {
     const vizStoreState = useVisualizationStore.getState();
     useVisualizationStore.setState({

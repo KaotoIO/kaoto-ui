@@ -185,23 +185,23 @@ export type IVizStepNodeDataBranch = Partial<IStepPropsBranch> & {
    * An optional label for the branch (e.g. 'if', 'else', 'otherwise')
    */
   branchIdentifier?: string;
-
-  /**
-   * The UUID of the original (n=1) branch's parent node
-   */
-  branchParentUuid: string;
-
-  /**
-   * The UUID of the node *after* the original (n=1) branch's
-   * parent node (used for connecting branch steps back)
-   */
-  branchParentNextUuid: string;
   branchStep: boolean;
 
   /**
    * The branch node's immediate parent
    */
   parentUuid?: string;
+
+  /**
+   * The UUID of the original (n=1) branch's parent node
+   */
+  rootStepUuid: string;
+
+  /**
+   * The UUID of the node *after* the original (n=1) branch's
+   * parent node (used for connecting branch steps back)
+   */
+  rootStepNextUuid: string;
 };
 
 /**

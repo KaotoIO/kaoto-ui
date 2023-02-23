@@ -66,14 +66,16 @@ export class VisualizationService {
    * @param node
    * @param rootNode
    * @param rootNextNode
+   * @param edgeType
    */
   static buildBranchSingleStepEdges(
     node: IVizStepNode,
     rootNode: IVizStepNode,
-    rootNextNode: IVizStepNode
+    rootNextNode: IVizStepNode,
+    edgeType?: string
   ): IVizStepPropsEdge[] {
     const branchPlaceholderEdges: IVizStepPropsEdge[] = [];
-    let edgeProps = VisualizationService.buildEdgeParams(rootNode, node, 'default');
+    let edgeProps = VisualizationService.buildEdgeParams(rootNode, node, edgeType ?? 'default');
 
     if (node.data.branchInfo?.branchIdentifier)
       edgeProps.label = node.data.branchInfo?.branchIdentifier;
@@ -82,7 +84,7 @@ export class VisualizationService {
 
     if (rootNextNode) {
       branchPlaceholderEdges.push(
-        VisualizationService.buildEdgeParams(node, rootNextNode, 'default')
+        VisualizationService.buildEdgeParams(node, rootNextNode, edgeType ?? 'default')
       );
     }
 
@@ -103,8 +105,8 @@ export class VisualizationService {
         node.data.branchInfo?.parentUuid,
         stepNodes
       );
-      const ogNodeNextIndex = VisualizationService.findNodeIdxWithUUID(
-        node.data.branchInfo?.branchParentNextUuid,
+      const rootStepNextIndex = VisualizationService.findNodeIdxWithUUID(
+        node.data.branchInfo?.rootStepNextUuid,
         stepNodes
       );
 
@@ -129,8 +131,15 @@ export class VisualizationService {
 
         // handle special first step, needs to be connected to its immediate parent
         if (node.data.isFirstStep) {
-          const ogNodeStep = stepNodes[parentNodeIndex];
-          let edgeProps = VisualizationService.buildEdgeParams(ogNodeStep, node, 'delete');
+          const parentStepNode: IVizStepNode = stepNodes[parentNodeIndex];
+          const showDeleteEdge = VisualizationService.showDeleteBranchEdge(
+            parentStepNode.data.step
+          );
+          let edgeProps = VisualizationService.buildEdgeParams(
+            parentStepNode,
+            node,
+            showDeleteEdge ? 'delete' : 'default'
+          );
 
           if (node.data.branchInfo?.branchIdentifier)
             edgeProps.label = node.data.branchInfo?.branchIdentifier;
@@ -140,18 +149,24 @@ export class VisualizationService {
 
         // handle placeholder steps within a branch
         if (node.data.branchInfo?.branchStep && node.data.isPlaceholder) {
+          const parentStepNode: IVizStepNode = stepNodes[parentNodeIndex];
+          const showDeleteEdge = VisualizationService.showDeleteBranchEdge(
+            parentStepNode.data.step
+          );
+
           specialEdges.push(
             ...VisualizationService.buildBranchSingleStepEdges(
               node,
               stepNodes[parentNodeIndex],
-              stepNodes[ogNodeNextIndex]
+              stepNodes[rootStepNextIndex],
+              showDeleteEdge ? 'delete' : 'default'
             )
           );
         }
 
         // handle special last steps
         if (node.data.isLastStep && !StepsService.isEndStep(node.data.step)) {
-          const nextStep = stepNodes[ogNodeNextIndex];
+          const nextStep = stepNodes[rootStepNextIndex];
 
           if (nextStep) {
             // it needs to merge back
@@ -326,10 +341,10 @@ export class VisualizationService {
             VisualizationService.buildNodesFromSteps(branch.steps, layout, props, {
               branchIdentifier: branch.identifier,
 
-              // branchParentUuid is the parent for a first branch step,
+              // rootStepUuid is the parent for a first branch step,
               // and grandparent for n branch step
-              branchParentUuid: branchInfo?.branchParentUuid ?? steps[index].UUID,
-              branchParentNextUuid: branchInfo?.branchParentNextUuid ?? steps[index + 1]?.UUID,
+              rootStepUuid: branchInfo?.rootStepUuid ?? steps[index].UUID,
+              rootStepNextUuid: branchInfo?.rootStepNextUuid ?? steps[index + 1]?.UUID,
               branchStep: true,
               branchUuid: branch.branchUuid,
 
@@ -564,6 +579,15 @@ export class VisualizationService {
     if (supportsBranching && nodeData.step.branches && nodeData.step.branches.length > 0) {
       return true;
     } else return !!(nodeData.isLastStep && !isEndStep);
+  }
+
+  /**
+   * Given a step, determines whether to show the edge to
+   * delete a branch, based on the required number of branches.
+   * @param step
+   */
+  static showDeleteBranchEdge(step: IStepProps): boolean {
+    return step.branches!.length > step.minBranches;
   }
 
   /**
