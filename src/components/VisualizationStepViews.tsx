@@ -1,3 +1,4 @@
+import { dynamicImport } from './import';
 import { Extension, JsonSchemaConfigurator, StepErrorBoundary } from '@kaoto/components';
 import { StepsService } from '@kaoto/services';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
@@ -12,11 +13,10 @@ import {
   GridItem,
   Tab,
   Tabs,
-  TabTitleText
+  TabTitleText,
 } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { lazy, useEffect, useState } from 'react';
-import { dynamicImport } from './import';
 
 export interface IStepViewsProps {
   isPanelExpanded: boolean;
