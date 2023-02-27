@@ -56,6 +56,6 @@ spec:
                       - aggregate: {}
         - filter:
             simple: "{{?foo}}"
-            steps: []
-        - to:
-            uri: kamelet:sink
+            steps:
+              - to:
+                uri: kamelet:sink

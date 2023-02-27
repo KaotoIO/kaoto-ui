@@ -39,7 +39,7 @@ describe('Settings', () => {
     // add a step
     cy.get('.stepNode').contains('ADD A STEP').click({ force: true });
     cy.get('#stepSearch').type('timer');
-    cy.get('[data-testid="miniCatalog__stepItem--timer-source"]').click();
+    cy.get('[data-testid="miniCatalog__stepItem--timer"]').click();
 
     cy.wait('@getDSLs');
     cy.wait('@getViewDefinitions');
@@ -70,14 +70,14 @@ describe('Settings', () => {
     cy.get('[data-testid="settings-modal--save"]').click();
 
     // verify that steps are still there
-    cy.get('[data-testid="viz-step-timer-source"]').should('be.visible');
+    cy.get('[data-testid="viz-step-timer"]').should('be.visible');
 
     // verify that toolbar contains new name
     cy.get('[data-testid="kaoto-toolbar--name"]').should('have.text', 'cherry');
 
     // verify that source code editor contains new values
     cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.get('.code-editor').contains('timer-source');
+    cy.get('.code-editor').contains('timer');
 
     // reopen modal, verify that value is changed accordingly
     cy.wait('@getIntegration');

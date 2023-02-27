@@ -12,15 +12,15 @@ describe('Test for catalog actions', () => {
         cy.get('[data-testid="sourceCode--applyButton"]').click();
     });
 
-    // Try replace the digitalocean step with the timer-source step
+    // Try replace the digitalocean step (action) with the timer step (start)
     it("User drags and drops an invalid step onto a nested branch step", () => {
         const dataTransfer = new DataTransfer();
         // open catalog
         cy.get('[data-testid="toolbar-step-catalog-btn"]').click();
-        // select timer-source step
-        cy.get('#stepSearch').type('timer-source');
-        // drag timer-source step from catalog
-        cy.get('[data-testid="catalog-step-timer-source"]').trigger('dragstart', {
+        // select timer step
+        cy.get('#stepSearch').type('timer');
+        // drag timer step from catalog
+        cy.get('[data-testid="catalog-step-timer"]').trigger('dragstart', {
             dataTransfer,
         });
         // drop aggregate step from catalog over nested digitalocean step
@@ -31,10 +31,10 @@ describe('Test for catalog actions', () => {
         // CHECK digitalocean step is visible
         cy.get('[data-testid="viz-step-digitalocean"]').should('be.visible');
         // CHECK aggregation step was not created
-        cy.get('[data-testid="viz-step-timer-source"]').should('not.exist');
+        cy.get('[data-testid="viz-step-timer"]').should('not.exist');
         // CHECK alert box is visible and contains error message
         cy.get('[data-testid="alert-box-replace-unsuccessful"]').should('be.visible');
-        cy.get('[data-testid="alert-box-replace-unsuccessful"]').should('contain', 'You cannot replace a middle step with a start step.');
+        cy.get('[data-testid="alert-box-replace-unsuccessful"]').should('contain', 'You cannot replace a middle step with a start step');
     });
 
     // Replace the digitalocean step with the delay step with the big catalog
