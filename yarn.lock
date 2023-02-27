@@ -15704,10 +15704,10 @@ zundo@^2.0.0-beta.11:
   resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.11.tgz#c5ee2c116af99d5c60c0fbb5199c91e5da3faf4c"
   integrity sha512-b+ZVzOcTICMLuU9cMUygWGrGoWcCdnE2u3kYm/EcWENeYEc4jEtFgFveukdZfpu+H2X7ym50JGS+KJm7YuhmYg==
 
-zustand@^4.3.1, zustand@^4.3.3:
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.3.tgz#c9113499074dde2d6d99c1b5f591e9329572c224"
-  integrity sha512-x2jXq8S0kfLGNwGh87nhRfEc2eZy37tSatpSoSIN+O6HIaBhgQHSONV/F9VNrNcBcKQu/E80K1DeHDYQC/zCrQ==
+zustand@^4.3.1, zustand@^4.3.4:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.4.tgz#55a1345656348218a690e437ee894dd042ac2440"
+  integrity sha512-QSV8MF80I4yM9UCcBhIBr5OcQkiTbZdxDofg5R5vyX49QsEia7sK1iwOhFyH/0hyNVg+h+OzARM76G8MgMno0g==
   dependencies:
     use-sync-external-store "1.2.0"
 
