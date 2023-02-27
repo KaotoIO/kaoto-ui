@@ -4,7 +4,7 @@ const webpack = require('webpack');
 
 module.exports = merge(common('development'), {
   mode: 'development',
-  devtool: 'eval-source-map',
+  devtool: 'inline-source-map',
   devServer: {
     allowedHosts: 'all',
 
