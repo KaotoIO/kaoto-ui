@@ -88,7 +88,7 @@ const VisualizationStepViews = ({
       const type = parameter.type;
 
       tempSchemaObject[propKey] = { type, description };
-      tempModelObject[propKey] = parameter.value;
+      tempModelObject[propKey] = parameter.value ?? parameter.defaultValue;
     };
 
     step.parameters?.map(schemaProps);
