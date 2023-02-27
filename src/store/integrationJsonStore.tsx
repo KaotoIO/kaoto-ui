@@ -20,7 +20,7 @@ export interface IIntegrationJsonStore {
   insertStep: (newStep: IStepProps, insertIndex: number) => void;
   integrationJson: IIntegration;
   prependStep: (currentStepIdx: number, newStep: IStepProps) => void;
-  replaceBranchStep: (newStep: IStepProps, pathToOldStep: string[] | undefined) => void;
+  replaceBranchParentStep: (newStep: IStepProps, pathToParentStep: string[] | undefined) => void;
   replaceStep: (newStep: IStepProps, oldStepIndex?: number) => void;
   setViews: (views: IViewProps[]) => void;
   updateIntegration: (newInt?: any) => void;
@@ -124,9 +124,9 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
           };
         });
       },
-      replaceBranchStep: (newStep, pathToOldStep) => {
+      replaceBranchParentStep: (newStep, pathToParentStep) => {
         let stepsCopy = get().integrationJson.steps.slice();
-        stepsCopy = setDeepValue(stepsCopy, pathToOldStep, newStep);
+        stepsCopy = setDeepValue(stepsCopy, pathToParentStep, newStep);
 
         const stepsWithNewUuids = StepsService.regenerateUuids(stepsCopy);
         const { updateSteps } = useNestedStepsStore.getState();
