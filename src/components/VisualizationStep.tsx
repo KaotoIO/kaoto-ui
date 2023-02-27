@@ -128,6 +128,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {/* PREPEND STEP BUTTON */}
           {visualizationService.showPrependStepButton(data) && (
             <Popover
+              id="popover-prepend-step"
               appendTo={() => document.body}
               aria-label="Add a step"
               bodyContent={
@@ -208,6 +209,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {/* ADD/APPEND STEP BUTTON */}
           {VisualizationService.showAppendStepButton(data, endStep) ? (
             <Popover
+              id="popover-append-step"
               appendTo={() => document.body}
               aria-label="Add a step or branch"
               bodyContent={
@@ -255,6 +257,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
         </div>
       ) : (
         <Popover
+          id="popover-add-step"
           appendTo={() => document.body}
           aria-label="Add a step"
           bodyContent={
