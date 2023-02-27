@@ -174,10 +174,10 @@ export const MiniCatalog = (props: IMiniCatalog) => {
           </Toolbar>
           <Gallery hasGutter={false} className={'miniCatalog__gallery'}>
             {catalogData &&
-              search(catalogData).map((step, idx) => {
+              search(catalogData).map((step) => {
                 return (
                   <Button
-                    key={idx}
+                    key={step.id}
                     variant={'tertiary'}
                     onClick={() => {
                       handleSelectStep(step);
@@ -192,6 +192,8 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                             src={step.icon}
                             className={'miniCatalog__stepImage'}
                             alt={'Step Image'}
+                            loading="lazy"
+                            decoding="async"
                           />
                         </Bullseye>
                       </GridItem>
