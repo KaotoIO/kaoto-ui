@@ -78,7 +78,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
         });
     }
     searchInputRef.current?.focus();
-  }, [dsl]);
+  }, []);
 
   const changeSearch = (e: string) => {
     setQuery(e);
