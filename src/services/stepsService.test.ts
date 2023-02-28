@@ -29,54 +29,24 @@ describe('stepsService', () => {
   });
 
   /**
-   * filterNestedSteps
-   */
-  it('filterNestedSteps(): should filter an array of steps given a conditional function', () => {
-    const nestedSteps = [
-      { branches: [{ steps: [{ branches: [{ steps: [{ UUID: 'log-340230' }] }] }] }] },
-    ] as IStepProps[];
-    expect(nestedSteps[0].branches![0].steps[0].branches![0].steps).toHaveLength(1);
-
-    const filtered = StepsService.filterNestedSteps(
-      nestedSteps,
-      (step) => step.UUID !== 'log-340230'
-    );
-    expect(filtered![0].branches![0].steps[0].branches![0].steps).toHaveLength(0);
-  });
-
-  /**
-   * filterStepWithBranches
-   */
-  it('filterStepWithBranches(): should filter the branch steps for a given step and conditional', () => {
-    const step = {
-      branches: [
-        {
-          steps: [
-            {
-              UUID: 'step-one',
-              branches: [{ steps: [{ UUID: 'strawberry' }, { UUID: 'banana' }] }],
-            },
-            { UUID: 'step-two', branches: [{ steps: [{ UUID: 'cherry' }] }] },
-          ],
-        },
-      ],
-    } as IStepProps;
-
-    expect(step.branches![0].steps[0].branches![0].steps).toHaveLength(2);
-
-    const filtered = StepsService.filterStepWithBranches(
-      step,
-      (step: { UUID: string }) => step.UUID !== 'banana'
-    );
-
-    expect(filtered.branches![0].steps[0].branches![0].steps).toHaveLength(1);
-  });
-
-  /**
    * findStepIdxWithUUID
    */
   it("findStepIdxWithUUID(): should find a step's index, given a particular UUID", () => {
+    const steps = [
+      { UUID: 'twitter-search-source-0' },
+      { UUID: 'pdf-action-1' },
+      { UUID: 'caffeine-action-2' },
+    ] as IStepProps[];
     expect(stepsService.findStepIdxWithUUID('caffeine-action-2', steps)).toEqual(2);
+    // passing it a nested branch's steps array
+    const nestedSteps = steps.slice();
+    nestedSteps.push({
+      UUID: 'new-step-3',
+      branches: [{ steps: [{ UUID: 'nested-step-0' }, { UUID: 'nested-step-1' }] }, {}],
+    } as IStepProps);
+    expect(
+      stepsService.findStepIdxWithUUID('nested-step-1', nestedSteps[3].branches![0].steps)
+    ).toEqual(1);
   });
 
   /**

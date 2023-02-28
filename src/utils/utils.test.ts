@@ -1,6 +1,5 @@
 import nestedBranch from '../store/data/kamelet.nested-branch.steps';
-import {findPath, getDeepValue, getRandomArbitraryNumber, setDeepValue} from './index';
-import { StepsService } from '@kaoto/services';
+import { findPath, getDeepValue, getRandomArbitraryNumber, setDeepValue } from './index';
 
 describe('utils', () => {
   it('findPath(): should find the path from a deeply nested object, given a value', () => {
@@ -15,20 +14,6 @@ describe('utils', () => {
       'steps',
       '0',
     ]);
-  });
-
-  /**
-   * filterNestedSteps
-   */
-  it('filterNestedSteps(): should filter an array of steps given a conditional function', () => {
-    const nestedBranchCopy = nestedBranch.slice();
-    expect(nestedBranchCopy[1].branches![0].steps[0].branches![0].steps).toHaveLength(1);
-
-    const filteredNestedBranch = StepsService.filterNestedSteps(
-      nestedBranchCopy,
-      (step) => step.UUID !== 'log-340230'
-    );
-    expect(filteredNestedBranch![1].branches![0].steps[0].branches![0].steps).toHaveLength(0);
   });
 
   /**
@@ -73,5 +58,4 @@ describe('utils', () => {
     expect(getRandomArbitraryNumber()).toEqual(new Uint32Array(10));
     expect(mGetRandomValues).toBeCalledWith(new Uint8Array(1));
   });
-
 });

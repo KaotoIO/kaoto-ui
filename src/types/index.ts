@@ -107,8 +107,11 @@ export interface IKaotoApi {
 }
 
 export interface INestedStep {
+  branchIndex: number;
   branchUuid: string;
-  originStepUuid: string;
+  parentStepUuid: string;
+  pathToBranch: string[] | undefined;
+  pathToParentStep: string[] | undefined;
   pathToStep: string[] | undefined;
   stepUuid: string;
 }
