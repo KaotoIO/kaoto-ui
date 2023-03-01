@@ -193,7 +193,11 @@ export type IVizStepNodeDataBranch = Partial<IStepPropsBranch> & {
   /**
    * The branch node's immediate parent
    */
-  parentUuid?: string;
+  parentStepUuid?: string;
+  /**
+   * The UUID of the node *after* the branch parent
+   */
+  parentStepNextUuid: string;
 
   /**
    * The UUID of the original (n=1) branch's parent node

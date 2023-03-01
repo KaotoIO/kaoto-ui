@@ -103,11 +103,7 @@ export class VisualizationService {
       if (node.type === 'group') return;
 
       const parentNodeIndex = VisualizationService.findNodeIdxWithUUID(
-        node.data.branchInfo?.parentUuid,
-        stepNodes
-      );
-      const rootStepNextIndex = VisualizationService.findNodeIdxWithUUID(
-        node.data.branchInfo?.rootStepNextUuid,
+        node.data.branchInfo?.parentStepUuid,
         stepNodes
       );
 
@@ -152,6 +148,10 @@ export class VisualizationService {
         // handle placeholder steps within a branch
         if (node.data.branchInfo?.branchStep && node.data.isPlaceholder) {
           const parentStepNode: IVizStepNode = stepNodes[parentNodeIndex];
+          const parentStepNextIdx = VisualizationService.findNodeIdxWithUUID(
+            node.data.branchInfo?.parentStepNextUuid,
+            stepNodes
+          );
           const showDeleteEdge = ValidationService.reachedMinBranches(
             parentStepNode.data.step.branches.length,
             parentStepNode.data.step.minBranches
@@ -161,7 +161,7 @@ export class VisualizationService {
             ...VisualizationService.buildBranchSingleStepEdges(
               node,
               stepNodes[parentNodeIndex],
-              stepNodes[rootStepNextIndex],
+              stepNodes[parentStepNextIdx],
               showDeleteEdge ? 'delete' : 'default'
             )
           );
@@ -169,11 +169,16 @@ export class VisualizationService {
 
         // handle special last steps
         if (node.data.isLastStep && !StepsService.isEndStep(node.data.step)) {
-          const nextStep = stepNodes[rootStepNextIndex];
+          const parentStepNextIdx = VisualizationService.findNodeIdxWithUUID(
+            node.data.branchInfo?.parentStepNextUuid,
+            stepNodes
+          );
 
-          if (nextStep) {
+          if (stepNodes[parentStepNextIdx]) {
             // it needs to merge back
-            specialEdges.push(VisualizationService.buildEdgeParams(node, nextStep, 'default'));
+            specialEdges.push(
+              VisualizationService.buildEdgeParams(node, stepNodes[parentStepNextIdx], 'default')
+            );
           }
         }
       }
@@ -345,14 +350,15 @@ export class VisualizationService {
               branchIdentifier: branch.identifier,
 
               // rootStepUuid is the parent for a first branch step,
-              // and grandparent for n branch step
-              rootStepUuid: branchInfo?.rootStepUuid ?? steps[index].UUID,
+              // and ancestor for n branch step
               rootStepNextUuid: branchInfo?.rootStepNextUuid ?? steps[index + 1]?.UUID,
+              rootStepUuid: branchInfo?.rootStepUuid ?? steps[index].UUID,
               branchStep: true,
               branchUuid: branch.branchUuid,
 
-              // parentUuid is always the parent of the branch step, no matter how nested
-              parentUuid: steps[index].UUID,
+              // parentStepUuid is always the parent of the branch step, no matter how nested
+              parentStepNextUuid: steps[index + 1]?.UUID ?? branchInfo?.rootStepNextUuid,
+              parentStepUuid: steps[index].UUID,
             })
           );
         });
@@ -631,7 +637,9 @@ export class VisualizationService {
    * @param nodeData
    */
   static showStepsTab(nodeData: IVizStepNodeData): boolean {
+    // if it contains branches and no next step, show the steps tab
     if (StepsService.containsBranches(nodeData.step) && !nodeData.nextStepUuid) return true;
+    // if it contains branches, don't show the steps tab
     return !StepsService.containsBranches(nodeData.step);
   }
 }

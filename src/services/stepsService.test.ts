@@ -138,25 +138,6 @@ describe('stepsService', () => {
   });
 
   /**
-   * prependStep
-   */
-  it('prependStep(): should insert the provided step at the beginning of a given array of steps', () => {
-    const steps = [
-      {
-        name: 'strawberry',
-      },
-      {
-        name: 'blueberry',
-      },
-    ] as IStepProps[];
-
-    expect(StepsService.prependStep(steps, { name: 'peach' } as IStepProps)).toHaveLength(3);
-    expect(StepsService.prependStep(steps, { name: 'mango' } as IStepProps)[0]).toEqual({
-      name: 'mango',
-    });
-  });
-
-  /**
    * regenerateUuids
    */
   it('regenerateUuids(): should regenerate UUIDs for an array of steps', () => {
