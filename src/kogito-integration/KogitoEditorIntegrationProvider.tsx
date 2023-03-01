@@ -102,12 +102,13 @@ function KogitoEditorIntegrationProviderInternal(
         }
 
         let intCopy = JSON.parse(JSON.stringify(integrationJson));
-        let tmpInt = {
+        const tmpInt: IIntegration = {
           ...integrationJson,
           metadata: {
             ...integrationJson.metadata,
             ...settings,
           },
+          dsl: settings.dsl.name
         };
         fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
           if (canceled.get()) return;
