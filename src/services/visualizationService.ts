@@ -294,10 +294,10 @@ export class VisualizationService {
     let id = 0;
     let getId = (uuid: string) => `node_${id++}-${uuid}-${getRandomArbitraryNumber()}`;
 
-    // if no steps or first step isn't START or an EIP, create a dummy placeholder step
+    // if no steps or first step isn't START, create a dummy placeholder step
     if (
       (steps.length === 0 && !branchInfo) ||
-      (!StepsService.isFirstStepStart(steps) && !StepsService.isFirstStepEip(steps) && !branchInfo)
+      (!StepsService.isFirstStepStart(steps) && !branchInfo)
     ) {
       VisualizationService.insertAddStepPlaceholder(stepNodes, getId(''), 'START', {
         nextStepUuid: steps[0]?.UUID,
