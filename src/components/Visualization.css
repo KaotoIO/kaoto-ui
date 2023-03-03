@@ -17,6 +17,11 @@
     right: -20px !important;
 }
 
+.reactflow-wrapper {
+    width: 100vw;
+    height: calc(100vh - 77px);
+}
+
 .stepNode {
     align-items: center;
     background: var(--pf-global--BackgroundColor--100);
@@ -51,7 +56,7 @@
     left: 0;
     top: 0;
  }
-  
+
  .stepNode__Icon {
     position: relative;
     top: 55%;
