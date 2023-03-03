@@ -138,11 +138,6 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').should('have.length', 3);
     });
 
-    // TODO: Transfer to the branch part?
-    it('User prepends a step', () => {
-
-    });
-
     it('Step Detail - User configures a normal step, which updates the YAML)', () => {
         // Click on the log step
         cy.get('[data-testid="viz-step-log"]').click();
