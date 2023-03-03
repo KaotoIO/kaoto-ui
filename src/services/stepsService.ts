@@ -335,30 +335,32 @@ export class StepsService {
    * @param targetNode
    * @param newStep
    */
-  handleInsertStep(targetNode: IVizStepNode | undefined, newStep: IStepProps) {
-    if (targetNode?.data.branchInfo) {
-      const currentStepNested = this.getStepNested(targetNode.data.step);
+  handleInsertStep(targetNode: IVizStepNode | undefined, step: IStepProps) {
+    return fetchStepDetails(step.id).then((newStep) => {
+      if (targetNode?.data.branchInfo) {
+        const currentStepNested = this.getStepNested(targetNode.data.step);
 
-      if (currentStepNested) {
-        const stepsCopy = this.integrationJsonStore.integrationJson.steps.slice();
-        let newParentStep = getDeepValue(stepsCopy, currentStepNested.pathToParentStep);
-        const newBranch = newParentStep.branches[currentStepNested.branchIndex];
-        const targetIdx = this.findStepIdxWithUUID(targetNode.data.step.UUID, newBranch.steps);
-        newParentStep.branches[currentStepNested.branchIndex].steps = StepsService.insertStep(
-          newBranch.steps,
-          targetIdx,
-          newStep
-        );
+        if (currentStepNested) {
+          const stepsCopy = this.integrationJsonStore.integrationJson.steps.slice();
+          let newParentStep = getDeepValue(stepsCopy, currentStepNested.pathToParentStep);
+          const newBranch = newParentStep.branches[currentStepNested.branchIndex];
+          const targetIdx = this.findStepIdxWithUUID(targetNode.data.step.UUID, newBranch.steps);
+          newParentStep.branches[currentStepNested.branchIndex].steps = StepsService.insertStep(
+            newBranch.steps,
+            targetIdx,
+            newStep
+          );
 
-        this.integrationJsonStore.replaceBranchParentStep(
-          newParentStep,
-          currentStepNested.pathToParentStep
-        );
+          this.integrationJsonStore.replaceBranchParentStep(
+            newParentStep,
+            currentStepNested.pathToParentStep
+          );
+        }
+      } else {
+        const currentIdx = this.findStepIdxWithUUID(targetNode?.data.step.UUID);
+        this.integrationJsonStore.insertStep(newStep, currentIdx);
       }
-    } else {
-      const currentIdx = this.findStepIdxWithUUID(targetNode?.data.step.UUID);
-      this.integrationJsonStore.insertStep(newStep, currentIdx);
-    }
+    });
   }
 
   /**

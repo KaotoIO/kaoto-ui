@@ -87,6 +87,12 @@ describe('visualizationService', () => {
       id: 'e-' + currentStep.id + '>' + previousStep.id,
       markerEnd: {
         type: MarkerType.Arrow,
+        color: '#d2d2d2',
+        strokeWidth: 2,
+      },
+      style: {
+        stroke: '#d2d2d2',
+        strokeWidth: 2,
       },
       source: currentStep.id,
       target: previousStep.id,

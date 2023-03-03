@@ -2,8 +2,9 @@ import { AlertProvider } from '../layout';
 import { Catalog } from './Catalog';
 import { jest } from '@jest/globals';
 import { fetchCatalogSteps } from '@kaoto/api';
+import { useStepCatalogStore } from '@kaoto/store';
 import { screen } from '@testing-library/dom';
-import { render } from '@testing-library/react';
+import { render, renderHook } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 jest.mock('@kaoto/api');
@@ -69,7 +70,9 @@ let method: jest.Mock<typeof fetchCatalogSteps>;
 describe('Catalog.tsx', () => {
   const user = userEvent.setup();
   beforeAll(() => {
-    method = (fetchCatalogSteps as jest.Mock<typeof fetchCatalogSteps>).mockResolvedValue(mockedValue);
+    method = (fetchCatalogSteps as jest.Mock<typeof fetchCatalogSteps>).mockResolvedValue(
+      mockedValue
+    );
   });
 
   test('component renders correctly', async () => {
@@ -101,6 +104,8 @@ describe('Catalog.tsx', () => {
 
   test('Search input works correctly', async () => {
     const user = userEvent.setup();
+    const { result } = renderHook(() => useStepCatalogStore());
+    result.current.setStepCatalog([]);
     render(
       <AlertProvider>
         <Catalog handleClose={jest.fn()} />
@@ -118,12 +123,17 @@ describe('Catalog.tsx', () => {
 
     expect(screen.queryByText('claim-check')).not.toBeInTheDocument();
     expect(screen.getByText('unmarshal')).toBeInTheDocument();
-
   });
 
   test('Alert is fired when there is an error with fetching', async () => {
-    jest.spyOn(console, 'error').mockImplementationOnce(() => { return; });
-    method = (fetchCatalogSteps as jest.Mock<typeof fetchCatalogSteps>).mockImplementation(() => Promise.reject('fail'));
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {
+      return;
+    });
+    method = (fetchCatalogSteps as jest.Mock<typeof fetchCatalogSteps>).mockImplementation(() =>
+      Promise.reject('fail')
+    );
+    const { result } = renderHook(() => useStepCatalogStore());
+    result.current.setStepCatalog([]);
     render(
       <AlertProvider>
         <Catalog handleClose={jest.fn()} />

@@ -11,7 +11,7 @@ import {
 import { StepsService, VisualizationService } from '@kaoto/services';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IVizStepNode } from '@kaoto/types';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
 
 const Visualization = () => {
@@ -25,8 +25,6 @@ const Visualization = () => {
     zoom: 1.2,
   };
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
-  const [, setReactFlowInstance] = useState(null);
-  const reactFlowWrapper = useRef(null);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({
     maxBranches: 0,
     minBranches: 0,
@@ -40,7 +38,10 @@ const Visualization = () => {
   const previousLayout = useRef(visualizationStore.layout);
   const previousIntegrationJson = useRef(integrationJsonStore.integrationJson);
   const visualizationService = new VisualizationService(integrationJsonStore, visualizationStore);
-  const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
+  const stepsService = useMemo(
+    () => new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore),
+    [integrationJsonStore, nestedStepsStore, visualizationStore],
+  );
 
   // initial loading of visualization steps
   useEffect(() => {
@@ -109,7 +110,7 @@ const Visualization = () => {
    * @param e
    * @param node
    */
-  const onNodeClick = (e: any, node: IVizStepNode) => {
+  const onNodeClick = useCallback((e: any, node: IVizStepNode) => {
     // here we check if it's a node or edge
     // workaround for https://github.com/wbkd/react-flow/issues/2202
     if (!e.target.classList.contains('stepNode__clickable')) return;
@@ -132,11 +133,7 @@ const Visualization = () => {
         visualizationStore.setSelectedStepUuid('');
       }
     }
-  };
-
-  const onLoad = (_reactFlowInstance: any) => {
-    setReactFlowInstance(_reactFlowInstance);
-  };
+  }, [isPanelExpanded, selectedStep.UUID, stepsService, visualizationStore]);
 
   /**
    * Handles Step View configuration changes
@@ -152,8 +149,8 @@ const Visualization = () => {
       <KaotoDrawer
         isExpanded={isPanelExpanded}
         data-expanded={isPanelExpanded}
-        isResizable={true}
-        dataTestId={'kaoto-right-drawer'}
+        isResizable
+        dataTestId="kaoto-right-drawer"
         panelContent={
           <VisualizationStepViews
             step={selectedStep}
@@ -162,19 +159,14 @@ const Visualization = () => {
             saveConfig={saveConfig}
           />
         }
-        position={'right'}
-        id={'right-resize-panel'}
-        defaultSize={'500px'}
-        minSize={'150px'}
+        position="right"
+        id="right-resize-panel"
+        defaultSize="500px"
+        minSize="150px"
       >
         <div
           className="reactflow-wrapper"
-          data-testid={'react-flow-wrapper'}
-          ref={reactFlowWrapper}
-          style={{
-            width: '100vw',
-            height: 'calc(100vh - 77px )',
-          }}
+          data-testid="react-flow-wrapper"
         >
           <ReactFlow
             nodes={visualizationStore.nodes}
@@ -186,7 +178,6 @@ const Visualization = () => {
             onNodeClick={onNodeClick}
             onNodesChange={visualizationStore.onNodesChange}
             onEdgesChange={visualizationStore.onEdgesChange}
-            onLoad={onLoad}
             snapToGrid={true}
             snapGrid={[15, 15]}
             deleteKeyCode={null}

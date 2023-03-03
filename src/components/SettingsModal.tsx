@@ -1,6 +1,11 @@
 import { fetchCapabilities, fetchCompatibleDSLs, fetchIntegrationSourceCode } from '@kaoto/api';
 import { ValidationService } from '@kaoto/services';
-import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
+import {
+  useIntegrationJsonStore,
+  useIntegrationSourceStore,
+  useSettingsStore,
+  useStepCatalogStore,
+} from '@kaoto/store';
 import { ICapabilities, ISettings } from '@kaoto/types';
 import { usePrevious } from '@kaoto/utils';
 import {
@@ -36,6 +41,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const [availableDSLs, setAvailableDSLs] = useState<string[]>([]);
   const { settings, setSettings } = useSettingsStore((state) => state);
   const [localSettings, setLocalSettings] = useState<ISettings>(settings);
+  const setStepCatalogDsl = useStepCatalogStore((state) => state.setDsl);
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
   const { setSourceCode } = useIntegrationSourceStore();
   const previousIntegrationJson = usePrevious(integrationJson);
@@ -99,6 +105,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
       capabilities.dsls.forEach((dsl) => {
         if (dsl.name === value) {
           setLocalSettings({ ...localSettings, dsl: dsl });
+          setStepCatalogDsl(dsl.name);
           const tmpIntegration = { ...integrationJson, dsl: dsl.name };
           updateIntegration(tmpIntegration);
           return;

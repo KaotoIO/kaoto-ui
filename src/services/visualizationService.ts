@@ -29,7 +29,7 @@ export class VisualizationService {
   constructor(
     private integrationJsonStore: IIntegrationJsonStore,
     private visualizationStore: RFState
-  ) {}
+  ) { }
 
   /**
    * for nodes within a branch
@@ -202,6 +202,12 @@ export class VisualizationService {
       id: `e-${sourceStep.id}>${targetStep.id}`,
       markerEnd: {
         type: MarkerType.Arrow,
+        color: '#d2d2d2',
+        strokeWidth: 2,
+      },
+      style: {
+        stroke: '#d2d2d2',
+        strokeWidth: 2,
       },
       source: sourceStep.id,
       target: targetStep.id,
