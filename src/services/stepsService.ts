@@ -379,8 +379,10 @@ export class StepsService {
         const stepsCopy = this.integrationJsonStore.integrationJson.steps.slice();
         let newParentStep = getDeepValue(stepsCopy, currentStepNested.pathToParentStep);
         const newBranch = newParentStep.branches[currentStepNested.branchIndex];
-        newParentStep.branches[currentStepNested.branchIndex].steps = StepsService.prependStep(
+        const currentStepIdx = this.findStepIdxWithUUID(currentStep.UUID, [...newBranch.steps]);
+        newParentStep.branches[currentStepNested.branchIndex].steps = StepsService.insertStep(
           [...newBranch.steps],
+          currentStepIdx,
           newStep
         );
 
@@ -431,18 +433,6 @@ export class StepsService {
 
   static isStartStep(step: IStepProps): boolean {
     return step.type === 'START';
-  }
-
-  /**
-   * Inserts the given step at the beginning of the
-   * array of provided steps, returning the modified array
-   * @param steps
-   * @param newStep
-   */
-  static prependStep(steps: IStepProps[], newStep: IStepProps): IStepProps[] {
-    const newSteps = [...steps];
-    newSteps.unshift(newStep);
-    return newSteps;
   }
 
   /**

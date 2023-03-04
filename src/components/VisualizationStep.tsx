@@ -136,7 +136,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
                   children={<BranchBuilder handleAddBranch={handleAddBranch} />}
                   disableBranchesTab={true}
                   disableBranchesTabMsg={"You can't add a branch from here."}
-                  disableStepsTab={!showStepsTab}
+                  disableStepsTab={!visualizationService.showPrependStepButton(data)}
                   handleSelectStep={onMiniCatalogClickPrepend}
                   queryParams={{
                     dsl: currentDSL,
