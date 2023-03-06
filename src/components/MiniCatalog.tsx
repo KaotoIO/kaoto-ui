@@ -143,6 +143,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                     <ToggleGroup aria-label={'Icon variant toggle group'} style={{ width: '100%' }}>
                       <ToggleGroupItem
                         text={'start'}
+                        data-testid={`miniCatalog__step-start`}
                         aria-label={'sources button'}
                         buttonId={'START'}
                         isDisabled={!typesAllowedArray?.includes('START')}
@@ -151,6 +152,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                       />
                       <ToggleGroupItem
                         icon={'actions'}
+                        data-testid={`miniCatalog__step-actions`}
                         aria-label={'actions button'}
                         buttonId={'MIDDLE'}
                         isDisabled={!typesAllowedArray?.includes('MIDDLE')}
@@ -159,6 +161,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                       />
                       <ToggleGroupItem
                         text={'end'}
+                        data-testid={`miniCatalog__step-end`}
                         aria-label={'sinks button'}
                         buttonId={'END'}
                         isDisabled={!typesAllowedArray?.includes('END')}
@@ -207,6 +210,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
           title={<TabTitleText>Branches</TabTitleText>}
           isAriaDisabled={props.disableBranchesTab}
           ref={branchTooltipRef}
+          data-testid="miniCatalog__branches"
         >
           {props.disableBranchesTab && props.disableBranchesTabMsg && (
             <Tooltip
