@@ -1,6 +1,6 @@
 import { StepsService } from './stepsService';
 import { ValidationService } from './validationService';
-import { IIntegrationJsonStore, RFState } from '@kaoto/store';
+import { IIntegrationJsonStore, RFState, useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
 import {
   IStepProps,
   IVizStepNode,
@@ -11,8 +11,7 @@ import {
 import { getRandomArbitraryNumber, truncateString } from '@kaoto/utils';
 import { ElkExtendedEdge, ElkNode } from 'elkjs';
 import { MarkerType, Position } from 'reactflow';
-
-const ELK = require('elkjs');
+import ELK from 'elkjs';
 
 /**
  * A collection of business logic to process visualization related tasks.
@@ -27,9 +26,13 @@ const ELK = require('elkjs');
  */
 export class VisualizationService {
   constructor(
-    private integrationJsonStore: IIntegrationJsonStore,
-    private visualizationStore: RFState
-  ) { }
+    /** @deprecated in favor of using the store raw data itself when needed to avoid binding entire store to several components */
+    // @ts-expect-error no unused constructor parameter
+    private readonly integrationJsonStore?: IIntegrationJsonStore,
+    /** @deprecated in favor of using the store raw data itself when needed to avoid binding entire store to several components */
+    // @ts-expect-error no unused constructor parameter
+    private readonly visualizationStore?: RFState
+  ) {}
 
   /**
    * for nodes within a branch
@@ -79,7 +82,7 @@ export class VisualizationService {
     let edgeProps = VisualizationService.buildEdgeParams(rootNode, node, edgeType ?? 'default');
 
     if (node.data.branchInfo?.branchIdentifier)
-      edgeProps.label = node.data.branchInfo?.branchIdentifier;
+      edgeProps.label = node.data.branchInfo.branchIdentifier;
 
     branchPlaceholderEdges.push(edgeProps);
 
@@ -271,8 +274,8 @@ export class VisualizationService {
    * @param handleDeleteStep
    */
   buildNodesAndEdges(handleDeleteStep: (uuid: string) => void) {
-    const steps = this.integrationJsonStore.integrationJson.steps;
-    const layout = this.visualizationStore.layout;
+    const steps = useIntegrationJsonStore.getState().integrationJson.steps;
+    const layout = useVisualizationStore.getState().layout;
     // build all nodes
     const stepNodes = VisualizationService.buildNodesFromSteps(steps, layout, {
       handleDeleteStep,
@@ -412,14 +415,14 @@ export class VisualizationService {
         'elk.direction': direction,
 
         // vertical spacing of nodes
-        'elk.spacing.nodeNode': DEFAULT_WIDTH_HEIGHT / 2,
+        'elk.spacing.nodeNode': `${DEFAULT_WIDTH_HEIGHT / 2}`,
 
         // ensures balanced, linear graph from beginning to end
         'elk.layered.nodePlacement.bk.fixedAlignment': 'BALANCED',
 
         // *between handles horizontal spacing
-        'elk.layered.spacing.nodeNodeBetweenLayers': DEFAULT_WIDTH_HEIGHT,
-        'elk.layered.spacing.edgeEdgeBetweenLayers': DEFAULT_WIDTH_HEIGHT * 1.5,
+        'elk.layered.spacing.nodeNodeBetweenLayers': `${DEFAULT_WIDTH_HEIGHT}`,
+        'elk.layered.spacing.edgeEdgeBetweenLayers': `${DEFAULT_WIDTH_HEIGHT * 1.5}`,
         'spacing.componentComponent': '70',
         spacing: '75',
 
@@ -452,7 +455,7 @@ export class VisualizationService {
       portConstraints: 'FIXED_ORDER',
       children: elkNodes,
       edges: elkEdges,
-    });
+    } as ElkNode);
 
     nodes.forEach((flowNode) => {
       const node = newGraph?.children?.find((n: { id: string }) => n.id === flowNode.id);
@@ -553,8 +556,8 @@ export class VisualizationService {
    * @param rebuildNodes
    */
   async redrawDiagram(handleDeleteStep: (uuid: string) => void, rebuildNodes: boolean) {
-    let stepNodes = this.visualizationStore.nodes;
-    let stepEdges = this.visualizationStore.edges;
+    let stepNodes = useVisualizationStore.getState().nodes;
+    let stepEdges = useVisualizationStore.getState().edges;
     if (rebuildNodes) {
       const ne = this.buildNodesAndEdges(handleDeleteStep);
       stepNodes = ne.stepNodes;
@@ -563,11 +566,11 @@ export class VisualizationService {
     VisualizationService.getLayoutedElements(
       stepNodes,
       stepEdges,
-      this.visualizationStore.layout
+      useVisualizationStore.getState().layout
     ).then((res) => {
       const { layoutedNodes, layoutedEdges } = res;
-      this.visualizationStore.setNodes(layoutedNodes);
-      this.visualizationStore.setEdges(layoutedEdges);
+      useVisualizationStore.getState().setNodes(layoutedNodes);
+      useVisualizationStore.getState().setEdges(layoutedEdges);
     });
   }
 
@@ -616,11 +619,11 @@ export class VisualizationService {
       // check if the previous step contains (nested) branches.
       const prevNodeIdx = VisualizationService.findNodeIdxWithUUID(
         nodeData.previousStepUuid,
-        this.visualizationStore.nodes
+        useVisualizationStore.getState().nodes
       );
       return !!(
-        this.visualizationStore.nodes[prevNodeIdx] &&
-        this.visualizationStore.nodes[prevNodeIdx]?.data.step.branches?.length
+        useVisualizationStore.getState().nodes[prevNodeIdx] &&
+        useVisualizationStore.getState().nodes[prevNodeIdx]?.data.step.branches?.length
       );
     } else if (!StepsService.isEndStep(nodeData.step) && nodeData.isFirstStep) {
       return true;
