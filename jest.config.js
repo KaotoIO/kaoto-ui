@@ -42,5 +42,7 @@ module.exports = {
   // The path to a module that runs some code to configure or set up the testing framework before each test
   setupFilesAfterEnv: [path.resolve(__dirname, './setupTests.ts')],
 
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
+
   testEnvironment: 'jsdom',
 };
