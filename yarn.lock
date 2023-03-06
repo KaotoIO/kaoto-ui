@@ -2040,10 +2040,10 @@
     "@opentelemetry/resources" "1.9.1"
     "@opentelemetry/sdk-trace-base" "1.9.1"
 
-"@opentelemetry/instrumentation-document-load@^0.31.1":
-  version "0.31.1"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-document-load/-/instrumentation-document-load-0.31.1.tgz#a535a5d1d71706701d3ff560a700b9dd03e4fb59"
-  integrity sha512-Ej4EB3m7GXzj4o8zF73amcnqXroN6/QdURjDAOgxN27zvvurR84larzGD7PjqgzzdtV+T7e/0BK07M0I2eA8PQ==
+"@opentelemetry/instrumentation-document-load@^0.31.2":
+  version "0.31.2"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-document-load/-/instrumentation-document-load-0.31.2.tgz#0efa54159db8a592bb46936149a0a34d30781e39"
+  integrity sha512-u8a+noo5FCky9q7yDWqfEVbLCYj8HpwL4x7NANmfUog/xyJsantSRKuKOjJUmn36UHxKN+Yc0gQqbTZUPp5Q8A==
   dependencies:
     "@opentelemetry/core" "^1.8.0"
     "@opentelemetry/instrumentation" "^0.35.1"
@@ -2061,10 +2061,10 @@
     "@opentelemetry/sdk-trace-web" "1.9.1"
     "@opentelemetry/semantic-conventions" "1.9.1"
 
-"@opentelemetry/instrumentation-long-task@^0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-long-task/-/instrumentation-long-task-0.32.1.tgz#8e5de23ababf5983f91944a774ed8e3bcce28e35"
-  integrity sha512-u28Wr+U5dj/V1pivb0O0UTh8GuUaEEgl9ScssAUQ0Vj9eiJRhdca32tF05PV0dWrHZblrnSLsyTm3e8DNzKQBw==
+"@opentelemetry/instrumentation-long-task@^0.32.2":
+  version "0.32.2"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-long-task/-/instrumentation-long-task-0.32.2.tgz#94db10b09cc12d354023c0b583b4c4be19a39569"
+  integrity sha512-+uOkrwdEqLwR7knWaPZIr86av5tm322FR52nfkWMrLiSmucvbxmV2hBPGuVX25XFubmuFtHicQf+LNetI3J8VA==
   dependencies:
     "@opentelemetry/core" "^1.8.0"
     "@opentelemetry/instrumentation" "^0.35.1"
