@@ -5,13 +5,15 @@ import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } f
 import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
-import { getBezierPath, Position, useReactFlow } from 'reactflow';
+import { ReactNode } from 'react';
+import { EdgeText, getBezierPath, Position, useReactFlow } from 'reactflow';
 
 const foreignObjectSize = 40;
 
 export interface IPlusButtonEdge {
   data?: any;
   id: string;
+  label?: string | ReactNode;
   sourceX: number;
   sourceY: number;
   targetX: number;
@@ -25,6 +27,7 @@ export interface IPlusButtonEdge {
 /* PLUS BUTTON TO INSERT STEP */
 const PlusButtonEdge = ({
   id,
+  label,
   sourceX,
   sourceY,
   targetX,
@@ -116,6 +119,13 @@ const PlusButtonEdge = ({
           </Popover>
         </span>
       </foreignObject>
+      {label && (
+        <EdgeText
+          x={edgeCenterX + foreignObjectSize / 2}
+          y={edgeCenterY + foreignObjectSize / 2}
+          label={label}
+        />
+      )}
     </>
   );
 };
