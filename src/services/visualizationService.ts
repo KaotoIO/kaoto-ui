@@ -9,9 +9,8 @@ import {
   IVizStepPropsEdge,
 } from '@kaoto/types';
 import { getRandomArbitraryNumber, truncateString } from '@kaoto/utils';
-import { ElkExtendedEdge, ElkNode } from 'elkjs';
+import ELK, { ElkExtendedEdge, ElkNode } from 'elkjs';
 import { MarkerType, Position } from 'reactflow';
-import ELK from 'elkjs';
 
 /**
  * A collection of business logic to process visualization related tasks.
