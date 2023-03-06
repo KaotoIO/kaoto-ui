@@ -9,7 +9,7 @@ import {
   VisualizationStepViews,
 } from '@kaoto/components';
 import { StepsService, VisualizationService } from '@kaoto/services';
-import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
+import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
@@ -18,12 +18,12 @@ const Visualization = () => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
 
-  const defaultViewport: Viewport = {
+  const defaultViewport = useRef<Viewport>({
     // 80/2 means half of the size of the icon so the placeholder icon can be centered
     x: window.innerWidth / 2 - 80 / 2,
     y: (window.innerHeight - 77) / 2 - 80 / 2,
     zoom: 1.2,
-  };
+  });
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [selectedStep, setSelectedStep] = useState<IStepProps>({
     maxBranches: 0,
@@ -32,42 +32,25 @@ const Visualization = () => {
     type: '',
     UUID: '',
   });
-  const integrationJsonStore = useIntegrationJsonStore();
-  const nestedStepsStore = useNestedStepsStore();
-  const visualizationStore = useVisualizationStore();
-  const previousLayout = useRef(visualizationStore.layout);
-  const previousIntegrationJson = useRef(integrationJsonStore.integrationJson);
-  const visualizationService = new VisualizationService(integrationJsonStore, visualizationStore);
-  const stepsService = useMemo(
-    () => new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore),
-    [integrationJsonStore, nestedStepsStore, visualizationStore],
-  );
-
-  // initial loading of visualization steps
-  useEffect(() => {
-    visualizationService.redrawDiagram(handleDeleteStep, true).catch((e) => console.error(e));
-  }, []);
+  const visualizationStore = useVisualizationStore.getState();
+  const layout = useVisualizationStore((state) => state.layout);
+  const nodes = useVisualizationStore((state) => state.nodes);
+  const edges = useVisualizationStore((state) => state.edges);
+  const integrationJson = useIntegrationJsonStore((state) => state.integrationJson);
+  const visualizationService = useMemo(() => new VisualizationService(), []);
+  const stepsService = useMemo(() => new StepsService(), []);
 
   /**
    * Check for changes to integrationJson,
    * which causes Visualization nodes to all be redrawn
    */
   useEffect(() => {
-    if (previousIntegrationJson.current === integrationJsonStore.integrationJson) return;
-
     stepsService.updateViews();
-    visualizationService.redrawDiagram(handleDeleteStep, true).catch((e) => console.error(e));
-
-    previousIntegrationJson.current = integrationJsonStore.integrationJson;
-  }, [integrationJsonStore.integrationJson]);
+  }, [integrationJson]);
 
   useEffect(() => {
-    if (previousLayout.current === visualizationStore.layout) return;
-
-    visualizationService.redrawDiagram(handleDeleteStep, false).catch((e) => console.error(e));
-
-    previousLayout.current = visualizationStore.layout;
-  }, [visualizationStore.layout]);
+    visualizationService.redrawDiagram(handleDeleteStep, true).catch((e) => console.error(e));
+  }, [integrationJson, layout]);
 
   const nodeTypes = useMemo(() => ({ step: VisualizationStep }), []);
   const edgeTypes = useMemo(
@@ -88,10 +71,10 @@ const Visualization = () => {
     stepsService.deleteStep(UUID);
   };
 
-  const onClosePanelClick = () => {
+  const onClosePanelClick = useCallback(() => {
     setIsPanelExpanded(false);
     visualizationStore.setSelectedStepUuid('');
-  };
+  }, []);
 
   /**
    * Called when a catalog step is dragged over the visualization canvas
@@ -139,9 +122,9 @@ const Visualization = () => {
    * Handles Step View configuration changes
    * @param newValues
    */
-  const saveConfig = (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
+  const saveConfig = useCallback((newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
     stepsService.updateStepParameters(selectedStep, newValues);
-  };
+  }, [selectedStep, stepsService]);
 
   return (
     <StepErrorBoundary>
@@ -169,9 +152,9 @@ const Visualization = () => {
           data-testid="react-flow-wrapper"
         >
           <ReactFlow
-            nodes={visualizationStore.nodes}
-            edges={visualizationStore.edges}
-            defaultViewport={defaultViewport}
+            nodes={nodes}
+            edges={edges}
+            defaultViewport={defaultViewport.current}
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
             onDragOver={onDragOver}
