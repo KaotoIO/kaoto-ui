@@ -13,7 +13,7 @@ const foreignObjectSize = 40;
 export interface IPlusButtonEdge {
   data?: any;
   id: string;
-  label?: string | ReactNode;
+  label?: ReactNode;
   sourceX: number;
   sourceY: number;
   targetX: number;
