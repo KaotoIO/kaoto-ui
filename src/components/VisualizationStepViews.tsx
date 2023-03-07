@@ -1,7 +1,7 @@
 import { dynamicImport } from './import';
 import { Extension, JsonSchemaConfigurator, StepErrorBoundary } from '@kaoto/components';
 import { StepsService } from '@kaoto/services';
-import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
+import { useIntegrationJsonStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
 import {
   AlertVariant,
@@ -16,7 +16,7 @@ import {
   TabTitleText,
 } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { lazy, useEffect, useState } from 'react';
+import { lazy, useCallback, useEffect, useMemo, useState } from 'react';
 
 export interface IStepViewsProps {
   isPanelExpanded: boolean;
@@ -39,15 +39,15 @@ const VisualizationStepViews = ({
   const extensionConfigViewIndex = views?.findIndex((v) => v.name === 'Config');
   const hasConfigView = extensionConfigViewIndex !== -1;
   const configTabIndex = !hasConfigView ? views?.length! + 2 : extensionConfigViewIndex;
-  const nestedStepsStore = useNestedStepsStore();
-  const visualizationStore = useVisualizationStore();
-  const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
-  const [activeTabKey, setActiveTabKey] = useState(configTabIndex);
+
+  const [activeTabKey, setActiveTabKey] = useState<string | number>(configTabIndex);
   const [stepPropertySchema, setStepPropertySchema] = useState<{
     [label: string]: { type: string };
   }>({});
   const [stepPropertyModel, setStepPropertyModel] = useState<{ [label: string]: any }>({});
   const { addAlert } = useAlert() || {};
+
+  const stepsService = useMemo(() => new StepsService(), []);
 
   const alertKaoto = (title: string, body?: string, variant?: string) => {
     let variantType = AlertVariant.default;
@@ -91,15 +91,15 @@ const VisualizationStepViews = ({
       tempModelObject[propKey] = parameter.value ?? parameter.defaultValue;
     };
 
-    step.parameters?.map(schemaProps);
+    step.parameters?.forEach(schemaProps);
 
     setStepPropertySchema(tempSchemaObject);
     setStepPropertyModel(tempModelObject);
   }, [step.parameters, isPanelExpanded]);
 
-  const handleTabClick = (_event: any, tabIndex: any) => {
+  const handleTabClick = useCallback((_event: unknown, tabIndex: string | number) => {
     setActiveTabKey(tabIndex);
-  };
+  }, []);
 
   return (
     <>
