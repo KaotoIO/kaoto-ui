@@ -166,4 +166,44 @@ describe('stepsService', () => {
 
     expect(StepsService.supportsBranching({ UUID: 'no-branches' } as IStepProps)).toBeFalsy();
   });
+
+  it('buildStepSchemaAndModel():should ignore empty array parameter', () => {
+    const parameter: { [label: string]: any } = {
+      id: 'key',
+      type: 'string',
+      description: 'test description',
+      value: 'value',
+    };
+    const parameter2: { [label: string]: any } = {
+      id: 'array',
+      type: 'array',
+      description: '',
+      value: [],
+    };
+    const parameter3: { [label: string]: any } = {
+      id: 'array2',
+      type: 'array',
+      description: 'array',
+      value: null,
+    };
+    const modelObjectRef: { [label: string]: any } = {};
+    const schemaObjectRef: {
+      [label: string]: { type: string; value?: any; description?: string };
+    } = {};
+
+    StepsService.buildStepSchemaAndModel(parameter, modelObjectRef, schemaObjectRef);
+    StepsService.buildStepSchemaAndModel(parameter2, modelObjectRef, schemaObjectRef);
+    StepsService.buildStepSchemaAndModel(parameter3, modelObjectRef, schemaObjectRef);
+
+    const modelEntries = Object.entries(modelObjectRef);
+    const schemaEntries = Object.entries(schemaObjectRef);
+
+    expect(schemaEntries.length).toBe(1);
+    expect(modelEntries.length).toBe(1);
+
+    expect(modelEntries[0][0]).toContain('key');
+    expect(modelEntries[0][1]).toContain('value');
+
+    expect(JSON.stringify(schemaEntries)).toContain('test description');
+  });
 });
