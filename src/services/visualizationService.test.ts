@@ -94,39 +94,39 @@ describe('visualizationService', () => {
       expect(
         VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext, 'CUSTOM-NODE')
       ).toEqual([
-          {
-            arrowHeadType: 'arrowclosed',
-            id: 'e-undefined>undefined',
-            markerEnd: {
-              color: '#d2d2d2',
-              strokeWidth: 2,
-              type: 'arrow'
-            },
-            source: undefined,
-            style: {
-              stroke: '#d2d2d2',
-              strokeWidth: 2
-            },
-            target: undefined,
-            type: 'CUSTOM-NODE'
+        {
+          arrowHeadType: 'arrowclosed',
+          id: 'e-undefined>undefined',
+          markerEnd: {
+            color: '#d2d2d2',
+            strokeWidth: 2,
+            type: 'arrow',
           },
-          {
-            arrowHeadType: 'arrowclosed',
-            id: 'e-undefined>undefined',
-            markerEnd: {
-              color: '#d2d2d2',
-              strokeWidth: 2,
-              type: 'arrow'
-            },
-            source: undefined,
-            style: {
-              stroke: '#d2d2d2',
-              strokeWidth: 2
-            },
-            target: undefined,
-            type: 'CUSTOM-NODE'
-          }
-        ]);
+          source: undefined,
+          style: {
+            stroke: '#d2d2d2',
+            strokeWidth: 2,
+          },
+          target: undefined,
+          type: 'CUSTOM-NODE',
+        },
+        {
+          arrowHeadType: 'arrowclosed',
+          id: 'e-undefined>undefined',
+          markerEnd: {
+            color: '#d2d2d2',
+            strokeWidth: 2,
+            type: 'arrow',
+          },
+          source: undefined,
+          style: {
+            stroke: '#d2d2d2',
+            strokeWidth: 2,
+          },
+          target: undefined,
+          type: 'default',
+        },
+      ]);
     });
 
     it('should use branchIdentifier as label if exists', () => {
@@ -147,9 +147,8 @@ describe('visualizationService', () => {
       const rootNode = {} as IVizStepNode;
       const rootNodeNext = {} as IVizStepNode;
 
-      expect(
-        VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext)
-      ).toEqual([
+      expect(VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext)).toEqual(
+        [
           {
             arrowHeadType: 'arrowclosed',
             id: 'e-undefined>undefined',
@@ -157,15 +156,15 @@ describe('visualizationService', () => {
             markerEnd: {
               color: '#d2d2d2',
               strokeWidth: 2,
-              type: 'arrow'
+              type: 'arrow',
             },
             source: undefined,
             style: {
               stroke: '#d2d2d2',
-              strokeWidth: 2
+              strokeWidth: 2,
             },
             target: undefined,
-            type: 'default'
+            type: 'default',
           },
           {
             arrowHeadType: 'arrowclosed',
@@ -173,17 +172,18 @@ describe('visualizationService', () => {
             markerEnd: {
               color: '#d2d2d2',
               strokeWidth: 2,
-              type: 'arrow'
+              type: 'arrow',
             },
             source: undefined,
             style: {
               stroke: '#d2d2d2',
-              strokeWidth: 2
+              strokeWidth: 2,
             },
             target: undefined,
-            type: 'default'
-          }
-        ]);
+            type: 'default',
+          },
+        ]
+      );
     });
   });
 
