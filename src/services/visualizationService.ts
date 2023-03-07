@@ -1,6 +1,11 @@
 import { StepsService } from './stepsService';
 import { ValidationService } from './validationService';
-import { IIntegrationJsonStore, RFState, useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
+import {
+  IIntegrationJsonStore,
+  RFState,
+  useIntegrationJsonStore,
+  useVisualizationStore,
+} from '@kaoto/store';
 import {
   IStepProps,
   IVizStepNode,
@@ -87,7 +92,7 @@ export class VisualizationService {
 
     if (rootNextNode) {
       branchPlaceholderEdges.push(
-        VisualizationService.buildEdgeParams(node, rootNextNode, edgeType ?? 'default')
+        VisualizationService.buildEdgeParams(node, rootNextNode, 'default')
       );
     }
 
