@@ -82,16 +82,9 @@ const VisualizationStepViews = ({
 
     let tempModelObject: { [label: string]: any } = {};
 
-    const schemaProps = (parameter: { [label: string]: any }) => {
-      const propKey = parameter.id;
-      const description = parameter.description;
-      const type = parameter.type;
-
-      tempSchemaObject[propKey] = { type, description };
-      tempModelObject[propKey] = parameter.value ?? parameter.defaultValue;
-    };
-
-    step.parameters?.forEach(schemaProps);
+    step.parameters?.forEach((p) =>
+      StepsService.buildStepSchemaAndModel(p, tempModelObject, tempSchemaObject)
+    );
 
     setStepPropertySchema(tempSchemaObject);
     setStepPropertyModel(tempModelObject);
