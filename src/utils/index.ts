@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import { useEffect, useRef } from 'react';
 
 export function accessibleRouteChangeHandler() {
   return window.setTimeout(() => {
@@ -141,6 +141,7 @@ export function bindUndoRedo(undoCallback: () => void, redoCallback: () => void)
 export function unbindUndoRedo(callback: (event: KeyboardEvent) => void) {
   document.removeEventListener('keydown', callback);
 }
+
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -148,4 +149,19 @@ export function sleep(ms: number) {
 export function getRandomArbitraryNumber(): number {
   const crypto = window.crypto;
   return Math.floor(crypto?.getRandomValues(new Uint32Array(1))[0]);
+}
+
+export function getDescriptionIfExists(integrationJson: any) {
+  if (integrationJson) {
+    //kamelet description location
+    if (integrationJson.metadata?.definition) {
+      return integrationJson.metadata.definition.description;
+      // integration/camel-route descipriton
+    } else if (integrationJson.description) {
+      return integrationJson.description;
+    } else if (integrationJson.metadata?.description) {
+      return integrationJson.metadata.description;
+    }
+  }
+  return undefined;
 }
