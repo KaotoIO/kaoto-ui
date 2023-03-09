@@ -191,8 +191,7 @@ describe('Test for Step actions from the canvas', () => {
             cy.get('[data-testid="transform-apply-button"]').should('be.visible');
         });
 
-        // TODO: This test is failing due to the issue https://github.com/KaotoIO/kaoto-ui/issues/1351
-        it.skip('User configures a step from a step extension (set-header)', () => {
+        it('User configures a step from a step extension (set-header)', () => {
             // Click insert button between two steps
             cy.get('[data-testid="stepNode__insertStep-btn"]').click();
             // Open the miniCatalog
@@ -219,14 +218,13 @@ describe('Test for Step actions from the canvas', () => {
             cy.get('.pf-c-alert').should('be.visible').and('contain.text', 'Set Header step updated');
             // CHECK that the YAML is updated
             // Get Span line with the text "set-header" and search for the text "test-name"
-            cy.get('.code-editor').contains('name').parent()
+            cy.get('.code-editor').contains('test-name').parent()
                 .should('contain.text', 'name')
                 .and('contain.text', "test-name");
             // Get Span line with the text "jq" and search for the text "jq-test"
             cy.get('.code-editor').contains('jq').parent()
                 .should('contain.text', 'jq')
                 .and('contain.text', "jq-test");
-
         });
 
         // TODO: This test is failing due to the issue https://github.com/KaotoIO/step-extension-repository/issues/162
@@ -304,5 +302,4 @@ describe('Test for Step actions from the canvas', () => {
             cy.get('.code-editor').should('not.contain.text', 'otherwise');
         });
     });
-
 });
