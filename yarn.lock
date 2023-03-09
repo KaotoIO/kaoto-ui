@@ -1811,32 +1811,15 @@
     "@kie-tools-core/i18n" "0.27.0"
     "@kie-tools-core/workspace" "0.27.0"
 
-"@kie-tools-core/operating-system@0.26.0":
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.26.0.tgz#6633591fb8177c1b29ae2af22958bf9f617cf873"
-  integrity sha512-A8BWq/QlZjCLEB7UUdM20f2sIdj3Af7SxLrQludPZ2rdFh96LcXpc4vtP1TU7PyY1LDuVQEJOPzSLB0epKijEQ==
-
 "@kie-tools-core/operating-system@0.27.0":
   version "0.27.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.27.0.tgz#9795e7fa98d3e35711885795e41679f19b5e99dc"
   integrity sha512-u8c3OKblPTO48sGhg8MDSfVi4j6M50qbcAl3BCDiGKZ1WbZ/2jRZRPi75UEuB/x5ls3TeWQ9Jf2j8QrArdSwhg==
 
-"@kie-tools-core/patternfly-base@0.26.0":
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.26.0.tgz#1127ae2806a463e92cb2a3072bdd76e7d33214da"
-  integrity sha512-Sivp0eMMe5uVqWJ0vwjyBvCfs/S5y3VzS+slNK5v55AYAHfuad4VM07SvR3Md34RW2u6Xgj+KZ8CsWkJCKfuvg==
-
 "@kie-tools-core/patternfly-base@0.27.0":
   version "0.27.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.27.0.tgz#1ae505106da93ea0486a888f6ac9b553997af034"
   integrity sha512-EPI7nbrwwWEOY5/lqErK97zthq3nt1fyvUtqVqPPR0utvuc1fCyeb5LRIt3KdjiSB49CyLwHnnH+lsEoiDnEdA==
-
-"@kie-tools-core/workspace@0.26.0":
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/workspace/-/workspace-0.26.0.tgz#af472e6d10c6cee26bc937c314adbee6bbafa2d4"
-  integrity sha512-9LNpcex36IhF0zDlTbxcdrJ+EHtJbyxUPYDpp2mhJcvjNCd26TWlaUKTJ6Dy3oQBY47yU5uyZ/mEjU6sq4yuHw==
-  dependencies:
-    "@kie-tools-core/operating-system" "0.26.0"
 
 "@kie-tools-core/workspace@0.27.0":
   version "0.27.0"
