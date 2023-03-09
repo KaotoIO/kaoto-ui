@@ -31,7 +31,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@kie-tools-core/editor": "0.26.0",
+    "@kie-tools-core/editor": "0.27.0",
     "@kie-tools-core/guided-tour": "0.26.0",
     "@kie-tools-core/monaco-editor": "0.27.0",
     "@kie-tools-core/notifications": "0.27.0",
