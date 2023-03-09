@@ -29,11 +29,9 @@ export const AddStepButton: FunctionComponent<IAddStepButton> = ({
   return (
     <Popover
       id="popover-append-step"
-      appendTo={() => document.body}
       aria-label="Add a step or branch"
       bodyContent={
         <MiniCatalog
-          children={<BranchBuilder handleAddBranch={handleAddBranch} />}
           disableBranchesTab={!showBranchesTab}
           disableBranchesTabMsg={ValidationService.getBranchTabTooltipMsg(
             supportsBranching,
@@ -41,22 +39,24 @@ export const AddStepButton: FunctionComponent<IAddStepButton> = ({
             step.branches?.length
           )}
           disableStepsTab={!showStepsTab}
-          disableStepsTabMsg={"You can't add a step between a step and a branch."}
+          disableStepsTabMsg="You can't add a step between a step and a branch."
           handleSelectStep={handleSelectStep}
           queryParams={{
             dsl: currentDSL,
             type: ValidationService.appendableStepTypes(step.type),
           }}
           step={step}
-        />
+        >
+          <BranchBuilder handleAddBranch={handleAddBranch} />
+        </MiniCatalog>
       }
-      className={'miniCatalog__popover'}
-      data-testid={'miniCatalog__popover'}
+      className="miniCatalog__popover"
+      data-testid="miniCatalog__popover"
       enableFlip={true}
       flipBehavior={['top-start', 'left-start']}
       hasAutoWidth
       hideOnOutsideClick={true}
-      position={'right-start'}
+      position="right-start"
       showClose={false}
     >
       <Tooltip
@@ -64,8 +64,7 @@ export const AddStepButton: FunctionComponent<IAddStepButton> = ({
       >
         <button
           className="stepNode__Add plusButton nodrag"
-          data-testid={'stepNode__appendStep-btn'}
-          aria-label="Add a step or a branch"
+          data-testid="stepNode__appendStep-btn"
         >
           <PlusIcon />
         </button>

@@ -208,8 +208,8 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           )}
 
           {/* ADD/APPEND STEP BUTTON */}
-          {VisualizationService.showAppendStepButton(data, endStep) ? (
-            <AddStepButton
+          {VisualizationService.showAppendStepButton(data, endStep)
+            && <AddStepButton
               handleAddBranch={handleAddBranch}
               handleSelectStep={onMiniCatalogClickAppend}
               step={data.step}
@@ -217,9 +217,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               showStepsTab={showStepsTab}
               supportsBranching={supportsBranching}
             />
-          ) : (
-            <></>
-          )}
+          }
         </div>
       ) : (
         <Popover
