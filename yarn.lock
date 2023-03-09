@@ -1794,6 +1794,14 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
+"@kie-tools-core/i18n@0.27.0":
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/i18n/-/i18n-0.27.0.tgz#4c3852b6a58c7465209d0281b2956275d6079068"
+  integrity sha512-emBUZLwFkX77c1zc+Vf1O0/dJj1UqdDMxnRteoKXL3Ze+VrrFgfTpZjlfQNBzT2Ub/9+oMhwZe18Fy5BJCXodQ==
+  dependencies:
+    react "^17.0.2"
+    react-dom "^17.0.2"
+
 "@kie-tools-core/keyboard-shortcuts@0.26.0":
   version "0.26.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/keyboard-shortcuts/-/keyboard-shortcuts-0.26.0.tgz#dc1a94219ce5d002af4cc35286a3c9484ec6045e"
@@ -1818,10 +1826,23 @@
     "@kie-tools-core/i18n" "0.26.0"
     "@kie-tools-core/workspace" "0.26.0"
 
+"@kie-tools-core/notifications@0.27.0":
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/notifications/-/notifications-0.27.0.tgz#10dbca45530dc13c1445746f4ad8509388061eda"
+  integrity sha512-O9OoD8FdgX51lS7SIvFI3g19k0YfEbWR5oKNffoKSkRCR0yooclCRCYrejIwAGy3N4LV2X3yNYfAwzpEWJ3DEQ==
+  dependencies:
+    "@kie-tools-core/i18n" "0.27.0"
+    "@kie-tools-core/workspace" "0.27.0"
+
 "@kie-tools-core/operating-system@0.26.0":
   version "0.26.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.26.0.tgz#6633591fb8177c1b29ae2af22958bf9f617cf873"
   integrity sha512-A8BWq/QlZjCLEB7UUdM20f2sIdj3Af7SxLrQludPZ2rdFh96LcXpc4vtP1TU7PyY1LDuVQEJOPzSLB0epKijEQ==
+
+"@kie-tools-core/operating-system@0.27.0":
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.27.0.tgz#9795e7fa98d3e35711885795e41679f19b5e99dc"
+  integrity sha512-u8c3OKblPTO48sGhg8MDSfVi4j6M50qbcAl3BCDiGKZ1WbZ/2jRZRPi75UEuB/x5ls3TeWQ9Jf2j8QrArdSwhg==
 
 "@kie-tools-core/patternfly-base@0.26.0":
   version "0.26.0"
@@ -1834,6 +1855,13 @@
   integrity sha512-9LNpcex36IhF0zDlTbxcdrJ+EHtJbyxUPYDpp2mhJcvjNCd26TWlaUKTJ6Dy3oQBY47yU5uyZ/mEjU6sq4yuHw==
   dependencies:
     "@kie-tools-core/operating-system" "0.26.0"
+
+"@kie-tools-core/workspace@0.27.0":
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/workspace/-/workspace-0.27.0.tgz#44d93f5b036b3071572af10aff8cc4a6c2356052"
+  integrity sha512-zk066QatVfJ+yg1l2RA02Cr3rRuauD/t/aw2rNZ6Z7p+tb3abg1crPP38MLSxoAqF/oIE5I7WzHj3eFW9yCmXQ==
+  dependencies:
+    "@kie-tools-core/operating-system" "0.27.0"
 
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
