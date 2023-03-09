@@ -3,7 +3,7 @@ import nestedBranch from '../store/data/kamelet.nested-branch.steps';
 import steps from '../store/data/steps';
 import { StepsService } from './stepsService';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
-import { IStepProps, IStepPropsBranch } from '@kaoto/types';
+import { IStepProps, IStepPropsBranch, IViewProps } from '@kaoto/types';
 
 describe('stepsService', () => {
   const stepsService = new StepsService(
@@ -165,6 +165,44 @@ describe('stepsService', () => {
     ).toBeFalsy();
 
     expect(StepsService.supportsBranching({ UUID: 'no-branches' } as IStepProps)).toBeFalsy();
+  });
+
+  describe('hasCustomStepExtension()', () => {
+    it('should return "false" for empty views', () => {
+      const result = StepsService.hasCustomStepExtension(
+        { UUID: 'random-id' } as IStepProps,
+        [] as IViewProps[],
+      );
+
+      expect(result).toBeFalsy();
+    });
+
+    it('should return "false" for a matching view with no URL available', () => {
+      const result = StepsService.hasCustomStepExtension(
+        { UUID: 'random-id' } as IStepProps,
+        [{ step: 'random-id', url: '' }] as IViewProps[],
+      );
+
+      expect(result).toBeFalsy();
+    });
+
+    it('should return "false" for non-matching views', () => {
+      const result = StepsService.hasCustomStepExtension(
+        { UUID: 'random-id' } as IStepProps,
+        [{ step: 'not-a-random-id', url: '/dev/null' }] as IViewProps[],
+      );
+
+      expect(result).toBeFalsy();
+    });
+
+    it('should return "true" for matching views and an URL available', () => {
+      const result = StepsService.hasCustomStepExtension(
+        { UUID: 'random-id' } as IStepProps,
+        [{ step: 'random-id', url: '/dev/null' }] as IViewProps[],
+      );
+
+      expect(result).toBeTruthy();
+    });
   });
 
   it('buildStepSchemaAndModel():should ignore empty array parameter', () => {

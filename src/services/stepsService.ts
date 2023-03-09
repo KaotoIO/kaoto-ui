@@ -21,6 +21,7 @@ import {
   INestedStep,
   IStepProps,
   IStepPropsBranch,
+  IViewProps,
   IVizStepNode,
   IVizStepNodeData,
 } from '@kaoto/types';
@@ -515,6 +516,16 @@ export class StepsService {
   static supportsBranching(step?: IStepProps) {
     if (!step) return false;
     return !!(step.minBranches || step.maxBranches);
+  }
+
+
+  /**
+   * Determines if a given step has a custom step extension
+   * @param step
+   * @param views
+   */
+  static hasCustomStepExtension(step: IStepProps, views: IViewProps[]): boolean {
+    return views.findIndex((view) => view.step === step.UUID && view.url) !== -1;
   }
 
   /**
