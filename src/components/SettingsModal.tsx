@@ -7,7 +7,7 @@ import {
   useStepCatalogStore,
 } from '@kaoto/store';
 import { ICapabilities, ISettings } from '@kaoto/types';
-import { usePrevious } from '@kaoto/utils';
+import { getDescriptionIfExists, usePrevious } from '@kaoto/utils';
 import {
   AlertVariant,
   Button,
@@ -60,7 +60,17 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
     // update settings if there is a name change
     if (settings.name === previousName) return;
     setLocalSettings({ ...localSettings, name: settings.name });
-  }, [settings.name]);
+
+    //update the description
+    let description = getDescriptionIfExists(integrationJson);
+    if (settings.description === description) return;
+    if (description) {
+      setLocalSettings({
+        ...localSettings,
+        description: description,
+      });
+    }
+  }, [settings.name, settings.description]);
 
   useEffect(() => {
     // update settings with the default namespace fetched from the API
@@ -70,7 +80,6 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
 
   useEffect(() => {
     if (previousIntegrationJson === integrationJson) return;
-
     // subsequent changes to the integration requires fetching
     // DSLs compatible with the specific integration
     fetchCompatibleDSLs({
