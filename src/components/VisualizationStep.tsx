@@ -13,6 +13,7 @@ import { AlertVariant, Popover, Tooltip } from '@patternfly/react-core';
 import { CubesIcon, PlusIcon, MinusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, NodeProps, Position } from 'reactflow';
+import { AddStepButton } from './AddStepButton';
 
 const currentDSL = useSettingsStore.getState().settings.dsl.name;
 
@@ -208,49 +209,14 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
           {/* ADD/APPEND STEP BUTTON */}
           {VisualizationService.showAppendStepButton(data, endStep) ? (
-            <Popover
-              id="popover-append-step"
-              appendTo={() => document.body}
-              aria-label="Add a step or branch"
-              bodyContent={
-                <MiniCatalog
-                  children={<BranchBuilder handleAddBranch={handleAddBranch} />}
-                  disableBranchesTab={!showBranchesTab}
-                  disableBranchesTabMsg={ValidationService.getBranchTabTooltipMsg(
-                    supportsBranching,
-                    data.step.maxBranches,
-                    data.step.branches?.length
-                  )}
-                  disableStepsTab={!showStepsTab}
-                  disableStepsTabMsg={"You can't add a step between a step and a branch."}
-                  handleSelectStep={onMiniCatalogClickAppend}
-                  queryParams={{
-                    dsl: currentDSL,
-                    type: ValidationService.appendableStepTypes(data.step.type),
-                  }}
-                  step={data.step}
-                />
-              }
-              className={'miniCatalog__popover'}
-              data-testid={'miniCatalog__popover'}
-              enableFlip={true}
-              flipBehavior={['top-start', 'left-start']}
-              hasAutoWidth
-              hideOnOutsideClick={true}
-              position={'right-start'}
-              showClose={false}
-            >
-              <Tooltip
-                content={ValidationService.getPlusButtonTooltipMsg(showBranchesTab, showStepsTab)}
-              >
-                <button
-                  className="stepNode__Add plusButton nodrag"
-                  data-testid={'stepNode__appendStep-btn'}
-                >
-                  <PlusIcon />
-                </button>
-              </Tooltip>
-            </Popover>
+            <AddStepButton
+              handleAddBranch={handleAddBranch}
+              handleSelectStep={onMiniCatalogClickAppend}
+              step={data.step}
+              showBranchesTab={showBranchesTab}
+              showStepsTab={showStepsTab}
+              supportsBranching={supportsBranching}
+            />
           ) : (
             <></>
           )}
