@@ -269,7 +269,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
                       <b>Kamelets</b>: Choose this if you want to create a connection to be used in
                       an integration. Read more about Kamelets&nbsp;
                       <a
-                        href={'https://camel.apache.org/camel-k/1.9.x/kamelets/kamelets.html'}
+                        href={'https://camel.apache.org/camel-k/latest/kamelets/kamelets.html'}
                         target={'_blank'}
                         rel={'noopener'}
                       >
