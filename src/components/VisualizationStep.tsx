@@ -13,7 +13,7 @@ import { AlertVariant, Popover, Tooltip } from '@patternfly/react-core';
 import { CubesIcon, PlusIcon, MinusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, NodeProps, Position } from 'reactflow';
-import { AddStepButton } from './AddStepButton';
+import { AppendStepButton } from './AppendStepButton';
 
 const currentDSL = useSettingsStore.getState().settings.dsl.name;
 
@@ -209,7 +209,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
           {/* ADD/APPEND STEP BUTTON */}
           {VisualizationService.showAppendStepButton(data, endStep)
-            && <AddStepButton
+            && <AppendStepButton
               handleAddBranch={handleAddBranch}
               handleSelectStep={onMiniCatalogClickAppend}
               step={data.step}

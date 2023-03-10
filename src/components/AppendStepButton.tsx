@@ -1,9 +1,9 @@
-import { ValidationService } from '@kaoto/services';
-import { useSettingsStore } from '@kaoto/store';
+import { StepsService, ValidationService } from '@kaoto/services';
+import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { BranchBuilder } from './BranchBuilder';
 import { MiniCatalog } from './MiniCatalog';
 
@@ -16,7 +16,7 @@ interface IAddStepButton {
   supportsBranching: boolean;
 }
 
-export const AddStepButton: FunctionComponent<IAddStepButton> = ({
+export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
   handleAddBranch,
   handleSelectStep,
   step,
@@ -25,6 +25,26 @@ export const AddStepButton: FunctionComponent<IAddStepButton> = ({
   supportsBranching,
 }) => {
   const currentDSL = useSettingsStore((state) => state.settings.dsl.name);
+  const views = useIntegrationJsonStore((state) => state.views);
+  const [hasCustomStepExtension, setHasCustomStepExtension] = useState(StepsService.hasCustomStepExtension(step, views));
+  const [disableBranchesTabMsg, setDisableBranchesTabMsg] = useState('');
+
+  useEffect(() => {
+    setHasCustomStepExtension(StepsService.hasCustomStepExtension(step, views));
+  }, [step, views])
+
+  useEffect(() => {
+    if (hasCustomStepExtension) {
+      setDisableBranchesTabMsg(`The "${step.name}" step has a Custom Step Extension, please click on the step to configure it`);
+      return;
+    }
+
+    setDisableBranchesTabMsg(ValidationService.getBranchTabTooltipMsg(
+      supportsBranching,
+      step.maxBranches,
+      step.branches?.length
+    ));
+  }, [hasCustomStepExtension, step, supportsBranching, views])
 
   return (
     <Popover
@@ -32,12 +52,8 @@ export const AddStepButton: FunctionComponent<IAddStepButton> = ({
       aria-label="Add a step or branch"
       bodyContent={
         <MiniCatalog
-          disableBranchesTab={!showBranchesTab}
-          disableBranchesTabMsg={ValidationService.getBranchTabTooltipMsg(
-            supportsBranching,
-            step.maxBranches,
-            step.branches?.length
-          )}
+          disableBranchesTab={hasCustomStepExtension || !showBranchesTab}
+          disableBranchesTabMsg={disableBranchesTabMsg}
           disableStepsTab={!showStepsTab}
           disableStepsTabMsg="You can't add a step between a step and a branch."
           handleSelectStep={handleSelectStep}
