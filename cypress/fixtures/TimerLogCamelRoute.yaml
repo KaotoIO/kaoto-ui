@@ -1,0 +1,21 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: Kamelet
+metadata:
+  labels:
+    camel.apache.org/kamelet.type: action
+  name: integration-action
+spec:
+  definition:
+    title: "null"
+    description: "null"
+    properties: {}
+  dependencies:
+    - camel:core
+    - camel:timer
+    - camel:log
+  template:
+    from:
+      uri: timer:null
+      steps:
+        - to:
+            uri: log:null

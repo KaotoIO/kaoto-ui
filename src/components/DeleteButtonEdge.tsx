@@ -5,13 +5,15 @@ import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } f
 import { IVizStepNode } from '@kaoto/types';
 import { Button, Popover, Tooltip } from '@patternfly/react-core';
 import { MinusIcon } from '@patternfly/react-icons';
-import { getBezierPath, Position, useReactFlow } from 'reactflow';
+import { ReactNode } from 'react';
+import { EdgeText, getBezierPath, Position, useReactFlow } from 'reactflow';
 
 const foreignObjectSize = 40;
 
 export interface IDeleteButtonEdge {
   data?: any;
   id: string;
+  label?: ReactNode;
   sourceX: number;
   sourceY: number;
   targetX: number;
@@ -25,6 +27,7 @@ export interface IDeleteButtonEdge {
 /* PLUS BUTTON TO INSERT STEP */
 const DeleteButtonEdge = ({
   id,
+  label,
   sourceX,
   sourceY,
   targetX,
@@ -112,6 +115,13 @@ const DeleteButtonEdge = ({
           </Popover>
         </span>
       </foreignObject>
+      {label && (
+        <EdgeText
+          x={edgeCenterX + foreignObjectSize / 2}
+          y={edgeCenterY + foreignObjectSize / 2}
+          label={label}
+        />
+      )}
     </>
   );
 };

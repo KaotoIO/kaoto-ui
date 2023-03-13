@@ -1,8 +1,13 @@
 import { fetchCapabilities, fetchCompatibleDSLs, fetchIntegrationSourceCode } from '@kaoto/api';
 import { ValidationService } from '@kaoto/services';
-import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
+import {
+  useIntegrationJsonStore,
+  useIntegrationSourceStore,
+  useSettingsStore,
+  useStepCatalogStore,
+} from '@kaoto/store';
 import { ICapabilities, ISettings } from '@kaoto/types';
-import { usePrevious } from '@kaoto/utils';
+import { getDescriptionIfExists, usePrevious } from '@kaoto/utils';
 import {
   AlertVariant,
   Button,
@@ -36,6 +41,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const [availableDSLs, setAvailableDSLs] = useState<string[]>([]);
   const { settings, setSettings } = useSettingsStore((state) => state);
   const [localSettings, setLocalSettings] = useState<ISettings>(settings);
+  const setStepCatalogDsl = useStepCatalogStore((state) => state.setDsl);
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
   const { setSourceCode } = useIntegrationSourceStore();
   const previousIntegrationJson = usePrevious(integrationJson);
@@ -54,7 +60,17 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
     // update settings if there is a name change
     if (settings.name === previousName) return;
     setLocalSettings({ ...localSettings, name: settings.name });
-  }, [settings.name]);
+
+    //update the description
+    let description = getDescriptionIfExists(integrationJson);
+    if (settings.description === description) return;
+    if (description) {
+      setLocalSettings({
+        ...localSettings,
+        description: description,
+      });
+    }
+  }, [settings.name, settings.description]);
 
   useEffect(() => {
     // update settings with the default namespace fetched from the API
@@ -64,7 +80,6 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
 
   useEffect(() => {
     if (previousIntegrationJson === integrationJson) return;
-
     // subsequent changes to the integration requires fetching
     // DSLs compatible with the specific integration
     fetchCompatibleDSLs({
@@ -99,6 +114,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
       capabilities.dsls.forEach((dsl) => {
         if (dsl.name === value) {
           setLocalSettings({ ...localSettings, dsl: dsl });
+          setStepCatalogDsl(dsl.name);
           const tmpIntegration = { ...integrationJson, dsl: dsl.name };
           updateIntegration(tmpIntegration);
           return;
@@ -253,7 +269,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
                       <b>Kamelets</b>: Choose this if you want to create a connection to be used in
                       an integration. Read more about Kamelets&nbsp;
                       <a
-                        href={'https://camel.apache.org/camel-k/1.9.x/kamelets/kamelets.html'}
+                        href={'https://camel.apache.org/camel-k/latest/kamelets/kamelets.html'}
                         target={'_blank'}
                         rel={'noopener'}
                       >

@@ -56,23 +56,135 @@ describe('visualizationService', () => {
     });
   });
 
-  it('buildBranchSingleStepEdges(): should build edges before and after a branch with only one step', () => {
-    const node = {
-      data: {
-        step: {
-          branches: [
-            {
-              steps: [{ UUID: 'single-step' }],
-            },
-          ],
+  describe('buildBranchSingleStepEdges()', () => {
+    it('should build edges before and after a branch with only one step', () => {
+      const node = {
+        data: {
+          step: {
+            branches: [
+              {
+                steps: [{ UUID: 'single-step' }],
+              },
+            ],
+          },
         },
-      },
-    } as IVizStepNode;
-    const rootNode = {} as IVizStepNode;
-    const rootNodeNext = {} as IVizStepNode;
-    expect(
-      VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext)
-    ).toHaveLength(2);
+      } as IVizStepNode;
+      const rootNode = {} as IVizStepNode;
+      const rootNodeNext = {} as IVizStepNode;
+      expect(
+        VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext)
+      ).toHaveLength(2);
+    });
+
+    it('should use edgeType if exists', () => {
+      const node = {
+        data: {
+          step: {
+            branches: [
+              {
+                steps: [{ UUID: 'single-step' }],
+              },
+            ],
+          },
+        },
+      } as IVizStepNode;
+      const rootNode = {} as IVizStepNode;
+      const rootNodeNext = {} as IVizStepNode;
+
+      expect(
+        VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext, 'CUSTOM-NODE')
+      ).toEqual([
+        {
+          arrowHeadType: 'arrowclosed',
+          id: 'e-undefined>undefined',
+          markerEnd: {
+            color: '#d2d2d2',
+            strokeWidth: 2,
+            type: 'arrow',
+          },
+          source: undefined,
+          style: {
+            stroke: '#d2d2d2',
+            strokeWidth: 2,
+          },
+          target: undefined,
+          type: 'CUSTOM-NODE',
+        },
+        {
+          arrowHeadType: 'arrowclosed',
+          id: 'e-undefined>undefined',
+          markerEnd: {
+            color: '#d2d2d2',
+            strokeWidth: 2,
+            type: 'arrow',
+          },
+          source: undefined,
+          style: {
+            stroke: '#d2d2d2',
+            strokeWidth: 2,
+          },
+          target: undefined,
+          type: 'default',
+        },
+      ]);
+    });
+
+    it('should use branchIdentifier as label if exists', () => {
+      const node = {
+        data: {
+          branchInfo: {
+            branchIdentifier: 'This is a fixed branch identifier',
+          },
+          step: {
+            branches: [
+              {
+                steps: [{ UUID: 'single-step' }],
+              },
+            ],
+          },
+        },
+      } as IVizStepNode;
+      const rootNode = {} as IVizStepNode;
+      const rootNodeNext = {} as IVizStepNode;
+
+      expect(VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext)).toEqual(
+        [
+          {
+            arrowHeadType: 'arrowclosed',
+            id: 'e-undefined>undefined',
+            label: 'This is a fixed branch identifier',
+            markerEnd: {
+              color: '#d2d2d2',
+              strokeWidth: 2,
+              type: 'arrow',
+            },
+            source: undefined,
+            style: {
+              stroke: '#d2d2d2',
+              strokeWidth: 2,
+            },
+            target: undefined,
+            type: 'default',
+          },
+          {
+            arrowHeadType: 'arrowclosed',
+            id: 'e-undefined>undefined',
+            markerEnd: {
+              color: '#d2d2d2',
+              strokeWidth: 2,
+              type: 'arrow',
+            },
+            source: undefined,
+            style: {
+              stroke: '#d2d2d2',
+              strokeWidth: 2,
+            },
+            target: undefined,
+            type: 'default',
+          },
+        ]
+      );
+    });
   });
 
   /**
@@ -87,6 +199,12 @@ describe('visualizationService', () => {
       id: 'e-' + currentStep.id + '>' + previousStep.id,
       markerEnd: {
         type: MarkerType.Arrow,
+        color: '#d2d2d2',
+        strokeWidth: 2,
+      },
+      style: {
+        stroke: '#d2d2d2',
+        strokeWidth: 2,
       },
       source: currentStep.id,
       target: previousStep.id,

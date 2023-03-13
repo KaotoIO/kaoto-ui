@@ -1,5 +1,5 @@
 import { fetchCatalogSteps } from '@kaoto/api';
-import { useSettingsStore } from '@kaoto/store';
+import { useSettingsStore, useStepCatalogStore } from '@kaoto/store';
 import { IStepProps, IStepQueryParams } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import {
@@ -37,7 +37,7 @@ export interface IMiniCatalog {
 }
 
 export const MiniCatalog = (props: IMiniCatalog) => {
-  const [catalogData, setCatalogData] = useState<IStepProps[]>(props.steps ?? []);
+  const stepCatalog = useStepCatalogStore();
   const [query, setQuery] = useState(``);
   const [activeTabKey, setActiveTabKey] = useState(props.disableStepsTab ? 1 : 0);
   const dsl = useSettingsStore((state) => state.settings.dsl.name);
@@ -57,15 +57,14 @@ export const MiniCatalog = (props: IMiniCatalog) => {
    * Sort & fetch all Steps for the Catalog
    */
   useEffect(() => {
-    if (!props.steps) {
+    if (!props.steps && !stepCatalog.stepCatalog.length) {
       fetchCatalogSteps({
-        ...props.queryParams,
         dsl,
       })
         .then((value) => {
           if (value) {
             value.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
-            setCatalogData(value);
+            stepCatalog.setStepCatalog(value);
           }
         })
         .catch((e) => {
@@ -79,7 +78,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
         });
     }
     searchInputRef.current?.focus();
-  }, [dsl]);
+  }, []);
 
   const changeSearch = (e: string) => {
     setQuery(e);
@@ -144,6 +143,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                     <ToggleGroup aria-label={'Icon variant toggle group'} style={{ width: '100%' }}>
                       <ToggleGroupItem
                         text={'start'}
+                        data-testid={`miniCatalog__step-start`}
                         aria-label={'sources button'}
                         buttonId={'START'}
                         isDisabled={!typesAllowedArray?.includes('START')}
@@ -152,6 +152,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                       />
                       <ToggleGroupItem
                         icon={'actions'}
+                        data-testid={`miniCatalog__step-actions`}
                         aria-label={'actions button'}
                         buttonId={'MIDDLE'}
                         isDisabled={!typesAllowedArray?.includes('MIDDLE')}
@@ -160,6 +161,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
                       />
                       <ToggleGroupItem
                         text={'end'}
+                        data-testid={`miniCatalog__step-end`}
                         aria-label={'sinks button'}
                         buttonId={'END'}
                         isDisabled={!typesAllowedArray?.includes('END')}
@@ -173,33 +175,34 @@ export const MiniCatalog = (props: IMiniCatalog) => {
             </ToolbarContent>
           </Toolbar>
           <Gallery hasGutter={false} className={'miniCatalog__gallery'}>
-            {catalogData &&
-              search(catalogData).map((step, idx) => {
-                return (
-                  <Button
-                    key={idx}
-                    variant={'tertiary'}
-                    onClick={() => {
-                      handleSelectStep(step);
-                    }}
-                    className={'miniCatalog__stepItem'}
-                    data-testid={`miniCatalog__stepItem--${step.name}`}
-                  >
-                    <Grid md={6} className={'miniCatalog__stepItem__grid'}>
-                      <GridItem span={3}>
-                        <Bullseye>
-                          <img
-                            src={step.icon}
-                            className={'miniCatalog__stepImage'}
-                            alt={'Step Image'}
-                          />
-                        </Bullseye>
-                      </GridItem>
-                      <GridItem span={9}>{truncateString(step.name, 25)}</GridItem>
-                    </Grid>
-                  </Button>
-                );
-              })}
+            {search(stepCatalog.stepCatalog).map((step) => {
+              return (
+                <Button
+                  key={step.id}
+                  variant={'tertiary'}
+                  onClick={() => {
+                    handleSelectStep(step);
+                  }}
+                  className={'miniCatalog__stepItem'}
+                  data-testid={`miniCatalog__stepItem--${step.name}`}
+                >
+                  <Grid md={6} className={'miniCatalog__stepItem__grid'}>
+                    <GridItem span={3}>
+                      <Bullseye>
+                        <img
+                          src={step.icon}
+                          className={'miniCatalog__stepImage'}
+                          alt={'Step Image'}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </Bullseye>
+                    </GridItem>
+                    <GridItem span={9}>{truncateString(step.name, 25)}</GridItem>
+                  </Grid>
+                </Button>
+              );
+            })}
           </Gallery>
         </Tab>
         <Tab
@@ -207,6 +210,7 @@ export const MiniCatalog = (props: IMiniCatalog) => {
           title={<TabTitleText>Branches</TabTitleText>}
           isAriaDisabled={props.disableBranchesTab}
           ref={branchTooltipRef}
+          data-testid="miniCatalog__branches"
         >
           {props.disableBranchesTab && props.disableBranchesTabMsg && (
             <Tooltip

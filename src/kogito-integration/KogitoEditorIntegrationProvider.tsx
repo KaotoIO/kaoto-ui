@@ -95,13 +95,20 @@ function KogitoEditorIntegrationProviderInternal(
       ({ canceled }) => {
         if (!integrationJson || isEqual(previousJson.current, integrationJson)) return;
 
+        if (integrationJson.dsl != null && integrationJson.dsl !== settings.dsl.name) {
+          const tmpDsl = { ...settings.dsl, name: integrationJson.dsl };
+          const tmpSettings = { ...settings, dsl: tmpDsl };
+          setSettings(tmpSettings);
+        }
+
         let intCopy = JSON.parse(JSON.stringify(integrationJson));
-        let tmpInt = {
+        const tmpInt: IIntegration = {
           ...integrationJson,
           metadata: {
             ...integrationJson.metadata,
             ...settings,
           },
+          dsl: settings.dsl.name
         };
         fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
           if (canceled.get()) return;

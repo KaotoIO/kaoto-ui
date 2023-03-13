@@ -5,15 +5,15 @@ import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } f
 import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
-import { getBezierPath, Position, useReactFlow } from 'reactflow';
+import { ReactNode } from 'react';
+import { EdgeText, getBezierPath, Position, useReactFlow } from 'reactflow';
 
 const foreignObjectSize = 40;
-const insertStepInStore = useIntegrationJsonStore.getState().insertStep;
-const replaceStep = useIntegrationJsonStore.getState().replaceStep;
 
 export interface IPlusButtonEdge {
   data?: any;
   id: string;
+  label?: ReactNode;
   sourceX: number;
   sourceY: number;
   targetX: number;
@@ -27,6 +27,7 @@ export interface IPlusButtonEdge {
 /* PLUS BUTTON TO INSERT STEP */
 const PlusButtonEdge = ({
   id,
+  label,
   sourceX,
   sourceY,
   targetX,
@@ -44,7 +45,6 @@ const PlusButtonEdge = ({
   const nestedStepsStore = useNestedStepsStore();
   const visualizationStore = useVisualizationStore();
   const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
-  const currentIdx = stepsService.findStepIdxWithUUID(targetNode?.data.step.UUID);
   const showBranchesTab = VisualizationService.showBranchesTab(sourceNode?.data);
   const showStepsTab = VisualizationService.showStepsTab(sourceNode?.data);
 
@@ -62,30 +62,7 @@ const PlusButtonEdge = ({
   };
 
   const onMiniCatalogClickInsert = (selectedStep: IStepProps) => {
-    if (targetNode?.data.branchInfo) {
-      const rootStepIdx = stepsService.findStepIdxWithUUID(targetNode?.data.branchInfo.parentUuid);
-      const currentStepNested = nestedStepsStore.nestedSteps.map(
-        (ns) => ns.stepUuid === targetNode?.data.step.UUID
-      );
-
-      if (currentStepNested) {
-        // 1. make a copy of the steps, get the root step
-        const newStep = integrationJsonStore.integrationJson.steps.slice()[rootStepIdx];
-        // 2. find the correct branch, insert new step there
-        newStep.branches?.forEach((b, bIdx) => {
-          b.steps.map((bs, bsIdx) => {
-            if (bs.UUID === targetNode?.data.step.UUID) {
-              // 3. assign the new steps back to the branch
-              newStep.branches![bIdx].steps = StepsService.insertStep(b.steps, bsIdx, selectedStep);
-            }
-          });
-        });
-
-        replaceStep(newStep, rootStepIdx);
-      }
-    } else {
-      insertStepInStore(selectedStep, currentIdx);
-    }
+    stepsService.handleInsertStep(targetNode, selectedStep);
   };
 
   return (
@@ -142,6 +119,13 @@ const PlusButtonEdge = ({
           </Popover>
         </span>
       </foreignObject>
+      {label && (
+        <EdgeText
+          x={edgeCenterX + foreignObjectSize / 2}
+          y={edgeCenterY + foreignObjectSize / 2}
+          label={label}
+        />
+      )}
     </>
   );
 };

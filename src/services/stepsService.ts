@@ -7,16 +7,24 @@ import {
   startDeployment,
   stopDeployment,
 } from '@kaoto/api';
-import { IIntegrationJsonStore, INestedStepStore, RFState } from '@kaoto/store';
+import {
+  IIntegrationJsonStore,
+  INestedStepStore,
+  RFState,
+  useIntegrationJsonStore,
+  useNestedStepsStore,
+  useVisualizationStore,
+} from '@kaoto/store';
 import {
   IIntegration,
   IKaotoApi,
   INestedStep,
   IStepProps,
   IStepPropsBranch,
+  IVizStepNode,
   IVizStepNodeData,
 } from '@kaoto/types';
-import { findPath, getDeepValue, getRandomArbitraryNumber, setDeepValue } from '@kaoto/utils';
+import { findPath, getDeepValue, getRandomArbitraryNumber } from '@kaoto/utils';
 
 /**
  * A collection of business logic to handle logical model objects of the integration,
@@ -30,9 +38,15 @@ import { findPath, getDeepValue, getRandomArbitraryNumber, setDeepValue } from '
  */
 export class StepsService {
   constructor(
-    private integrationJsonStore: IIntegrationJsonStore,
-    private nestedStepsStore: INestedStepStore,
-    private visualizationStore: RFState
+    /** @deprecated in favor of using the store raw data itself when needed to avoid binding entire store to several components */
+    // @ts-expect-error no unused constructor parameter
+    private readonly integrationJsonStore?: IIntegrationJsonStore,
+    /** @deprecated in favor of using the store raw data itself when needed to avoid binding entire store to several components */
+    // @ts-expect-error no unused constructor parameter
+    private readonly nestedStepsStore?: INestedStepStore,
+    /** @deprecated in favor of using the store raw data itself when needed to avoid binding entire store to several components */
+    // @ts-expect-error no unused constructor parameter
+    private readonly visualizationStore?: RFState
   ) {}
 
   addBranch(step: IStepProps, branch: IStepPropsBranch) {
@@ -45,11 +59,13 @@ export class StepsService {
       } else {
         newStep.branches = newStep.branches.concat(branch);
       }
-      this.integrationJsonStore.replaceBranchStep(newStep, currentStepNested.pathToStep);
+      useIntegrationJsonStore
+        .getState()
+        .replaceBranchParentStep(newStep, currentStepNested.pathToStep);
     } else {
       const oldStepIdx = this.findStepIdxWithUUID(
         step.UUID,
-        this.integrationJsonStore.integrationJson.steps
+        useIntegrationJsonStore.getState().integrationJson.steps
       );
       const newStep = { ...step };
       if (!newStep.branches) {
@@ -57,7 +73,7 @@ export class StepsService {
       } else {
         newStep.branches = newStep.branches.concat(branch);
       }
-      this.integrationJsonStore.replaceStep(newStep, oldStepIdx);
+      useIntegrationJsonStore.getState().replaceStep(newStep, oldStepIdx);
     }
   }
 
@@ -80,17 +96,19 @@ export class StepsService {
         ...step,
         branches: step.branches?.filter((b) => b.branchUuid !== branchUuid),
       };
-      this.integrationJsonStore.replaceBranchStep(newStep, currentStepNested.pathToStep);
+      useIntegrationJsonStore
+        .getState()
+        .replaceBranchParentStep(newStep, currentStepNested.pathToStep);
     } else {
       const oldStepIdx = this.findStepIdxWithUUID(
         step.UUID,
-        this.integrationJsonStore.integrationJson.steps
+        useIntegrationJsonStore.getState().integrationJson.steps
       );
       const newStep = {
         ...step,
         branches: step.branches?.filter((b) => b.branchUuid !== branchUuid),
       };
-      this.integrationJsonStore.replaceStep(newStep, oldStepIdx);
+      useIntegrationJsonStore.getState().replaceStep(newStep, oldStepIdx);
     }
   }
 
@@ -138,36 +156,36 @@ export class StepsService {
         });
       },
       updateStep: (newStep: IStepProps) =>
-        this.integrationJsonStore.replaceStep(newStep, currentIdx),
+        useIntegrationJsonStore.getState().replaceStep(newStep, currentIdx),
       updateStepParams: saveConfig,
     };
   }
 
   deleteStep(UUID: string) {
     // check if the step being modified is nested
-    const currentStepNested = this.nestedStepsStore.nestedSteps.find((ns) => ns.stepUuid === UUID);
+    const currentStepNested = useNestedStepsStore
+      .getState()
+      .nestedSteps.find((ns) => ns.stepUuid === UUID);
     if (currentStepNested) {
-      const parentStepIdx = this.findStepIdxWithUUID(
-        currentStepNested.originStepUuid,
-        this.integrationJsonStore.integrationJson.steps
+      const stepsCopy = useIntegrationJsonStore.getState().integrationJson.steps.slice();
+      let newParentStep = getDeepValue(stepsCopy, currentStepNested.pathToParentStep);
+      const newBranch = newParentStep.branches[currentStepNested.branchIndex];
+      newParentStep.branches[currentStepNested.branchIndex].steps = newBranch.steps.filter(
+        (branchStep: { UUID: string }) => branchStep.UUID !== UUID
       );
 
-      // update the original parent step, without the child step
-      const updatedParentStep = StepsService.filterStepWithBranches(
-        this.integrationJsonStore.integrationJson.steps[parentStepIdx],
-        (step: { UUID: string }) => step.UUID !== UUID
-      );
-
-      this.integrationJsonStore.deleteBranchStep(updatedParentStep, parentStepIdx);
+      useIntegrationJsonStore
+        .getState()
+        .replaceBranchParentStep(newParentStep, currentStepNested.pathToParentStep);
     } else {
       // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
       const stepsIndex = this.findStepIdxWithUUID(
         UUID,
-        this.integrationJsonStore.integrationJson.steps
+        useIntegrationJsonStore.getState().integrationJson.steps
       );
 
-      this.visualizationStore.deleteNode(stepsIndex);
-      this.integrationJsonStore.deleteStep(stepsIndex);
+      useVisualizationStore.getState().deleteNode(stepsIndex);
+      useIntegrationJsonStore.getState().deleteStep(stepsIndex);
     }
   }
 
@@ -180,23 +198,31 @@ export class StepsService {
     let tempSteps = steps.slice();
     let nestedSteps: INestedStep[] = [];
 
-    const loopOverSteps = (steps: IStepProps[], originalStepUuid?: string, branchUuid?: string) => {
+    const loopOverSteps = (
+      steps: IStepProps[],
+      parentStepUuid?: string,
+      branchUuid?: string,
+      branchIdx?: number
+    ) => {
       steps.forEach((step) => {
-        if (originalStepUuid) {
+        if (parentStepUuid) {
           // this is a nested step
           nestedSteps.push({
+            branchIndex: branchIdx ?? undefined,
             branchUuid,
             stepUuid: step.UUID,
-            originStepUuid: originalStepUuid,
+            parentStepUuid,
+            pathToBranch: branchUuid ? findPath(tempSteps, branchUuid, 'branchUuid') : undefined,
+            pathToParentStep: findPath(tempSteps, parentStepUuid, 'UUID'),
             pathToStep: findPath(tempSteps, step.UUID, 'UUID'),
           } as INestedStep);
         }
 
         if (this.supportsBranching(step) && this.containsBranches(step)) {
-          step.branches!.forEach((branch) => {
+          step.branches!.forEach((branch, branchIdx) => {
             // it contains nested steps; we will need to store the branch info
             // and the path to it, for each of those steps
-            return loopOverSteps(branch.steps, step.UUID, branch.branchUuid);
+            return loopOverSteps(branch.steps, step.UUID, branch.branchUuid, branchIdx);
           });
         }
       });
@@ -208,72 +234,19 @@ export class StepsService {
   }
 
   /**
-   * Given an array of steps and a function with a condition,
-   * return a new filtered array
-   * @param steps
-   * @param predicate
-   */
-  static filterNestedSteps(steps: IStepProps[], predicate: (step: IStepProps) => boolean) {
-    if (!steps) return null;
-
-    return steps.reduce((list: IStepProps[], step: IStepProps) => {
-      let clone: IStepProps | null = null;
-
-      if (predicate(step) && steps.some((s) => s.UUID === step.UUID)) {
-        // clone the step if it matches the condition and isn't a nested step
-        clone = Object.assign({}, step);
-      }
-
-      // overwrite the branch if one of its steps contains a match
-      if (clone && clone.branches && clone.branches.length > 0) {
-        clone.branches.forEach((branch, idx) => {
-          const filteredBranchSteps = StepsService.filterNestedSteps(branch.steps, predicate);
-          if (filteredBranchSteps && clone!.branches) {
-            clone!.branches[idx].steps = filteredBranchSteps;
-          }
-        });
-      }
-
-      // if there's a cloned step, push it to the output list
-      clone && list.push(clone);
-      return list;
-    }, []);
-  }
-
-  /**
-   * Given a step and a function with a condition,
-   * return a new step with filtered branch steps
-   * @param step
-   * @param predicate
-   */
-  static filterStepWithBranches(step: IStepProps, predicate: (step: IStepProps) => boolean) {
-    const stepCopy: IStepProps = { ...step };
-    const loopOverBranches = (branches: IStepPropsBranch[]) => {
-      if (step.branches?.length === 0 || !step.branches) return;
-      branches.forEach((branch, idx) => {
-        const branchCopy = { ...branch };
-        if (stepCopy.branches && stepCopy.branches[idx].steps) {
-          const filtered = StepsService.filterNestedSteps(branchCopy.steps, predicate);
-          if (filtered) stepCopy.branches[idx].steps = filtered;
-        }
-      });
-    };
-
-    if (stepCopy.branches) loopOverBranches(stepCopy.branches);
-
-    return stepCopy;
-  }
-
-  /**
    * Returns a Step index when provided with the `UUID`.
    * `UUID` is originally set using the Step UUID.
    * @param UUID
    * @param steps
    */
   findStepIdxWithUUID(UUID: string, steps?: IStepProps[]): number {
-    // optional steps allows for dependency injection in testing
+    // optional steps allows for dependency injection in testing,
+    // or finding an index within a nested branch's array of steps
     if (!steps) {
-      return this.integrationJsonStore.integrationJson.steps.map((s) => s.UUID).indexOf(UUID);
+      return useIntegrationJsonStore
+        .getState()
+        .integrationJson.steps.map((s) => s.UUID)
+        .indexOf(UUID);
     } else {
       return steps.map((s) => s.UUID).indexOf(UUID);
     }
@@ -285,7 +258,9 @@ export class StepsService {
    * @param UUID
    */
   findStepWithUUID(UUID: string): IStepProps | null {
-    const flatSteps = StepsService.flattenSteps(this.integrationJsonStore.integrationJson.steps);
+    const flatSteps = StepsService.flattenSteps(
+      useIntegrationJsonStore.getState().integrationJson.steps
+    );
     const stepIdx = flatSteps.map((s: IStepProps) => s.UUID).indexOf(UUID);
     return stepIdx !== -1 ? flatSteps[stepIdx] : null;
   }
@@ -314,7 +289,7 @@ export class StepsService {
    * @param step
    */
   getStepNested(step: IStepProps) {
-    return this.nestedStepsStore.nestedSteps.find((ns) => ns.stepUuid === step.UUID);
+    return useNestedStepsStore.getState().nestedSteps.find((ns) => ns.stepUuid === step.UUID);
   }
 
   /**
@@ -324,23 +299,20 @@ export class StepsService {
    */
   handleAppendStep(currentStep: IStepProps, selectedStep: IStepProps) {
     // fetch parameters and other details
-    fetchStepDetails(selectedStep.id).then((step) => {
-      step.UUID = selectedStep.UUID;
+    fetchStepDetails(selectedStep.id).then((newStep) => {
+      newStep.UUID = selectedStep.UUID;
       const currentStepNested = this.getStepNested(currentStep);
       if (currentStepNested) {
-        // special handling for branch steps
-        const rootStepIdx = this.findStepIdxWithUUID(currentStepNested.originStepUuid);
-        const stepsCopy = this.integrationJsonStore.integrationJson.steps.slice();
-        const stepCopy = stepsCopy[rootStepIdx];
-        // find path to the branch, for easy modification of its steps
-        const pathToBranch = findPath(stepCopy, currentStepNested.branchUuid, 'branchUuid');
-        let newBranch = getDeepValue(stepCopy, pathToBranch);
-        newBranch.steps = [...newBranch.steps, step];
-        // here we are building a new root step, with a new array of those branch steps
-        const newRootStep = setDeepValue(stepCopy, pathToBranch, newBranch);
-        this.integrationJsonStore.replaceStep(newRootStep, rootStepIdx);
+        const stepsCopy = useIntegrationJsonStore.getState().integrationJson.steps.slice();
+        let newParentStep = getDeepValue(stepsCopy, currentStepNested.pathToParentStep);
+        const newBranch = newParentStep.branches[currentStepNested.branchIndex];
+        newParentStep.branches[currentStepNested.branchIndex].steps = [...newBranch.steps, newStep];
+
+        useIntegrationJsonStore
+          .getState()
+          .replaceBranchParentStep(newParentStep, currentStepNested.pathToParentStep);
       } else {
-        this.integrationJsonStore.appendStep(step);
+        useIntegrationJsonStore.getState().appendStep(newStep);
       }
     });
   }
@@ -365,14 +337,49 @@ export class StepsService {
         if (node.branchInfo) {
           const currentStepNested = this.getStepNested(currentStep);
           if (currentStepNested) {
-            this.integrationJsonStore.replaceBranchStep(newStep, currentStepNested.pathToStep);
+            useIntegrationJsonStore
+              .getState()
+              .replaceBranchParentStep(newStep, currentStepNested.pathToStep);
           }
         } else {
           const currentIdx = this.findStepIdxWithUUID(currentStep.UUID);
-          this.integrationJsonStore.replaceStep(newStep, currentIdx);
+          useIntegrationJsonStore.getState().replaceStep(newStep, currentIdx);
         }
       }
       return validation;
+    });
+  }
+
+  /**
+   * Handler for inserting a step, where `targetNode` is the
+   * right-hand node. Ex: source -> {insert step here} -> target
+   * @param targetNode
+   * @param newStep
+   */
+  handleInsertStep(targetNode: IVizStepNode | undefined, step: IStepProps) {
+    return fetchStepDetails(step.id).then((newStep) => {
+      if (targetNode?.data.branchInfo) {
+        const currentStepNested = this.getStepNested(targetNode.data.step);
+
+        if (currentStepNested) {
+          const stepsCopy = useIntegrationJsonStore.getState().integrationJson.steps.slice();
+          let newParentStep = getDeepValue(stepsCopy, currentStepNested.pathToParentStep);
+          const newBranch = newParentStep.branches[currentStepNested.branchIndex];
+          const targetIdx = this.findStepIdxWithUUID(targetNode.data.step.UUID, newBranch.steps);
+          newParentStep.branches[currentStepNested.branchIndex].steps = StepsService.insertStep(
+            newBranch.steps,
+            targetIdx,
+            newStep
+          );
+
+          useIntegrationJsonStore
+            .getState()
+            .replaceBranchParentStep(newParentStep, currentStepNested.pathToParentStep);
+        }
+      } else {
+        const currentIdx = this.findStepIdxWithUUID(targetNode?.data.step.UUID);
+        useIntegrationJsonStore.getState().insertStep(newStep, currentIdx);
+      }
     });
   }
 
@@ -383,24 +390,28 @@ export class StepsService {
    */
   handlePrependStep(currentStep: IStepProps, selectedStep: IStepProps) {
     // fetch parameters and other details
-    fetchStepDetails(selectedStep.id).then((step) => {
-      step.UUID = selectedStep.UUID;
+    fetchStepDetails(selectedStep.id).then((newStep) => {
+      newStep.UUID = selectedStep.UUID;
       const currentStepNested = this.getStepNested(currentStep);
+
+      // special handling for branch steps
       if (currentStepNested) {
-        // special handling for branch steps
-        const rootStepIdx = this.findStepIdxWithUUID(currentStepNested.originStepUuid);
-        const stepsCopy = this.integrationJsonStore.integrationJson.steps.slice();
-        const stepCopy = stepsCopy[rootStepIdx];
-        // find path to the branch, for easy modification of its steps
-        const pathToBranch = findPath(stepCopy, currentStepNested.branchUuid, 'branchUuid');
-        let newBranch = getDeepValue(stepCopy, pathToBranch);
-        newBranch.steps = StepsService.prependStep([...newBranch.steps], step);
-        // here we are building a new root step, with a new array of those branch steps
-        const newRootStep = setDeepValue(stepCopy, pathToBranch, newBranch);
-        this.integrationJsonStore.replaceStep(newRootStep, rootStepIdx);
+        const stepsCopy = useIntegrationJsonStore.getState().integrationJson.steps.slice();
+        let newParentStep = getDeepValue(stepsCopy, currentStepNested.pathToParentStep);
+        const newBranch = newParentStep.branches[currentStepNested.branchIndex];
+        const currentStepIdx = this.findStepIdxWithUUID(currentStep.UUID, [...newBranch.steps]);
+        newParentStep.branches[currentStepNested.branchIndex].steps = StepsService.insertStep(
+          [...newBranch.steps],
+          currentStepIdx,
+          newStep
+        );
+
+        useIntegrationJsonStore
+          .getState()
+          .replaceBranchParentStep(newParentStep, currentStepNested.pathToParentStep);
       } else {
         const currentStepIdx = this.findStepIdxWithUUID(currentStep.UUID);
-        this.integrationJsonStore.prependStep(currentStepIdx, step);
+        useIntegrationJsonStore.getState().prependStep(currentStepIdx, newStep);
       }
     });
   }
@@ -444,18 +455,6 @@ export class StepsService {
   }
 
   /**
-   * Inserts the given step at the beginning of the
-   * array of provided steps, returning the modified array
-   * @param steps
-   * @param newStep
-   */
-  static prependStep(steps: IStepProps[], newStep: IStepProps): IStepProps[] {
-    const newSteps = [...steps];
-    newSteps.unshift(newStep);
-    return newSteps;
-  }
-
-  /**
    * Regenerate a UUID for a list of Steps
    * Every time there is a change to steps or their positioning in the Steps array,
    * their UUIDs need to be regenerated
@@ -494,15 +493,15 @@ export class StepsService {
         if (node.branchInfo) {
           if (node.isPlaceholder) {
             const pathToBranch = findPath(
-              this.integrationJsonStore.integrationJson.steps,
+              useIntegrationJsonStore.getState().integrationJson.steps,
               node.branchInfo.branchUuid!,
               'branchUuid'
             );
             const newPath = pathToBranch?.concat('steps', '0');
-            this.integrationJsonStore.replaceBranchStep(step, newPath);
+            useIntegrationJsonStore.getState().replaceBranchParentStep(step, newPath);
           }
         } else {
-          this.integrationJsonStore.replaceStep(step);
+          useIntegrationJsonStore.getState().replaceStep(step);
         }
       }
       return validation;
@@ -534,20 +533,22 @@ export class StepsService {
       });
 
       // check if the step being modified is nested
-      if (this.nestedStepsStore.nestedSteps.some((ns) => ns.stepUuid === newStep.UUID)) {
+      if (useNestedStepsStore.getState().nestedSteps.some((ns) => ns.stepUuid === newStep.UUID)) {
         // use its path to replace only this part of the original step
-        const currentStepNested = this.nestedStepsStore.nestedSteps.find(
-          (ns) => ns.stepUuid === newStep.UUID
-        );
+        const currentStepNested = useNestedStepsStore
+          .getState()
+          .nestedSteps.find((ns) => ns.stepUuid === newStep.UUID);
         if (currentStepNested) {
-          this.integrationJsonStore.replaceBranchStep(newStep, currentStepNested.pathToStep);
+          useIntegrationJsonStore
+            .getState()
+            .replaceBranchParentStep(newStep, currentStepNested.pathToStep);
         }
       } else {
         const oldStepIdx = this.findStepIdxWithUUID(
           newStep.UUID,
-          this.integrationJsonStore.integrationJson.steps
+          useIntegrationJsonStore.getState().integrationJson.steps
         );
-        this.integrationJsonStore.replaceStep(newStep, oldStepIdx);
+        useIntegrationJsonStore.getState().replaceStep(newStep, oldStepIdx);
       }
     } else {
       return;
@@ -558,8 +559,27 @@ export class StepsService {
    * Submits current integration steps to the backend and update with received views.
    */
   updateViews() {
-    fetchViews(this.integrationJsonStore.integrationJson.steps).then((views) => {
-      this.integrationJsonStore.setViews(views);
+    fetchViews(useIntegrationJsonStore.getState().integrationJson.steps).then((views) => {
+      useIntegrationJsonStore.getState().setViews(views);
     });
+  }
+
+  /**
+   * Add records to provded model and the schema for Config views
+   * @param parameter config parameter of the step
+   * @param modelObjectRef reference to the model object
+   * @param schemaObjectRef reference to the schema object
+   */
+  static buildStepSchemaAndModel(
+    parameter: { [label: string]: any },
+    modelObjectRef: { [label: string]: any },
+    schemaObjectRef: { [label: string]: { type: string; value?: any; description?: string } }
+  ) {
+    const propKey = parameter.id;
+    const { type, description } = parameter;
+    if (type !== 'array' || (type === 'array' && parameter.value && parameter.value.length > 0)) {
+      schemaObjectRef[propKey] = { type, description };
+      modelObjectRef[propKey] = parameter.value ?? parameter.defaultValue;
+    }
   }
 }

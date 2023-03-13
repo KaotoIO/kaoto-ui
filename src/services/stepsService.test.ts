@@ -29,54 +29,24 @@ describe('stepsService', () => {
   });
 
   /**
-   * filterNestedSteps
-   */
-  it('filterNestedSteps(): should filter an array of steps given a conditional function', () => {
-    const nestedSteps = [
-      { branches: [{ steps: [{ branches: [{ steps: [{ UUID: 'log-340230' }] }] }] }] },
-    ] as IStepProps[];
-    expect(nestedSteps[0].branches![0].steps[0].branches![0].steps).toHaveLength(1);
-
-    const filtered = StepsService.filterNestedSteps(
-      nestedSteps,
-      (step) => step.UUID !== 'log-340230'
-    );
-    expect(filtered![0].branches![0].steps[0].branches![0].steps).toHaveLength(0);
-  });
-
-  /**
-   * filterStepWithBranches
-   */
-  it('filterStepWithBranches(): should filter the branch steps for a given step and conditional', () => {
-    const step = {
-      branches: [
-        {
-          steps: [
-            {
-              UUID: 'step-one',
-              branches: [{ steps: [{ UUID: 'strawberry' }, { UUID: 'banana' }] }],
-            },
-            { UUID: 'step-two', branches: [{ steps: [{ UUID: 'cherry' }] }] },
-          ],
-        },
-      ],
-    } as IStepProps;
-
-    expect(step.branches![0].steps[0].branches![0].steps).toHaveLength(2);
-
-    const filtered = StepsService.filterStepWithBranches(
-      step,
-      (step: { UUID: string }) => step.UUID !== 'banana'
-    );
-
-    expect(filtered.branches![0].steps[0].branches![0].steps).toHaveLength(1);
-  });
-
-  /**
    * findStepIdxWithUUID
    */
   it("findStepIdxWithUUID(): should find a step's index, given a particular UUID", () => {
+    const steps = [
+      { UUID: 'twitter-search-source-0' },
+      { UUID: 'pdf-action-1' },
+      { UUID: 'caffeine-action-2' },
+    ] as IStepProps[];
     expect(stepsService.findStepIdxWithUUID('caffeine-action-2', steps)).toEqual(2);
+    // passing it a nested branch's steps array
+    const nestedSteps = steps.slice();
+    nestedSteps.push({
+      UUID: 'new-step-3',
+      branches: [{ steps: [{ UUID: 'nested-step-0' }, { UUID: 'nested-step-1' }] }, {}],
+    } as IStepProps);
+    expect(
+      stepsService.findStepIdxWithUUID('nested-step-1', nestedSteps[3].branches![0].steps)
+    ).toEqual(1);
   });
 
   /**
@@ -168,25 +138,6 @@ describe('stepsService', () => {
   });
 
   /**
-   * prependStep
-   */
-  it('prependStep(): should insert the provided step at the beginning of a given array of steps', () => {
-    const steps = [
-      {
-        name: 'strawberry',
-      },
-      {
-        name: 'blueberry',
-      },
-    ] as IStepProps[];
-
-    expect(StepsService.prependStep(steps, { name: 'peach' } as IStepProps)).toHaveLength(3);
-    expect(StepsService.prependStep(steps, { name: 'mango' } as IStepProps)[0]).toEqual({
-      name: 'mango',
-    });
-  });
-
-  /**
    * regenerateUuids
    */
   it('regenerateUuids(): should regenerate UUIDs for an array of steps', () => {
@@ -214,5 +165,45 @@ describe('stepsService', () => {
     ).toBeFalsy();
 
     expect(StepsService.supportsBranching({ UUID: 'no-branches' } as IStepProps)).toBeFalsy();
+  });
+
+  it('buildStepSchemaAndModel():should ignore empty array parameter', () => {
+    const parameter: { [label: string]: any } = {
+      id: 'key',
+      type: 'string',
+      description: 'test description',
+      value: 'value',
+    };
+    const parameter2: { [label: string]: any } = {
+      id: 'array',
+      type: 'array',
+      description: '',
+      value: [],
+    };
+    const parameter3: { [label: string]: any } = {
+      id: 'array2',
+      type: 'array',
+      description: 'array',
+      value: null,
+    };
+    const modelObjectRef: { [label: string]: any } = {};
+    const schemaObjectRef: {
+      [label: string]: { type: string; value?: any; description?: string };
+    } = {};
+
+    StepsService.buildStepSchemaAndModel(parameter, modelObjectRef, schemaObjectRef);
+    StepsService.buildStepSchemaAndModel(parameter2, modelObjectRef, schemaObjectRef);
+    StepsService.buildStepSchemaAndModel(parameter3, modelObjectRef, schemaObjectRef);
+
+    const modelEntries = Object.entries(modelObjectRef);
+    const schemaEntries = Object.entries(schemaObjectRef);
+
+    expect(schemaEntries.length).toBe(1);
+    expect(modelEntries.length).toBe(1);
+
+    expect(modelEntries[0][0]).toContain('key');
+    expect(modelEntries[0][1]).toContain('value');
+
+    expect(JSON.stringify(schemaEntries)).toContain('test description');
   });
 });

@@ -1,6 +1,11 @@
 import { StepsService } from './stepsService';
 import { ValidationService } from './validationService';
-import { IIntegrationJsonStore, RFState } from '@kaoto/store';
+import {
+  IIntegrationJsonStore,
+  RFState,
+  useIntegrationJsonStore,
+  useVisualizationStore,
+} from '@kaoto/store';
 import {
   IStepProps,
   IVizStepNode,
@@ -9,10 +14,8 @@ import {
   IVizStepPropsEdge,
 } from '@kaoto/types';
 import { getRandomArbitraryNumber, truncateString } from '@kaoto/utils';
-import { ElkExtendedEdge, ElkNode } from 'elkjs';
+import ELK, { ElkExtendedEdge, ElkNode } from 'elkjs';
 import { MarkerType, Position } from 'reactflow';
-
-const ELK = require('elkjs');
 
 /**
  * A collection of business logic to process visualization related tasks.
@@ -27,8 +30,12 @@ const ELK = require('elkjs');
  */
 export class VisualizationService {
   constructor(
-    private integrationJsonStore: IIntegrationJsonStore,
-    private visualizationStore: RFState
+    /** @deprecated in favor of using the store raw data itself when needed to avoid binding entire store to several components */
+    // @ts-expect-error no unused constructor parameter
+    private readonly integrationJsonStore?: IIntegrationJsonStore,
+    /** @deprecated in favor of using the store raw data itself when needed to avoid binding entire store to several components */
+    // @ts-expect-error no unused constructor parameter
+    private readonly visualizationStore?: RFState
   ) {}
 
   /**
@@ -79,13 +86,13 @@ export class VisualizationService {
     let edgeProps = VisualizationService.buildEdgeParams(rootNode, node, edgeType ?? 'default');
 
     if (node.data.branchInfo?.branchIdentifier)
-      edgeProps.label = node.data.branchInfo?.branchIdentifier;
+      edgeProps.label = node.data.branchInfo.branchIdentifier;
 
     branchPlaceholderEdges.push(edgeProps);
 
     if (rootNextNode) {
       branchPlaceholderEdges.push(
-        VisualizationService.buildEdgeParams(node, rootNextNode, edgeType ?? 'default')
+        VisualizationService.buildEdgeParams(node, rootNextNode, 'default')
       );
     }
 
@@ -103,11 +110,7 @@ export class VisualizationService {
       if (node.type === 'group') return;
 
       const parentNodeIndex = VisualizationService.findNodeIdxWithUUID(
-        node.data.branchInfo?.parentUuid,
-        stepNodes
-      );
-      const rootStepNextIndex = VisualizationService.findNodeIdxWithUUID(
-        node.data.branchInfo?.rootStepNextUuid,
+        node.data.branchInfo?.parentStepUuid,
         stepNodes
       );
 
@@ -152,6 +155,10 @@ export class VisualizationService {
         // handle placeholder steps within a branch
         if (node.data.branchInfo?.branchStep && node.data.isPlaceholder) {
           const parentStepNode: IVizStepNode = stepNodes[parentNodeIndex];
+          const parentStepNextIdx = VisualizationService.findNodeIdxWithUUID(
+            node.data.branchInfo?.parentStepNextUuid,
+            stepNodes
+          );
           const showDeleteEdge = ValidationService.reachedMinBranches(
             parentStepNode.data.step.branches.length,
             parentStepNode.data.step.minBranches
@@ -161,7 +168,7 @@ export class VisualizationService {
             ...VisualizationService.buildBranchSingleStepEdges(
               node,
               stepNodes[parentNodeIndex],
-              stepNodes[rootStepNextIndex],
+              stepNodes[parentStepNextIdx],
               showDeleteEdge ? 'delete' : 'default'
             )
           );
@@ -169,11 +176,16 @@ export class VisualizationService {
 
         // handle special last steps
         if (node.data.isLastStep && !StepsService.isEndStep(node.data.step)) {
-          const nextStep = stepNodes[rootStepNextIndex];
+          const parentStepNextIdx = VisualizationService.findNodeIdxWithUUID(
+            node.data.branchInfo?.parentStepNextUuid,
+            stepNodes
+          );
 
-          if (nextStep) {
+          if (stepNodes[parentStepNextIdx]) {
             // it needs to merge back
-            specialEdges.push(VisualizationService.buildEdgeParams(node, nextStep, 'default'));
+            specialEdges.push(
+              VisualizationService.buildEdgeParams(node, stepNodes[parentStepNextIdx], 'default')
+            );
           }
         }
       }
@@ -197,6 +209,12 @@ export class VisualizationService {
       id: `e-${sourceStep.id}>${targetStep.id}`,
       markerEnd: {
         type: MarkerType.Arrow,
+        color: '#d2d2d2',
+        strokeWidth: 2,
+      },
+      style: {
+        stroke: '#d2d2d2',
+        strokeWidth: 2,
       },
       source: sourceStep.id,
       target: targetStep.id,
@@ -260,8 +278,8 @@ export class VisualizationService {
    * @param handleDeleteStep
    */
   buildNodesAndEdges(handleDeleteStep: (uuid: string) => void) {
-    const steps = this.integrationJsonStore.integrationJson.steps;
-    const layout = this.visualizationStore.layout;
+    const steps = useIntegrationJsonStore.getState().integrationJson.steps;
+    const layout = useVisualizationStore.getState().layout;
     // build all nodes
     const stepNodes = VisualizationService.buildNodesFromSteps(steps, layout, {
       handleDeleteStep,
@@ -294,10 +312,10 @@ export class VisualizationService {
     let id = 0;
     let getId = (uuid: string) => `node_${id++}-${uuid}-${getRandomArbitraryNumber()}`;
 
-    // if no steps or first step isn't START or an EIP, create a dummy placeholder step
+    // if no steps or first step isn't START, create a dummy placeholder step
     if (
       (steps.length === 0 && !branchInfo) ||
-      (!StepsService.isFirstStepStart(steps) && !StepsService.isFirstStepEip(steps) && !branchInfo)
+      (!StepsService.isFirstStepStart(steps) && !branchInfo)
     ) {
       VisualizationService.insertAddStepPlaceholder(stepNodes, getId(''), 'START', {
         nextStepUuid: steps[0]?.UUID,
@@ -345,14 +363,15 @@ export class VisualizationService {
               branchIdentifier: branch.identifier,
 
               // rootStepUuid is the parent for a first branch step,
-              // and grandparent for n branch step
-              rootStepUuid: branchInfo?.rootStepUuid ?? steps[index].UUID,
+              // and ancestor for n branch step
               rootStepNextUuid: branchInfo?.rootStepNextUuid ?? steps[index + 1]?.UUID,
+              rootStepUuid: branchInfo?.rootStepUuid ?? steps[index].UUID,
               branchStep: true,
               branchUuid: branch.branchUuid,
 
-              // parentUuid is always the parent of the branch step, no matter how nested
-              parentUuid: steps[index].UUID,
+              // parentStepUuid is always the parent of the branch step, no matter how nested
+              parentStepNextUuid: steps[index + 1]?.UUID ?? branchInfo?.rootStepNextUuid,
+              parentStepUuid: steps[index].UUID,
             })
           );
         });
@@ -400,14 +419,14 @@ export class VisualizationService {
         'elk.direction': direction,
 
         // vertical spacing of nodes
-        'elk.spacing.nodeNode': DEFAULT_WIDTH_HEIGHT / 2,
+        'elk.spacing.nodeNode': `${DEFAULT_WIDTH_HEIGHT / 2}`,
 
         // ensures balanced, linear graph from beginning to end
         'elk.layered.nodePlacement.bk.fixedAlignment': 'BALANCED',
 
         // *between handles horizontal spacing
-        'elk.layered.spacing.nodeNodeBetweenLayers': DEFAULT_WIDTH_HEIGHT,
-        'elk.layered.spacing.edgeEdgeBetweenLayers': DEFAULT_WIDTH_HEIGHT * 1.5,
+        'elk.layered.spacing.nodeNodeBetweenLayers': `${DEFAULT_WIDTH_HEIGHT}`,
+        'elk.layered.spacing.edgeEdgeBetweenLayers': `${DEFAULT_WIDTH_HEIGHT * 1.5}`,
         'spacing.componentComponent': '70',
         spacing: '75',
 
@@ -440,7 +459,7 @@ export class VisualizationService {
       portConstraints: 'FIXED_ORDER',
       children: elkNodes,
       edges: elkEdges,
-    });
+    } as ElkNode);
 
     nodes.forEach((flowNode) => {
       const node = newGraph?.children?.find((n: { id: string }) => n.id === flowNode.id);
@@ -541,8 +560,8 @@ export class VisualizationService {
    * @param rebuildNodes
    */
   async redrawDiagram(handleDeleteStep: (uuid: string) => void, rebuildNodes: boolean) {
-    let stepNodes = this.visualizationStore.nodes;
-    let stepEdges = this.visualizationStore.edges;
+    let stepNodes = useVisualizationStore.getState().nodes;
+    let stepEdges = useVisualizationStore.getState().edges;
     if (rebuildNodes) {
       const ne = this.buildNodesAndEdges(handleDeleteStep);
       stepNodes = ne.stepNodes;
@@ -551,11 +570,11 @@ export class VisualizationService {
     VisualizationService.getLayoutedElements(
       stepNodes,
       stepEdges,
-      this.visualizationStore.layout
+      useVisualizationStore.getState().layout
     ).then((res) => {
       const { layoutedNodes, layoutedEdges } = res;
-      this.visualizationStore.setNodes(layoutedNodes);
-      this.visualizationStore.setEdges(layoutedEdges);
+      useVisualizationStore.getState().setNodes(layoutedNodes);
+      useVisualizationStore.getState().setEdges(layoutedEdges);
     });
   }
 
@@ -604,11 +623,11 @@ export class VisualizationService {
       // check if the previous step contains (nested) branches.
       const prevNodeIdx = VisualizationService.findNodeIdxWithUUID(
         nodeData.previousStepUuid,
-        this.visualizationStore.nodes
+        useVisualizationStore.getState().nodes
       );
       return !!(
-        this.visualizationStore.nodes[prevNodeIdx] &&
-        this.visualizationStore.nodes[prevNodeIdx]?.data.step.branches?.length
+        useVisualizationStore.getState().nodes[prevNodeIdx] &&
+        useVisualizationStore.getState().nodes[prevNodeIdx]?.data.step.branches?.length
       );
     } else if (!StepsService.isEndStep(nodeData.step) && nodeData.isFirstStep) {
       return true;
@@ -631,7 +650,9 @@ export class VisualizationService {
    * @param nodeData
    */
   static showStepsTab(nodeData: IVizStepNodeData): boolean {
+    // if it contains branches and no next step, show the steps tab
     if (StepsService.containsBranches(nodeData.step) && !nodeData.nextStepUuid) return true;
+    // if it contains branches, don't show the steps tab
     return !StepsService.containsBranches(nodeData.step);
   }
 }

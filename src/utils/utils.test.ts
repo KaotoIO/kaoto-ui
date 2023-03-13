@@ -1,6 +1,11 @@
 import nestedBranch from '../store/data/kamelet.nested-branch.steps';
-import {findPath, getDeepValue, getRandomArbitraryNumber, setDeepValue} from './index';
-import { StepsService } from '@kaoto/services';
+import {
+  findPath,
+  getDeepValue,
+  getDescriptionIfExists,
+  getRandomArbitraryNumber,
+  setDeepValue,
+} from './index';
 
 describe('utils', () => {
   it('findPath(): should find the path from a deeply nested object, given a value', () => {
@@ -15,20 +20,6 @@ describe('utils', () => {
       'steps',
       '0',
     ]);
-  });
-
-  /**
-   * filterNestedSteps
-   */
-  it('filterNestedSteps(): should filter an array of steps given a conditional function', () => {
-    const nestedBranchCopy = nestedBranch.slice();
-    expect(nestedBranchCopy[1].branches![0].steps[0].branches![0].steps).toHaveLength(1);
-
-    const filteredNestedBranch = StepsService.filterNestedSteps(
-      nestedBranchCopy,
-      (step) => step.UUID !== 'log-340230'
-    );
-    expect(filteredNestedBranch![1].branches![0].steps[0].branches![0].steps).toHaveLength(0);
   });
 
   /**
@@ -74,4 +65,22 @@ describe('utils', () => {
     expect(mGetRandomValues).toBeCalledWith(new Uint8Array(1));
   });
 
+  it('test getDescription from different DSLs', () => {
+    const kamelet = {
+      metadata: {
+        definition: {
+          description: 'test',
+        },
+      },
+    };
+    const integration1 = {
+      steps: [],
+    };
+    const integration2 = { ...integration1, description: 'test' };
+    const integration3 = { ...integration1, metadata: { description: 'test' } };
+    expect(getDescriptionIfExists(kamelet)).toEqual('test');
+    expect(getDescriptionIfExists(integration1)).toEqual(undefined);
+    expect(getDescriptionIfExists(integration2)).toEqual('test');
+    expect(getDescriptionIfExists(integration3)).toEqual('test');
+  });
 });
