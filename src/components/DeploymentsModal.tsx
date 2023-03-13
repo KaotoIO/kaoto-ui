@@ -1,5 +1,5 @@
-import './DeploymentsModal.css';
 import { fetchDeployments, stopDeployment } from '../api';
+import './DeploymentsModal.css';
 import { CustomExclamationTriangleIcon } from './Icons';
 import { useDeploymentStore, useSettingsStore } from '@kaoto/store';
 import { IDeployment } from '@kaoto/types';
@@ -66,12 +66,12 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
     // fetch deployments and on changes to deployment, re-fetch list of deployments
     if (settings.namespace !== '') {
       fetchDeployments('no-cache', settings.namespace)
-          .then((output) => {
-            setDeployments(output);
-          })
-          .catch((e) => {
-            throw Error(e);
-          });
+        .then((output) => {
+          setDeployments(output);
+        })
+        .catch((e) => {
+          throw Error(e);
+        });
     }
     searchInputRef.current?.focus();
   }, [deployment, settings.namespace]);
@@ -131,7 +131,7 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
     });
   }
 
-  const changeSearch = (e: any) => {
+  const changeSearch = (e: string) => {
     setQuery(e);
   };
 
@@ -202,7 +202,7 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
                       placeholder={'search for deployment...'}
                       aria-label={'search for deployment'}
                       value={query}
-                      onChange={changeSearch}
+                      onChange={(_event, value) => changeSearch(value)}
                       onClear={() => setQuery('')}
                       ref={searchInputRef}
                     />
@@ -210,8 +210,7 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
                 </ToolbarItem>
               </ToolbarContent>
             </Toolbar>
-            <TableComposable aria-label="List of deployments"
-            >
+            <TableComposable aria-label="List of deployments">
               <Thead>
                 <Tr>
                   <Th sort={getSortParams(0)}>{columnNames.name}</Th>
@@ -222,39 +221,44 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
                     {columnNames.date}
                   </Th>
                   <Th modifier="wrap">{columnNames.errors}</Th>
-                  <Th modifier="wrap" sort={getSortParams(4)}>{columnNames.status}</Th>
-                  <Th modifier="wrap" sort={getSortParams(5)}>{columnNames.type}</Th>
+                  <Th modifier="wrap" sort={getSortParams(4)}>
+                    {columnNames.status}
+                  </Th>
+                  <Th modifier="wrap" sort={getSortParams(5)}>
+                    {columnNames.type}
+                  </Th>
                   <Th></Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {sortedDeployments && search(sortedDeployments).map((dep, rowIndex) => (
-                  <Tr key={rowIndex}>
-                    <Td dataLabel={columnNames.name}>
-                      <b>{dep.name}</b>
-                    </Td>
-                    <Td dataLabel={columnNames.namespace}>{dep.namespace}</Td>
-                    <Td dataLabel={columnNames.date}>{formatDateTime(dep.date)}</Td>
-                    <Td dataLabel={columnNames.errors}>
-                      {dep.errors.length > 0 && (
-                        <span>
-                          <CustomExclamationTriangleIcon color="red" />
-                          &nbsp;&nbsp;
-                        </span>
-                      )}
-                      {dep.errors.length}
-                    </Td>
-                    <Td dataLabel={columnNames.status}>{dep.status}</Td>
-                    <Td dataLabel={columnNames.type}>
-                      <Badge key={rowIndex} isRead>
-                        {dep.type}
-                      </Badge>
-                    </Td>
-                    <Td isActionCell>
-                      <ActionsColumn items={defaultActions(dep)} />
-                    </Td>
-                  </Tr>
-                ))}
+                {sortedDeployments &&
+                  search(sortedDeployments).map((dep, rowIndex) => (
+                    <Tr key={rowIndex}>
+                      <Td dataLabel={columnNames.name}>
+                        <b>{dep.name}</b>
+                      </Td>
+                      <Td dataLabel={columnNames.namespace}>{dep.namespace}</Td>
+                      <Td dataLabel={columnNames.date}>{formatDateTime(dep.date)}</Td>
+                      <Td dataLabel={columnNames.errors}>
+                        {dep.errors.length > 0 && (
+                          <span>
+                            <CustomExclamationTriangleIcon color="red" />
+                            &nbsp;&nbsp;
+                          </span>
+                        )}
+                        {dep.errors.length}
+                      </Td>
+                      <Td dataLabel={columnNames.status}>{dep.status}</Td>
+                      <Td dataLabel={columnNames.type}>
+                        <Badge key={rowIndex} isRead>
+                          {dep.type}
+                        </Badge>
+                      </Td>
+                      <Td isActionCell>
+                        <ActionsColumn items={defaultActions(dep)} />
+                      </Td>
+                    </Tr>
+                  ))}
               </Tbody>
             </TableComposable>
           </>
