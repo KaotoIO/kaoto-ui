@@ -77,6 +77,7 @@ const VisualizationStepViews = ({
   };
 
   useEffect(() => {
+    setActiveTabKey(configTabIndex);
     let tempSchemaObject: { [label: string]: { type: string; value?: any; description?: string } } =
       {};
 
@@ -88,7 +89,7 @@ const VisualizationStepViews = ({
 
     setStepPropertySchema(tempSchemaObject);
     setStepPropertyModel(tempModelObject);
-  }, [step.parameters, isPanelExpanded]);
+  }, [step.parameters, isPanelExpanded, configTabIndex]);
 
   const handleTabClick = useCallback((_event: unknown, tabIndex: string | number) => {
     setActiveTabKey(tabIndex);
