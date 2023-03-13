@@ -9,6 +9,7 @@ import {
   IVizStepNode,
   IVizStepNodeData,
   IVizStepNodeDataBranch,
+  IVizStepPropsEdge,
 } from '@kaoto/types';
 import { truncateString } from '@kaoto/utils';
 import { MarkerType, Position } from 'reactflow';
@@ -17,9 +18,6 @@ describe('visualizationService', () => {
   const groupWidth = 80;
   const baseStep = { UUID: '', name: '', maxBranches: 0, minBranches: 0, type: '' };
 
-  /**
-   * buildBranchNodeParams
-   */
   it('buildBranchNodeParams(): should build params for a branch node', () => {
     const currentStep = steps[3];
     const nodeId = 'node_example-1234';
@@ -187,9 +185,6 @@ describe('visualizationService', () => {
     });
   });
 
-  /**
-   * buildEdgeParams
-   */
   it("buildEdgeParams(): should build an edge's default parameters for a single given node", () => {
     const currentStep = nodes[1];
     const previousStep = nodes[0];
@@ -212,9 +207,6 @@ describe('visualizationService', () => {
     });
   });
 
-  /**
-   * buildEdges
-   */
   it('buildEdges(): should build an edge for every node except the first, given an array of nodes', () => {
     const nodes = [
       {
@@ -241,9 +233,6 @@ describe('visualizationService', () => {
     expect(VisualizationService.buildEdges(stepNodes)).toHaveLength(branchSteps.length - 1);
   });
 
-  /**
-   * buildNodeDefaultParams
-   */
   it('buildNodeDefaultParams(): should build the default parameters for a single node, given a step', () => {
     const position = { x: 0, y: 0 };
     const step = { name: 'avro-deserialize-action', icon: '', kind: 'Kamelet' } as IStepProps;
@@ -270,27 +259,18 @@ describe('visualizationService', () => {
     });
   });
 
-  /**
-   * buildNodesFromSteps
-   */
   it('buildNodesFromSteps(): should build visualization nodes from an array of steps', () => {
     const stepNodes = VisualizationService.buildNodesFromSteps(steps, 'RIGHT');
     expect(stepNodes[0].data.step.UUID).toBeDefined();
     expect(stepNodes[0].id).toContain(stepNodes[0].data.step.UUID);
   });
 
-  /**
-   * buildNodesFromSteps for integrations with branches
-   */
   it.skip('buildNodesFromSteps(): should build visualization nodes from an array of steps with branches', () => {
     const stepNodes = VisualizationService.buildNodesFromSteps(branchSteps, 'RIGHT');
     expect(stepNodes[0].data.step.UUID).toBeDefined();
     expect(stepNodes).toHaveLength(branchSteps.length);
   });
 
-  /**
-   * containsAddStepPlaceholder
-   */
   it('containsAddStepPlaceholder(): should determine if there is an ADD STEP placeholder in the steps', () => {
     const nodes = [
       {
@@ -327,12 +307,58 @@ describe('visualizationService', () => {
     ).toBe(false);
   });
 
-  /**
-   * findNodeIdxWithUUID
-   */
   it('findNodeIdxWithUUID(): should find a node from an array of nodes, given a UUID', () => {
     expect(VisualizationService.findNodeIdxWithUUID(nodes[0].data.step.UUID, nodes)).toBe(0);
     expect(VisualizationService.findNodeIdxWithUUID(nodes[1].data.step.UUID, nodes)).toBe(1);
+  });
+
+  it('getLayoutedElements(): given an array of nodes and edges, return them with the correct graph layout', () => {
+    const nodes: IVizStepNode[] = [
+      { data: { step: {} } } as IVizStepNode,
+      { data: { step: {} } } as IVizStepNode,
+    ];
+    const edges: IVizStepPropsEdge[] = [
+      {
+        arrowHeadType: 'arrowclosed',
+        id: 'some-id',
+        markerEnd: { type: 'arrow', color: '', strokeWidth: 2 },
+        style: { stroke: '', strokeWidth: 2 },
+        source: 'one',
+        target: 'two',
+        type: 'insert',
+      } as IVizStepPropsEdge,
+    ];
+    let direction: string = 'LR';
+
+    return VisualizationService.getLayoutedElements(nodes, edges, direction).then((res) => {
+      const { layoutedNodes, layoutedEdges } = res;
+
+      expect(layoutedNodes).toEqual([
+        {
+          data: { step: {} },
+          position: { x: 0, y: 0 },
+          sourcePosition: 'right',
+          targetPosition: 'left',
+        },
+        {
+          data: { step: {} },
+          position: { x: 0, y: 0 },
+          sourcePosition: 'right',
+          targetPosition: 'left',
+        },
+      ]);
+      expect(layoutedEdges).toEqual([
+        {
+          arrowHeadType: 'arrowclosed',
+          id: 'some-id',
+          markerEnd: { type: 'arrow', color: '', strokeWidth: 2 },
+          style: { stroke: '', strokeWidth: 2 },
+          source: 'one',
+          target: 'two',
+          type: 'insert',
+        },
+      ]);
+    });
   });
 
   it('getNodeClass(): given two strings to compare and a class name, returns the class name if they match', () => {
@@ -349,18 +375,12 @@ describe('visualizationService', () => {
     ).toEqual(' stepNode__Hover');
   });
 
-  /**
-   * insertAddStepPlaceholder
-   */
   it('insertAddStepPlaceholder(): should add an ADD STEP placeholder to the beginning of the array', () => {
     const nodes: IVizStepNode[] = [];
     VisualizationService.insertAddStepPlaceholder(nodes, '', 'START', { nextStepUuid: '' });
     expect(nodes).toHaveLength(1);
   });
 
-  /**
-   * insertBranchGroupNode
-   */
   it.skip('insertBranchGroupNode', () => {
     const nodes: IVizStepNode[] = [];
     VisualizationService.insertBranchGroupNode(nodes, { x: 0, y: 0 }, 150, groupWidth);
@@ -380,9 +400,6 @@ describe('visualizationService', () => {
     ).toBeFalsy();
   });
 
-  /**
-   * shouldAddEdge
-   */
   it('shouldAddEdge(): given a node, should determine whether to add an edge for it', () => {
     const nodeWithoutBranches = {
       id: 'node-without-branches',

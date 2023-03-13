@@ -14,7 +14,6 @@ import {
   IVizStepPropsEdge,
 } from '@kaoto/types';
 import { getRandomArbitraryNumber, truncateString } from '@kaoto/utils';
-// import ELK, { ElkExtendedEdge, ElkNode } from 'elkjs';
 // @ts-ignore
 import dagre from 'dagre';
 import { MarkerType, Position } from 'reactflow';
@@ -402,7 +401,7 @@ export class VisualizationService {
 
   /**
    * Accepts an array of React Flow nodes and edges,
-   * build a new ELK layout graph with them
+   * build a new layouted graph with them
    * @param nodes
    * @param edges
    * @param direction
@@ -419,10 +418,10 @@ export class VisualizationService {
     const isHorizontal = direction === 'LR';
 
     dagreGraph.setGraph({
-      // edgesep: DEFAULT_WIDTH_HEIGHT,
-      // nodesep: DEFAULT_WIDTH_HEIGHT,
+      edgesep: 50,
+      nodesep: 50,
       rankdir: direction,
-      ranksep: DEFAULT_WIDTH_HEIGHT,
+      ranksep: 80,
     });
 
     nodes.forEach((node) => {
@@ -433,7 +432,12 @@ export class VisualizationService {
     });
 
     edges.forEach((edge) => {
-      dagreGraph.setEdge(edge.source, edge.target);
+      const sourceNode = nodes.find((node) => node.id === edge.source);
+
+      dagreGraph.setEdge(edge.source, edge.target, {
+        minlen: sourceNode?.data.step.branches?.length > 1 ? 2 : 1,
+        weight: sourceNode?.data.step.branches?.length > 0 ? 2 : 1,
+      });
     });
 
     await dagre.layout(dagreGraph);
