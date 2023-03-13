@@ -156,7 +156,7 @@ describe('AppendStepButton.tsx', () => {
     });
 
     await waitFor(() => {
-      const tooltip = screen.getByText(/step has a Custom Step Extension/,);
+      const tooltip = screen.getByText(/Please click on the step to configure branches for it./,);
       expect(tooltip).toBeInTheDocument();
     });
 

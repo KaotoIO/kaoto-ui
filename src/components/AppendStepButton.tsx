@@ -35,7 +35,7 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
 
   useEffect(() => {
     if (hasCustomStepExtension) {
-      setDisableBranchesTabMsg(`The "${step.name}" step has a Custom Step Extension, please click on the step to configure it`);
+      setDisableBranchesTabMsg("Please click on the step to configure branches for it.");
       return;
     }
 
