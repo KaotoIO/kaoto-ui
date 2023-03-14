@@ -1,8 +1,8 @@
+import { CustomJsonSchemaBridge } from './CustomJsonSchemaBridge';
 import Ajv from 'ajv';
 import { useRef } from 'react';
 import { AutoForm } from 'uniforms';
 import { AutoFields, ErrorsField } from 'uniforms-patternfly';
-import { CustomJsonSchemaBridge } from './CustomJsonSchemaBridge';
 
 const ajv = new Ajv({
   allErrors: true,
