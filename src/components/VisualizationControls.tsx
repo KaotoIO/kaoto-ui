@@ -12,14 +12,14 @@ export const VisualizationControls = () => {
   return (
     <Controls className={'visualization__controls'}>
       {/* VERTICAL BUTTON */}
-      <ControlButton onClick={() => setLayout('DOWN')}>
+      <ControlButton onClick={() => setLayout('TB')}>
         <Icon>
           <img src={vertical} alt={'Vertical'} />
         </Icon>
       </ControlButton>
 
       {/* HORIZONTAL BUTTON */}
-      <ControlButton onClick={() => setLayout('RIGHT')}>
+      <ControlButton onClick={() => setLayout('LR')}>
         <Icon>
           <img src={horizontal} alt={'Horizontal'} />
         </Icon>
