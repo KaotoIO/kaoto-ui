@@ -22,6 +22,7 @@ import {
   IStepProps,
   IStepPropsBranch,
   IViewProps,
+  IStepPropsParameters,
   IVizStepNode,
   IVizStepNodeData,
 } from '@kaoto/types';
@@ -116,19 +117,19 @@ export class StepsService {
   /**
    * Creates a {@link IKaotoApi} instance for the target step.
    * @param step target step
-   * @param saveConfig Kaoto save config callback
+   * @param updateStepParams Kaoto save config callback
    * @param alertKaoto Kaoto alert callback
    */
   createKaotoApi(
     step: IStepProps,
-    saveConfig: (values: any) => void,
+    updateStepParams: (values: any) => void,
     alertKaoto: (title: string, body?: string, variant?: string) => void
   ): IKaotoApi {
-    let tmpValues = {};
-    step.parameters?.map((p) => {
-      const paramKey = p.title;
+    let stepParams = {};
+    step.parameters?.forEach((parameter) => {
+      const paramKey = parameter.title;
       // @ts-ignore
-      tmpValues[paramKey] = p.value ?? p.defaultValue;
+      stepParams[paramKey] = parameter.value ?? parameter.defaultValue;
     });
     const currentIdx = this.findStepIdxWithUUID(step.UUID);
 
@@ -150,7 +151,7 @@ export class StepsService {
         });
       },
       step,
-      stepParams: tmpValues,
+      stepParams,
       stopDeployment: (name: string) => {
         return stopDeployment(name).then((res) => {
           return res;
@@ -158,7 +159,7 @@ export class StepsService {
       },
       updateStep: (newStep: IStepProps) =>
         useIntegrationJsonStore.getState().replaceStep(newStep, currentIdx),
-      updateStepParams: saveConfig,
+      updateStepParams,
     };
   }
 
@@ -582,8 +583,8 @@ export class StepsService {
    * @param schemaObjectRef reference to the schema object
    */
   static buildStepSchemaAndModel(
-    parameter: { [label: string]: any },
-    modelObjectRef: { [label: string]: any },
+    parameter: IStepPropsParameters,
+    modelObjectRef: IStepPropsParameters,
     schemaObjectRef: { [label: string]: { type: string; value?: any; description?: string } }
   ) {
     const propKey = parameter.id;
