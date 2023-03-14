@@ -43,7 +43,7 @@ export const useVisualizationStore = create<RFState>((set, get) => ({
       nodes: [...state.nodes.filter((_n, idx) => idx !== nodeIndex)],
     })),
   hoverStepUuid: '',
-  layout: 'LR', // e.g. LR, TB
+  layout: 'RIGHT', // e.g. RIGHT, DOWN
   onNodesChange: (changes: NodeChange[]) =>
     set((state) => ({
       nodes: applyNodeChanges(changes, state.nodes),

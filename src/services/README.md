@@ -16,5 +16,3 @@ Contains methods pertaining to validation of Steps. These methods ensure that th
 
 ### visualizationService
 Contains methods pertaining to any mutations for the canvas or visualization. This is where you build nodes, find nodes, etc. Example methods: `buildNodesAndEdges`
-
-**NOTE:** Check the [elkjs branch](https://github.com/KaotoIO/kaoto-ui/tree/elkjs) to see Kaoto layouting with ELK instead of Dagre.

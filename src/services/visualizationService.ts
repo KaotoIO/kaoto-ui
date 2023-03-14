@@ -14,8 +14,7 @@ import {
   IVizStepPropsEdge,
 } from '@kaoto/types';
 import { getRandomArbitraryNumber, truncateString } from '@kaoto/utils';
-// @ts-ignore
-import dagre from 'dagre';
+import ELK, { ElkExtendedEdge, ElkNode } from 'elkjs';
 import { MarkerType, Position } from 'reactflow';
 
 /**
@@ -411,59 +410,82 @@ export class VisualizationService {
     edges: IVizStepPropsEdge[],
     direction: string
   ) {
-    const dagreGraph = new dagre.graphlib.Graph();
-    dagreGraph.setDefaultEdgeLabel(() => ({}));
-
     const DEFAULT_WIDTH_HEIGHT = 80;
-    const isHorizontal = direction === 'LR';
+    const isHorizontal = direction === 'RIGHT';
 
-    dagreGraph.setGraph({
-      edgesep: 50,
-      nodesep: 50,
-      rankdir: direction,
-      ranksep: 80,
+    const elk = new ELK({
+      defaultLayoutOptions: {
+        'elk.algorithm': 'layered',
+        'elk.direction': direction,
+
+        // vertical spacing of nodes
+        'elk.spacing.nodeNode': `${DEFAULT_WIDTH_HEIGHT / 2}`,
+
+        // ensures balanced, linear graph from beginning to end
+        'elk.layered.nodePlacement.bk.fixedAlignment': 'BALANCED',
+
+        // *between handles horizontal spacing
+        'elk.layered.spacing.nodeNodeBetweenLayers': `${DEFAULT_WIDTH_HEIGHT}`,
+        'elk.layered.spacing.edgeEdgeBetweenLayers': `${DEFAULT_WIDTH_HEIGHT * 1.5}`,
+        'spacing.componentComponent': '70',
+        spacing: '75',
+
+        // ensures correct order of nodes (particularly important for branches)
+        'elk.layered.crossingMinimization.forceNodeModelOrder': 'true',
+      },
     });
 
-    nodes.forEach((node) => {
-      dagreGraph.setNode(node.id, {
-        width: node.width ?? DEFAULT_WIDTH_HEIGHT,
-        height: node.height ?? DEFAULT_WIDTH_HEIGHT,
+    const elkNodes: ElkNode[] = [];
+    const elkEdges: ElkExtendedEdge[] = [];
+
+    nodes.forEach((flowNode) => {
+      elkNodes.push({
+        id: flowNode.id,
+        width: flowNode.width ?? DEFAULT_WIDTH_HEIGHT,
+        height: flowNode.height ?? DEFAULT_WIDTH_HEIGHT,
       });
     });
 
-    edges.forEach((edge) => {
-      const sourceNode = nodes.find((node) => node.id === edge.source);
-      const dagreWeightedValues = VisualizationService.getDagreWeightedValues(isHorizontal, sourceNode);
-
-      dagreGraph.setEdge(edge.source, edge.target, dagreWeightedValues);
+    edges.forEach((flowEdge) => {
+      elkEdges.push({
+        id: flowEdge.id,
+        targets: [flowEdge.target],
+        sources: [flowEdge.source],
+      });
     });
 
-    await dagre.layout(dagreGraph);
+    const newGraph = await elk.layout({
+      id: 'root',
+      portConstraints: 'FIXED_ORDER',
+      children: elkNodes,
+      edges: elkEdges,
+    } as ElkNode);
 
     nodes.forEach((flowNode) => {
-      const nodeWithPosition = dagreGraph.node(flowNode.id);
+      const node = newGraph?.children?.find((n: { id: string }) => n.id === flowNode.id);
+      if (node?.x && node?.y && node?.width && node?.height) {
+        flowNode.position = {
+          x: node.x - node.width / 2,
+          y: node.y - node.height / 2,
+        };
 
-      // We are shifting the dagre node position (anchor=center center) to the top left,
-      // so it matches the React Flow node anchor point (top left).
-      flowNode.position = {
-        x: nodeWithPosition.x - nodeWithPosition.width / 2,
-        y: nodeWithPosition.y - nodeWithPosition.height / 2,
-      };
-
-      flowNode.targetPosition = isHorizontal ? Position.Left : Position.Top;
-      flowNode.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
-
+        flowNode.targetPosition = isHorizontal ? Position.Left : Position.Top;
+        flowNode.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
+      }
       return flowNode;
     });
 
     return { layoutedNodes: nodes, layoutedEdges: edges };
   }
 
-  static getDagreWeightedValues(isHorizontal: boolean, sourceNode?: IVizStepNode): { minlen: number; weight: number } {
+  static getDagreWeightedValues(
+    isHorizontal: boolean,
+    sourceNode?: IVizStepNode
+  ): { minlen: number; weight: number } {
     return {
       minlen: isHorizontal ? (sourceNode?.data.step.branches?.length > 1 ? 2 : 1) : 1.5,
       weight: sourceNode?.data.step.branches?.length > 0 ? 2 : 1,
-    }
+    };
   }
 
   /**
@@ -627,10 +649,7 @@ export class VisualizationService {
    * @param nodeData
    */
   static showBranchesTab(step: IStepProps): boolean {
-    return (
-      StepsService.supportsBranching(step) &&
-      step.branches?.length !== step.maxBranches
-    );
+    return StepsService.supportsBranching(step) && step.branches?.length !== step.maxBranches;
   }
 
   /**
