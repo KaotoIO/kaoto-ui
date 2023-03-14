@@ -1470,13 +1470,6 @@
     "@types/node" "*"
     jest-mock "^29.5.0"
 
-"@jest/expect-utils@^29.4.1":
-  version "29.4.1"
-  resolved "https://registry.yarnpkg.com/@jest/expect-utils/-/expect-utils-29.4.1.tgz#105b9f3e2c48101f09cae2f0a4d79a1b3a419cbb"
-  integrity sha512-w6YJMn5DlzmxjO00i9wu2YSozUYRBhIoJ6nQwpMYcBMtiqMGJm1QBzOf6DDgRao8dbtpDoaqLg6iiQTvv0UHhQ==
-  dependencies:
-    jest-get-type "^29.2.0"
-
 "@jest/expect-utils@^29.5.0":
   version "29.5.0"
   resolved "https://registry.yarnpkg.com/@jest/expect-utils/-/expect-utils-29.5.0.tgz#f74fad6b6e20f924582dc8ecbf2cb800fe43a036"
@@ -1656,7 +1649,7 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@jest/types@^29.3.1", "@jest/types@^29.4.1", "@jest/types@^29.5.0":
+"@jest/types@^29.3.1", "@jest/types@^29.5.0":
   version "29.5.0"
   resolved "https://registry.yarnpkg.com/@jest/types/-/types-29.5.0.tgz#f59ef9b031ced83047c67032700d8c807d6e1593"
   integrity sha512-qbu7kN6czmVRc3xWFQcAN03RAUamgppVUdXrvl1Wr3jlNF93o9mJbGcDWrwGB6ht44u7efB1qCFgVQmca24Uog==
@@ -2249,27 +2242,27 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@reactflow/background@11.1.8":
-  version "11.1.8"
-  resolved "https://registry.yarnpkg.com/@reactflow/background/-/background-11.1.8.tgz#e804eb82ade6f70ab5f218dc767051083497c0f7"
-  integrity sha512-NYZwiEeKVc1qJbDRrRX5RgHbMMzofhzOAqz3teWtUIGju5d+kEf/vcx/35bLM+CZuhucL+OvJpRgCjKmViiTIw==
+"@reactflow/background@11.1.9":
+  version "11.1.9"
+  resolved "https://registry.yarnpkg.com/@reactflow/background/-/background-11.1.9.tgz#04f47362b3166fba624f1834e09986bb0a1391cf"
+  integrity sha512-tl2uDpq3FECz9Q8+7Fm3z9wmYOryRqRDuPr3nhp3GJRNbELSIJc5AUm2LSyYf1pM/Ck4fZU1zKmby9kC+hj99g==
   dependencies:
-    "@reactflow/core" "11.5.5"
+    "@reactflow/core" "11.6.0"
     classcat "^5.0.3"
     zustand "^4.3.1"
 
-"@reactflow/controls@11.1.8":
-  version "11.1.8"
-  resolved "https://registry.yarnpkg.com/@reactflow/controls/-/controls-11.1.8.tgz#43c3756a53479382e34d495f4b123f45b8cf658f"
-  integrity sha512-QCG4q52HS/zmuBAFzmTFh4wkR6thmNDxSKHQPxTwfVIuQtV/oGpfz7zMaoU0ZSN84qSWl5UdzmV4PAC50tOAkQ==
+"@reactflow/controls@11.1.9":
+  version "11.1.9"
+  resolved "https://registry.yarnpkg.com/@reactflow/controls/-/controls-11.1.9.tgz#3210c617c194bfa5188a45b597264d6874fde8d0"
+  integrity sha512-k0Vfz/jIHsQ6DFfsNBgYk29KtPQhzZAyQY7g9yN6GWPCXALF8fkopNb79BHOYichQ7a0rpUmeaGfjdMUsWrIhg==
   dependencies:
-    "@reactflow/core" "11.5.5"
+    "@reactflow/core" "11.6.0"
     classcat "^5.0.3"
 
-"@reactflow/core@11.5.5":
-  version "11.5.5"
-  resolved "https://registry.yarnpkg.com/@reactflow/core/-/core-11.5.5.tgz#bced11d76fc200b4dc301f2f2b882c4f4ec3dad3"
-  integrity sha512-/FPnpvO9I4E6/mmfZInbsVusR214gzIZ2e2xgl9XJdBo90cWaqHgo0c5F2YPXX19R3mItzxveN+WlENFEOvdPg==
+"@reactflow/core@11.6.0":
+  version "11.6.0"
+  resolved "https://registry.yarnpkg.com/@reactflow/core/-/core-11.6.0.tgz#d73d61cb167bb55199c68838ea04b83ca72a07af"
+  integrity sha512-sxw4X/E8FLPzljcZ9rSdSTbNeN4uvIcdJXXFEpYol98RJluwQG+wajvr75D4tLoRafgJHCGcULjdRI1RVDjV2A==
   dependencies:
     "@types/d3" "^7.4.0"
     "@types/d3-drag" "^3.0.1"
@@ -2281,12 +2274,12 @@
     d3-zoom "^3.0.0"
     zustand "^4.3.1"
 
-"@reactflow/minimap@11.3.8":
-  version "11.3.8"
-  resolved "https://registry.yarnpkg.com/@reactflow/minimap/-/minimap-11.3.8.tgz#f2324c2f038d75bf9f8b27d46d782f488038f341"
-  integrity sha512-hOW3FVP/ObRK3oZxvKSSKIIR/DRe1OR4KU+3AIHxTK6K2kt/D48zQU37fOmEasfohjBjsqEopK7Ux8tapTT0EA==
+"@reactflow/minimap@11.4.0":
+  version "11.4.0"
+  resolved "https://registry.yarnpkg.com/@reactflow/minimap/-/minimap-11.4.0.tgz#2915a5bead1952d79689f9b5f2e957fea505e969"
+  integrity sha512-JZ30XyVdL7bXX6Hp+B/4RENH8QT37WJnFcCh7WIF/J8kKP3t216AaJa1h3Hc2b92dV7qoB9LjBl8iI6gdHH0xQ==
   dependencies:
-    "@reactflow/core" "11.5.5"
+    "@reactflow/core" "11.6.0"
     "@types/d3-selection" "^3.0.3"
     "@types/d3-zoom" "^3.0.1"
     classcat "^5.0.3"
@@ -2294,12 +2287,12 @@
     d3-zoom "^3.0.0"
     zustand "^4.3.1"
 
-"@reactflow/node-toolbar@1.1.8":
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/@reactflow/node-toolbar/-/node-toolbar-1.1.8.tgz#36a97fb390b8c622fa98e7ffaf1b03c2f75f812a"
-  integrity sha512-/Aj5dfarrBRvPeyDk+CZef7InP4LXlhMnlMPw6hnT/P9lVVChe02knzzkeKiVGmiWKXWL/gOCDXBFp9tMtIAsQ==
+"@reactflow/node-toolbar@1.1.9":
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/@reactflow/node-toolbar/-/node-toolbar-1.1.9.tgz#63d653715c6a39ee428a06ce16d0ab0db402bea4"
+  integrity sha512-rzS4gfeY1VFqz0ai0EuS+DBWsQyhMbYNlmm8sBMk8wj/4TaMOzF33ejMHreDJPHsZouuGh4jfeHIKkJjRBk74g==
   dependencies:
-    "@reactflow/core" "11.5.5"
+    "@reactflow/core" "11.6.0"
     classcat "^5.0.3"
     zustand "^4.3.1"
 
@@ -3806,10 +3799,10 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@*", "@types/jest@^29.4.0":
-  version "29.4.0"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.4.0.tgz#a8444ad1704493e84dbf07bb05990b275b3b9206"
-  integrity sha512-VaywcGQ9tPorCX/Jkkni7RWGFfI11whqzs8dvxF41P17Z+z872thvEvlIbznjPJ02kl1HMX3LmLOonsj2n7HeQ==
+"@types/jest@*", "@types/jest@^29.4.1":
+  version "29.4.1"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.4.1.tgz#d76cbd07e5a24c0f4e86c2c0f9ed9e4ed33af3c8"
+  integrity sha512-zDQSWXG+ZkEvs2zFFMszePhx4euKz+Yt3Gg1P+RHjfJBinTTr6L2DEyovO4V/WrKXuF0Dgn56GWGZPDa6TW9eQ==
   dependencies:
     expect "^29.0.0"
     pretty-format "^29.0.0"
@@ -6894,11 +6887,6 @@ detect-port@^1.3.0:
     address "^1.0.1"
     debug "4"
 
-diff-sequences@^29.3.1:
-  version "29.3.1"
-  resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-29.3.1.tgz#104b5b95fe725932421a9c6e5b4bef84c3f2249e"
-  integrity sha512-hlM3QR272NXCi4pq+N4Kok4kOp6EsgOM3ZSpJI7Da3UAs+Ttsi8MRmB6trM/lhyzUxGfOgnpkHtgqm5Q/CTcfQ==
-
 diff-sequences@^29.4.3:
   version "29.4.3"
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-29.4.3.tgz#9314bc1fabe09267ffeca9cbafc457d8499a13f2"
@@ -7704,18 +7692,7 @@ expand-brackets@^2.1.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-expect@^29.0.0:
-  version "29.4.1"
-  resolved "https://registry.yarnpkg.com/expect/-/expect-29.4.1.tgz#58cfeea9cbf479b64ed081fd1e074ac8beb5a1fe"
-  integrity sha512-OKrGESHOaMxK3b6zxIq9SOW8kEXztKff/Dvg88j4xIJxur1hspEbedVkR3GpHe5LO+WB2Qw7OWN0RMTdp6as5A==
-  dependencies:
-    "@jest/expect-utils" "^29.4.1"
-    jest-get-type "^29.2.0"
-    jest-matcher-utils "^29.4.1"
-    jest-message-util "^29.4.1"
-    jest-util "^29.4.1"
-
-expect@^29.5.0:
+expect@^29.0.0, expect@^29.5.0:
   version "29.5.0"
   resolved "https://registry.yarnpkg.com/expect/-/expect-29.5.0.tgz#68c0509156cb2a0adb8865d413b137eeaae682f7"
   integrity sha512-yM7xqUrCO2JdpFo4XpM82t+PJBFybdqoQuJLDGeDX2ij8NZzqRHyu3Hp188/JX7SWqud+7t4MUdvcgGBICMHZg==
@@ -9739,16 +9716,6 @@ jest-config@^29.5.0:
     slash "^3.0.0"
     strip-json-comments "^3.1.1"
 
-jest-diff@^29.4.1:
-  version "29.4.1"
-  resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-29.4.1.tgz#9a6dc715037e1fa7a8a44554e7d272088c4029bd"
-  integrity sha512-uazdl2g331iY56CEyfbNA0Ut7Mn2ulAG5vUaEHXycf1L6IPyuImIxSz4F0VYBKi7LYIuxOwTZzK3wh5jHzASMw==
-  dependencies:
-    chalk "^4.0.0"
-    diff-sequences "^29.3.1"
-    jest-get-type "^29.2.0"
-    pretty-format "^29.4.1"
-
 jest-diff@^29.5.0:
   version "29.5.0"
   resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-29.5.0.tgz#e0d83a58eb5451dcc1fa61b1c3ee4e8f5a290d63"
@@ -9803,11 +9770,6 @@ jest-environment-node@^29.5.0:
     jest-mock "^29.5.0"
     jest-util "^29.5.0"
 
-jest-get-type@^29.2.0:
-  version "29.2.0"
-  resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-29.2.0.tgz#726646f927ef61d583a3b3adb1ab13f3a5036408"
-  integrity sha512-uXNJlg8hKFEnDgFsrCjznB+sTxdkuqiCL6zMgA75qEbAJjJYTs9XPrvDctrEig2GDow22T/LvHgO57iJhXB/UA==
-
 jest-get-type@^29.4.3:
   version "29.4.3"
   resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-29.4.3.tgz#1ab7a5207c995161100b5187159ca82dd48b3dd5"
@@ -9861,16 +9823,6 @@ jest-leak-detector@^29.5.0:
     jest-get-type "^29.4.3"
     pretty-format "^29.5.0"
 
-jest-matcher-utils@^29.4.1:
-  version "29.4.1"
-  resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-29.4.1.tgz#73d834e305909c3b43285fbc76f78bf0ad7e1954"
-  integrity sha512-k5h0u8V4nAEy6lSACepxL/rw78FLDkBnXhZVgFneVpnJONhb2DhZj/Gv4eNe+1XqQ5IhgUcqj745UwH0HJmMnA==
-  dependencies:
-    chalk "^4.0.0"
-    jest-diff "^29.4.1"
-    jest-get-type "^29.2.0"
-    pretty-format "^29.4.1"
-
 jest-matcher-utils@^29.5.0:
   version "29.5.0"
   resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-29.5.0.tgz#d957af7f8c0692c5453666705621ad4abc2c59c5"
@@ -9893,21 +9845,6 @@ jest-message-util@^29.3.1:
     graceful-fs "^4.2.9"
     micromatch "^4.0.4"
     pretty-format "^29.3.1"
-    slash "^3.0.0"
-    stack-utils "^2.0.3"
-
-jest-message-util@^29.4.1:
-  version "29.4.1"
-  resolved "https://registry.yarnpkg.com/jest-message-util/-/jest-message-util-29.4.1.tgz#522623aa1df9a36ebfdffb06495c7d9d19e8a845"
-  integrity sha512-H4/I0cXUaLeCw6FM+i4AwCnOwHRgitdaUFOdm49022YD5nfyr8C/DrbXOBEyJaj+w/y0gGJ57klssOaUiLLQGQ==
-  dependencies:
-    "@babel/code-frame" "^7.12.13"
-    "@jest/types" "^29.4.1"
-    "@types/stack-utils" "^2.0.0"
-    chalk "^4.0.0"
-    graceful-fs "^4.2.9"
-    micromatch "^4.0.4"
-    pretty-format "^29.4.1"
     slash "^3.0.0"
     stack-utils "^2.0.3"
 
@@ -10100,18 +10037,6 @@ jest-util@^29.0.0, jest-util@^29.1.2, jest-util@^29.3.1:
   integrity sha512-7YOVZaiX7RJLv76ZfHt4nbNEzzTRiMW/IiOG7ZOKmTXmoGBxUDefgMAxQubu6WPVqP5zSzAdZG0FfLcC7HOIFQ==
   dependencies:
     "@jest/types" "^29.3.1"
-    "@types/node" "*"
-    chalk "^4.0.0"
-    ci-info "^3.2.0"
-    graceful-fs "^4.2.9"
-    picomatch "^2.2.3"
-
-jest-util@^29.4.1:
-  version "29.4.1"
-  resolved "https://registry.yarnpkg.com/jest-util/-/jest-util-29.4.1.tgz#2eeed98ff4563b441b5a656ed1a786e3abc3e4c4"
-  integrity sha512-bQy9FPGxVutgpN4VRc0hk6w7Hx/m6L53QxpDreTZgJd9gfx/AV2MjyPde9tGyZRINAUrSv57p2inGBu2dRLmkQ==
-  dependencies:
-    "@jest/types" "^29.4.1"
     "@types/node" "*"
     chalk "^4.0.0"
     ci-info "^3.2.0"
@@ -12433,7 +12358,7 @@ pretty-format@^27.0.2:
     ansi-styles "^5.0.0"
     react-is "^17.0.1"
 
-pretty-format@^29.0.0, pretty-format@^29.3.1, pretty-format@^29.4.1, pretty-format@^29.5.0:
+pretty-format@^29.0.0, pretty-format@^29.3.1, pretty-format@^29.5.0:
   version "29.5.0"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-29.5.0.tgz#283134e74f70e2e3e7229336de0e4fce94ccde5a"
   integrity sha512-V2mGkI31qdttvTFX7Mt4efOqHXqJWMu4/r66Xh3Z3BwZaPfPJgp6/gbwoujRpPUtfEF6AUUWx3Jim3GCw5g/Qw==
@@ -12852,16 +12777,16 @@ react@^17.0.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
 
-reactflow@^11.5.6:
-  version "11.5.6"
-  resolved "https://registry.yarnpkg.com/reactflow/-/reactflow-11.5.6.tgz#744e2aa6cfb2c376b560633377063c2a576f3eec"
-  integrity sha512-my4LUKT7H7t2mK/qy4n+bfAMgjqhHOhYGYrvzSWB4yPhOhamPGjs0Ted9G8JWEw15Svn7pHf8DppTHUfk5zH2g==
+reactflow@^11.6.0:
+  version "11.6.0"
+  resolved "https://registry.yarnpkg.com/reactflow/-/reactflow-11.6.0.tgz#b0b76aeea95ab621f635ee64b836aa68963e91bf"
+  integrity sha512-u0lKKYThK+ZRT4YO71xMz/6Gjj22XsDkuD7UUNlqPCqbNXRHlHYv7XlaxTw6gzFpS9OvjekDZXWacYS12J58Eg==
   dependencies:
-    "@reactflow/background" "11.1.8"
-    "@reactflow/controls" "11.1.8"
-    "@reactflow/core" "11.5.5"
-    "@reactflow/minimap" "11.3.8"
-    "@reactflow/node-toolbar" "1.1.8"
+    "@reactflow/background" "11.1.9"
+    "@reactflow/controls" "11.1.9"
+    "@reactflow/core" "11.6.0"
+    "@reactflow/minimap" "11.4.0"
+    "@reactflow/node-toolbar" "1.1.9"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
@@ -14174,10 +14099,10 @@ strnum@^1.0.5:
   resolved "https://registry.yarnpkg.com/strnum/-/strnum-1.0.5.tgz#5c4e829fe15ad4ff0d20c3db5ac97b73c9b072db"
   integrity sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==
 
-style-loader@3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-3.3.1.tgz#057dfa6b3d4d7c7064462830f9113ed417d38575"
-  integrity sha512-GPcQ+LDJbrcxHORTRes6Jy2sfvK2kS6hpSfI/fXhPt+spVzxF6LJ1dHLN9zIGmVaaP044YKaIatFaufENRiDoQ==
+style-loader@3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-3.3.2.tgz#eaebca714d9e462c19aa1e3599057bc363924899"
+  integrity sha512-RHs/vcrKdQK8wZliteNK4NKzxvLBzpuHMqYmUVWeKa6MkaIQ97ZTOS0b+zapZhy6GcrgWnvWYCMHRirC3FsUmw==
 
 style-loader@^1.3.0:
   version "1.3.0"
