@@ -79,7 +79,7 @@
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^2.2.3",
-    "@babel/core": "^7.21.0",
+    "@babel/core": "^7.21.3",
     "@module-federation/typescript": "^2.3.0",
     "@storybook/addon-actions": "^6.5.16",
     "@storybook/addon-essentials": "^6.5.16",
@@ -109,7 +109,7 @@
     "cpr": "^3.0.1",
     "css-loader": "^6.7.3",
     "css-minimizer-webpack-plugin": "^4.2.2",
-    "cypress": "12.7.0",
+    "cypress": "12.8.0",
     "cypress-file-upload": "^5.0.8",
     "dotenv-webpack": "8.0.1",
     "eslint": "7.32.0",
