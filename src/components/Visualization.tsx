@@ -46,7 +46,22 @@ const Visualization = () => {
    */
   useEffect(() => {
     stepsService.updateViews();
-  }, [integrationJson]);
+  }, [integrationJson, stepsService]);
+
+  /**
+   * Check for changes to integrationJson to refresh the selected step's data.
+   * This is usually caused because of code sync or changes through a step extension
+   */
+  useEffect(() => {
+    if (!selectedStep.UUID) {
+      return;
+    }
+
+    const step = stepsService.findStepWithUUID(selectedStep.UUID);
+    if (step) {
+      setSelectedStep(step);
+    }
+  }, [integrationJson, selectedStep.UUID, stepsService]);
 
   useEffect(() => {
     visualizationService.redrawDiagram(handleDeleteStep, true).catch((e) => console.error(e));
