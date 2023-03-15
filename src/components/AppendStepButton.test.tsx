@@ -1,8 +1,8 @@
-import { StepsService } from '@kaoto/services';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { kameletSourceStepStub } from '../__mocks__/steps';
 import { AlertProvider } from '../layout';
 import { AppendStepButton } from './AppendStepButton';
+import { StepsService } from '@kaoto/services';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 describe('AppendStepButton.tsx', () => {
   const noopFn = jest.fn();
@@ -22,6 +22,7 @@ describe('AppendStepButton.tsx', () => {
         <AppendStepButton
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
+          layout={'LR'}
           showBranchesTab={true}
           showStepsTab={true}
           supportsBranching={true}
@@ -40,6 +41,7 @@ describe('AppendStepButton.tsx', () => {
         <AppendStepButton
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
+          layout={'LR'}
           showBranchesTab={true}
           showStepsTab={true}
           supportsBranching={true}
@@ -63,10 +65,15 @@ describe('AppendStepButton.tsx', () => {
         <AppendStepButton
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
+          layout={'LR'}
           showBranchesTab={false}
           showStepsTab={true}
           supportsBranching={true}
-          step={{ ...kameletSourceStepStub, maxBranches: 1, branches: [{ branchUuid: 'random-uuid', identifier: 'branch-1', steps: [] }] }}
+          step={{
+            ...kameletSourceStepStub,
+            maxBranches: 1,
+            branches: [{ branchUuid: 'random-uuid', identifier: 'branch-1', steps: [] }],
+          }}
         />
       </AlertProvider>
     );
@@ -86,7 +93,7 @@ describe('AppendStepButton.tsx', () => {
     });
 
     await waitFor(() => {
-      const tooltip = screen.getByText(/Max number of branches reached/,);
+      const tooltip = screen.getByText(/Max number of branches reached/);
       expect(tooltip).toBeInTheDocument();
     });
   });
@@ -97,6 +104,7 @@ describe('AppendStepButton.tsx', () => {
         <AppendStepButton
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
+          layout={'LR'}
           showBranchesTab={false}
           showStepsTab={true}
           supportsBranching={false}
@@ -120,7 +128,7 @@ describe('AppendStepButton.tsx', () => {
     });
 
     await waitFor(() => {
-      const tooltip = screen.getByText(/step doesn't support branching/,);
+      const tooltip = screen.getByText(/step doesn't support branching/);
       expect(tooltip).toBeInTheDocument();
     });
   });
@@ -133,6 +141,7 @@ describe('AppendStepButton.tsx', () => {
         <AppendStepButton
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
+          layout={'LR'}
           showBranchesTab={true}
           showStepsTab={true}
           supportsBranching={true}
@@ -156,11 +165,10 @@ describe('AppendStepButton.tsx', () => {
     });
 
     await waitFor(() => {
-      const tooltip = screen.getByText(/Please click on the step to configure branches for it./,);
+      const tooltip = screen.getByText(/Please click on the step to configure branches for it./);
       expect(tooltip).toBeInTheDocument();
     });
 
     spy.mockReset();
   });
-
 });

@@ -51,6 +51,12 @@
     top: 38%;
 }
 
+.stepNode__Add--vertical {
+    position: absolute;
+    right: 30px;
+    bottom: -63%;
+}
+
 .stepNode__Delete {
     position: absolute;
     left: 0;
@@ -97,6 +103,12 @@
     position: absolute;
     left: -24px;
     top: 38%;
+}
+
+.stepNode__Prepend--vertical {
+    position: absolute;
+    left: 30px;
+    top: -30%;
 }
 
 .stepNode__Slot {

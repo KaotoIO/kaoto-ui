@@ -1,3 +1,4 @@
+import { AppendStepButton } from './AppendStepButton';
 import { BranchBuilder } from './BranchBuilder';
 import './Visualization.css';
 import { MiniCatalog } from '@kaoto/components';
@@ -13,7 +14,6 @@ import { AlertVariant, Popover, Tooltip } from '@patternfly/react-core';
 import { CubesIcon, PlusIcon, MinusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, NodeProps, Position } from 'reactflow';
-import { AppendStepButton } from './AppendStepButton';
 
 const currentDSL = useSettingsStore.getState().settings.dsl.name;
 
@@ -208,16 +208,17 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           )}
 
           {/* ADD/APPEND STEP BUTTON */}
-          {VisualizationService.showAppendStepButton(data, endStep)
-            && <AppendStepButton
+          {VisualizationService.showAppendStepButton(data, endStep) && (
+            <AppendStepButton
               handleAddBranch={handleAddBranch}
               handleSelectStep={onMiniCatalogClickAppend}
+              layout={visualizationStore.layout}
               step={data.step}
               showBranchesTab={showBranchesTab}
               showStepsTab={showStepsTab}
               supportsBranching={supportsBranching}
             />
-          }
+          )}
         </div>
       ) : (
         <Popover
