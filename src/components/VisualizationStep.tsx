@@ -157,7 +157,11 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             >
               <Tooltip content={ValidationService.getPlusButtonTooltipMsg(false, showStepsTab)}>
                 <button
-                  className="stepNode__Prepend plusButton nodrag"
+                  className={`${
+                    visualizationStore.layout === 'LR'
+                      ? 'stepNode__Prepend'
+                      : 'stepNode__Prepend--vertical'
+                  } plusButton nodrag`}
                   data-testid={'stepNode__prependStep-btn'}
                 >
                   <PlusIcon />
