@@ -169,11 +169,11 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
           {!StepsService.isStartStep(data.step) && (
             <Handle
+              className={'stepHandle'}
               isConnectable={false}
               type="target"
               position={visualizationStore.layout === 'LR' ? Position.Left : Position.Top}
               id="a"
-              style={{ borderRadius: 0 }}
             />
           )}
 
@@ -199,11 +199,11 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
           {!StepsService.isEndStep(data.step) && (
             <Handle
+              className={'stepHandle'}
               isConnectable={false}
               type="source"
               position={visualizationStore.layout === 'LR' ? Position.Right : Position.Bottom}
               id="b"
-              style={{ borderRadius: 0 }}
             />
           )}
 
@@ -263,11 +263,11 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
             {(!StepsService.isStartStep(data.step) || data.branchInfo) && (
               <Handle
+                className={'stepHandle'}
                 isConnectable={false}
                 type="target"
                 position={visualizationStore.layout === 'LR' ? Position.Left : Position.Top}
                 id="a"
-                style={{ borderRadius: 0 }}
               />
             )}
 
@@ -278,10 +278,10 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
             {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
             <Handle
+              className={'stepHandle'}
               type="source"
               position={visualizationStore.layout === 'LR' ? Position.Right : Position.Bottom}
               id="b"
-              style={{ borderRadius: 0 }}
               isConnectable={false}
             />
             <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
