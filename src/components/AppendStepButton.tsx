@@ -81,7 +81,10 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
       position="right-start"
       showClose={false}
     >
-      <Tooltip content={ValidationService.getPlusButtonTooltipMsg(showBranchesTab, showStepsTab)}>
+      <Tooltip
+        content={ValidationService.getPlusButtonTooltipMsg(showBranchesTab, showStepsTab)}
+        position={layout === 'LR' ? 'top' : 'right'}
+      >
         <button
           className={`${
             layout === 'LR' ? 'stepNode__Add' : 'stepNode__Add--vertical'

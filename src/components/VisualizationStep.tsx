@@ -155,7 +155,10 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               position={'left-start'}
               showClose={false}
             >
-              <Tooltip content={ValidationService.getPlusButtonTooltipMsg(false, showStepsTab)}>
+              <Tooltip
+                content={ValidationService.getPlusButtonTooltipMsg(false, showStepsTab)}
+                position={visualizationStore.layout === 'LR' ? 'top' : 'right'}
+              >
                 <button
                   className={`${
                     visualizationStore.layout === 'LR'
@@ -182,7 +185,10 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           )}
 
           {/* DELETE STEP BUTTON */}
-          <Tooltip content={'Delete step'}>
+          <Tooltip
+            content={'Delete step'}
+            position={visualizationStore.layout === 'LR' ? 'top' : 'left'}
+          >
             <button
               className="stepNode__Delete trashButton nodrag"
               data-testid={'configurationTab__deleteBtn'}

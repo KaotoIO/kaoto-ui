@@ -111,6 +111,7 @@ const PlusButtonEdge = ({
           >
             <Tooltip
               content={ValidationService.getPlusButtonTooltipMsg(showBranchesTab, showStepsTab)}
+              position={visualizationStore.layout === 'LR' ? 'top' : 'right'}
             >
               <button className="plusButton" data-testid={'stepNode__insertStep-btn'}>
                 <PlusIcon />
