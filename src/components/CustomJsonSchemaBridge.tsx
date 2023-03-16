@@ -16,7 +16,7 @@ export class CustomJsonSchemaBridge extends JSONSchemaBridge {
     const { description, ...props } = field;
 
     const isDisabled = field.type === 'object';
-    const revisedField: any = {
+    const revisedField: Record<string, any> = {
       labelIcon: description ? FieldLabelIcon({ description, disabled: isDisabled }) : undefined,
       ...props,
     };
