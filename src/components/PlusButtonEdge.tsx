@@ -45,7 +45,7 @@ const PlusButtonEdge = ({
   const nestedStepsStore = useNestedStepsStore();
   const visualizationStore = useVisualizationStore();
   const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
-  const showBranchesTab = VisualizationService.showBranchesTab(sourceNode?.data);
+  const showBranchesTab = VisualizationService.showBranchesTab(sourceNode?.data.step);
   const showStepsTab = VisualizationService.showStepsTab(sourceNode?.data);
 
   const [edgePath, edgeCenterX, edgeCenterY] = getBezierPath({

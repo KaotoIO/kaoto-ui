@@ -23,7 +23,6 @@ describe('AppendStepButton.tsx', () => {
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
           layout={'LR'}
-          showBranchesTab={true}
           showStepsTab={true}
           supportsBranching={true}
           step={kameletSourceStepStub}
@@ -42,7 +41,6 @@ describe('AppendStepButton.tsx', () => {
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
           layout={'LR'}
-          showBranchesTab={true}
           showStepsTab={true}
           supportsBranching={true}
           step={kameletSourceStepStub}
@@ -66,7 +64,6 @@ describe('AppendStepButton.tsx', () => {
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
           layout={'LR'}
-          showBranchesTab={false}
           showStepsTab={true}
           supportsBranching={true}
           step={{
@@ -98,14 +95,13 @@ describe('AppendStepButton.tsx', () => {
     });
   });
 
-  test('should disable branches tab when showBranchesTab={false} and supportsBranching={false}', async () => {
+  test('should disable branches tab when supportsBranching={false}', async () => {
     render(
       <AlertProvider>
         <AppendStepButton
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
           layout={'LR'}
-          showBranchesTab={false}
           showStepsTab={true}
           supportsBranching={false}
           step={kameletSourceStepStub}
@@ -142,7 +138,6 @@ describe('AppendStepButton.tsx', () => {
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
           layout={'LR'}
-          showBranchesTab={true}
           showStepsTab={true}
           supportsBranching={true}
           step={kameletSourceStepStub}
@@ -161,6 +156,38 @@ describe('AppendStepButton.tsx', () => {
 
     act(() => {
       fireEvent.mouseEnter(branchTab);
+      jest.runAllTimers();
+    });
+
+    await waitFor(() => {
+      const tooltip = screen.getByText(/Please click on the step to configure branches for it./);
+      expect(tooltip).toBeInTheDocument();
+    });
+
+    spy.mockReset();
+  });
+
+  test('should disable the plus button when showStepsTab={false} and supportsBranching={false}', async () => {
+    const spy = jest.spyOn(StepsService, 'hasCustomStepExtension').mockReturnValue(true);
+
+    render(
+      <AlertProvider>
+        <AppendStepButton
+          handleAddBranch={noopFn}
+          handleSelectStep={noopFn}
+          layout={'LR'}
+          showStepsTab={false}
+          supportsBranching={false}
+          step={kameletSourceStepStub}
+        />
+      </AlertProvider>
+    );
+
+    const plusIcon = screen.getByTestId('stepNode__appendStep-btn');
+    expect(plusIcon).toBeDisabled();
+
+    act(() => {
+      fireEvent.mouseEnter(plusIcon);
       jest.runAllTimers();
     });
 

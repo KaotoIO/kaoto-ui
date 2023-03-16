@@ -621,10 +621,10 @@ export class VisualizationService {
    * Determines whether to show the Branches tab in the mini catalog
    * @param nodeData
    */
-  static showBranchesTab(nodeData: IVizStepNodeData): boolean {
+  static showBranchesTab(step: IStepProps): boolean {
     return (
-      StepsService.supportsBranching(nodeData.step) &&
-      nodeData.step.branches?.length !== nodeData.step.maxBranches
+      StepsService.supportsBranching(step) &&
+      step.branches?.length !== step.maxBranches
     );
   }
 
