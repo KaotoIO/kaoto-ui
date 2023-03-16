@@ -1,4 +1,5 @@
-import { StepsService, ValidationService, VisualizationService } from '@kaoto/services';
+import { useShowBranchTab } from '@kaoto/hooks';
+import { ValidationService } from '@kaoto/services';
 import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
@@ -13,7 +14,6 @@ interface IAddStepButton {
   layout: string;
   step: IStepProps;
   showStepsTab: boolean;
-  supportsBranching: boolean;
 }
 
 export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
@@ -22,41 +22,13 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
   layout,
   step,
   showStepsTab,
-  supportsBranching,
 }) => {
   const currentDSL = useSettingsStore((state) => state.settings.dsl.name);
   const views = useIntegrationJsonStore((state) => state.views);
-  const [hasCustomStepExtension, setHasCustomStepExtension] = useState(
-    StepsService.hasCustomStepExtension(step, views)
-  );
-  const [disableBranchesTab, setDisableBranchesTab] = useState(false);
-  const [disableBranchesTabMsg, setDisableBranchesTabMsg] = useState('');
+  const { disableBranchesTab, disableBranchesTabMsg } = useShowBranchTab(step, views);
+
   const [tooltipText, setTooltipText] = useState('');
   const [disableButton, setDisableButton] = useState(false);
-
-  useEffect(() => {
-    setHasCustomStepExtension(StepsService.hasCustomStepExtension(step, views));
-  }, [step, views]);
-
-  useEffect(() => {
-    const showBranchesTab = VisualizationService.showBranchesTab(step);
-    setDisableBranchesTab(hasCustomStepExtension || !showBranchesTab || !supportsBranching);
-  }, [step, hasCustomStepExtension, supportsBranching]);
-
-  useEffect(() => {
-    if (hasCustomStepExtension) {
-      setDisableBranchesTabMsg('Please click on the step to configure branches for it.');
-      return;
-    }
-
-    setDisableBranchesTabMsg(
-      ValidationService.getBranchTabTooltipMsg(
-        supportsBranching,
-        step.maxBranches,
-        step.branches?.length
-      )
-    );
-  }, [hasCustomStepExtension, step, supportsBranching]);
 
   useEffect(() => {
     setDisableButton(!showStepsTab && disableBranchesTab);
