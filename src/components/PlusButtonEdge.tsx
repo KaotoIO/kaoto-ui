@@ -1,12 +1,13 @@
-import './CustomEdge.css';
 import { BranchBuilder, MiniCatalog } from '@kaoto/components';
+import { useShowBranchTab } from '@kaoto/hooks';
 import { StepsService, ValidationService, VisualizationService } from '@kaoto/services';
-import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
+import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { ReactNode } from 'react';
 import { EdgeText, getBezierPath, Position, useReactFlow } from 'reactflow';
+import './CustomEdge.css';
 
 const foreignObjectSize = 40;
 
@@ -41,12 +42,13 @@ const PlusButtonEdge = ({
   const nodeIds = id.substring(2).split('>');
   const sourceNode: IVizStepNode | undefined = useReactFlow().getNode(nodeIds[0]);
   const targetNode: IVizStepNode | undefined = useReactFlow().getNode(nodeIds[1]);
-  const integrationJsonStore = useIntegrationJsonStore();
-  const nestedStepsStore = useNestedStepsStore();
-  const visualizationStore = useVisualizationStore();
-  const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
+  const stepsService = new StepsService();
   const showBranchesTab = VisualizationService.showBranchesTab(sourceNode?.data.step);
   const showStepsTab = VisualizationService.showStepsTab(sourceNode?.data);
+
+  const layout = useVisualizationStore((state) => state.layout);
+  const views = useIntegrationJsonStore((state) => state.views);
+  const { disableBranchesTab, disableBranchesTabMsg } = useShowBranchTab(sourceNode?.data.step, views);
 
   const [edgePath, edgeCenterX, edgeCenterY] = getBezierPath({
     sourceX,
@@ -88,11 +90,10 @@ const PlusButtonEdge = ({
             aria-label="Search for a step"
             bodyContent={
               <MiniCatalog
-                children={<BranchBuilder handleAddBranch={handleAddBranch} />}
-                disableBranchesTab={!showBranchesTab}
-                disableBranchesTabMsg={"This step doesn't support branching."}
+                disableBranchesTab={disableBranchesTab}
+                disableBranchesTabMsg={disableBranchesTabMsg}
                 disableStepsTab={!showStepsTab}
-                disableStepsTabMsg={"You can't add a step between a step and a branch."}
+                disableStepsTabMsg="You can't add a step between a step and a branch."
                 handleSelectStep={onMiniCatalogClickInsert}
                 queryParams={{
                   type: ValidationService.insertableStepTypes(
@@ -101,17 +102,19 @@ const PlusButtonEdge = ({
                   ),
                 }}
                 step={sourceNode?.data.step}
-              />
+              >
+                <BranchBuilder handleAddBranch={handleAddBranch} />
+              </MiniCatalog>
             }
-            enableFlip={true}
+            enableFlip
             flipBehavior={['top-start', 'left-start']}
             hasAutoWidth
-            hideOnOutsideClick={true}
-            position={'right-start'}
+            hideOnOutsideClick
+            position="right-start"
           >
             <Tooltip
               content={ValidationService.getPlusButtonTooltipMsg(showBranchesTab, showStepsTab)}
-              position={visualizationStore.layout === 'LR' ? 'top' : 'right'}
+              position={layout === 'LR' ? 'top' : 'right'}
             >
               <button className="plusButton" data-testid={'stepNode__insertStep-btn'}>
                 <PlusIcon />
