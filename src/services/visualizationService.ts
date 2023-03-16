@@ -361,7 +361,7 @@ export class VisualizationService {
         step.branches.forEach((branch) => {
           stepNodes = stepNodes.concat(
             VisualizationService.buildNodesFromSteps(branch.steps, layout, props, {
-              branchIdentifier: branch.identifier,
+              branchIdentifier: branch.condition !== null ? branch.condition : branch.identifier,
 
               // rootStepUuid is the parent for a first branch step,
               // and ancestor for n branch step
