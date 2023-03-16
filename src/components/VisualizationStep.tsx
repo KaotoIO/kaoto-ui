@@ -2,7 +2,7 @@ import { AppendStepButton } from './AppendStepButton';
 import { BranchBuilder } from './BranchBuilder';
 import './Visualization.css';
 import { MiniCatalog } from '@kaoto/components';
-import { StepsService, ValidationService, VisualizationService } from '@kaoto/services';
+import { StepsService, VisualizationService } from '@kaoto/services';
 import {
   useIntegrationJsonStore,
   useNestedStepsStore,
@@ -11,9 +11,10 @@ import {
 } from '@kaoto/store';
 import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 import { AlertVariant, Popover, Tooltip } from '@patternfly/react-core';
-import { CubesIcon, PlusIcon, MinusIcon } from '@patternfly/react-icons';
+import { CubesIcon, MinusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, NodeProps, Position } from 'reactflow';
+import { PrependStepButton } from './PrependStepButton';
 
 const currentDSL = useSettingsStore.getState().settings.dsl.name;
 
@@ -128,49 +129,13 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
         >
           {/* PREPEND STEP BUTTON */}
           {visualizationService.showPrependStepButton(data) && (
-            <Popover
-              id="popover-prepend-step"
-              appendTo={() => document.body}
-              aria-label="Add a step"
-              bodyContent={
-                <MiniCatalog
-                  children={<BranchBuilder handleAddBranch={handleAddBranch} />}
-                  disableBranchesTab={true}
-                  disableBranchesTabMsg={"You can't add a branch from here."}
-                  disableStepsTab={!visualizationService.showPrependStepButton(data)}
-                  handleSelectStep={onMiniCatalogClickPrepend}
-                  queryParams={{
-                    dsl: currentDSL,
-                    type: ValidationService.prependableStepTypes(),
-                  }}
-                  step={data.step}
-                />
-              }
-              className={'miniCatalog__popover'}
-              data-testid={'miniCatalog__popover'}
-              enableFlip={true}
-              flipBehavior={['top-start', 'left-start']}
-              hasAutoWidth
-              hideOnOutsideClick={true}
-              position={'left-start'}
-              showClose={false}
-            >
-              <Tooltip
-                content={ValidationService.getPlusButtonTooltipMsg(false, showStepsTab)}
-                position={visualizationStore.layout === 'LR' ? 'top' : 'right'}
-              >
-                <button
-                  className={`${
-                    visualizationStore.layout === 'LR'
-                      ? 'stepNode__Prepend'
-                      : 'stepNode__Prepend--vertical'
-                  } plusButton nodrag`}
-                  data-testid={'stepNode__prependStep-btn'}
-                >
-                  <PlusIcon />
-                </button>
-              </Tooltip>
-            </Popover>
+            <PrependStepButton
+              handleAddBranch={handleAddBranch}
+              onMiniCatalogClickPrepend={onMiniCatalogClickPrepend}
+              layout={visualizationStore.layout}
+              step={data.step}
+              showStepsTab={showStepsTab}
+            />
           )}
 
           {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
