@@ -84,11 +84,7 @@ export class StepsService {
    * @param step
    */
   static containsBranches(step: IStepProps): boolean {
-    let containsBranching = false;
-    if (step.branches && step.branches.length > 0) {
-      containsBranching = true;
-    }
-    return containsBranching;
+    return Array.isArray(step.branches) && step.branches.length > 0;
   }
 
   deleteBranch(step: IStepProps, branchUuid: string) {

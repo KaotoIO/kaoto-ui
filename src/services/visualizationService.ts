@@ -635,7 +635,7 @@ export class VisualizationService {
   static showStepsTab(nodeData: IVizStepNodeData): boolean {
     // if it contains branches and no next step, show the steps tab
     if (StepsService.containsBranches(nodeData.step) && !nodeData.nextStepUuid) return true;
-    // if it contains branches, don't show the steps tab
+    // if it doesn't contains branches, don't show the steps tab
     return !StepsService.containsBranches(nodeData.step);
   }
 }
