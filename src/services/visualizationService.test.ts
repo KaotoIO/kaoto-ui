@@ -519,24 +519,23 @@ describe('visualizationService', () => {
   });
 
   it('showBranchesTab(): given node data, should determine whether to show the branches tab in mini catalog', () => {
-    const step: IVizStepNodeData = {
-      label: '',
-      step: {} as IStepProps,
-    };
+    const step = {} as IStepProps;
 
     expect(VisualizationService.showBranchesTab(step)).toBeFalsy();
     // has branches but not branch support
     expect(
       VisualizationService.showBranchesTab({
         ...step,
-        step: { ...step.step, branches: [] },
+        branches: [],
       })
     ).toBeFalsy();
 
     expect(
       VisualizationService.showBranchesTab({
         ...step,
-        step: { ...step.step, branches: [], minBranches: 0, maxBranches: -1 },
+        branches: [],
+        minBranches: 0,
+        maxBranches: -1,
       })
     ).toBeTruthy();
 
@@ -544,12 +543,9 @@ describe('visualizationService', () => {
     expect(
       VisualizationService.showBranchesTab({
         ...step,
-        step: {
-          ...step.step,
-          branches: [{}, {}] as IStepPropsBranch[],
-          minBranches: 0,
-          maxBranches: 2,
-        },
+        branches: [{}, {}] as IStepPropsBranch[],
+        minBranches: 0,
+        maxBranches: 2,
       })
     ).toBeFalsy();
   });

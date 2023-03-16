@@ -26,7 +26,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const integrationJsonStore = useIntegrationJsonStore();
   const visualizationService = new VisualizationService(integrationJsonStore, visualizationStore);
   const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
-  const showBranchesTab = VisualizationService.showBranchesTab(data);
+  const showBranchesTab = VisualizationService.showBranchesTab(data.step);
   const showStepsTab = VisualizationService.showStepsTab(data);
   const supportsBranching = StepsService.supportsBranching(data.step);
 
@@ -187,7 +187,6 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               handleSelectStep={onMiniCatalogClickAppend}
               layout={visualizationStore.layout}
               step={data.step}
-              showBranchesTab={showBranchesTab}
               showStepsTab={showStepsTab}
               supportsBranching={supportsBranching}
             />

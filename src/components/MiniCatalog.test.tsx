@@ -1,27 +1,23 @@
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { AlertProvider } from '../layout';
 import { MiniCatalog } from './MiniCatalog';
-import { screen } from '@testing-library/dom';
-import { render } from '@testing-library/react';
 
 describe('MiniCatalog.tsx', () => {
-  test('component renders correctly', () => {
-    render(
-      <AlertProvider>
-        <MiniCatalog />
-      </AlertProvider>
-    );
+  test('component renders correctly', async () => {
+    act(() => {
+      render(
+        <AlertProvider>
+          <MiniCatalog />
+        </AlertProvider>
+      );
+    });
 
-    const element = screen.getByTestId('miniCatalog');
-    expect(element).toBeInTheDocument();
-  });
-  test('component renders correctly', () => {
-    render(
-      <AlertProvider>
-        <MiniCatalog />
-      </AlertProvider>
-    );
+    await waitFor(() => {
+      const element = screen.getByTestId('miniCatalog');
+      expect(element).toBeInTheDocument();
 
-    const element = screen.getByText('start');
-    expect(element).toBeInTheDocument();
+      const startButton = screen.getByText('start');
+      expect(startButton).toBeInTheDocument();
+    });
   });
 });

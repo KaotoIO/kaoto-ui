@@ -1,5 +1,6 @@
 import { IIntegrationJsonStore, RFState, useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 import { AlertProvider } from '../layout';
 import { integrationJSONStub, stepsStub } from '../__mocks__/steps';
 import { Visualization } from './Visualization';
@@ -33,14 +34,19 @@ beforeAll(() => {
 });
 
 describe('Visualization.tsx', () => {
-  test('component renders correctly', () => {
-    render(
-      <AlertProvider>
-        <Visualization />
-      </AlertProvider>
-    );
-    const element = screen.getByTestId('react-flow-wrapper');
-    expect(element).toBeInTheDocument();
+  test('component renders correctly', async () => {
+    act(() => {
+      render(
+        <AlertProvider>
+          <Visualization />
+        </AlertProvider>
+      );
+    });
+
+    await waitFor(() => {
+      const element = screen.getByTestId('react-flow-wrapper');
+      expect(element).toBeInTheDocument();
+    });
   });
 
   test('should expands the details panel upon clicking on a step', async () => {

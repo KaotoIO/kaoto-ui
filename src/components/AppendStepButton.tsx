@@ -1,18 +1,17 @@
-import { BranchBuilder } from './BranchBuilder';
-import { MiniCatalog } from './MiniCatalog';
-import { StepsService, ValidationService } from '@kaoto/services';
+import { StepsService, ValidationService, VisualizationService } from '@kaoto/services';
 import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { FunctionComponent, useEffect, useState } from 'react';
+import { BranchBuilder } from './BranchBuilder';
+import { MiniCatalog } from './MiniCatalog';
 
 interface IAddStepButton {
   handleAddBranch: () => void;
   handleSelectStep: (selectedStep: IStepProps) => void;
   layout: string;
   step: IStepProps;
-  showBranchesTab: boolean;
   showStepsTab: boolean;
   supportsBranching: boolean;
 }
@@ -22,7 +21,6 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
   handleSelectStep,
   layout,
   step,
-  showBranchesTab,
   showStepsTab,
   supportsBranching,
 }) => {
@@ -31,11 +29,19 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
   const [hasCustomStepExtension, setHasCustomStepExtension] = useState(
     StepsService.hasCustomStepExtension(step, views)
   );
+  const [disableBranchesTab, setDisableBranchesTab] = useState(false);
   const [disableBranchesTabMsg, setDisableBranchesTabMsg] = useState('');
+  const [tooltipText, setTooltipText] = useState('');
+  const [disableButton, setDisableButton] = useState(false);
 
   useEffect(() => {
     setHasCustomStepExtension(StepsService.hasCustomStepExtension(step, views));
   }, [step, views]);
+
+  useEffect(() => {
+    const showBranchesTab = VisualizationService.showBranchesTab(step);
+    setDisableBranchesTab(hasCustomStepExtension || !showBranchesTab || !supportsBranching);
+  }, [step, hasCustomStepExtension, supportsBranching]);
 
   useEffect(() => {
     if (hasCustomStepExtension) {
@@ -50,7 +56,15 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
         step.branches?.length
       )
     );
-  }, [hasCustomStepExtension, step, supportsBranching, views]);
+  }, [hasCustomStepExtension, step, supportsBranching]);
+
+  useEffect(() => {
+    setDisableButton(!showStepsTab && disableBranchesTab);
+  }, [showStepsTab, disableBranchesTab]);
+
+  useEffect(() => {
+    setTooltipText(ValidationService.getPlusButtonTooltipMsg(!disableBranchesTab, showStepsTab));
+  }, [disableBranchesTab, showStepsTab]);
 
   return (
     <Popover
@@ -58,7 +72,7 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
       aria-label="Add a step or branch"
       bodyContent={
         <MiniCatalog
-          disableBranchesTab={hasCustomStepExtension || !showBranchesTab}
+          disableBranchesTab={disableBranchesTab}
           disableBranchesTabMsg={disableBranchesTabMsg}
           disableStepsTab={!showStepsTab}
           disableStepsTabMsg="You can't add a step between a step and a branch."
@@ -74,22 +88,23 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
       }
       className="miniCatalog__popover"
       data-testid="miniCatalog__popover"
-      enableFlip={true}
+      enableFlip
       flipBehavior={['top-start', 'left-start']}
       hasAutoWidth
-      hideOnOutsideClick={true}
+      hideOnOutsideClick
       position="right-start"
       showClose={false}
     >
       <Tooltip
-        content={ValidationService.getPlusButtonTooltipMsg(showBranchesTab, showStepsTab)}
+        content={tooltipText}
         position={layout === 'LR' ? 'top' : 'right'}
       >
         <button
-          className={`${
-            layout === 'LR' ? 'stepNode__Add' : 'stepNode__Add--vertical'
-          } plusButton nodrag`}
+          className={`${layout === 'LR' ? 'stepNode__Add' : 'stepNode__Add--vertical'
+            } plusButton nodrag`}
           data-testid="stepNode__appendStep-btn"
+          disabled={disableButton}
+          aria-disabled={disableButton}
         >
           <PlusIcon />
         </button>
