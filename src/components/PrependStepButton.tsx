@@ -4,23 +4,18 @@ import { FunctionComponent } from 'react';
 import { ValidationService } from '@kaoto/services';
 import { useSettingsStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
-import { BranchBuilder } from './BranchBuilder';
 import { MiniCatalog } from './MiniCatalog';
 
 interface IPrependStepButton {
-  handleAddBranch: () => void;
   onMiniCatalogClickPrepend: (selectedStep: IStepProps) => void;
   layout: string;
   step: IStepProps;
-  showStepsTab: boolean;
 }
 
 export const PrependStepButton: FunctionComponent<IPrependStepButton> = ({
-  handleAddBranch,
   onMiniCatalogClickPrepend,
   layout,
   step,
-  showStepsTab,
 }) => {
   const currentDSL = useSettingsStore((state) => state.settings.dsl.name);
 
@@ -39,9 +34,7 @@ export const PrependStepButton: FunctionComponent<IPrependStepButton> = ({
             type: ValidationService.prependableStepTypes(),
           }}
           step={step}
-        >
-          <BranchBuilder handleAddBranch={handleAddBranch} />
-        </MiniCatalog>
+        />
       }
       className="miniCatalog__popover"
       data-testid="miniCatalog__popover"
@@ -53,7 +46,7 @@ export const PrependStepButton: FunctionComponent<IPrependStepButton> = ({
       showClose={false}
     >
       <Tooltip
-        content={ValidationService.getPlusButtonTooltipMsg(false, showStepsTab)}
+        content="Add a step"
         position={layout === 'LR' ? 'top' : 'right'}
       >
         <button
