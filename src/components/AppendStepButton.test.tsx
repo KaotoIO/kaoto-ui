@@ -5,13 +5,16 @@ import { StepsService } from '@kaoto/services';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 describe('AppendStepButton.tsx', () => {
+  let supportsBranchingSpy: jest.SpyInstance;
   const noopFn = jest.fn();
 
   beforeEach(() => {
     jest.useFakeTimers();
+    supportsBranchingSpy = jest.spyOn(StepsService, 'supportsBranching').mockReturnValue(true);
   });
 
   afterEach(() => {
+    supportsBranchingSpy.mockRestore();
     jest.clearAllTimers();
     jest.useRealTimers();
   });
@@ -24,7 +27,6 @@ describe('AppendStepButton.tsx', () => {
           handleSelectStep={noopFn}
           layout={'LR'}
           showStepsTab={true}
-          supportsBranching={true}
           step={kameletSourceStepStub}
         />
       </AlertProvider>
@@ -42,7 +44,6 @@ describe('AppendStepButton.tsx', () => {
           handleSelectStep={noopFn}
           layout={'LR'}
           showStepsTab={true}
-          supportsBranching={true}
           step={kameletSourceStepStub}
         />
       </AlertProvider>
@@ -65,7 +66,6 @@ describe('AppendStepButton.tsx', () => {
           handleSelectStep={noopFn}
           layout={'LR'}
           showStepsTab={true}
-          supportsBranching={true}
           step={{
             ...kameletSourceStepStub,
             maxBranches: 1,
@@ -96,6 +96,8 @@ describe('AppendStepButton.tsx', () => {
   });
 
   test('should disable branches tab when supportsBranching={false}', async () => {
+    supportsBranchingSpy = jest.spyOn(StepsService, 'supportsBranching').mockReturnValue(false);
+
     render(
       <AlertProvider>
         <AppendStepButton
@@ -103,7 +105,6 @@ describe('AppendStepButton.tsx', () => {
           handleSelectStep={noopFn}
           layout={'LR'}
           showStepsTab={true}
-          supportsBranching={false}
           step={kameletSourceStepStub}
         />
       </AlertProvider>
@@ -139,7 +140,6 @@ describe('AppendStepButton.tsx', () => {
           handleSelectStep={noopFn}
           layout={'LR'}
           showStepsTab={true}
-          supportsBranching={true}
           step={kameletSourceStepStub}
         />
       </AlertProvider>
@@ -169,6 +169,7 @@ describe('AppendStepButton.tsx', () => {
 
   test('should disable the plus button when showStepsTab={false} and supportsBranching={false}', async () => {
     const spy = jest.spyOn(StepsService, 'hasCustomStepExtension').mockReturnValue(true);
+    supportsBranchingSpy = jest.spyOn(StepsService, 'supportsBranching').mockReturnValue(false);
 
     render(
       <AlertProvider>
@@ -177,7 +178,6 @@ describe('AppendStepButton.tsx', () => {
           handleSelectStep={noopFn}
           layout={'LR'}
           showStepsTab={false}
-          supportsBranching={false}
           step={kameletSourceStepStub}
         />
       </AlertProvider>

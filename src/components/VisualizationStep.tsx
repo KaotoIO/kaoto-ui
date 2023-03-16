@@ -188,7 +188,6 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               layout={visualizationStore.layout}
               step={data.step}
               showStepsTab={showStepsTab}
-              supportsBranching={supportsBranching}
             />
           )}
         </div>
