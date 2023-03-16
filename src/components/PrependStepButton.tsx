@@ -26,47 +26,46 @@ export const PrependStepButton: FunctionComponent<IPrependStepButton> = ({
 
   return (
     <Popover
-    id="popover-prepend-step"
-    appendTo={() => document.body}
-    aria-label="Add a step"
-    bodyContent={
-      <MiniCatalog
-        children={<BranchBuilder handleAddBranch={handleAddBranch} />}
-        disableBranchesTab={true}
-        disableBranchesTabMsg={"You can't add a branch from here."}
-        disableStepsTab={false}
-        handleSelectStep={onMiniCatalogClickPrepend}
-        queryParams={{
-          dsl: currentDSL,
-          type: ValidationService.prependableStepTypes(),
-        }}
-        step={step}
-      />
-    }
-    className={'miniCatalog__popover'}
-    data-testid={'miniCatalog__popover'}
-    enableFlip={true}
-    flipBehavior={['top-start', 'left-start']}
-    hasAutoWidth
-    hideOnOutsideClick={true}
-    position={'left-start'}
-    showClose={false}
-  >
-    <Tooltip
-      content={ValidationService.getPlusButtonTooltipMsg(false, showStepsTab)}
-      position={layout === 'LR' ? 'top' : 'right'}
+      id="popover-prepend-step"
+      aria-label="Add a step"
+      bodyContent={
+        <MiniCatalog
+          disableBranchesTab={true}
+          disableBranchesTabMsg="You can't add a branch from here."
+          disableStepsTab={false}
+          handleSelectStep={onMiniCatalogClickPrepend}
+          queryParams={{
+            dsl: currentDSL,
+            type: ValidationService.prependableStepTypes(),
+          }}
+          step={step}
+        >
+          <BranchBuilder handleAddBranch={handleAddBranch} />
+        </MiniCatalog>
+      }
+      className="miniCatalog__popover"
+      data-testid="miniCatalog__popover"
+      enableFlip={true}
+      flipBehavior={['top-start', 'left-start']}
+      hasAutoWidth
+      hideOnOutsideClick={true}
+      position="left-start"
+      showClose={false}
     >
-      <button
-        className={`${
-          layout === 'LR'
+      <Tooltip
+        content={ValidationService.getPlusButtonTooltipMsg(false, showStepsTab)}
+        position={layout === 'LR' ? 'top' : 'right'}
+      >
+        <button
+          className={`${layout === 'LR'
             ? 'stepNode__Prepend'
             : 'stepNode__Prepend--vertical'
-        } plusButton nodrag`}
-        data-testid={'stepNode__prependStep-btn'}
-      >
-        <PlusIcon />
-      </button>
-    </Tooltip>
-  </Popover>
+            } plusButton nodrag`}
+          data-testid="stepNode__prependStep-btn"
+        >
+          <PlusIcon />
+        </button>
+      </Tooltip>
+    </Popover>
   )
 };
