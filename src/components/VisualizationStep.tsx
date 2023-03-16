@@ -130,11 +130,9 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {/* PREPEND STEP BUTTON */}
           {visualizationService.showPrependStepButton(data) && (
             <PrependStepButton
-              handleAddBranch={handleAddBranch}
               onMiniCatalogClickPrepend={onMiniCatalogClickPrepend}
               layout={visualizationStore.layout}
               step={data.step}
-              showStepsTab={showStepsTab}
             />
           )}
 
