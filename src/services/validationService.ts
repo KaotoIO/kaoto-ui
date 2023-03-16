@@ -116,7 +116,7 @@ export class ValidationService {
     } else if (showStepsTab) {
       return 'Add a step';
     } else {
-      return '';
+      return 'Please click on the step to configure branches for it.';
     }
   }
 
