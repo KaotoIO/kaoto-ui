@@ -1,15 +1,16 @@
+import { BranchBuilder } from './BranchBuilder';
+import { MiniCatalog } from './MiniCatalog';
 import { StepsService, ValidationService } from '@kaoto/services';
 import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { FunctionComponent, useEffect, useState } from 'react';
-import { BranchBuilder } from './BranchBuilder';
-import { MiniCatalog } from './MiniCatalog';
 
 interface IAddStepButton {
   handleAddBranch: () => void;
   handleSelectStep: (selectedStep: IStepProps) => void;
+  layout: string;
   step: IStepProps;
   showBranchesTab: boolean;
   showStepsTab: boolean;
@@ -19,6 +20,7 @@ interface IAddStepButton {
 export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
   handleAddBranch,
   handleSelectStep,
+  layout,
   step,
   showBranchesTab,
   showStepsTab,
@@ -26,25 +28,29 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
 }) => {
   const currentDSL = useSettingsStore((state) => state.settings.dsl.name);
   const views = useIntegrationJsonStore((state) => state.views);
-  const [hasCustomStepExtension, setHasCustomStepExtension] = useState(StepsService.hasCustomStepExtension(step, views));
+  const [hasCustomStepExtension, setHasCustomStepExtension] = useState(
+    StepsService.hasCustomStepExtension(step, views)
+  );
   const [disableBranchesTabMsg, setDisableBranchesTabMsg] = useState('');
 
   useEffect(() => {
     setHasCustomStepExtension(StepsService.hasCustomStepExtension(step, views));
-  }, [step, views])
+  }, [step, views]);
 
   useEffect(() => {
     if (hasCustomStepExtension) {
-      setDisableBranchesTabMsg("Please click on the step to configure branches for it.");
+      setDisableBranchesTabMsg('Please click on the step to configure branches for it.');
       return;
     }
 
-    setDisableBranchesTabMsg(ValidationService.getBranchTabTooltipMsg(
-      supportsBranching,
-      step.maxBranches,
-      step.branches?.length
-    ));
-  }, [hasCustomStepExtension, step, supportsBranching, views])
+    setDisableBranchesTabMsg(
+      ValidationService.getBranchTabTooltipMsg(
+        supportsBranching,
+        step.maxBranches,
+        step.branches?.length
+      )
+    );
+  }, [hasCustomStepExtension, step, supportsBranching, views]);
 
   return (
     <Popover
@@ -77,9 +83,12 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
     >
       <Tooltip
         content={ValidationService.getPlusButtonTooltipMsg(showBranchesTab, showStepsTab)}
+        position={layout === 'LR' ? 'top' : 'right'}
       >
         <button
-          className="stepNode__Add plusButton nodrag"
+          className={`${
+            layout === 'LR' ? 'stepNode__Add' : 'stepNode__Add--vertical'
+          } plusButton nodrag`}
           data-testid="stepNode__appendStep-btn"
         >
           <PlusIcon />
@@ -87,4 +96,4 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
       </Tooltip>
     </Popover>
   );
-}
+};

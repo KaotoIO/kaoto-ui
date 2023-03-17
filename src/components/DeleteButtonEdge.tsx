@@ -107,7 +107,10 @@ const DeleteButtonEdge = ({
             hideOnOutsideClick={true}
             position={'right-start'}
           >
-            <Tooltip content={'Delete branch'}>
+            <Tooltip
+              content={'Delete branch'}
+              position={visualizationStore.layout === 'LR' ? 'top' : 'right'}
+            >
               <button className="deleteButton" data-testid={'stepNode__deleteBranch-btn'}>
                 <MinusIcon />
               </button>

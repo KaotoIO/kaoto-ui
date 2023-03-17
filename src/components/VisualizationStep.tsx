@@ -1,3 +1,4 @@
+import { AppendStepButton } from './AppendStepButton';
 import { BranchBuilder } from './BranchBuilder';
 import './Visualization.css';
 import { MiniCatalog } from '@kaoto/components';
@@ -13,7 +14,6 @@ import { AlertVariant, Popover, Tooltip } from '@patternfly/react-core';
 import { CubesIcon, PlusIcon, MinusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, NodeProps, Position } from 'reactflow';
-import { AppendStepButton } from './AppendStepButton';
 
 const currentDSL = useSettingsStore.getState().settings.dsl.name;
 
@@ -155,9 +155,16 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               position={'left-start'}
               showClose={false}
             >
-              <Tooltip content={ValidationService.getPlusButtonTooltipMsg(false, showStepsTab)}>
+              <Tooltip
+                content={ValidationService.getPlusButtonTooltipMsg(false, showStepsTab)}
+                position={visualizationStore.layout === 'LR' ? 'top' : 'right'}
+              >
                 <button
-                  className="stepNode__Prepend plusButton nodrag"
+                  className={`${
+                    visualizationStore.layout === 'LR'
+                      ? 'stepNode__Prepend'
+                      : 'stepNode__Prepend--vertical'
+                  } plusButton nodrag`}
                   data-testid={'stepNode__prependStep-btn'}
                 >
                   <PlusIcon />
@@ -169,16 +176,19 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
           {!StepsService.isStartStep(data.step) && (
             <Handle
+              className={'stepHandle'}
               isConnectable={false}
               type="target"
               position={visualizationStore.layout === 'LR' ? Position.Left : Position.Top}
               id="a"
-              style={{ borderRadius: 0 }}
             />
           )}
 
           {/* DELETE STEP BUTTON */}
-          <Tooltip content={'Delete step'}>
+          <Tooltip
+            content={'Delete step'}
+            position={visualizationStore.layout === 'LR' ? 'top' : 'left'}
+          >
             <button
               className="stepNode__Delete trashButton nodrag"
               data-testid={'configurationTab__deleteBtn'}
@@ -199,25 +209,26 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
           {!StepsService.isEndStep(data.step) && (
             <Handle
+              className={'stepHandle'}
               isConnectable={false}
               type="source"
               position={visualizationStore.layout === 'LR' ? Position.Right : Position.Bottom}
               id="b"
-              style={{ borderRadius: 0 }}
             />
           )}
 
           {/* ADD/APPEND STEP BUTTON */}
-          {VisualizationService.showAppendStepButton(data, endStep)
-            && <AppendStepButton
+          {VisualizationService.showAppendStepButton(data, endStep) && (
+            <AppendStepButton
               handleAddBranch={handleAddBranch}
               handleSelectStep={onMiniCatalogClickAppend}
+              layout={visualizationStore.layout}
               step={data.step}
               showBranchesTab={showBranchesTab}
               showStepsTab={showStepsTab}
               supportsBranching={supportsBranching}
             />
-          }
+          )}
         </div>
       ) : (
         <Popover
@@ -262,11 +273,11 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             {/* LEFT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
             {(!StepsService.isStartStep(data.step) || data.branchInfo) && (
               <Handle
+                className={'stepHandle'}
                 isConnectable={false}
                 type="target"
                 position={visualizationStore.layout === 'LR' ? Position.Left : Position.Top}
                 id="a"
-                style={{ borderRadius: 0 }}
               />
             )}
 
@@ -277,10 +288,10 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
 
             {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
             <Handle
+              className={'stepHandle'}
               type="source"
               position={visualizationStore.layout === 'LR' ? Position.Right : Position.Bottom}
               id="b"
-              style={{ borderRadius: 0 }}
               isConnectable={false}
             />
             <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>

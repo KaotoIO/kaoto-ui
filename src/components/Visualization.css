@@ -22,6 +22,13 @@
     height: calc(100vh - 77px);
 }
 
+.stepHandle {
+    width: 8px !important;
+    height: 8px !important;
+    background: var(--pf-global--BorderColor--200) !important;
+    border-radius: 100% !important;
+}
+
 .stepNode {
     align-items: center;
     background: var(--pf-global--BackgroundColor--100);
@@ -49,6 +56,12 @@
     position: absolute;
     right: -24px;
     top: 38%;
+}
+
+.stepNode__Add--vertical {
+    position: absolute;
+    right: 30px;
+    bottom: -63%;
 }
 
 .stepNode__Delete {
@@ -97,6 +110,12 @@
     position: absolute;
     left: -24px;
     top: 38%;
+}
+
+.stepNode__Prepend--vertical {
+    position: absolute;
+    left: 30px;
+    top: -30%;
 }
 
 .stepNode__Slot {
