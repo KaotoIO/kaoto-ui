@@ -30,6 +30,8 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const showStepsTab = VisualizationService.showStepsTab(data);
   const supportsBranching = StepsService.supportsBranching(data.step);
 
+  const layout = useVisualizationStore((state) => state.layout);
+
   const { addAlert } = useAlert() || {};
 
   const onMiniCatalogClickAppend = (selectedStep: IStepProps) => {
@@ -115,7 +117,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     <>
       {!data.isPlaceholder ? (
         <div
-          className={`stepNode` + getSelectedClass() + getHoverClass()}
+          className={`stepNode stepNode--${layout}` + getSelectedClass() + getHoverClass()}
           onDrop={onDropReplace}
           onMouseEnter={() => {
             if (data.branchInfo || supportsBranching) {
@@ -131,7 +133,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {visualizationService.showPrependStepButton(data) && (
             <PrependStepButton
               onMiniCatalogClickPrepend={onMiniCatalogClickPrepend}
-              layout={visualizationStore.layout}
+              layout={layout}
               step={data.step}
             />
           )}
@@ -142,7 +144,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               className={'stepHandle'}
               isConnectable={false}
               type="target"
-              position={visualizationStore.layout === 'LR' ? Position.Left : Position.Top}
+              position={layout === 'LR' ? Position.Left : Position.Top}
               id="a"
             />
           )}
@@ -150,7 +152,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {/* DELETE STEP BUTTON */}
           <Tooltip
             content={'Delete step'}
-            position={visualizationStore.layout === 'LR' ? 'top' : 'left'}
+            position={layout === 'LR' ? 'top' : 'left'}
           >
             <button
               className="stepNode__Delete trashButton nodrag"
@@ -175,7 +177,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               className={'stepHandle'}
               isConnectable={false}
               type="source"
-              position={visualizationStore.layout === 'LR' ? Position.Right : Position.Bottom}
+              position={layout === 'LR' ? Position.Right : Position.Bottom}
               id="b"
             />
           )}
@@ -185,7 +187,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             <AppendStepButton
               handleAddBranch={handleAddBranch}
               handleSelectStep={onMiniCatalogClickAppend}
-              layout={visualizationStore.layout}
+              layout={layout}
               step={data.step}
               showStepsTab={showStepsTab}
             />
@@ -237,7 +239,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
                 className={'stepHandle'}
                 isConnectable={false}
                 type="target"
-                position={visualizationStore.layout === 'LR' ? Position.Left : Position.Top}
+                position={layout === 'LR' ? Position.Left : Position.Top}
                 id="a"
               />
             )}
@@ -251,7 +253,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             <Handle
               className={'stepHandle'}
               type="source"
-              position={visualizationStore.layout === 'LR' ? Position.Right : Position.Bottom}
+              position={layout === 'LR' ? Position.Right : Position.Bottom}
               id="b"
               isConnectable={false}
             />

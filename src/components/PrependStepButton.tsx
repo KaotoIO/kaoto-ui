@@ -50,10 +50,7 @@ export const PrependStepButton: FunctionComponent<IPrependStepButton> = ({
         position={layout === 'LR' ? 'top' : 'right'}
       >
         <button
-          className={`${layout === 'LR'
-            ? 'stepNode__Prepend'
-            : 'stepNode__Prepend--vertical'
-            } plusButton nodrag`}
+          className="stepNode__Prepend plusButton nodrag"
           data-testid="stepNode__prependStep-btn"
         >
           <PlusIcon />

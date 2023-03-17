@@ -52,16 +52,16 @@
     border: 3px solid rgb(0, 136, 206);
 }
 
-.stepNode__Add {
+.stepNode .stepNode__Add {
     position: absolute;
     right: -24px;
     top: 38%;
 }
 
-.stepNode__Add--vertical {
-    position: absolute;
+.stepNode.stepNode--TB .stepNode__Add {
     right: 30px;
     bottom: -63%;
+    top: auto;
 }
 
 .stepNode__Delete {
@@ -112,8 +112,7 @@
     top: 38%;
 }
 
-.stepNode__Prepend--vertical {
-    position: absolute;
+.stepNode.stepNode--TB .stepNode__Prepend {
     left: 30px;
     top: -30%;
 }
