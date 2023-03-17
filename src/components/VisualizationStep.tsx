@@ -1,5 +1,5 @@
 import { MiniCatalog } from '@kaoto/components';
-import { useLayout } from '@kaoto/hooks';
+import { usePosition } from '@kaoto/hooks';
 import { StepsService, VisualizationService } from '@kaoto/services';
 import {
   useIntegrationJsonStore,
@@ -37,7 +37,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     minusIconPosition,
     leftHandlePosition,
     rightHandlePosition,
-  } = useLayout();
+  } = usePosition();
 
   const { addAlert } = useAlert() || {};
 
