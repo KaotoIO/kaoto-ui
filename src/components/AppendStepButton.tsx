@@ -77,6 +77,8 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
           data-testid="stepNode__appendStep-btn"
           disabled={disableButton}
           aria-disabled={disableButton}
+          data-disable-branchestab={disableBranchesTab}
+          data-disable-stepstab={!showStepsTab}
         >
           <PlusIcon />
         </button>

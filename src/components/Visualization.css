@@ -64,6 +64,15 @@
     top: auto;
 }
 
+button[data-disable-branchestab="true"][data-disable-stepstab="true"] {
+    cursor: not-allowed;
+    color:rgb(210, 210, 210)
+}
+
+button[data-disable-branchestab="true"][data-disable-stepstab="true"]:hover {
+    background: var(--pf-global--Color--light-200)
+}
+
 .stepNode__Delete {
     position: absolute;
     left: 0;
