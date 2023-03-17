@@ -199,4 +199,82 @@ describe('AppendStepButton.tsx', () => {
 
     spy.mockReset();
   });
+
+  test('should assign [data-disable-branchestab=true] when the branch tab is disabled', async () => {
+    const spy = jest.spyOn(StepsService, 'hasCustomStepExtension').mockReturnValue(true);
+    supportsBranchingSpy = jest.spyOn(StepsService, 'supportsBranching').mockReturnValue(false);
+
+    render(
+      <AlertProvider>
+        <AppendStepButton
+          handleAddBranch={noopFn}
+          handleSelectStep={noopFn}
+          position={Position.Top}
+          showStepsTab={true}
+          step={kameletSourceStepStub}
+        />
+      </AlertProvider>
+    );
+
+    const plusIcon = screen.getByTestId('stepNode__appendStep-btn');
+    expect(plusIcon).toHaveAttribute('data-disable-branchestab', 'true');
+
+    spy.mockReset();
+  });
+
+  test('should assign [data-disable-branchestab=false] when the branch tab is enabled', async () => {
+    const spy = jest.spyOn(StepsService, 'hasCustomStepExtension').mockReturnValue(false);
+    supportsBranchingSpy = jest.spyOn(StepsService, 'supportsBranching').mockReturnValue(true);
+
+    render(
+      <AlertProvider>
+        <AppendStepButton
+          handleAddBranch={noopFn}
+          handleSelectStep={noopFn}
+          position={Position.Top}
+          showStepsTab={true}
+          step={kameletSourceStepStub}
+        />
+      </AlertProvider>
+    );
+
+    const plusIcon = screen.getByTestId('stepNode__appendStep-btn');
+    expect(plusIcon).toHaveAttribute('data-disable-branchestab', 'false');
+
+    spy.mockReset();
+  });
+
+  test('should assign [data-disable-stepstab=true] when the step tab is disabled', async () => {
+    render(
+      <AlertProvider>
+        <AppendStepButton
+          handleAddBranch={noopFn}
+          handleSelectStep={noopFn}
+          position={Position.Top}
+          showStepsTab={false}
+          step={kameletSourceStepStub}
+        />
+      </AlertProvider>
+    );
+
+    const plusIcon = screen.getByTestId('stepNode__appendStep-btn');
+    expect(plusIcon).toHaveAttribute('data-disable-stepstab', 'true');
+  });
+
+  test('should assign [data-disable-stepstab=false] when the step tab is enabled', async () => {
+    render(
+      <AlertProvider>
+        <AppendStepButton
+          handleAddBranch={noopFn}
+          handleSelectStep={noopFn}
+          position={Position.Top}
+          showStepsTab={true}
+          step={kameletSourceStepStub}
+        />
+      </AlertProvider>
+    );
+
+    const plusIcon = screen.getByTestId('stepNode__appendStep-btn');
+    expect(plusIcon).toHaveAttribute('data-disable-stepstab', 'false');
+  });
 });
