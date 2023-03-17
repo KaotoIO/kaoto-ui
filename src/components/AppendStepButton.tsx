@@ -72,8 +72,7 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
         position={layout === 'LR' ? 'top' : 'right'}
       >
         <button
-          className={`${layout === 'LR' ? 'stepNode__Add' : 'stepNode__Add--vertical'
-            } plusButton nodrag`}
+          className="stepNode__Add plusButton nodrag"
           data-testid="stepNode__appendStep-btn"
           disabled={disableButton}
           aria-disabled={disableButton}
