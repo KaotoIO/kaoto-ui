@@ -1,20 +1,21 @@
-import { Popover, Tooltip } from '@patternfly/react-core';
-import { PlusIcon } from '@patternfly/react-icons';
-import { FunctionComponent } from 'react';
 import { ValidationService } from '@kaoto/services';
 import { useSettingsStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
+import { Popover, Tooltip } from '@patternfly/react-core';
+import { PlusIcon } from '@patternfly/react-icons';
+import { FunctionComponent } from 'react';
+import { Position } from 'reactflow';
 import { MiniCatalog } from './MiniCatalog';
 
 interface IPrependStepButton {
   onMiniCatalogClickPrepend: (selectedStep: IStepProps) => void;
-  layout: string;
+  position: Position;
   step: IStepProps;
 }
 
 export const PrependStepButton: FunctionComponent<IPrependStepButton> = ({
   onMiniCatalogClickPrepend,
-  layout,
+  position,
   step,
 }) => {
   const currentDSL = useSettingsStore((state) => state.settings.dsl.name);
@@ -47,7 +48,7 @@ export const PrependStepButton: FunctionComponent<IPrependStepButton> = ({
     >
       <Tooltip
         content="Add a step"
-        position={layout === 'LR' ? 'top' : 'right'}
+        position={position}
       >
         <button
           className="stepNode__Prepend plusButton nodrag"
