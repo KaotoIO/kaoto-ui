@@ -3,6 +3,7 @@ import { AlertProvider } from '../layout';
 import { AppendStepButton } from './AppendStepButton';
 import { StepsService } from '@kaoto/services';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { Position } from 'reactflow';
 
 describe('AppendStepButton.tsx', () => {
   let supportsBranchingSpy: jest.SpyInstance;
@@ -25,7 +26,7 @@ describe('AppendStepButton.tsx', () => {
         <AppendStepButton
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
-          layout={'LR'}
+          position={Position.Top}
           showStepsTab={true}
           step={kameletSourceStepStub}
         />
@@ -42,7 +43,7 @@ describe('AppendStepButton.tsx', () => {
         <AppendStepButton
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
-          layout={'LR'}
+          position={Position.Top}
           showStepsTab={true}
           step={kameletSourceStepStub}
         />
@@ -64,7 +65,7 @@ describe('AppendStepButton.tsx', () => {
         <AppendStepButton
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
-          layout={'LR'}
+          position={Position.Top}
           showStepsTab={true}
           step={{
             ...kameletSourceStepStub,
@@ -103,7 +104,7 @@ describe('AppendStepButton.tsx', () => {
         <AppendStepButton
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
-          layout={'LR'}
+          position={Position.Top}
           showStepsTab={true}
           step={kameletSourceStepStub}
         />
@@ -138,7 +139,7 @@ describe('AppendStepButton.tsx', () => {
         <AppendStepButton
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
-          layout={'LR'}
+          position={Position.Top}
           showStepsTab={true}
           step={kameletSourceStepStub}
         />
@@ -176,7 +177,7 @@ describe('AppendStepButton.tsx', () => {
         <AppendStepButton
           handleAddBranch={noopFn}
           handleSelectStep={noopFn}
-          layout={'LR'}
+          position={Position.Top}
           showStepsTab={false}
           step={kameletSourceStepStub}
         />
