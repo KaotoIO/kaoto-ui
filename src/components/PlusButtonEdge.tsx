@@ -1,7 +1,7 @@
 import { BranchBuilder, MiniCatalog } from '@kaoto/components';
-import { useShowBranchTab } from '@kaoto/hooks';
+import { usePosition, useShowBranchTab } from '@kaoto/hooks';
 import { StepsService, ValidationService, VisualizationService } from '@kaoto/services';
-import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
+import { useIntegrationJsonStore } from '@kaoto/store';
 import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
@@ -46,7 +46,7 @@ const PlusButtonEdge = ({
   const showBranchesTab = VisualizationService.showBranchesTab(sourceNode?.data.step);
   const showStepsTab = VisualizationService.showStepsTab(sourceNode?.data);
 
-  const layout = useVisualizationStore((state) => state.layout);
+  const { tooltipPosition } = usePosition();
   const views = useIntegrationJsonStore((state) => state.views);
   const { disableBranchesTab, disableBranchesTabMsg } = useShowBranchTab(sourceNode?.data.step, views);
 
@@ -114,7 +114,7 @@ const PlusButtonEdge = ({
           >
             <Tooltip
               content={ValidationService.getPlusButtonTooltipMsg(showBranchesTab, showStepsTab)}
-              position={layout === 'LR' ? 'top' : 'right'}
+              position={tooltipPosition}
             >
               <button className="plusButton" data-testid={'stepNode__insertStep-btn'}>
                 <PlusIcon />

@@ -1,5 +1,4 @@
-import './CustomEdge.css';
-import { OrangeExclamationTriangleIcon } from './Icons';
+import { usePosition } from '@kaoto/hooks';
 import { StepsService } from '@kaoto/services';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
 import { IVizStepNode } from '@kaoto/types';
@@ -7,6 +6,8 @@ import { Button, Popover, Tooltip } from '@patternfly/react-core';
 import { MinusIcon } from '@patternfly/react-icons';
 import { ReactNode } from 'react';
 import { EdgeText, getBezierPath, Position, useReactFlow } from 'reactflow';
+import './CustomEdge.css';
+import { OrangeExclamationTriangleIcon } from './Icons';
 
 const foreignObjectSize = 40;
 
@@ -46,6 +47,7 @@ const DeleteButtonEdge = ({
   const visualizationStore = useVisualizationStore();
   const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
 
+  const { tooltipPosition } = usePosition();
   const [edgePath, edgeCenterX, edgeCenterY] = getBezierPath({
     sourceX,
     sourceY,
@@ -109,7 +111,7 @@ const DeleteButtonEdge = ({
           >
             <Tooltip
               content={'Delete branch'}
-              position={visualizationStore.layout === 'LR' ? 'top' : 'right'}
+              position={tooltipPosition}
             >
               <button className="deleteButton" data-testid={'stepNode__deleteBranch-btn'}>
                 <MinusIcon />
