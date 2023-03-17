@@ -1,4 +1,5 @@
 import { MiniCatalog } from '@kaoto/components';
+import { useLayout } from '@kaoto/hooks';
 import { StepsService, VisualizationService } from '@kaoto/services';
 import {
   useIntegrationJsonStore,
@@ -10,8 +11,7 @@ import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 import { AlertVariant, Popover, Tooltip } from '@patternfly/react-core';
 import { CubesIcon, MinusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { useEffect, useState } from 'react';
-import { Handle, NodeProps, Position } from 'reactflow';
+import { Handle, NodeProps } from 'reactflow';
 import { AppendStepButton } from './AppendStepButton';
 import { BranchBuilder } from './BranchBuilder';
 import { PrependStepButton } from './PrependStepButton';
@@ -31,17 +31,13 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const showStepsTab = VisualizationService.showStepsTab(data);
   const supportsBranching = StepsService.supportsBranching(data.step);
 
-  const layout = useVisualizationStore((state) => state.layout);
-  const [plusIconPosition, setPlusIconPosition] = useState(layout === 'LR' ? Position.Top : Position.Right);
-  const [minusIconPosition, setMinusIconPosition] = useState(layout === 'LR' ? Position.Top : Position.Left);
-  const [leftHandlePosition, setLeftHandlePosition] = useState(layout === 'LR' ? Position.Left : Position.Top);
-  const [rightHandlePosition, setRightHandlePosition] = useState(layout === 'LR' ? Position.Right : Position.Bottom);
-  useEffect(() => {
-    setPlusIconPosition(layout === 'LR' ? Position.Top : Position.Right);
-    setMinusIconPosition(layout === 'LR' ? Position.Top : Position.Left);
-    setLeftHandlePosition(layout === 'LR' ? Position.Left : Position.Top);
-    setRightHandlePosition(layout === 'LR' ? Position.Right : Position.Bottom);
-  }, [layout]);
+  const {
+    layout,
+    plusIconPosition,
+    minusIconPosition,
+    leftHandlePosition,
+    rightHandlePosition,
+  } = useLayout();
 
   const { addAlert } = useAlert() || {};
 
