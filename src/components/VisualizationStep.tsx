@@ -1,20 +1,21 @@
-import { AppendStepButton } from './AppendStepButton';
-import { BranchBuilder } from './BranchBuilder';
-import './Visualization.css';
 import { MiniCatalog } from '@kaoto/components';
 import { StepsService, VisualizationService } from '@kaoto/services';
 import {
   useIntegrationJsonStore,
   useNestedStepsStore,
   useSettingsStore,
-  useVisualizationStore,
+  useVisualizationStore
 } from '@kaoto/store';
 import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 import { AlertVariant, Popover, Tooltip } from '@patternfly/react-core';
 import { CubesIcon, MinusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
+import { useEffect, useState } from 'react';
 import { Handle, NodeProps, Position } from 'reactflow';
+import { AppendStepButton } from './AppendStepButton';
+import { BranchBuilder } from './BranchBuilder';
 import { PrependStepButton } from './PrependStepButton';
+import './Visualization.css';
 
 const currentDSL = useSettingsStore.getState().settings.dsl.name;
 
@@ -31,6 +32,16 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const supportsBranching = StepsService.supportsBranching(data.step);
 
   const layout = useVisualizationStore((state) => state.layout);
+  const [plusIconPosition, setPlusIconPosition] = useState(layout === 'LR' ? Position.Top : Position.Right);
+  const [minusIconPosition, setMinusIconPosition] = useState(layout === 'LR' ? Position.Top : Position.Left);
+  const [leftHandlePosition, setLeftHandlePosition] = useState(layout === 'LR' ? Position.Left : Position.Top);
+  const [rightHandlePosition, setRightHandlePosition] = useState(layout === 'LR' ? Position.Right : Position.Bottom);
+  useEffect(() => {
+    setPlusIconPosition(layout === 'LR' ? Position.Top : Position.Right);
+    setMinusIconPosition(layout === 'LR' ? Position.Top : Position.Left);
+    setLeftHandlePosition(layout === 'LR' ? Position.Left : Position.Top);
+    setRightHandlePosition(layout === 'LR' ? Position.Right : Position.Bottom);
+  }, [layout]);
 
   const { addAlert } = useAlert() || {};
 
@@ -133,7 +144,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {visualizationService.showPrependStepButton(data) && (
             <PrependStepButton
               onMiniCatalogClickPrepend={onMiniCatalogClickPrepend}
-              layout={layout}
+              position={plusIconPosition}
               step={data.step}
             />
           )}
@@ -144,7 +155,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               className={'stepHandle'}
               isConnectable={false}
               type="target"
-              position={layout === 'LR' ? Position.Left : Position.Top}
+              position={leftHandlePosition}
               id="a"
             />
           )}
@@ -152,7 +163,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           {/* DELETE STEP BUTTON */}
           <Tooltip
             content={'Delete step'}
-            position={layout === 'LR' ? 'top' : 'left'}
+            position={minusIconPosition}
           >
             <button
               className="stepNode__Delete trashButton nodrag"
@@ -177,7 +188,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               className={'stepHandle'}
               isConnectable={false}
               type="source"
-              position={layout === 'LR' ? Position.Right : Position.Bottom}
+              position={rightHandlePosition}
               id="b"
             />
           )}
@@ -187,7 +198,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             <AppendStepButton
               handleAddBranch={handleAddBranch}
               handleSelectStep={onMiniCatalogClickAppend}
-              layout={layout}
+              position={plusIconPosition}
               step={data.step}
               showStepsTab={showStepsTab}
             />
@@ -239,7 +250,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
                 className={'stepHandle'}
                 isConnectable={false}
                 type="target"
-                position={layout === 'LR' ? Position.Left : Position.Top}
+                position={leftHandlePosition}
                 id="a"
               />
             )}
@@ -253,7 +264,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             <Handle
               className={'stepHandle'}
               type="source"
-              position={layout === 'LR' ? Position.Right : Position.Bottom}
+              position={rightHandlePosition}
               id="b"
               isConnectable={false}
             />

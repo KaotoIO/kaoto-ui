@@ -5,13 +5,14 @@ import { IStepProps } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { FunctionComponent, useEffect, useState } from 'react';
+import { Position } from 'reactflow';
 import { BranchBuilder } from './BranchBuilder';
 import { MiniCatalog } from './MiniCatalog';
 
 interface IAddStepButton {
   handleAddBranch: () => void;
   handleSelectStep: (selectedStep: IStepProps) => void;
-  layout: string;
+  position: Position;
   step: IStepProps;
   showStepsTab: boolean;
 }
@@ -19,7 +20,7 @@ interface IAddStepButton {
 export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
   handleAddBranch,
   handleSelectStep,
-  layout,
+  position,
   step,
   showStepsTab,
 }) => {
@@ -69,7 +70,7 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
     >
       <Tooltip
         content={tooltipText}
-        position={layout === 'LR' ? 'top' : 'right'}
+        position={position}
       >
         <button
           className="stepNode__Add plusButton nodrag"
