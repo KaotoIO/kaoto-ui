@@ -58,19 +58,24 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
 
   useEffect(() => {
     // update settings if there is a name change
-    if (settings.name === previousName) return;
-    setLocalSettings({ ...localSettings, name: settings.name });
+    if (settings.name !== previousName) {
+      setLocalSettings({ ...localSettings, name: settings.name });
+    }
 
     //update the description
     let description = getDescriptionIfExists(integrationJson);
-    if (settings.description === description) return;
-    if (description) {
-      setLocalSettings({
-        ...localSettings,
-        description: description,
-      });
+    if (settings.description !== description) {
+      if (description) {
+        setLocalSettings({
+          ...localSettings,
+          description: description,
+        });
+      }
     }
-  }, [settings.name, settings.description]);
+    //update the DSL if changed
+    if (settings.dsl.name === localSettings.dsl.name) return;
+    onChangeDsl(settings.dsl.name);
+  }, [settings.name, settings.description, settings.dsl]);
 
   useEffect(() => {
     // update settings with the default namespace fetched from the API
