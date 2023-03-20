@@ -58,7 +58,7 @@
     top: 38%;
 }
 
-.stepNode.stepNode--TB .stepNode__Add {
+.stepNode.stepNode--vertical .stepNode__Add {
     right: 30px;
     bottom: -63%;
     top: auto;
@@ -112,7 +112,7 @@
     top: 38%;
 }
 
-.stepNode.stepNode--TB .stepNode__Prepend {
+.stepNode.stepNode--vertical .stepNode__Prepend {
     left: 30px;
     top: -30%;
 }

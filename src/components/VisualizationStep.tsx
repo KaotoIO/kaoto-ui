@@ -32,7 +32,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const supportsBranching = StepsService.supportsBranching(data.step);
 
   const {
-    layout,
+    layoutCssClass,
     plusIconPosition,
     minusIconPosition,
     leftHandlePosition,
@@ -124,7 +124,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     <>
       {!data.isPlaceholder ? (
         <div
-          className={`stepNode stepNode--${layout}` + getSelectedClass() + getHoverClass()}
+          className={`stepNode stepNode--${layoutCssClass}` + getSelectedClass() + getHoverClass()}
           onDrop={onDropReplace}
           onMouseEnter={() => {
             if (data.branchInfo || supportsBranching) {

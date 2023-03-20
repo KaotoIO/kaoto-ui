@@ -5,6 +5,9 @@ import { Position } from 'reactflow';
 
 export const usePosition = () => {
   const layout = useVisualizationStore((state) => state.layout);
+
+  const [layoutCssClass, setLayoutCssClass] = useState(layout === 'LR' ? 'horizontal' : 'vertical');
+
   const [plusIconPosition, setPlusIconPosition] = useState(layout === 'LR' ? Position.Top : Position.Right);
   const [minusIconPosition, setMinusIconPosition] = useState(layout === 'LR' ? Position.Top : Position.Left);
 
@@ -14,6 +17,7 @@ export const usePosition = () => {
   const [tooltipPosition, setTooltipPosition] = useState(layout === 'LR' ? TooltipPosition.top : TooltipPosition.right);
 
   useEffect(() => {
+    setLayoutCssClass(layout === 'LR' ? 'horizontal' : 'vertical');
     setPlusIconPosition(layout === 'LR' ? Position.Top : Position.Right);
     setMinusIconPosition(layout === 'LR' ? Position.Top : Position.Left);
 
@@ -25,6 +29,7 @@ export const usePosition = () => {
 
   return {
     layout,
+    layoutCssClass,
     plusIconPosition,
     minusIconPosition,
     leftHandlePosition,
