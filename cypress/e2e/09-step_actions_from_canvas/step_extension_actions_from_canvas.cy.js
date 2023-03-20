@@ -8,7 +8,7 @@ describe('Test for Step extensions', () => {
         cy.uploadInitialState('TimerLogCamelRoute.yaml');
     });
 
-    it('User sees a step extension(http)', () => {
+    it('User sees a step extension(transform)', () => {
         cy.insertStepMiniCatalog('transform');
         cy.openStepConfigurationTab('transform');
 
