@@ -3,7 +3,6 @@ import { fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
 import {
   useIntegrationJsonStore,
   useSettingsStore,
-  useTemporalIntegrationJsonStore,
 } from '@kaoto/store';
 import { IIntegration } from '@kaoto/types';
 import isEqual from 'lodash.isequal';
@@ -50,7 +49,7 @@ function KogitoEditorIntegrationProviderInternal(
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
 
   // The history is used to keep a log of every change to the content. Then, this log is used to undo and redo content.
-  const { undo, redo, pastStates } = useTemporalIntegrationJsonStore();
+  const { undo, redo, pastStates } = useIntegrationJsonStore.temporal.getState();
 
   const previousJson = useRef(JSON.parse(JSON.stringify(integrationJson)));
   const previousContent = useRef<string>();

@@ -191,6 +191,4 @@ if (process.env.NODE_ENV === 'development') {
   mountStoreDevtool('visualizationStore', useVisualizationStore);
 }
 
-export const useTemporalIntegrationJsonStore = create(useIntegrationJsonStore.temporal);
-
 export default useIntegrationJsonStore;
