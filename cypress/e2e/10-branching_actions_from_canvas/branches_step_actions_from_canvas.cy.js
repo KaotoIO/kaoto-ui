@@ -6,6 +6,8 @@ describe('User completes normal actions on steps in a branch', () => {
 
         cy.openHomePage();
         cy.uploadInitialState('EipAction.yaml');
+
+        cy.zoomOutXTimes(3)
     });
 
     it('User configures a step in a branch', () => {
