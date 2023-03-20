@@ -2,7 +2,7 @@ import { IIntegrationJsonStore, RFState, useIntegrationJsonStore, useVisualizati
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { AlertProvider } from '../layout';
-import { integrationJSONStub, stepsStub } from '../__mocks__/steps';
+import { integrationJSONStub, stepsStub } from '../stubs/steps';
 import { Visualization } from './Visualization';
 
 beforeAll(() => {
