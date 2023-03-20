@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { TextEncoder } from 'util';
 import 'whatwg-fetch';
-import { stepsCatalog } from './src/__mocks__/steps';
+import { stepsCatalog } from './src/stubs/steps';
 
 global.TextEncoder = TextEncoder;
 

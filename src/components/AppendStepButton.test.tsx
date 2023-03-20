@@ -1,4 +1,4 @@
-import { kameletSourceStepStub } from '../__mocks__/steps';
+import { kameletSourceStepStub } from '../stubs/steps';
 import { AlertProvider } from '../layout';
 import { AppendStepButton } from './AppendStepButton';
 import { StepsService } from '@kaoto/services';
