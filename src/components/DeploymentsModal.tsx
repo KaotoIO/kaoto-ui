@@ -1,5 +1,4 @@
 import { fetchDeployments, stopDeployment } from '../api';
-import './DeploymentsModal.css';
 import { CustomExclamationTriangleIcon } from './Icons';
 import { useDeploymentStore, useSettingsStore } from '@kaoto/store';
 import { IDeployment } from '@kaoto/types';
