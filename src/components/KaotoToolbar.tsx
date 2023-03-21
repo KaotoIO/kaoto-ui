@@ -7,6 +7,7 @@ import {
   DeploymentsModal,
   SettingsModal,
 } from '@kaoto/components';
+import { constants } from '@kaoto/constants';
 import { ValidationService } from '@kaoto/services';
 import {
   useDeploymentStore,
@@ -58,6 +59,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel }:
   const { settings, setSettings } = useSettingsStore((state) => state);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore((state) => state);
   const deleteIntegration = useIntegrationJsonStore((state) => state.deleteIntegration);
+  const htmlTagElement = document.documentElement;
 
   const { deployment, setDeploymentCrd } = useDeploymentStore();
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
@@ -101,6 +103,16 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel }:
       setSettings(newSettings);
     });
   }, []);
+
+  // configure UI theme
+  useEffect(() => {
+    const uiTheme = localStorage.getItem(constants.LOCAL_STORAGE_UI_THEME_KEY) ?? "true";
+    if (uiTheme === "true") {
+      htmlTagElement?.classList.remove(constants.THEME_DARK_CLASS);
+    } else {
+      htmlTagElement?.classList.add(constants.THEME_DARK_CLASS);
+    }
+  }, [settings.uiLightMode]);
 
   const handleDeployStartClick = () => {
     startDeployment(sourceCode, settings.name, settings.namespace)
