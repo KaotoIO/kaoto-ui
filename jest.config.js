@@ -25,7 +25,7 @@ module.exports = {
     '@kaoto/api': path.resolve(__dirname, './src/api'),
     '@kaoto/assets': path.resolve(__dirname, './src/assets'),
     '@kaoto/components': path.resolve(__dirname, './src/components'),
-    '@kaoto/constants': path.resolve(__dirname, './src/store/constants'),
+    '@kaoto/constants': path.resolve(__dirname, './src/constants'),
     '@kaoto/hooks': path.resolve(__dirname, './src/hooks'),
     '@kaoto/layout': path.resolve(__dirname, './src/layout'),
     '@kaoto/types': path.resolve(__dirname, './src/types'),
