@@ -1,5 +1,6 @@
-import { ThemeSwitcher } from './ThemeSwitcher';
-import LOCAL_STORAGE_EDITOR_THEME_KEY from '@kaoto/constants';
+import { useEffect } from 'react';
+
+import { constants } from '@kaoto/constants';
 import { useSettingsStore } from '@kaoto/store';
 import {
   Form,
@@ -10,7 +11,9 @@ import {
   Switch,
 } from '@patternfly/react-core';
 import { MoonIcon, SunIcon } from '@patternfly/react-icons';
-import { useEffect } from 'react';
+
+import { ThemeSwitcher } from './ThemeSwitcher';
+
 
 export interface IAppearanceModal {
   handleCloseModal: () => void;
@@ -24,19 +27,19 @@ export interface IAppearanceModal {
  * @constructor
  */
 const AppearanceModal = ({ handleCloseModal, isModalOpen }: IAppearanceModal) => {
-  const storedTheme = localStorage.getItem(LOCAL_STORAGE_EDITOR_THEME_KEY);
+  const storedTheme = localStorage.getItem(constants.LOCAL_STORAGE_EDITOR_THEME_KEY);
   const { settings, setSettings } = useSettingsStore();
 
   useEffect(() => {
     localStorage.setItem(
-      LOCAL_STORAGE_EDITOR_THEME_KEY,
+      constants.LOCAL_STORAGE_EDITOR_THEME_KEY,
       storedTheme ?? settings.editorIsLightMode.toString()
     );
   }, [settings.editorIsLightMode, storedTheme]);
 
-  const onToggleSwitchEditorTheme = (newCheckedState: boolean) => {
-    setSettings({ ...settings, editorIsLightMode: newCheckedState });
-    localStorage.setItem(LOCAL_STORAGE_EDITOR_THEME_KEY, `${newCheckedState}`);
+  const onToggleSwitchEditorTheme = (newEditorCheckedState: boolean) => {
+    setSettings({ ...settings, editorIsLightMode: newEditorCheckedState });
+    localStorage.setItem(constants.LOCAL_STORAGE_EDITOR_THEME_KEY, `${newEditorCheckedState}`);
   };
 
   return (
@@ -57,7 +60,7 @@ const AppearanceModal = ({ handleCloseModal, isModalOpen }: IAppearanceModal) =>
             <MoonIcon size="md" />
             <Switch
               aria-label="theme-editor-switch"
-              className="switch-theme"
+              className="switch-editor-theme"
               isChecked={settings.editorIsLightMode}
               onChange={onToggleSwitchEditorTheme}
               data-testid={'appearance--theme-editor-switch'}
