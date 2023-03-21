@@ -28,14 +28,18 @@ Cypress.Commands.add('editorDeleteLine', (line, repeatCount) => {
 Cypress.Commands.add('openHomePage', () => {
   let url = Cypress.config().baseUrl;
   cy.visit(url);
+  cy.wait('@getDSLs');
+  cy.wait('@getViewDefinitions');
 });
 
 Cypress.Commands.add('uploadInitialState', (fixture) => {
   cy.get('[data-testid="toolbar-show-code-btn"]').click();
+  cy.wait('@getIntegration');
   cy.get('[data-testid="sourceCode--clearButton"]').should('be.visible').click({ force: true });
   cy.get('.pf-c-code-editor__main').should('be.visible');
   cy.get('.pf-c-code-editor__main > input').attachFile(fixture);
   cy.syncUpCodeChanges();
+  cy.waitVisualizationUpdate();
 });
 
 Cypress.Commands.add('deleteStep', (step, stepIndex) => {
@@ -60,6 +64,12 @@ Cypress.Commands.add('appendStepMiniCatalog', (step, appendedStep, stage, stepIn
   stepIndex = stepIndex ?? 0;
   cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).children('[data-testid="stepNode__appendStep-btn"]').click();
   cy.selectStepMiniCatalog(appendedStep, stage);
+});
+
+Cypress.Commands.add('prependStepMiniCatalog', (step, prependedStep, stage, stepIndex) => {
+  stepIndex = stepIndex ?? 0;
+  cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).children('[data-testid="stepNode__prependStep-btn"]').click();
+  cy.selectStepMiniCatalog(prependedStep, stage);
 });
 
 Cypress.Commands.add('insertStepMiniCatalog', (step, insertIndex) => {
@@ -88,7 +98,7 @@ Cypress.Commands.add('openStepConfigurationTab', (step, stepIndex) => {
 });
 
 Cypress.Commands.add('closeStepConfigurationTab', () => {
-  cy.get('.pf-c-button.pf-m-plain').click();
+  cy.get('.pf-c-button.pf-m-plain').eq(0).click();
 });
 
 Cypress.Commands.add('checkCodeSpanLine', (firstSpan, secondSpan) => {
@@ -120,21 +130,28 @@ Cypress.Commands.add('dragAndDropFromCatalog', (source, target, targetIndex) => 
 });
 
 // Blocked due to: https://github.com/KaotoIO/kaoto-ui/issues/1381
-// Cypress.Commands.add('insertBranch', (insertIndex) => {
-//   insertIndex = insertIndex ?? 0;
-//   cy.get('[data-testid="stepNode__insertStep-btn"]').eq(insertIndex).click();
-//   cy.get('[data-testid="miniCatalog__branches"]').click();
-//   cy.get('[data-testid="addBranch__button"]').click();
-//   cy.waitVisualizationUpdate();
-// });
+Cypress.Commands.add('insertBranch', (insertIndex) => {
+  insertIndex = insertIndex ?? 0;
+  cy.get('[data-testid="stepNode__insertStep-btn"]').eq(insertIndex).click();
+  cy.get('[data-testid="miniCatalog__branches"]').click();
+  cy.get('[data-testid="addBranch__button"]').click();
+  cy.waitVisualizationUpdate();
+});
 
-// Cypress.Commands.add('appendBranch', (choiceIndex) => {
-//   choiceIndex = choiceIndex ?? 0;
-//   cy.get('[data-testid="viz-step-choice"]').eq(choiceIndex).children('[data-testid="stepNode__appendStep-btn"]').click();
-//   cy.get('[data-testid="miniCatalog__branches"]').click();
-//   cy.get('[data-testid="addBranch__button"]').click();
-//   cy.waitVisualizationUpdate();
-// });
+Cypress.Commands.add('appendBranch', (choiceIndex) => {
+  choiceIndex = choiceIndex ?? 0;
+  cy.get('[data-testid="viz-step-choice"]').eq(choiceIndex).children('[data-testid="stepNode__appendStep-btn"]').click();
+  cy.get('[data-testid="miniCatalog__branches"]').click();
+  cy.get('[data-testid="addBranch__button"]').click();
+  cy.waitVisualizationUpdate();
+});
+
+Cypress.Commands.add('deleteBranch', (branchIndex) => {
+  branchIndex = branchIndex ?? 0;
+  cy.get('[data-testid="stepNode__deleteBranch-btn"]').eq(branchIndex).click();
+  cy.get('[data-testid="confirmDeleteBranchDialog__btn"]').click();
+  cy.waitVisualizationUpdate();
+});
 
 Cypress.Commands.add('addBranchChoiceExtension', (otherwise) => {
   otherwise = otherwise ?? null;
@@ -161,4 +178,11 @@ Cypress.Commands.add('editBranchCondition', (whenIndex, condition, type) => {
   cy.get('.pf-c-alert').should('contain.text', 'Choice step updated');
   cy.get('.pf-c-alert__action').children('button').click();
   cy.waitVisualizationUpdate();
+});
+
+Cypress.Commands.add('zoomOutXTimes', (times) => {
+  times = times ?? 1;
+  Cypress._.times(times, () => {
+    cy.get('.react-flow__controls-button.react-flow__controls-zoomout').click()
+  })
 });

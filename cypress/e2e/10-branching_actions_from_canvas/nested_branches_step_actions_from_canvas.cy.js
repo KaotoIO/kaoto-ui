@@ -7,6 +7,7 @@ describe('User completes normal actions on steps in a branch', () => {
         cy.openHomePage();
         cy.uploadInitialState('EipAction.yaml');
 
+        cy.zoomOutXTimes(3)
         // Blocked due to: https://github.com/KaotoIO/kaoto-ui/issues/1381
         // cy.insertBranch(3);
         // cy.replaceEmptyStepMiniCatalog('activemq');
@@ -14,14 +15,11 @@ describe('User completes normal actions on steps in a branch', () => {
         // cy.replaceEmptyStepMiniCatalog('amqp');
 
         // Workaround for: https://github.com/KaotoIO/kaoto-ui/issues/1381
-        cy.get('.react-flow__controls-button.react-flow__controls-zoomout').click().click().click();
         cy.openStepConfigurationTab('choice', 1);
         cy.addBranchChoiceExtension();
         cy.addBranchChoiceExtension('other');
-        cy.editBranchCondition(0, 'jq-condition', 'jq');
         cy.closeStepConfigurationTab();
-        cy.replaceEmptyStepMiniCatalog('activemq', 1);
-        cy.replaceEmptyStepMiniCatalog('amqp');
+        cy.replaceEmptyStepMiniCatalog('amqp', 0);
     });
 
     it('User configures a step in a branch', () => {
@@ -42,11 +40,11 @@ describe('User completes normal actions on steps in a branch', () => {
 
         // CHECK that amqp step is deleted and empty step is added
         cy.get('[data-testid="viz-step-amqp"]').should('not.exist');
-        cy.get('[data-testid="viz-step-slot"]').should('have.length', 1).and('be.visible');
+        cy.get('[data-testid="viz-step-slot"]').should('have.length', 2).and('be.visible');
     });
 
     it('User replaces a step in a branch', () => {
-        cy.dragAndDropFromCatalog('arangodb', 'activemq');
+        cy.dragAndDropFromCatalog('arangodb', 'amqp');
 
         // CHECK digitalocean step was replaced with amqp
         cy.get('[data-testid="viz-step-activemq"]').should('not.exist');
