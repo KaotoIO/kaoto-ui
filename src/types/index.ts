@@ -59,7 +59,6 @@ export interface ISettings {
   // e.g. 'KameletBinding'
   dsl: IDsl;
   editorIsLightMode: boolean;
-  uiLightMode: boolean;
   editorMode: CodeEditorMode;
 
   icon?: string;
