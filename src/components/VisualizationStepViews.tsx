@@ -2,7 +2,7 @@ import { dynamicImport } from './import';
 import { Extension, JsonSchemaConfigurator, StepErrorBoundary } from '@kaoto/components';
 import { StepsService } from '@kaoto/services';
 import { useIntegrationJsonStore } from '@kaoto/store';
-import { IStepProps } from '@kaoto/types';
+import { IStepProps, IStepPropsParameters } from '@kaoto/types';
 import {
   AlertVariant,
   DrawerActions,
@@ -81,7 +81,7 @@ const VisualizationStepViews = ({
     let tempSchemaObject: { [label: string]: { type: string; value?: any; description?: string } } =
       {};
 
-    let tempModelObject: { [label: string]: any } = {};
+    let tempModelObject = {} as IStepPropsParameters;
 
     step.parameters?.forEach((p) =>
       StepsService.buildStepSchemaAndModel(p, tempModelObject, tempSchemaObject)

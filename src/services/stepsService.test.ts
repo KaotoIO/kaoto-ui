@@ -3,7 +3,7 @@ import nestedBranch from '../store/data/kamelet.nested-branch.steps';
 import steps from '../store/data/steps';
 import { StepsService } from './stepsService';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
-import { IStepProps, IStepPropsBranch, IViewProps } from '@kaoto/types';
+import { IStepProps, IStepPropsBranch, IStepPropsParameters, IViewProps } from '@kaoto/types';
 
 describe('stepsService', () => {
   const stepsService = new StepsService(
@@ -206,25 +206,25 @@ describe('stepsService', () => {
   });
 
   it('buildStepSchemaAndModel():should ignore empty array parameter', () => {
-    const parameter: { [label: string]: any } = {
+    const parameter: IStepPropsParameters = {
       id: 'key',
       type: 'string',
       description: 'test description',
       value: 'value',
     };
-    const parameter2: { [label: string]: any } = {
+    const parameter2: IStepPropsParameters = {
       id: 'array',
       type: 'array',
       description: '',
       value: [],
     };
-    const parameter3: { [label: string]: any } = {
+    const parameter3: IStepPropsParameters = {
       id: 'array2',
       type: 'array',
       description: 'array',
       value: null,
     };
-    const modelObjectRef: { [label: string]: any } = {};
+    const modelObjectRef = {} as IStepPropsParameters;
     const schemaObjectRef: {
       [label: string]: { type: string; value?: any; description?: string };
     } = {};
