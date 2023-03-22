@@ -153,6 +153,7 @@ export interface IStepPropsBranch {
 }
 
 export interface IStepPropsParameters {
+  id: string;
   [key: string]: any;
 }
 
