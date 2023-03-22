@@ -1,4 +1,3 @@
-import { dynamicImport } from './import';
 import { Extension, JsonSchemaConfigurator, StepErrorBoundary } from '@kaoto/components';
 import { StepsService } from '@kaoto/services';
 import { useIntegrationJsonStore } from '@kaoto/store';
@@ -16,7 +15,9 @@ import {
   TabTitleText,
 } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { lazy, useCallback, useEffect, useMemo, useState } from 'react';
+import debounce from 'lodash.debounce';
+import { lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { dynamicImport } from './import';
 
 export interface IStepViewsProps {
   isPanelExpanded: boolean;
@@ -31,6 +32,7 @@ const VisualizationStepViews = ({
   saveConfig,
   step,
 }: IStepViewsProps) => {
+  const debouncedSaveConfig = useRef(debounce(saveConfig, 500, { leading: false, trailing: true }));
   const integrationJsonStore = useIntegrationJsonStore();
   const views = integrationJsonStore.views.filter((view) => view.step === step.UUID);
 
@@ -95,6 +97,12 @@ const VisualizationStepViews = ({
     setActiveTabKey(tabIndex);
   }, []);
 
+  const onChangeModel = useCallback((configuration: unknown, isValid: boolean): void => {
+    if (isValid) {
+      debouncedSaveConfig.current(configuration);
+    }
+  }, [debouncedSaveConfig]);
+
   return (
     <>
       <DrawerHead>
@@ -139,10 +147,10 @@ const VisualizationStepViews = ({
                     {step.type === 'START'
                       ? 'Source'
                       : step.type === 'MIDDLE'
-                      ? 'Action'
-                      : step.type === 'END'
-                      ? 'Sink'
-                      : ''}
+                        ? 'Action'
+                        : step.type === 'END'
+                          ? 'Sink'
+                          : ''}
                   </GridItem>
                 </Grid>
                 <br />
@@ -193,11 +201,7 @@ const VisualizationStepViews = ({
                         required: step.required,
                       }}
                       configuration={stepPropertyModel}
-                      onChangeModel={(configuration, isValid) => {
-                        if (isValid) {
-                          saveConfig(configuration);
-                        }
-                      }}
+                      onChangeModel={onChangeModel}
                     />
                   )}
                 </Grid>
