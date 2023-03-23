@@ -7,7 +7,7 @@ import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-
 import { Alert } from '@patternfly/react-core';
 import { CheckCircleIcon, EraserIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';
 import { useEffect, useRef, useState } from 'react';
-import EditorDidMount from 'react-monaco-editor';
+import { EditorDidMount } from 'react-monaco-editor';
 import { useDebouncedCallback } from 'use-debounce';
 
 interface ISourceCodeEditor {
@@ -21,7 +21,7 @@ interface ISourceCodeEditor {
 }
 
 const SourceCodeEditor = (props: ISourceCodeEditor) => {
-  const editorRef = useRef<EditorDidMount['editor'] | null>(null);
+  const editorRef = useRef<Parameters<EditorDidMount>[0] | null>(null);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
   const [syncedCode, setSyncedCode] = useState('');
   const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
@@ -85,7 +85,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
       });
   };
 
-  const handleEditorDidMount = (editor: EditorDidMount['editor']) => {
+  const handleEditorDidMount: EditorDidMount = (editor) => {
     import('monaco-yaml').then((im) => {
       im.setDiagnosticsOptions({
         enableSchemaRequest: props.schemaUri !== '',
