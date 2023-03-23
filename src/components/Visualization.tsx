@@ -63,7 +63,7 @@ const Visualization = () => {
     } else {
       setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '' });
       visualizationStore.setSelectedStepUuid('');
-      if (isPanelExpanded) setIsPanelExpanded(false);
+      setIsPanelExpanded(false);
     }
   }, [integrationJson, selectedStep.UUID, stepsService]);
 
