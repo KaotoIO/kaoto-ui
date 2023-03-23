@@ -60,6 +60,10 @@ const Visualization = () => {
     const step = stepsService.findStepWithUUID(selectedStep.UUID);
     if (step) {
       setSelectedStep(step);
+    } else {
+      setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '' });
+      visualizationStore.setSelectedStepUuid('');
+      setIsPanelExpanded(false);
     }
   }, [integrationJson, selectedStep.UUID, stepsService]);
 
@@ -108,38 +112,44 @@ const Visualization = () => {
    * @param e
    * @param node
    */
-  const onNodeClick = useCallback((e: any, node: IVizStepNode) => {
-    // here we check if it's a node or edge
-    // workaround for https://github.com/wbkd/react-flow/issues/2202
-    if (!e.target.classList.contains('stepNode__clickable')) return;
+  const onNodeClick = useCallback(
+    (e: any, node: IVizStepNode) => {
+      // here we check if it's a node or edge
+      // workaround for https://github.com/wbkd/react-flow/issues/2202
+      if (!e.target.classList.contains('stepNode__clickable')) return;
 
-    if (!node.data.isPlaceholder) {
-      const step = stepsService.findStepWithUUID(node.data.step.UUID);
-      if (step) {
-        setSelectedStep(step);
-        visualizationStore.setSelectedStepUuid(step.UUID);
+      if (!node.data.isPlaceholder) {
+        const step = stepsService.findStepWithUUID(node.data.step.UUID);
+        if (step) {
+          setSelectedStep(step);
+          visualizationStore.setSelectedStepUuid(step.UUID);
+        }
+
+        /** If the details panel is collapsed, we expanded for the user */
+        if (!isPanelExpanded) setIsPanelExpanded(true);
+
+        /**
+         * If the details panel is already expanded and the step it's already
+         * selected, we collapse it for the user */
+        if (isPanelExpanded && selectedStep.UUID === node.data.step.UUID) {
+          setIsPanelExpanded(false);
+          visualizationStore.setSelectedStepUuid('');
+        }
       }
-
-      /** If the details panel is collapsed, we expanded for the user */
-      if (!isPanelExpanded) setIsPanelExpanded(true);
-
-      /**
-       * If the details panel is already expanded and the step it's already
-       * selected, we collapse it for the user */
-      if (isPanelExpanded && selectedStep.UUID === node.data.step.UUID) {
-        setIsPanelExpanded(false);
-        visualizationStore.setSelectedStepUuid('');
-      }
-    }
-  }, [isPanelExpanded, selectedStep.UUID, stepsService, visualizationStore]);
+    },
+    [isPanelExpanded, selectedStep.UUID, stepsService, visualizationStore]
+  );
 
   /**
    * Handles Step View configuration changes
    * @param newValues
    */
-  const saveConfig = useCallback((newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
-    stepsService.updateStepParameters(selectedStep, newValues);
-  }, [selectedStep, stepsService]);
+  const saveConfig = useCallback(
+    (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
+      stepsService.updateStepParameters(selectedStep, newValues);
+    },
+    [selectedStep, stepsService]
+  );
 
   return (
     <StepErrorBoundary>
@@ -162,10 +172,7 @@ const Visualization = () => {
         defaultSize="500px"
         minSize="150px"
       >
-        <div
-          className="reactflow-wrapper"
-          data-testid="react-flow-wrapper"
-        >
+        <div className="reactflow-wrapper" data-testid="react-flow-wrapper">
           <ReactFlow
             nodes={nodes}
             edges={edges}
