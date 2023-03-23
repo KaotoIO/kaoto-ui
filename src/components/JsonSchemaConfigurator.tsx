@@ -1,8 +1,8 @@
-import { CustomJsonSchemaBridge } from './CustomJsonSchemaBridge';
+import { AutoFields, AutoForm, ErrorsField } from '@kie-tools/uniforms-patternfly/dist/esm';
 import Ajv from 'ajv';
 import { useRef } from 'react';
-import { AutoForm } from 'uniforms';
-import { AutoFields, ErrorsField } from 'uniforms-patternfly';
+import { CustomJsonSchemaBridge } from './CustomJsonSchemaBridge';
+import './JsonSchemaConfigurator.css';
 
 const ajv = new Ajv({
   allErrors: true,

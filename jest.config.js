@@ -33,6 +33,7 @@ module.exports = {
     '@kaoto/services': path.resolve(__dirname, './src/services'),
     '@kaoto/store': path.resolve(__dirname, './src/store'),
     '@kaoto/utils': path.resolve(__dirname, './src/utils'),
+    '@kie-tools/uniforms-patternfly/dist/esm': path.resolve(__dirname, 'node_modules/@kie-tools/uniforms-patternfly/dist/cjs'),
   },
 
   roots: ['<rootDir>'],
