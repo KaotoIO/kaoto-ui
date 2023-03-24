@@ -11,7 +11,7 @@ Cypress.Commands.add('uploadInitialState', (fixture) => {
 });
 
 Cypress.Commands.add('editorAddText', (line, text) => {
-    var arr = text.split('\n');
+    const arr = text.split('\n');
     Cypress._.times(arr.length, (i) => {
         cy.get('.code-editor')
             .click()
