@@ -13,8 +13,8 @@ describe('User completes normal actions on steps in a branch', () => {
     it('User configures a step in a branch', () => {
         cy.openStepConfigurationTab('digitalocean');
 
-        cy.interactWithInputObject('lazyStartProducer');
-        cy.interactWithInputObject('oAuthToken', 'token');
+        cy.interactWithConfigInputObject('lazyStartProducer');
+        cy.interactWithConfigInputObject('oAuthToken', 'token');
 
         // CHECK that the step yaml is updated
         cy.checkCodeSpanLine('lazyStartProducer', "true");

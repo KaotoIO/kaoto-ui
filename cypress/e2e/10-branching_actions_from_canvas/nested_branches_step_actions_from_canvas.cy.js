@@ -25,8 +25,8 @@ describe('User completes normal actions on steps in a branch', () => {
     it('User configures a step in a branch', () => {
         cy.openStepConfigurationTab('amqp');
 
-        cy.interactWithInputObject('includeSentJMSMessageID');
-        cy.interactWithInputObject('password', 'qwerty');
+        cy.interactWithConfigInputObject('includeSentJMSMessageID');
+        cy.interactWithConfigInputObject('password', 'qwerty');
 
         // CHECK that the step yaml is updated
         cy.checkCodeSpanLine('includeSentJMSMessageID', 'true');

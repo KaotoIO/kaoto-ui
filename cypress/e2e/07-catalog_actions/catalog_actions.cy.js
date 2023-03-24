@@ -1,32 +1,18 @@
 describe('Test for catalog actions', () => {
 
     beforeEach(() => {
-        let url = Cypress.config().baseUrl;
-        cy.visit(url);
+        cy.intercept('/v1/integrations/dsls').as('getDSLs');
+        cy.intercept('/v1/view-definitions').as('getViewDefinitions');
+        cy.intercept('/v1/integrations*').as('getIntegration');
 
-        // Upload the initial state (EipAction.yaml)
-        cy.get('[data-testid="toolbar-show-code-btn"]').click();
-        cy.get('[data-testid="sourceCode--clearButton"]').should('be.visible').click({ force: true });
-        cy.get('.pf-c-code-editor__main').should('be.visible');
-        cy.get('.pf-c-code-editor__main > input').attachFile('EipAction.yaml');
-        cy.get('[data-testid="sourceCode--applyButton"]').click();
+        cy.openHomePage();
+        cy.uploadInitialState('EipAction.yaml');
+
+        cy.zoomOutXTimes(3)
     });
 
-    // Try replace the digitalocean step (action) with the timer step (start)
     it("User drags and drops an invalid step onto a nested branch step", () => {
-        const dataTransfer = new DataTransfer();
-        // open catalog
-        cy.get('[data-testid="toolbar-step-catalog-btn"]').click();
-        // select timer step
-        cy.get('#stepSearch').type('timer');
-        // drag timer step from catalog
-        cy.get('[data-testid="catalog-step-timer"]').trigger('dragstart', {
-            dataTransfer,
-        });
-        // drop aggregate step from catalog over nested digitalocean step
-        cy.get('[data-testid="viz-step-digitalocean"]').trigger('drop', {
-            dataTransfer,
-        });
+        cy.dragAndDropFromCatalog('timer', 'digitalocean', 'start');
 
         // CHECK digitalocean step is visible
         cy.get('[data-testid="viz-step-digitalocean"]').should('be.visible');
@@ -37,23 +23,8 @@ describe('Test for catalog actions', () => {
         cy.get('[data-testid="alert-box-replace-unsuccessful"]').should('contain', 'You cannot replace a middle step with a start step');
     });
 
-    // Replace the digitalocean step with the delay step with the big catalog
     it("User replaces a placeholder step via drag & drop from the big catalog", () => {
-        const dataTransfer = new DataTransfer();
-        // open catalog
-        cy.get('[data-testid="toolbar-step-catalog-btn"]').click();
-        // select actions category
-        cy.get('[data-testid="catalog-step-actions"]').click();
-        // select delay step
-        cy.get('#stepSearch').type('delay');
-        // drag delay step from catalog
-        cy.get('[data-testid="catalog-step-delay"]').trigger('dragstart', {
-            dataTransfer,
-        });
-        // drop aggregate step from catalog over nested digitalocean step
-        cy.get('[data-testid="viz-step-digitalocean"]').trigger('drop', {
-            dataTransfer,
-        });
+        cy.dragAndDropFromCatalog('delay', 'digitalocean');
 
         // CHECK digitalocean step was replaced
         cy.get('[data-testid="viz-step-digitalocean"]').should('not.exist');
@@ -61,22 +32,11 @@ describe('Test for catalog actions', () => {
         cy.get('[data-testid="viz-step-delay"]').should('be.visible');
     });
 
-    // Replace the digitalocean step with the delay step with the mini catalog (Delete and Insert)
+    // Replace the digitalocean step with the delay step with the mini catalog (Delete and Prepend)
     it("User replaces a placeholder step using the mini catalog (Delete and Insert)", () => {
         // delete digitalocean step
-        cy.get('[data-testid="viz-step-digitalocean"]').trigger('mouseover');
-        cy.get(
-            '[data-testid="viz-step-digitalocean"] > [data-testid="configurationTab__deleteBtn"]'
-        ).click({ force: true });
-        // prepend step before set-header step
-        cy.get(
-            '[data-testid="viz-step-set-header"] > [data-testid="stepNode__prependStep-btn"]'
-        ).click();
-        cy.get('[data-testid="miniCatalog"]').should('be.visible');
-        // search delay step
-        cy.get('.pf-c-text-input-group__text-input').type('delay');
-        // select delay step
-        cy.get('[data-testid="miniCatalog__stepItem--delay"]').click();
+        cy.deleteStep('digitalocean');
+        cy.prependStepMiniCatalog('set-header', 'delay');
 
         // CHECK digitalocean step was replaced
         cy.get('[data-testid="viz-step-digitalocean"]').should('not.exist');
