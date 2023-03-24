@@ -16,28 +16,27 @@ export const FieldLabelIcon = (props: FieldLabelIconProps) => {
   const headerContent = props.disabled
     ? 'Please use the source code editor to configure this property.'
     : '';
-  const bodyContent = () => {
-    return props.description ? (
-      <>
-        {props.description}
-        <>
-          <br />
-          <br />
-          <Text component={TextVariants.small}>Default: {props.defaultValue ?? 'null'}</Text>
-        </>
-      </>
-    ) : (
-      ''
-    );
+  const bodyContent = props.description ? props.description : '';
+
+  const footerContent = () => {
+    return <Text component={TextVariants.small}>Default: {props.defaultValue ?? 'null'}</Text>;
   };
+
   return (
-    <Popover headerContent={headerContent} bodyContent={bodyContent}>
+    <Popover
+      aria-label={'Property description'}
+      headerContent={headerContent}
+      bodyContent={bodyContent}
+      data-testid={'property-description-popover'}
+      footerContent={footerContent}
+    >
       <Button
         variant="plain"
         type="button"
         aria-label="More info for field"
         aria-describedby="form-group-label-info"
         className="pf-c-form__group-label-help"
+        data-testid={'field-label-icon'}
       >
         <HelpIcon />
       </Button>
