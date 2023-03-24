@@ -2,6 +2,7 @@ import { Extension, JsonSchemaConfigurator, StepErrorBoundary } from '@kaoto/com
 import { StepsService } from '@kaoto/services';
 import { useIntegrationJsonStore } from '@kaoto/store';
 import { IStepProps, IStepPropsParameters } from '@kaoto/types';
+import { getSortedParameters } from '@kaoto/utils';
 import {
   AlertVariant,
   DrawerActions,
@@ -47,6 +48,7 @@ const VisualizationStepViews = ({
     [label: string]: { type: string };
   }>({});
   const [stepPropertyModel, setStepPropertyModel] = useState<{ [label: string]: any }>({});
+  const [parametersOrder, setParametersOrder] = useState<string[]>([]);
   const { addAlert } = useAlert() || {};
 
   const stepsService = useMemo(() => new StepsService(), []);
@@ -91,7 +93,8 @@ const VisualizationStepViews = ({
 
     setStepPropertySchema(tempSchemaObject);
     setStepPropertyModel(tempModelObject);
-  }, [step.parameters, isPanelExpanded, configTabIndex]);
+    setParametersOrder(getSortedParameters(step));
+  }, [step, isPanelExpanded, configTabIndex]);
 
   const handleTabClick = useCallback((_event: unknown, tabIndex: string | number) => {
     setActiveTabKey(tabIndex);
@@ -201,6 +204,7 @@ const VisualizationStepViews = ({
                         required: step.required,
                       }}
                       configuration={stepPropertyModel}
+                      parametersOrder={parametersOrder}
                       onChangeModel={onChangeModel}
                     />
                   )}
