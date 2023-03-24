@@ -14,7 +14,10 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands';
+import './kaoto-ui-commands/branches';
+import './kaoto-ui-commands/default';
+import './kaoto-ui-commands/editor';
+import './kaoto-ui-commands/steps';
 
 Cypress.on('uncaught:exception', (err, runnable) => {
   // returning false here prevents Cypress from
