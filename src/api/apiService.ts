@@ -1,6 +1,5 @@
 import request from './request';
 import { IIntegration, IStepProps } from '@kaoto/types';
-import { sortParameters } from '@kaoto/utils';
 
 const apiVersion = '/v1';
 
@@ -229,10 +228,7 @@ export async function fetchStepDetails(id?: string, namespace?: string) {
       },
     });
 
-    const step= await resp.json();
-
-    /** We're sorting the parameters of the selected step to avoid sorting the entire catalog */
-    return sortParameters(step) as any;
+    return resp.json();
   } catch (err) {
     console.error(err);
     return err;

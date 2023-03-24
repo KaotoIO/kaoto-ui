@@ -23,12 +23,14 @@ export function createValidator(schema: object) {
 type JsonSchemaConfiguratorProps = {
   schema: any;
   configuration: any;
+  parametersOrder: string[];
   onChangeModel: (configuration: unknown, isValid: boolean) => void;
 };
 
 export const JsonSchemaConfigurator = ({
   schema,
   configuration,
+  parametersOrder,
   onChangeModel,
 }: JsonSchemaConfiguratorProps) => {
   schema.type = schema.type || 'object';
@@ -46,7 +48,7 @@ export const JsonSchemaConfigurator = ({
       }}
       data-testid={'json-schema-configurator'}
     >
-      <AutoFields />
+      <AutoFields fields={parametersOrder}/>
       <ErrorsField />
       <br />
     </AutoForm>

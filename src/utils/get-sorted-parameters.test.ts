@@ -1,21 +1,17 @@
 import { debeziumMongoDBStep } from '../stubs';
-import { sortParameters } from './sort-parameters';
+import { getSortedParameters } from './get-sorted-parameters';
 
 describe('sortParameters', () => {
   it('should move all the required parameters to the top and sort them alphabetically', () => {
-    const step = sortParameters(debeziumMongoDBStep);
-    const idList = step.parameters
-      ?.map((parameter) => parameter.id)
-      .slice(0, step.required?.length);
+    const sortedParameters = getSortedParameters(debeziumMongoDBStep);
+    const idList = sortedParameters.slice(0, debeziumMongoDBStep.required?.length);
 
     expect(idList).toMatchObject(['mongodbName', 'mongodbPassword', 'name']);
   });
 
   it('should alphabetically sort the rest of parameters', () => {
-    const step = sortParameters(debeziumMongoDBStep);
-    const idList = step.parameters
-    ?.map((parameter) => parameter.id)
-    .slice(step.required?.length);
+    const sortedParameters = getSortedParameters(debeziumMongoDBStep);
+    const idList = sortedParameters.slice(debeziumMongoDBStep.required?.length);
 
     expect(idList).toMatchObject([
       'additionalProperties',

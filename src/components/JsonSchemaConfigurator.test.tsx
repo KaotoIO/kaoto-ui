@@ -39,6 +39,7 @@ describe('JsonSchemaConfigurator.tsx', () => {
         schema={bridge}
         configuration={stepPropertyModel}
         onChangeModel={jest.fn()}
+        parametersOrder={[]}
       />
     );
     const element = screen.getByTestId('json-schema-configurator');
