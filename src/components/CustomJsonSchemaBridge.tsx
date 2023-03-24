@@ -13,11 +13,13 @@ export class CustomJsonSchemaBridge extends JSONSchemaBridge {
 
   getField(name: string): Record<string, any> {
     const field = super.getField(name);
-    const { description, ...props } = field;
+    const { defaultValue, description, ...props } = field;
 
     const isDisabled = field.type === 'object';
     const revisedField: Record<string, any> = {
-      labelIcon: description ? FieldLabelIcon({ description, disabled: isDisabled }) : undefined,
+      labelIcon: description
+        ? FieldLabelIcon({ defaultValue, description, disabled: isDisabled })
+        : undefined,
       ...props,
     };
     if (isDisabled) {

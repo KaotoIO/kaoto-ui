@@ -515,7 +515,6 @@ export class StepsService {
     return !!(step.minBranches || step.maxBranches);
   }
 
-
   /**
    * Determines if a given step has a custom step extension
    * @param step
@@ -573,7 +572,7 @@ export class StepsService {
   }
 
   /**
-   * Add records to provded model and the schema for Config views
+   * Add records to provided model and the schema for Config views
    * @param parameter config parameter of the step
    * @param modelObjectRef reference to the model object
    * @param schemaObjectRef reference to the schema object
@@ -581,12 +580,25 @@ export class StepsService {
   static buildStepSchemaAndModel(
     parameter: IStepPropsParameters,
     modelObjectRef: IStepPropsParameters,
-    schemaObjectRef: { [label: string]: { type: string; value?: any; description?: string } }
+    schemaObjectRef: {
+      [label: string]: {
+        type: string;
+        defaultValue?: any;
+        value?: any;
+        description?: string;
+        uniforms?: { placeholder: any };
+      };
+    }
   ) {
     const propKey = parameter.id;
-    const { type, description } = parameter;
+    const { type, defaultValue, description } = parameter;
     if (type !== 'array' || (type === 'array' && parameter.value && parameter.value.length > 0)) {
-      schemaObjectRef[propKey] = { type, description };
+      schemaObjectRef[propKey] = {
+        type,
+        defaultValue,
+        description,
+        uniforms: { placeholder: defaultValue },
+      };
       modelObjectRef[propKey] = parameter.value ?? parameter.defaultValue;
     }
   }
