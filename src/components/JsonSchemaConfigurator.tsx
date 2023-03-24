@@ -45,6 +45,7 @@ export const JsonSchemaConfigurator = ({
         previousModel.current = model;
       }}
       data-testid={'json-schema-configurator'}
+      placeholder={true}
     >
       <AutoFields />
       <ErrorsField />

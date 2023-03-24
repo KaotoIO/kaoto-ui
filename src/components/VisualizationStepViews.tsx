@@ -1,3 +1,4 @@
+import { dynamicImport } from './import';
 import { Extension, JsonSchemaConfigurator, StepErrorBoundary } from '@kaoto/components';
 import { StepsService } from '@kaoto/services';
 import { useIntegrationJsonStore } from '@kaoto/store';
@@ -17,7 +18,6 @@ import {
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import debounce from 'lodash.debounce';
 import { lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { dynamicImport } from './import';
 
 export interface IStepViewsProps {
   isPanelExpanded: boolean;
@@ -80,8 +80,9 @@ const VisualizationStepViews = ({
 
   useEffect(() => {
     setActiveTabKey(configTabIndex);
-    let tempSchemaObject: { [label: string]: { type: string; value?: any; description?: string } } =
-      {};
+    let tempSchemaObject: {
+      [label: string]: { type: string; value?: any; description?: string };
+    } = {};
 
     let tempModelObject = {} as IStepPropsParameters;
 
@@ -97,11 +98,14 @@ const VisualizationStepViews = ({
     setActiveTabKey(tabIndex);
   }, []);
 
-  const onChangeModel = useCallback((configuration: unknown, isValid: boolean): void => {
-    if (isValid) {
-      debouncedSaveConfig.current(configuration);
-    }
-  }, [debouncedSaveConfig]);
+  const onChangeModel = useCallback(
+    (configuration: unknown, isValid: boolean): void => {
+      if (isValid) {
+        debouncedSaveConfig.current(configuration);
+      }
+    },
+    [debouncedSaveConfig]
+  );
 
   return (
     <>
@@ -147,10 +151,10 @@ const VisualizationStepViews = ({
                     {step.type === 'START'
                       ? 'Source'
                       : step.type === 'MIDDLE'
-                        ? 'Action'
-                        : step.type === 'END'
-                          ? 'Sink'
-                          : ''}
+                      ? 'Action'
+                      : step.type === 'END'
+                      ? 'Sink'
+                      : ''}
                   </GridItem>
                 </Grid>
                 <br />

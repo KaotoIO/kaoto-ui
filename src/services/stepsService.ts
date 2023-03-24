@@ -581,13 +581,24 @@ export class StepsService {
     parameter: IStepPropsParameters,
     modelObjectRef: IStepPropsParameters,
     schemaObjectRef: {
-      [label: string]: { type: string; defaultValue?: any; value?: any; description?: string };
+      [label: string]: {
+        type: string;
+        defaultValue?: any;
+        value?: any;
+        description?: string;
+        uniforms?: { placeholder: any };
+      };
     }
   ) {
     const propKey = parameter.id;
     const { type, defaultValue, description } = parameter;
     if (type !== 'array' || (type === 'array' && parameter.value && parameter.value.length > 0)) {
-      schemaObjectRef[propKey] = { type, defaultValue, description };
+      schemaObjectRef[propKey] = {
+        type,
+        defaultValue,
+        description,
+        uniforms: { placeholder: defaultValue },
+      };
       modelObjectRef[propKey] = parameter.value ?? parameter.defaultValue;
     }
   }
