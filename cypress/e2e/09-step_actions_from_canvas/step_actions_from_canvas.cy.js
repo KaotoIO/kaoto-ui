@@ -21,8 +21,8 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-timer');
         cy.get('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-aggregate');
         cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-log');
-
-        cy.syncUpCodeChanges();
+        // CHECK YAML contains the  'aggregate: {}'
+        cy.checkCodeSpanLine('aggregate:', '{}');
 
         // CHECK that the step is added between two steps
         cy.get('[data-testid="viz-step-aggregate"]').should('be.visible');
@@ -32,6 +32,8 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-timer');
         cy.get('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-aggregate');
         cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-log');
+        // CHECK YAML contains the  'aggregate: {}'
+        cy.checkCodeSpanLine('aggregate:', '{}');
     });
 
     it('In an integration with at least two steps, user deletes the first step, showing a placeholder step in its place (start-end)', () => {
@@ -44,6 +46,8 @@ describe('Test for Step actions from the canvas', () => {
         // CHECK that stepNodes are in the correct order
         cy.get('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-slot');
         cy.get('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-log');
+        // CHECK that YAML not contains the 'timer:null'
+        cy.get('.code-editor').should('not.contain.text', 'timer:null');
 
         cy.syncUpCodeChanges();
 
@@ -54,6 +58,8 @@ describe('Test for Step actions from the canvas', () => {
         // CHECK that stepNodes are in the correct order
         cy.get('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-slot');
         cy.get('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-log');
+        // CHECK that YAML not contains the 'timer:null'
+        cy.get('.code-editor').should('not.contain.text', 'timer:null');
     });
 
     it('In an integration with at least two steps, user deletes the first step, showing a placeholder step in its place (start-action)', () => {
@@ -68,6 +74,8 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-log');
         // CHECK that stepNodes contains of the two steps
         cy.get('.stepNode').should('have.length', 3);
+        // CHECK that YAML not contains the 'timer:null'
+        cy.get('.code-editor').should('not.contain.text', 'timer:null');
 
         cy.syncUpCodeChanges();
 
@@ -79,6 +87,8 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-log');
         // CHECK that stepNodes contains of the two steps
         cy.get('.stepNode').should('have.length', 3);
+        // CHECK that YAML not contains the 'timer:null'
+        cy.get('.code-editor').should('not.contain.text', 'timer:null');
     });
 
     it('In an integration with at least two steps, user deletes the first step, showing a placeholder step in its place (start-action_EIP)', () => {
@@ -93,6 +103,8 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-slot');
         cy.get('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-aggregate');
         cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-log');
+        // CHECK that YAML not contains the 'timer:null'
+        cy.get('.code-editor').should('not.contain.text', 'timer:null');
 
         cy.syncUpCodeChanges();
 
@@ -104,6 +116,8 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-slot');
         cy.get('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-aggregate');
         cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-log');
+        // CHECK that YAML not contains the 'timer:null'
+        cy.get('.code-editor').should('not.contain.text', 'timer:null');
     });
 
     it('User appends a step(+ button to the right of the node)', () => {
@@ -117,6 +131,8 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-log');
         // CHECK that stepNodes contains of the three steps
         cy.get('.stepNode').should('have.length', 3);
+        // CHECK YAML contains the  'aggregate: {}'
+        cy.checkCodeSpanLine('aggregate:', '{}');
 
         cy.syncUpCodeChanges();
 
@@ -126,6 +142,8 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-log');
         // CHECK that stepNodes contains of the three steps
         cy.get('.stepNode').should('have.length', 3);
+        // CHECK YAML contains the  'aggregate: {}'
+        cy.checkCodeSpanLine('aggregate:', '{}');
     });
 
     it('Step Detail - User configures a normal step, which updates the YAML)', () => {
