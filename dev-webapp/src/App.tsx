@@ -18,11 +18,11 @@ import {
   ChannelType,
   EditorEnvelopeLocator,
   EnvelopeContentType,
-  EnvelopeMapping,
+  EnvelopeMapping
 } from '@kie-tools-core/editor/dist/api';
 import { EmbeddedEditorFile } from '@kie-tools-core/editor/dist/channel';
 import { EmbeddedEditor, useEditorRef } from '@kie-tools-core/editor/dist/embedded';
-import { Page, PageSection } from '@patternfly/react-core/dist/js/components/Page';
+import { Drawer, DrawerContent, DrawerContentBody, DrawerPanelBody, DrawerPanelContent, Page, PageSection } from '@patternfly/react-core';
 import { basename, extname } from 'path';
 import { useCallback, useMemo, useState } from 'react';
 import './App.css';
@@ -31,11 +31,13 @@ import { MenuButtons } from './MenuButtons';
 
 export type KaotoFileType = 'yml' | 'yaml';
 
-  export const App = () => {
-  const [embeddedEditorFile, setEmbeddedEditorFile] = useState<EmbeddedEditorFile>();
-  const { editor, editorRef } = useEditorRef();
+export const App = () => {
+  const [kaotoEmbeddedEditorFile, setKaotoEmbeddedEditorFile] = useState<EmbeddedEditorFile>();
+  const [textEmbeddedEditorFile, setTextEmbeddedEditorFile] = useState<EmbeddedEditorFile>();
+  const { editor: kaotoEditor, editorRef: kaotoEditorRef } = useEditorRef();
+  const { editor: textEditor, editorRef: textEditorRef } = useEditorRef();
 
-  const editorEnvelopeLocator = useMemo(
+  const kaotoEditorEnvelopeLocator = useMemo(
     () =>
       new EditorEnvelopeLocator(window.location.origin, [
         new EnvelopeMapping({
@@ -48,31 +50,44 @@ export type KaotoFileType = 'yml' | 'yaml';
     []
   );
 
+  const textEditorEnvelopeLocator = useMemo(
+    () =>
+      new EditorEnvelopeLocator(window.location.origin, [
+        new EnvelopeMapping({
+          type: 'text',
+          filePathGlob: '**/**(.+(kaoto|camel)).+(yml|yaml)',
+          resourcesPathPrefix: '',
+          envelopeContent: { type: EnvelopeContentType.PATH, path: 'serverless-workflow-text-editor-envelope.html' },
+        }),
+      ]),
+    []
+  );
+
   const onUndo = useCallback(async () => {
-    editor?.undo();
-  }, [editor]);
+    kaotoEditor?.undo();
+  }, [kaotoEditor]);
 
   const onRedo = useCallback(async () => {
-    editor?.redo();
-  }, [editor]);
+    kaotoEditor?.redo();
+  }, [kaotoEditor]);
 
-  const onGetContent = useCallback(async () => editor?.getContent() ?? '', [editor]);
+  const onGetContent = useCallback(async () => kaotoEditor?.getContent() ?? '', [kaotoEditor]);
 
   const onSetTheme = useCallback(
     async (theme) => {
-      editor?.setTheme(theme);
+      kaotoEditor?.setTheme(theme);
     },
-    [editor]
+    [kaotoEditor]
   );
 
   const onValidate = useCallback(async () => {
-    if (!editor) {
+    if (!kaotoEditor) {
       return;
     }
 
-    const notifications = await editor.validate();
+    const notifications = await kaotoEditor.validate();
     window.alert(JSON.stringify(notifications, undefined, 2));
-  }, [editor]);
+  }, [kaotoEditor]);
 
   const onSetContent = useCallback((path: string, content: string) => {
     const match = /\.kaoto\.(yml|yaml)$/.exec(path.toLowerCase());
@@ -80,7 +95,15 @@ export type KaotoFileType = 'yml' | 'yaml';
     const extension = dotExtension.slice(1);
     const fileName = basename(path);
 
-    setEmbeddedEditorFile({
+    setKaotoEmbeddedEditorFile({
+      path: path,
+      getFileContents: async () => content,
+      isReadOnly: false,
+      fileExtension: extension,
+      fileName: fileName,
+    });
+
+    setTextEmbeddedEditorFile({
       path: path,
       getFileContents: async () => content,
       isReadOnly: false,
@@ -98,30 +121,53 @@ export type KaotoFileType = 'yml' | 'yaml';
 
   return (
     <Page>
-      {!embeddedEditorFile && (
+      {!kaotoEmbeddedEditorFile && (
         <PageSection isFilled={true}>
           <KaotoEmptyState newContent={onNewContent} setContent={onSetContent} />
         </PageSection>
       )}
 
-      {embeddedEditorFile && (
+      {kaotoEmbeddedEditorFile && (
         <>
           <PageSection padding={{ default: 'noPadding' }}>
             <MenuButtons undo={onUndo} redo={onRedo} get={onGetContent} setTheme={onSetTheme} validate={onValidate} />
           </PageSection>
-          <PageSection padding={{ default: 'noPadding' }} isFilled={true} hasOverflowScroll={false}>
-            <div className='editor-container'>
-              {embeddedEditorFile && (
-                <EmbeddedEditor
-                  ref={editorRef}
-                  file={embeddedEditorFile}
-                  channelType={ChannelType.ONLINE}
-                  editorEnvelopeLocator={editorEnvelopeLocator}
-                  locale={'en'}
-                />
-              )}
-            </div>
-          </PageSection>
+
+          <Drawer isExpanded={true} isInline={true}>
+            <DrawerContent
+              panelContent={
+                <DrawerPanelContent isResizable={true} defaultSize="50%">
+                  <DrawerPanelBody style={{ padding: 0 }}>
+                    <div className='editor-container'>
+                      {kaotoEmbeddedEditorFile && (
+                        <EmbeddedEditor
+                          ref={kaotoEditorRef}
+                          file={kaotoEmbeddedEditorFile}
+                          channelType={ChannelType.ONLINE}
+                          editorEnvelopeLocator={kaotoEditorEnvelopeLocator}
+                          locale={'en'}
+                        />
+                      )}
+                    </div>
+                  </DrawerPanelBody>
+                </DrawerPanelContent>
+              }
+            >
+              <DrawerContentBody>
+                <div className='editor-container'>
+                  {textEmbeddedEditorFile && (
+                    <EmbeddedEditor
+                      ref={textEditorRef}
+                      file={textEmbeddedEditorFile}
+                      channelType={ChannelType.ONLINE}
+                      editorEnvelopeLocator={textEditorEnvelopeLocator}
+                      locale={'en'}
+                    />
+                  )}
+                </div>
+              </DrawerContentBody>
+            </DrawerContent>
+          </Drawer>
         </>
       )}
     </Page>

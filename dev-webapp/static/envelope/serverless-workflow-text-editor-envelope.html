@@ -5,7 +5,7 @@
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~        http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,17 +15,28 @@
   -->
 
 <!DOCTYPE html>
-<html lang="en" class="pf-m-redhat-font">
+<html lang="en">
   <head>
-    <title>Kaoto Editor Showcase</title>
+    <style>
+      html,
+      body,
+      div#envelope-app {
+        margin: 0;
+        border: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <title></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href="resources/style.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.svg" />
   </head>
   <body>
-    <div id="app"></div>
-    <script src="index.js"></script>
+    <div id="envelope-app"></div>
+    <script src="serverless-workflow-text-editor-envelope.js"></script>
   </body>
 </html>

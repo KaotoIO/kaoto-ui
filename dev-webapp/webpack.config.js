@@ -29,6 +29,7 @@ module.exports = () => {
     entry: {
       index: path.resolve(__dirname, './src/index.tsx'),
       'kaoto-editor-envelope': path.resolve(__dirname, './src/envelope/KaotoEditorEnvelopeApp.ts'),
+      'serverless-workflow-text-editor-envelope': path.resolve(__dirname, './src/envelope/ServerlessWorkflowTextEditorEnvelopeApp.ts'),
     },
     output: {
       path: path.resolve('./dist/dev-webapp'),
@@ -76,6 +77,10 @@ module.exports = () => {
           {
             from: path.resolve(__dirname, './static/envelope/kaoto-editor-envelope.html'),
             to: './kaoto-editor-envelope.html',
+          },
+          {
+            from: path.resolve(__dirname, './static/envelope/serverless-workflow-text-editor-envelope.html'),
+            to: './serverless-workflow-text-editor-envelope.html',
           },
         ],
       }),
