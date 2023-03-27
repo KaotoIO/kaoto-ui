@@ -1,12 +1,11 @@
 describe('Test for catalog actions', () => {
-
     beforeEach(() => {
         cy.intercept('/v1/integrations/dsls').as('getDSLs');
         cy.intercept('/v1/view-definitions').as('getViewDefinitions');
         cy.intercept('/v1/integrations*').as('getIntegration');
 
         cy.openHomePage();
-        cy.uploadInitialState('EipAction.yaml');
+        cy.uploadFixture('EipAction.yaml');
 
         cy.zoomOutXTimes(3)
     });
