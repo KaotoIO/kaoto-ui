@@ -136,7 +136,7 @@ export const App = () => {
           <Drawer isExpanded={true} isInline={true}>
             <DrawerContent
               panelContent={
-                <DrawerPanelContent isResizable={true} defaultSize="50%">
+                <DrawerPanelContent isResizable={true} defaultSize="70%">
                   <DrawerPanelBody style={{ padding: 0 }}>
                     <div className='editor-container'>
                       {kaotoEmbeddedEditorFile && (

@@ -19,17 +19,20 @@ const CopyPlugin = require('copy-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-const { DefinePlugin } = require('webpack');
+const { DefinePlugin, container } = require('webpack');
 const { inspect } = require('util');
 
 module.exports = () => {
-  const hola = {
+  const config = {
     mode: 'development',
     devtool: 'inline-source-map',
     entry: {
       index: path.resolve(__dirname, './src/index.tsx'),
       'kaoto-editor-envelope': path.resolve(__dirname, './src/envelope/KaotoEditorEnvelopeApp.ts'),
-      'serverless-workflow-text-editor-envelope': path.resolve(__dirname, './src/envelope/ServerlessWorkflowTextEditorEnvelopeApp.ts'),
+      'serverless-workflow-text-editor-envelope': path.resolve(
+        __dirname,
+        './src/envelope/ServerlessWorkflowTextEditorEnvelopeApp.ts'
+      ),
     },
     output: {
       path: path.resolve('./dist/dev-webapp'),
@@ -40,8 +43,8 @@ module.exports = () => {
       rules: [
         {
           test: /\.js$/,
-          enforce: "pre",
-          use: ["source-map-loader"],
+          enforce: 'pre',
+          use: ['source-map-loader'],
         },
         {
           test: /\.(tsx|ts|jsx)?$/,
@@ -57,11 +60,7 @@ module.exports = () => {
         },
         {
           test: /\.(sa|sc|c)ss$/i,
-          use: [
-            'style-loader',
-            'css-loader',
-            'sass-loader',
-          ],
+          use: ['style-loader', 'css-loader', 'sass-loader'],
         },
         {
           test: /\.(ttf|eot|woff|woff2)$/,
@@ -84,7 +83,10 @@ module.exports = () => {
             to: './kaoto-editor-envelope.html',
           },
           {
-            from: path.resolve(__dirname, './static/envelope/serverless-workflow-text-editor-envelope.html'),
+            from: path.resolve(
+              __dirname,
+              './static/envelope/serverless-workflow-text-editor-envelope.html'
+            ),
             to: './serverless-workflow-text-editor-envelope.html',
           },
         ],
@@ -106,7 +108,26 @@ module.exports = () => {
         includeAliases: ['path'],
       }),
       new DefinePlugin({
-        'process.env.KAOTO_API': JSON.stringify("http://localhost:8081")
+        'process.env.KAOTO_API': JSON.stringify('http://localhost:8081'),
+      }),
+      new container.ModuleFederationPlugin({
+        name: 'kaoto-combined-editor',
+        filename: 'remoteEntry.js',
+        library: { type: 'var', name: 'kaoto-combined-editor' },
+        shared: {
+          react: {
+            singleton: true,
+            eager: true,
+            strictVersion: true,
+            requiredVersion: '18.2.0',
+          },
+          'react-dom': {
+            singleton: true,
+            eager: true,
+            strictVersion: true,
+            requiredVersion: '18.2.0',
+          },
+        },
       }),
     ],
     resolve: {
@@ -133,7 +154,7 @@ module.exports = () => {
     },
   };
 
-  console.log(inspect(hola, { colors: true, depth: null }));
+  console.log(inspect(config, { colors: true, depth: null }));
 
-  return hola;
+  return config;
 };
