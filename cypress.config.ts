@@ -14,6 +14,7 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
     viewportWidth: 1920,
     viewportHeight: 1080,
+    scrollBehavior: false,
   },
 
   component: {

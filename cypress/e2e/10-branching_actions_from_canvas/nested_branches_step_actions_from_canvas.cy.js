@@ -5,7 +5,7 @@ describe('User completes normal actions on steps in a branch', () => {
         cy.intercept('/v1/integrations*').as('getIntegration');
 
         cy.openHomePage();
-        cy.uploadInitialState('EipAction.yaml');
+        cy.uploadFixture('EipAction.yaml');
 
         cy.zoomOutXTimes(3)
         // Blocked due to: https://github.com/KaotoIO/kaoto-ui/issues/1381

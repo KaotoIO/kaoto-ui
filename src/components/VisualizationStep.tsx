@@ -235,8 +235,8 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             {/* PLACEHOLDER HINT FOR EMPTY STATE */}
             {VisualizationService.isFirstAndOnlyNode(data) && (
               <div className={'nodeHintWrapper'} data-testid={'placeholderHint'}>
-                <div className={'nodeHintArrow'}>⤹</div>
-                <div>click on a node to add a step.</div>
+                <div className={'nodeHintArrow'} data-testid='nodeHintArrow'>⤹</div>
+                <div data-testid='nodeHintText'>click on a node to add a step.</div>
               </div>
             )}
 

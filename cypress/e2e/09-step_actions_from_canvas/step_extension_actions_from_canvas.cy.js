@@ -5,7 +5,7 @@ describe('Test for Step extensions', () => {
         cy.intercept('/v1/integrations*').as('getIntegration');
 
         cy.openHomePage();
-        cy.uploadInitialState('TimerLogCamelRoute.yaml');
+        cy.uploadFixture('TimerLogCamelRoute.yaml');
 
         cy.zoomOutXTimes(3)
     });

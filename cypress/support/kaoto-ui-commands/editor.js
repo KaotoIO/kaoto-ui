@@ -1,8 +1,11 @@
 import 'cypress-file-upload';
 
-Cypress.Commands.add('uploadInitialState', (fixture) => {
-    cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.wait('@getIntegration');
+Cypress.Commands.add('uploadFixture', (fixture, initial) => {
+    initial = initial ?? true;
+    if (initial) {
+        cy.get('[data-testid="toolbar-show-code-btn"]').click();
+        cy.wait('@getIntegration');
+    }
     cy.get('[data-testid="sourceCode--clearButton"]').should('be.visible').click({ force: true });
     cy.get('.pf-c-code-editor__main').should('be.visible');
     cy.get('.pf-c-code-editor__main > input').attachFile(fixture);
@@ -33,6 +36,13 @@ Cypress.Commands.add('editorDeleteLine', (line, repeatCount) => {
             '{backspace}',
             { delay: 1 }
         );
+});
+
+Cypress.Commands.add('editorClickUndoXTimes', (times) => {
+    times = times ?? 1;
+    Cypress._.times(times, () => {
+        cy.get('[data-testid="sourceCode--undoButton"]').click();
+    })
 });
 
 Cypress.Commands.add('syncUpCodeChanges', () => {

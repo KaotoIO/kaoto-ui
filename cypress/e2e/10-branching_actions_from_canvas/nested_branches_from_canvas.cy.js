@@ -5,7 +5,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
         cy.intercept('/v1/integrations*').as('getIntegration');
 
         cy.openHomePage();
-        cy.uploadInitialState('EipAction.yaml');
+        cy.uploadFixture('EipAction.yaml');
 
         cy.zoomOutXTimes(3)
     });
