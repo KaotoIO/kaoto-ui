@@ -26,7 +26,7 @@ import {
   IVizStepNode,
   IVizStepNodeData,
 } from '@kaoto/types';
-import { findPath, getDeepValue, getRandomArbitraryNumber } from '@kaoto/utils';
+import { findPath, getDeepValue } from '@kaoto/utils';
 
 /**
  * A collection of business logic to handle logical model objects of the integration,
@@ -459,19 +459,20 @@ export class StepsService {
    * @param steps
    * @param branchSteps
    */
-  static regenerateUuids(steps: IStepProps[], branchSteps: boolean = false): IStepProps[] {
+  static regenerateUuids(steps: IStepProps[], prefix: string = ''): IStepProps[] {
     let newSteps = steps.slice();
 
-    newSteps.forEach((step, idx) => {
-      step.UUID = `${step.name}-${idx}`;
-      if (branchSteps) step.UUID = `${step.name}-${idx}-${getRandomArbitraryNumber()}`;
+    newSteps.forEach((step, stepIndex) => {
+      step.UUID = `${prefix}${step.name}-${stepIndex}`;
+
       if (this.containsBranches(step)) {
-        step.branches!.forEach((branch) => {
-          branch.branchUuid = `b-${idx}-${getRandomArbitraryNumber()}`;
-          return newSteps.concat(StepsService.regenerateUuids(branch.steps, true));
+        step.branches?.forEach((branch, branchIndex) => {
+          branch.branchUuid = `${step.UUID}|branch-${branchIndex}`;
+          return newSteps.concat(StepsService.regenerateUuids(branch.steps, `${branch.branchUuid}|`));
         });
       }
     });
+
     return newSteps;
   }
 

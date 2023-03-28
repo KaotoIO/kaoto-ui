@@ -1,6 +1,7 @@
 import branchSteps from '../store/data/branchSteps';
 import nestedBranch from '../store/data/kamelet.nested-branch.steps';
 import steps from '../store/data/steps';
+import { integrationSteps } from '../stubs';
 import { StepsService } from './stepsService';
 import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IStepPropsBranch, IStepPropsParameters, IViewProps } from '@kaoto/types';
@@ -140,10 +141,187 @@ describe('stepsService', () => {
   /**
    * regenerateUuids
    */
-  it('regenerateUuids(): should regenerate UUIDs for an array of steps', () => {
-    expect(StepsService.regenerateUuids(steps)[0].UUID).toBeDefined();
-    expect(StepsService.regenerateUuids(branchSteps)[0].UUID).toBeDefined();
-    expect(StepsService.regenerateUuids(branchSteps)[1].UUID).toBeDefined();
+  describe('regenerateUuids', () => {
+    it('should generate UUIDs for the main steps array', () => {
+      const result = StepsService.regenerateUuids(integrationSteps);
+
+      expect(result).toMatchObject<Partial<IStepProps>[]>([
+        { UUID: 'timer-0' },
+        { UUID: 'choice-1' },
+      ]);
+    });
+
+    it('should generate UUIDs for branches', () => {
+      const result = StepsService.regenerateUuids(integrationSteps);
+
+      expect(result).toMatchObject<Partial<IStepProps>[]>([
+        { UUID: 'timer-0', branches: [] },
+        {
+          UUID: 'choice-1',
+          branches: [
+            { branchUuid: 'choice-1|branch-0', steps: expect.any(Array), identifier: 'true path' },
+            { branchUuid: 'choice-1|branch-1', steps: expect.any(Array), identifier: 'otherwise' },
+          ],
+        },
+      ]);
+    });
+
+    it('should generate UUIDs for nested steps', () => {
+      const result = StepsService.regenerateUuids(integrationSteps);
+
+      expect(result).toMatchObject<Partial<IStepProps>[]>([
+        { UUID: 'timer-0', branches: [] },
+        {
+          UUID: 'choice-1',
+          branches: [
+            {
+              branchUuid: 'choice-1|branch-0',
+              steps: [
+                {
+                  UUID: 'choice-1|branch-0|log-0',
+                  minBranches: 0,
+                  maxBranches: 0,
+                  name: 'log',
+                  type: 'MIDDLE',
+                },
+              ],
+              identifier: 'true path',
+            },
+            {
+              branchUuid: 'choice-1|branch-1',
+              steps: [
+                {
+                  UUID: 'choice-1|branch-1|log-0',
+                  minBranches: 0,
+                  maxBranches: 0,
+                  name: 'log',
+                  type: 'MIDDLE',
+                },
+              ],
+              identifier: 'otherwise',
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should generate UUIDs for nested steps at two levels deep', () => {
+      const copiedIntegrationSteps = JSON.parse(JSON.stringify(integrationSteps));
+      const nestedIntegrationSteps: IStepProps[] = copiedIntegrationSteps;
+      nestedIntegrationSteps[1].branches![0].steps = integrationSteps;
+
+      const result = StepsService.regenerateUuids(nestedIntegrationSteps);
+
+      expect(result).toMatchObject<Partial<IStepProps>[]>([
+        { UUID: 'timer-0', branches: [] },
+        {
+          UUID: 'choice-1',
+          branches: [
+            {
+              branchUuid: 'choice-1|branch-0',
+              steps: [
+                {
+                  UUID: 'choice-1|branch-0|timer-0',
+                  minBranches: 0,
+                  maxBranches: 0,
+                  name: 'timer',
+                  type: 'START',
+                  branches: [],
+                },
+                {
+                  UUID: 'choice-1|branch-0|choice-1',
+                  minBranches: 1,
+                  maxBranches: -1,
+                  name: 'choice',
+                  type: 'MIDDLE',
+                  branches: [
+                    {
+                      branchUuid: 'choice-1|branch-0|choice-1|branch-0',
+                      steps: [
+                        {
+                          UUID: 'choice-1|branch-0|choice-1|branch-0|log-0',
+                          minBranches: 0,
+                          maxBranches: 0,
+                          name: 'log',
+                          type: 'MIDDLE',
+                        },
+                      ],
+                      identifier: 'true path',
+                    },
+                    {
+                      branchUuid: 'choice-1|branch-0|choice-1|branch-1',
+                      steps: [
+                        {
+                          UUID: 'choice-1|branch-0|choice-1|branch-1|log-0',
+                          minBranches: 0,
+                          maxBranches: 0,
+                          name: 'log',
+                          type: 'MIDDLE',
+                        },
+                      ],
+                      identifier: 'otherwise',
+                    },
+                  ],
+                },
+              ],
+              identifier: 'true path',
+            },
+            {
+              branchUuid: 'choice-1|branch-1',
+              steps: [
+                {
+                  UUID: 'choice-1|branch-1|log-0',
+                  minBranches: 0,
+                  maxBranches: 0,
+                  name: 'log',
+                  type: 'MIDDLE',
+                },
+              ],
+              identifier: 'otherwise',
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should regenerate UUIDs when a branch is removed', () => {
+      const localIntegrationSteps = integrationSteps.slice(1);
+      const result = StepsService.regenerateUuids(localIntegrationSteps);
+
+      expect(result).toMatchObject<Partial<IStepProps>[]>([
+        {
+          UUID: 'choice-0',
+          branches: [
+            {
+              branchUuid: 'choice-0|branch-0',
+              steps: [
+                {
+                  UUID: 'choice-0|branch-0|log-0',
+                  minBranches: 0,
+                  maxBranches: 0,
+                  name: 'log',
+                  type: 'MIDDLE',
+                },
+              ],
+              identifier: 'true path',
+            },
+            {
+              branchUuid: 'choice-0|branch-1',
+              steps: [
+                {
+                  UUID: 'choice-0|branch-1|log-0',
+                  minBranches: 0,
+                  maxBranches: 0,
+                  name: 'log',
+                  type: 'MIDDLE',
+                },
+              ],
+              identifier: 'otherwise',
+            },
+          ],
+        },
+      ]);
+    });
   });
 
   it('supportsBranching(): should determine if the provided step supports branching', () => {
@@ -171,7 +349,7 @@ describe('stepsService', () => {
     it('should return "false" for empty views', () => {
       const result = StepsService.hasCustomStepExtension(
         { UUID: 'random-id' } as IStepProps,
-        [] as IViewProps[],
+        [] as IViewProps[]
       );
 
       expect(result).toBeFalsy();
@@ -180,7 +358,7 @@ describe('stepsService', () => {
     it('should return "false" for a matching view with no URL available', () => {
       const result = StepsService.hasCustomStepExtension(
         { UUID: 'random-id' } as IStepProps,
-        [{ step: 'random-id', url: '' }] as IViewProps[],
+        [{ step: 'random-id', url: '' }] as IViewProps[]
       );
 
       expect(result).toBeFalsy();
@@ -189,7 +367,7 @@ describe('stepsService', () => {
     it('should return "false" for non-matching views', () => {
       const result = StepsService.hasCustomStepExtension(
         { UUID: 'random-id' } as IStepProps,
-        [{ step: 'not-a-random-id', url: '/dev/null' }] as IViewProps[],
+        [{ step: 'not-a-random-id', url: '/dev/null' }] as IViewProps[]
       );
 
       expect(result).toBeFalsy();
@@ -198,7 +376,7 @@ describe('stepsService', () => {
     it('should return "true" for matching views and an URL available', () => {
       const result = StepsService.hasCustomStepExtension(
         { UUID: 'random-id' } as IStepProps,
-        [{ step: 'random-id', url: '/dev/null' }] as IViewProps[],
+        [{ step: 'random-id', url: '/dev/null' }] as IViewProps[]
       );
 
       expect(result).toBeTruthy();
