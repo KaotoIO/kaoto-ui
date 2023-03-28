@@ -1,3 +1,6 @@
+import './App.css';
+import { useIntegrationJsonStore } from './store';
+import { bindUndoRedo } from './utils';
 import { AlertProvider, AppLayout, MASLoading } from '@kaoto/layout';
 import { AppRoutes } from '@kaoto/routes';
 import '@patternfly/patternfly/patternfly-theme-dark.css';
@@ -12,9 +15,6 @@ import '@patternfly/patternfly/utilities/Text/text.css';
 import { Suspense } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'reactflow/dist/style.css';
-import './App.css';
-import { useIntegrationJsonStore } from './store';
-import { bindUndoRedo } from './utils';
 
 const { undo, redo } = useIntegrationJsonStore.temporal.getState();
 
