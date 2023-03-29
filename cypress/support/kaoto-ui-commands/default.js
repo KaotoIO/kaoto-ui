@@ -8,7 +8,7 @@ Cypress.Commands.add('openHomePage', () => {
 
 Cypress.Commands.add('zoomOutXTimes', (times) => {
     times = times ?? 1;
-    Cypress._.times(times, () => {
+    Array.from({ length: times }, (_, i) => {
         cy.get('.react-flow__controls-button.react-flow__controls-zoomout').click()
     })
 });

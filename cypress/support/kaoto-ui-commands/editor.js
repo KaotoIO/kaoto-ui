@@ -20,7 +20,7 @@ Cypress.Commands.add('openCodeEditor', () => {
 
 Cypress.Commands.add('editorAddText', (line, text) => {
     const arr = text.split('\n');
-    Cypress._.times(arr.length, (i) => {
+    Array.from({ length: arr.length }, (_, i) => {
         cy.get('.code-editor')
             .click()
             .type('{pageUp}{pageUp}' + '{downArrow}'.repeat(line + i) + '{enter}{upArrow}' + arr[i], {
@@ -45,7 +45,7 @@ Cypress.Commands.add('editorDeleteLine', (line, repeatCount) => {
 
 Cypress.Commands.add('editorClickUndoXTimes', (times) => {
     times = times ?? 1;
-    Cypress._.times(times, () => {
+    Array.from({ length: times }, (_, i) => {
         cy.get('[data-testid="sourceCode--undoButton"]').click();
     })
 });
