@@ -104,7 +104,7 @@ describe('VisualizationStepViews', () => {
     act(() => {
       fireEvent.click(changeModelTrigger);
 
-      jest.advanceTimersByTime(500);
+      jest.advanceTimersByTime(1_000);
       expect(saveConfigSpy).toHaveBeenCalledTimes(2);
     });
   });

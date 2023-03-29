@@ -530,7 +530,7 @@ export class StepsService {
    * @param step
    * @param newValues
    */
-  updateStepParameters(step: IStepProps, newValues: { [s: string]: unknown } | ArrayLike<unknown>) {
+  updateStepParameters(step: IStepProps, newValues: Record<string, unknown>) {
     let newStep: IStepProps = step;
     const newStepParameters = newStep.parameters?.slice();
 
