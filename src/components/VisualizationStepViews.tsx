@@ -17,13 +17,13 @@ import {
   TabTitleText,
 } from '@patternfly/react-core';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import debounce from 'lodash.debounce';
-import { lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, useCallback, useEffect, useMemo, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 export interface IStepViewsProps {
   isPanelExpanded: boolean;
-  onClosePanelClick: (e: any) => void;
-  saveConfig: (newValues: any) => void;
+  onClosePanelClick: () => void;
+  saveConfig: (step: IStepProps, newValues: Record<string, unknown>) => void;
   step: IStepProps;
 }
 
@@ -33,7 +33,7 @@ const VisualizationStepViews = ({
   saveConfig,
   step,
 }: IStepViewsProps) => {
-  const debouncedSaveConfig = useRef(debounce(saveConfig, 500, { leading: false, trailing: true }));
+  const debouncedSaveConfig = useDebouncedCallback(saveConfig, 1_000, { leading: false, trailing: true });
   const integrationJsonStore = useIntegrationJsonStore();
   const views = integrationJsonStore.views.filter((view) => view.step === step.UUID);
 
@@ -100,14 +100,11 @@ const VisualizationStepViews = ({
     setActiveTabKey(tabIndex);
   }, []);
 
-  const onChangeModel = useCallback(
-    (configuration: unknown, isValid: boolean): void => {
-      if (isValid) {
-        debouncedSaveConfig.current(configuration);
-      }
-    },
-    [debouncedSaveConfig]
-  );
+  const onChangeModel = (configuration: Record<string, unknown>, isValid: boolean): void => {
+    if (isValid) {
+      debouncedSaveConfig(step, configuration);
+    }
+  };
 
   return (
     <>
@@ -167,7 +164,7 @@ const VisualizationStepViews = ({
           {views?.length! > 0 &&
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
-              const kaotoApi = stepsService.createKaotoApi(step, saveConfig, alertKaoto);
+              const kaotoApi = stepsService.createKaotoApi(step, (values) => {saveConfig(step, values)}, alertKaoto);
 
               return (
                 <Tab

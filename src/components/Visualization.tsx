@@ -144,12 +144,9 @@ const Visualization = () => {
    * Handles Step View configuration changes
    * @param newValues
    */
-  const saveConfig = useCallback(
-    (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => {
-      stepsService.updateStepParameters(selectedStep, newValues);
-    },
-    [selectedStep, stepsService]
-  );
+  const saveConfig = useCallback((step: IStepProps, newValues: Record<string, unknown>) => {
+    stepsService.updateStepParameters(step, newValues);
+  }, [stepsService]);
 
   return (
     <StepErrorBoundary>

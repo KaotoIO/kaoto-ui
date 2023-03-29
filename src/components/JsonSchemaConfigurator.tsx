@@ -24,7 +24,7 @@ type JsonSchemaConfiguratorProps = {
   schema: any;
   configuration: any;
   parametersOrder: string[];
-  onChangeModel: (configuration: unknown, isValid: boolean) => void;
+  onChangeModel: (configuration: Record<string, unknown>, isValid: boolean) => void;
 };
 
 export const JsonSchemaConfigurator = ({
@@ -41,7 +41,7 @@ export const JsonSchemaConfigurator = ({
     <AutoForm
       schema={bridge}
       model={configuration}
-      onChangeModel={(model: any) => {
+      onChangeModel={(model: Record<string, unknown>) => {
         if (model === previousModel.current) return;
         onChangeModel(model, true);
         previousModel.current = model;
