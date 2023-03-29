@@ -7,8 +7,7 @@ describe('editing properties', () => {
     cy.openHomePage();
   });
 
-  // Blocked by issue #1576 -> https://github.com/KaotoIO/kaoto-ui/issues/1576
-  it.skip('loads the YAML editor', () => {
+  it('loads the YAML editor', () => {
     cy.uploadFixture('TimerKafka.yaml');
 
     // Configure timer - source step
@@ -35,6 +34,8 @@ describe('editing properties', () => {
     cy.checkCodeSpanLine('password', 'password');
 
     cy.closeStepConfigurationTab();
+
+    // CHECK that previous change is still there
     cy.checkCodeSpanLine('period:', '3000');
   });
 });
