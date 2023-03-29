@@ -25,18 +25,22 @@ describe('User completes normal actions on steps in a branch', () => {
     it('User configures a step in a branch', () => {
         cy.openStepConfigurationTab('amqp');
 
-        cy.interactWithConfigInputObject('includeSentJMSMessageID');
-        cy.interactWithConfigInputObject('password', 'qwerty');
+        cy.interactWithConfigInputObject('allowNullBody');
+        cy.interactWithConfigInputObject('acknowledgementModeName', 'test-value');
 
         // CHECK that the step yaml is updated
-        cy.checkCodeSpanLine('includeSentJMSMessageID', 'true');
-        cy.checkCodeSpanLine('password', 'qwerty');
+        cy.checkCodeSpanLine('allowNullBody', 'false');
+        cy.checkCodeSpanLine('acknowledgementModeName', 'test-value');
     });
 
     it(' User deletes a step in a branch', () => {
         cy.deleteStep('amqp');
-        // Blocked due to: https://github.com/KaotoIO/kaoto-ui/issues/1381
-        // cy.syncUpCodeChanges();
+
+        // CHECK that amqp step is deleted and empty step is added
+        cy.get('[data-testid="viz-step-amqp"]').should('not.exist');
+        cy.get('[data-testid="viz-step-slot"]').should('have.length', 2).and('be.visible');
+
+        cy.syncUpCodeChanges();
 
         // CHECK that amqp step is deleted and empty step is added
         cy.get('[data-testid="viz-step-amqp"]').should('not.exist');

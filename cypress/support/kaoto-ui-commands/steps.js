@@ -1,8 +1,9 @@
 import 'cypress-file-upload';
 
-Cypress.Commands.add('dragAndDropFromCatalog', (source, target, catalog, targetIndex) => {
+Cypress.Commands.add('dragAndDropFromCatalog', (source, target, catalog, targetIndex, testError) => {
     targetIndex = targetIndex ?? 0;
     catalog = catalog ?? 'actions';
+    testError = testError ?? false;
     const dataTransfer = new DataTransfer();
     cy.get('[data-testid="toolbar-step-catalog-btn"]').click();
     cy.get(`[data-testid="catalog-step-${catalog}"]`).click();
@@ -13,6 +14,9 @@ Cypress.Commands.add('dragAndDropFromCatalog', (source, target, catalog, targetI
     cy.get(`[data-testid="viz-step-${target}"]`).eq(targetIndex).trigger('drop', {
         dataTransfer,
     });
+    if (!testError) {
+        cy.waitVisualizationUpdate();
+    }
 });
 
 Cypress.Commands.add('replaceEmptyStepMiniCatalog', (step, stepIndex) => {
@@ -60,7 +64,9 @@ Cypress.Commands.add('openStepConfigurationTab', (step, stepIndex) => {
 });
 
 Cypress.Commands.add('closeStepConfigurationTab', () => {
-    cy.get('.pf-c-button.pf-m-plain').eq(0).click();
+    cy.get('[data-testid="kaoto-right-drawer"]').within(() => {
+        cy.get('.pf-c-drawer__close > .pf-c-button').click();
+    });
 });
 
 Cypress.Commands.add('interactWithConfigInputObject', (inputName, value) => {

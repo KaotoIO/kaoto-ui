@@ -11,7 +11,7 @@ describe('Test for catalog actions', () => {
     });
 
     it("User drags and drops an invalid step onto a nested branch step", () => {
-        cy.dragAndDropFromCatalog('timer', 'digitalocean', 'start');
+        cy.dragAndDropFromCatalog('timer', 'digitalocean', 'start', 0, true);
 
         // CHECK digitalocean step is visible
         cy.get('[data-testid="viz-step-digitalocean"]').should('be.visible');

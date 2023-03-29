@@ -1,16 +1,21 @@
 import 'cypress-file-upload';
 
-Cypress.Commands.add('uploadFixture', (fixture, initial) => {
-    initial = initial ?? true;
-    if (initial) {
-        cy.get('[data-testid="toolbar-show-code-btn"]').click();
-        cy.wait('@getIntegration');
+Cypress.Commands.add('uploadFixture', (fixture, open) => {
+    open = open ?? true;
+    if (open) {
+        cy.openCodeEditor();
     }
     cy.get('[data-testid="sourceCode--clearButton"]').should('be.visible').click({ force: true });
     cy.get('.pf-c-code-editor__main').should('be.visible');
     cy.get('.pf-c-code-editor__main > input').attachFile(fixture);
     cy.syncUpCodeChanges();
     cy.waitVisualizationUpdate();
+});
+
+Cypress.Commands.add('openCodeEditor', () => {
+    cy.get('[data-testid="toolbar-show-code-btn"]').click();
+    cy.get('[data-testid="toolbar-show-code-btn"]').trigger('mouseleave');
+    cy.wait('@getIntegration');
 });
 
 Cypress.Commands.add('editorAddText', (line, text) => {

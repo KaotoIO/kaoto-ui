@@ -1,5 +1,5 @@
 describe('Test for undo/redo actions on code-editor', () => {
-  before(() => {
+  beforeEach(() => {
     cy.intercept('/v1/integrations/dsls').as('getDSLs');
     cy.intercept('/v1/view-definitions').as('getViewDefinitions');
     cy.intercept('/v1/integrations*').as('getIntegration');
