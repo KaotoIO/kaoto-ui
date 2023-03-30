@@ -1,29 +1,31 @@
 describe('Settings: Appearance', () => {
   beforeEach(() => {
-    let url = Cypress.config().baseUrl;
-    cy.visit(url);
-    cy.get('.pf-c-toolbar__content-section').click();
-    cy.get('[data-testid="toolbar-kebab-dropdown-btn"]').click();
-    cy.get('[data-testid="kaotoToolbar-kebab__appearance"]').click();
+    cy.intercept('/v1/integrations/dsls').as('getDSLs');
+    cy.intercept('/v1/view-definitions').as('getViewDefinitions');
+    cy.intercept('/v1/integrations*').as('getIntegration');
+
+    cy.openHomePage();
+    cy.openAppearanceModal();
   });
 
   it('Close and reopen appearance modal', () => {
-    // close
-    cy.get('#pf-modal-part-3 > .pf-c-button').click();
+    cy.closeAppearanceModal();
+    cy.openAppearanceModal();
 
-    // reopen
-    cy.get('.pf-c-toolbar__content-section').click();
-    cy.get('[data-testid="toolbar-kebab-dropdown-btn"]').click();
-    cy.get('[data-testid="kaotoToolbar-kebab__appearance"]').click();
+    // Check that the modal is open
     cy.get('[data-testid="appearance-modal"').should('be.visible');
   });
 
   it('enables dark mode in Kaoto', () => {
-    cy.get('[data-testid="appearance--theme-switch"]').click({ force: true });
+    cy.switchAppearanceTheme()
+
+    // Check that theme is dark
     cy.get('.pf-theme-dark').should('exist');
     cy.get('html').should('have.class', 'pf-theme-dark').and('have.css', 'color-scheme', 'dark');
 
-    cy.get('[data-testid="appearance--theme-switch"]').click({ force: true });
+    cy.switchAppearanceTheme()
+
+    // Check that theme is not dark
     cy.get('.pf-theme-dark').should('not.exist');
     cy.get('html')
       .should('not.have.class', 'pf-theme-dark')
@@ -31,17 +33,18 @@ describe('Settings: Appearance', () => {
   });
 
   it('enables light mode in code editor', () => {
-    cy.get('[data-testid="appearance--theme-editor-switch"]').click({ force: true });
-    cy.get('#pf-modal-part-3 > .pf-c-button').click();
+    cy.switchAppearanceTheme('editor')
+    cy.closeAppearanceModal();
+    cy.openCodeEditor();
 
-    cy.get('[data-testid="toolbar-show-code-btn"]').click();
+    // Check that theme is not dark
     cy.get('.monaco-scrollable-element').should('not.have.class', 'vs-dark');
 
-    cy.get('.pf-c-toolbar__content-section').click();
-    cy.get('[data-testid="toolbar-kebab-dropdown-btn"]').click();
-    cy.get('[data-testid="kaotoToolbar-kebab__appearance"]').click();
-    cy.get('[data-testid="appearance--theme-editor-switch"]').click({ force: true });
-    cy.get('#pf-modal-part-3 > .pf-c-button').click();
+    cy.openAppearanceModal();
+    cy.switchAppearanceTheme('editor')
+    cy.closeAppearanceModal();
+
+    // Check that theme is dark
     cy.get('.monaco-scrollable-element').should('have.class', 'vs-dark');
   });
 });

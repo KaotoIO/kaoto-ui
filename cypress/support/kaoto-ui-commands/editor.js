@@ -1,10 +1,9 @@
 import 'cypress-file-upload';
 
-Cypress.Commands.add('uploadFixture', (fixture, initial) => {
-    initial = initial ?? true;
-    if (initial) {
-        cy.get('[data-testid="toolbar-show-code-btn"]').click();
-        cy.wait('@getIntegration');
+Cypress.Commands.add('uploadFixture', (fixture, open) => {
+    open = open ?? true;
+    if (open) {
+        cy.openCodeEditor();
     }
     cy.get('[data-testid="sourceCode--clearButton"]').should('be.visible').click({ force: true });
     cy.get('.pf-c-code-editor__main').should('be.visible');
@@ -13,9 +12,15 @@ Cypress.Commands.add('uploadFixture', (fixture, initial) => {
     cy.waitVisualizationUpdate();
 });
 
+Cypress.Commands.add('openCodeEditor', () => {
+    cy.get('[data-testid="toolbar-show-code-btn"]').click();
+    cy.get('[data-testid="toolbar-show-code-btn"]').trigger('mouseleave');
+    cy.wait('@getIntegration');
+});
+
 Cypress.Commands.add('editorAddText', (line, text) => {
     const arr = text.split('\n');
-    Cypress._.times(arr.length, (i) => {
+    Array.from({ length: arr.length }).forEach((_, i) => {
         cy.get('.code-editor')
             .click()
             .type('{pageUp}{pageUp}' + '{downArrow}'.repeat(line + i) + '{enter}{upArrow}' + arr[i], {
@@ -40,9 +45,9 @@ Cypress.Commands.add('editorDeleteLine', (line, repeatCount) => {
 
 Cypress.Commands.add('editorClickUndoXTimes', (times) => {
     times = times ?? 1;
-    Cypress._.times(times, () => {
-        cy.get('[data-testid="sourceCode--undoButton"]').click();
-    })
+    Array.from({ length: times }).forEach(() => {
+        return cy.get('[data-testid="sourceCode--undoButton"]').click();
+    });
 });
 
 Cypress.Commands.add('syncUpCodeChanges', () => {
