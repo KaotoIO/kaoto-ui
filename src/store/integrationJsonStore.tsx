@@ -25,8 +25,8 @@ export interface IIntegrationJsonStore {
     pathToParentStep: string[] | undefined
   ) => void;
   replaceStep: (newStep: IStepProps, oldStepIndex?: number) => void;
-  setViews: (views: IViewProps[]) => void;
-  updateIntegration: (newInt?: any) => void;
+  updateIntegration: (newInt: IIntegration) => void;
+  updateViews: (views: IViewProps[]) => void;
   views: IViewProps[];
 }
 
@@ -162,9 +162,6 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
           },
         }));
       },
-      setViews: (viewData: IViewProps[]) => {
-        set({ views: viewData });
-      },
       updateIntegration: (newInt: IIntegration) => {
         let newIntegration = { ...get().integrationJson, ...newInt };
         const uuidSteps = StepsService.regenerateUuids(newIntegration.steps);
@@ -172,6 +169,9 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
         updateSteps(StepsService.extractNestedSteps(uuidSteps));
 
         return set({ integrationJson: { ...newIntegration, steps: uuidSteps } });
+      },
+      updateViews: (viewData: IViewProps[]) => {
+        set({ views: viewData });
       },
     }),
     {

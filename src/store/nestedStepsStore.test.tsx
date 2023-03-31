@@ -39,7 +39,7 @@ describe('nestedStepsStore', () => {
     expect(result.current.nestedSteps).toHaveLength(1);
 
     act(() => {
-      result.current.deleteStep('example-step');
+      result.current.deleteStep('raspberry');
     });
 
     expect(result.current.nestedSteps).toHaveLength(0);

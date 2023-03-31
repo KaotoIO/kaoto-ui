@@ -22,8 +22,8 @@ describe('integrationJsonStore', () => {
     const { result } = renderHook(() => useIntegrationJsonStore());
     act(() => {
       result.current.updateIntegration({
-        ...integrationJsonInitialState,
-        steps: [{ name: 'apple' }],
+        ...integrationJsonInitialState.integrationJson,
+        steps: [{ name: 'apple' }] as IStepProps[],
       });
 
       result.current.appendStep({
@@ -40,13 +40,13 @@ describe('integrationJsonStore', () => {
     const { result } = renderHook(() => useIntegrationJsonStore());
     act(() => {
       result.current.updateIntegration({
-        ...integrationJsonInitialState,
+        ...integrationJsonInitialState.integrationJson,
         steps: [
           {
             name: 'peach',
             branches: [{ steps: [{ name: 'a-branch-step' }] }],
           },
-        ],
+        ] as IStepProps[],
       });
     });
 
@@ -83,8 +83,12 @@ describe('integrationJsonStore', () => {
     const { result } = renderHook(() => useIntegrationJsonStore());
     act(() => {
       result.current.updateIntegration({
-        ...integrationJsonInitialState,
-        steps: [{ name: 'cantaloupe' }, { name: 'watermelon' }, { name: 'strawberry' }],
+        ...integrationJsonInitialState.integrationJson,
+        steps: [
+          { name: 'cantaloupe' },
+          { name: 'watermelon' },
+          { name: 'strawberry' },
+        ] as IStepProps[],
       });
       result.current.deleteStep(1);
     });
@@ -96,8 +100,8 @@ describe('integrationJsonStore', () => {
     const { result } = renderHook(() => useIntegrationJsonStore());
     act(() => {
       result.current.updateIntegration({
-        ...integrationJsonInitialState,
-        steps: [{ name: 'kiwi' }, { name: 'mango' }, { name: 'papaya' }],
+        ...integrationJsonInitialState.integrationJson,
+        steps: [{ name: 'kiwi' }, { name: 'mango' }, { name: 'papaya' }] as IStepProps[],
       });
 
       result.current.deleteSteps();
@@ -110,8 +114,8 @@ describe('integrationJsonStore', () => {
     const { result } = renderHook(() => useIntegrationJsonStore());
     act(() => {
       result.current.updateIntegration({
-        ...integrationJsonInitialState,
-        steps: [{ name: 'pear' }, { name: 'pineapple' }, { name: 'grape' }],
+        ...integrationJsonInitialState.integrationJson,
+        steps: [{ name: 'pear' }, { name: 'pineapple' }, { name: 'grape' }] as IStepProps[],
       });
       result.current.insertStep({ name: 'blackberry' } as IStepProps, 1);
     });
@@ -127,8 +131,8 @@ describe('integrationJsonStore', () => {
     const { result } = renderHook(() => useIntegrationJsonStore());
     act(() => {
       result.current.updateIntegration({
-        ...integrationJsonInitialState,
-        steps: [{ name: 'banana' }],
+        ...integrationJsonInitialState.integrationJson,
+        steps: [{ name: 'banana' }] as IStepProps[],
       });
 
       result.current.prependStep(0, { name: 'blueberry' } as IStepProps);
@@ -142,21 +146,18 @@ describe('integrationJsonStore', () => {
     const { result } = renderHook(() => useIntegrationJsonStore());
     act(() => {
       result.current.updateIntegration({
-        ...integrationJsonInitialState,
-        integrationJson: {
-          ...integrationJsonInitialState.integrationJson,
-          steps: [
-            {
-              name: 'satsuma',
-            },
-            {
-              name: 'orange',
-              branches: [
-                { steps: [{ name: 'dragonfruit', branches: [{ steps: [{ name: 'guava' }] }] }] },
-              ],
-            },
-          ] as IStepProps[],
-        },
+        ...integrationJsonInitialState.integrationJson,
+        steps: [
+          {
+            name: 'satsuma',
+          },
+          {
+            name: 'orange',
+            branches: [
+              { steps: [{ name: 'dragonfruit', branches: [{ steps: [{ name: 'guava' }] }] }] },
+            ],
+          },
+        ] as IStepProps[],
       });
 
       // replace with an empty branch
@@ -182,8 +183,8 @@ describe('integrationJsonStore', () => {
     const { result } = renderHook(() => useIntegrationJsonStore());
     act(() => {
       result.current.updateIntegration({
-        ...integrationJsonInitialState,
-        steps: [{ name: 'blackcurrant' }, { name: 'grapefruit' }],
+        ...integrationJsonInitialState.integrationJson,
+        steps: [{ name: 'blackcurrant' }, { name: 'grapefruit' }] as IStepProps[],
       });
       result.current.replaceStep({ name: 'pomegranate' } as IStepProps, 1);
     });
@@ -192,10 +193,10 @@ describe('integrationJsonStore', () => {
     expect(result.current.integrationJson.steps[1].name).toEqual('pomegranate');
   });
 
-  it('setViews', () => {
+  it('updateViews', () => {
     const { result } = renderHook(() => useIntegrationJsonStore());
     act(() => {
-      result.current.setViews([
+      result.current.updateViews([
         {
           name: 'Integration View',
           type: 'generic',
@@ -216,8 +217,8 @@ describe('integrationJsonStore', () => {
     const { result } = renderHook(() => useIntegrationJsonStore());
     act(() => {
       result.current.updateIntegration({
-        ...integrationJsonInitialState,
-        steps: [{ name: 'mulberry' }, { name: 'lemon' }, { name: 'cranberry' }],
+        ...integrationJsonInitialState.integrationJson,
+        steps: [{ name: 'mulberry' }, { name: 'lemon' }, { name: 'cranberry' }] as IStepProps[],
       });
     });
 

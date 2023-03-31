@@ -568,7 +568,7 @@ export class StepsService {
    */
   updateViews() {
     fetchViews(useIntegrationJsonStore.getState().integrationJson.steps).then((views) => {
-      useIntegrationJsonStore.getState().setViews(views);
+      useIntegrationJsonStore.getState().updateViews(views);
     });
   }
 
