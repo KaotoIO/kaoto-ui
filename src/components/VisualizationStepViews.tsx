@@ -202,6 +202,7 @@ const VisualizationStepViews = ({
                         type: 'object',
                         properties: stepPropertySchema,
                         required: step.required,
+                        default: stepPropertyModel,
                       }}
                       configuration={stepPropertyModel}
                       parametersOrder={parametersOrder}

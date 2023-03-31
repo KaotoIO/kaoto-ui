@@ -7,10 +7,6 @@ import JSONSchemaBridge from 'uniforms-bridge-json-schema';
  * based on the incoming model data
  */
 export class CustomJsonSchemaBridge extends JSONSchemaBridge {
-  constructor(schema: any, validator: any) {
-    super(schema, validator);
-  }
-
   getField(name: string): Record<string, any> {
     const field = super.getField(name);
     const { defaultValue, description, ...props } = field;
