@@ -1,5 +1,4 @@
-import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
-import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { WebTracerProvider, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-web';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
