@@ -1,4 +1,5 @@
 import { useNestedStepsStore } from './nestedStepsStore';
+import { INestedStep } from '@kaoto/types';
 import { act, renderHook } from '@testing-library/react';
 
 describe('nestedStepsStore', () => {
@@ -11,14 +12,8 @@ describe('nestedStepsStore', () => {
     const { result } = renderHook(() => useNestedStepsStore());
     act(() => {
       result.current.addStep({
-        branchIndex: 0,
-        branchUuid: '',
-        parentStepUuid: '',
-        pathToBranch: [''],
-        pathToParentStep: [''],
-        pathToStep: [''],
-        stepUuid: '',
-      });
+        stepUuid: 'durian',
+      } as INestedStep);
     });
 
     expect(result.current.nestedSteps).toHaveLength(1);
@@ -37,14 +32,8 @@ describe('nestedStepsStore', () => {
     const { result } = renderHook(() => useNestedStepsStore());
     act(() => {
       result.current.addStep({
-        branchIndex: 0,
-        branchUuid: '',
-        parentStepUuid: '',
-        pathToBranch: [''],
-        pathToParentStep: [''],
-        pathToStep: [''],
-        stepUuid: 'example-step',
-      });
+        stepUuid: 'raspberry',
+      } as INestedStep);
     });
 
     expect(result.current.nestedSteps).toHaveLength(1);
@@ -61,45 +50,21 @@ describe('nestedStepsStore', () => {
     act(() => {
       result.current.updateSteps([
         {
-          branchIndex: 0,
-          branchUuid: '',
-          parentStepUuid: '',
-          pathToBranch: [''],
-          pathToParentStep: [''],
-          pathToStep: [''],
-          stepUuid: 'cherry',
+          stepUuid: 'plum',
         },
         {
-          branchIndex: 0,
-          branchUuid: '',
-          parentStepUuid: '',
-          pathToBranch: [''],
-          pathToParentStep: [''],
-          pathToStep: [''],
-          stepUuid: 'banana',
+          stepUuid: 'prune',
         },
-      ]);
+      ] as INestedStep[]);
     });
 
     expect(result.current.nestedSteps).toHaveLength(2);
     expect(result.current.nestedSteps).toEqual([
       {
-        branchIndex: 0,
-        branchUuid: '',
-        parentStepUuid: '',
-        pathToBranch: [''],
-        pathToParentStep: [''],
-        pathToStep: [''],
-        stepUuid: 'cherry',
+        stepUuid: 'plum',
       },
       {
-        branchIndex: 0,
-        branchUuid: '',
-        parentStepUuid: '',
-        pathToBranch: [''],
-        pathToParentStep: [''],
-        pathToStep: [''],
-        stepUuid: 'banana',
+        stepUuid: 'prune',
       },
     ]);
   });
