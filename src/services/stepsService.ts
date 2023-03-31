@@ -90,13 +90,13 @@ export class StepsService {
   deleteBranch(step: IStepProps, branchUuid: string) {
     const currentStepNested = this.getStepNested(step);
     if (currentStepNested) {
-      const newStep = {
+      const newParentStep = {
         ...step,
         branches: step.branches?.filter((b) => b.branchUuid !== branchUuid),
       };
       useIntegrationJsonStore
         .getState()
-        .replaceBranchParentStep(newStep, currentStepNested.pathToStep);
+        .replaceBranchParentStep(newParentStep, currentStepNested.pathToStep);
     } else {
       const oldStepIdx = this.findStepIdxWithUUID(
         step.UUID,
@@ -352,7 +352,7 @@ export class StepsService {
    * Handler for inserting a step, where `targetNode` is the
    * right-hand node. Ex: source -> {insert step here} -> target
    * @param targetNode
-   * @param newStep
+   * @param step
    */
   handleInsertStep(targetNode: IVizStepNode | undefined, step: IStepProps) {
     return fetchStepDetails(step.id).then((newStep) => {
@@ -568,7 +568,7 @@ export class StepsService {
    */
   updateViews() {
     fetchViews(useIntegrationJsonStore.getState().integrationJson.steps).then((views) => {
-      useIntegrationJsonStore.getState().setViews(views);
+      useIntegrationJsonStore.getState().updateViews(views);
     });
   }
 

@@ -13,22 +13,24 @@ import { create } from 'zustand';
 
 export interface IIntegrationJsonStore {
   appendStep: (newStep: IStepProps) => void;
-  deleteBranchStep: (newStep: IStepProps, originalStepIndex: number) => void;
+  deleteBranchStep: (newRootStep: IStepProps, rootStepIndex: number) => void;
   deleteIntegration: () => void;
   deleteStep: (index: number) => void;
   deleteSteps: () => void;
   insertStep: (newStep: IStepProps, insertIndex: number) => void;
   integrationJson: IIntegration;
   prependStep: (currentStepIdx: number, newStep: IStepProps) => void;
-  replaceBranchParentStep: (newStep: IStepProps, pathToParentStep: string[] | undefined) => void;
+  replaceBranchParentStep: (
+    newParentStep: IStepProps,
+    pathToParentStep: string[] | undefined
+  ) => void;
   replaceStep: (newStep: IStepProps, oldStepIndex?: number) => void;
-  setViews: (views: IViewProps[]) => void;
-  updateIntegration: (newInt?: any) => void;
+  updateIntegration: (newInt: IIntegration) => void;
+  updateViews: (views: IViewProps[]) => void;
   views: IViewProps[];
 }
 
-const initialState = {
-  branchSteps: {},
+export const integrationJsonInitialState = {
   integrationJson: {
     dsl: initDsl.name,
     metadata: { name: initialSettings.name, namespace: initialSettings.namespace },
@@ -41,7 +43,7 @@ const initialState = {
 export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
   temporal(
     (set, get) => ({
-      ...initialState,
+      ...integrationJsonInitialState,
       appendStep: (newStep) => {
         set((state) => {
           let newSteps = state.integrationJson.steps.slice();
@@ -56,11 +58,11 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
           };
         });
       },
-      deleteIntegration: () => set(initialState),
-      deleteBranchStep: (newStep: IStepProps, originalStepIndex: number) => {
+      deleteIntegration: () => set(integrationJsonInitialState),
+      deleteBranchStep: (newRootStep: IStepProps, rootStepIndex: number) => {
         let newSteps = get().integrationJson.steps.slice();
-        // replacing the origin parent of a deeply nested step
-        newSteps[originalStepIndex] = newStep;
+        // replacing the root step of a deeply nested step
+        newSteps[rootStepIndex] = newRootStep;
 
         const stepsWithNewUuids = StepsService.regenerateUuids(newSteps);
         const { updateSteps } = useNestedStepsStore.getState();
@@ -124,9 +126,9 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
           };
         });
       },
-      replaceBranchParentStep: (newStep, pathToParentStep) => {
+      replaceBranchParentStep: (newParentStep, pathToParentStep) => {
         let stepsCopy = get().integrationJson.steps.slice();
-        stepsCopy = setDeepValue(stepsCopy, pathToParentStep, newStep);
+        stepsCopy = setDeepValue(stepsCopy, pathToParentStep, newParentStep);
 
         const stepsWithNewUuids = StepsService.regenerateUuids(stepsCopy);
         const { updateSteps } = useNestedStepsStore.getState();
@@ -160,9 +162,6 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
           },
         }));
       },
-      setViews: (viewData: IViewProps[]) => {
-        set({ views: viewData });
-      },
       updateIntegration: (newInt: IIntegration) => {
         let newIntegration = { ...get().integrationJson, ...newInt };
         const uuidSteps = StepsService.regenerateUuids(newIntegration.steps);
@@ -170,6 +169,9 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
         updateSteps(StepsService.extractNestedSteps(uuidSteps));
 
         return set({ integrationJson: { ...newIntegration, steps: uuidSteps } });
+      },
+      updateViews: (viewData: IViewProps[]) => {
+        set({ views: viewData });
       },
     }),
     {
