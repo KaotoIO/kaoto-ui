@@ -65,6 +65,8 @@ You will also see any lint errors in the console.
 
 ## Tests
 
+test
+
 ### Unit Tests
 
 Run all [Jest](https://testing-library.com/docs/react-testing-library/intro) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) unit tests:
