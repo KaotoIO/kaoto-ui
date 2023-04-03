@@ -124,7 +124,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     <>
       {!data.isPlaceholder ? (
         <div
-          className={`stepNode stepNode--${layoutCssClass}` + getSelectedClass() + getHoverClass()}
+          className={`stepNode stepNode--${layoutCssClass} stepNode__clickable` + getSelectedClass() + getHoverClass()}
           onDrop={onDropReplace}
           onMouseEnter={() => {
             if (data.branchInfo || supportsBranching) {
