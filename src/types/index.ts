@@ -87,7 +87,7 @@ export interface IDsl {
  * a Generic or Step Extension
  */
 export interface IKaotoApi {
-  getDeployment: (name: string, namespace?: string) => Promise<string | unknown>;
+  getDeployment: (deploymentName: string, namespace?: string) => Promise<string | unknown>;
   getIntegrationSource: (
     integration: IIntegration,
     dsl: string,
@@ -96,12 +96,12 @@ export interface IKaotoApi {
   notifyKaoto: (title: string, body?: string, variant?: string) => void;
   startDeployment: (
     integration: any,
-    name: string,
+    deploymentName: string,
     namespace?: string
   ) => Promise<string | unknown>;
   step: IStepProps;
   stepParams: { [p: string]: any };
-  stopDeployment: (name: string, namespace?: string) => void;
+  stopDeployment: (deploymentName: string, namespace?: string) => void;
   updateStep: (step: IStepProps) => void;
   updateStepParams: (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => void;
 }

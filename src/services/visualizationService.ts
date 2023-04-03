@@ -433,7 +433,10 @@ export class VisualizationService {
 
     edges.forEach((edge) => {
       const sourceNode = nodes.find((node) => node.id === edge.source);
-      const dagreWeightedValues = VisualizationService.getDagreWeightedValues(isHorizontal, sourceNode);
+      const dagreWeightedValues = VisualizationService.getDagreWeightedValues(
+        isHorizontal,
+        sourceNode
+      );
 
       dagreGraph.setEdge(edge.source, edge.target, dagreWeightedValues);
     });
@@ -459,11 +462,14 @@ export class VisualizationService {
     return { layoutedNodes: nodes, layoutedEdges: edges };
   }
 
-  static getDagreWeightedValues(isHorizontal: boolean, sourceNode?: IVizStepNode): { minlen: number; weight: number } {
+  static getDagreWeightedValues(
+    isHorizontal: boolean,
+    sourceNode?: IVizStepNode
+  ): { minlen: number; weight: number } {
     return {
       minlen: isHorizontal ? (sourceNode?.data.step.branches?.length > 1 ? 2 : 1) : 1.5,
       weight: sourceNode?.data.step.branches?.length > 0 ? 2 : 1,
-    }
+    };
   }
 
   /**
@@ -624,13 +630,10 @@ export class VisualizationService {
 
   /**
    * Determines whether to show the Branches tab in the mini catalog
-   * @param nodeData
+   * @param step
    */
   static showBranchesTab(step: IStepProps): boolean {
-    return (
-      StepsService.supportsBranching(step) &&
-      step.branches?.length !== step.maxBranches
-    );
+    return StepsService.supportsBranching(step) && step.branches?.length !== step.maxBranches;
   }
 
   /**
