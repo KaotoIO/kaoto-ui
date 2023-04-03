@@ -15961,17 +15961,10 @@ zundo@^2.0.0-beta.11:
   resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.11.tgz#c5ee2c116af99d5c60c0fbb5199c91e5da3faf4c"
   integrity sha512-b+ZVzOcTICMLuU9cMUygWGrGoWcCdnE2u3kYm/EcWENeYEc4jEtFgFveukdZfpu+H2X7ym50JGS+KJm7YuhmYg==
 
-zustand@^4.3.1:
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.3.tgz#c9113499074dde2d6d99c1b5f591e9329572c224"
-  integrity sha512-x2jXq8S0kfLGNwGh87nhRfEc2eZy37tSatpSoSIN+O6HIaBhgQHSONV/F9VNrNcBcKQu/E80K1DeHDYQC/zCrQ==
-  dependencies:
-    use-sync-external-store "1.2.0"
-
-zustand@^4.3.6:
-  version "4.3.6"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.6.tgz#ce7804eb75361af0461a2d0536b65461ec5de86f"
-  integrity sha512-6J5zDxjxLE+yukC2XZWf/IyWVKnXT9b9HUv09VJ/bwGCpKNcaTqp7Ws28Xr8jnbvnZcdRaidztAPsXFBIqufiw==
+zustand@^4.3.1, zustand@^4.3.7:
+  version "4.3.7"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.7.tgz#501b1f0393a7f1d103332e45ab574be5747fedce"
+  integrity sha512-dY8ERwB9Nd21ellgkBZFhudER8KVlelZm8388B5nDAXhO/+FZDhYMuRnqDgu5SYyRgz/iaf8RKnbUs/cHfOGlQ==
   dependencies:
     use-sync-external-store "1.2.0"
 
