@@ -17,8 +17,8 @@ describe('User completes normal actions on steps in a branch', () => {
         cy.interactWithConfigInputObject('oAuthToken', 'token');
 
         // CHECK that the step yaml is updated
-        cy.checkCodeSpanLine('lazyStartProducer', "true");
-        cy.checkCodeSpanLine('oAuthToken', "token");
+        cy.checkCodeSpanLine('lazyStartProducer: true');
+        cy.checkCodeSpanLine('oAuthToken: token');
     });
 
     it(' User deletes a step in a branch', () => {

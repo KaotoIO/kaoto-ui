@@ -13,7 +13,7 @@ describe('editing properties', () => {
     // Configure timer - source step
     cy.openStepConfigurationTab('timer-source');
     cy.interactWithConfigInputObject('period', '3000');
-    cy.checkCodeSpanLine('period:', '3000');
+    cy.checkCodeSpanLine('period: \'3000\'');
     cy.closeStepConfigurationTab();
 
     // Configure kafka-sink step
@@ -26,16 +26,16 @@ describe('editing properties', () => {
     cy.interactWithConfigInputObject('password', 'password');
 
     // CHECK they are reflected in the code editor
-    cy.checkCodeSpanLine('topic', 'topicname');
-    cy.checkCodeSpanLine('bootstrapServers', 'bootstrap');
-    cy.checkCodeSpanLine('securityProtocol', 'security');
-    cy.checkCodeSpanLine('saslMechanism', 'sasl');
-    cy.checkCodeSpanLine('user', 'user');
-    cy.checkCodeSpanLine('password', 'password');
+    cy.checkCodeSpanLine('topic: topicname');
+    cy.checkCodeSpanLine('bootstrapServers: bootstrap');
+    cy.checkCodeSpanLine('securityProtocol: security');
+    cy.checkCodeSpanLine('saslMechanism: sasl');
+    cy.checkCodeSpanLine('user: user');
+    cy.checkCodeSpanLine('password: password');
 
     cy.closeStepConfigurationTab();
 
     // CHECK that previous change is still there
-    cy.checkCodeSpanLine('period:', '3000');
+    cy.checkCodeSpanLine('period: \'3000\'');
   });
 });

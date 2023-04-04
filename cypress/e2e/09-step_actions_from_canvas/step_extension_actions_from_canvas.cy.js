@@ -36,8 +36,8 @@ describe('Test for Step extensions', () => {
         // CHECK alert message
         cy.get('.pf-c-alert').should('be.visible').and('contain.text', 'Set Header step updated');
         // CHECK that the YAML is updated
-        cy.checkCodeSpanLine('test-name', "name");
-        cy.checkCodeSpanLine('jq', "jq-test");
+        cy.checkCodeSpanLine('name: test-name');
+        cy.checkCodeSpanLine('jq: jq-test');
     });
 
     it('User adds and removes a branch from a step using a step extension', () => {
@@ -53,8 +53,8 @@ describe('Test for Step extensions', () => {
         cy.editBranchConditionChoiceExtension(1, 'simple-test', 'simple');
 
         // Check that the YAML is updated
-        cy.checkCodeSpanLine("jq", "jq-test");
-        cy.checkCodeSpanLine("simple", "simple-test");
+        cy.checkCodeSpanLine("jq: jq-test");
+        cy.checkCodeSpanLine("simple: simple-test");
         cy.get('.code-editor').should('contain.text', 'otherwise')
 
         cy.deleteBranchChoiceExtension(0);
