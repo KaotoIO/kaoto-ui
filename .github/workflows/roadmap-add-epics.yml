@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     name: 🎯 Move to Kaoto List 🎯
     steps:
-      - uses: actions/add-to-project@v0.4.1
+      - uses: actions/add-to-project@v0.5.0
         with:
           project-url: https://github.com/orgs/KaotoIO/projects/10
           github-token: ${{ secrets.MY_GITHUB_TOKEN }}
