@@ -19,7 +19,7 @@ export const FieldLabelIcon = (props: FieldLabelIconProps) => {
   const bodyContent = props.description ? props.description : '';
 
   const footerContent = () => {
-    return <Text component={TextVariants.small}>Default: {props.defaultValue ?? 'null'}</Text>;
+    return <Text component={TextVariants.small}>Default: {props.defaultValue ?? <i>No default value</i>}</Text>;
   };
 
   return (
