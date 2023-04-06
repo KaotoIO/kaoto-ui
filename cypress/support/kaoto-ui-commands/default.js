@@ -3,7 +3,7 @@ import 'cypress-file-upload';
 Cypress.Commands.add('openHomePage', () => {
     let url = Cypress.config().baseUrl;
     cy.visit(url);
-    cy.waitVisualizationUpdate();
+    cy.waitOpenHomePage();
 });
 
 Cypress.Commands.add('zoomOutXTimes', (times) => {
@@ -21,6 +21,11 @@ Cypress.Commands.add('waitVisualizationUpdate', () => {
         cy.wait('@getDSLs');
         cy.wait('@getViewDefinitions');
     });
+});
+
+Cypress.Commands.add('waitOpenHomePage', () => {
+    cy.wait('@getDSLs');
+    cy.wait('@getViewDefinitions');
 });
 
 Cypress.Commands.add('closeCatalogOrCodeEditor', () => {

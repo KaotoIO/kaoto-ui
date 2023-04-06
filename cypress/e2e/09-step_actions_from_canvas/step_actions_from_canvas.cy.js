@@ -22,7 +22,7 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-aggregate');
         cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-log');
         // CHECK YAML contains the  'aggregate: {}'
-        cy.checkCodeSpanLine('aggregate:', '{}');
+        cy.checkCodeSpanLine('aggregate: {}');
 
         // CHECK that the step is added between two steps
         cy.get('[data-testid="viz-step-aggregate"]').should('be.visible');
@@ -33,7 +33,7 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-aggregate');
         cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-log');
         // CHECK YAML contains the  'aggregate: {}'
-        cy.checkCodeSpanLine('aggregate:', '{}');
+        cy.checkCodeSpanLine('aggregate: {}');
     });
 
     it('In an integration with at least two steps, user deletes the first step, showing a placeholder step in its place (start-end)', () => {
@@ -132,8 +132,7 @@ describe('Test for Step actions from the canvas', () => {
         // CHECK that stepNodes contains of the three steps
         cy.get('.stepNode').should('have.length', 3);
         // CHECK YAML contains the  'aggregate: {}'
-        cy.checkCodeSpanLine('aggregate:', '{}');
-
+        cy.checkCodeSpanLine('aggregate: {}');
         cy.syncUpCodeChanges();
 
         // CHECK that stepNodes are in the correct order
@@ -143,7 +142,7 @@ describe('Test for Step actions from the canvas', () => {
         // CHECK that stepNodes contains of the three steps
         cy.get('.stepNode').should('have.length', 3);
         // CHECK YAML contains the  'aggregate: {}'
-        cy.checkCodeSpanLine('aggregate:', '{}');
+        cy.checkCodeSpanLine('aggregate: {}');
     });
 
     it('Step Detail - User configures a normal step, which updates the YAML)', () => {
@@ -152,7 +151,7 @@ describe('Test for Step actions from the canvas', () => {
         // Enable checkbox "Log mask"
         cy.get('[name="logMask"]').click();
         // CHECK that the YAML is updated logMask: 'true'
-        cy.checkCodeSpanLine('logMask', "true");
+        cy.checkCodeSpanLine('logMask: true');
 
         // Disable checkbox "Log mask"
         cy.get('[name="logMask"]').click();
@@ -162,6 +161,6 @@ describe('Test for Step actions from the canvas', () => {
         // Change the value of the "groupDelay" integer field
         cy.get('[name="groupDelay"]').clear().type('15000');
         // CHECK that the YAML is updated groupDelay: 15000
-        cy.checkCodeSpanLine('groupDelay', "15000");
+        cy.checkCodeSpanLine('groupDelay: 15000');
     });
 });

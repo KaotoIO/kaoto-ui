@@ -29,8 +29,8 @@ describe('User completes normal actions on steps in a branch', () => {
         cy.interactWithConfigInputObject('acknowledgementModeName', 'test-value');
 
         // CHECK that the step yaml is updated
-        cy.checkCodeSpanLine('allowNullBody', 'false');
-        cy.checkCodeSpanLine('acknowledgementModeName', 'test-value');
+        cy.checkCodeSpanLine('allowNullBody: false');
+        cy.checkCodeSpanLine('acknowledgementModeName: test-value');
     });
 
     it(' User deletes a step in a branch', () => {

@@ -56,8 +56,12 @@ Cypress.Commands.add('syncUpCodeChanges', () => {
     cy.wait('@getIntegration');
 });
 
-Cypress.Commands.add('checkCodeSpanLine', (firstSpan, secondSpan) => {
-    cy.get('.code-editor').contains(firstSpan).parent()
-        .should('contain.text', firstSpan)
-        .and('contain.text', secondSpan)
+Cypress.Commands.add('checkCodeSpanLine', (spanText, linesCount) => {
+    linesCount = linesCount ?? 1;
+    cy.get('.code-editor')
+        .within (() => {
+            cy.get('span:only-child').contains(spanText)
+            .should("have.length", linesCount)
+        }
+    )
 });
