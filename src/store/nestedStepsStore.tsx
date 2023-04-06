@@ -11,7 +11,7 @@ export interface INestedStepStore {
 
 const initialState: INestedStep[] = [];
 
-export const useNestedStepsStore = create<INestedStepStore>()((set, get) => ({
+export const useNestedStepsStore = create<INestedStepStore>((set, get) => ({
   ...initialState,
   addStep: (newStep) => {
     set((state) => {
