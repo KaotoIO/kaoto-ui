@@ -52,15 +52,16 @@ export class StepsService {
   ) {}
 
   addBranch(step: IStepProps, branch: IStepPropsBranch) {
-    const currentStepNested = this.getStepNested(step);
+    const currentStepNested = this.getStepNested(step.UUID);
+    const newStep = { ...step };
+
+    if (!newStep.branches) {
+      newStep.branches = [branch];
+    } else {
+      newStep.branches = newStep.branches.concat(branch);
+    }
+
     if (currentStepNested) {
-      const newStep = { ...step };
-      // if branches array does not exist, create it
-      if (!newStep.branches) {
-        newStep.branches = [branch];
-      } else {
-        newStep.branches = newStep.branches.concat(branch);
-      }
       useIntegrationJsonStore
         .getState()
         .replaceBranchParentStep(newStep, currentStepNested.pathToStep);
@@ -69,12 +70,7 @@ export class StepsService {
         step.UUID,
         useIntegrationJsonStore.getState().integrationJson.steps
       );
-      const newStep = { ...step };
-      if (!newStep.branches) {
-        newStep.branches = [branch];
-      } else {
-        newStep.branches = newStep.branches.concat(branch);
-      }
+
       useIntegrationJsonStore.getState().replaceStep(newStep, oldStepIdx);
     }
   }
@@ -88,7 +84,7 @@ export class StepsService {
   }
 
   deleteBranch(step: IStepProps, branchUuid: string) {
-    const currentStepNested = this.getStepNested(step);
+    const currentStepNested = this.getStepNested(step.UUID);
     if (currentStepNested) {
       const newParentStep = {
         ...step,
@@ -130,26 +126,33 @@ export class StepsService {
     const currentIdx = this.findStepIdxWithUUID(step.UUID);
 
     return {
-      getDeployment: (name: string, namespace?: string): Promise<string | unknown> => {
-        return fetchDeployment(name, namespace).then((deployment: string | unknown) => {
+      getDeployment: async (
+        deploymentName: string,
+        namespace?: string
+      ): Promise<string | unknown> => {
+        return fetchDeployment(deploymentName, namespace).then((deployment: string | unknown) => {
           return deployment;
         });
       },
-      getIntegrationSource: (integration: IIntegration) => {
+      getIntegrationSource: async (integration: IIntegration) => {
         return fetchIntegrationSourceCode(integration).then((sourceCode) => {
           return sourceCode;
         });
       },
       notifyKaoto: alertKaoto,
-      startDeployment: (integration: any, name: string, namespace?: string): Promise<string> => {
-        return startDeployment(integration, name, namespace).then((res) => {
+      startDeployment: async (
+        integrationSourceCode: string,
+        deploymentName: string,
+        namespace?: string
+      ): Promise<string> => {
+        return startDeployment(integrationSourceCode, deploymentName, namespace).then((res) => {
           return res;
         });
       },
       step,
       stepParams,
-      stopDeployment: (name: string) => {
-        return stopDeployment(name).then((res) => {
+      stopDeployment: async (deploymentName: string) => {
+        return stopDeployment(deploymentName).then((res) => {
           return res;
         });
       },
@@ -283,11 +286,11 @@ export class StepsService {
   }
 
   /**
-   * Gets a step nested.
-   * @param step
+   * Gets a nested step.
+   * @param stepUuid
    */
-  getStepNested(step: IStepProps) {
-    return useNestedStepsStore.getState().nestedSteps.find((ns) => ns.stepUuid === step.UUID);
+  getStepNested(stepUuid: string) {
+    return useNestedStepsStore.getState().nestedSteps.find((ns) => ns.stepUuid === stepUuid);
   }
 
   /**
@@ -295,11 +298,11 @@ export class StepsService {
    * @param currentStep
    * @param selectedStep
    */
-  handleAppendStep(currentStep: IStepProps, selectedStep: IStepProps) {
+  async handleAppendStep(currentStep: IStepProps, selectedStep: IStepProps) {
     // fetch parameters and other details
     fetchStepDetails(selectedStep.id).then((newStep) => {
       newStep.UUID = selectedStep.UUID;
-      const currentStepNested = this.getStepNested(currentStep);
+      const currentStepNested = this.getStepNested(currentStep.UUID);
       if (currentStepNested) {
         const stepsCopy = useIntegrationJsonStore.getState().integrationJson.steps.slice();
         let newParentStep = getDeepValue(stepsCopy, currentStepNested.pathToParentStep);
@@ -320,20 +323,20 @@ export class StepsService {
    * @todo {@link node} is a React Flow related object that should be handled in {@link VisualizationService}, while this does modify the logical step structure. Could we retrieve same info from something else than {@link node}?
    * @param node
    * @param currentStep
-   * @param stepC
+   * @param proposedStep
    */
   async handleDropOnExistingStep(
     node: IVizStepNodeData,
     currentStep: IStepProps,
-    stepC: IStepProps
+    proposedStep: IStepProps
   ) {
     // fetch parameters and other details
-    return fetchStepDetails(stepC.id).then((newStep) => {
+    return fetchStepDetails(proposedStep.id).then((newStep) => {
       const validation = ValidationService.canStepBeReplaced(node, newStep);
       // Replace step
       if (validation.isValid) {
         if (node.branchInfo) {
-          const currentStepNested = this.getStepNested(currentStep);
+          const currentStepNested = this.getStepNested(currentStep.UUID);
           if (currentStepNested) {
             useIntegrationJsonStore
               .getState()
@@ -354,7 +357,7 @@ export class StepsService {
    * @param targetNode
    * @param step
    */
-  handleInsertStep(targetNode: IVizStepNode | undefined, step: IStepProps) {
+  async handleInsertStep(targetNode: IVizStepNode | undefined, step: IStepProps) {
     return fetchStepDetails(step.id).then((newStep) => {
       if (targetNode?.data.branchInfo) {
         const currentStepNested = this.getStepNested(targetNode.data.step);
@@ -386,11 +389,11 @@ export class StepsService {
    * @param currentStep
    * @param selectedStep
    */
-  handlePrependStep(currentStep: IStepProps, selectedStep: IStepProps) {
+  async handlePrependStep(currentStep: IStepProps, selectedStep: IStepProps) {
     // fetch parameters and other details
     fetchStepDetails(selectedStep.id).then((newStep) => {
       newStep.UUID = selectedStep.UUID;
-      const currentStepNested = this.getStepNested(currentStep);
+      const currentStepNested = this.getStepNested(currentStep.UUID);
 
       // special handling for branch steps
       if (currentStepNested) {
@@ -457,7 +460,7 @@ export class StepsService {
    * Every time there is a change to steps or their positioning in the Steps array,
    * their UUIDs need to be regenerated
    * @param steps
-   * @param branchSteps
+   * @param prefix
    */
   static regenerateUuids(steps: IStepProps[], prefix: string = ''): IStepProps[] {
     let newSteps = steps.slice();
@@ -468,7 +471,9 @@ export class StepsService {
       if (this.containsBranches(step)) {
         step.branches?.forEach((branch, branchIndex) => {
           branch.branchUuid = `${step.UUID}|branch-${branchIndex}`;
-          return newSteps.concat(StepsService.regenerateUuids(branch.steps, `${branch.branchUuid}|`));
+          return newSteps.concat(
+            StepsService.regenerateUuids(branch.steps, `${branch.branchUuid}|`)
+          );
         });
       }
     });
@@ -479,12 +484,12 @@ export class StepsService {
   /**
    * Adds a new step onto a placeholder from mini catalog.
    * @param node
-   * @param stepC
+   * @param proposedStep
    */
-  async replacePlaceholderStep(node: IVizStepNodeData, stepC: IStepProps) {
+  async replacePlaceholderStep(node: IVizStepNodeData, proposedStep: IStepProps) {
     // fetch parameters and other details
-    return fetchStepDetails(stepC.id).then((step) => {
-      step.UUID = stepC.UUID;
+    return fetchStepDetails(proposedStep.id).then((step) => {
+      step.UUID = proposedStep.UUID;
       const validation = ValidationService.canStepBeReplaced(node, step);
 
       if (validation.isValid) {
@@ -564,9 +569,9 @@ export class StepsService {
   }
 
   /**
-   * Submits current integration steps to the backend and update with received views.
+   * Submits current integration steps to the backend and updates with received views.
    */
-  updateViews() {
+  async updateViews() {
     fetchViews(useIntegrationJsonStore.getState().integrationJson.steps).then((views) => {
       useIntegrationJsonStore.getState().updateViews(views);
     });

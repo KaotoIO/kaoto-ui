@@ -376,8 +376,11 @@ describe('visualizationService', () => {
       type: 'step',
     };
 
-    it('should return minlen=2 when in horizontal mode and have more than one nested step', () => {
-      const sourceNode = { ...node, data: { step: { ...steps[1], branches: [1, 2] } } } as IVizStepNode;
+    it('should return minlen=2 when in horizontal mode and has more than one nested step', () => {
+      const sourceNode = {
+        ...node,
+        data: { step: { ...steps[1], branches: [1, 2] } },
+      } as IVizStepNode;
       const result = VisualizationService.getDagreWeightedValues(isHorizontal, sourceNode);
 
       expect(result).toMatchObject({
@@ -385,8 +388,11 @@ describe('visualizationService', () => {
       });
     });
 
-    it('should return minlen=1 when in horizontal mode and have one nested step', () => {
-      const sourceNode = { ...node, data: { step: { ...steps[1], branches: [1] } } } as IVizStepNode;
+    it('should return minlen=1 when in horizontal mode and has one nested step', () => {
+      const sourceNode = {
+        ...node,
+        data: { step: { ...steps[1], branches: [1] } },
+      } as IVizStepNode;
       const result = VisualizationService.getDagreWeightedValues(isHorizontal, sourceNode);
 
       expect(result).toMatchObject({
@@ -394,7 +400,7 @@ describe('visualizationService', () => {
       });
     });
 
-    it('should return minlen=1 when in horizontal mode and have no nested step', () => {
+    it('should return minlen=1 when in horizontal mode and has no nested step', () => {
       const sourceNode = { ...node, data: { step: { ...steps[1], branches: [] } } } as IVizStepNode;
       const result = VisualizationService.getDagreWeightedValues(isHorizontal, sourceNode);
 
@@ -403,8 +409,11 @@ describe('visualizationService', () => {
       });
     });
 
-    it('should return minlen=1 when in horizontal mode and have no nranch info', () => {
-      const sourceNode = { ...node, data: { step: { ...steps[1], branches: null } } } as IVizStepNode;
+    it('should return minlen=1 when in horizontal mode and has no branch info', () => {
+      const sourceNode = {
+        ...node,
+        data: { step: { ...steps[1], branches: null } },
+      } as IVizStepNode;
       const result = VisualizationService.getDagreWeightedValues(isHorizontal, sourceNode);
 
       expect(result).toMatchObject({
@@ -422,7 +431,10 @@ describe('visualizationService', () => {
     });
 
     it('should return weight=2 for steps with nested steps', () => {
-      const sourceNode = { ...node, data: { step: { ...steps[1], branches: [1, 2, 3] } } } as IVizStepNode;
+      const sourceNode = {
+        ...node,
+        data: { step: { ...steps[1], branches: [1, 2, 3] } },
+      } as IVizStepNode;
       const result = VisualizationService.getDagreWeightedValues(isHorizontal, sourceNode);
 
       expect(result).toMatchObject({
@@ -440,7 +452,10 @@ describe('visualizationService', () => {
     });
 
     it('should return weight=1 for steps without branches', () => {
-      const sourceNode = { ...node, data: { step: { ...steps[1], branches: null } } } as IVizStepNode;
+      const sourceNode = {
+        ...node,
+        data: { step: { ...steps[1], branches: null } },
+      } as IVizStepNode;
       const result = VisualizationService.getDagreWeightedValues(isHorizontal, sourceNode);
 
       expect(result).toMatchObject({

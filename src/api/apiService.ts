@@ -284,13 +284,13 @@ export async function startDeployment(integrationSource: string, name: string, n
 
 /**
  * Stops an integration deployment
- * @param name
+ * @param deploymentName
  * @param namespace
  */
-export async function stopDeployment(name: string, namespace?: string) {
+export async function stopDeployment(deploymentName: string, namespace?: string) {
   try {
     const resp = await request.delete({
-      endpoint: `${apiVersion}/deployments/${name.toLowerCase()}`,
+      endpoint: `${apiVersion}/deployments/${deploymentName.toLowerCase()}`,
       contentType: 'application/json',
       queryParams: { namespace: namespace ?? 'default' },
     });
