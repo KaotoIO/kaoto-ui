@@ -47,6 +47,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 export interface IKaotoToolbar {
   toggleCatalog: () => void;
+  leftDrawerExpanded: boolean;
   toggleCodeEditor: () => void;
   hideLeftPanel: () => void;
 }
@@ -54,11 +55,11 @@ function LogoImg() {
   return <img data-testid={'kaoto-logo'} src={logo} alt="Kaoto Logo" style={{ height: '30px' }} />;
 }
 
-export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel }: IKaotoToolbar) => {
+export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, leftDrawerExpanded }: IKaotoToolbar) => {
   const { settings, setSettings } = useSettingsStore((state) => state);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore((state) => state);
   const deleteIntegration = useIntegrationJsonStore((state) => state.deleteIntegration);
-
+  const [isActiveButton,setIsActiveButton] = useState('');
   const { deployment, setDeploymentCrd } = useDeploymentStore();
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
@@ -233,9 +234,13 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel }:
               <Button
                 tabIndex={0}
                 variant="link"
+                isActive={isActiveButton == 'toolbar-step-catalog-btn' && leftDrawerExpanded}
                 data-testid={'toolbar-step-catalog-btn'}
                 icon={<CatalogIcon />}
-                onClick={toggleCatalog}
+                onClick={()=>{
+                toggleCatalog()
+                setIsActiveButton('toolbar-step-catalog-btn')
+                }}
               />
             </Tooltip>
           </ToolbarItem>
@@ -245,8 +250,12 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel }:
             <Tooltip content={<div>Source Code</div>} position={'bottom'}>
               <Button
                 variant={'link'}
+                isActive={isActiveButton == 'toolbar-show-code-btn' && leftDrawerExpanded}
                 data-testid={'toolbar-show-code-btn'}
-                onClick={toggleCodeEditor}
+                onClick={()=>{
+                toggleCodeEditor()
+                setIsActiveButton('toolbar-show-code-btn')
+                }}
                 icon={<CodeIcon />}
               />
             </Tooltip>
