@@ -2113,16 +2113,16 @@
   dependencies:
     "@opentelemetry/semantic-conventions" "1.12.0"
 
-"@opentelemetry/exporter-trace-otlp-http@^0.37.0":
-  version "0.37.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/exporter-trace-otlp-http/-/exporter-trace-otlp-http-0.37.0.tgz#3740a0907a94ec0091e7a05dbf503f027d1d8089"
-  integrity sha512-+oVV/h6UTLMF4IRtCGkLk2kQImMgC0ARFCfz+XXGNksP+awh/NXsDtJ3mHrn8Gtudrf3+pKVe/FWptBRqicm5Q==
+"@opentelemetry/exporter-trace-otlp-http@^0.38.0":
+  version "0.38.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/exporter-trace-otlp-http/-/exporter-trace-otlp-http-0.38.0.tgz#93d012fba5f6f345807993aff59c883821d73fde"
+  integrity sha512-AWpTCyijC7kt2DbLj8FmdlRquA6/rTXZ+3U4MVl4P2YNI7KLUnx/FEhn2BMTB0+rOy7UxSAocqz2tJ/5Ss/6Ng==
   dependencies:
-    "@opentelemetry/core" "1.11.0"
-    "@opentelemetry/otlp-exporter-base" "0.37.0"
-    "@opentelemetry/otlp-transformer" "0.37.0"
-    "@opentelemetry/resources" "1.11.0"
-    "@opentelemetry/sdk-trace-base" "1.11.0"
+    "@opentelemetry/core" "1.12.0"
+    "@opentelemetry/otlp-exporter-base" "0.38.0"
+    "@opentelemetry/otlp-transformer" "0.38.0"
+    "@opentelemetry/resources" "1.12.0"
+    "@opentelemetry/sdk-trace-base" "1.12.0"
 
 "@opentelemetry/instrumentation-document-load@^0.32.0":
   version "0.32.0"
@@ -2190,22 +2190,22 @@
     semver "^7.3.2"
     shimmer "^1.2.1"
 
-"@opentelemetry/otlp-exporter-base@0.37.0":
-  version "0.37.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/otlp-exporter-base/-/otlp-exporter-base-0.37.0.tgz#5c544ca92b3d77c67059b9184f7d573b7dac25c2"
-  integrity sha512-dLbv7nr7d14xrHzd+S1eW+RpXh7IC0onktc23pwzETh6J7Ytzf0+QwLV5iRatoNtwPU2hX1VGOipwEnC/BjXxg==
+"@opentelemetry/otlp-exporter-base@0.38.0":
+  version "0.38.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/otlp-exporter-base/-/otlp-exporter-base-0.38.0.tgz#803d0e29825023721963384a9c64c5db254d4cf1"
+  integrity sha512-VWQo7vUDyW/7/FT8RErAtM/29i/fllCc9xMtnK7kDuheAjJU68zrZ88bQOsLamHvOCU3KVpozjfTZVxZKQRYXw==
   dependencies:
-    "@opentelemetry/core" "1.11.0"
+    "@opentelemetry/core" "1.12.0"
 
-"@opentelemetry/otlp-transformer@0.37.0":
-  version "0.37.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/otlp-transformer/-/otlp-transformer-0.37.0.tgz#5de4bf39da9a14841ca0ebd7ac220801d616de64"
-  integrity sha512-cIzV9x2DhJ5gN0mld8OqN+XM95sDiuAJJvXsRjVuz9vu8TSNbbao/QCKNfJLOXqe8l3Ge05nKzQ6Q2gDDEN36w==
+"@opentelemetry/otlp-transformer@0.38.0":
+  version "0.38.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/otlp-transformer/-/otlp-transformer-0.38.0.tgz#0e759cf494b9c1cb7ee272ac6e936f9a2abf6514"
+  integrity sha512-ykQEipby0NVSi2ih5E8J2GNJ6y9zYDPSef0nD8j33XPKxfyVG5184rUrCsh6TIk1d/GlYl8gB9Wy4TdRvwl6kA==
   dependencies:
-    "@opentelemetry/core" "1.11.0"
-    "@opentelemetry/resources" "1.11.0"
-    "@opentelemetry/sdk-metrics" "1.11.0"
-    "@opentelemetry/sdk-trace-base" "1.11.0"
+    "@opentelemetry/core" "1.12.0"
+    "@opentelemetry/resources" "1.12.0"
+    "@opentelemetry/sdk-metrics" "1.12.0"
+    "@opentelemetry/sdk-trace-base" "1.12.0"
 
 "@opentelemetry/resources@1.11.0":
   version "1.11.0"
@@ -2223,13 +2223,13 @@
     "@opentelemetry/core" "1.12.0"
     "@opentelemetry/semantic-conventions" "1.12.0"
 
-"@opentelemetry/sdk-metrics@1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/sdk-metrics/-/sdk-metrics-1.11.0.tgz#0fe347fb39a802ec270315cba0eba2e3ce64c4a2"
-  integrity sha512-knuq3pwU0+46FEMdw9Ses+alXL9cbcLUUTdYBBBsaKkqKwoVMHfhBufW7u6YCu4i+47Wg6ZZTN/eGc4LbTbK5Q==
+"@opentelemetry/sdk-metrics@1.12.0":
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/sdk-metrics/-/sdk-metrics-1.12.0.tgz#52c135b8ca6af677a3e93b6721bc866a74c98b4b"
+  integrity sha512-zOy88Jfk88eTxqu+9ypHLs184dGydJocSWtvWMY10QKVVaxhC3SLKa0uxI/zBtD9S+x0LP65wxrTSfSoUNtCOA==
   dependencies:
-    "@opentelemetry/core" "1.11.0"
-    "@opentelemetry/resources" "1.11.0"
+    "@opentelemetry/core" "1.12.0"
+    "@opentelemetry/resources" "1.12.0"
     lodash.merge "4.6.2"
 
 "@opentelemetry/sdk-trace-base@1.11.0":
