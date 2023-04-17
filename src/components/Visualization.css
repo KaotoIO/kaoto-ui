@@ -107,12 +107,14 @@ button[data-disable-branchestab="true"][data-disable-stepstab="true"]:hover {
     left: -75%;
     position: relative;
     width: 250%;
+    pointer-events: none;
 }
 
 .stepNode__Label span {
     background: var(--pf-global--BackgroundColor--150);
     border-radius: 15%;
     padding: 0.4em;
+    pointer-events: auto;
 }
 
 .stepNode__Prepend {
