@@ -175,8 +175,8 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             <img src={data.step.icon} alt={data.label} />
           </div>
           {/* STEP LABEL */}
-          <div className={'stepNode__Label stepNode__clickable'}>
-            <span>{data.label}</span>
+          <div className={'stepNode__Label'}>
+            <span className={'stepNode__clickable'}>{data.label}</span>
           </div>
           {/* RIGHT-SIDE HANDLE FOR EDGE TO CONNECT WITH */}
           {!StepsService.isEndStep(data.step) && (
@@ -264,7 +264,9 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               id="b"
               isConnectable={false}
             />
-            <div className={'stepNode__Label stepNode__clickable'}>{data.label}</div>
+            <div className={'stepNode__Label'}>
+              <span className={'stepNode__clickable'}>{data.label}</span>
+            </div>
           </div>
         </Popover>
       )}
