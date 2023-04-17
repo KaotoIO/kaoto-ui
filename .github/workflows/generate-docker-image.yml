@@ -39,7 +39,6 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
-          username: ${{ secrets.DOCKER_USERNAME }}
         env:
           username: ${{ secrets.DOCKER_USERNAME }}
         if: ${{env.username != ''}}
