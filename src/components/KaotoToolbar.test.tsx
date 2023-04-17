@@ -8,6 +8,7 @@ describe('KaotoToolbar.tsx', () => {
     render(
       <AlertProvider>
         <KaotoToolbar
+          leftDrawerExpanded
           toggleCatalog={jest.fn()}
           toggleCodeEditor={jest.fn()}
           hideLeftPanel={jest.fn()}
@@ -22,6 +23,7 @@ describe('KaotoToolbar.tsx', () => {
     render(
       <AlertProvider>
         <KaotoToolbar
+          leftDrawerExpanded
           toggleCatalog={jest.fn()}
           toggleCodeEditor={jest.fn()}
           hideLeftPanel={jest.fn()}

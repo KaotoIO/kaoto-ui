@@ -100,6 +100,7 @@ const Dashboard = () => {
             <Page>
               <PageSection padding={{ default: 'noPadding' }}>
                 <KaotoToolbar
+                  leftDrawerExpanded={leftDrawerExpanded}
                   toggleCatalog={handleToggleCatalog}
                   toggleCodeEditor={handleToggleCodeEditor}
                   hideLeftPanel={() => {
