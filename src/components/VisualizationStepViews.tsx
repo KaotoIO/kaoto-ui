@@ -81,7 +81,8 @@ const VisualizationStepViews = ({
   };
 
   useEffect(() => {
-    setActiveTabKey(configTabIndex);
+    setActiveTabKey(()=>
+    step.parameters?.length ? configTabIndex : detailsTabIndex);
     let tempSchemaObject: { [label: string]: { type: string; value?: any; description?: string } } =
       {};
 
@@ -187,7 +188,7 @@ const VisualizationStepViews = ({
             })}
 
           {/** If the step does not have an overriding Config view, provide the default one */}
-          {!hasConfigView && (
+          {step.parameters?.length! > 0 && !hasConfigView && (
             <Tab
               eventKey={configTabIndex}
               title={<TabTitleText>Config</TabTitleText>}
