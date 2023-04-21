@@ -20,7 +20,7 @@ describe('Test for Branching actions from the canvas', () => {
         cy.get('[data-testid="viz-step-choice"]').eq(0).children('[data-testid="stepNode__appendStep-btn"]').should('be.disabled');
 
         // Temporary solution with Choice extension
-        cy.openStepConfigurationTab('choice', 0);
+        cy.openStepConfigurationTab('choice', true, 0);
         cy.addBranchChoiceExtension();
         cy.closeStepConfigurationTab();
 

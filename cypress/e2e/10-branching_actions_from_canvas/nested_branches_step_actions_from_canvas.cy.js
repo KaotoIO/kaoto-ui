@@ -15,7 +15,7 @@ describe('User completes normal actions on steps in a branch', () => {
         // cy.replaceEmptyStepMiniCatalog('amqp');
 
         // Workaround for: https://github.com/KaotoIO/kaoto-ui/issues/1381
-        cy.openStepConfigurationTab('choice', 1);
+        cy.openStepConfigurationTab('choice', true, 1);
         cy.addBranchChoiceExtension();
         cy.addBranchChoiceExtension('other');
         cy.closeStepConfigurationTab();

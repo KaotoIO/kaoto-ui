@@ -57,11 +57,14 @@ Cypress.Commands.add('deleteStep', (step, stepIndex) => {
     cy.waitVisualizationUpdate();
 });
 
-Cypress.Commands.add('openStepConfigurationTab', (step, stepIndex) => {
+Cypress.Commands.add('openStepConfigurationTab', (step, EIP, stepIndex) => {
     stepIndex = stepIndex ?? 0;
+    EIP = EIP ?? false;
     cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).click();
     cy.get('[data-testid="configurationTab"]').click();
-    cy.waitVisualizationUpdate();
+    if (!EIP) {
+        cy.waitVisualizationUpdate();
+    }
 });
 
 Cypress.Commands.add('closeStepConfigurationTab', () => {

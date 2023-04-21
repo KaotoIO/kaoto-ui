@@ -12,7 +12,7 @@ describe('Test for Step extensions', () => {
 
     it('User sees a step extension(transform)', () => {
         cy.insertStepMiniCatalog('transform');
-        cy.openStepConfigurationTab('transform');
+        cy.openStepConfigurationTab('transform', true);
 
         // CHECK that choice extension elements are visible
         cy.get('[data-testid="expression-syntax-select"]').should('be.visible');
@@ -22,7 +22,7 @@ describe('Test for Step extensions', () => {
 
     it('User configures a step from a step extension (set-header)', () => {
         cy.insertStepMiniCatalog('set-header');
-        cy.openStepConfigurationTab('set-header');
+        cy.openStepConfigurationTab('set-header', true);
 
         // Fill the step name
         cy.get('[data-testid="set-header-name-input"]').clear().type('test-name');
@@ -42,7 +42,7 @@ describe('Test for Step extensions', () => {
 
     it('User adds and removes a branch from a step using a step extension', () => {
         cy.insertStepMiniCatalog('choice');
-        cy.openStepConfigurationTab('choice');
+        cy.openStepConfigurationTab('choice', true);
 
 
         cy.addBranchChoiceExtension();
