@@ -61,6 +61,7 @@ Cypress.Commands.add('openStepConfigurationTab', (step, stepIndex) => {
     stepIndex = stepIndex ?? 0;
     cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).click();
     cy.get('[data-testid="configurationTab"]').click();
+    cy.waitVisualizationUpdate();
 });
 
 Cypress.Commands.add('closeStepConfigurationTab', () => {
