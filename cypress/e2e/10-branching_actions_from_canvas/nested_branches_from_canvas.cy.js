@@ -39,7 +39,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
         cy.get('[data-testid="stepNode__insertStep-btn"]').eq(3).click();
         cy.get('[data-testid="miniCatalog__branches"]').should('have.attr', 'aria-disabled', 'true')
         cy.get('.pf-c-button.pf-m-plain').click();
-        cy.openStepConfigurationTab('choice', 1);
+        cy.openStepConfigurationTab('choice', true, 1);
         cy.addBranchChoiceExtension();
         cy.closeStepConfigurationTab();
         cy.get('[data-testid="viz-step-choice"]').eq(1).children('[data-testid="stepNode__appendStep-btn"]').should('be.disabled');
@@ -53,7 +53,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
         // cy.appendBranch(1);
 
         // Temporary workaround:
-        cy.openStepConfigurationTab('choice', 1);
+        cy.openStepConfigurationTab('choice', true, 1);
         cy.addBranchChoiceExtension();
         cy.addBranchChoiceExtension('other');
         cy.closeStepConfigurationTab();
@@ -84,7 +84,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
         // cy.appendBranch(1);
 
         // Temporary workaround:
-        cy.openStepConfigurationTab('choice', 1);
+        cy.openStepConfigurationTab('choice', true, 1);
         cy.addBranchChoiceExtension();
         cy.addBranchChoiceExtension('other');
         cy.closeStepConfigurationTab();
@@ -118,7 +118,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
         // cy.appendBranch(1);
 
         // Temporary workaround:
-        cy.openStepConfigurationTab('choice', 1);
+        cy.openStepConfigurationTab('choice', true, 1);
         cy.addBranchChoiceExtension();
         cy.addBranchChoiceExtension('other');
         cy.closeStepConfigurationTab();
@@ -151,7 +151,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
         // cy.appendBranch(1);
 
         // Temporary workaround:
-        cy.openStepConfigurationTab('choice', 1);
+        cy.openStepConfigurationTab('choice', true, 1);
         cy.addBranchChoiceExtension();
         cy.addBranchChoiceExtension('other');
         cy.closeStepConfigurationTab();
