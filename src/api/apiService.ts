@@ -4,6 +4,21 @@ import { IIntegration, IStepProps } from '@kaoto/types';
 const apiVersion = '/v1';
 
 /**
+ * Returns the backend version
+ */
+export async function fetchBackendVersion(): Promise<string> {
+  try {
+    const resp = await request.get({
+      endpoint: `${apiVersion}/capabilities/version`,
+    });
+
+    return await resp.text();
+  } catch (err) {
+    throw new Error(`Unable to fetch Backend version ${err}`);
+  }
+}
+
+/**
  * Returns a list of all capabilities, including all
  * domain-specific languages (DSLs)
  * Returns { dsls: { [val: string]: string }[] }
