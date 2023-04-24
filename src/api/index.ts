@@ -1,2 +1,2 @@
 export * from './apiService';
-export * from './request';
+export * from './requestService';

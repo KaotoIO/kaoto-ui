@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-//@ts-nocheck
 import { RefObject, createRef } from "react";
 
 import {
   Editor,
+  EditorApi,
   EditorInitArgs,
   EditorTheme,
   KogitoEditorChannelApi,
@@ -27,37 +27,43 @@ import {
 import { DEFAULT_RECT } from "@kie-tools-core/guided-tour/dist/api";
 import { Notification } from "@kie-tools-core/notifications/dist/api";
 import { KaotoEditor } from "./KaotoEditor";
+import { RequestService } from '../api';
 
 export class KaotoEditorView implements Editor {
   private readonly editorRef: RefObject<EditorApi>;
-  public af_isReact = true;
-  public af_componentId: "kaoto-editor";
-  public af_componentTitle: "Kaoto Editor";
+  af_isReact = true;
+  af_componentId = "kaoto-editor";
+  af_componentTitle = "Kaoto Editor";
 
   constructor(
     private readonly envelopeContext: KogitoEditorEnvelopeContextType<KogitoEditorChannelApi>,
-    private readonly initArgs: EditorInitArgs
+    private readonly initArgs: EditorInitArgs,
+    private readonly apiUrl?: string,
   ) {
     this.editorRef = createRef<EditorApi>();
+
+    if (this.apiUrl) {
+      RequestService.setApiURL(this.apiUrl);
+    }
   }
 
-  public async getElementPosition() {
+  async getElementPosition() {
     return DEFAULT_RECT;
   }
 
-  public setContent(path: string, content: string): Promise<void> {
+  setContent(path: string, content: string): Promise<void> {
     return this.editorRef.current!.setContent(path, content);
   }
 
-  public getContent(): Promise<string> {
+  getContent(): Promise<string> {
     return this.editorRef.current!.getContent();
   }
 
-  public getPreview(): Promise<string | undefined> {
+  getPreview(): Promise<string | undefined> {
     return this.editorRef.current!.getPreview();
   }
 
-  public af_componentRoot() {
+  af_componentRoot() {
     return (
       <KaotoEditor
         ref={this.editorRef}
@@ -76,19 +82,19 @@ export class KaotoEditorView implements Editor {
     );
   }
 
-  public async undo(): Promise<void> {
+  async undo(): Promise<void> {
     return this.editorRef.current!.undo();
   }
 
-  public async redo(): Promise<void> {
+  async redo(): Promise<void> {
     return this.editorRef.current!.redo();
   }
 
-  public async validate(): Promise<Notification[]> {
+  async validate(): Promise<Notification[]> {
     return this.editorRef.current!.validate();
   }
 
-  public async setTheme(theme: EditorTheme) {
+  async setTheme(theme: EditorTheme) {
     return this.editorRef.current!.setTheme(theme);
   }
 }
