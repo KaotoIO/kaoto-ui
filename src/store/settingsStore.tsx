@@ -1,4 +1,3 @@
-// @ts-ignore
 import svg from '../assets/images/kaoto.svg';
 import LOCAL_STORAGE_EDITOR_THEME_KEY from '@kaoto/constants';
 import { CodeEditorMode, IDsl, ISettings } from '@kaoto/types';
@@ -7,6 +6,8 @@ import { create } from 'zustand';
 interface ISettingsStore {
   settings: ISettings;
   setSettings: (vals?: Partial<ISettings>) => void;
+  backendVersion: string;
+  setBackendVersion: (backendVersion: string) => void;
 }
 
 export const initDsl: IDsl = {
@@ -35,6 +36,12 @@ export const useSettingsStore = create<ISettingsStore>((set) => ({
     set((state) => ({
       settings: { ...state.settings, ...vals },
     })),
+  backendVersion: '',
+  setBackendVersion: (backendVersion: string) => {
+    set(() => ({
+      backendVersion: backendVersion,
+    }));
+  }
 }));
 
 export default useSettingsStore;
