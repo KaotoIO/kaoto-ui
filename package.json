@@ -74,7 +74,7 @@
     "uniforms-bridge-json-schema": "^3.10.2",
     "use-debounce": "9.0.4",
     "web-vitals": "3.3.1",
-    "zundo": "^2.0.0-beta.12",
+    "zundo": "^2.0.0-beta.15",
     "zustand": "^4.3.7"
   },
   "devDependencies": {
@@ -94,10 +94,10 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
-    "@types/jest": "^29.5.0",
+    "@types/jest": "^29.5.1",
     "@types/lodash.isequal": "^4.5.6",
     "@types/node": "^18.15.13",
-    "@types/react": "18.0.37",
+    "@types/react": "18.0.38",
     "@types/react-dom": "18.0.11",
     "@types/react-router-dom": "5.3.3",
     "@types/testing-library__jest-dom": "5.14.5",
@@ -164,7 +164,7 @@
     "*.tsx": "eslint --ext .tsx"
   },
   "resolutions": {
-    "@types/react": "18.0.37"
+    "@types/react": "18.0.38"
   },
   "bugs": {
     "url": "https://github.com/KaotoIO/kaoto-ui/issues"
