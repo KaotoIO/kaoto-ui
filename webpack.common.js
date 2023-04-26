@@ -3,7 +3,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const { dependencies, federatedModuleName } = require('./package.json');
+const { dependencies, federatedModuleName, version } = require('./package.json');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
@@ -14,8 +14,6 @@ const isPatternflyStyles = (stylesheet) =>
   stylesheet.includes('@patternfly/react-core/') ||
   stylesheet.includes('@patternfly/react-code-editor') ||
   stylesheet.includes('monaco-editor-webpack-plugin');
-
-const deps = require('./package.json').dependencies;
 
 module.exports = () => {
   return {
@@ -110,10 +108,13 @@ module.exports = () => {
         library: { type: 'var', name: federatedModuleName },
         // exposes: ['./src/@kaoto/index.ts'],
         shared: {
-          ...deps,
+          ...dependencies,
         },
       }),
       // new FederatedTypesPlugin(),
+      new webpack.DefinePlugin({
+        KAOTO_VERSION: JSON.stringify(version),
+      }),
     ],
     resolve: {
       extensions: ['.js', '.ts', '.tsx', '.jsx'],

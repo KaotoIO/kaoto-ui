@@ -1,4 +1,3 @@
-// @ts-ignore
 import logo from '../assets/images/logo-kaoto-dark.png';
 import { fetchDefaultNamespace, startDeployment } from '@kaoto/api';
 import {
@@ -45,15 +44,13 @@ import {
 } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useCallback, useEffect, useState } from 'react';
+import { AboutModal } from './AboutModal';
 
 export interface IKaotoToolbar {
   toggleCatalog: () => void;
   leftDrawerExpanded: boolean;
   toggleCodeEditor: () => void;
   hideLeftPanel: () => void;
-}
-function LogoImg() {
-  return <img data-testid={'kaoto-logo'} src={logo} alt="Kaoto Logo" style={{ height: '30px' }} />;
 }
 
 export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, leftDrawerExpanded }: IKaotoToolbar) => {
@@ -76,6 +73,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
     'default' | 'warning' | 'success' | 'error' | undefined
   >('default');
   const [expanded, setExpanded] = useState({
+    aboutModal: false,
     appearanceModal: false,
     deploymentsModal: false,
     settingsModal: false,
@@ -182,6 +180,15 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
 
   const kebabItems = [
     <DropdownItem
+      key="about"
+      data-testid="kaotoToolbar-kebab__about"
+      onClick={() => {
+        setExpanded({ ...expanded, aboutModal: !expanded.aboutModal });
+      }}
+    >
+      About
+    </DropdownItem>,
+    <DropdownItem
       key="settings"
       data-testid={'kaotoToolbar-kebab__settings'}
       onClick={() => {
@@ -218,8 +225,9 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
     <>
       <Toolbar className={'viz-toolbar'} data-testid={'viz-toolbar'}>
         <ToolbarContent>
+          <img data-testid="kaoto-logo" src={logo} alt="Kaoto Logo" style={{ height: '30px' }} />
+
           {/* APP MENU */}
-          <LogoImg />
           <ToolbarItem>
             <Dropdown
               onSelect={onSelectAppMenu}
@@ -394,10 +402,10 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
               <OverflowMenuControl hasAdditionalOptions>
                 <Dropdown
                   position={DropdownPosition.right}
-                  toggle={<KebabToggle onToggle={(val) => setKebabIsOpen(val)} />}
+                  toggle={<KebabToggle data-testid="toolbar-kebab-dropdown-toggle" onToggle={(val) => {setKebabIsOpen(val);}} />}
                   isOpen={kebabIsOpen}
                   isPlain
-                  data-testid={'toolbar-kebab-dropdown-btn'}
+                  data-testid="toolbar-kebab-dropdown-btn"
                   dropdownItems={kebabItems}
                 />
               </OverflowMenuControl>
@@ -444,6 +452,11 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
           }
         }}
         isModalOpen={expanded.appearanceModal ?? false}
+      />
+
+      <AboutModal
+        handleCloseModal={() => { setExpanded({ ...expanded, aboutModal: false }); }}
+        isModalOpen={expanded.aboutModal}
       />
     </>
   );

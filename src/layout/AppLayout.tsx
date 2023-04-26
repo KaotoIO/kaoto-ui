@@ -1,30 +1,34 @@
 import { WaitingPage } from '../components/WaitingPage';
-import { fetchCapabilities } from '@kaoto/api';
+import { fetchBackendVersion } from '@kaoto/api';
 import { sleep } from '@kaoto/utils';
 import { Panel } from '@patternfly/react-core';
 import { ReactNode, useEffect, useState } from 'react';
+import { useSettingsStore } from '../store';
 
 interface IAppLayout {
   children: ReactNode;
 }
-const AppLayout = ({ children }: IAppLayout) => {
+
+export const AppLayout = ({ children }: IAppLayout) => {
   const [backendAvailable, setBackendAvailable] = useState(false);
   const [message, setMessage] = useState('Trying to reach the Kaoto API');
   const [fetching, setFetching] = useState(true);
+  const setBackendVersion = useSettingsStore((state) => state.setBackendVersion);
 
   useEffect(() => {
-    // Method that tries to connect to capabilities endpoint and evaluate if the API is available
+    // Method that tries to connect to capabilities/version endpoint and evaluate if the API is available
     const tryApiAvailable = (retries: number) => {
-      fetchCapabilities()
+      fetchBackendVersion()
         .then((resp) => {
           if (resp) {
             setBackendAvailable(true);
             setMessage('Trying to reach the Kaoto API');
+            setBackendVersion(resp);
           }
         })
         .catch(() => {
           if (retries > 0) {
-            sleep(1000).then(() => {
+            sleep(1_000).then(() => {
               tryApiAvailable(retries - 1);
             });
           } else {
@@ -44,5 +48,3 @@ const AppLayout = ({ children }: IAppLayout) => {
     </Panel>
   );
 };
-
-export { AppLayout };

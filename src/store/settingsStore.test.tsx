@@ -22,4 +22,15 @@ describe('settingsStore', () => {
     expect(result.current.settings.name).toEqual('Goji Berry');
     expect(result.current.settings.namespace).toEqual('KameletBinding');
   });
+
+  it('setBackendVersion', () => {
+    const { result } = renderHook(() => useSettingsStore());
+    expect(result.current.backendVersion).toEqual('');
+
+    act(() => {
+      result.current.setBackendVersion('1.0-test');
+    });
+
+    expect(result.current.backendVersion).toEqual('1.0-test');
+  });
 });
