@@ -77,6 +77,6 @@ Cypress.Commands.add('switchAppearanceTheme', (object) => {
     if (object === 'editor') {
         cy.get('[data-testid="appearance--theme-editor-switch"]').click({ force: true });
     } else {
-        cy.get('[data-testid="appearance--theme-switch"]').click({ force: true });
+        cy.get('[data-testid="appearance--theme-ui-switch"]').click({ force: true });
     }
 });
