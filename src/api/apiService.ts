@@ -8,7 +8,7 @@ const apiVersion = '/v1';
  */
 export async function fetchBackendVersion(): Promise<string> {
   try {
-    const resp = await request.get({
+    const resp = await RequestService.get({
       endpoint: `${apiVersion}/capabilities/version`,
     });
 
