@@ -15,7 +15,7 @@ export interface IFetch {
    */
   accept?: string;
 
-  cache?: RequestCache;
+  cache?: RequestCache | undefined;
 
   /**
    * Default: 'application/json'
