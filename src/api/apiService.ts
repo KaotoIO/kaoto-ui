@@ -1,4 +1,4 @@
-import request from './request';
+import { RequestService } from './requestService';
 import { IIntegration, IStepProps } from '@kaoto/types';
 
 const apiVersion = '/v1';
@@ -25,7 +25,7 @@ export async function fetchBackendVersion(): Promise<string> {
  */
 export async function fetchCapabilities(namespace?: string) {
   try {
-    const resp = await request.get({
+    const resp = await RequestService.get({
       endpoint: `${apiVersion}/capabilities`,
       contentType: 'application/json',
       queryParams: {
@@ -41,7 +41,7 @@ export async function fetchCapabilities(namespace?: string) {
 
 export async function fetchDefaultNamespace() {
   try {
-    const resp = await request.get({
+    const resp = await RequestService.get({
       endpoint: `${apiVersion}/capabilities/namespace`,
       contentType: 'application/json',
     });
@@ -69,7 +69,7 @@ export async function fetchCatalogSteps(
   cache?: RequestCache | undefined
 ) {
   try {
-    const resp = await request.get({
+    const resp = await RequestService.get({
       endpoint: `${apiVersion}/steps`,
       cache,
       queryParams: {
@@ -91,7 +91,7 @@ export async function fetchCatalogSteps(
  */
 export async function fetchCompatibleDSLs(props: { namespace?: string; steps: IStepProps[] }) {
   try {
-    const resp = await request.post({
+    const resp = await RequestService.post({
       endpoint: `${apiVersion}/integrations/dsls`,
       contentType: 'application/json',
       body: props.steps,
@@ -113,7 +113,7 @@ export async function fetchCompatibleDSLs(props: { namespace?: string; steps: IS
  */
 export async function fetchDeployment(name: string, namespace?: string): Promise<string | unknown> {
   try {
-    const resp = await request.get({
+    const resp = await RequestService.get({
       endpoint: `${apiVersion}/deployment/${name}`,
       contentType: 'application/json',
       queryParams: {
@@ -134,7 +134,7 @@ export async function fetchDeployment(name: string, namespace?: string): Promise
  */
 export async function fetchDeployments(cache?: RequestCache | undefined, namespace?: string) {
   try {
-    const resp = await request.get({
+    const resp = await RequestService.get({
       endpoint: `${apiVersion}/deployments`,
       contentType: 'application/json',
       cache,
@@ -161,7 +161,7 @@ export async function fetchDeploymentLogs(
   lines?: number
 ): Promise<ReadableStream | unknown> {
   try {
-    const resp = await request.get({
+    const resp = await RequestService.get({
       endpoint: `${apiVersion}/deployments/${name}/logs`,
       contentType: 'application/json',
       queryParams: {
@@ -192,7 +192,7 @@ export async function fetchIntegrationJson(
   namespace?: string
 ) {
   try {
-    const resp = await request.post({
+    const resp = await RequestService.post({
       endpoint: `${apiVersion}/integrations`,
       contentType: typeof data === 'string' ? 'text/yaml' : 'application/json',
       body: typeof data === 'string' ? data : { steps: data },
@@ -219,7 +219,7 @@ export async function fetchIntegrationJson(
  */
 export async function fetchIntegrationSourceCode(newIntegration: IIntegration, namespace?: string) {
   try {
-    const resp = await request.post({
+    const resp = await RequestService.post({
       endpoint: `${apiVersion}/integrations?dsl=${newIntegration.dsl}`,
       contentType: 'application/json',
       body: newIntegration,
@@ -236,7 +236,7 @@ export async function fetchIntegrationSourceCode(newIntegration: IIntegration, n
 
 export async function fetchStepDetails(id?: string, namespace?: string) {
   try {
-    const resp = await request.get({
+    const resp = await RequestService.get({
       endpoint: `${apiVersion}/steps/id/${id}`,
       queryParams: {
         namespace: namespace ?? 'default',
@@ -260,7 +260,7 @@ export async function fetchStepDetails(id?: string, namespace?: string) {
  */
 export async function fetchViews(data: IStepProps[], namespace?: string) {
   try {
-    const resp = await request.post({
+    const resp = await RequestService.post({
       endpoint: `${apiVersion}/view-definitions`,
       contentType: 'application/json',
       body: data,
@@ -285,7 +285,7 @@ export async function fetchViews(data: IStepProps[], namespace?: string) {
 export async function startDeployment(integrationSource: string, name: string, namespace?: string) {
   try {
     const params = namespace ? `?namespace=${namespace}` : '';
-    const resp = await request.post({
+    const resp = await RequestService.post({
       endpoint: `${apiVersion}/deployments/${name.toLowerCase()}${params}`,
       contentType: 'text/yaml',
       body: integrationSource,
@@ -304,7 +304,7 @@ export async function startDeployment(integrationSource: string, name: string, n
  */
 export async function stopDeployment(deploymentName: string, namespace?: string) {
   try {
-    const resp = await request.delete({
+    const resp = await RequestService.delete({
       endpoint: `${apiVersion}/deployments/${deploymentName.toLowerCase()}`,
       contentType: 'application/json',
       queryParams: { namespace: namespace ?? 'default' },
