@@ -1,14 +1,15 @@
 import { defineConfig } from 'cypress';
+import dotenv from 'dotenv';
 
 export default defineConfig({
   projectId: 'zfop6s',
   videoUploadOnPasses: false,
 
   e2e: {
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
-    setupNodeEvents(on, config) {
-      return require('./cypress/plugins/index.js')(on, config);
+    setupNodeEvents(_on, config) {
+      dotenv.config();
+      config.env.KAOTO_API = process.env.KAOTO_API;
+      return config
     },
     baseUrl: 'http://localhost:1337',
     specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
