@@ -187,26 +187,28 @@ export async function fetchDeploymentLogs(
  * @param namespace
  */
 export async function fetchIntegrationJson(
-  data: string | IStepProps[],
+  data: string,
   dsl: string,
   namespace?: string
-) {
-  try {
-    const resp = await RequestService.post({
-      endpoint: `${apiVersion}/integrations`,
-      contentType: typeof data === 'string' ? 'text/yaml' : 'application/json',
-      body: typeof data === 'string' ? data : { steps: data },
-      queryParams: {
-        dsl,
-        namespace: namespace ?? 'default',
-      },
-    });
+): Promise<IIntegration[]> {
+  const resp = await RequestService.post({
+    endpoint: `${apiVersion}/integrations`,
+    contentType: 'text/yaml',
+    body: data,
+    queryParams: {
+      dsl,
+      namespace: namespace ?? 'default',
+    },
+  });
 
-    return await resp.json();
-  } catch (err) {
-    console.error(err);
-    return err;
+  // TODO: Temporary workaround until multiple routes are supported in the backend
+  const response = (await resp.json()) as IIntegration | IIntegration[];
+
+  if (!Array.isArray(response)) {
+    return [response];
   }
+
+  return response;
 }
 
 /**

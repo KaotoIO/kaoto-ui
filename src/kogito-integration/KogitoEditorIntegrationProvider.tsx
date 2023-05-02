@@ -138,17 +138,17 @@ function KogitoEditorIntegrationProviderInternal(
         if (previousContent.current === content) return;
 
         fetchIntegrationJson(content, settings.namespace)
-          .then((res: IIntegration) => {
+          .then((res) => {
             if (canceled.get()) return;
 
-            let tmpInt = res;
+            let tmpInt = res[0];
 
-            if (typeof res.metadata?.name === 'string' && res.metadata.name !== '') {
-              settings.name = res.metadata.name;
-              setSettings({ name: res.metadata.name });
+            if (typeof tmpInt.metadata?.name === 'string' && tmpInt.metadata.name !== '') {
+              settings.name = tmpInt.metadata.name;
+              setSettings({ name: tmpInt.metadata.name });
             }
 
-            tmpInt.metadata = { ...res.metadata, ...settings };
+            tmpInt.metadata = { ...tmpInt.metadata, ...settings };
             updateIntegration(tmpInt);
 
             if (!initialIntegrationJson.current) {
