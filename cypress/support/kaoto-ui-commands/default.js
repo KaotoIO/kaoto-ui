@@ -39,6 +39,11 @@ Cypress.Commands.add('openMenuDropDown', () => {
     cy.get('[data-testid="toolbar-kebab-dropdown-btn"]').click();
 });
 
+Cypress.Commands.add('openAboutModal', () => {
+    cy.openMenuDropDown();
+    cy.get('[data-testid="kaotoToolbar-kebab__about"]').click();
+});
+
 Cypress.Commands.add('openAppearanceModal', () => {
     cy.openMenuDropDown();
     cy.get('[data-testid="kaotoToolbar-kebab__appearance"]').click();
@@ -51,6 +56,10 @@ Cypress.Commands.add('openSettingsModal', () => {
 
 Cypress.Commands.add('closeAppearanceModal', () => {
     cy.get('#pf-modal-part-3 > .pf-c-button').click();
+});
+
+Cypress.Commands.add('closeAboutModal', () => {
+    cy.get('.pf-c-button.pf-m-plain').click();
 });
 
 Cypress.Commands.add('closeMenuModal', () => {

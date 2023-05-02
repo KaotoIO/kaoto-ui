@@ -21,9 +21,9 @@ export const AboutModal = ({ handleCloseModal, isModalOpen }: IAboutModal) => {
       <TextContent>
         <TextList component="dl">
           <TextListItem component="dt">Frontend Version</TextListItem>
-          <TextListItem component="dd">{KAOTO_VERSION}</TextListItem>
+          <TextListItem component="dd" data-testid="about-frontend-version" >{KAOTO_VERSION}</TextListItem>
           <TextListItem component="dt">Backend Version</TextListItem>
-          <TextListItem component="dd">{backendVersion}</TextListItem>
+          <TextListItem component="dd" data-testid="about-backend-version" >{backendVersion}</TextListItem>
         </TextList>
       </TextContent>
     </PatternFlyAboutModal>
