@@ -1,15 +1,11 @@
-import { useDeploymentStore } from './deploymentStore';
-import { useIntegrationSourceStore } from './integrationSourceStore';
-import { useNestedStepsStore } from './nestedStepsStore';
-import { initDsl, initialSettings, useSettingsStore } from './settingsStore';
-import { useVisualizationStore } from './visualizationStore';
 import { StepsService } from '@kaoto/services';
 import { IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { setDeepValue } from '@kaoto/utils';
 import isEqual from 'lodash.isequal';
-import { mountStoreDevtool } from 'simple-zustand-devtools';
 import { temporal } from 'zundo';
 import { create } from 'zustand';
+import { useNestedStepsStore } from './nestedStepsStore';
+import { initDsl, initialSettings } from './settingsStore';
 
 export interface IIntegrationJsonStore {
   appendStep: (newStep: IStepProps) => void;
@@ -184,14 +180,3 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
     }
   )
 );
-
-if (process.env.NODE_ENV === 'development') {
-  mountStoreDevtool('integrationJsonStore', useIntegrationJsonStore);
-  mountStoreDevtool('integrationSourceStore', useIntegrationSourceStore);
-  mountStoreDevtool('nestedStepsStore', useNestedStepsStore);
-  mountStoreDevtool('deploymentStore', useDeploymentStore);
-  mountStoreDevtool('settingsStore', useSettingsStore);
-  mountStoreDevtool('visualizationStore', useVisualizationStore);
-}
-
-export default useIntegrationJsonStore;

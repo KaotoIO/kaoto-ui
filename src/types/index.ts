@@ -244,3 +244,11 @@ export interface IVizStepNodeData {
 export type IVizStepPropsEdge = Edge & {
   arrowHeadType?: string;
 };
+
+/**
+ * DTO Interface used for the backend communication
+ */
+export interface IFlowsWrapper {
+  flows: IIntegration[];
+  properties: Record<string, unknown>;
+}
