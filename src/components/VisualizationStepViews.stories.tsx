@@ -8,6 +8,7 @@ export default {
     isPanelExpanded: true,
     step: {
       id: 'servlet',
+      integrationId: 'Camel Route-1',
       name: 'servlet',
       type: 'START',
       description:

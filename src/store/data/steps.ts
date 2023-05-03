@@ -6,6 +6,7 @@ export default [
     name: 'twitter-search-source',
     type: 'START',
     UUID: 'twitter-search-source-0',
+    integrationId: 'Camel Route-1',
     description:
       'Allows to get all tweets on particular keywords from Twitter.\n\nIt requires tokens that can be obtained by creating an application \nin the Twitter developer portal: https://developer.twitter.com/.',
     group: 'Twitter',
@@ -72,6 +73,7 @@ export default [
     name: 'pdf-action',
     type: 'MIDDLE',
     UUID: 'pdf-action-1',
+    integrationId: 'Camel Route-1',
     description: 'Create a PDF',
     group: 'PDF',
     icon: 'data:image/svg+xml',
@@ -116,6 +118,7 @@ export default [
     name: 'caffeine-action',
     type: 'MIDDLE',
     UUID: 'caffeine-action-2',
+    integrationId: 'Camel Route-1',
     description:
       "Perform operations on a caffeine cache\n\nThe Kamelet expects the following headers to be set:\n\n- `caffeine-key` / `ce-caffeinekey`: as the cache key used in the operation\n\n- `caffeine-operation` / `ce-caffeineoperation`: as the operation to perform. It can be PUT, GET, INVALIDATE and CLEANUP.\n\nIf the caffeine-key header won't be set the exchange ID will be used as key.\n\nIf the caffeine-operation header won't be set, the GET operation will be performed.",
     group: 'Caffeine',
@@ -141,6 +144,7 @@ export default [
     name: 'kafka-sink',
     type: 'END',
     UUID: 'kafka-sink-3',
+    integrationId: 'Camel Route-1',
     description:
       'Send data to Kafka topics.\n\nThe Kamelet is able to understand the following headers to be set:\n\n- `key` / `ce-key`: as message key\n\n- `partition-key` / `ce-partitionkey`: as message partition key\n\nBoth the headers are optional.',
     group: 'Kafka',

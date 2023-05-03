@@ -133,6 +133,7 @@ describe('stepsService', () => {
 
     it('getIntegrationSource(): should call apiService to return the source code (YAML) for the current running deployment', async () => {
       const integration = {
+        id: '',
         metadata: { name: 'Updated integration' },
         dsl: 'KameletBinding',
         params: [],
@@ -529,6 +530,7 @@ describe('stepsService', () => {
               steps: [
                 {
                   UUID: 'choice-1|branch-0|log-0',
+                  integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
                   name: 'log',
@@ -542,6 +544,7 @@ describe('stepsService', () => {
               steps: [
                 {
                   UUID: 'choice-1|branch-1|log-0',
+                  integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
                   name: 'log',
@@ -571,6 +574,7 @@ describe('stepsService', () => {
               steps: [
                 {
                   UUID: 'choice-1|branch-0|timer-0',
+                  integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
                   name: 'timer',
@@ -579,6 +583,7 @@ describe('stepsService', () => {
                 },
                 {
                   UUID: 'choice-1|branch-0|choice-1',
+                  integrationId: 'Camel Route-1',
                   minBranches: 1,
                   maxBranches: -1,
                   name: 'choice',
@@ -589,6 +594,7 @@ describe('stepsService', () => {
                       steps: [
                         {
                           UUID: 'choice-1|branch-0|choice-1|branch-0|log-0',
+                          integrationId: 'Camel Route-1',
                           minBranches: 0,
                           maxBranches: 0,
                           name: 'log',
@@ -602,6 +608,7 @@ describe('stepsService', () => {
                       steps: [
                         {
                           UUID: 'choice-1|branch-0|choice-1|branch-1|log-0',
+                          integrationId: 'Camel Route-1',
                           minBranches: 0,
                           maxBranches: 0,
                           name: 'log',
@@ -620,6 +627,7 @@ describe('stepsService', () => {
               steps: [
                 {
                   UUID: 'choice-1|branch-1|log-0',
+                  integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
                   name: 'log',
@@ -646,6 +654,7 @@ describe('stepsService', () => {
               steps: [
                 {
                   UUID: 'choice-0|branch-0|log-0',
+                  integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
                   name: 'log',
@@ -659,6 +668,7 @@ describe('stepsService', () => {
               steps: [
                 {
                   UUID: 'choice-0|branch-1|log-0',
+                  integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
                   name: 'log',

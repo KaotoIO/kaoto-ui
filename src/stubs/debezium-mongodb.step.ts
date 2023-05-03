@@ -1028,4 +1028,5 @@ export const debeziumMongoDBStep: IStepProps = {
   minBranches: 0,
   maxBranches: 0,
   UUID: 'random-and-unique-id',
+  integrationId: 'Camel Route-1',
 };

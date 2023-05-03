@@ -15,7 +15,8 @@ export const kameletSourceStepStub: IStepProps = {
   branches: [],
   minBranches: 0,
   maxBranches: 1,
-  UUID: 'timer-source-0'
+  UUID: 'timer-source-0',
+  integrationId: 'Camel Route-1',
 }
 
 export const stepsStub = {
@@ -69,7 +70,8 @@ export const integrationJSONStub = {
       branches: null,
       minBranches: 0,
       maxBranches: 0,
-      UUID: 'timer-source-0'
+      UUID: 'timer-source-0',
+      integrationId: 'Camel Route-1',
     }
   ],
   params: []
@@ -87,7 +89,8 @@ export const stepsCatalog: IStepProps[] = [
     group: 'Camel-Component',
     minBranches: 0,
     maxBranches: 0,
-    UUID: 'random-id-1'
+    UUID: 'random-id-1',
+    integrationId: 'Camel Route-1',
   },
   {
     name: 'activemq',
@@ -100,7 +103,8 @@ export const stepsCatalog: IStepProps[] = [
     group: 'Camel-Component',
     minBranches: 0,
     maxBranches: 0,
-    UUID: 'random-id-2'
+    UUID: 'random-id-2',
+    integrationId: 'Camel Route-1',
   },
   {
     name: 'activemq',
@@ -113,6 +117,7 @@ export const stepsCatalog: IStepProps[] = [
     group: 'Camel-Component',
     minBranches: 0,
     maxBranches: 0,
-    UUID: 'random-id-3'
+    UUID: 'random-id-3',
+    integrationId: 'Camel Route-1',
   },
 ];

@@ -238,6 +238,7 @@ export const integrationSteps: IStepProps[] = [
     minBranches: 0,
     maxBranches: 0,
     UUID: 'timer-0',
+    integrationId: 'Camel Route-1',
   },
   {
     name: 'choice',
@@ -447,6 +448,7 @@ export const integrationSteps: IStepProps[] = [
             minBranches: 0,
             maxBranches: 0,
             UUID: 'log-0-3610810635',
+            integrationId: 'Camel Route-1',
           },
         ],
         parameters: [],
@@ -585,6 +587,7 @@ export const integrationSteps: IStepProps[] = [
             minBranches: 0,
             maxBranches: 0,
             UUID: 'log-0-793453600',
+            integrationId: 'Camel Route-1',
           },
         ],
         parameters: [],
@@ -595,5 +598,6 @@ export const integrationSteps: IStepProps[] = [
     minBranches: 1,
     maxBranches: -1,
     UUID: 'choice-1',
+    integrationId: 'Camel Route-1',
   },
 ];
