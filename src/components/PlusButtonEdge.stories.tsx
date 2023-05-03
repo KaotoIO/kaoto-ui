@@ -1,5 +1,5 @@
 import { PlusButtonEdge } from './PlusButtonEdge';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ReactFlowProvider } from 'reactflow';
 
 export default {
@@ -23,9 +23,9 @@ export default {
       </ReactFlowProvider>
     ),
   ],
-} as ComponentMeta<typeof PlusButtonEdge>;
+} as Meta<typeof PlusButtonEdge>;
 
-const Template: ComponentStory<typeof PlusButtonEdge> = (args) => {
+const Template: StoryFn<typeof PlusButtonEdge> = (args) => {
   return <PlusButtonEdge {...args} />;
 };
 

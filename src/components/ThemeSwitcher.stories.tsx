@@ -1,12 +1,12 @@
 import { ThemeSwitcher } from './ThemeSwitcher';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Settings/ThemeSwitcher',
   component: ThemeSwitcher,
-} as ComponentMeta<typeof ThemeSwitcher>;
+} as Meta<typeof ThemeSwitcher>;
 
-const Template: ComponentStory<typeof ThemeSwitcher> = () => {
+const Template: StoryFn<typeof ThemeSwitcher> = () => {
   return <ThemeSwitcher />;
 };
 

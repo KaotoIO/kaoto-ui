@@ -1,6 +1,6 @@
 import { AppearanceModal } from './AppearanceModal';
 import { useArgs } from '@storybook/client-api';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Settings/AppearanceModal',
@@ -13,9 +13,9 @@ export default {
     ),
   ],
   argTypes: { handleCloseModal: { action: 'clicked' } },
-} as ComponentMeta<typeof AppearanceModal>;
+} as Meta<typeof AppearanceModal>;
 
-const Template: ComponentStory<typeof AppearanceModal> = (args) => {
+const Template: StoryFn<typeof AppearanceModal> = (args) => {
   const [{ isModalOpen }, updateArgs] = useArgs();
   const handleClose = () => updateArgs({ isModalOpen: !isModalOpen });
   return (

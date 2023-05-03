@@ -1,5 +1,5 @@
 import { KaotoToolbar } from './KaotoToolbar';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Layout/KaotoToolbar',
@@ -9,9 +9,9 @@ export default {
     toggleCatalog: { action: 'toggled' },
     toggleCodeEditor: { action: 'toggled' },
   },
-} as ComponentMeta<typeof KaotoToolbar>;
+} as Meta<typeof KaotoToolbar>;
 
-const Template: ComponentStory<typeof KaotoToolbar> = (args) => {
+const Template: StoryFn<typeof KaotoToolbar> = (args) => {
   return <KaotoToolbar {...args} />;
 };
 

@@ -1,13 +1,13 @@
 import { Console } from './Console';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Layout/Console',
   component: Console,
   argTypes: { handleCloseConsole: { action: 'closed' } },
-} as ComponentMeta<typeof Console>;
+} as Meta<typeof Console>;
 
-const Template: ComponentStory<typeof Console> = (args) => {
+const Template: StoryFn<typeof Console> = (args) => {
   return <Console {...args} />;
 };
 

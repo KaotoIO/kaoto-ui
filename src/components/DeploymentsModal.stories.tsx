@@ -1,6 +1,6 @@
 import { DeploymentsModal } from './DeploymentsModal';
 import { useArgs } from '@storybook/client-api';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Deployment/DeploymentsModal',
@@ -13,9 +13,9 @@ export default {
     ),
   ],
   argTypes: { handleCloseModal: { action: 'clicked' } },
-} as ComponentMeta<typeof DeploymentsModal>;
+} as Meta<typeof DeploymentsModal>;
 
-const Template: ComponentStory<typeof DeploymentsModal> = (args) => {
+const Template: StoryFn<typeof DeploymentsModal> = (args) => {
   const [{ isModalOpen }, updateArgs] = useArgs();
   const handleClose = () => updateArgs({ isModalOpen: !isModalOpen });
   return (

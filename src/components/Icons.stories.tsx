@@ -1,13 +1,13 @@
 import { CustomExclamationTriangleIcon } from './Icons';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Layout/Icons',
   component: CustomExclamationTriangleIcon,
   argTypes: { props: { color: 'orange' } },
-} as ComponentMeta<typeof CustomExclamationTriangleIcon>;
+} as Meta<typeof CustomExclamationTriangleIcon>;
 
-const Template: ComponentStory<typeof CustomExclamationTriangleIcon> = (args) => {
+const Template: StoryFn<typeof CustomExclamationTriangleIcon> = (args) => {
   return <CustomExclamationTriangleIcon {...args} />;
 };
 

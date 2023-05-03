@@ -1,12 +1,12 @@
 import { SourceCodeEditor } from './SourceCodeEditor';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Code Editor/SourceCodeEditor',
   component: SourceCodeEditor,
-} as ComponentMeta<typeof SourceCodeEditor>;
+} as Meta<typeof SourceCodeEditor>;
 
-const Template: ComponentStory<typeof SourceCodeEditor> = (args) => {
+const Template: StoryFn<typeof SourceCodeEditor> = (args) => {
   return <SourceCodeEditor {...args} />;
 };
 

@@ -1,5 +1,5 @@
 import { VisualizationStepViews } from './VisualizationStepViews';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Step Views/VisualizationStepViews',
@@ -84,9 +84,9 @@ export default {
     },
   },
   argTypes: { onClosePanelClick: { action: 'clicked' }, saveConfig: { action: 'triggered' } },
-} as ComponentMeta<typeof VisualizationStepViews>;
+} as Meta<typeof VisualizationStepViews>;
 
-const Template: ComponentStory<typeof VisualizationStepViews> = (args) => {
+const Template: StoryFn<typeof VisualizationStepViews> = (args) => {
   return <VisualizationStepViews {...args} />;
 };
 

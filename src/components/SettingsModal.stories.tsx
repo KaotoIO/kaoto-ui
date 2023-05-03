@@ -1,6 +1,6 @@
 import { SettingsModal } from './SettingsModal';
 import { useArgs } from '@storybook/client-api';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Settings/SettingsModal',
@@ -13,9 +13,9 @@ export default {
     ),
   ],
   argTypes: { handleCloseModal: { action: 'clicked' } },
-} as ComponentMeta<typeof SettingsModal>;
+} as Meta<typeof SettingsModal>;
 
-const Template: ComponentStory<typeof SettingsModal> = (args) => {
+const Template: StoryFn<typeof SettingsModal> = (args) => {
   const [{ isModalOpen }, updateArgs] = useArgs();
   const handleClose = () => updateArgs({ isModalOpen: !isModalOpen });
   return (
