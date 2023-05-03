@@ -45,28 +45,18 @@ module.exports = {
       }
     });
 
-    /**
-     * The first rule from the array it's the typescript one,
-     * it would be better to have a more deterministic way to ensure it*/
-    const [existingTypescriptConfig, ...rest] = updatedConfig.module.rules;
-
-    updatedConfig.module.rules = [
-      {
-        test: /\.(tsx|ts|jsx)?$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              transpileOnly: true,
-              experimentalWatchApi: true,
-            },
+    updatedConfig.module.rules.unshift({
+      test: /\.(tsx|ts|jsx)?$/,
+      use: [
+        {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true,
+            experimentalWatchApi: true,
           },
-        ],
-      },
-      ...rest,
-    ];
-
-    console.log(JSON.stringify(updatedConfig.module.rules, null, 4));
+        },
+      ],
+    });
 
     return updatedConfig;
   },

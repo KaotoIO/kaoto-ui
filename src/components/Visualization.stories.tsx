@@ -15,8 +15,8 @@ export default {
   argTypes: { toggleCatalog: { action: 'toggled' } },
 } as ComponentMeta<typeof Visualization>;
 
-const Template: ComponentStory<typeof Visualization> = (args) => {
-  return <Visualization {...args} />;
+const Template: ComponentStory<typeof Visualization> = () => {
+  return <Visualization />;
 };
 
 export const EmptyState = Template.bind({});

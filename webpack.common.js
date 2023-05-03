@@ -15,23 +15,13 @@ const isPatternflyStyles = (stylesheet) =>
   stylesheet.includes('@patternfly/react-code-editor') ||
   stylesheet.includes('monaco-editor-webpack-plugin');
 
-module.exports = () => {
+const common = (mode) => {
   return {
+    mode,
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
     module: {
       rules: [
-        {
-          test: /\.(tsx|ts|jsx)?$/,
-          use: [
-            {
-              loader: 'ts-loader',
-              options: {
-                transpileOnly: true,
-                experimentalWatchApi: true,
-              },
-            },
-          ],
-        },
+
         {
           test: /\.css|s[ac]ss$/i,
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
@@ -128,3 +118,5 @@ module.exports = () => {
     },
   };
 };
+
+module.exports = { common };
