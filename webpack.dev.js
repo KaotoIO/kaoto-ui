@@ -1,9 +1,8 @@
 const { merge } = require('webpack-merge');
-const common = require('./webpack.common.js');
+const { common } = require('./webpack.common.js');
 const webpack = require('webpack');
 
 module.exports = merge(common('development'), {
-  mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
     allowedHosts: 'all',
@@ -28,4 +27,20 @@ module.exports = merge(common('development'), {
     }),
   ],
   stats: 'errors-warnings',
+  module: {
+    rules: [
+      {
+        test: /\.(tsx|ts|jsx)?$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+              experimentalWatchApi: true,
+            },
+          },
+        ],
+      },
+    ],
+  },
 });

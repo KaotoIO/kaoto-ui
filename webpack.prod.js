@@ -1,11 +1,9 @@
-/* eslint-disable */
 const { merge } = require('webpack-merge');
-const common = require('./webpack.common.js');
+const { common } = require('./webpack.common.js');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const webpack = require('webpack');
 
-module.exports = merge(common('production', { mode: 'production' }), {
-  mode: 'production',
+module.exports = merge(common('production'), {
   devtool: 'source-map',
   optimization: {
     minimizer: [
@@ -22,5 +20,17 @@ module.exports = merge(common('production', { mode: 'production' }), {
     new webpack.DefinePlugin({
       KAOTO_API: JSON.stringify(process.env.KAOTO_API || '/api'),
     }),
-  ]
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.(tsx|ts|jsx)?$/,
+        use: [
+          {
+            loader: 'ts-loader',
+          },
+        ],
+      },
+    ],
+  },
 });
