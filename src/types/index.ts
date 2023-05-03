@@ -30,6 +30,7 @@ export interface IDeployment {
 }
 
 export interface IIntegration {
+  id: string;
   dsl: string;
   metadata: IIntegrationMetadata;
   params: IIntegrationParams[];
@@ -142,6 +143,9 @@ export interface IStepProps {
 
   // generated only for integration steps
   UUID: string;
+
+  // IntegrationID to which this step belongs to
+  integrationId: string;
 }
 
 export interface IStepPropsBranch {

@@ -31,6 +31,7 @@ const Visualization = () => {
     name: '',
     type: '',
     UUID: '',
+    integrationId: '',
   });
   const visualizationStore = useVisualizationStore.getState();
   const layout = useVisualizationStore((state) => state.layout);
@@ -61,7 +62,7 @@ const Visualization = () => {
     if (step) {
       setSelectedStep(step);
     } else {
-      setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '' });
+      setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '', integrationId: '' });
       visualizationStore.setSelectedStepUuid('');
       setIsPanelExpanded(false);
     }
@@ -83,7 +84,7 @@ const Visualization = () => {
   const handleDeleteStep = (UUID?: string) => {
     if (!UUID) return;
 
-    setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '' });
+    setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '', integrationId: '' });
     visualizationStore.setSelectedStepUuid('');
     if (isPanelExpanded) setIsPanelExpanded(false);
 

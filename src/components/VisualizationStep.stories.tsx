@@ -20,6 +20,7 @@ export default {
       isPlaceholder: false,
       step: {
         id: 'servlet',
+        integrationId: 'Camel Route-1',
         name: 'servlet',
         type: 'START',
         description:

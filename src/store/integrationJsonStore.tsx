@@ -30,8 +30,9 @@ export interface IIntegrationJsonStore {
   views: IViewProps[];
 }
 
-export const integrationJsonInitialState = {
+export const integrationJsonInitialState: Pick<IIntegrationJsonStore, 'integrationJson' | 'views'>   = {
   integrationJson: {
+    id: `${initDsl.name}-1`,
     dsl: initDsl.name,
     metadata: { name: initialSettings.name, namespace: initialSettings.namespace },
     steps: [],

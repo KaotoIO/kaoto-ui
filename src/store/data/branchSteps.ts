@@ -14,6 +14,7 @@ export default [
     parameters: [],
     title: 'Kamelet Source',
     UUID: 'kamelet:source-233189',
+    integrationId: 'Camel Route-1',
   },
   {
     id: 'choice',
@@ -65,6 +66,7 @@ export default [
             required: ['name'],
             title: 'Set Header',
             UUID: 'set-header-337596',
+            integrationId: 'Camel Route-1',
           },
         ],
       },
@@ -113,6 +115,7 @@ export default [
             required: ['name'],
             title: 'Set Property',
             UUID: 'set-property-00823',
+            integrationId: 'Camel Route-1',
           },
           {
             id: 'remove-property',
@@ -136,6 +139,7 @@ export default [
             required: ['name'],
             title: 'Remove Property',
             UUID: 'remove-property-2403409',
+            integrationId: 'Camel Route-1',
           },
         ],
       },
@@ -166,6 +170,7 @@ export default [
             ],
             title: 'Transform',
             UUID: 'transform-208704',
+            integrationId: 'Camel Route-1',
           },
         ],
       },
@@ -195,6 +200,7 @@ export default [
             ],
             title: 'Set Body',
             UUID: 'set-body-28904309',
+            integrationId: 'Camel Route-1',
           },
           {
             id: 'remove-header',
@@ -218,6 +224,7 @@ export default [
             required: ['name'],
             title: 'Remove Header',
             UUID: 'remove-header-281047',
+            integrationId: 'Camel Route-1',
           },
         ],
       },
@@ -242,6 +249,7 @@ export default [
     ],
     title: 'Content Based Router.',
     UUID: 'choice-344294',
+    integrationId: 'Camel Route-1',
   },
   {
     id: 'filter',
@@ -275,6 +283,7 @@ export default [
             ],
             title: 'Set Body',
             UUID: 'set-body-12334',
+            integrationId: 'Camel Route-1',
           },
         ],
       },
@@ -299,6 +308,7 @@ export default [
     ],
     title: 'Filter',
     UUID: 'filter-3923735',
+    integrationId: 'Camel Route-1',
   },
   {
     id: 'kamelet:sink',
@@ -313,5 +323,6 @@ export default [
     parameters: [],
     title: 'Kamelet Sink',
     UUID: 'kamelet:sink-559424',
+    integrationId: 'Camel Route-1',
   },
 ] as IStepProps[];

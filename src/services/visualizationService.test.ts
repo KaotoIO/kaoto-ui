@@ -16,7 +16,7 @@ import { MarkerType, Position } from 'reactflow';
 
 describe('visualizationService', () => {
   const groupWidth = 80;
-  const baseStep = { UUID: '', name: '', maxBranches: 0, minBranches: 0, type: '' };
+  const baseStep = { UUID: '', name: '', maxBranches: 0, minBranches: 0, type: '', integrationId: 'Camel Route-1' };
 
   it('buildBranchNodeParams(): should build params for a branch node', () => {
     const currentStep = steps[3];
@@ -208,18 +208,18 @@ describe('visualizationService', () => {
   });
 
   it('buildEdges(): should build an edge for every node except the first, given an array of nodes', () => {
-    const nodes = [
+    const nodes: IVizStepNode[] = [
       {
         data: {
           label: 'aws-kinesis-source',
-          step: { ...baseStep, UUID: 'example-1234' },
+          step: { ...baseStep, UUID: 'example-1234', integrationId: 'Camel Route-1' },
           nextStepUuid: 'example-1235',
         },
         id: 'dndnode_1',
         position: { x: 720, y: 250 },
       },
       {
-        data: { label: 'avro-deserialize-sink', step: { ...baseStep, UUID: 'example-1235' } },
+        data: { label: 'avro-deserialize-sink', step: { ...baseStep, UUID: 'example-1235', integrationId: 'Camel Route-1' } },
         id: 'dndnode_2',
         position: { x: 880, y: 250 },
       },
