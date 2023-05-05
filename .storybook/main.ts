@@ -3,6 +3,9 @@ const {
 } = require('webpack-merge');
 const prod = require('../webpack.prod.js');
 const path = require('path');
+const webpack = require('webpack');
+const { version } = require('../package.json');
+
 module.exports = {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   staticDirs: ['../public'],
@@ -10,6 +13,9 @@ module.exports = {
   babel: async (options: any) => {
     // Update your babel configuration here
     return options;
+  },
+  docs: {
+    autodocs: true
   },
   typescript: {
     check: false,
@@ -59,9 +65,12 @@ module.exports = {
       ],
     });
 
+    updatedConfig.plugins.push(
+      new webpack.DefinePlugin({
+        KAOTO_VERSION: JSON.stringify(version),
+      }),
+    );
+
     return updatedConfig;
-  },
-  docs: {
-    autodocs: true
   }
 };
