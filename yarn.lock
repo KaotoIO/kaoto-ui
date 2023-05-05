@@ -1939,10 +1939,10 @@
   dependencies:
     "@kie-tools-core/operating-system" "0.28.0"
 
-"@kie-tools/uniforms-patternfly@^0.27.0":
-  version "0.27.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools/uniforms-patternfly/-/uniforms-patternfly-0.27.0.tgz#208f3e92637d9c197380beec8a4f2f3dc44c157b"
-  integrity sha512-hg1tU0Z2OU607g+bFfLc3EURweGuAjY1JgbVPIebabMbRU7IGK+QhSFOynj6gMK03x3D+DVQ5k8sOGMODOt+hQ==
+"@kie-tools/uniforms-patternfly@^0.28.0":
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools/uniforms-patternfly/-/uniforms-patternfly-0.28.0.tgz#41bf66e535da52d66d4ac8ea4592d382ff3956bb"
+  integrity sha512-Qf+JUSpP3n52Mq03YZtNEIHSIjWoQL8F2T246cDXIVEnLcbMQDooU2wp6jEAgV6Fo1mb1yo1dj8G6+Y31Pgllw==
   dependencies:
     "@types/invariant" "^2.2.35"
     invariant "^2.2.4"
