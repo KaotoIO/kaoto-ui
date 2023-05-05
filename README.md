@@ -95,6 +95,14 @@ yarn e2e --browser firefox
 
 See the [Cypress docs](https://docs.cypress.io) for more information. There are also GitHub Actions workflows in `.github/workflows` that run the tests automatically on opening a pull request.
 
+### Storybook
+
+Storybook builds are enabled for all non-Dependabot pull requests to `kaoto-ui`, thanks to [Chromatic](https://main--61040cd029d0ce003b570dad.chromatic.com/). It gives you the ability to view stories for each pull request, which makes it easy to share development of new UI components with team members. Storybook also makes it easy to keep presentational components isolated. You can learn more about how to create a story for your UI component [here](https://storybook.js.org/docs/react/writing-stories/introduction).
+
+To run Storybook locally: `yarn storybook`
+
+To publish to Chromatic: `yarn chromatic`
+
 ## Build
 
 ```bash

@@ -210,6 +210,12 @@ export class VisualizationService {
     return {
       arrowHeadType: 'arrowclosed',
       id: `e-${sourceStep.id}>${targetStep.id}`,
+      data: {
+        showBranchesTab: this.showBranchesTab(targetStep.data.step),
+        showStepsTab: this.showStepsTab(sourceStep.data),
+        sourceStepNode: sourceStep,
+        targetStepNode: targetStep,
+      },
       markerEnd: {
         type: MarkerType.Arrow,
         color: '#d2d2d2',
@@ -668,7 +674,7 @@ export class VisualizationService {
   static showStepsTab(nodeData: IVizStepNodeData): boolean {
     // if it contains branches and no next step, show the steps tab
     if (StepsService.containsBranches(nodeData.step) && !nodeData.nextStepUuid) return true;
-    // if it doesn't contains branches, don't show the steps tab
+    // if it doesn't contain branches, don't show the steps tab
     return !StepsService.containsBranches(nodeData.step);
   }
 }
