@@ -84,9 +84,11 @@ const Visualization = () => {
   const handleDeleteStep = (UUID?: string) => {
     if (!UUID) return;
 
-    setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '', integrationId: '' });
-    visualizationStore.setSelectedStepUuid('');
-    if (isPanelExpanded) setIsPanelExpanded(false);
+    if (selectedStep.UUID === UUID) {
+      setIsPanelExpanded(false);
+      setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '', integrationId: '' });
+      visualizationStore.setSelectedStepUuid('');
+    }
 
     stepsService.deleteStep(UUID);
   };

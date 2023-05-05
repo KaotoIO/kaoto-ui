@@ -163,4 +163,19 @@ describe('Test for Step actions from the canvas', () => {
         // CHECK that the YAML is updated groupDelay: 15000
         cy.checkCodeSpanLine('groupDelay: 15000');
     });
+
+    it('Step detail - User selects a step, which opens the detail drawer', () => {
+        cy.insertStepMiniCatalog('choice');
+
+        cy.openStepConfigurationTab('log');
+
+        cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');
+        cy.deleteStep('log');
+        cy.get('[data-testid="kaoto-right-drawer"]').should('not.be.visible');
+
+        cy.openStepConfigurationTab('timer');
+        cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');
+        cy.deleteStep('choice');
+        cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');
+    })
 });
