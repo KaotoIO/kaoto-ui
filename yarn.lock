@@ -1852,6 +1852,14 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
+"@kie-tools-core/i18n@0.28.0":
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/i18n/-/i18n-0.28.0.tgz#5e3b7b53f68f9ee52ac172e064d1e9175c83ff43"
+  integrity sha512-9hdux08O8yroC5ZQnayBLbMb8nM7qu/Dsnow15N3cDm0U71DdzGHoXiF6Tth5cp2s0wTfnIwhsLawG/bogpkPg==
+  dependencies:
+    react "^17.0.2"
+    react-dom "^17.0.2"
+
 "@kie-tools-core/keyboard-shortcuts@0.27.0":
   version "0.27.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/keyboard-shortcuts/-/keyboard-shortcuts-0.27.0.tgz#0e39274c421e1ad2e1da7b53a4be6d1a4942b619"
@@ -1876,10 +1884,23 @@
     "@kie-tools-core/i18n" "0.27.0"
     "@kie-tools-core/workspace" "0.27.0"
 
+"@kie-tools-core/notifications@0.28.0":
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/notifications/-/notifications-0.28.0.tgz#9324f1be8cc479054ca9a33038e88d2a8d527699"
+  integrity sha512-fl8GZaljcLZpNBOqma3wiYhB7XoC2ue7l5cZtZhPrFyUq3GIIGPNANW7iX000hJ4TmUsjp6+4fkOPcPFMFBjkQ==
+  dependencies:
+    "@kie-tools-core/i18n" "0.28.0"
+    "@kie-tools-core/workspace" "0.28.0"
+
 "@kie-tools-core/operating-system@0.27.0":
   version "0.27.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.27.0.tgz#9795e7fa98d3e35711885795e41679f19b5e99dc"
   integrity sha512-u8c3OKblPTO48sGhg8MDSfVi4j6M50qbcAl3BCDiGKZ1WbZ/2jRZRPi75UEuB/x5ls3TeWQ9Jf2j8QrArdSwhg==
+
+"@kie-tools-core/operating-system@0.28.0":
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.28.0.tgz#0d2d44c58d711e0449aac4c439ed647ab29e7916"
+  integrity sha512-U5Sz7SE7eQim4T+TJckNh/6vtv1ipgmFsVcQQwCWluT/Vwb4u7iIv6I6PcebrTPCQlx7qzV715QjdNm1/xxu1Q==
 
 "@kie-tools-core/patternfly-base@0.27.0":
   version "0.27.0"
@@ -1892,6 +1913,13 @@
   integrity sha512-zk066QatVfJ+yg1l2RA02Cr3rRuauD/t/aw2rNZ6Z7p+tb3abg1crPP38MLSxoAqF/oIE5I7WzHj3eFW9yCmXQ==
   dependencies:
     "@kie-tools-core/operating-system" "0.27.0"
+
+"@kie-tools-core/workspace@0.28.0":
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/workspace/-/workspace-0.28.0.tgz#b7187956c546e8eaabd9d60a1b9ff9ed94ffb860"
+  integrity sha512-8l7eDNh4THO0csjDV3IKXh+o/CCA1HIeiUyd8tFbkP13/fjcY48s1YXuVEwmACo0wglf8x2tSWzrmaqXD1umtQ==
+  dependencies:
+    "@kie-tools-core/operating-system" "0.28.0"
 
 "@kie-tools/uniforms-patternfly@^0.27.0":
   version "0.27.0"
