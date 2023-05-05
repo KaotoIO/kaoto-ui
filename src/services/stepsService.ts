@@ -360,7 +360,7 @@ export class StepsService {
   async handleInsertStep(targetNode: IVizStepNode | undefined, step: IStepProps) {
     return fetchStepDetails(step.id).then((newStep) => {
       if (targetNode?.data.branchInfo) {
-        const currentStepNested = this.getStepNested(targetNode.data.step);
+        const currentStepNested = this.getStepNested(targetNode.data.step.UUID);
 
         if (currentStepNested) {
           const stepsCopy = useIntegrationJsonStore.getState().integrationJson.steps.slice();
