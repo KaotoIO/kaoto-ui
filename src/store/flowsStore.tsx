@@ -40,7 +40,7 @@ export const flowsInitialState: Pick<IFlowsStore, 'flows' | 'properties' | 'view
  * to clean the duplication and hopefully get a smaller
  * API for the consumers
  */
-export const flowsStore = create<IFlowsStore>()(
+export const useFlowsStore = create<IFlowsStore>()(
   temporal(
     (set) => ({
       ...flowsInitialState,
