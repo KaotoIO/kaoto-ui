@@ -1,6 +1,6 @@
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 import { useDeploymentStore } from './deploymentStore';
-import { flowsStore } from './flowsStore';
+import { useFlowsStore } from './flowsStore';
 import { useIntegrationJsonStore } from './integrationJsonStore';
 import { useIntegrationSourceStore } from './integrationSourceStore';
 import { useNestedStepsStore } from './nestedStepsStore';
@@ -10,7 +10,7 @@ import { useVisualizationStore } from './visualizationStore';
 
 if (process.env.NODE_ENV === 'development') {
   mountStoreDevtool('deploymentStore', useDeploymentStore);
-  mountStoreDevtool('flowsStore', flowsStore);
+  mountStoreDevtool('flowsStore', useFlowsStore);
   mountStoreDevtool('integrationJsonStore', useIntegrationJsonStore);
   mountStoreDevtool('integrationSourceStore', useIntegrationSourceStore);
   mountStoreDevtool('nestedStepsStore', useNestedStepsStore);
