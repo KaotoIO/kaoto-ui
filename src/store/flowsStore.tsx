@@ -14,7 +14,7 @@ export interface IFlowsStore {
   views: IViewProps[];
 
   // Handler methods
-  appendStep: (integrationId: string, newStep: IStepProps) => void;
+  insertStep: (integrationId: string, newStep: IStepProps) => void;
   deleteStep: (integrationId: string, stepUUID: string) => void;
 }
 
@@ -51,7 +51,7 @@ export const useFlowsStore = create<IFlowsStore>()(
        */
       ...{ flows: initialFlows },
 
-      appendStep: (integrationId, newStep) => {
+      insertStep: (integrationId, newStep) => {
         set((state: IFlowsStore): IFlowsStore => {
           const integrationIndex = state.flows.findIndex((integration) => integration.id === integrationId);
           if (integrationIndex === -1) {
