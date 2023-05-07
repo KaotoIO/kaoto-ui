@@ -1890,10 +1890,10 @@
     "@kie-tools-core/operating-system" "0.28.0"
     react "^17.0.2"
 
-"@kie-tools-core/monaco-editor@0.27.0":
-  version "0.27.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/monaco-editor/-/monaco-editor-0.27.0.tgz#ab7826e13d5a97dd450f9d4c8b2a81099b5c6576"
-  integrity sha512-wPsVhqbu7CHj23olxKogRhYW6zSHDFy6gQ3GGX/NNHbfLvxb1NnNvg4ORlaMeqzNogLHi+BLqO7pzCrc9aI9DQ==
+"@kie-tools-core/monaco-editor@0.28.0":
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/monaco-editor/-/monaco-editor-0.28.0.tgz#9e6269beefc3ca8622669546cc63f52b35577eae"
+  integrity sha512-KriIEPR0CNF/m3m4/mK6+OacJswpgfCnX9ZTGNI6mnx+Z+5m0pRIC+igqqEzc+1WSyrJ4E81O5zGjR4b4GTEZQ==
   dependencies:
     monaco-editor "^0.33.0"
 
