@@ -18,12 +18,13 @@ import {
   Modal,
   ModalVariant,
   Popover,
+  Switch,
   TextArea,
   TextInput,
 } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface ISettingsModal {
   handleCloseModal: () => void;
@@ -176,6 +177,10 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
     handleCloseModal();
   };
 
+  const onToggleUseMultipleFlowsSupport = useCallback((useMultipleFlows: boolean) => {
+    setLocalSettings({ ...localSettings, useMultipleFlows });
+  }, [localSettings]);
+
   return (
     <Modal
       actions={[
@@ -325,6 +330,18 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
               );
             })}
           </FormSelect>
+        </FormGroup>
+
+        {/* TODO: Temporary toggle to enable experimental support for Multiple Flows */}
+        <FormGroup
+          fieldId="useMultipleFlows"
+          label="Enable experimental support for multiple flows"
+        >
+          <Switch
+            aria-label="enable multiple flows support"
+            isChecked={localSettings.useMultipleFlows}
+            onChange={onToggleUseMultipleFlowsSupport}
+          />
         </FormGroup>
       </Form>
     </Modal>

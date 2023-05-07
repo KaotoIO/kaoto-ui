@@ -9,7 +9,7 @@ import {
   VisualizationStepViews,
 } from '@kaoto/components';
 import { StepsService, VisualizationService } from '@kaoto/services';
-import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
+import { useIntegrationJsonStore, useSettingsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
@@ -33,6 +33,8 @@ const Visualization = () => {
     UUID: '',
     integrationId: '',
   });
+
+  const useMultipleFlows = useSettingsStore((state) => state.settings.useMultipleFlows);
   const visualizationStore = useVisualizationStore.getState();
   const layout = useVisualizationStore((state) => state.layout);
   const nodes = useVisualizationStore((state) => state.nodes);
@@ -70,7 +72,7 @@ const Visualization = () => {
 
   useEffect(() => {
     visualizationService.redrawDiagram(handleDeleteStep, true).catch((e) => console.error(e));
-  }, [integrationJson, layout]);
+  }, [integrationJson, layout, useMultipleFlows]);
 
   const nodeTypes = useMemo(() => ({ step: VisualizationStep }), []);
   const edgeTypes = useMemo(

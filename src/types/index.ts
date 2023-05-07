@@ -68,6 +68,9 @@ export interface ISettings {
   name: string;
   // Cluster namespace
   namespace: string;
+
+  /** TODO: Temporary config to enable the support for multiple flows */
+  useMultipleFlows: boolean,
 }
 
 export interface ICapabilities {

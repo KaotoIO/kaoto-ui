@@ -1,11 +1,21 @@
 import { StepsService } from '@kaoto/services';
 import { IIntegration, IStepProps, IViewProps } from '@kaoto/types';
+import { setDeepValue } from '@kaoto/utils';
 import isEqual from 'lodash.isequal';
 import { temporal } from 'zundo';
 import { create } from 'zustand';
 import { initialFlows } from '../stubs';
 import { useNestedStepsStore } from './nestedStepsStore';
 import { initDsl, initialSettings } from './settingsStore';
+
+interface IInsertOptions {
+  (integrationId: string, newStep: IStepProps, options: { mode: 'append' }): void;
+  (integrationId: string, newStep: IStepProps, options: { mode: 'insert', index: number }): void;
+  (integrationId: string, newStep: IStepProps, options: { mode: 'replace', index: number }): void;
+  (integrationId: string, newStep: IStepProps, options: { mode: 'replace', path: string[] }): void;
+  (integrationId: string, newStep: IStepProps, options: { mode: 'replace', index?: number, path?: string[] }): void;
+  (integrationId: string, newStep: IStepProps, options: { mode: 'append' | 'insert' | 'replace'; index: number, path: string[] }): void;
+}
 
 export interface IFlowsStore {
   // Data
@@ -14,7 +24,7 @@ export interface IFlowsStore {
   views: IViewProps[];
 
   // Handler methods
-  insertStep: (integrationId: string, newStep: IStepProps) => void;
+  insertStep: IInsertOptions;
   deleteStep: (integrationId: string, stepUUID: string) => void;
 }
 
@@ -36,7 +46,7 @@ export const flowsInitialState: Pick<IFlowsStore, 'flows' | 'properties' | 'view
  * them in the correspondig integration.
  *
  * The goal is to have a working version first to include
- * support for multiple routes and then make another pass
+ * support for multiple flows and then make another pass
  * to clean the duplication and hopefully get a smaller
  * API for the consumers
  */
@@ -51,7 +61,7 @@ export const useFlowsStore = create<IFlowsStore>()(
        */
       ...{ flows: initialFlows },
 
-      insertStep: (integrationId, newStep) => {
+      insertStep: (integrationId, newStep, options) => {
         set((state: IFlowsStore): IFlowsStore => {
           const integrationIndex = state.flows.findIndex((integration) => integration.id === integrationId);
           if (integrationIndex === -1) {
@@ -60,7 +70,25 @@ export const useFlowsStore = create<IFlowsStore>()(
 
           newStep.integrationId = integrationId;
           const clonedSteps = state.flows[integrationIndex].steps.slice();
-          clonedSteps.push(newStep);
+
+          switch(options.mode) {
+            case 'append':
+              clonedSteps.push(newStep);
+              break;
+
+            case 'insert':
+              clonedSteps.splice(options.index, 0, newStep);
+              break;
+
+            case 'replace':
+              if ((options as any).path) {
+                setDeepValue(clonedSteps, (options as any).path, newStep);
+                break;
+              }
+
+              clonedSteps.splice((options as any).index, 1, newStep);
+          }
+
           const stepsWithNewUuids = StepsService.regenerateUuids(clonedSteps, `${integrationId}|`);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
           useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));

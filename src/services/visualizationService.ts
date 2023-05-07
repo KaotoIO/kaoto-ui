@@ -4,7 +4,9 @@ import {
   IIntegrationJsonStore,
   RFState,
   useIntegrationJsonStore,
+  useFlowsStore,
   useVisualizationStore,
+  useSettingsStore,
 } from '@kaoto/store';
 import {
   IStepProps,
@@ -279,12 +281,32 @@ export class VisualizationService {
    * @param handleDeleteStep
    */
   buildNodesAndEdges(handleDeleteStep: (uuid: string) => void) {
-    const steps = useIntegrationJsonStore.getState().integrationJson.steps;
+    const { id: singleFlowId, steps: singleFlowSteps } = useIntegrationJsonStore.getState().integrationJson;
     const layout = useVisualizationStore.getState().layout;
+
     // build all nodes
-    const stepNodes = VisualizationService.buildNodesFromSteps(steps, layout, {
-      handleDeleteStep,
-    });
+    let stepNodes: IVizStepNode[] = [];
+
+    /**
+     * TODO: The following check is meant to be a temporary one
+     * while the Multiple Flows support is completed.
+     *
+     * This will be removed once all the existing functionality
+     * it's ported to the new "multi-flow" approach
+     */
+    if (!useSettingsStore.getState().settings.useMultipleFlows) {
+      stepNodes = VisualizationService.buildNodesFromSteps(singleFlowId, singleFlowSteps, layout, { handleDeleteStep });
+    } else {
+      const integrations = useFlowsStore.getState().flows;
+      stepNodes = integrations.reduce((acc, currentIntegration) => acc.concat(
+        VisualizationService.buildNodesFromSteps(
+          currentIntegration.id,
+          currentIntegration.steps,
+          layout,
+          { handleDeleteStep },
+        ),
+      ), [] as IVizStepNode[]);
+    }
 
     // build edges only for main nodes
     const filteredNodes = stepNodes.filter((node) => !node.data.branchInfo);
@@ -304,6 +326,7 @@ export class VisualizationService {
    * Data is stored in the `nodes` hook.
    */
   static buildNodesFromSteps(
+    integrationId: string,
     steps: IStepProps[],
     layout: string,
     props?: { [prop: string]: any },
@@ -311,21 +334,21 @@ export class VisualizationService {
   ): IVizStepNode[] {
     let stepNodes: IVizStepNode[] = [];
     let id = 0;
-    let getId = (uuid: string) => `node_${id++}-${uuid}-${getRandomArbitraryNumber()}`;
+    let getId = (UUID: string) => `node_${id++}-${UUID}-${getRandomArbitraryNumber()}`;
 
     // if no steps or first step isn't START, create a dummy placeholder step
     if (
       (steps.length === 0 && !branchInfo) ||
       (!StepsService.isFirstStepStart(steps) && !branchInfo)
     ) {
-      VisualizationService.insertAddStepPlaceholder(stepNodes, getId(''), 'START', {
+      VisualizationService.insertAddStepPlaceholder(integrationId, stepNodes, getId(''), 'START', {
         nextStepUuid: steps[0]?.UUID,
       });
     }
 
     // build EIP placeholder
     if (branchInfo && steps.length === 0 && !StepsService.isFirstStepStart(steps)) {
-      VisualizationService.insertAddStepPlaceholder(stepNodes, getId(''), 'MIDDLE', {
+      VisualizationService.insertAddStepPlaceholder(integrationId, stepNodes, getId(''), 'MIDDLE', {
         branchInfo,
         nextStepUuid: steps[0]?.UUID,
       });
@@ -360,7 +383,7 @@ export class VisualizationService {
       if (step.branches && step.branches.length > 0 && step.maxBranches !== 0) {
         step.branches.forEach((branch) => {
           stepNodes = stepNodes.concat(
-            VisualizationService.buildNodesFromSteps(branch.steps, layout, props, {
+            VisualizationService.buildNodesFromSteps(integrationId, branch.steps, layout, props, {
               branchIdentifier: branch.condition !== null ? branch.condition : branch.identifier,
 
               // rootStepUuid is the parent for a first branch step,
@@ -487,6 +510,7 @@ export class VisualizationService {
   }
 
   static insertAddStepPlaceholder(
+    integrationId: string,
     stepNodes: IVizStepNode[],
     id: string,
     type: string,
@@ -499,6 +523,7 @@ export class VisualizationService {
           name: '',
           type: type,
           UUID: `placeholder-${getRandomArbitraryNumber()}`,
+          integrationId,
         },
         isPlaceholder: true,
         ...props,

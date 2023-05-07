@@ -228,7 +228,7 @@ describe('visualizationService', () => {
     expect(VisualizationService.buildEdges(nodes)).toHaveLength(1);
 
     // let's test that it works for branching too
-    const stepNodes = VisualizationService.buildNodesFromSteps(branchSteps, 'RIGHT');
+    const stepNodes = VisualizationService.buildNodesFromSteps('Camel Route-1', branchSteps, 'RIGHT');
 
     expect(VisualizationService.buildEdges(stepNodes)).toHaveLength(branchSteps.length - 1);
   });
@@ -260,13 +260,13 @@ describe('visualizationService', () => {
   });
 
   it('buildNodesFromSteps(): should build visualization nodes from an array of steps', () => {
-    const stepNodes = VisualizationService.buildNodesFromSteps(steps, 'RIGHT');
+    const stepNodes = VisualizationService.buildNodesFromSteps('Camel Route-1', steps, 'RIGHT');
     expect(stepNodes[0].data.step.UUID).toBeDefined();
     expect(stepNodes[0].id).toContain(stepNodes[0].data.step.UUID);
   });
 
   it.skip('buildNodesFromSteps(): should build visualization nodes from an array of steps with branches', () => {
-    const stepNodes = VisualizationService.buildNodesFromSteps(branchSteps, 'RIGHT');
+    const stepNodes = VisualizationService.buildNodesFromSteps('Camel Route-1', branchSteps, 'RIGHT');
     expect(stepNodes[0].data.step.UUID).toBeDefined();
     expect(stepNodes).toHaveLength(branchSteps.length);
   });
@@ -480,7 +480,7 @@ describe('visualizationService', () => {
 
   it('insertAddStepPlaceholder(): should add an ADD STEP placeholder to the beginning of the array', () => {
     const nodes: IVizStepNode[] = [];
-    VisualizationService.insertAddStepPlaceholder(nodes, '', 'START', { nextStepUuid: '' });
+    VisualizationService.insertAddStepPlaceholder('Camel Route-1', nodes, '', 'START', { nextStepUuid: '' });
     expect(nodes).toHaveLength(1);
   });
 
