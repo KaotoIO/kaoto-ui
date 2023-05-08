@@ -1,5 +1,8 @@
-.pf-c-drawer__content.panelCustom {
+.pf-c-drawer__content.panelCustom, .react-flow.panelCustom {
     background-color: var(--pf-global--BackgroundColor--200);
+}
+
+.pf-c-drawer__content.panelCustom {
     overflow: hidden;
 }
 

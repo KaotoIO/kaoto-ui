@@ -1,4 +1,3 @@
-import logo from '../assets/images/logo-kaoto-dark.png';
 import { fetchDefaultNamespace, startDeployment } from '@kaoto/api';
 import {
   AppearanceModal,
@@ -47,7 +46,9 @@ import {
 } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useCallback, useEffect, useState } from 'react';
+import logo from '../assets/images/logo-kaoto-dark.png';
 import { AboutModal } from './AboutModal';
+import { ExportCanvasToPng } from './ExportCanvasToPng';
 
 export interface IKaotoToolbar {
   toggleCatalog: () => void;
@@ -183,6 +184,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
 
   const kebabItems = [
     <DropdownItem
+      autoFocus
       key="about"
       data-testid="kaotoToolbar-kebab__about"
       onClick={() => {
@@ -209,13 +211,15 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
       Appearance
     </DropdownItem>,
     <DropdownSeparator key="separator-01" />,
+    <ExportCanvasToPng key="export" fileName={settings.name} onClick={() => { setKebabIsOpen(false); }}/>,
+    <DropdownSeparator key="separator-02" />,
     <DropdownItem key="tutorial" href="https://kaoto.io/workshop/" target="_blank" className="pf-u-display-flex pf-u-justify-content-space-between">
-      <span className="pf-u-mr-lg ">Tutorial</span>
+      <span className="pf-u-mr-lg">Tutorial</span>
       <Icon isInline>
         <ExternalLinkAltIcon />
       </Icon>
     </DropdownItem>,
-    <DropdownItem key="help" href="https://kaoto.io/docs/" target="_blank"  className="pf-u-display-flex pf-u-justify-content-space-between">
+    <DropdownItem key="help" href="https://kaoto.io/docs/" target="_blank" className="pf-u-display-flex pf-u-justify-content-space-between">
       <span className="pf-u-mr-lg">Help</span>
       <Icon isInline>
         <ExternalLinkAltIcon />
@@ -227,7 +231,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
         <GithubIcon />
       </Icon>
     </DropdownItem>,
-    <DropdownSeparator key="separator-02" />,
+    <DropdownSeparator key="separator-03" />,
     <DropdownItem key="delete" component="button" onClick={() => setIsConfirmationModalOpen(true)}>
       Delete
     </DropdownItem>,

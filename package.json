@@ -56,6 +56,7 @@
     "@rhoas/app-services-ui-shared": "^0.16.6",
     "ajv": "^8.12.0",
     "dagre": "^0.8.5",
+    "html-to-image": "^1.11.11",
     "immer": "^10.0.1",
     "lodash.isequal": "^4.5.0",
     "monaco-editor": "^0.38.0",

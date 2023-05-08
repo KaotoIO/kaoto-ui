@@ -189,6 +189,7 @@ const Visualization = () => {
             snapGrid={[15, 15]}
             deleteKeyCode={null}
             zoomOnDoubleClick={false}
+            className="panelCustom"
           >
             {/*<MiniMap nodeBorderRadius={2} className={'visualization__minimap'} />*/}
             <VisualizationControls />
