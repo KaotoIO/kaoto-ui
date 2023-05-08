@@ -22,6 +22,7 @@ import {
   DropdownPosition,
   DropdownSeparator,
   DropdownToggle,
+  Icon,
   InputGroup,
   KebabToggle,
   OverflowMenu,
@@ -39,6 +40,8 @@ import {
   CheckIcon,
   CodeIcon,
   CubesIcon,
+  ExternalLinkAltIcon,
+  GithubIcon,
   PencilAltIcon,
   TimesIcon,
 } from '@patternfly/react-icons';
@@ -206,14 +209,23 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
       Appearance
     </DropdownItem>,
     <DropdownSeparator key="separator-01" />,
-    <DropdownItem key="tutorial" isDisabled>
-      Tutorial
+    <DropdownItem key="tutorial" href="https://kaoto.io/workshop/" target="_blank" className="pf-u-display-flex pf-u-justify-content-space-between">
+      <span className="pf-u-mr-lg ">Tutorial</span>
+      <Icon isInline>
+        <ExternalLinkAltIcon />
+      </Icon>
     </DropdownItem>,
-    <DropdownItem key="help" isDisabled>
-      Help
+    <DropdownItem key="help" href="https://kaoto.io/docs/" target="_blank"  className="pf-u-display-flex pf-u-justify-content-space-between">
+      <span className="pf-u-mr-lg">Help</span>
+      <Icon isInline>
+        <ExternalLinkAltIcon />
+      </Icon>
     </DropdownItem>,
-    <DropdownItem key="feedback" isDisabled>
-      Feedback
+    <DropdownItem key="feedback" href="https://github.com/KaotoIO/kaoto-ui/issues/new/choose" target="_blank"  className="pf-u-display-flex pf-u-justify-content-space-between">
+      <span className="pf-u-mr-lg">Feedback</span>
+      <Icon isInline>
+        <GithubIcon />
+      </Icon>
     </DropdownItem>,
     <DropdownSeparator key="separator-02" />,
     <DropdownItem key="delete" component="button" onClick={() => setIsConfirmationModalOpen(true)}>
