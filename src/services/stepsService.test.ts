@@ -275,9 +275,56 @@ describe('stepsService', () => {
     expect(flattenedSteps.some((s) => s.UUID === deeplyNestedBranchStepUuid)).toBeTruthy();
   });
 
+  it('getFollowingStep(): should return the step following the one provided', () => {
+    const steps = [
+      {
+        UUID: 'one',
+      } as IStepProps,
+      {
+        UUID: 'two',
+      } as IStepProps,
+      {
+        UUID: 'three',
+      } as IStepProps,
+    ]
+    useIntegrationJsonStore.setState({
+      integrationJson: {
+        ...useIntegrationJsonStore.getState().integrationJson,
+        steps: steps
+      },
+    });
+
+    expect(stepsService.getFollowingStep('two')).toMatchObject({ UUID: 'three' });
+    expect(stepsService.getFollowingStep('three')).toBeFalsy();
+  });
+
   it('getStepNested(): gets a nested step with its UUID', () => {
     useNestedStepsStore.getState().addStep({ stepUuid: 'strawberry' } as INestedStep);
     expect(stepsService.getStepNested('strawberry')).toMatchObject({ stepUuid: 'strawberry' });
+  });
+
+  it( 'getPreviousStep(): should return the step preceding the one provided', () => {
+    const steps = [
+      {
+        UUID: 'one',
+      } as IStepProps,
+      {
+        UUID: 'two',
+      } as IStepProps,
+      {
+        UUID: 'three',
+      } as IStepProps,
+    ]
+
+    useIntegrationJsonStore.setState({
+      integrationJson: {
+        ...useIntegrationJsonStore.getState().integrationJson,
+        steps: steps
+      },
+    });
+
+    expect(stepsService.getPreviousStep('one')).toBeFalsy();
+    expect(stepsService.getPreviousStep('two')).toMatchObject({ UUID: 'one' });
   });
 
   it('handleAppendStep(): should append a step to another and update the store', async () => {

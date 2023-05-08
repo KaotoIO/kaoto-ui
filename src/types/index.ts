@@ -70,7 +70,7 @@ export interface ISettings {
   namespace: string;
 
   /** TODO: Temporary config to enable the support for multiple flows */
-  useMultipleFlows: boolean,
+  useMultipleFlows: boolean;
 }
 
 export interface ICapabilities {
@@ -173,6 +173,8 @@ export interface IStepQueryParams {
   namespace?: string;
   // e.g. 'START', 'END', 'MIDDLE'
   type?: string;
+  previousStep?: string;
+  followingStep?: string;
 }
 
 export interface IViewConstraintsProps {

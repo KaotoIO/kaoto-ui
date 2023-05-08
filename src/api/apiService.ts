@@ -65,10 +65,18 @@ export async function fetchCatalogSteps(
     // e.g. 'START', 'END', 'MIDDLE'
     type?: string;
     namespace?: string;
+    previousStep?: string;
+    followingStep?: string;
   },
   cache?: RequestCache | undefined
 ) {
   try {
+    if (!queryParams?.previousStep) {
+      delete queryParams?.previousStep;
+    }
+    if (!queryParams?.followingStep) {
+      delete queryParams?.followingStep;
+    }
     const resp = await RequestService.get({
       endpoint: `${apiVersion}/steps`,
       cache,

@@ -1,13 +1,13 @@
+import { BranchBuilder } from './BranchBuilder';
+import { MiniCatalog } from './MiniCatalog';
 import { useShowBranchTab } from '@kaoto/hooks';
-import { ValidationService } from '@kaoto/services';
+import { StepsService, ValidationService } from '@kaoto/services';
 import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { Position } from 'reactflow';
-import { BranchBuilder } from './BranchBuilder';
-import { MiniCatalog } from './MiniCatalog';
 
 interface IAddStepButton {
   handleAddBranch: () => void;
@@ -31,6 +31,9 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
   const [tooltipText, setTooltipText] = useState('');
   const [disableButton, setDisableButton] = useState(false);
 
+  const stepsService = new StepsService();
+  const followingStep = stepsService.getFollowingStep(step.id);
+
   useEffect(() => {
     setDisableButton(!showStepsTab && disableBranchesTab);
   }, [showStepsTab, disableBranchesTab]);
@@ -53,6 +56,8 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
           queryParams={{
             dsl: currentDSL,
             type: ValidationService.appendableStepTypes(step.type),
+            previousStep: step.id,
+            followingStep: followingStep?.id,
           }}
           step={step}
         >
@@ -68,10 +73,7 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
       position="right-start"
       showClose={false}
     >
-      <Tooltip
-        content={tooltipText}
-        position={position}
-      >
+      <Tooltip content={tooltipText} position={position}>
         <button
           className="stepNode__Add plusButton nodrag"
           data-testid="stepNode__appendStep-btn"

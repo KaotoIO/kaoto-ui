@@ -1,12 +1,11 @@
-import { mountStoreDevtool } from 'simple-zustand-devtools';
 import { useDeploymentStore } from './deploymentStore';
 import { useFlowsStore } from './flowsStore';
 import { useIntegrationJsonStore } from './integrationJsonStore';
 import { useIntegrationSourceStore } from './integrationSourceStore';
 import { useNestedStepsStore } from './nestedStepsStore';
 import { useSettingsStore } from './settingsStore';
-import { useStepCatalogStore } from './stepCatalogStore';
 import { useVisualizationStore } from './visualizationStore';
+import { mountStoreDevtool } from 'simple-zustand-devtools';
 
 if (process.env.NODE_ENV === 'development') {
   mountStoreDevtool('deploymentStore', useDeploymentStore);
@@ -15,7 +14,6 @@ if (process.env.NODE_ENV === 'development') {
   mountStoreDevtool('integrationSourceStore', useIntegrationSourceStore);
   mountStoreDevtool('nestedStepsStore', useNestedStepsStore);
   mountStoreDevtool('settingsStore', useSettingsStore);
-  mountStoreDevtool('stepCatalogStore', useStepCatalogStore);
   mountStoreDevtool('visualizationStore', useVisualizationStore);
 }
 
@@ -25,5 +23,4 @@ export * from './integrationJsonStore';
 export * from './integrationSourceStore';
 export * from './nestedStepsStore';
 export * from './settingsStore';
-export * from './stepCatalogStore';
 export * from './visualizationStore';

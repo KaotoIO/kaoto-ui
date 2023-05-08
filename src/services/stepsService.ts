@@ -286,12 +286,28 @@ export class StepsService {
     return flattenMembers.concat(children.length ? StepsService.flattenSteps(children) : children);
   }
 
+  getFollowingStep(stepUuid?: string) {
+    if (!stepUuid) return undefined;
+    const currentStepIdx = this.findStepIdxWithUUID(stepUuid);
+    const steps = useIntegrationJsonStore.getState().integrationJson.steps;
+    return currentStepIdx !== -1 && steps.length > currentStepIdx + 1
+      ? steps[currentStepIdx + 1]
+      : undefined;
+  }
+
   /**
    * Gets a nested step.
    * @param stepUuid
    */
   getStepNested(stepUuid: string) {
     return useNestedStepsStore.getState().nestedSteps.find((ns) => ns.stepUuid === stepUuid);
+  }
+
+  getPreviousStep(stepUuid?: string) {
+    if (!stepUuid) return undefined;
+    const currentStepIdx = this.findStepIdxWithUUID(stepUuid);
+    const steps = useIntegrationJsonStore.getState().integrationJson.steps;
+    return currentStepIdx > 0 ? steps[currentStepIdx - 1] : undefined;
   }
 
   /**
