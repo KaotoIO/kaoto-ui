@@ -26,6 +26,7 @@ export interface IFlowsStore {
   // Handler methods
   insertStep: IInsertOptions;
   deleteStep: (integrationId: string, stepUUID: string) => void;
+  deleteAllIntegrations: () => void;
 }
 
 export const flowsInitialState: Pick<IFlowsStore, 'flows' | 'properties' | 'views'> = {
@@ -111,6 +112,7 @@ export const useFlowsStore = create<IFlowsStore>()(
           return state;
         });
       },
+      deleteAllIntegrations: () => set((state) => ({ ...state, ...flowsInitialState })),
     }),
     {
       partialize: (state) => {

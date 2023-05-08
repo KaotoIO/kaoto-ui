@@ -9,6 +9,7 @@ import { LOCAL_STORAGE_UI_THEME_KEY, THEME_DARK_CLASS } from '@kaoto/constants';
 import { ValidationService } from '@kaoto/services';
 import {
   useDeploymentStore,
+  useFlowsStore,
   useIntegrationJsonStore,
   useIntegrationSourceStore,
   useSettingsStore,
@@ -61,6 +62,7 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
   const { settings, setSettings } = useSettingsStore((state) => state);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore((state) => state);
   const deleteIntegration = useIntegrationJsonStore((state) => state.deleteIntegration);
+  const deleteAllIntegrations = useFlowsStore((state) => state.deleteAllIntegrations);
   const [isActiveButton,setIsActiveButton] = useState('');
   const htmlTagElement = document.documentElement;
 
@@ -435,7 +437,11 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
           setIsConfirmationModalOpen(false);
         }}
         handleConfirm={() => {
+          /** Delete current flow */
           deleteIntegration();
+
+          /** Delete all flows */
+          deleteAllIntegrations();
           setSourceCode('');
           setSettings({ dsl: settings.dsl, name: 'integration', namespace: 'default' });
           setIsConfirmationModalOpen(false);
