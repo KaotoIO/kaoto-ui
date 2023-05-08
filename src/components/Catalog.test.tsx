@@ -2,9 +2,8 @@ import { AlertProvider } from '../layout';
 import { Catalog } from './Catalog';
 import { jest } from '@jest/globals';
 import { fetchCatalogSteps } from '@kaoto/api';
-import { useStepCatalogStore } from '@kaoto/store';
 import { screen } from '@testing-library/dom';
-import { render, renderHook } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 jest.mock('@kaoto/api');
@@ -104,8 +103,6 @@ describe('Catalog.tsx', () => {
 
   test('Search input works correctly', async () => {
     const user = userEvent.setup();
-    const { result } = renderHook(() => useStepCatalogStore());
-    result.current.setStepCatalog([]);
     render(
       <AlertProvider>
         <Catalog handleClose={jest.fn()} />
@@ -132,8 +129,6 @@ describe('Catalog.tsx', () => {
     method = (fetchCatalogSteps as jest.Mock<typeof fetchCatalogSteps>).mockImplementation(() =>
       Promise.reject('fail')
     );
-    const { result } = renderHook(() => useStepCatalogStore());
-    result.current.setStepCatalog([]);
     render(
       <AlertProvider>
         <Catalog handleClose={jest.fn()} />

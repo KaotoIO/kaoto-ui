@@ -1,8 +1,8 @@
 import './Catalog.css';
 import { fetchCatalogSteps } from '@kaoto/api';
-import { useSettingsStore, useStepCatalogStore } from '@kaoto/store';
+import { useSettingsStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
-import { shorten, truncateString } from '@kaoto/utils';
+import { shorten, truncateString, usePrevious } from '@kaoto/utils';
 import {
   AlertVariant,
   Bullseye,
@@ -29,10 +29,11 @@ import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useRef, useState } from 'react';
 
 export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
-  const stepCatalog = useStepCatalogStore();
+  const [catalogData, setCatalogData] = useState<IStepProps[]>([]);
   const [isSelected, setIsSelected] = useState('START');
   const [query, setQuery] = useState(``);
   const dsl = useSettingsStore((state) => state.settings.dsl.name);
+  const previousDSL = usePrevious(dsl);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const { addAlert } = useAlert() || {};
@@ -42,14 +43,14 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
    * Checks for changes to the settings for DSL
    */
   useEffect(() => {
-    if (stepCatalog.stepCatalog.length) return;
+    if (previousDSL === dsl) return;
     fetchCatalogSteps({
       dsl,
     })
       .then((value) => {
         if (value) {
           value.sort((a: IStepProps, b: IStepProps) => a.name.localeCompare(b.name));
-          stepCatalog.setStepCatalog(value);
+          setCatalogData(value);
         }
       })
       .catch((e) => {
@@ -153,53 +154,54 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
         hasGutter={true}
         style={{ flex: '1 1', overflow: 'auto', padding: '0 10px', alignContent: 'flex-start' }}
       >
-        {search(stepCatalog.stepCatalog).map((step, idx) => {
-          return (
-            <GalleryItem key={idx}>
-              <Card
-                className={'catalog__step'}
-                data-testid={`catalog-step-${step.name}`}
-                isCompact={true}
-                isSelectable={true}
-                draggable={'true'}
-                onDragStart={(e: any) => {
-                  e.dataTransfer.setData('application/reactflow', 'step');
-                  e.dataTransfer.setData('text/plain', JSON.stringify(step));
+        {catalogData &&
+          search(catalogData).map((step, idx) => {
+            return (
+              <GalleryItem key={idx}>
+                <Card
+                  className={'catalog__step'}
+                  data-testid={`catalog-step-${step.name}`}
+                  isCompact={true}
+                  isSelectable={true}
+                  draggable={'true'}
+                  onDragStart={(e: any) => {
+                    e.dataTransfer.setData('application/reactflow', 'step');
+                    e.dataTransfer.setData('text/plain', JSON.stringify(step));
 
-                  e.dataTransfer.effectAllowed = 'move';
-                }}
-              >
-                <Grid md={6}>
-                  <GridItem span={2}>
-                    <Bullseye>
-                      <img
-                        src={step.icon}
-                        className={'catalog__stepImage'}
-                        alt={'Step Image'}
-                        data-testid={'catalog__stepImage'}
-                      />
-                    </Bullseye>
-                  </GridItem>
-                  <GridItem span={7}>
-                    <CardTitle>
-                      <span>{step.name}</span>
-                    </CardTitle>
-                    <CardBody>{shorten(step?.description, 60)}</CardBody>
-                  </GridItem>
-                  <GridItem span={3}>
-                    <Label
-                      color={'blue'}
-                      data-testid={'catalog__stepLabel'}
-                      style={{ marginTop: '0.8em' }}
-                    >
-                      {truncateString(step.kind, 8)}
-                    </Label>
-                  </GridItem>
-                </Grid>
-              </Card>
-            </GalleryItem>
-          );
-        })}
+                    e.dataTransfer.effectAllowed = 'move';
+                  }}
+                >
+                  <Grid md={6}>
+                    <GridItem span={2}>
+                      <Bullseye>
+                        <img
+                          src={step.icon}
+                          className={'catalog__stepImage'}
+                          alt={'Step Image'}
+                          data-testid={'catalog__stepImage'}
+                        />
+                      </Bullseye>
+                    </GridItem>
+                    <GridItem span={7}>
+                      <CardTitle>
+                        <span>{step.name}</span>
+                      </CardTitle>
+                      <CardBody>{shorten(step?.description, 60)}</CardBody>
+                    </GridItem>
+                    <GridItem span={3}>
+                      <Label
+                        color={'blue'}
+                        data-testid={'catalog__stepLabel'}
+                        style={{ marginTop: '0.8em' }}
+                      >
+                        {truncateString(step.kind, 8)}
+                      </Label>
+                    </GridItem>
+                  </Grid>
+                </Card>
+              </GalleryItem>
+            );
+          })}
       </Gallery>
     </div>
   );

@@ -1,35 +1,31 @@
+import { AppendStepButton } from './AppendStepButton';
+import { BranchBuilder } from './BranchBuilder';
+import { PrependStepButton } from './PrependStepButton';
+import './Visualization.css';
 import { MiniCatalog } from '@kaoto/components';
 import { usePosition } from '@kaoto/hooks';
 import { StepsService, VisualizationService } from '@kaoto/services';
-import {
-  useIntegrationJsonStore,
-  useNestedStepsStore,
-  useSettingsStore,
-  useVisualizationStore
-} from '@kaoto/store';
+import { useSettingsStore, useVisualizationStore } from '@kaoto/store';
 import { IStepProps, IVizStepNodeData } from '@kaoto/types';
 import { AlertVariant, Popover, Tooltip } from '@patternfly/react-core';
 import { CubesIcon, MinusIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { Handle, NodeProps } from 'reactflow';
-import { AppendStepButton } from './AppendStepButton';
-import { BranchBuilder } from './BranchBuilder';
-import { PrependStepButton } from './PrependStepButton';
-import './Visualization.css';
 
 const currentDSL = useSettingsStore.getState().settings.dsl.name;
 
 // Custom Node type and component for React Flow
 const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const endStep = StepsService.isEndStep(data.step!);
-  const nestedStepsStore = useNestedStepsStore();
   const visualizationStore = useVisualizationStore();
-  const integrationJsonStore = useIntegrationJsonStore();
-  const visualizationService = new VisualizationService(integrationJsonStore, visualizationStore);
-  const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
+  const visualizationService = new VisualizationService();
+  const stepsService = new StepsService();
   const showBranchesTab = VisualizationService.showBranchesTab(data.step);
   const showStepsTab = VisualizationService.showStepsTab(data);
   const supportsBranching = StepsService.supportsBranching(data.step);
+  const parentStepId = data.branchInfo?.parentStepUuid
+    ? stepsService.findStepWithUUID(data.branchInfo.parentStepUuid)?.id ?? undefined
+    : undefined;
 
   const {
     layoutCssClass,
@@ -124,7 +120,11 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     <>
       {!data.isPlaceholder ? (
         <div
-          className={`stepNode stepNode--${layoutCssClass} stepNode__clickable` + getSelectedClass() + getHoverClass()}
+          className={
+            `stepNode stepNode--${layoutCssClass} stepNode__clickable` +
+            getSelectedClass() +
+            getHoverClass()
+          }
           onDrop={onDropReplace}
           onMouseEnter={() => {
             if (data.branchInfo || supportsBranching) {
@@ -142,6 +142,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               onMiniCatalogClickPrepend={onMiniCatalogClickPrepend}
               position={plusIconPosition}
               step={data.step}
+              parentStepId={parentStepId}
             />
           )}
 
@@ -157,10 +158,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
           )}
 
           {/* DELETE STEP BUTTON */}
-          <Tooltip
-            content={'Delete step'}
-            position={minusIconPosition}
-          >
+          <Tooltip content={'Delete step'} position={minusIconPosition}>
             <button
               className="stepNode__Delete trashButton nodrag"
               data-testid={'configurationTab__deleteBtn'}
@@ -215,6 +213,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
               queryParams={{
                 dsl: currentDSL,
                 type: data.step.type,
+                previousStep: parentStepId,
               }}
               step={data.step}
             />
@@ -235,8 +234,10 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
             {/* PLACEHOLDER HINT FOR EMPTY STATE */}
             {VisualizationService.isFirstAndOnlyNode(data) && (
               <div className={'nodeHintWrapper'} data-testid={'placeholderHint'}>
-                <div className={'nodeHintArrow'} data-testid='nodeHintArrow'>⤹</div>
-                <div data-testid='nodeHintText'>click on a node to add a step.</div>
+                <div className={'nodeHintArrow'} data-testid="nodeHintArrow">
+                  ⤹
+                </div>
+                <div data-testid="nodeHintText">click on a node to add a step.</div>
               </div>
             )}
 
