@@ -14,6 +14,7 @@ import {
   useFlowsStore,
   useIntegrationJsonStore,
   useNestedStepsStore,
+  useSettingsStore,
   useVisualizationStore,
 } from '@kaoto/store';
 import {
@@ -28,6 +29,7 @@ import {
   IVizStepNodeData,
 } from '@kaoto/types';
 import { findPath, getDeepValue } from '@kaoto/utils';
+import cloneDeep from 'lodash.clonedeep';
 
 /**
  * A collection of business logic to handle logical model objects of the integration,
@@ -259,12 +261,12 @@ export class StepsService {
    * `UUID` is originally set using the Step UUID.
    * @param UUID
    */
-  findStepWithUUID(UUID: string): IStepProps | null {
-    const flatSteps = StepsService.flattenSteps(
-      useIntegrationJsonStore.getState().integrationJson.steps
-    );
-    const stepIdx = flatSteps.map((s: IStepProps) => s.UUID).indexOf(UUID);
-    return stepIdx !== -1 ? flatSteps[stepIdx] : null;
+  findStepWithUUID(integrationId: string, UUID: string): IStepProps | undefined {
+    const integration = this.getIntegration(integrationId);
+    if (integration === undefined) return;
+
+    const flatSteps = StepsService.flattenSteps(integration.steps);
+    return flatSteps.find((step) => UUID === step.UUID);
   }
 
   /**
@@ -323,7 +325,10 @@ export class StepsService {
       newStep.UUID = selectedStep.UUID;
       const currentStepNested = this.getStepNested(currentStep.UUID);
       if (currentStepNested) {
-        const stepsCopy = useIntegrationJsonStore.getState().integrationJson.steps.slice();
+        const integration = this.getIntegration(currentStep.integrationId);
+        if (integration === undefined) return;
+
+        const stepsCopy = integration?.steps.slice();
         let newParentStep = getDeepValue(stepsCopy, currentStepNested.pathToParentStep);
         const newBranch = newParentStep.branches[currentStepNested.branchIndex];
         newParentStep.branches[currentStepNested.branchIndex].steps = [...newBranch.steps, newStep];
@@ -429,7 +434,11 @@ export class StepsService {
   }
 
   getIntegration(integrationId: string): IIntegration | undefined {
-    return useFlowsStore.getState().flows.find((integration) => integration.id === integrationId);
+    if (useSettingsStore.getState().settings.useMultipleFlows) {
+      return useFlowsStore.getState().flows.find((integration) => integration.id === integrationId);
+    }
+
+    return useIntegrationJsonStore.getState().integrationJson;
   }
 
   /**
@@ -511,19 +520,15 @@ export class StepsService {
    * @param prefix
    */
   static regenerateUuids(steps: IStepProps[], prefix: string = ''): IStepProps[] {
-    let newSteps = steps.slice();
+    let newSteps = cloneDeep(steps);
 
     newSteps.forEach((step, stepIndex) => {
       step.UUID = `${prefix}${step.name}-${stepIndex}`;
 
-      if (this.containsBranches(step)) {
-        step.branches?.forEach((branch, branchIndex) => {
-          branch.branchUuid = `${step.UUID}|branch-${branchIndex}`;
-          return newSteps.concat(
-            StepsService.regenerateUuids(branch.steps, `${branch.branchUuid}|`)
-          );
-        });
-      }
+      step.branches?.forEach((branch, branchIndex) => {
+        branch.branchUuid = `${step.UUID}_branch-${branchIndex}`;
+        branch.steps = StepsService.regenerateUuids(branch.steps, `${branch.branchUuid}_`)
+      });
     });
 
     return newSteps;
@@ -622,8 +627,11 @@ export class StepsService {
    * Submits current integration steps to the backend and updates with received views.
    */
   async updateViews() {
-    fetchViews(useIntegrationJsonStore.getState().integrationJson.steps).then((views) => {
-      useIntegrationJsonStore.getState().updateViews(views);
+    fetchViews(useIntegrationJsonStore.getState().integrationJson.steps).then((views: IViewProps[]) => {
+      if (Array.isArray(views)) {
+        useIntegrationJsonStore.getState().updateViews(views);
+        useFlowsStore.getState().updateViews(views);
+      }
     });
   }
 

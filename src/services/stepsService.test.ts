@@ -184,7 +184,7 @@ describe('stepsService', () => {
     });
 
     it('updateStep(): should replace the current step with the one provided', () => {
-      const customStep = { name: 'pineapple', UUID: 'pineapple-0' } as IStepProps;
+      const customStep = { name: 'pineapple', UUID: 'Camel Route-1_pineapple-0' } as IStepProps;
       useIntegrationJsonStore.getState().insertStep(customStep, 0);
       expect(useIntegrationJsonStore.getState().integrationJson.steps[0].UUID).toContain(
         'pineapple'
@@ -209,7 +209,7 @@ describe('stepsService', () => {
       UUID: 'peach',
       name: 'peach',
       branches: [
-        { branchUuid: 'peach-0|branch-0', steps: [] as IStepProps[] } as IStepPropsBranch,
+        { branchUuid: 'peach-0_branch-0', steps: [] as IStepProps[] } as IStepPropsBranch,
       ] as IStepPropsBranch[],
     } as IStepProps;
 
@@ -222,7 +222,7 @@ describe('stepsService', () => {
 
     expect(useIntegrationJsonStore.getState().integrationJson.steps[0].branches).toHaveLength(1);
 
-    stepsService.deleteBranch(step, 'peach-0|branch-0');
+    stepsService.deleteBranch(step, 'peach-0_branch-0');
 
     expect(useIntegrationJsonStore.getState().integrationJson.steps[0].branches).toHaveLength(0);
   });
@@ -364,12 +364,12 @@ describe('stepsService', () => {
     await stepsService
       .handleDropOnExistingStep(
         { step: { type: 'START' } } as IVizStepNodeData,
-        { name: 'lychee', UUID: 'lychee-0' } as IStepProps,
-        { name: 'raspberry', UUID: 'raspberry-0' } as IStepProps
+        { name: 'lychee', UUID: 'Camel Route-1_lychee-0' } as IStepProps,
+        { name: 'raspberry', UUID: 'Camel Route-1_raspberry-0' } as IStepProps
       )
       .then(() => {
         expect(useIntegrationJsonStore.getState().integrationJson.steps[0].UUID).toContain(
-          'raspberry'
+          'Camel Route-1_raspberry'
         );
       });
 
@@ -557,8 +557,8 @@ describe('stepsService', () => {
         {
           UUID: 'choice-1',
           branches: [
-            { branchUuid: 'choice-1|branch-0', steps: expect.any(Array), identifier: 'true path' },
-            { branchUuid: 'choice-1|branch-1', steps: expect.any(Array), identifier: 'otherwise' },
+            { branchUuid: 'choice-1_branch-0', steps: expect.any(Array), identifier: 'true path' },
+            { branchUuid: 'choice-1_branch-1', steps: expect.any(Array), identifier: 'otherwise' },
           ],
         },
       ]);
@@ -573,10 +573,10 @@ describe('stepsService', () => {
           UUID: 'choice-1',
           branches: [
             {
-              branchUuid: 'choice-1|branch-0',
+              branchUuid: 'choice-1_branch-0',
               steps: [
                 {
-                  UUID: 'choice-1|branch-0|log-0',
+                  UUID: 'choice-1_branch-0_log-0',
                   integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
@@ -587,10 +587,10 @@ describe('stepsService', () => {
               identifier: 'true path',
             },
             {
-              branchUuid: 'choice-1|branch-1',
+              branchUuid: 'choice-1_branch-1',
               steps: [
                 {
-                  UUID: 'choice-1|branch-1|log-0',
+                  UUID: 'choice-1_branch-1_log-0',
                   integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
@@ -617,10 +617,10 @@ describe('stepsService', () => {
           UUID: 'choice-1',
           branches: [
             {
-              branchUuid: 'choice-1|branch-0',
+              branchUuid: 'choice-1_branch-0',
               steps: [
                 {
-                  UUID: 'choice-1|branch-0|timer-0',
+                  UUID: 'choice-1_branch-0_timer-0',
                   integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
@@ -629,7 +629,7 @@ describe('stepsService', () => {
                   branches: [],
                 },
                 {
-                  UUID: 'choice-1|branch-0|choice-1',
+                  UUID: 'choice-1_branch-0_choice-1',
                   integrationId: 'Camel Route-1',
                   minBranches: 1,
                   maxBranches: -1,
@@ -637,10 +637,10 @@ describe('stepsService', () => {
                   type: 'MIDDLE',
                   branches: [
                     {
-                      branchUuid: 'choice-1|branch-0|choice-1|branch-0',
+                      branchUuid: 'choice-1_branch-0_choice-1_branch-0',
                       steps: [
                         {
-                          UUID: 'choice-1|branch-0|choice-1|branch-0|log-0',
+                          UUID: 'choice-1_branch-0_choice-1_branch-0_log-0',
                           integrationId: 'Camel Route-1',
                           minBranches: 0,
                           maxBranches: 0,
@@ -651,10 +651,10 @@ describe('stepsService', () => {
                       identifier: 'true path',
                     },
                     {
-                      branchUuid: 'choice-1|branch-0|choice-1|branch-1',
+                      branchUuid: 'choice-1_branch-0_choice-1_branch-1',
                       steps: [
                         {
-                          UUID: 'choice-1|branch-0|choice-1|branch-1|log-0',
+                          UUID: 'choice-1_branch-0_choice-1_branch-1_log-0',
                           integrationId: 'Camel Route-1',
                           minBranches: 0,
                           maxBranches: 0,
@@ -670,10 +670,10 @@ describe('stepsService', () => {
               identifier: 'true path',
             },
             {
-              branchUuid: 'choice-1|branch-1',
+              branchUuid: 'choice-1_branch-1',
               steps: [
                 {
-                  UUID: 'choice-1|branch-1|log-0',
+                  UUID: 'choice-1_branch-1_log-0',
                   integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
@@ -697,10 +697,10 @@ describe('stepsService', () => {
           UUID: 'choice-0',
           branches: [
             {
-              branchUuid: 'choice-0|branch-0',
+              branchUuid: 'choice-0_branch-0',
               steps: [
                 {
-                  UUID: 'choice-0|branch-0|log-0',
+                  UUID: 'choice-0_branch-0_log-0',
                   integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
@@ -711,10 +711,10 @@ describe('stepsService', () => {
               identifier: 'true path',
             },
             {
-              branchUuid: 'choice-0|branch-1',
+              branchUuid: 'choice-0_branch-1',
               steps: [
                 {
-                  UUID: 'choice-0|branch-1|log-0',
+                  UUID: 'choice-0_branch-1_log-0',
                   integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
@@ -776,6 +776,7 @@ describe('stepsService', () => {
 
   it('updateStepParameters(): should update existing parameters for specified step, with provided values', () => {
     const step = {
+      UUID: 'Camel Route-1_plum-0',
       name: 'plum',
       parameters: [{ type: 'string', id: 'description', value: 'wat' }] as IStepPropsParameters[],
     } as IStepProps;

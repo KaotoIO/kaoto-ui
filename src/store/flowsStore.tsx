@@ -6,7 +6,7 @@ import { temporal } from 'zundo';
 import { create } from 'zustand';
 import { initialFlows } from '../stubs';
 import { useNestedStepsStore } from './nestedStepsStore';
-import { initDsl, initialSettings } from './settingsStore';
+import useSettingsStore, { initDsl, initialSettings } from './settingsStore';
 
 interface IInsertOptions {
   (integrationId: string, newStep: IStepProps, options: { mode: 'append' }): void;
@@ -27,6 +27,7 @@ export interface IFlowsStore {
   insertStep: IInsertOptions;
   deleteStep: (integrationId: string, stepUUID: string) => void;
   deleteAllIntegrations: () => void;
+  updateViews: (views: IViewProps[]) => void;
 }
 
 export const flowsInitialState: Pick<IFlowsStore, 'flows' | 'properties' | 'views'> = {
@@ -60,10 +61,13 @@ export const useFlowsStore = create<IFlowsStore>()(
        * Overriding the default route for demo purposes
        * To be removed once the final feature is complete
        */
-      ...{ flows: initialFlows },
+      ...{ flows: [ ...flowsInitialState.flows, initialFlows[1]] },
 
       insertStep: (integrationId, newStep, options) => {
         set((state: IFlowsStore): IFlowsStore => {
+          /** Temporary check to enable the store only when the multiple flows feature is enabled */
+          if (!useSettingsStore.getState().settings.useMultipleFlows) return state;
+
           const integrationIndex = state.flows.findIndex((integration) => integration.id === integrationId);
           if (integrationIndex === -1) {
             return state;
@@ -90,7 +94,7 @@ export const useFlowsStore = create<IFlowsStore>()(
               clonedSteps.splice((options as any).index, 1, newStep);
           }
 
-          const stepsWithNewUuids = StepsService.regenerateUuids(clonedSteps, `${integrationId}|`);
+          const stepsWithNewUuids = StepsService.regenerateUuids(clonedSteps, `${integrationId}_`);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
           useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
@@ -99,13 +103,16 @@ export const useFlowsStore = create<IFlowsStore>()(
       },
       deleteStep: (integrationId: string, stepUUID: string) => {
         set((state) => {
+          /** Temporary check to enable the store only when the multiple flows feature is enabled */
+          if (!useSettingsStore.getState().settings.useMultipleFlows) return state;
+
           const integrationIndex = state.flows.findIndex((integration) => integration.id === integrationId);
           if (integrationIndex === -1) {
             return state;
           }
 
           const filteredSteps = state.flows[integrationIndex].steps.slice().filter((step: IStepProps) => step.UUID !== stepUUID);
-          const stepsWithNewUuids = StepsService.regenerateUuids(filteredSteps, `${integrationId}|`);
+          const stepsWithNewUuids = StepsService.regenerateUuids(filteredSteps, `${integrationId}_`);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
           useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
@@ -113,6 +120,9 @@ export const useFlowsStore = create<IFlowsStore>()(
         });
       },
       deleteAllIntegrations: () => set((state) => ({ ...state, ...flowsInitialState })),
+      updateViews: (views: IViewProps[]) => {
+        set({ views });
+      },
     }),
     {
       partialize: (state) => {
