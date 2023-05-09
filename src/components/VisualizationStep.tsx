@@ -24,7 +24,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   const showStepsTab = VisualizationService.showStepsTab(data);
   const supportsBranching = StepsService.supportsBranching(data.step);
   const parentStepId = data.branchInfo?.parentStepUuid
-    ? stepsService.findStepWithUUID(data.branchInfo.parentStepUuid)?.id ?? undefined
+    ? stepsService.findStepWithUUID(data.step.integrationId, data.branchInfo.parentStepUuid)?.id
     : undefined;
 
   const {

@@ -61,7 +61,7 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
         // replacing the root step of a deeply nested step
         newSteps[rootStepIndex] = newRootStep;
 
-        const stepsWithNewUuids = StepsService.regenerateUuids(newSteps);
+        const stepsWithNewUuids = StepsService.regenerateUuids(newSteps, `${get().integrationJson.id}_`);
         const { updateSteps } = useNestedStepsStore.getState();
         updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
@@ -75,7 +75,7 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
       deleteStep: (stepIdx) => {
         let stepsCopy = get().integrationJson.steps.slice();
         const updatedSteps = stepsCopy.filter((_step: IStepProps, idx: number) => idx !== stepIdx);
-        const stepsWithNewUuids = StepsService.regenerateUuids(updatedSteps);
+        const stepsWithNewUuids = StepsService.regenerateUuids(updatedSteps, `${get().integrationJson.id}_`);
         const updateSteps = useNestedStepsStore.getState().updateSteps;
         updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
         set((state) => ({
@@ -96,7 +96,8 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
       insertStep: (newStep, insertIndex) => {
         let steps = get().integrationJson.steps.slice();
         const stepsWithNewUuids = StepsService.regenerateUuids(
-          StepsService.insertStep(steps, insertIndex, newStep)
+          StepsService.insertStep(steps, insertIndex, newStep),
+          `${get().integrationJson.id}_`,
         );
         const updateSteps = useNestedStepsStore.getState().updateSteps;
         updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
@@ -127,7 +128,7 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
         let stepsCopy = get().integrationJson.steps.slice();
         stepsCopy = setDeepValue(stepsCopy, pathToParentStep, newParentStep);
 
-        const stepsWithNewUuids = StepsService.regenerateUuids(stepsCopy);
+        const stepsWithNewUuids = StepsService.regenerateUuids(stepsCopy, `${get().integrationJson.id}_`);
         const { updateSteps } = useNestedStepsStore.getState();
         updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
@@ -148,7 +149,7 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
           stepsCopy[oldStepIndex] = newStep;
         }
 
-        const stepsWithNewUuids = StepsService.regenerateUuids(stepsCopy);
+        const stepsWithNewUuids = StepsService.regenerateUuids(stepsCopy, `${get().integrationJson.id}_`);
         const { updateSteps } = useNestedStepsStore.getState();
         updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
@@ -161,14 +162,14 @@ export const useIntegrationJsonStore = create<IIntegrationJsonStore>()(
       },
       updateIntegration: (newInt: IIntegration) => {
         let newIntegration = { ...get().integrationJson, ...newInt };
-        const uuidSteps = StepsService.regenerateUuids(newIntegration.steps);
+        const uuidSteps = StepsService.regenerateUuids(newIntegration.steps, `${get().integrationJson.id}_`);
         const updateSteps = useNestedStepsStore.getState().updateSteps;
         updateSteps(StepsService.extractNestedSteps(uuidSteps));
 
         return set({ integrationJson: { ...newIntegration, steps: uuidSteps } });
       },
-      updateViews: (viewData: IViewProps[]) => {
-        set({ views: viewData });
+      updateViews: (views: IViewProps[]) => {
+        set({ views });
       },
     }),
     {

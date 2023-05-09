@@ -13,6 +13,7 @@ import { useFlowsStore, useIntegrationJsonStore, useSettingsStore, useVisualizat
 import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
+import { shallow } from 'zustand/shallow';
 
 const Visualization = () => {
   // `nodes` is an array of UI-specific objects that represent
@@ -35,12 +36,13 @@ const Visualization = () => {
   });
 
   const useMultipleFlows = useSettingsStore((state) => state.settings.useMultipleFlows);
-  const flows = useFlowsStore((state) => state.flows);
-  const visualizationStore = useVisualizationStore.getState();
+  const { selectedStepUuid, setSelectedStepUuid } = useVisualizationStore(({ selectedStepUuid, setSelectedStepUuid }) => ({ selectedStepUuid, setSelectedStepUuid }), shallow);
+  const { onNodesChange, onEdgesChange } = useVisualizationStore(({ onNodesChange, onEdgesChange }) => ({ onNodesChange, onEdgesChange }), shallow);
   const layout = useVisualizationStore((state) => state.layout);
   const nodes = useVisualizationStore((state) => state.nodes);
   const edges = useVisualizationStore((state) => state.edges);
   const integrationJson = useIntegrationJsonStore((state) => state.integrationJson);
+  const flows = useFlowsStore((state) => state.flows);
   const visualizationService = useMemo(() => new VisualizationService(), []);
   const stepsService = useMemo(() => new StepsService(), []);
 
@@ -57,23 +59,35 @@ const Visualization = () => {
    * This is usually caused because of code sync or changes through a step extension
    */
   useEffect(() => {
-    if (!selectedStep.UUID) {
+    if (!selectedStepUuid) {
       return;
     }
 
-    const step = stepsService.findStepWithUUID(selectedStep.UUID);
+    const step = stepsService.findStepWithUUID(selectedStep.integrationId, selectedStepUuid);
     if (step) {
       setSelectedStep(step);
     } else {
       setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '', integrationId: '' });
-      visualizationStore.setSelectedStepUuid('');
+      setSelectedStepUuid('');
       setIsPanelExpanded(false);
     }
-  }, [integrationJson, selectedStep.UUID, stepsService]);
+  }, [integrationJson, flows, selectedStep.integrationId, selectedStepUuid, setSelectedStepUuid, stepsService]);
+
+  const handleDeleteStep = useCallback((UUID?: string) => {
+    if (!UUID) return;
+
+    if (selectedStepUuid === UUID) {
+      setIsPanelExpanded(false);
+      setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '', integrationId: '' });
+      setSelectedStepUuid('');
+    }
+
+    stepsService.deleteStep(UUID);
+  }, [selectedStepUuid, setSelectedStepUuid, stepsService]);
 
   useEffect(() => {
     visualizationService.redrawDiagram(handleDeleteStep, true).catch((e) => console.error(e));
-  }, [integrationJson, layout, useMultipleFlows, flows]);
+  }, [handleDeleteStep, integrationJson, flows, layout, useMultipleFlows, visualizationService]);
 
   const nodeTypes = useMemo(() => ({ step: VisualizationStep }), []);
   const edgeTypes = useMemo(
@@ -84,22 +98,10 @@ const Visualization = () => {
     []
   );
 
-  const handleDeleteStep = (UUID?: string) => {
-    if (!UUID) return;
-
-    if (selectedStep.UUID === UUID) {
-      setIsPanelExpanded(false);
-      setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '', integrationId: '' });
-      visualizationStore.setSelectedStepUuid('');
-    }
-
-    stepsService.deleteStep(UUID);
-  };
-
   const onClosePanelClick = useCallback(() => {
     setIsPanelExpanded(false);
-    visualizationStore.setSelectedStepUuid('');
-  }, []);
+    setSelectedStepUuid('');
+  }, [setSelectedStepUuid]);
 
   /**
    * Called when a catalog step is dragged over the visualization canvas
@@ -125,10 +127,10 @@ const Visualization = () => {
       if (!e.target.classList.contains('stepNode__clickable')) return;
 
       if (!node.data.isPlaceholder) {
-        const step = stepsService.findStepWithUUID(node.data.step.UUID);
+        const step = stepsService.findStepWithUUID(node.data.step.integrationId, node.data.step.UUID);
         if (step) {
           setSelectedStep(step);
-          visualizationStore.setSelectedStepUuid(step.UUID);
+          setSelectedStepUuid(step.UUID);
         }
 
         /** If the details panel is collapsed, we expanded for the user */
@@ -137,13 +139,13 @@ const Visualization = () => {
         /**
          * If the details panel is already expanded and the step it's already
          * selected, we collapse it for the user */
-        if (isPanelExpanded && selectedStep.UUID === node.data.step.UUID) {
+        if (isPanelExpanded && selectedStepUuid === node.data.step.UUID) {
           setIsPanelExpanded(false);
-          visualizationStore.setSelectedStepUuid('');
+          setSelectedStepUuid('');
         }
       }
     },
-    [isPanelExpanded, selectedStep.UUID, stepsService, visualizationStore]
+    [isPanelExpanded, selectedStepUuid, setSelectedStepUuid, stepsService]
   );
 
   /**
@@ -184,9 +186,9 @@ const Visualization = () => {
             nodeTypes={nodeTypes}
             onDragOver={onDragOver}
             onNodeClick={onNodeClick}
-            onNodesChange={visualizationStore.onNodesChange}
-            onEdgesChange={visualizationStore.onEdgesChange}
-            snapToGrid={true}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            snapToGrid
             snapGrid={[15, 15]}
             deleteKeyCode={null}
             zoomOnDoubleClick={false}

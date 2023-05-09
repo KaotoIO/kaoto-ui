@@ -122,7 +122,7 @@ describe('integrationJsonStore', () => {
 
     expect(result.current.integrationJson.steps).toHaveLength(4);
     expect(result.current.integrationJson.steps[1]).toEqual({
-      UUID: 'blackberry-1',
+      UUID: 'Camel Route-1_blackberry-1',
       name: 'blackberry',
     });
   });
