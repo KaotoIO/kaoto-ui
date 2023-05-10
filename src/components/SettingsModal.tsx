@@ -1,6 +1,10 @@
 import { fetchCapabilities, fetchCompatibleDSLs, fetchIntegrationSourceCode } from '@kaoto/api';
 import { ValidationService } from '@kaoto/services';
-import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
+import {
+  useFlowsStore,
+  useIntegrationSourceStore,
+  useSettingsStore,
+} from '@kaoto/store';
 import { ICapabilities, ISettings } from '@kaoto/types';
 import { getDescriptionIfExists, usePrevious } from '@kaoto/utils';
 import {
@@ -20,6 +24,7 @@ import {
 import { HelpIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useCallback, useEffect, useState } from 'react';
+import { shallow } from 'zustand/shallow';
 
 export interface ISettingsModal {
   handleCloseModal: () => void;
@@ -37,10 +42,9 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const [availableDSLs, setAvailableDSLs] = useState<string[]>([]);
   const { settings, setSettings } = useSettingsStore((state) => state);
   const [localSettings, setLocalSettings] = useState<ISettings>(settings);
-  const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
+  const { flows, properties } = useFlowsStore(({ flows, properties }) => ({ flows, properties }), shallow);
   const { setSourceCode } = useIntegrationSourceStore();
-  const previousIntegrationJson = usePrevious(integrationJson);
-  const previousName = usePrevious(localSettings.name);
+  const previousFlows = usePrevious(flows);
   const previousNamespace = usePrevious(localSettings.namespace);
   const [nameValidation, setNameValidation] = useState<
     'default' | 'warning' | 'success' | 'error' | undefined
@@ -51,39 +55,53 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
 
   const { addAlert } = useAlert() || {};
 
+  const onChangeDsl = useCallback((value: string) => {
+    fetchCapabilities().then((capabilities: ICapabilities) => {
+      capabilities.dsls.forEach((dsl) => {
+        if (dsl.name === value) {
+          setLocalSettings((state) => ({ ...state, dsl }));
+          // const tmpIntegration = { ...integrationJson, dsl: dsl.name };
+          // updateIntegration(tmpIntegration);
+          // return;
+        }
+      });
+    });
+  }, []);
+
   useEffect(() => {
     // update settings if there is a name change
-    if (settings.name !== previousName) {
-      setLocalSettings({ ...localSettings, name: settings.name });
-    }
+    setLocalSettings((state) => ({ ...state, name: settings.name }));
+  }, [settings.name]);
 
-    //update the description
-    let description = getDescriptionIfExists(integrationJson);
+  useEffect(() => {
+    /** TODO: how to handle multiple flows? */
+    /** update the description from the first flow */
+    const description = getDescriptionIfExists(flows[0]);
     if (settings.description !== description) {
       if (description) {
-        setLocalSettings({
-          ...localSettings,
-          description: description,
-        });
+        setLocalSettings((state) => ({ ...state, description }));
       }
     }
-    //update the DSL if changed
-    if (settings.dsl.name === localSettings.dsl.name) return;
-    onChangeDsl(settings.dsl.name);
-  }, [settings.name, settings.description, settings.dsl]);
+  }, [flows, settings.description]);
+
+  // useEffect(() => {
+  //   // update the DSL if changed
+  //   if (settingsDslName === localSettings.dsl.name) return;
+  //   onChangeDsl(settingsDslName);
+  // }, [localSettings.dsl.name, onChangeDsl, settingsDslName]);
 
   useEffect(() => {
     // update settings with the default namespace fetched from the API
     if (settings.namespace === previousNamespace) return;
-    setLocalSettings({ ...localSettings, namespace: settings.namespace });
-  }, [settings.namespace]);
+    setLocalSettings((state) => ({ ...state, namespace: settings.namespace }));
+  }, [previousNamespace, settings.namespace]);
 
   useEffect(() => {
-    if (previousIntegrationJson === integrationJson) return;
+    if (previousFlows === flows || !Array.isArray(flows[0].steps)) return;
     // subsequent changes to the integration requires fetching
     // DSLs compatible with the specific integration
     fetchCompatibleDSLs({
-      steps: integrationJson.steps,
+      steps: flows[0].steps,
     })
       .then((value) => {
         if (value) {
@@ -93,7 +111,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
       .catch((e) => {
         console.error(e);
       });
-  }, [integrationJson?.steps]);
+  }, [flows]);
 
   const onChangeDescription = (newDesc: string) => {
     setLocalSettings({ ...localSettings, description: newDesc });
@@ -107,19 +125,6 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
     } else {
       setNameValidation('error');
     }
-  };
-
-  const onChangeDsl = (value: string) => {
-    fetchCapabilities().then((capabilities: ICapabilities) => {
-      capabilities.dsls.forEach((dsl) => {
-        if (dsl.name === value) {
-          setLocalSettings({ ...localSettings, dsl: dsl });
-          const tmpIntegration = { ...integrationJson, dsl: dsl.name };
-          updateIntegration(tmpIntegration);
-          return;
-        }
-      });
-    });
   };
 
   const onChangeNamespace = (newNamespace: string) => {
@@ -138,10 +143,16 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
 
   const onSave = () => {
     setSettings(localSettings);
-    let tmpInt = integrationJson;
-    tmpInt.metadata = { ...integrationJson.metadata, ...localSettings };
+    const updatedFlowWrapper = {
+      flows: flows.map((flow) => ({
+        ...flow,
+        metadata: { ...flow.metadata, ...settings },
+        dsl: settings.dsl.name,
+      })),
+      properties,
+    };
 
-    fetchIntegrationSourceCode(tmpInt)
+    fetchIntegrationSourceCode(updatedFlowWrapper)
       .then((source) => {
         if (typeof source === 'string') {
           setSourceCode(source);
@@ -171,8 +182,8 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   };
 
   const onToggleUseMultipleFlowsSupport = useCallback((useMultipleFlows: boolean) => {
-    setLocalSettings({ ...localSettings, useMultipleFlows });
-  }, [localSettings]);
+    setLocalSettings((state) => ({ ...state, useMultipleFlows }));
+  }, []);
 
   return (
     <Modal

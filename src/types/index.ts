@@ -33,6 +33,7 @@ export interface IIntegration {
   id: string;
   dsl: string;
   metadata: IIntegrationMetadata;
+  description?: string;
   params: IIntegrationParams[];
   steps: IStepProps[];
 }
@@ -93,11 +94,7 @@ export interface IDsl {
  */
 export interface IKaotoApi {
   getDeployment: (deploymentName: string, namespace?: string) => Promise<string | unknown>;
-  getIntegrationSource: (
-    integration: IIntegration,
-    dsl: string,
-    namespace?: string
-  ) => Promise<string | unknown>;
+  getIntegrationSource: () => string;
   notifyKaoto: (title: string, body?: string, variant?: string) => void;
   startDeployment: (
     integration: any,

@@ -1,7 +1,6 @@
 import { ValidationService } from './validationService';
 import {
   fetchDeployment,
-  fetchIntegrationSourceCode,
   fetchStepDetails,
   fetchViews,
   startDeployment,
@@ -13,6 +12,7 @@ import {
   RFState,
   useFlowsStore,
   useIntegrationJsonStore,
+  useIntegrationSourceStore,
   useNestedStepsStore,
   useSettingsStore,
   useVisualizationStore,
@@ -138,10 +138,8 @@ export class StepsService {
           return deployment;
         });
       },
-      getIntegrationSource: async (integration: IIntegration) => {
-        return fetchIntegrationSourceCode(integration).then((sourceCode) => {
-          return sourceCode;
-        });
+      getIntegrationSource: () => {
+        return useIntegrationSourceStore.getState().sourceCode;
       },
       notifyKaoto: alertKaoto,
       startDeployment: async (

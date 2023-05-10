@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { IIntegration } from 'src/types';
 
 export function accessibleRouteChangeHandler() {
   return window.setTimeout(() => {
@@ -151,17 +152,16 @@ export function getRandomArbitraryNumber(): number {
   return Math.floor(crypto?.getRandomValues(new Uint32Array(1))[0]);
 }
 
-export function getDescriptionIfExists(integrationJson: any) {
-  if (integrationJson) {
-    //kamelet description location
-    if (integrationJson.metadata?.definition) {
-      return integrationJson.metadata.definition.description;
-      // integration/camel-route descipriton
-    } else if (integrationJson.description) {
-      return integrationJson.description;
-    } else if (integrationJson.metadata?.description) {
-      return integrationJson.metadata.description;
-    }
+export function getDescriptionIfExists(integrationJson?: IIntegration) {
+  // kamelet description location
+  if (integrationJson?.metadata?.definition) {
+    return integrationJson?.metadata.definition.description;
+    // integration/camel-route desrciption
+  } else if (integrationJson?.description) {
+    return integrationJson?.description;
+  } else if (integrationJson?.metadata?.description) {
+    return integrationJson?.metadata.description;
+  } else {
+    return undefined;
   }
-  return undefined;
 }

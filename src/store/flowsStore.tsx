@@ -1,5 +1,5 @@
 import { StepsService } from '@kaoto/services';
-import { IIntegration, IStepProps, IViewProps } from '@kaoto/types';
+import { IFlowsWrapper, IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { setDeepValue } from '@kaoto/utils';
 import isEqual from 'lodash.isequal';
 import { temporal } from 'zundo';
@@ -28,6 +28,7 @@ export interface IFlowsStore {
   deleteStep: (integrationId: string, stepUUID: string) => void;
   deleteAllIntegrations: () => void;
   updateViews: (views: IViewProps[]) => void;
+  setFlows: (flowsWrapper: IFlowsWrapper) => void;
 }
 
 export const flowsInitialState: Pick<IFlowsStore, 'flows' | 'properties' | 'views'> = {
@@ -96,9 +97,10 @@ export const useFlowsStore = create<IFlowsStore>()(
 
           const stepsWithNewUuids = StepsService.regenerateUuids(clonedSteps, `${integrationId}_`);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
+          state.flows = [...state.flows];
           useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
-          return state;
+          return { ...state };
         });
       },
       deleteStep: (integrationId: string, stepUUID: string) => {
@@ -108,7 +110,7 @@ export const useFlowsStore = create<IFlowsStore>()(
 
           const integrationIndex = state.flows.findIndex((integration) => integration.id === integrationId);
           if (integrationIndex === -1) {
-            return state;
+            return { ...state };
           }
 
           const filteredSteps = state.flows[integrationIndex].steps.slice().filter((step: IStepProps) => step.UUID !== stepUUID);
@@ -116,18 +118,24 @@ export const useFlowsStore = create<IFlowsStore>()(
           state.flows[integrationIndex].steps = stepsWithNewUuids;
           useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
-          return state;
+          return { ...state };
         });
       },
       deleteAllIntegrations: () => set((state) => ({ ...state, ...flowsInitialState })),
       updateViews: (views: IViewProps[]) => {
         set({ views });
       },
+      setFlows: (flowsWrapper) => {
+        set((state) => ({
+          ...state,
+          flowsWrapper,
+        }));
+      },
     }),
     {
       partialize: (state) => {
-        const { flows: integrations } = state;
-        return { integrations };
+        const { flows } = state;
+        return { flows };
       },
       equality: (a, b) => isEqual(a, b),
     }

@@ -21,7 +21,6 @@ import { integrationSteps } from '../stubs';
 import { StepsService } from './stepsService';
 import {
   fetchDeployment,
-  fetchIntegrationSourceCode,
   fetchStepDetails,
   fetchViews,
   startDeployment,
@@ -128,24 +127,6 @@ describe('stepsService', () => {
         .then((res) => {
           expect(res).toEqual(deployment);
           expect(fetchDeployment).toHaveBeenCalled();
-        });
-    });
-
-    it('getIntegrationSource(): should call apiService to return the source code (YAML) for the current running deployment', async () => {
-      const integration = {
-        id: '',
-        metadata: { name: 'Updated integration' },
-        dsl: 'KameletBinding',
-        params: [],
-        namespace: 'default',
-        steps: [],
-      };
-      jest.mocked(fetchIntegrationSourceCode).mockResolvedValueOnce(YAML);
-      await stepsService
-        .createKaotoApi(step, jest.fn(), jest.fn())
-        .getIntegrationSource(integration, 'KameletBinding', 'default')
-        .then(() => {
-          expect(fetchIntegrationSourceCode).toHaveBeenCalled();
         });
     });
 

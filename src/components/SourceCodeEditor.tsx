@@ -1,7 +1,7 @@
 import { fetchCapabilities, fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
 import { StepErrorBoundary } from '@kaoto/components';
-import { useIntegrationJsonStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
-import { CodeEditorMode, ICapabilities, IIntegration, ISettings } from '@kaoto/types';
+import { useFlowsStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
+import { CodeEditorMode, ICapabilities, IFlowsWrapper, ISettings } from '@kaoto/types';
 import { usePrevious } from '@kaoto/utils';
 import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
 import { Alert } from '@patternfly/react-core';
@@ -9,6 +9,7 @@ import { CheckCircleIcon, EraserIcon, RedoIcon, UndoIcon } from '@patternfly/rea
 import { useEffect, useRef, useState } from 'react';
 import { EditorDidMount } from 'react-monaco-editor';
 import { useDebouncedCallback } from 'use-debounce';
+import { shallow } from 'zustand/shallow';
 
 interface ISourceCodeEditor {
   initialData?: string;
@@ -24,46 +25,50 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<Parameters<EditorDidMount>[0] | null>(null);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
   const [syncedCode, setSyncedCode] = useState('');
-  const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
   const { settings, setSettings } = useSettingsStore();
-  const previousJson = usePrevious(integrationJson);
+  const { flows, properties, setFlows } = useFlowsStore(({ flows, properties, setFlows }) => ({ flows, properties, setFlows }), shallow);
+  const previousFlows = usePrevious(flows);
+
   const schemaUri = settings.dsl.validationSchema
     ? process.env.KAOTO_API + settings.dsl.validationSchema
     : '';
 
   useEffect(() => {
-    let tmpInt: IIntegration = integrationJson;
-    if (previousJson === integrationJson) return;
+    if (previousFlows === flows || !Array.isArray(flows[0].steps)) return;
 
-    if (tmpInt.dsl != null && tmpInt.dsl !== settings.dsl.name) {
+    if (flows[0].dsl !== null && flows[0].dsl !== settings.dsl.name) {
       fetchCapabilities().then((capabilities: ICapabilities) => {
         capabilities.dsls.forEach((dsl) => {
-          if (dsl.name === tmpInt.dsl) {
+          if (dsl.name === flows[0].dsl) {
             const tmpSettings = { ...settings, dsl: dsl };
             setSettings(tmpSettings);
-            fetchTheSourceCode(tmpInt, tmpSettings);
+            fetchTheSourceCode({flows, properties}, tmpSettings);
           }
         });
       });
     } else {
-      fetchTheSourceCode(integrationJson, settings);
+      fetchTheSourceCode({flows, properties}, settings);
     }
-  }, [integrationJson]);
+  }, [flows, properties]);
 
-  const fetchTheSourceCode = (integration: IIntegration, settings: ISettings) => {
-    const tmpIntegration = {
-      ...integration,
-      metadata: { ...integrationJson.metadata, ...settings },
-      dsl: settings.dsl.name,
+  const fetchTheSourceCode = (currentFlowsWrapper: IFlowsWrapper, settings: ISettings) => {
+    const updatedFlowWrapper = {
+      ...currentFlowsWrapper,
+      flows: currentFlowsWrapper.flows.map((flow) => ({
+        ...flow,
+        metadata: { ...flow.metadata, ...settings },
+        dsl: settings.dsl.name,
+      })),
     };
 
-    fetchIntegrationSourceCode(tmpIntegration, settings.namespace).then((newSrc) => {
+    fetchIntegrationSourceCode(updatedFlowWrapper, settings.namespace).then((newSrc) => {
       if (typeof newSrc === 'string') {
         setSourceCode(newSrc);
         setSyncedCode(newSrc);
       }
     });
   };
+
   /**
    * On detected changes to YAML state, issue POST to external endpoint
    * Returns JSON to be displayed in the visualization
@@ -71,14 +76,14 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const handleChanges = (incomingData: string) => {
     // update integration JSON state with changes
     fetchIntegrationJson(incomingData, settings.dsl.name)
-      .then((res) => {
-        let tmpInt = res[0];
+      .then((flowsWrapper) => {
+        let tmpInt = flowsWrapper.flows[0];
         if (typeof tmpInt.metadata?.name === 'string' && tmpInt.metadata.name !== '') {
           settings.name = tmpInt.metadata.name;
           setSettings({ name: tmpInt.metadata.name });
         }
         tmpInt.metadata = { ...tmpInt.metadata, ...settings };
-        updateIntegration(tmpInt);
+        setFlows(flowsWrapper);
       })
       .catch((e) => {
         console.error(e);
