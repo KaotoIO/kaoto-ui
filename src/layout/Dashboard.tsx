@@ -36,7 +36,7 @@ const Dashboard = () => {
   const [leftDrawerContent, setLeftDrawerContent] = useState(drawerCatalog);
 
   const drawerConsole = (
-    <DrawerContentBody style={{ maxHeight: '250px' }} tabIndex={bottomDrawerExpanded ? 0 : -1}>
+    <DrawerContentBody tabIndex={bottomDrawerExpanded ? 0 : -1}>
       <Console
         handleCloseConsole={() => {
           setBottomDrawerExpanded(!bottomDrawerExpanded);

@@ -17,6 +17,7 @@ import {
   PauseIcon,
   PlayIcon,
 } from '@patternfly/react-icons';
+
 import { LogViewer, LogViewerSearch } from '@patternfly/react-log-viewer';
 import { Fragment, useEffect, useRef, useState } from 'react';
 
@@ -183,7 +184,7 @@ const Console = (props: IConsole) => {
       data={renderData}
       scrollToRow={currentItemCount}
       innerRef={logViewerRef}
-      height={400}
+      height={'100%'}
       toolbar={
         <Toolbar>
           <ToolbarContent>
