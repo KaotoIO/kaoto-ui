@@ -1813,14 +1813,6 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/envelope-bus@0.27.0":
-  version "0.27.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope-bus/-/envelope-bus-0.27.0.tgz#05e275d3ea193ad4d35a33516fe161817800348a"
-  integrity sha512-76/AhEQPM3NJPjIJ4KAtr+B+mJdhczos/rZD3eTyHGVlZ6xeCvurWuOC/48FCRH71UdqWBwBRCkj8aLBClj4XQ==
-  dependencies:
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
 "@kie-tools-core/envelope-bus@0.28.0":
   version "0.28.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope-bus/-/envelope-bus-0.28.0.tgz#e730c341f146b9021dcb49bc416a47141b4d9611"
@@ -1839,19 +1831,6 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/guided-tour@0.27.0":
-  version "0.27.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/guided-tour/-/guided-tour-0.27.0.tgz#deb26f345152bd69eadcb2708cf42b53e6ba57ba"
-  integrity sha512-1XiNrBclgXjxw6mdUTl3gNZw9kFgJa94K3gYS04uJHOwkLX0hFxAsa8WeUlxno/TBdPYJSKbwaK0zZuIPJrvEw==
-  dependencies:
-    "@kie-tools-core/envelope-bus" "0.27.0"
-    "@kie-tools-core/i18n" "0.27.0"
-    "@kie-tools-core/patternfly-base" "0.27.0"
-    "@patternfly/react-core" "^4.157.3"
-    "@patternfly/react-icons" "^4.11.17"
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
 "@kie-tools-core/guided-tour@0.28.0":
   version "0.28.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/guided-tour/-/guided-tour-0.28.0.tgz#94eff4f18e94457468742502bb7cfe09582eb9f9"
@@ -1862,14 +1841,6 @@
     "@kie-tools-core/patternfly-base" "0.28.0"
     "@patternfly/react-core" "^4.276.6"
     "@patternfly/react-icons" "^4.93.6"
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
-"@kie-tools-core/i18n@0.27.0":
-  version "0.27.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/i18n/-/i18n-0.27.0.tgz#4c3852b6a58c7465209d0281b2956275d6079068"
-  integrity sha512-emBUZLwFkX77c1zc+Vf1O0/dJj1UqdDMxnRteoKXL3Ze+VrrFgfTpZjlfQNBzT2Ub/9+oMhwZe18Fy5BJCXodQ==
-  dependencies:
     react "^17.0.2"
     react-dom "^17.0.2"
 
@@ -1914,11 +1885,6 @@
   version "0.28.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.28.0.tgz#0d2d44c58d711e0449aac4c439ed647ab29e7916"
   integrity sha512-U5Sz7SE7eQim4T+TJckNh/6vtv1ipgmFsVcQQwCWluT/Vwb4u7iIv6I6PcebrTPCQlx7qzV715QjdNm1/xxu1Q==
-
-"@kie-tools-core/patternfly-base@0.27.0":
-  version "0.27.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.27.0.tgz#1ae505106da93ea0486a888f6ac9b553997af034"
-  integrity sha512-EPI7nbrwwWEOY5/lqErK97zthq3nt1fyvUtqVqPPR0utvuc1fCyeb5LRIt3KdjiSB49CyLwHnnH+lsEoiDnEdA==
 
 "@kie-tools-core/patternfly-base@0.28.0":
   version "0.28.0"
@@ -2303,7 +2269,7 @@
     react-dropzone "9.0.0"
     tslib "^2.0.0"
 
-"@patternfly/react-core@4.276.8", "@patternfly/react-core@^4.157.3", "@patternfly/react-core@^4.273.1", "@patternfly/react-core@^4.276.6", "@patternfly/react-core@^4.276.8":
+"@patternfly/react-core@4.276.8", "@patternfly/react-core@^4.273.1", "@patternfly/react-core@^4.276.6", "@patternfly/react-core@^4.276.8":
   version "4.276.8"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.276.8.tgz#7ef52830dcdda954bd5bec40132da6eef49aba6f"
   integrity sha512-dn322rEzBeiVztZEuCZMUUittNb8l1hk30h9ZN31FLZLLVtXGlThFNV9ieqOJYA9zrYxYZrHMkTnOxSWVacMZg==
@@ -2316,7 +2282,7 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-icons@4.93.6", "@patternfly/react-icons@^4.11.17", "@patternfly/react-icons@^4.93.4", "@patternfly/react-icons@^4.93.6":
+"@patternfly/react-icons@4.93.6", "@patternfly/react-icons@^4.93.4", "@patternfly/react-icons@^4.93.6":
   version "4.93.6"
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.93.6.tgz#4aff18724afa30157e3ffd6a6414951dbb39dcb3"
   integrity sha512-ZrXegc/81oiuTIeWvoHb3nG/eZODbB4rYmekBEsrbiysyO7m/sUFoi/RLvgFINrRoh6YCJqL5fj06Jg6d7jX1g==
