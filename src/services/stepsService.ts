@@ -651,17 +651,19 @@ export class StepsService {
         value?: any;
         description?: string;
         uniforms?: { placeholder: any };
+        label?: string;
       };
     }
   ) {
     const propKey = parameter.id;
-    const { type, defaultValue, description } = parameter;
+    const { type, defaultValue, description, title } = parameter;
     if (type !== 'array' || (type === 'array' && parameter.value && parameter.value.length > 0)) {
       schemaObjectRef[propKey] = {
         type,
         defaultValue,
         description,
         uniforms: { placeholder: defaultValue },
+        label: title,
       };
       modelObjectRef[propKey] = parameter.value ?? parameter.defaultValue;
     }
