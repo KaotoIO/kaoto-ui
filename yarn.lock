@@ -2198,10 +2198,10 @@
     semver "^7.3.2"
     shimmer "^1.2.1"
 
-"@opentelemetry/instrumentation@^0.39.0":
-  version "0.39.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation/-/instrumentation-0.39.0.tgz#ed23874f2452b3cb85d40a99ff752ae0b0e9b691"
-  integrity sha512-LhO4fP9S/Np4vAIT68Hjp0KXIaH+AKAzW2U2PMx7X7Xi8+xVEAwzWYuH0GztwyM7KFffB3WlHpTDX+ir9fqVhg==
+"@opentelemetry/instrumentation@^0.39.1":
+  version "0.39.1"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation/-/instrumentation-0.39.1.tgz#46d03b4c7ce9f8d08f575d756acc801fa1283615"
+  integrity sha512-s7/9tPmM0l5KCd07VQizC4AO2/5UJdkXq5gMSHPdCeiMKSeBEdyDyQX7A+Cq+RYZM452qzFmrJ4ut628J5bnSg==
   dependencies:
     require-in-the-middle "^7.1.0"
     semver "^7.3.2"
