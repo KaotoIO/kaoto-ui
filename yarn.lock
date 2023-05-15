@@ -2217,7 +2217,7 @@
     "@opentelemetry/sdk-metrics" "1.12.0"
     "@opentelemetry/sdk-trace-base" "1.12.0"
 
-"@opentelemetry/resources@1.12.0", "@opentelemetry/resources@^1.12.0":
+"@opentelemetry/resources@1.12.0":
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/resources/-/resources-1.12.0.tgz#895394c727dc3e7e51d1d2cc50907ec07a626dca"
   integrity sha512-gunMKXG0hJrR0LXrqh7BVbziA/+iJBL3ZbXCXO64uY+SrExkwoyJkpiq9l5ismkGF/A20mDEV7tGwh+KyPw00Q==
@@ -2225,7 +2225,7 @@
     "@opentelemetry/core" "1.12.0"
     "@opentelemetry/semantic-conventions" "1.12.0"
 
-"@opentelemetry/resources@1.13.0":
+"@opentelemetry/resources@1.13.0", "@opentelemetry/resources@^1.13.0":
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/resources/-/resources-1.13.0.tgz#436b33ea950004e66fce6575f2776a05faca7f8e"
   integrity sha512-euqjOkiN6xhjE//0vQYGvbStxoD/WWQRhDiO0OTLlnLBO9Yw2Gd/VoSx2H+svsebjzYk5OxLuREBmcdw6rbUNg==
