@@ -128,7 +128,8 @@ export const useFlowsStore = create<IFlowsStore>()(
       setFlows: (flowsWrapper) => {
         set((state) => ({
           ...state,
-          flowsWrapper,
+          flows: flowsWrapper.flows,
+          properties: flowsWrapper.properties,
         }));
       },
     }),

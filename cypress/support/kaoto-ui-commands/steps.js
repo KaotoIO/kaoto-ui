@@ -15,7 +15,7 @@ Cypress.Commands.add('dragAndDropFromCatalog', (source, target, catalog, targetI
         dataTransfer,
     });
     if (!testError) {
-        cy.waitVisualizationUpdate();
+        cy.wait('@getStepDetails');
     }
 });
 
@@ -58,7 +58,7 @@ Cypress.Commands.add('waitMiniCatalogItIsClosed', () => {
 Cypress.Commands.add('deleteStep', (step, stepIndex) => {
     stepIndex = stepIndex ?? 0;
     cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).trigger('mouseover').children('[data-testid="configurationTab__deleteBtn"]').click({ force: true });
-    cy.waitVisualizationUpdate();
+    cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).should('not.exist');
 });
 
 Cypress.Commands.add('openStepConfigurationTab', (step, EIP, stepIndex) => {
@@ -67,7 +67,7 @@ Cypress.Commands.add('openStepConfigurationTab', (step, EIP, stepIndex) => {
     cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).click();
     cy.get('[data-testid="configurationTab"]').click();
     if (!EIP) {
-        cy.waitVisualizationUpdate();
+        cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');
     }
 });
 
@@ -78,7 +78,7 @@ Cypress.Commands.add('closeStepConfigurationTab', () => {
 });
 
 Cypress.Commands.add('interactWithConfigInputObject', (inputName, value) => {
-    if (value != null) {
+    if (value !== null) {
         cy.get(`input[name="${inputName}"]`).clear().type(value);
     } else {
         cy.get(`input[name="${inputName}"]`).click();
