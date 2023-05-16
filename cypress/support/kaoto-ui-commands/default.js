@@ -18,8 +18,7 @@ Cypress.Commands.add('waitVisualizationUpdate', () => {
         if (body.find('.code-editor').length > 0) {
             cy.wait('@getIntegration');
         }
-        // cy.wait('@getDSLs');
-        // cy.wait('@getViewDefinitions');
+        cy.wait('@getDSLs');
     });
 });
 

@@ -48,7 +48,11 @@ Cypress.Commands.add('selectStepMiniCatalog', (step, stage) => {
     cy.get('[data-testid="miniCatalog"]').should('be.visible');
     cy.get('.pf-c-text-input-group__text-input').type(step);
     cy.get(`[data-testid="miniCatalog__stepItem--${step}"]`).first().click();
-    cy.waitVisualizationUpdate();
+    cy.waitMiniCatalogItIsClosed();
+});
+
+Cypress.Commands.add('waitMiniCatalogItIsClosed', () => {
+    cy.get('[data-testid="miniCatalog"]').should('not.exist');
 });
 
 Cypress.Commands.add('deleteStep', (step, stepIndex) => {

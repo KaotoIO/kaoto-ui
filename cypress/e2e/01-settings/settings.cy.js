@@ -93,7 +93,7 @@ describe('Settings', () => {
     cy.get('[data-testid="settings--integration-type__KameletBinding"]').should('not.exist');
   });
 
-  it.only('updates the DSL', () => {
+  it('updates the DSL', () => {
     // close modal
     cy.get('[data-testid="settings--integration-type"]')
       .select('Integration')
