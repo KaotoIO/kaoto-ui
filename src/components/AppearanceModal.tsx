@@ -49,6 +49,7 @@ const AppearanceModal = ({ handleCloseModal, isModalOpen }: IAppearanceModal) =>
       title="Appearance Settings"
       data-testid={'appearance-modal'}
       variant={ModalVariant.small}
+      ouiaId="appearance-modal"
     >
       <br />
       <Form>

@@ -591,6 +591,7 @@ export class StepsService {
    */
   updateStepParameters(step: IStepProps, newValues: Record<string, unknown>) {
     let newStep: IStepProps = step;
+    const integrationId = step.integrationId;
     const newStepParameters = newStep.parameters?.slice();
 
     if (newStepParameters && newStepParameters.length > 0) {
@@ -609,13 +610,21 @@ export class StepsService {
           useIntegrationJsonStore
             .getState()
             .replaceBranchParentStep(newStep, currentStepNested.pathToStep);
+
+          useFlowsStore
+            .getState()
+            .insertStep(integrationId, newStep, { mode: 'replace', path: currentStepNested.pathToStep });
         }
       } else {
-        const oldStepIdx = this.findStepIdxWithUUID(
+        let oldStepIdx = this.findStepIdxWithUUID(
           newStep.UUID,
           useIntegrationJsonStore.getState().integrationJson.steps
         );
         useIntegrationJsonStore.getState().replaceStep(newStep, oldStepIdx);
+
+        const integration = this.getIntegration(integrationId);
+        oldStepIdx = this.findStepIdxWithUUID(step.UUID, integration?.steps);
+        useFlowsStore.getState().insertStep(integrationId, newStep, { mode: 'replace', index: oldStepIdx });
       }
     } else {
       return;

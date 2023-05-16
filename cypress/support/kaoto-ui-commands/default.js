@@ -18,13 +18,13 @@ Cypress.Commands.add('waitVisualizationUpdate', () => {
         if (body.find('.code-editor').length > 0) {
             cy.wait('@getIntegration');
         }
-        cy.wait('@getDSLs');
-        cy.wait('@getViewDefinitions');
+        // cy.wait('@getDSLs');
+        // cy.wait('@getViewDefinitions');
     });
 });
 
 Cypress.Commands.add('waitOpenHomePage', () => {
-    cy.wait('@getDSLs');
+    cy.wait('@getDeployments');
     cy.wait('@getViewDefinitions');
 });
 
@@ -55,7 +55,7 @@ Cypress.Commands.add('openSettingsModal', () => {
 });
 
 Cypress.Commands.add('closeAppearanceModal', () => {
-    cy.get('#pf-modal-part-3 > .pf-c-button').click();
+    cy.get('[data-ouia-component-id="appearance-modal"] > button[aria-label="Close"]').click();
 });
 
 Cypress.Commands.add('closeAboutModal', () => {
@@ -63,7 +63,7 @@ Cypress.Commands.add('closeAboutModal', () => {
 });
 
 Cypress.Commands.add('closeMenuModal', () => {
-    cy.get('[data-ouia-component-id="OUIA-Generated-Modal-small-2-ModalBoxCloseButton"]').click();
+    cy.get('[data-ouia-component-id="settings-modal"] > button[aria-label="Close"]').click();
 });
 
 Cypress.Commands.add('cancelMenuModal', () => {

@@ -2,7 +2,7 @@ describe('Test for deleting steps', () => {
   beforeEach(() => {
     cy.intercept('/v1/integrations/dsls').as('getDSLs');
     cy.intercept('/v1/view-definitions').as('getViewDefinitions');
-    cy.intercept('/v1/integrations*').as('getIntegration');
+    cy.intercept('/v2/integrations*').as('getIntegration');
 
     cy.openHomePage();
     cy.uploadFixture('ChuckNorris.yaml');

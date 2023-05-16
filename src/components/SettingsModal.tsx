@@ -25,6 +25,7 @@ import { HelpIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useCallback, useEffect, useState } from 'react';
 import { shallow } from 'zustand/shallow';
+import isEqual from 'lodash.isequal';
 
 export interface ISettingsModal {
   handleCloseModal: () => void;
@@ -42,7 +43,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const [availableDSLs, setAvailableDSLs] = useState<string[]>([]);
   const { settings, setSettings } = useSettingsStore((state) => state);
   const [localSettings, setLocalSettings] = useState<ISettings>(settings);
-  const { flows, properties } = useFlowsStore(({ flows, properties }) => ({ flows, properties }), shallow);
+  const { flows, properties, setFlows } = useFlowsStore(({ flows, properties, setFlows }) => ({ flows, properties, setFlows }), shallow);
   const { setSourceCode } = useIntegrationSourceStore();
   const previousFlows = usePrevious(flows);
   const previousNamespace = usePrevious(localSettings.namespace);
@@ -58,12 +59,19 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const onChangeDsl = useCallback((value: string) => {
     fetchCapabilities().then((capabilities: ICapabilities) => {
       capabilities.dsls.forEach((dsl) => {
-        if (dsl.name === value) {
-          setLocalSettings((state) => ({ ...state, dsl }));
-          // const tmpIntegration = { ...integrationJson, dsl: dsl.name };
-          // updateIntegration(tmpIntegration);
-          // return;
-        }
+        if (dsl.name !== value) return;
+
+        setLocalSettings((state) => ({ ...state, dsl }));
+
+        const updatedFlowWrapper = {
+          flows: flows.map((flow) => ({
+            ...flow,
+            dsl: settings.dsl.name,
+          })),
+          properties,
+        };
+
+        setFlows(updatedFlowWrapper);
       });
     });
   }, []);
@@ -84,20 +92,20 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
     }
   }, [flows, settings.description]);
 
-  // useEffect(() => {
-  //   // update the DSL if changed
-  //   if (settingsDslName === localSettings.dsl.name) return;
-  //   onChangeDsl(settingsDslName);
-  // }, [localSettings.dsl.name, onChangeDsl, settingsDslName]);
+  useEffect(() => {
+    // update the DSL if changed
+    if (settings.dsl.name === localSettings.dsl.name) return;
+    onChangeDsl(settings.dsl.name);
+  }, [settings.name, settings.description, settings.dsl]);
 
   useEffect(() => {
     // update settings with the default namespace fetched from the API
     if (settings.namespace === previousNamespace) return;
     setLocalSettings((state) => ({ ...state, namespace: settings.namespace }));
-  }, [previousNamespace, settings.namespace]);
+  }, [settings.namespace]);
 
   useEffect(() => {
-    if (previousFlows === flows || !Array.isArray(flows[0].steps)) return;
+    if (isEqual(previousFlows, flows) || !Array.isArray(flows[0].steps)) return;
     // subsequent changes to the integration requires fetching
     // DSLs compatible with the specific integration
     fetchCompatibleDSLs({
@@ -114,11 +122,11 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   }, [flows]);
 
   const onChangeDescription = (newDesc: string) => {
-    setLocalSettings({ ...localSettings, description: newDesc });
+    setLocalSettings((state) => ({ ...state, description: newDesc }));
   };
 
   const onChangeName = (newName: string) => {
-    setLocalSettings({ ...localSettings, name: newName });
+    setLocalSettings((state) => ({ ...state, name: newName }));
 
     if (ValidationService.isNameValidCheck(newName)) {
       setNameValidation('success');
@@ -128,7 +136,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   };
 
   const onChangeNamespace = (newNamespace: string) => {
-    setLocalSettings({ ...localSettings, namespace: newNamespace });
+    setLocalSettings((state) => ({ ...state, namespace: newNamespace }));
 
     if (ValidationService.isNameValidCheck(newNamespace)) {
       setNamespaceValidation('success');
@@ -211,6 +219,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
       onClose={handleCloseModal}
       title="Settings"
       variant={ModalVariant.small}
+      ouiaId="settings-modal"
     >
       <Form>
         <FormGroup

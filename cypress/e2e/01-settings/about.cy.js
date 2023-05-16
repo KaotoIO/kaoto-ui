@@ -1,8 +1,9 @@
 describe('Settings: About', () => {
     beforeEach(() => {
+        cy.intercept('/v1/deployments*').as('getDeployments');
         cy.intercept('/v1/integrations/dsls').as('getDSLs');
         cy.intercept('/v1/view-definitions').as('getViewDefinitions');
-        cy.intercept('/v1/integrations*').as('getIntegration');
+        cy.intercept('/v2/integrations*').as('getIntegration');
 
         cy.openHomePage();
         cy.openAboutModal();
