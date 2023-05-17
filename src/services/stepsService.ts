@@ -129,6 +129,7 @@ export class StepsService {
     const currentIdx = this.findStepIdxWithUUID(step.UUID);
 
     return {
+      fetchStepDetails,
       getDeployment: async (
         deploymentName: string,
         namespace?: string
