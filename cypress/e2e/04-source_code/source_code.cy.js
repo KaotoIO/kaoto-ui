@@ -1,5 +1,7 @@
 describe('source code and drag and drop', () => {
   beforeEach(() => {
+    cy.intercept('/v1/deployments*').as('getDeployments');
+    cy.intercept('/v1/steps/id/*').as('getStepDetails');
     cy.intercept('/v1/integrations/dsls').as('getDSLs');
     cy.intercept('/v1/view-definitions').as('getViewDefinitions');
     cy.intercept('/v2/integrations*').as('getIntegration');

@@ -4,7 +4,7 @@ import { setDeepValue } from '@kaoto/utils';
 import isEqual from 'lodash.isequal';
 import { temporal } from 'zundo';
 import { create } from 'zustand';
-import { initialFlows } from '../stubs';
+// import { initialFlows } from '../stubs';
 import { useNestedStepsStore } from './nestedStepsStore';
 import useSettingsStore, { initDsl, initialSettings } from './settingsStore';
 
@@ -61,7 +61,7 @@ export const useFlowsStore = create<IFlowsStore>()(
        * Overriding the default route for demo purposes
        * To be removed once the final feature is complete
        */
-      ...{ flows: [ ...flowsInitialState.flows, initialFlows[1]] },
+      // ...{ flows: [ ...flowsInitialState.flows, initialFlows[1]] },
 
       insertStep: (integrationId, newStep, options) => {
         set((state: IFlowsStore): IFlowsStore => {
