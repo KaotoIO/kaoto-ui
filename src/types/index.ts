@@ -109,6 +109,7 @@ export interface IKaotoApi {
   stopDeployment: (deploymentName: string, namespace?: string) => void;
   updateStep: (step: IStepProps) => void;
   updateStepParams: (newValues: { [s: string]: unknown } | ArrayLike<unknown>) => void;
+  fetchStepDetails: (stepId: string) => Promise<IStepProps>;
 }
 
 export interface INestedStep {
