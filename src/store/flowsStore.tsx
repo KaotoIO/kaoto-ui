@@ -12,9 +12,8 @@ interface IInsertOptions {
   (integrationId: string, newStep: IStepProps, options: { mode: 'append' }): void;
   (integrationId: string, newStep: IStepProps, options: { mode: 'insert', index: number }): void;
   (integrationId: string, newStep: IStepProps, options: { mode: 'replace', index: number }): void;
-  (integrationId: string, newStep: IStepProps, options: { mode: 'replace', path: string[] }): void;
-  (integrationId: string, newStep: IStepProps, options: { mode: 'replace', index?: number, path?: string[] }): void;
-  (integrationId: string, newStep: IStepProps, options: { mode: 'append' | 'insert' | 'replace'; index: number, path: string[] }): void;
+  (integrationId: string, newStep: IStepProps, options: { mode: 'replace', path: string[] | undefined }): void;
+  (integrationId: string, newStep: IStepProps, options: { mode: 'append' | 'insert' | 'replace'; index: number, path: string[] | undefined }): void;
 }
 
 export interface IFlowsStore {
@@ -87,12 +86,12 @@ export const useFlowsStore = create<IFlowsStore>()(
               break;
 
             case 'replace':
-              if ((options as any).path) {
-                setDeepValue(clonedSteps, (options as any).path, newStep);
+              if ('path' in options) {
+                setDeepValue(clonedSteps, options.path, newStep);
                 break;
               }
 
-              clonedSteps.splice((options as any).index, 1, newStep);
+              clonedSteps.splice(options.index, 1, newStep);
           }
 
           const stepsWithNewUuids = StepsService.regenerateUuids(clonedSteps, `${integrationId}_`);

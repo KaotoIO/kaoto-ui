@@ -164,7 +164,7 @@ export class StepsService {
     };
   }
 
-  deleteStep(UUID: string) {
+  deleteStep(integrationId: string, UUID: string) {
     // check if the step being modified is nested
     const currentStepNested = useNestedStepsStore
       .getState()
@@ -180,6 +180,9 @@ export class StepsService {
       useIntegrationJsonStore
         .getState()
         .replaceBranchParentStep(newParentStep, currentStepNested.pathToParentStep);
+      useFlowsStore
+        .getState()
+        .insertStep(integrationId, newParentStep, { mode: 'replace', path: currentStepNested.pathToParentStep });
     } else {
       // `deleteStep` requires the index to be from `integrationJson`, not `nodes`
       const stepsIndex = this.findStepIdxWithUUID(
@@ -189,6 +192,7 @@ export class StepsService {
 
       useVisualizationStore.getState().deleteNode(stepsIndex);
       useIntegrationJsonStore.getState().deleteStep(stepsIndex);
+      useFlowsStore.getState().deleteStep(integrationId, UUID);
     }
   }
 

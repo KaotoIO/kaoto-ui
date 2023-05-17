@@ -57,8 +57,17 @@ Cypress.Commands.add('waitMiniCatalogItIsClosed', () => {
 
 Cypress.Commands.add('deleteStep', (step, stepIndex) => {
     stepIndex = stepIndex ?? 0;
-    cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).trigger('mouseover').children('[data-testid="configurationTab__deleteBtn"]').click({ force: true });
-    cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).should('not.exist');
+
+    /** Get existing steps count */
+    cy.get(`[data-testid="viz-step-${step}"]`).then((elem) => {
+        const previousStepsCount = elem.length;
+
+        /** Delete the given step */
+        cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).trigger('mouseover').children('[data-testid="configurationTab__deleteBtn"]').click({ force: true });
+
+        /** Check whether the given step was removed */
+        cy.get(`[data-testid="viz-step-${step}"]`).should('have.length.lessThan', previousStepsCount);
+    });
 });
 
 Cypress.Commands.add('openStepConfigurationTab', (step, EIP, stepIndex) => {

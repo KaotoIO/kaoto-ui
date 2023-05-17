@@ -229,7 +229,7 @@ export type IVizStepNode = Node & {
 
 export interface IVizStepNodeData {
   branchInfo?: IVizStepNodeDataBranch;
-  handleDeleteStep?: (UUID: string) => void;
+  handleDeleteStep?: HandleDeleteStepFn;
   icon?: string;
   isFirstStep?: boolean;
   isLastStep?: boolean;
@@ -255,3 +255,5 @@ export interface IFlowsWrapper {
   flows: IIntegration[];
   properties: Record<string, unknown>;
 }
+
+export type HandleDeleteStepFn = (integrationId: string, UUID: string) => void;

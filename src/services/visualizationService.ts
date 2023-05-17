@@ -9,6 +9,7 @@ import {
   useSettingsStore,
 } from '@kaoto/store';
 import {
+  HandleDeleteStepFn,
   IStepProps,
   IVizStepNode,
   IVizStepNodeData,
@@ -286,7 +287,7 @@ export class VisualizationService {
    * Builds React Flow nodes and edges from current integration JSON.
    * @param handleDeleteStep
    */
-  buildNodesAndEdges(handleDeleteStep: (uuid: string) => void) {
+  buildNodesAndEdges(handleDeleteStep: HandleDeleteStepFn) {
     const { id: singleFlowId, steps: singleFlowSteps } = useIntegrationJsonStore.getState().integrationJson;
     const layout = useVisualizationStore.getState().layout;
 
@@ -584,7 +585,7 @@ export class VisualizationService {
    * @param handleDeleteStep
    * @param rebuildNodes
    */
-  async redrawDiagram(handleDeleteStep: (uuid: string) => void, rebuildNodes: boolean) {
+  async redrawDiagram(handleDeleteStep: HandleDeleteStepFn, rebuildNodes: boolean) {
     let stepNodes = useVisualizationStore.getState().nodes;
     let stepEdges = useVisualizationStore.getState().edges;
     if (rebuildNodes) {

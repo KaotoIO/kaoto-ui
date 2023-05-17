@@ -10,7 +10,7 @@ import {
 } from '@kaoto/components';
 import { StepsService, VisualizationService } from '@kaoto/services';
 import { useFlowsStore, useIntegrationJsonStore, useSettingsStore, useVisualizationStore } from '@kaoto/store';
-import { IStepProps, IVizStepNode } from '@kaoto/types';
+import { HandleDeleteStepFn, IStepProps, IVizStepNode } from '@kaoto/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
 import { shallow } from 'zustand/shallow';
@@ -73,8 +73,8 @@ const Visualization = () => {
     }
   }, [integrationJson, flows, selectedStep.integrationId, selectedStepUuid, setSelectedStepUuid, stepsService]);
 
-  const handleDeleteStep = useCallback((UUID?: string) => {
-    if (!UUID) return;
+  const handleDeleteStep: HandleDeleteStepFn = useCallback((integrationId, UUID) => {
+    if (!integrationId || !UUID) return;
 
     if (selectedStepUuid === UUID) {
       setIsPanelExpanded(false);
@@ -82,7 +82,7 @@ const Visualization = () => {
       setSelectedStepUuid('');
     }
 
-    stepsService.deleteStep(UUID);
+    stepsService.deleteStep(integrationId, UUID);
   }, [selectedStepUuid, setSelectedStepUuid, stepsService]);
 
   useEffect(() => {
