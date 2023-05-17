@@ -1,6 +1,6 @@
 import { ConfirmationModal } from './ConfirmationModal';
 import { useArgs } from '@storybook/client-api';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Layout/ConfirmationModal',
@@ -13,9 +13,9 @@ export default {
     ),
   ],
   argTypes: { handleCloseModal: { action: 'clicked' } },
-} as ComponentMeta<typeof ConfirmationModal>;
+} as Meta<typeof ConfirmationModal>;
 
-const Template: ComponentStory<typeof ConfirmationModal> = (args) => {
+const Template: StoryFn<typeof ConfirmationModal> = (args) => {
   const [{ isModalOpen }, updateArgs] = useArgs();
   const handleClose = () => updateArgs({ isModalOpen: !isModalOpen });
   return (

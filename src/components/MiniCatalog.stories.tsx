@@ -1,6 +1,6 @@
 import { MiniCatalog } from './MiniCatalog';
 import { IStepQueryParams } from '@kaoto/types';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Catalog/MiniCatalog',
@@ -14,9 +14,9 @@ export default {
       type: 'START',
     } as IStepQueryParams,
   },
-} as ComponentMeta<typeof MiniCatalog>;
+} as Meta<typeof MiniCatalog>;
 
-const Template: ComponentStory<typeof MiniCatalog> = (args) => {
+const Template: StoryFn<typeof MiniCatalog> = (args) => {
   return <MiniCatalog {...args} />;
 };
 

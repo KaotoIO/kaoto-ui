@@ -1,12 +1,12 @@
 import { Extension } from './Extension';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Step Views/Extension',
   component: Extension,
-} as ComponentMeta<typeof Extension>;
+} as Meta<typeof Extension>;
 
-const Template: ComponentStory<typeof Extension> = (args) => {
+const Template: StoryFn<typeof Extension> = (args) => {
   return <Extension {...args} />;
 };
 

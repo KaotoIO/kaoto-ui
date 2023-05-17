@@ -1,5 +1,5 @@
 import { FieldLabelIcon } from './FieldLabelIcon';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Step Views/FieldLabelIcon',
@@ -11,9 +11,9 @@ export default {
       </div>
     ),
   ],
-} as ComponentMeta<typeof FieldLabelIcon>;
+} as Meta<typeof FieldLabelIcon>;
 
-const Template: ComponentStory<typeof FieldLabelIcon> = (args) => {
+const Template: StoryFn<typeof FieldLabelIcon> = (args) => {
   return <FieldLabelIcon {...args} disabled={false} />;
 };
 

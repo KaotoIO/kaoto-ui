@@ -1,5 +1,5 @@
 import { VisualizationStep } from './VisualizationStep';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 import { ReactFlowProvider } from 'reactflow';
 
 export default {
@@ -36,9 +36,9 @@ export default {
       },
     },
   },
-} as ComponentMeta<typeof VisualizationStep>;
+} as Meta<typeof VisualizationStep>;
 
-const Template: ComponentStory<typeof VisualizationStep> = (args) => {
+const Template: StoryFn<typeof VisualizationStep> = (args) => {
   return <VisualizationStep {...args} />;
 };
 

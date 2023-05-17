@@ -108,7 +108,7 @@ export class ValidationService {
    * @param showBranchesTab
    * @param showStepsTab
    */
-  static getPlusButtonTooltipMsg(showBranchesTab: boolean, showStepsTab: boolean): string {
+  static getPlusButtonTooltipMsg(showBranchesTab?: boolean, showStepsTab?: boolean): string {
     if (showStepsTab && showBranchesTab) {
       return 'Add a step or branch';
     } else if (showBranchesTab) {

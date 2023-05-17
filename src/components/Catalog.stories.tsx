@@ -1,7 +1,7 @@
 import { Catalog } from './Catalog';
 import KaotoDrawer from './KaotoDrawer';
 import { DrawerContentBody } from '@patternfly/react-core';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Catalog/Catalog',
@@ -23,9 +23,9 @@ export default {
       </div>
     ),
   ],
-} as ComponentMeta<typeof Catalog>;
+} as Meta<typeof Catalog>;
 
-const Template: ComponentStory<typeof Catalog> = (args) => {
+const Template: StoryFn<typeof Catalog> = (args) => {
   return <Catalog {...args} />;
 };
 

@@ -1,12 +1,12 @@
 import { WaitingPage } from './WaitingPage';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Layout/WaitingPage',
   component: WaitingPage,
-} as ComponentMeta<typeof WaitingPage>;
+} as Meta<typeof WaitingPage>;
 
-const Template: ComponentStory<typeof WaitingPage> = (args) => {
+const Template: StoryFn<typeof WaitingPage> = (args) => {
   return <WaitingPage {...args} message={'Trying to reach the Kaoto API'} />;
 };
 

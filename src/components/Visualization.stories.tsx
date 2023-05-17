@@ -1,5 +1,5 @@
 import { Visualization } from './Visualization';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 import { ReactFlowProvider } from 'reactflow';
 
 export default {
@@ -13,9 +13,9 @@ export default {
     ),
   ],
   argTypes: { toggleCatalog: { action: 'toggled' } },
-} as ComponentMeta<typeof Visualization>;
+} as Meta<typeof Visualization>;
 
-const Template: ComponentStory<typeof Visualization> = () => {
+const Template: StoryFn<typeof Visualization> = () => {
   return <Visualization />;
 };
 

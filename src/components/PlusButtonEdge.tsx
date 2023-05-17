@@ -1,18 +1,23 @@
 import './CustomEdge.css';
 import { BranchBuilder, MiniCatalog } from '@kaoto/components';
 import { usePosition, useShowBranchTab } from '@kaoto/hooks';
-import { StepsService, ValidationService, VisualizationService } from '@kaoto/services';
+import { StepsService, ValidationService } from '@kaoto/services';
 import { useIntegrationJsonStore } from '@kaoto/store';
 import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { ReactNode } from 'react';
-import { EdgeText, getBezierPath, Position, useReactFlow } from 'reactflow';
+import { EdgeText, getBezierPath, Position } from 'reactflow';
 
 const foreignObjectSize = 40;
 
 export interface IPlusButtonEdge {
-  data?: any;
+  data?: {
+    showBranchesTab: boolean;
+    showStepsTab: boolean;
+    sourceStepNode: IVizStepNode;
+    targetStepNode: IVizStepNode;
+  };
   id: string;
   label?: ReactNode;
   sourceX: number;
@@ -27,6 +32,7 @@ export interface IPlusButtonEdge {
 
 /* PLUS BUTTON TO INSERT STEP */
 const PlusButtonEdge = ({
+  data,
   id,
   label,
   sourceX,
@@ -38,13 +44,11 @@ const PlusButtonEdge = ({
   style = {},
   markerEnd,
 }: IPlusButtonEdge) => {
-  // substring is used to remove the 'e-' from the id (i.e. e-{nodeId}>{nodeId})
-  const nodeIds = id.substring(2).split('>');
-  const sourceNode: IVizStepNode | undefined = useReactFlow().getNode(nodeIds[0]);
-  const targetNode: IVizStepNode | undefined = useReactFlow().getNode(nodeIds[1]);
   const stepsService = new StepsService();
-  const showBranchesTab = VisualizationService.showBranchesTab(sourceNode?.data.step);
-  const showStepsTab = VisualizationService.showStepsTab(sourceNode?.data);
+  const showBranchesTab = data?.showBranchesTab;
+  const showStepsTab = data?.showStepsTab;
+  const sourceNode = data?.sourceStepNode;
+  const targetNode = data?.targetStepNode;
 
   const { tooltipPosition } = usePosition();
   const views = useIntegrationJsonStore((state) => state.views);

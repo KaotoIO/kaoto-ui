@@ -1,12 +1,12 @@
 import { AppLayout } from './AppLayout';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 export default {
   title: 'Layout/AppLayout',
   component: AppLayout,
-} as ComponentMeta<typeof AppLayout>;
+} as Meta<typeof AppLayout>;
 
-const Template: ComponentStory<typeof AppLayout> = (args) => {
+const Template: StoryFn<typeof AppLayout> = (args) => {
   return <AppLayout children={args.children} />;
 };
 

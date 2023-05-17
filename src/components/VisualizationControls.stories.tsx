@@ -1,5 +1,5 @@
 import { VisualizationControls } from './VisualizationControls';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 import { ReactFlowProvider } from 'reactflow';
 
 export default {
@@ -12,9 +12,9 @@ export default {
       </ReactFlowProvider>
     ),
   ],
-} as ComponentMeta<typeof VisualizationControls>;
+} as Meta<typeof VisualizationControls>;
 
-const Template: ComponentStory<typeof VisualizationControls> = () => {
+const Template: StoryFn<typeof VisualizationControls> = () => {
   return <VisualizationControls />;
 };
 
