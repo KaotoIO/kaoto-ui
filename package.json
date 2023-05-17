@@ -84,7 +84,7 @@
     "@babel/core": "^7.21.8",
     "@module-federation/typescript": "^2.3.0",
     "@storybook/addon-actions": "^6.5.16",
-    "@storybook/addon-essentials": "^7.0.10",
+    "@storybook/addon-essentials": "^7.0.12",
     "@storybook/addon-interactions": "^7.0.12",
     "@storybook/addon-links": "^6.5.16",
     "@storybook/builder-webpack5": "^6.5.16",
