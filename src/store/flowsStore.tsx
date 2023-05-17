@@ -94,7 +94,7 @@ export const useFlowsStore = create<IFlowsStore>()(
               clonedSteps.splice(options.index, 1, newStep);
           }
 
-          const stepsWithNewUuids = StepsService.regenerateUuids(clonedSteps, `${integrationId}_`);
+          const stepsWithNewUuids = StepsService.regenerateUuids(integrationId, clonedSteps);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
           state.flows = [...state.flows];
           useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
@@ -113,11 +113,11 @@ export const useFlowsStore = create<IFlowsStore>()(
           }
 
           const filteredSteps = state.flows[integrationIndex].steps.slice().filter((step: IStepProps) => step.UUID !== stepUUID);
-          const stepsWithNewUuids = StepsService.regenerateUuids(filteredSteps, `${integrationId}_`);
+          const stepsWithNewUuids = StepsService.regenerateUuids(integrationId, filteredSteps);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
           useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
-          return { ...state };
+          return { ...state, flows: [...state.flows] };
         });
       },
       deleteAllIntegrations: () => set((state) => ({ ...state, ...flowsInitialState })),
@@ -125,11 +125,24 @@ export const useFlowsStore = create<IFlowsStore>()(
         set({ views });
       },
       setFlows: (flowsWrapper) => {
-        set((state) => ({
-          ...state,
-          flows: flowsWrapper.flows,
-          properties: flowsWrapper.properties,
-        }));
+        set((state) => {
+          /**
+           * TODO: Temporarily assign IDs to each flows and steps
+           * This is needed until https://github.com/KaotoIO/kaoto-backend/issues/663 it's done
+           */
+          const flowsWithId = flowsWrapper.flows.map((flow, index) => {
+            const id = `${flow.dsl}-${index}`;
+            const steps = StepsService.regenerateUuids(id, flow.steps);
+
+            return { ...flow, id, steps };
+          });
+
+          return {
+            ...state,
+            flows: flowsWithId,
+            properties: flowsWrapper.properties,
+          };
+        });
       },
     }),
     {

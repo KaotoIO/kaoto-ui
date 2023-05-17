@@ -65,6 +65,12 @@ Cypress.Commands.add('deleteStep', (step, stepIndex) => {
         /** Delete the given step */
         cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).trigger('mouseover').children('[data-testid="configurationTab__deleteBtn"]').click({ force: true });
 
+        cy.get('[data-testid="kaoto-left-drawer"][data-drawer-content]')
+            .should('have.attr', 'data-drawer-content')
+            .then((content) => {
+                if (content === 'code') cy.wait('@getIntegration');
+            });
+
         /** Check whether the given step was removed */
         cy.get(`[data-testid="viz-step-${step}"]`).should('have.length.lessThan', previousStepsCount);
     });

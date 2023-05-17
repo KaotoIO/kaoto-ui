@@ -55,6 +55,7 @@ const Dashboard = () => {
     if (leftDrawerModel.current === 'code') {
       // it's already showing the code editor, just toggle it
       setLeftDrawerExpanded(!leftDrawerExpanded);
+      leftDrawerModel.current = '';
     } else {
       setLeftDrawerContent(drawerCodeEditor);
       leftDrawerModel.current = 'code';
@@ -65,6 +66,7 @@ const Dashboard = () => {
     if (leftDrawerModel.current === 'catalog') {
       // it's already showing the catalog, just toggle it
       setLeftDrawerExpanded(!leftDrawerExpanded);
+      leftDrawerModel.current = '';
     } else {
       // currently showing code editor content;
       // set to catalog, only close if already open
@@ -112,6 +114,7 @@ const Dashboard = () => {
                 <KaotoDrawer
                   colorVariant={DrawerColorVariant.light200}
                   dataTestId={'kaoto-left-drawer'}
+                  dataDrawerContent={leftDrawerModel.current}
                   panelContent={leftDrawerContent}
                   id={'kaoto-left-drawer'}
                   isExpanded={leftDrawerExpanded}

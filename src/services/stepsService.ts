@@ -522,15 +522,17 @@ export class StepsService {
    * @param steps
    * @param prefix
    */
-  static regenerateUuids(steps: IStepProps[], prefix: string = ''): IStepProps[] {
+  static regenerateUuids(integrationId: string, steps: IStepProps[], prefix?: string): IStepProps[] {
     let newSteps = cloneDeep(steps);
+    const integrationPrefix = prefix ?? `${integrationId}_`;
 
     newSteps.forEach((step, stepIndex) => {
-      step.UUID = `${prefix}${step.name}-${stepIndex}`;
+      step.UUID = `${integrationPrefix}${step.name}-${stepIndex}`;
+      step.integrationId = integrationId;
 
       step.branches?.forEach((branch, branchIndex) => {
         branch.branchUuid = `${step.UUID}_branch-${branchIndex}`;
-        branch.steps = StepsService.regenerateUuids(branch.steps, `${branch.branchUuid}_`)
+        branch.steps = StepsService.regenerateUuids(integrationId, branch.steps, `${branch.branchUuid}_`)
       });
     });
 
