@@ -7,13 +7,17 @@ import '@patternfly/patternfly/utilities/Sizing/sizing.css';
 import '@patternfly/patternfly/utilities/Spacing/spacing.css';
 import 'reactflow/dist/style.css';
 import { AlertProvider } from '../src/layout';
+import { initialize, mswDecorator } from 'msw-storybook-addon';
 
-if (process.env.NODE_ENV === 'development') {
-  const { worker } = require('../src/__mocks__/browser');
-  worker.start();
-}
+initialize();
+
+// if (process.env.NODE_ENV === 'development') {
+//   const { worker } = require('../src/__mocks__/browser');
+//   worker.start();
+// }
 
 export const decorators = [
+  mswDecorator,
   (Story: any) => (
     <AlertProvider>
       <Story />
