@@ -2143,13 +2143,13 @@
     "@opentelemetry/resources" "1.13.0"
     "@opentelemetry/sdk-trace-base" "1.13.0"
 
-"@opentelemetry/instrumentation-document-load@^0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-document-load/-/instrumentation-document-load-0.32.1.tgz#3e8b4d0bb9f2fe260fd2bdc2d055f43d5ec22f09"
-  integrity sha512-YXPX3vuWtE8lvz6KXQHYdkA1DtNvHWQLWtNjCv7zFKnOfyNLELFIzenBstVBN/wMRAj01UYAf/e8Jz8k/MVMrg==
+"@opentelemetry/instrumentation-document-load@^0.32.2":
+  version "0.32.2"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-document-load/-/instrumentation-document-load-0.32.2.tgz#bc66d9c0842fcc5d39baaf382a4d038fa1b5904b"
+  integrity sha512-j5klJHCz3HXbhl3nOJK3qMQkWXWcNUtGaaEcYh3uD1VdzvC6+SGbp40FGAGZXAhnlkIcWyTDsPGsNI1c0KuzNw==
   dependencies:
     "@opentelemetry/core" "^1.8.0"
-    "@opentelemetry/instrumentation" "^0.38.0"
+    "@opentelemetry/instrumentation" "^0.39.1"
     "@opentelemetry/sdk-trace-base" "^1.0.0"
     "@opentelemetry/sdk-trace-web" "^1.8.0"
     "@opentelemetry/semantic-conventions" "^1.0.0"
