@@ -2173,13 +2173,13 @@
     "@opentelemetry/instrumentation" "^0.38.0"
     "@opentelemetry/sdk-trace-web" "^1.8.0"
 
-"@opentelemetry/instrumentation-user-interaction@^0.32.2":
-  version "0.32.2"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-user-interaction/-/instrumentation-user-interaction-0.32.2.tgz#8135b4126890c22dfab1a597b182ddd073e107fd"
-  integrity sha512-fAc8w0KywcR4jBFFudoI6Wrb87oLt3i0oLEe0yC+01qui6XNCIH3FzpWs10Dwo+eDMyqNjIX/PLDkW3N4EJoYA==
+"@opentelemetry/instrumentation-user-interaction@^0.32.3":
+  version "0.32.3"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-user-interaction/-/instrumentation-user-interaction-0.32.3.tgz#9d8851f783616212b2abb0c767dd5f55c9288d12"
+  integrity sha512-Hf4PVmjEQ3fWLfHrYwO2VP9Wr5bWPl3b6UrGqwnqFkrE7/OvsW9R10vMjHxZxORBGGLE7we+ROfJMpwDWNVdvg==
   dependencies:
     "@opentelemetry/core" "^1.8.0"
-    "@opentelemetry/instrumentation" "^0.38.0"
+    "@opentelemetry/instrumentation" "^0.39.1"
     "@opentelemetry/sdk-trace-web" "^1.8.0"
 
 "@opentelemetry/instrumentation@0.39.1", "@opentelemetry/instrumentation@^0.39.1":
