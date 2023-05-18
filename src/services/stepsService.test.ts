@@ -414,6 +414,7 @@ describe('stepsService', () => {
 
     await stepsService
       .handlePrependStep(
+        'Camel Route-1',
         { name: 'peach', UUID: 'peach-1' } as IStepProps,
         { name: 'lime', UUID: 'lime-1' } as IStepProps
       )

@@ -45,7 +45,7 @@ export function formatDateTime(date: string) {
  * @param obj
  * @param path
  */
-export function getDeepValue(obj: any, path: any) {
+export function getDeepValue<T = any>(obj: any, path: any) {
   // If path is not defined or it has false value
   if (!path) return undefined;
   // Check if path is string or array. Regex : ensure that we do not have '.' and brackets.
@@ -55,7 +55,7 @@ export function getDeepValue(obj: any, path: any) {
   return pathArray.reduce(
     (prevObj: { [x: string]: any }, key: string | number) => prevObj && prevObj[key],
     obj
-  );
+  ) as T;
 }
 
 /**

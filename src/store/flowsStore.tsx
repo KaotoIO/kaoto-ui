@@ -126,6 +126,8 @@ export const useFlowsStore = create<IFlowsStore>()(
       },
       setFlows: (flowsWrapper) => {
         set((state) => {
+          let allSteps: IStepProps[] = [];
+
           /**
            * TODO: Temporarily assign IDs to each flows and steps
            * This is needed until https://github.com/KaotoIO/kaoto-backend/issues/663 it's done
@@ -133,9 +135,12 @@ export const useFlowsStore = create<IFlowsStore>()(
           const flowsWithId = flowsWrapper.flows.map((flow, index) => {
             const id = `${flow.dsl}-${index}`;
             const steps = StepsService.regenerateUuids(id, flow.steps);
+            allSteps.push(...steps);
 
             return { ...flow, id, steps };
           });
+
+          useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(allSteps));
 
           return {
             ...state,
