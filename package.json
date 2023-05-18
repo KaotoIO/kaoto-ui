@@ -205,6 +205,6 @@
     "tsconfig.json"
   ],
   "msw": {
-    "workerDirectory": "dist"
+    "workerDirectory": "public"
   }
 }
