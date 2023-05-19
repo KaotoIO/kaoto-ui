@@ -75,20 +75,20 @@ export class StepsService {
   deleteBranch(integrationId: string, step: IStepProps, branchUuid: string) {
     const currentStepNested = this.getStepNested(step.UUID);
     if (currentStepNested) {
-      const { parentStep, branch } = this.getParentStep(integrationId, currentStepNested);
-      if (parentStep === undefined || branch === undefined) return;
-
-      parentStep.branches = parentStep.branches?.filter((branch) => branch.branchUuid !== branchUuid);
+      const newParentStep = {
+        ...step,
+        branches: step.branches?.filter((b) => b.branchUuid !== branchUuid),
+      };
 
       /** TODO: Temporary check while we completely replace previous store with the new one */
       if (!useSettingsStore.getState().settings.useMultipleFlows) {
         useIntegrationJsonStore
           .getState()
-          .replaceBranchParentStep(parentStep, currentStepNested.pathToStep);
+          .replaceBranchParentStep(newParentStep, currentStepNested.pathToStep);
       } else {
         useFlowsStore
           .getState()
-          .insertStep(integrationId, parentStep, { mode: 'replace', path: currentStepNested.pathToParentStep });
+          .insertStep(integrationId, newParentStep, { mode: 'replace', path: currentStepNested.pathToStep });
       }
     } else {
       let oldStepIdx = this.findStepIdxWithUUID(
@@ -569,30 +569,38 @@ export class StepsService {
    * @param node
    * @param proposedStep
    */
-  async replacePlaceholderStep(node: IVizStepNodeData, proposedStep: IStepProps) {
+  async replacePlaceholderStep(node: IVizStepNodeData, proposedStep: IStepProps): Promise<{ isValid: boolean; message?: string }> {
     // fetch parameters and other details
     return fetchStepDetails(proposedStep.id).then((step) => {
       step.UUID = proposedStep.UUID;
       const validation = ValidationService.canStepBeReplaced(node, step);
 
-      if (validation.isValid) {
-        // update the steps, the new node will be created automatically
-        if (node.branchInfo) {
-          if (node.isPlaceholder) {
-            const pathToBranch = findPath(
-              useIntegrationJsonStore.getState().integrationJson.steps,
-              node.branchInfo.branchUuid!,
-              'branchUuid'
-            );
-            const newPath = pathToBranch?.concat('steps', '0');
+      if (!validation.isValid) {
+        return validation;
+      }
+
+      // update the steps, the new node will be created automatically
+      if (node.branchInfo) {
+        if (node.isPlaceholder) {
+          const pathToBranch = findPath(
+            this.getIntegration(node.step.integrationId)?.steps ?? [],
+            node.branchInfo.branchUuid!,
+            'branchUuid'
+          );
+          const newPath = pathToBranch?.concat('steps', '0');
+
+          /** TODO: Temporary check while we completely replace previous store with the new one */
+          if (!useSettingsStore.getState().settings.useMultipleFlows) {
             useIntegrationJsonStore.getState().replaceBranchParentStep(step, newPath);
+          } else {
             useFlowsStore.getState().insertStep(node.step.integrationId, step, { mode: 'replace', path: newPath });
           }
-        } else {
-          useIntegrationJsonStore.getState().replaceStep(step);
-          useFlowsStore.getState().insertStep(node.step.integrationId, step, { mode: 'append' });
         }
+      } else {
+        useIntegrationJsonStore.getState().replaceStep(step);
+        useFlowsStore.getState().insertStep(node.step.integrationId, step, { mode: 'append' });
       }
+
       return validation;
     });
   }
