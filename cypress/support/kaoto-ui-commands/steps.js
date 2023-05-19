@@ -89,7 +89,7 @@ Cypress.Commands.add('closeStepConfigurationTab', () => {
 });
 
 Cypress.Commands.add('interactWithConfigInputObject', (inputName, value) => {
-    if (value !== null) {
+    if (value !== undefined && value !== null) {
         cy.get(`input[name="${inputName}"]`).clear().type(value);
     } else {
         cy.get(`input[name="${inputName}"]`).click();

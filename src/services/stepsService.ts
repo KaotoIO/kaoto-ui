@@ -638,13 +638,16 @@ export class StepsService {
           .getState()
           .nestedSteps.find((ns) => ns.stepUuid === newStep.UUID);
         if (currentStepNested) {
-          useIntegrationJsonStore
-            .getState()
-            .replaceBranchParentStep(newStep, currentStepNested.pathToStep);
-
-          useFlowsStore
-            .getState()
-            .insertStep(integrationId, newStep, { mode: 'replace', path: currentStepNested.pathToStep });
+          /** TODO: Temporary check while we completely replace previous store with the new one */
+          if (!useSettingsStore.getState().settings.useMultipleFlows) {
+            useIntegrationJsonStore
+              .getState()
+              .replaceBranchParentStep(newStep, currentStepNested.pathToStep);
+          } else {
+            useFlowsStore
+              .getState()
+              .insertStep(integrationId, newStep, { mode: 'replace', path: currentStepNested.pathToStep });
+          }
         }
       } else {
         let oldStepIdx = this.findStepIdxWithUUID(

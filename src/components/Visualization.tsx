@@ -148,6 +148,7 @@ const Visualization = () => {
 
   /**
    * Handles Step View configuration changes
+   * @param step
    * @param newValues
    */
   const saveConfig = useCallback((step: IStepProps, newValues: Record<string, unknown>) => {
