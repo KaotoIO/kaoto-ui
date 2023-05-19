@@ -12,7 +12,6 @@ export interface IKaotoDrawer {
   colorVariant?: DrawerColorVariant | 'light-200' | 'default';
   className?: string;
   dataTestId?: string;
-  dataDrawerContent?: string;
   defaultSize?: string;
   handleOnExpand?: () => void;
   hasNoBorder?: boolean;
@@ -31,7 +30,6 @@ export const KaotoDrawer = ({
   className,
   colorVariant,
   dataTestId,
-  dataDrawerContent,
   defaultSize,
   handleOnExpand,
   hasNoBorder,
@@ -57,7 +55,6 @@ export const KaotoDrawer = ({
       colorVariant={colorVariant}
       className={className}
       data-testid={dataTestId}
-      data-drawer-content={dataDrawerContent}
       defaultSize={defaultSize}
       hasNoBorder={hasNoBorder}
       isResizable={isResizable}

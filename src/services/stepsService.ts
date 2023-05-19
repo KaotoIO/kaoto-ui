@@ -158,8 +158,13 @@ export class StepsService {
           return res;
         });
       },
-      updateStep: (newStep: IStepProps) =>
-        useIntegrationJsonStore.getState().replaceStep(newStep, currentIdx),
+      updateStep: (newStep: IStepProps) => {
+        useIntegrationJsonStore.getState().replaceStep(newStep, currentIdx);
+
+        const integration = this.getIntegration(step.integrationId);
+        const stepCurrentIdx = this.findStepIdxWithUUID(newStep.UUID, integration?.steps);
+        useFlowsStore.getState().insertStep(step.integrationId, newStep, { mode: 'replace', index: stepCurrentIdx });
+      },
       updateStepParams,
     };
   }
@@ -445,11 +450,11 @@ export class StepsService {
   }
 
   getIntegration(integrationId: string): IIntegration | undefined {
-    if (useSettingsStore.getState().settings.useMultipleFlows) {
-      return useFlowsStore.getState().flows.find((integration) => integration.id === integrationId);
+    if (!useSettingsStore.getState().settings.useMultipleFlows) {
+      return useIntegrationJsonStore.getState().integrationJson;
     }
 
-    return useIntegrationJsonStore.getState().integrationJson;
+    return useFlowsStore.getState().flows.find((integration) => integration.id === integrationId);
   }
 
   /**
@@ -660,7 +665,19 @@ export class StepsService {
    * Submits current integration steps to the backend and updates with received views.
    */
   async updateViews() {
-    fetchViews(useIntegrationJsonStore.getState().integrationJson.steps).then((views: IViewProps[]) => {
+    let steps: IStepProps[] = [];
+
+    if (!useSettingsStore.getState().settings.useMultipleFlows) {
+      steps = useIntegrationJsonStore.getState().integrationJson.steps
+    } else {
+      steps = useFlowsStore.getState().flows.reduce((acc, flow) => {
+        acc.push(...flow.steps);
+        return acc;
+      },
+      [] as IStepProps[]);
+    }
+
+    return fetchViews(steps).then((views: IViewProps[]) => {
       if (Array.isArray(views)) {
         useIntegrationJsonStore.getState().updateViews(views);
         useFlowsStore.getState().updateViews(views);

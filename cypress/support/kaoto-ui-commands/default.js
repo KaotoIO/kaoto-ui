@@ -15,10 +15,14 @@ Cypress.Commands.add('zoomOutXTimes', (times) => {
 
 Cypress.Commands.add('waitVisualizationUpdate', () => {
     cy.get('body').then((body) => {
+        /**
+         * If the code editor is visible, it means that we would need
+         * to wait for the getIntegration call, otherwise, the operation
+         * is synchronous
+         */
         if (body.find('.code-editor').length > 0) {
             cy.wait('@getIntegration');
         }
-        cy.wait('@getDSLs');
     });
 });
 
@@ -77,6 +81,7 @@ Cypress.Commands.add('saveMenuModal', (integrationChanged) => {
     cy.wait('@getIntegration');
     if (integrationChanged) {
         cy.waitVisualizationUpdate();
+        cy.wait('@getDSLs');
     }
 });
 

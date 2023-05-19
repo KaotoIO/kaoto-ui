@@ -9,7 +9,7 @@ import {
   VisualizationStepViews,
 } from '@kaoto/components';
 import { StepsService, VisualizationService } from '@kaoto/services';
-import { useFlowsStore, useIntegrationJsonStore, useSettingsStore, useVisualizationStore } from '@kaoto/store';
+import { useFlowsStore, useVisualizationStore } from '@kaoto/store';
 import { HandleDeleteStepFn, IStepProps, IVizStepNode } from '@kaoto/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
@@ -35,13 +35,11 @@ const Visualization = () => {
     integrationId: '',
   });
 
-  const useMultipleFlows = useSettingsStore((state) => state.settings.useMultipleFlows);
   const { selectedStepUuid, setSelectedStepUuid } = useVisualizationStore(({ selectedStepUuid, setSelectedStepUuid }) => ({ selectedStepUuid, setSelectedStepUuid }), shallow);
   const { onNodesChange, onEdgesChange } = useVisualizationStore(({ onNodesChange, onEdgesChange }) => ({ onNodesChange, onEdgesChange }), shallow);
   const layout = useVisualizationStore((state) => state.layout);
   const nodes = useVisualizationStore((state) => state.nodes);
   const edges = useVisualizationStore((state) => state.edges);
-  const integrationJson = useIntegrationJsonStore((state) => state.integrationJson);
   const flows = useFlowsStore((state) => state.flows);
   const visualizationService = useMemo(() => new VisualizationService(), []);
   const stepsService = useMemo(() => new StepsService(), []);
@@ -52,7 +50,7 @@ const Visualization = () => {
    */
   useEffect(() => {
     stepsService.updateViews();
-  }, [integrationJson, flows, stepsService]);
+  }, [flows, stepsService]);
 
   /**
    * Check for changes to integrationJson to refresh the selected step's data.
@@ -71,7 +69,7 @@ const Visualization = () => {
       setSelectedStepUuid('');
       setIsPanelExpanded(false);
     }
-  }, [integrationJson, flows, selectedStep.integrationId, selectedStepUuid, setSelectedStepUuid, stepsService]);
+  }, [flows, selectedStep.integrationId, selectedStepUuid, setSelectedStepUuid, stepsService]);
 
   const handleDeleteStep: HandleDeleteStepFn = useCallback((integrationId, UUID) => {
     if (!integrationId || !UUID) return;
@@ -87,7 +85,7 @@ const Visualization = () => {
 
   useEffect(() => {
     visualizationService.redrawDiagram(handleDeleteStep, true).catch((e) => console.error(e));
-  }, [handleDeleteStep, integrationJson, flows, layout, useMultipleFlows, visualizationService]);
+  }, [handleDeleteStep, flows, layout, visualizationService]);
 
   const nodeTypes = useMemo(() => ({ step: VisualizationStep }), []);
   const edgeTypes = useMemo(
