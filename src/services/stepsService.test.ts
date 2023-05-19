@@ -171,8 +171,8 @@ describe('stepsService', () => {
 
     it('stepParams: should return the current step parameters', () => {
       expect(
-        stepsService.createKaotoApi(step, jest.fn(), jest.fn()).stepParams.Description
-      ).toEqual('A fruit');
+        stepsService.createKaotoApi(step, jest.fn(), jest.fn()).stepParams,
+      ).toMatchObject({ description: 'A fruit' });
     });
 
     it('stopDeployment(): should call apiService to stop the current running deployment', async () => {

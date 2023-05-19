@@ -122,7 +122,7 @@ export class StepsService {
   ): IKaotoApi {
     let stepParams = {};
     step.parameters?.forEach((parameter) => {
-      const paramKey = parameter.title;
+      const paramKey = parameter.id;
       // @ts-ignore
       stepParams[paramKey] = parameter.value ?? parameter.defaultValue;
     });
