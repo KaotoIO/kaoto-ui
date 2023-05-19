@@ -124,7 +124,6 @@ export class StepsService {
       // @ts-ignore
       stepParams[paramKey] = parameter.value ?? parameter.defaultValue;
     });
-    const currentIdx = this.findStepIdxWithUUID(step.UUID);
 
     return {
       fetchStepDetails,
@@ -156,12 +155,10 @@ export class StepsService {
           return res;
         });
       },
+      /** TODO: Evaluate if makes sense to keep this duplicated method in the API */
       updateStep: (newStep: IStepProps) => {
-        useIntegrationJsonStore.getState().replaceStep(newStep, currentIdx);
-
-        const integration = this.getIntegration(step.integrationId);
-        const stepCurrentIdx = this.findStepIdxWithUUID(newStep.UUID, integration?.steps);
-        useFlowsStore.getState().insertStep(step.integrationId, newStep, { mode: 'replace', index: stepCurrentIdx });
+        /** TODO: Passing an empty object to avoid setting new parameters to the step */
+        this.updateStepParameters(newStep, {});
       },
       updateStepParams,
     };

@@ -1,5 +1,7 @@
 describe('User completes normal actions on steps in a branch', () => {
     beforeEach(() => {
+        cy.intercept('/v1/deployments*').as('getDeployments');
+        cy.intercept('/v1/steps/id/*').as('getStepDetails');
         cy.intercept('/v1/integrations/dsls').as('getDSLs');
         cy.intercept('/v1/view-definitions').as('getViewDefinitions');
         cy.intercept('/v2/integrations*').as('getIntegration');
