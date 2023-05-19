@@ -1,18 +1,22 @@
 import { usePosition } from '@kaoto/hooks';
 import { StepsService } from '@kaoto/services';
-import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
 import { IVizStepNode } from '@kaoto/types';
 import { Button, Popover, Tooltip } from '@patternfly/react-core';
 import { MinusIcon } from '@patternfly/react-icons';
-import { ReactNode } from 'react';
-import { EdgeText, getBezierPath, Position, useReactFlow } from 'reactflow';
+import { ReactNode, useMemo } from 'react';
+import { EdgeText, getBezierPath, Position } from 'reactflow';
 import './CustomEdge.css';
 import { OrangeExclamationTriangleIcon } from './Icons';
 
 const foreignObjectSize = 40;
 
 export interface IDeleteButtonEdge {
-  data?: any;
+  data?: {
+    showBranchesTab: boolean;
+    showStepsTab: boolean;
+    sourceStepNode: IVizStepNode;
+    targetStepNode: IVizStepNode;
+  };
   id: string;
   label?: ReactNode;
   sourceX: number;
@@ -27,6 +31,7 @@ export interface IDeleteButtonEdge {
 
 /* PLUS BUTTON TO INSERT STEP */
 const DeleteButtonEdge = ({
+  data,
   id,
   label,
   sourceX,
@@ -38,14 +43,9 @@ const DeleteButtonEdge = ({
   style = {},
   markerEnd,
 }: IDeleteButtonEdge) => {
-  // substring is used to remove the 'e-' from the id (i.e. e-{nodeId}>{nodeId})
-  const nodeIds = id.substring(2).split('>');
-  const sourceNode: IVizStepNode | undefined = useReactFlow().getNode(nodeIds[0]);
-  const targetNode: IVizStepNode | undefined = useReactFlow().getNode(nodeIds[1]);
-  const integrationJsonStore = useIntegrationJsonStore();
-  const nestedStepsStore = useNestedStepsStore();
-  const visualizationStore = useVisualizationStore();
-  const stepsService = new StepsService(integrationJsonStore, nestedStepsStore, visualizationStore);
+  const sourceNode = data?.sourceStepNode;
+  const targetNode = data?.targetStepNode;
+  const stepsService = useMemo(() => new StepsService(), []);
 
   const { tooltipPosition } = usePosition();
   const [edgePath, edgeCenterX, edgeCenterY] = getBezierPath({
@@ -59,7 +59,7 @@ const DeleteButtonEdge = ({
 
   const handleDeleteBranch = () => {
     // we will modify source node, and target node has the branchInfo we need
-    stepsService.deleteBranch(sourceNode?.data.step, targetNode?.data.branchInfo.branchUuid);
+    stepsService.deleteBranch(sourceNode?.data.step.integrationId, sourceNode?.data.step, targetNode?.data.branchInfo.branchUuid);
   };
 
   return (

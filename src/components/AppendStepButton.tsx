@@ -2,12 +2,13 @@ import { BranchBuilder } from './BranchBuilder';
 import { MiniCatalog } from './MiniCatalog';
 import { useShowBranchTab } from '@kaoto/hooks';
 import { StepsService, ValidationService } from '@kaoto/services';
-import { useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
+import { useFlowsStore, useSettingsStore } from '@kaoto/store';
 import { IStepProps } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { Position } from 'reactflow';
+import { shallow } from 'zustand/shallow';
 
 interface IAddStepButton {
   handleAddBranch: () => void;
@@ -25,13 +26,13 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
   showStepsTab,
 }) => {
   const currentDSL = useSettingsStore((state) => state.settings.dsl.name);
-  const views = useIntegrationJsonStore((state) => state.views);
+  const views = useFlowsStore((state) => state.views, shallow);
   const { disableBranchesTab, disableBranchesTabMsg } = useShowBranchTab(step, views);
 
   const [tooltipText, setTooltipText] = useState('');
   const [disableButton, setDisableButton] = useState(false);
 
-  const stepsService = new StepsService();
+  const stepsService = useMemo(() => new StepsService(), []);
   const followingStep = stepsService.getFollowingStep(step.id);
 
   useEffect(() => {

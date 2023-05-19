@@ -26,7 +26,7 @@ import {
   startDeployment,
   stopDeployment,
 } from '@kaoto/api';
-import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
+import { useIntegrationJsonStore, useNestedStepsStore } from '@kaoto/store';
 import {
   INestedStep,
   IStepProps,
@@ -38,11 +38,7 @@ import {
 } from '@kaoto/types';
 
 describe('stepsService', () => {
-  const stepsService = new StepsService(
-    useIntegrationJsonStore.getState(),
-    useNestedStepsStore.getState(),
-    useVisualizationStore.getState()
-  );
+  const stepsService = new StepsService();
 
   beforeEach(() => {
     useIntegrationJsonStore.getState().deleteIntegration();
@@ -203,7 +199,7 @@ describe('stepsService', () => {
 
     expect(useIntegrationJsonStore.getState().integrationJson.steps[0].branches).toHaveLength(1);
 
-    stepsService.deleteBranch(step, 'peach-0_branch-0');
+    stepsService.deleteBranch('Camel Route-1', step, 'peach-0_branch-0');
 
     expect(useIntegrationJsonStore.getState().integrationJson.steps[0].branches).toHaveLength(0);
   });
