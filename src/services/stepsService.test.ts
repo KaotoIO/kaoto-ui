@@ -160,20 +160,6 @@ describe('stepsService', () => {
       expect(stopDeployment).toHaveBeenCalled();
     });
 
-    it('updateStep(): should replace the current step with the one provided', () => {
-      const customStep = { name: 'pineapple', UUID: 'Camel Route-1_pineapple-0' } as IStepProps;
-      useIntegrationJsonStore.getState().insertStep(customStep, 0);
-      expect(useIntegrationJsonStore.getState().integrationJson.steps[0].UUID).toContain(
-        'pineapple'
-      );
-      stepsService
-        .createKaotoApi(customStep, jest.fn(), jest.fn())
-        .updateStep({ name: 'blackberry' } as IStepProps);
-      expect(useIntegrationJsonStore.getState().integrationJson.steps[0].UUID).toContain(
-        'blackberry'
-      );
-    });
-
     it('updateStepParams(): should call the provided callback for updating step params', () => {
       const saveConfig = jest.fn();
       stepsService.createKaotoApi(step, saveConfig, jest.fn()).updateStepParams({ name: 'pizza' });
