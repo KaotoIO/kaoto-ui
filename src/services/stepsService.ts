@@ -649,6 +649,7 @@ export class StepsService {
       [label: string]: {
         type: string;
         defaultValue?: any;
+        step?: number;
         value?: any;
         description?: string;
         uniforms?: { placeholder: any };
@@ -663,6 +664,7 @@ export class StepsService {
         type,
         defaultValue,
         description,
+        ...(type === "number" || type === "integer") && {step : 1},
         uniforms: { placeholder: defaultValue },
         label: title,
       };
