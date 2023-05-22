@@ -68,7 +68,7 @@
     "react-dom": "18.2.0",
     "react-error-boundary": "4.0.4",
     "react-monaco-editor": "^0.52.0",
-    "react-router-dom": "5.3.4",
+    "react-router-dom": "6.11.2",
     "react-router-last-location": "2.0.1",
     "reactflow": "^11.7.2",
     "simple-zustand-devtools": "^1.1.0",
