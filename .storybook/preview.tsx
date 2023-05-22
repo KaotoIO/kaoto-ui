@@ -7,13 +7,22 @@ import '@patternfly/patternfly/utilities/Sizing/sizing.css';
 import '@patternfly/patternfly/utilities/Spacing/spacing.css';
 import 'reactflow/dist/style.css';
 import { AlertProvider } from '../src/layout';
+import { initialize, mswDecorator } from 'msw-storybook-addon';
+import steps from '../src/stubs/steps/steps.default';
+import { rest } from 'msw';
 
-if (process.env.NODE_ENV === 'development') {
-  const { worker } = require('../src/__mocks__/browser');
-  worker.start();
-}
+initialize({
+  onUnhandledRequest(req, print) {
+    if (req.url.pathname.startsWith('/static/')) {
+      return;
+    }
+
+    print.warning();
+  }
+});
 
 export const decorators = [
+  mswDecorator,
   (Story: any) => (
     <AlertProvider>
       <Story />
@@ -32,6 +41,16 @@ export const parameters = {
   options: {
     storySort: {
       method: 'alphabetical'
+    }
+  },
+  msw: {
+    handlers: {
+      steps: rest.get(
+        'http://localhost:8081/v1/steps?dsl=Camel%20Route&namespace=default',
+        (_req, res, ctx) => {
+          return res(ctx.status(200), ctx.json(steps))
+        }
+      ),
     }
   }
 }
