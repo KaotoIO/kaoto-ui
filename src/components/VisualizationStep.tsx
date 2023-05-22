@@ -67,7 +67,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   };
 
   const handleTrashClick = () => {
-    data.handleDeleteStep && data.handleDeleteStep(data.step.integrationId, data.step?.UUID);
+    data.handleDeleteStep && data.handleDeleteStep(data.step.integrationId, data.step.UUID);
   };
 
   /**

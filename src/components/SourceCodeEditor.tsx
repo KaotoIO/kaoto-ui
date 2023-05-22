@@ -26,7 +26,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
   const [syncedCode, setSyncedCode] = useState('');
   const { settings, setSettings } = useSettingsStore();
-  const { flows, properties, setFlows } = useFlowsStore(({ flows, properties, setFlows }) => ({ flows, properties, setFlows }), shallow);
+  const { flows, properties, setFlowsWrapper } = useFlowsStore(({ flows, properties, setFlowsWrapper }) => ({ flows, properties, setFlowsWrapper }), shallow);
   const previousFlows = usePrevious(flows);
 
   const schemaUri = settings.dsl.validationSchema
@@ -83,7 +83,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
           setSettings({ name: tmpInt.metadata.name });
         }
         tmpInt.metadata = { ...tmpInt.metadata, ...settings };
-        setFlows(flowsWrapper);
+        setFlowsWrapper(flowsWrapper);
       })
       .catch((e) => {
         console.error(e);

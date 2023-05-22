@@ -43,7 +43,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const [availableDSLs, setAvailableDSLs] = useState<string[]>([]);
   const { settings, setSettings } = useSettingsStore((state) => state);
   const [localSettings, setLocalSettings] = useState<ISettings>(settings);
-  const { flows, properties, setFlows } = useFlowsStore(({ flows, properties, setFlows }) => ({ flows, properties, setFlows }), shallow);
+  const { flows, properties, setFlows } = useFlowsStore(({ flows, properties, setFlowsWrapper: setFlows }) => ({ flows, properties, setFlows }), shallow);
   const { setSourceCode } = useIntegrationSourceStore();
   const previousFlows = usePrevious(flows);
   const previousNamespace = usePrevious(localSettings.namespace);

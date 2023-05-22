@@ -27,7 +27,7 @@ export interface IFlowsStore {
   deleteStep: (integrationId: string, stepUUID: string) => void;
   deleteAllIntegrations: () => void;
   updateViews: (views: IViewProps[]) => void;
-  setFlows: (flowsWrapper: IFlowsWrapper) => void;
+  setFlowsWrapper: (flowsWrapper: IFlowsWrapper) => void;
 }
 
 export const flowsInitialState: Pick<IFlowsStore, 'flows' | 'properties' | 'views'> = {
@@ -124,7 +124,7 @@ export const useFlowsStore = create<IFlowsStore>()(
       updateViews: (views: IViewProps[]) => {
         set({ views });
       },
-      setFlows: (flowsWrapper) => {
+      setFlowsWrapper: (flowsWrapper) => {
         set((state) => {
           let allSteps: IStepProps[] = [];
 
