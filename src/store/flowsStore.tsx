@@ -1,19 +1,27 @@
+// import { initialFlows } from '../stubs';
+import { useNestedStepsStore } from './nestedStepsStore';
+import useSettingsStore, { initDsl, initialSettings } from './settingsStore';
 import { StepsService } from '@kaoto/services';
 import { IFlowsWrapper, IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { setDeepValue } from '@kaoto/utils';
 import isEqual from 'lodash.isequal';
 import { temporal } from 'zundo';
 import { create } from 'zustand';
-// import { initialFlows } from '../stubs';
-import { useNestedStepsStore } from './nestedStepsStore';
-import useSettingsStore, { initDsl, initialSettings } from './settingsStore';
 
 interface IInsertOptions {
   (integrationId: string, newStep: IStepProps, options: { mode: 'append' }): void;
-  (integrationId: string, newStep: IStepProps, options: { mode: 'insert', index: number }): void;
-  (integrationId: string, newStep: IStepProps, options: { mode: 'replace', index: number }): void;
-  (integrationId: string, newStep: IStepProps, options: { mode: 'replace', path: string[] | undefined }): void;
-  (integrationId: string, newStep: IStepProps, options: { mode: 'append' | 'insert' | 'replace'; index: number, path: string[] | undefined }): void;
+  (integrationId: string, newStep: IStepProps, options: { mode: 'insert'; index: number }): void;
+  (integrationId: string, newStep: IStepProps, options: { mode: 'replace'; index: number }): void;
+  (
+    integrationId: string,
+    newStep: IStepProps,
+    options: { mode: 'replace'; path: string[] | undefined }
+  ): void;
+  (
+    integrationId: string,
+    newStep: IStepProps,
+    options: { mode: 'append' | 'insert' | 'replace'; index: number; path: string[] | undefined }
+  ): void;
 }
 
 export interface IFlowsStore {
@@ -21,6 +29,7 @@ export interface IFlowsStore {
   flows: IIntegration[];
   properties: Record<string, unknown>;
   views: IViewProps[];
+  metadata: Record<string, unknown>;
 
   // Handler methods
   insertStep: IInsertOptions;
@@ -30,16 +39,19 @@ export interface IFlowsStore {
   setFlowsWrapper: (flowsWrapper: IFlowsWrapper) => void;
 }
 
-export const flowsInitialState: Pick<IFlowsStore, 'flows' | 'properties' | 'views'> = {
-  flows: [{
-    id: `${initDsl.name}-1`,
-    dsl: initDsl.name,
-    metadata: { name: initialSettings.name, namespace: initialSettings.namespace },
-    steps: [],
-    params: [],
-  }],
+export const flowsInitialState: Pick<IFlowsStore, 'flows' | 'properties' | 'views' | 'metadata'> = {
+  flows: [
+    {
+      id: `${initDsl.name}-1`,
+      dsl: initDsl.name,
+      metadata: { name: initialSettings.name, namespace: initialSettings.namespace },
+      steps: [],
+      params: [],
+    },
+  ],
   properties: {},
   views: [],
+  metadata: {},
 };
 
 /**
@@ -68,7 +80,9 @@ export const useFlowsStore = create<IFlowsStore>()(
           /** Temporary check to enable the store only when the multiple flows feature is enabled */
           if (!useSettingsStore.getState().settings.useMultipleFlows) return state;
 
-          const integrationIndex = state.flows.findIndex((integration) => integration.id === integrationId);
+          const integrationIndex = state.flows.findIndex(
+            (integration) => integration.id === integrationId
+          );
           if (integrationIndex === -1) {
             return state;
           }
@@ -76,7 +90,7 @@ export const useFlowsStore = create<IFlowsStore>()(
           newStep.integrationId = integrationId;
           const clonedSteps = state.flows[integrationIndex].steps.slice();
 
-          switch(options.mode) {
+          switch (options.mode) {
             case 'append':
               clonedSteps.push(newStep);
               break;
@@ -97,7 +111,9 @@ export const useFlowsStore = create<IFlowsStore>()(
           const stepsWithNewUuids = StepsService.regenerateUuids(integrationId, clonedSteps);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
           state.flows = [...state.flows];
-          useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
+          useNestedStepsStore
+            .getState()
+            .updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
           return { ...state };
         });
@@ -107,15 +123,21 @@ export const useFlowsStore = create<IFlowsStore>()(
           /** Temporary check to enable the store only when the multiple flows feature is enabled */
           if (!useSettingsStore.getState().settings.useMultipleFlows) return state;
 
-          const integrationIndex = state.flows.findIndex((integration) => integration.id === integrationId);
+          const integrationIndex = state.flows.findIndex(
+            (integration) => integration.id === integrationId
+          );
           if (integrationIndex === -1) {
             return { ...state };
           }
 
-          const filteredSteps = state.flows[integrationIndex].steps.slice().filter((step: IStepProps) => step.UUID !== stepUUID);
+          const filteredSteps = state.flows[integrationIndex].steps
+            .slice()
+            .filter((step: IStepProps) => step.UUID !== stepUUID);
           const stepsWithNewUuids = StepsService.regenerateUuids(integrationId, filteredSteps);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
-          useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
+          useNestedStepsStore
+            .getState()
+            .updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
           return { ...state, flows: [...state.flows] };
         });
@@ -146,6 +168,7 @@ export const useFlowsStore = create<IFlowsStore>()(
             ...state,
             flows: flowsWithId,
             properties: flowsWrapper.properties,
+            metadata: flowsWrapper.metadata,
           };
         });
       },
