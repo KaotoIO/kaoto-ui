@@ -1,7 +1,7 @@
 import { dynamicImport } from './import';
 import { Extension, JsonSchemaConfigurator, StepErrorBoundary } from '@kaoto/components';
 import { StepsService } from '@kaoto/services';
-import { useIntegrationJsonStore } from '@kaoto/store';
+import { useFlowsStore } from '@kaoto/store';
 import { IStepProps, IStepPropsParameters } from '@kaoto/types';
 import { getSortedParameters } from '@kaoto/utils';
 import {
@@ -19,6 +19,7 @@ import {
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
+import { shallow } from 'zustand/shallow';
 
 export interface IStepViewsProps {
   isPanelExpanded: boolean;
@@ -34,8 +35,7 @@ const VisualizationStepViews = ({
   step,
 }: IStepViewsProps) => {
   const debouncedSaveConfig = useDebouncedCallback(saveConfig, 1_000, { leading: false, trailing: true });
-  const integrationJsonStore = useIntegrationJsonStore();
-  const views = integrationJsonStore.views.filter((view) => view.step === step.UUID);
+  const views = useFlowsStore((state) => state.views.filter((view) => view.step === step.UUID), shallow);
 
   const hasDetailView = views?.some((v) => v.id === 'detail-step');
   const detailsTabIndex = views?.length! + 1; // provide an index that won't be used by custom views

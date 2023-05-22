@@ -59,7 +59,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   };
 
   const onMiniCatalogClickPrepend = (selectedStep: IStepProps): void => {
-    stepsService.handlePrependStep(data.step, selectedStep);
+    stepsService.handlePrependStep(data.step.integrationId, data.step, selectedStep);
   };
 
   const handleAddBranch = () => {
@@ -67,7 +67,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
   };
 
   const handleTrashClick = () => {
-    data.handleDeleteStep && data.handleDeleteStep(data.step?.UUID);
+    data.handleDeleteStep && data.handleDeleteStep(data.step.integrationId, data.step.UUID);
   };
 
   /**

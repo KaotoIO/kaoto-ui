@@ -15,7 +15,7 @@ Cypress.Commands.add('dragAndDropFromCatalog', (source, target, catalog, targetI
         dataTransfer,
     });
     if (!testError) {
-        cy.waitVisualizationUpdate();
+        cy.wait('@getStepDetails');
     }
 });
 
@@ -48,13 +48,28 @@ Cypress.Commands.add('selectStepMiniCatalog', (step, stage) => {
     cy.get('[data-testid="miniCatalog"]').should('be.visible');
     cy.get('.pf-c-text-input-group__text-input').type(step);
     cy.get(`[data-testid="miniCatalog__stepItem--${step}"]`).first().click();
-    cy.waitVisualizationUpdate();
+    cy.waitMiniCatalogItIsClosed();
+});
+
+Cypress.Commands.add('waitMiniCatalogItIsClosed', () => {
+    cy.get('[data-testid="miniCatalog"]').should('not.exist');
 });
 
 Cypress.Commands.add('deleteStep', (step, stepIndex) => {
     stepIndex = stepIndex ?? 0;
-    cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).trigger('mouseover').children('[data-testid="configurationTab__deleteBtn"]').click({ force: true });
-    cy.waitVisualizationUpdate();
+
+    /** Get existing steps count */
+    cy.get(`[data-testid="viz-step-${step}"]`).then((elem) => {
+        const previousStepsCount = elem.length;
+
+        /** Delete the given step */
+        cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).trigger('mouseover').children('[data-testid="configurationTab__deleteBtn"]').click({ force: true });
+
+        cy.waitVisualizationUpdate();
+
+        /** Check whether the given step was removed */
+        cy.get(`[data-testid="viz-step-${step}"]`).should('have.length.lessThan', previousStepsCount);
+    });
 });
 
 Cypress.Commands.add('openStepConfigurationTab', (step, EIP, stepIndex) => {
@@ -63,7 +78,7 @@ Cypress.Commands.add('openStepConfigurationTab', (step, EIP, stepIndex) => {
     cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).click();
     cy.get('[data-testid="configurationTab"]').click();
     if (!EIP) {
-        cy.waitVisualizationUpdate();
+        cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');
     }
 });
 
@@ -74,7 +89,7 @@ Cypress.Commands.add('closeStepConfigurationTab', () => {
 });
 
 Cypress.Commands.add('interactWithConfigInputObject', (inputName, value) => {
-    if (value != null) {
+    if (value !== undefined && value !== null) {
         cy.get(`input[name="${inputName}"]`).clear().type(value);
     } else {
         cy.get(`input[name="${inputName}"]`).click();

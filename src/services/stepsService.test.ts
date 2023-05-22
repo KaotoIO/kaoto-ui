@@ -21,13 +21,12 @@ import { integrationSteps } from '../stubs';
 import { StepsService } from './stepsService';
 import {
   fetchDeployment,
-  fetchIntegrationSourceCode,
   fetchStepDetails,
   fetchViews,
   startDeployment,
   stopDeployment,
 } from '@kaoto/api';
-import { useIntegrationJsonStore, useNestedStepsStore, useVisualizationStore } from '@kaoto/store';
+import { useIntegrationJsonStore, useNestedStepsStore } from '@kaoto/store';
 import {
   INestedStep,
   IStepProps,
@@ -39,11 +38,7 @@ import {
 } from '@kaoto/types';
 
 describe('stepsService', () => {
-  const stepsService = new StepsService(
-    useIntegrationJsonStore.getState(),
-    useNestedStepsStore.getState(),
-    useVisualizationStore.getState()
-  );
+  const stepsService = new StepsService();
 
   beforeEach(() => {
     useIntegrationJsonStore.getState().deleteIntegration();
@@ -131,24 +126,6 @@ describe('stepsService', () => {
         });
     });
 
-    it('getIntegrationSource(): should call apiService to return the source code (YAML) for the current running deployment', async () => {
-      const integration = {
-        id: '',
-        metadata: { name: 'Updated integration' },
-        dsl: 'KameletBinding',
-        params: [],
-        namespace: 'default',
-        steps: [],
-      };
-      jest.mocked(fetchIntegrationSourceCode).mockResolvedValueOnce(YAML);
-      await stepsService
-        .createKaotoApi(step, jest.fn(), jest.fn())
-        .getIntegrationSource(integration, 'KameletBinding', 'default')
-        .then(() => {
-          expect(fetchIntegrationSourceCode).toHaveBeenCalled();
-        });
-    });
-
     it('notifyKaoto(): should call the provided callback to alert Kaoto', () => {
       const alertKaoto = jest.fn();
       stepsService.createKaotoApi(step, jest.fn(), alertKaoto).notifyKaoto('Dummy notification');
@@ -183,20 +160,6 @@ describe('stepsService', () => {
       expect(stopDeployment).toHaveBeenCalled();
     });
 
-    it('updateStep(): should replace the current step with the one provided', () => {
-      const customStep = { name: 'pineapple', UUID: 'Camel Route-1_pineapple-0' } as IStepProps;
-      useIntegrationJsonStore.getState().insertStep(customStep, 0);
-      expect(useIntegrationJsonStore.getState().integrationJson.steps[0].UUID).toContain(
-        'pineapple'
-      );
-      stepsService
-        .createKaotoApi(customStep, jest.fn(), jest.fn())
-        .updateStep({ name: 'blackberry' } as IStepProps);
-      expect(useIntegrationJsonStore.getState().integrationJson.steps[0].UUID).toContain(
-        'blackberry'
-      );
-    });
-
     it('updateStepParams(): should call the provided callback for updating step params', () => {
       const saveConfig = jest.fn();
       stepsService.createKaotoApi(step, saveConfig, jest.fn()).updateStepParams({ name: 'pizza' });
@@ -222,7 +185,7 @@ describe('stepsService', () => {
 
     expect(useIntegrationJsonStore.getState().integrationJson.steps[0].branches).toHaveLength(1);
 
-    stepsService.deleteBranch(step, 'peach-0_branch-0');
+    stepsService.deleteBranch('Camel Route-1', step, 'peach-0_branch-0');
 
     expect(useIntegrationJsonStore.getState().integrationJson.steps[0].branches).toHaveLength(0);
   });
@@ -433,6 +396,7 @@ describe('stepsService', () => {
 
     await stepsService
       .handlePrependStep(
+        'Camel Route-1',
         { name: 'peach', UUID: 'peach-1' } as IStepProps,
         { name: 'lime', UUID: 'lime-1' } as IStepProps
       )
@@ -541,42 +505,42 @@ describe('stepsService', () => {
 
   describe('regenerateUuids(): should (re)generate UUIDs for all steps', () => {
     it('should generate UUIDs for the main steps array', () => {
-      const result = StepsService.regenerateUuids(integrationSteps);
+      const result = StepsService.regenerateUuids('Camel Route-1', integrationSteps);
 
       expect(result).toMatchObject<Partial<IStepProps>[]>([
-        { UUID: 'timer-0' },
-        { UUID: 'choice-1' },
+        { UUID: 'Camel Route-1_timer-0' },
+        { UUID: 'Camel Route-1_choice-1' },
       ]);
     });
 
     it('should generate UUIDs for branches', () => {
-      const result = StepsService.regenerateUuids(integrationSteps);
+      const result = StepsService.regenerateUuids('Camel Route-1', integrationSteps);
 
       expect(result).toMatchObject<Partial<IStepProps>[]>([
-        { UUID: 'timer-0', branches: [] },
+        { UUID: 'Camel Route-1_timer-0', branches: [] },
         {
-          UUID: 'choice-1',
+          UUID: 'Camel Route-1_choice-1',
           branches: [
-            { branchUuid: 'choice-1_branch-0', steps: expect.any(Array), identifier: 'true path' },
-            { branchUuid: 'choice-1_branch-1', steps: expect.any(Array), identifier: 'otherwise' },
+            { branchUuid: 'Camel Route-1_choice-1_branch-0', steps: expect.any(Array), identifier: 'true path' },
+            { branchUuid: 'Camel Route-1_choice-1_branch-1', steps: expect.any(Array), identifier: 'otherwise' },
           ],
         },
       ]);
     });
 
     it('should generate UUIDs for nested steps', () => {
-      const result = StepsService.regenerateUuids(integrationSteps);
+      const result = StepsService.regenerateUuids('Camel Route-1', integrationSteps);
 
       expect(result).toMatchObject<Partial<IStepProps>[]>([
-        { UUID: 'timer-0', branches: [] },
+        { UUID: 'Camel Route-1_timer-0', branches: [] },
         {
-          UUID: 'choice-1',
+          UUID: 'Camel Route-1_choice-1',
           branches: [
             {
-              branchUuid: 'choice-1_branch-0',
+              branchUuid: 'Camel Route-1_choice-1_branch-0',
               steps: [
                 {
-                  UUID: 'choice-1_branch-0_log-0',
+                  UUID: 'Camel Route-1_choice-1_branch-0_log-0',
                   integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
@@ -587,10 +551,10 @@ describe('stepsService', () => {
               identifier: 'true path',
             },
             {
-              branchUuid: 'choice-1_branch-1',
+              branchUuid: 'Camel Route-1_choice-1_branch-1',
               steps: [
                 {
-                  UUID: 'choice-1_branch-1_log-0',
+                  UUID: 'Camel Route-1_choice-1_branch-1_log-0',
                   integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
@@ -609,18 +573,18 @@ describe('stepsService', () => {
       const nestedIntegrationSteps: IStepProps[] = JSON.parse(JSON.stringify(integrationSteps));
       nestedIntegrationSteps[1].branches![0].steps = integrationSteps;
 
-      const result = StepsService.regenerateUuids(nestedIntegrationSteps);
+      const result = StepsService.regenerateUuids('Camel Route-1', nestedIntegrationSteps);
 
       expect(result).toMatchObject<Partial<IStepProps>[]>([
-        { UUID: 'timer-0', branches: [] },
+        { UUID: 'Camel Route-1_timer-0', branches: [] },
         {
-          UUID: 'choice-1',
+          UUID: 'Camel Route-1_choice-1',
           branches: [
             {
-              branchUuid: 'choice-1_branch-0',
+              branchUuid: 'Camel Route-1_choice-1_branch-0',
               steps: [
                 {
-                  UUID: 'choice-1_branch-0_timer-0',
+                  UUID: 'Camel Route-1_choice-1_branch-0_timer-0',
                   integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
@@ -629,7 +593,7 @@ describe('stepsService', () => {
                   branches: [],
                 },
                 {
-                  UUID: 'choice-1_branch-0_choice-1',
+                  UUID: 'Camel Route-1_choice-1_branch-0_choice-1',
                   integrationId: 'Camel Route-1',
                   minBranches: 1,
                   maxBranches: -1,
@@ -637,10 +601,10 @@ describe('stepsService', () => {
                   type: 'MIDDLE',
                   branches: [
                     {
-                      branchUuid: 'choice-1_branch-0_choice-1_branch-0',
+                      branchUuid: 'Camel Route-1_choice-1_branch-0_choice-1_branch-0',
                       steps: [
                         {
-                          UUID: 'choice-1_branch-0_choice-1_branch-0_log-0',
+                          UUID: 'Camel Route-1_choice-1_branch-0_choice-1_branch-0_log-0',
                           integrationId: 'Camel Route-1',
                           minBranches: 0,
                           maxBranches: 0,
@@ -651,10 +615,10 @@ describe('stepsService', () => {
                       identifier: 'true path',
                     },
                     {
-                      branchUuid: 'choice-1_branch-0_choice-1_branch-1',
+                      branchUuid: 'Camel Route-1_choice-1_branch-0_choice-1_branch-1',
                       steps: [
                         {
-                          UUID: 'choice-1_branch-0_choice-1_branch-1_log-0',
+                          UUID: 'Camel Route-1_choice-1_branch-0_choice-1_branch-1_log-0',
                           integrationId: 'Camel Route-1',
                           minBranches: 0,
                           maxBranches: 0,
@@ -670,10 +634,10 @@ describe('stepsService', () => {
               identifier: 'true path',
             },
             {
-              branchUuid: 'choice-1_branch-1',
+              branchUuid: 'Camel Route-1_choice-1_branch-1',
               steps: [
                 {
-                  UUID: 'choice-1_branch-1_log-0',
+                  UUID: 'Camel Route-1_choice-1_branch-1_log-0',
                   integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
@@ -690,17 +654,17 @@ describe('stepsService', () => {
 
     it('should regenerate UUIDs when a branch is removed', () => {
       const localIntegrationSteps = integrationSteps.slice(1);
-      const result = StepsService.regenerateUuids(localIntegrationSteps);
+      const result = StepsService.regenerateUuids('Camel Route-1', localIntegrationSteps);
 
       expect(result).toMatchObject<Partial<IStepProps>[]>([
         {
-          UUID: 'choice-0',
+          UUID: 'Camel Route-1_choice-0',
           branches: [
             {
-              branchUuid: 'choice-0_branch-0',
+              branchUuid: 'Camel Route-1_choice-0_branch-0',
               steps: [
                 {
-                  UUID: 'choice-0_branch-0_log-0',
+                  UUID: 'Camel Route-1_choice-0_branch-0_log-0',
                   integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,
@@ -711,10 +675,10 @@ describe('stepsService', () => {
               identifier: 'true path',
             },
             {
-              branchUuid: 'choice-0_branch-1',
+              branchUuid: 'Camel Route-1_choice-0_branch-1',
               steps: [
                 {
-                  UUID: 'choice-0_branch-1_log-0',
+                  UUID: 'Camel Route-1_choice-0_branch-1_log-0',
                   integrationId: 'Camel Route-1',
                   minBranches: 0,
                   maxBranches: 0,

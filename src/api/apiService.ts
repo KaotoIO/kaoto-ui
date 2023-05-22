@@ -1,5 +1,5 @@
 import { RequestService } from './requestService';
-import { IIntegration, IStepProps } from '@kaoto/types';
+import { IFlowsWrapper, IStepProps } from '@kaoto/types';
 
 const apiVersion = '/v1';
 
@@ -198,9 +198,9 @@ export async function fetchIntegrationJson(
   data: string,
   dsl: string,
   namespace?: string
-): Promise<IIntegration[]> {
+): Promise<IFlowsWrapper> {
   const resp = await RequestService.post({
-    endpoint: `${apiVersion}/integrations`,
+    endpoint: `/v2/integrations`,
     contentType: 'text/yaml',
     body: data,
     queryParams: {
@@ -209,14 +209,7 @@ export async function fetchIntegrationJson(
     },
   });
 
-  // TODO: Temporary workaround until multiple routes are supported in the backend
-  const response = (await resp.json()) as IIntegration | IIntegration[];
-
-  if (!Array.isArray(response)) {
-    return [response];
-  }
-
-  return response;
+  return resp.json();
 }
 
 /**
@@ -224,15 +217,16 @@ export async function fetchIntegrationJson(
  * YAML. Usually to update the Code Editor after a change in the integration
  * from the Visualization.
  * Requires a list of all new steps.
- * @param newIntegration
+ * @param flows
  * @param namespace
  */
-export async function fetchIntegrationSourceCode(newIntegration: IIntegration, namespace?: string) {
+export async function fetchIntegrationSourceCode(flowsWrapper: IFlowsWrapper, namespace?: string) {
   try {
+    const dsl = flowsWrapper.flows[0]?.dsl;
     const resp = await RequestService.post({
-      endpoint: `${apiVersion}/integrations?dsl=${newIntegration.dsl}`,
+      endpoint: `/v2/integrations?dsl=${dsl}`,
       contentType: 'application/json',
-      body: newIntegration,
+      body: flowsWrapper,
       queryParams: {
         namespace: namespace ?? 'default',
       },

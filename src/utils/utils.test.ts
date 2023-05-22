@@ -1,3 +1,4 @@
+import { IIntegration } from '@kaoto/types';
 import nestedBranch from '../store/data/kamelet.nested-branch.steps';
 import {
   findPath,
@@ -78,9 +79,9 @@ describe('utils', () => {
     };
     const integration2 = { ...integration1, description: 'test' };
     const integration3 = { ...integration1, metadata: { description: 'test' } };
-    expect(getDescriptionIfExists(kamelet)).toEqual('test');
-    expect(getDescriptionIfExists(integration1)).toEqual(undefined);
-    expect(getDescriptionIfExists(integration2)).toEqual('test');
-    expect(getDescriptionIfExists(integration3)).toEqual('test');
+    expect(getDescriptionIfExists(kamelet as unknown as IIntegration)).toEqual('test');
+    expect(getDescriptionIfExists(integration1 as unknown as IIntegration)).toEqual(undefined);
+    expect(getDescriptionIfExists(integration2 as unknown as IIntegration)).toEqual('test');
+    expect(getDescriptionIfExists(integration3 as unknown as IIntegration)).toEqual('test');
   });
 });

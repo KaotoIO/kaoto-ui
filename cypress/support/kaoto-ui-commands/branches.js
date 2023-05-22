@@ -67,5 +67,5 @@ Cypress.Commands.add('deleteBranchChoiceExtension', (indexOrType) => {
 });
 
 Cypress.Commands.add('waitExtensionLoaded', () => {
-    cy.contains('Loading extension...').should('not.exist');
+    cy.contains('Loading extension...', { timeout: 30_000 }).should('not.exist');
 });

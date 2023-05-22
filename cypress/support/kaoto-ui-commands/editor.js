@@ -9,7 +9,6 @@ Cypress.Commands.add('uploadFixture', (fixture, open) => {
     cy.get('.pf-c-code-editor__main').should('be.visible');
     cy.get('.pf-c-code-editor__main > input').attachFile(fixture);
     cy.syncUpCodeChanges();
-    cy.waitVisualizationUpdate();
 });
 
 Cypress.Commands.add('openCodeEditor', () => {
@@ -52,8 +51,8 @@ Cypress.Commands.add('editorClickUndoXTimes', (times) => {
 
 Cypress.Commands.add('syncUpCodeChanges', () => {
     cy.get('[data-testid="sourceCode--applyButton"]').click();
-    cy.waitVisualizationUpdate();
     cy.wait('@getIntegration');
+    cy.wait('@getViewDefinitions');
 });
 
 Cypress.Commands.add('checkCodeSpanLine', (spanText, linesCount) => {

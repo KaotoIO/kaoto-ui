@@ -460,12 +460,12 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
         isModalOpen={expanded.deploymentsModal ?? false}
       />
 
-      <SettingsModal
-        handleCloseModal={() => {
-          setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
-        }}
-        isModalOpen={expanded.settingsModal ?? false}
-      />
+      {expanded.settingsModal &&
+        <SettingsModal
+          handleCloseModal={() => {
+            setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
+          }}
+          isModalOpen={expanded.settingsModal} />}
 
       <AppearanceModal
         handleCloseModal={() => {

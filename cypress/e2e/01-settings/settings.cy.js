@@ -1,8 +1,9 @@
 describe('Settings', () => {
   beforeEach(() => {
+    cy.intercept('/v1/deployments*').as('getDeployments');
     cy.intercept('/v1/integrations/dsls').as('getDSLs');
     cy.intercept('/v1/view-definitions').as('getViewDefinitions');
-    cy.intercept('/v1/integrations*').as('getIntegration');
+    cy.intercept('/v2/integrations*').as('getIntegration');
 
     cy.openHomePage();
 
@@ -84,7 +85,7 @@ describe('Settings', () => {
     cy.get('[data-testid="settings--integration-type"]')
       .select('Integration')
       .should('have.value', 'Integration');
-    cy.saveMenuModal(true);
+    cy.saveMenuModal();
     cy.replaceEmptyStepMiniCatalog('timer');
     cy.openSettingsModal();
 
@@ -114,7 +115,7 @@ describe('Settings', () => {
     // CHECK that steps are still there
     cy.get('[data-testid="viz-step-kamelet"]').should('be.visible');
 
-    // reopen modal, 
+    // reopen modal,
     cy.openSettingsModal();
 
     // CHECK that value is still Kamelet

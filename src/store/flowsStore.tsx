@@ -1,10 +1,10 @@
 import { StepsService } from '@kaoto/services';
-import { IIntegration, IStepProps, IViewProps } from '@kaoto/types';
+import { IFlowsWrapper, IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { setDeepValue } from '@kaoto/utils';
 import isEqual from 'lodash.isequal';
 import { temporal } from 'zundo';
 import { create } from 'zustand';
-import { initialFlows } from '../stubs';
+// import { initialFlows } from '../stubs';
 import { useNestedStepsStore } from './nestedStepsStore';
 import useSettingsStore, { initDsl, initialSettings } from './settingsStore';
 
@@ -12,9 +12,8 @@ interface IInsertOptions {
   (integrationId: string, newStep: IStepProps, options: { mode: 'append' }): void;
   (integrationId: string, newStep: IStepProps, options: { mode: 'insert', index: number }): void;
   (integrationId: string, newStep: IStepProps, options: { mode: 'replace', index: number }): void;
-  (integrationId: string, newStep: IStepProps, options: { mode: 'replace', path: string[] }): void;
-  (integrationId: string, newStep: IStepProps, options: { mode: 'replace', index?: number, path?: string[] }): void;
-  (integrationId: string, newStep: IStepProps, options: { mode: 'append' | 'insert' | 'replace'; index: number, path: string[] }): void;
+  (integrationId: string, newStep: IStepProps, options: { mode: 'replace', path: string[] | undefined }): void;
+  (integrationId: string, newStep: IStepProps, options: { mode: 'append' | 'insert' | 'replace'; index: number, path: string[] | undefined }): void;
 }
 
 export interface IFlowsStore {
@@ -28,6 +27,7 @@ export interface IFlowsStore {
   deleteStep: (integrationId: string, stepUUID: string) => void;
   deleteAllIntegrations: () => void;
   updateViews: (views: IViewProps[]) => void;
+  setFlowsWrapper: (flowsWrapper: IFlowsWrapper) => void;
 }
 
 export const flowsInitialState: Pick<IFlowsStore, 'flows' | 'properties' | 'views'> = {
@@ -61,7 +61,7 @@ export const useFlowsStore = create<IFlowsStore>()(
        * Overriding the default route for demo purposes
        * To be removed once the final feature is complete
        */
-      ...{ flows: [ ...flowsInitialState.flows, initialFlows[1]] },
+      // ...{ flows: [ ...flowsInitialState.flows, initialFlows[1]] },
 
       insertStep: (integrationId, newStep, options) => {
         set((state: IFlowsStore): IFlowsStore => {
@@ -86,19 +86,20 @@ export const useFlowsStore = create<IFlowsStore>()(
               break;
 
             case 'replace':
-              if ((options as any).path) {
-                setDeepValue(clonedSteps, (options as any).path, newStep);
+              if ('path' in options) {
+                setDeepValue(clonedSteps, options.path, newStep);
                 break;
               }
 
-              clonedSteps.splice((options as any).index, 1, newStep);
+              clonedSteps.splice(options.index, 1, newStep);
           }
 
-          const stepsWithNewUuids = StepsService.regenerateUuids(clonedSteps, `${integrationId}_`);
+          const stepsWithNewUuids = StepsService.regenerateUuids(integrationId, clonedSteps);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
+          state.flows = [...state.flows];
           useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
-          return state;
+          return { ...state };
         });
       },
       deleteStep: (integrationId: string, stepUUID: string) => {
@@ -108,26 +109,51 @@ export const useFlowsStore = create<IFlowsStore>()(
 
           const integrationIndex = state.flows.findIndex((integration) => integration.id === integrationId);
           if (integrationIndex === -1) {
-            return state;
+            return { ...state };
           }
 
           const filteredSteps = state.flows[integrationIndex].steps.slice().filter((step: IStepProps) => step.UUID !== stepUUID);
-          const stepsWithNewUuids = StepsService.regenerateUuids(filteredSteps, `${integrationId}_`);
+          const stepsWithNewUuids = StepsService.regenerateUuids(integrationId, filteredSteps);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
           useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
 
-          return state;
+          return { ...state, flows: [...state.flows] };
         });
       },
       deleteAllIntegrations: () => set((state) => ({ ...state, ...flowsInitialState })),
       updateViews: (views: IViewProps[]) => {
         set({ views });
       },
+      setFlowsWrapper: (flowsWrapper) => {
+        set((state) => {
+          let allSteps: IStepProps[] = [];
+
+          /**
+           * TODO: Temporarily assign IDs to each flows and steps
+           * This is needed until https://github.com/KaotoIO/kaoto-backend/issues/663 it's done
+           */
+          const flowsWithId = flowsWrapper.flows.map((flow, index) => {
+            const id = `${flow.dsl}-${index}`;
+            const steps = StepsService.regenerateUuids(id, flow.steps);
+            allSteps.push(...steps);
+
+            return { ...flow, id, steps };
+          });
+
+          useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(allSteps));
+
+          return {
+            ...state,
+            flows: flowsWithId,
+            properties: flowsWrapper.properties,
+          };
+        });
+      },
     }),
     {
       partialize: (state) => {
-        const { flows: integrations } = state;
-        return { integrations };
+        const { flows } = state;
+        return { flows };
       },
       equality: (a, b) => isEqual(a, b),
     }

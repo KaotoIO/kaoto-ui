@@ -1,10 +1,11 @@
 import { useCancelableEffect } from './hooks/useCancelableEffect';
 import { fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
 import {
+  useFlowsStore,
   useIntegrationJsonStore,
   useSettingsStore,
 } from '@kaoto/store';
-import { IIntegration } from '@kaoto/types';
+import { IFlowsWrapper, IIntegration } from '@kaoto/types';
 import isEqual from 'lodash.isequal';
 import { basename } from 'path';
 import {
@@ -18,6 +19,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { shallow } from 'zustand/shallow';
 
 // Create context
 const KogitoEditorIntegrationContext = createContext({});
@@ -45,13 +47,13 @@ function KogitoEditorIntegrationProviderInternal(
   { content, onContentChanged, onReady, children, contentPath }: IKogitoEditorIntegrationProvider,
   ref: Ref<KaotoIntegrationProviderRef>
 ) {
-  const { settings, setSettings } = useSettingsStore();
-  const { integrationJson, updateIntegration } = useIntegrationJsonStore((state) => state);
+  const { settings, setSettings } = useSettingsStore(({ settings, setSettings }) => ({ settings, setSettings }), shallow);
+  const { flows, properties, setFlowsWrapper } = useFlowsStore(({ flows, properties, setFlowsWrapper }) => ({ flows, properties, setFlowsWrapper }), shallow);
 
   // The history is used to keep a log of every change to the content. Then, this log is used to undo and redo content.
   const { undo, redo, pastStates } = useIntegrationJsonStore.temporal.getState();
 
-  const previousJson = useRef(JSON.parse(JSON.stringify(integrationJson)));
+  const previousFlowWrapper = useRef<IFlowsWrapper>(JSON.parse(JSON.stringify({ flows, properties })));
   const previousContent = useRef<string>();
   const initialIntegrationJson = useRef<IIntegration>();
   const [lastAction, setLastAction] = useState<
@@ -92,24 +94,24 @@ function KogitoEditorIntegrationProviderInternal(
   useCancelableEffect(
     useCallback(
       ({ canceled }) => {
-        if (!integrationJson || isEqual(previousJson.current, integrationJson)) return;
+        if (!flows || isEqual(previousFlowWrapper.current, flows)) return;
 
-        if (integrationJson.dsl != null && integrationJson.dsl !== settings.dsl.name) {
-          const tmpDsl = { ...settings.dsl, name: integrationJson.dsl };
+        if (flows[0]?.dsl && flows[0]?.dsl !== settings.dsl.name) {
+          const tmpDsl = { ...settings.dsl, name: flows[0].dsl };
           const tmpSettings = { ...settings, dsl: tmpDsl };
           setSettings(tmpSettings);
         }
 
-        let intCopy = JSON.parse(JSON.stringify(integrationJson));
-        const tmpInt: IIntegration = {
-          ...integrationJson,
-          metadata: {
-            ...integrationJson.metadata,
-            ...settings,
-          },
-          dsl: settings.dsl.name
+        const updatedFlowWrapper: IFlowsWrapper = {
+          flows: flows.map((flow) => ({
+            ...flow,
+            metadata: { ...flow.metadata, ...settings },
+            dsl: settings.dsl.name,
+          })),
+          properties
         };
-        fetchIntegrationSourceCode(tmpInt, settings.namespace).then((newSrc) => {
+
+        fetchIntegrationSourceCode(updatedFlowWrapper, settings.namespace).then((newSrc) => {
           if (canceled.get()) return;
 
           if (
@@ -123,11 +125,11 @@ function KogitoEditorIntegrationProviderInternal(
             } else {
               onContentChanged(newSrc, ContentOperation.EDIT);
             }
-            previousJson.current = intCopy;
+            previousFlowWrapper.current = updatedFlowWrapper;
           }
         });
       },
-      [integrationJson, lastAction, onContentChanged, settings]
+      [flows, settings, properties, setSettings, lastAction, onContentChanged]
     )
   );
 
@@ -138,10 +140,10 @@ function KogitoEditorIntegrationProviderInternal(
         if (previousContent.current === content) return;
 
         fetchIntegrationJson(content, settings.namespace)
-          .then((res) => {
+          .then((response) => {
             if (canceled.get()) return;
 
-            let tmpInt = res[0];
+            let tmpInt = response.flows[0] ?? {};
 
             if (typeof tmpInt.metadata?.name === 'string' && tmpInt.metadata.name !== '') {
               settings.name = tmpInt.metadata.name;
@@ -149,7 +151,7 @@ function KogitoEditorIntegrationProviderInternal(
             }
 
             tmpInt.metadata = { ...tmpInt.metadata, ...settings };
-            updateIntegration(tmpInt);
+            setFlowsWrapper(response);
 
             if (!initialIntegrationJson.current) {
               initialIntegrationJson.current = tmpInt;
@@ -161,7 +163,7 @@ function KogitoEditorIntegrationProviderInternal(
             console.error(e);
           });
       },
-      [content, settings, updateIntegration]
+      [content, settings, setFlowsWrapper, setSettings]
     )
   );
 

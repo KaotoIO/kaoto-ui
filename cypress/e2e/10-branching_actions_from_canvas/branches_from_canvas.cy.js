@@ -1,8 +1,9 @@
 describe('Test for Branching actions from the canvas', () => {
     beforeEach(() => {
+        cy.intercept('/v1/deployments*').as('getDeployments');
         cy.intercept('/v1/integrations/dsls').as('getDSLs');
         cy.intercept('/v1/view-definitions').as('getViewDefinitions');
-        cy.intercept('/v1/integrations*').as('getIntegration');
+        cy.intercept('/v2/integrations*').as('getIntegration');
 
         cy.openHomePage();
         cy.uploadFixture('EipAction.yaml');
@@ -11,7 +12,7 @@ describe('Test for Branching actions from the canvas', () => {
     });
 
     it(' User appends a branch from the canvas', () => {
-        // Blocked due to: 
+        // Blocked due to:
         //      https://github.com/KaotoIO/kaoto-ui/issues/1381
         //      https://github.com/KaotoIO/kaoto-ui/issues/1473
         // cy.appendBranch(0);
@@ -58,7 +59,7 @@ describe('Test for Branching actions from the canvas', () => {
 
         // CHECK new choice step added
         cy.get('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-choice');
-        // Blocked due to: 
+        // Blocked due to:
         //      https://github.com/KaotoIO/kaoto-ui/issues/1381
         //      https://github.com/KaotoIO/kaoto-ui/issues/1473
         // cy.insertBranch(1);

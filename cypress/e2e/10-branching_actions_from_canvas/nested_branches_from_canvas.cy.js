@@ -1,8 +1,9 @@
 describe('Test for Nested Branching actions from the canvas', () => {
     beforeEach(() => {
+        cy.intercept('/v1/deployments*').as('getDeployments');
         cy.intercept('/v1/integrations/dsls').as('getDSLs');
         cy.intercept('/v1/view-definitions').as('getViewDefinitions');
-        cy.intercept('/v1/integrations*').as('getIntegration');
+        cy.intercept('/v2/integrations*').as('getIntegration');
 
         cy.openHomePage();
         cy.uploadFixture('EipAction.yaml');
@@ -11,7 +12,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
     });
 
     it('User inserts/appends a nested branch from the canvas', () => {
-        // Blocked due to: 
+        // Blocked due to:
         //      https://github.com/KaotoIO/kaoto-ui/issues/1381
         //      https://github.com/KaotoIO/kaoto-ui/issues/1473
         // cy.insertBranch(3);
@@ -46,7 +47,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
     })
 
     it('User deletes a branch from the canvas', () => {
-        // Blocked due to: 
+        // Blocked due to:
         //      https://github.com/KaotoIO/kaoto-ui/issues/1381
         //      https://github.com/KaotoIO/kaoto-ui/issues/1473
         // cy.insertBranch(3);
@@ -76,7 +77,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
     });
 
     it('User appends a step in a nested branch from the canvas (last in the branch)', () => {
-        // Blocked due to: 
+        // Blocked due to:
         //      https://github.com/KaotoIO/kaoto-ui/issues/1381
         //      https://github.com/KaotoIO/kaoto-ui/issues/1473
         // cy.insertBranch(3);
@@ -110,7 +111,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
     });
 
     it('User prepends a step in a nested branch from the canvas (first in the branch)', () => {
-        // Blocked due to: 
+        // Blocked due to:
         //      https://github.com/KaotoIO/kaoto-ui/issues/1381
         //      https://github.com/KaotoIO/kaoto-ui/issues/1473
         // cy.insertBranch(3);
@@ -144,7 +145,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
     });
 
     it('User prepends a step to a step whose previous step contains nested branches', () => {
-        // Blocked due to: 
+        // Blocked due to:
         //      https://github.com/KaotoIO/kaoto-ui/issues/1381
         //      https://github.com/KaotoIO/kaoto-ui/issues/1473
         // cy.insertBranch(3);
