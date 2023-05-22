@@ -1,10 +1,6 @@
 import { fetchCapabilities, fetchCompatibleDSLs, fetchIntegrationSourceCode } from '@kaoto/api';
 import { ValidationService } from '@kaoto/services';
-import {
-  useFlowsStore,
-  useIntegrationSourceStore,
-  useSettingsStore,
-} from '@kaoto/store';
+import { useFlowsStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
 import { ICapabilities, ISettings } from '@kaoto/types';
 import { getDescriptionIfExists, usePrevious } from '@kaoto/utils';
 import {
@@ -23,9 +19,9 @@ import {
 } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
+import isEqual from 'lodash.isequal';
 import { useCallback, useEffect, useState } from 'react';
 import { shallow } from 'zustand/shallow';
-import isEqual from 'lodash.isequal';
 
 export interface ISettingsModal {
   handleCloseModal: () => void;
@@ -43,7 +39,15 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
   const [availableDSLs, setAvailableDSLs] = useState<string[]>([]);
   const { settings, setSettings } = useSettingsStore((state) => state);
   const [localSettings, setLocalSettings] = useState<ISettings>(settings);
-  const { flows, properties, setFlows } = useFlowsStore(({ flows, properties, setFlowsWrapper: setFlows }) => ({ flows, properties, setFlows }), shallow);
+  const { flows, properties, metadata, setFlowsWrapper } = useFlowsStore(
+    ({ flows, properties, metadata, setFlowsWrapper }) => ({
+      flows,
+      properties,
+      metadata,
+      setFlowsWrapper,
+    }),
+    shallow
+  );
   const { setSourceCode } = useIntegrationSourceStore();
   const previousFlows = usePrevious(flows);
   const previousNamespace = usePrevious(localSettings.namespace);
@@ -69,9 +73,10 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
             dsl: settings.dsl.name,
           })),
           properties,
+          metadata,
         };
 
-        setFlows(updatedFlowWrapper);
+        setFlowsWrapper(updatedFlowWrapper);
       });
     });
   }, []);
@@ -158,6 +163,7 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
         dsl: settings.dsl.name,
       })),
       properties,
+      metadata,
     };
 
     fetchIntegrationSourceCode(updatedFlowWrapper)

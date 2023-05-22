@@ -1,10 +1,6 @@
 import { useCancelableEffect } from './hooks/useCancelableEffect';
 import { fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
-import {
-  useFlowsStore,
-  useIntegrationJsonStore,
-  useSettingsStore,
-} from '@kaoto/store';
+import { useFlowsStore, useIntegrationJsonStore, useSettingsStore } from '@kaoto/store';
 import { IFlowsWrapper, IIntegration } from '@kaoto/types';
 import isEqual from 'lodash.isequal';
 import { basename } from 'path';
@@ -47,13 +43,26 @@ function KogitoEditorIntegrationProviderInternal(
   { content, onContentChanged, onReady, children, contentPath }: IKogitoEditorIntegrationProvider,
   ref: Ref<KaotoIntegrationProviderRef>
 ) {
-  const { settings, setSettings } = useSettingsStore(({ settings, setSettings }) => ({ settings, setSettings }), shallow);
-  const { flows, properties, setFlowsWrapper } = useFlowsStore(({ flows, properties, setFlowsWrapper }) => ({ flows, properties, setFlowsWrapper }), shallow);
+  const { settings, setSettings } = useSettingsStore(
+    ({ settings, setSettings }) => ({ settings, setSettings }),
+    shallow
+  );
+  const { flows, properties, metadata, setFlowsWrapper } = useFlowsStore(
+    ({ flows, properties, metadata, setFlowsWrapper }) => ({
+      flows,
+      properties,
+      metadata,
+      setFlowsWrapper,
+    }),
+    shallow
+  );
 
   // The history is used to keep a log of every change to the content. Then, this log is used to undo and redo content.
   const { undo, redo, pastStates } = useIntegrationJsonStore.temporal.getState();
 
-  const previousFlowWrapper = useRef<IFlowsWrapper>(JSON.parse(JSON.stringify({ flows, properties })));
+  const previousFlowWrapper = useRef<IFlowsWrapper>(
+    JSON.parse(JSON.stringify({ flows, properties, metadata }))
+  );
   const previousContent = useRef<string>();
   const initialIntegrationJson = useRef<IIntegration>();
   const [lastAction, setLastAction] = useState<
@@ -108,7 +117,8 @@ function KogitoEditorIntegrationProviderInternal(
             metadata: { ...flow.metadata, ...settings },
             dsl: settings.dsl.name,
           })),
-          properties
+          properties,
+          metadata,
         };
 
         fetchIntegrationSourceCode(updatedFlowWrapper, settings.namespace).then((newSrc) => {
@@ -129,7 +139,7 @@ function KogitoEditorIntegrationProviderInternal(
           }
         });
       },
-      [flows, settings, properties, setSettings, lastAction, onContentChanged]
+      [flows, settings, properties, metadata, setSettings, lastAction, onContentChanged]
     )
   );
 

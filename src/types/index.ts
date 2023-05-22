@@ -254,6 +254,7 @@ export type IVizStepPropsEdge = Edge & {
 export interface IFlowsWrapper {
   flows: IIntegration[];
   properties: Record<string, unknown>;
+  metadata: Record<string, unknown>;
 }
 
 export type HandleDeleteStepFn = (integrationId: string, UUID: string) => void;
