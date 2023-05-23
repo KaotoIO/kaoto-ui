@@ -1,12 +1,8 @@
 import { StepsService } from './stepsService';
 import { ValidationService } from './validationService';
 import {
-  IIntegrationJsonStore,
-  RFState,
-  useIntegrationJsonStore,
   useFlowsStore,
   useVisualizationStore,
-  useSettingsStore,
 } from '@kaoto/store';
 import {
   HandleDeleteStepFn,
@@ -33,15 +29,6 @@ import { MarkerType, Position } from 'reactflow';
  *  @see StepsService
  */
 export class VisualizationService {
-  constructor(
-    /** @deprecated in favor of using the store raw data itself when needed to avoid binding entire store to several components */
-    // @ts-expect-error no unused constructor parameter
-    private readonly integrationJsonStore?: IIntegrationJsonStore,
-    /** @deprecated in favor of using the store raw data itself when needed to avoid binding entire store to several components */
-    // @ts-expect-error no unused constructor parameter
-    private readonly visualizationStore?: RFState
-  ) {}
-
   /**
    * for nodes within a branch
    * @param step
@@ -288,32 +275,20 @@ export class VisualizationService {
    * @param handleDeleteStep
    */
   buildNodesAndEdges(handleDeleteStep: HandleDeleteStepFn) {
-    const { id: singleFlowId, steps: singleFlowSteps } = useIntegrationJsonStore.getState().integrationJson;
     const layout = useVisualizationStore.getState().layout;
 
     // build all nodes
     let stepNodes: IVizStepNode[] = [];
 
-    /**
-     * TODO: The following check is meant to be a temporary one
-     * while the Multiple Flows support is completed.
-     *
-     * This will be removed once all the existing functionality
-     * it's ported to the new "multi-flow" approach
-     */
-    if (!useSettingsStore.getState().settings.useMultipleFlows) {
-      stepNodes = VisualizationService.buildNodesFromSteps(singleFlowId, singleFlowSteps, layout, { handleDeleteStep });
-    } else {
-      const integrations = useFlowsStore.getState().flows;
-      stepNodes = integrations.reduce((acc, currentIntegration) => acc.concat(
-        VisualizationService.buildNodesFromSteps(
-          currentIntegration.id,
-          currentIntegration.steps,
-          layout,
-          { handleDeleteStep },
-        ),
-      ), [] as IVizStepNode[]);
-    }
+    const integrations = useFlowsStore.getState().flows;
+    stepNodes = integrations.reduce((acc, currentIntegration) => acc.concat(
+      VisualizationService.buildNodesFromSteps(
+        currentIntegration.id,
+        currentIntegration.steps,
+        layout,
+        { handleDeleteStep },
+      ),
+    ), [] as IVizStepNode[]);
 
     // build edges only for main nodes
     const filteredNodes = stepNodes.filter((node) => !node.data.branchInfo);

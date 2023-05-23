@@ -1,6 +1,5 @@
-// import { initialFlows } from '../stubs';
 import { useNestedStepsStore } from './nestedStepsStore';
-import useSettingsStore, { initDsl, initialSettings } from './settingsStore';
+import { initDsl, initialSettings } from './settingsStore';
 import { StepsService } from '@kaoto/services';
 import { IFlowsWrapper, IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { setDeepValue } from '@kaoto/utils';
@@ -24,14 +23,14 @@ interface IInsertOptions {
   ): void;
 }
 
-export interface IFlowsStore {
-  // Data
+export interface IFlowsStoreData {
   flows: IIntegration[];
   properties: Record<string, unknown>;
   views: IViewProps[];
   metadata: Record<string, unknown>;
+}
 
-  // Handler methods
+export interface IFlowsStore extends IFlowsStoreData {
   insertStep: IInsertOptions;
   deleteStep: (integrationId: string, stepUUID: string) => void;
   deleteAllIntegrations: () => void;
@@ -39,47 +38,31 @@ export interface IFlowsStore {
   setFlowsWrapper: (flowsWrapper: IFlowsWrapper) => void;
 }
 
-export const flowsInitialState: Pick<IFlowsStore, 'flows' | 'properties' | 'views' | 'metadata'> = {
-  flows: [
-    {
-      id: `${initDsl.name}-1`,
-      dsl: initDsl.name,
-      metadata: { name: initialSettings.name, namespace: initialSettings.namespace },
-      steps: [],
-      params: [],
-    },
-  ],
-  properties: {},
-  views: [],
-  metadata: {},
+export const getInitialState = (previousState: Partial<IFlowsStoreData> = {}): IFlowsStoreData => {
+  return {
+    ...previousState,
+    flows: [
+      {
+        id: `${initDsl.name}-1`,
+        dsl: initDsl.name,
+        metadata: { name: initialSettings.name, namespace: initialSettings.namespace },
+        steps: [],
+        params: [],
+      },
+    ],
+    properties: {},
+    views: [],
+    metadata: {},
+  };
 };
 
-/**
- * This store has duplicated code as we can see on
- * how are we dealing with regenerating UUIDs and setting
- * them in the correspondig integration.
- *
- * The goal is to have a working version first to include
- * support for multiple flows and then make another pass
- * to clean the duplication and hopefully get a smaller
- * API for the consumers
- */
 export const useFlowsStore = create<IFlowsStore>()(
   temporal(
     (set) => ({
-      ...flowsInitialState,
-
-      /**
-       * Overriding the default route for demo purposes
-       * To be removed once the final feature is complete
-       */
-      // ...{ flows: [ ...flowsInitialState.flows, initialFlows[1]] },
+      ...getInitialState(),
 
       insertStep: (integrationId, newStep, options) => {
         set((state: IFlowsStore): IFlowsStore => {
-          /** Temporary check to enable the store only when the multiple flows feature is enabled */
-          if (!useSettingsStore.getState().settings.useMultipleFlows) return state;
-
           const integrationIndex = state.flows.findIndex(
             (integration) => integration.id === integrationId
           );
@@ -120,9 +103,6 @@ export const useFlowsStore = create<IFlowsStore>()(
       },
       deleteStep: (integrationId: string, stepUUID: string) => {
         set((state) => {
-          /** Temporary check to enable the store only when the multiple flows feature is enabled */
-          if (!useSettingsStore.getState().settings.useMultipleFlows) return state;
-
           const integrationIndex = state.flows.findIndex(
             (integration) => integration.id === integrationId
           );
@@ -142,7 +122,7 @@ export const useFlowsStore = create<IFlowsStore>()(
           return { ...state, flows: [...state.flows] };
         });
       },
-      deleteAllIntegrations: () => set((state) => ({ ...state, ...flowsInitialState })),
+      deleteAllIntegrations: () => set((state) => getInitialState(state)),
       updateViews: (views: IViewProps[]) => {
         set({ views });
       },

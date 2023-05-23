@@ -31,7 +31,6 @@ export const initialSettings: ISettings = {
   editorIsLightMode: localStorage.getItem(LOCAL_STORAGE_EDITOR_THEME_KEY) === 'true',
   uiLightMode: isUILightMode === 'true',
   editorMode: CodeEditorMode.FREE_EDIT,
-  useMultipleFlows: true,
 };
 
 export const useSettingsStore = create<ISettingsStore>((set) => ({
@@ -47,5 +46,3 @@ export const useSettingsStore = create<ISettingsStore>((set) => ({
     }));
   },
 }));
-
-export default useSettingsStore;

@@ -2,12 +2,13 @@ import './CustomEdge.css';
 import { BranchBuilder, MiniCatalog } from '@kaoto/components';
 import { usePosition, useShowBranchTab } from '@kaoto/hooks';
 import { StepsService, ValidationService } from '@kaoto/services';
-import { useIntegrationJsonStore } from '@kaoto/store';
+import { useFlowsStore } from '@kaoto/store';
 import { IStepProps, IVizStepNode } from '@kaoto/types';
 import { Popover, Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { ReactNode } from 'react';
 import { EdgeText, getBezierPath, Position } from 'reactflow';
+import { shallow } from 'zustand/shallow';
 
 const foreignObjectSize = 40;
 
@@ -51,7 +52,7 @@ const PlusButtonEdge = ({
   const targetNode = data?.targetStepNode;
 
   const { tooltipPosition } = usePosition();
-  const views = useIntegrationJsonStore((state) => state.views);
+  const views = useFlowsStore((state) => state.views, shallow);
   const { disableBranchesTab, disableBranchesTabMsg } = useShowBranchTab(
     sourceNode?.data.step,
     views

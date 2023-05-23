@@ -1,5 +1,6 @@
 const { create: actualCreate, createStore } = jest.requireActual('zustand');
 const { act } = require('react-dom/test-utils');
+const cloneDeep = require('lodash.clonedeep');
 
 /**a variable to hold reset functions for all stores declared in the app */
 const storeResetFns = new Set();
@@ -25,7 +26,7 @@ const create = (createState) => {
   if (typeof store.getState === 'function') {
     /** when creating a store, we get its initial state, create a reset function and add it in the set */
     const initialState = store.getState();
-    storeResetFns.add(() => store.setState(initialState, true));
+    storeResetFns.add(() => store.setState(cloneDeep(initialState), true));
   }
 
   return store;
