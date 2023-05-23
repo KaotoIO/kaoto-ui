@@ -88,14 +88,12 @@ describe('editing properties', () => {
     cy.get('[data-testid="viz-step-digitalocean"]').should('not.exist');
     cy.get('[data-testid="viz-step-set-header"]').should('not.exist');
 
-    // First click undo button => alert is displayed
+    // First click undo button => reverted automatic adjustments
     cy.editorClickUndoXTimes();
-
+    // Second click undo button => changes reverted & alert is displayed
+    cy.editorClickUndoXTimes();
     // CHECK alert is displayed
     cy.get('.pf-c-alert__title').contains('Any invalid code will be replaced after sync. If you don\'t want to lose your changes please make a backup.');
-
-    // Second click undo button => changes reverted
-    cy.editorClickUndoXTimes();
     cy.syncUpCodeChanges();
 
     // CHECK branch with digitalocean and set header step was deleted
