@@ -1,4 +1,4 @@
-import useSettingsStore, { initialSettings } from './settingsStore';
+import { initialSettings, useSettingsStore } from './settingsStore';
 import { act, renderHook } from '@testing-library/react';
 
 describe('settingsStore', () => {

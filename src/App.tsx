@@ -1,5 +1,5 @@
 import './App.css';
-import { useIntegrationJsonStore } from './store';
+import { useFlowsStore } from './store';
 import { bindUndoRedo } from './utils';
 import { AlertProvider, AppLayout, MASLoading } from '@kaoto/layout';
 import { AppRoutes } from '@kaoto/routes';
@@ -16,7 +16,7 @@ import { Suspense } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'reactflow/dist/style.css';
 
-const { undo, redo } = useIntegrationJsonStore.temporal.getState();
+const { undo, redo } = useFlowsStore.temporal.getState();
 
 bindUndoRedo(undo, redo);
 

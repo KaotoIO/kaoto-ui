@@ -26,7 +26,7 @@ import {
   startDeployment,
   stopDeployment,
 } from '@kaoto/api';
-import { useIntegrationJsonStore, useNestedStepsStore } from '@kaoto/store';
+import { useFlowsStore, useNestedStepsStore } from '@kaoto/store';
 import {
   INestedStep,
   IStepProps,
@@ -40,26 +40,23 @@ import {
 describe('stepsService', () => {
   const stepsService = new StepsService();
 
-  beforeEach(() => {
-    useIntegrationJsonStore.getState().deleteIntegration();
-  });
-
   it('addBranch(): should add a branch to the specified step from the store', () => {
-    useIntegrationJsonStore.setState({
-      integrationJson: {
-        ...useIntegrationJsonStore.getState().integrationJson,
+    useFlowsStore.setState({
+      flows: [{
+        ...useFlowsStore.getState().flows[0],
+        id: 'Camel Route-1',
         steps: [
-          { UUID: 'blueberry', name: 'blueberry', minBranches: 0, maxBranches: -1 },
+          { integrationId: 'Camel Route-1', UUID: 'blueberry', name: 'blueberry', minBranches: 0, maxBranches: -1 },
         ] as IStepProps[],
-      },
+      }],
     });
 
     stepsService.addBranch(
-      { UUID: 'blueberry', name: 'blueberry' } as IStepProps,
+      { integrationId: 'Camel Route-1', UUID: 'blueberry', name: 'blueberry' } as IStepProps,
       { branchUuid: 'blueberry-branch-01', steps: [] as IStepProps[] } as IStepPropsBranch
     );
 
-    expect(useIntegrationJsonStore.getState().integrationJson.steps[0].branches).toHaveLength(1);
+    expect(useFlowsStore.getState().flows[0].steps[0].branches).toHaveLength(1);
   });
 
   it('buildStepSchemaAndModel(): should ignore empty array parameter', () => {
@@ -176,23 +173,26 @@ describe('stepsService', () => {
       ] as IStepPropsBranch[],
     } as IStepProps;
 
-    useIntegrationJsonStore.setState({
-      integrationJson: {
-        ...useIntegrationJsonStore.getState().integrationJson,
+    useFlowsStore.setState({
+      flows: [{
+        ...useFlowsStore.getState().flows[0],
         steps: [step],
-      },
+      }],
     });
 
-    expect(useIntegrationJsonStore.getState().integrationJson.steps[0].branches).toHaveLength(1);
+    expect(useFlowsStore.getState().flows[0].steps[0].branches).toHaveLength(1);
 
     stepsService.deleteBranch('Camel Route-1', step, 'peach-0_branch-0');
 
-    expect(useIntegrationJsonStore.getState().integrationJson.steps[0].branches).toHaveLength(0);
+    expect(useFlowsStore.getState().flows[0].steps[0].branches).toHaveLength(0);
   });
 
   it('deleteStep(): should delete specified step from the store', () => {
-    useIntegrationJsonStore.getState().insertStep({ name: 'pineapple' } as IStepProps, 0);
-    expect(useIntegrationJsonStore.getState().integrationJson.steps).toHaveLength(1);
+    useFlowsStore.getState().insertStep('Camel Route-1', { name: 'pineapple' } as IStepProps, { mode: 'append' });
+    expect(useFlowsStore.getState().flows[0].steps).toHaveLength(1);
+
+    useFlowsStore.getState().deleteStep('Camel Route-1', 'Camel Route-1_pineapple-0');
+    expect(useFlowsStore.getState().flows[0].steps).toHaveLength(0);
   });
 
   it('extractNestedSteps(): should create an array of properties for all nested steps', () => {
@@ -219,13 +219,14 @@ describe('stepsService', () => {
     ).toEqual(1);
 
     // testing without explicitly passing a steps array
-    useIntegrationJsonStore.setState({
-      integrationJson: {
-        ...useIntegrationJsonStore.getState().integrationJson,
-        steps: steps,
-      },
+    useFlowsStore.setState({
+      flows: [{
+        ...useFlowsStore.getState().flows[0],
+        steps,
+      }],
     });
-    expect(stepsService.findStepIdxWithUUID('caffeine-action-2')).toEqual(2);
+
+    expect(stepsService.findStepIdxWithUUID('caffeine-action-2', steps)).toEqual(2);
   });
 
   it('flattenSteps(): should flatten an array of deeply nested steps', () => {
@@ -250,15 +251,16 @@ describe('stepsService', () => {
         UUID: 'three',
       } as IStepProps,
     ]
-    useIntegrationJsonStore.setState({
-      integrationJson: {
-        ...useIntegrationJsonStore.getState().integrationJson,
-        steps: steps
-      },
+
+    useFlowsStore.setState({
+      flows: [{
+        ...useFlowsStore.getState().flows[0],
+        steps,
+      }],
     });
 
-    expect(stepsService.getFollowingStep('two')).toMatchObject({ UUID: 'three' });
-    expect(stepsService.getFollowingStep('three')).toBeFalsy();
+    expect(stepsService.getFollowingStep({ integrationId: 'Camel Route-1', UUID: 'two' } as IStepProps)).toMatchObject({ UUID: 'three' });
+    expect(stepsService.getFollowingStep({ integrationId: 'Camel Route-1', UUID: 'three' } as IStepProps)).toBeFalsy();
   });
 
   it('getStepNested(): gets a nested step with its UUID', () => {
@@ -279,22 +281,23 @@ describe('stepsService', () => {
       } as IStepProps,
     ]
 
-    useIntegrationJsonStore.setState({
-      integrationJson: {
-        ...useIntegrationJsonStore.getState().integrationJson,
-        steps: steps
-      },
+    useFlowsStore.setState({
+      flows: [{
+        ...useFlowsStore.getState().flows[0],
+        steps,
+      }],
     });
 
-    expect(stepsService.getPreviousStep('one')).toBeFalsy();
-    expect(stepsService.getPreviousStep('two')).toMatchObject({ UUID: 'one' });
+    expect(stepsService.getPreviousStep({ integrationId: 'Camel Route-1', UUID: 'one' } as IStepProps)).toBeFalsy();
+    expect(stepsService.getPreviousStep({ integrationId: 'Camel Route-1', UUID: 'two' } as IStepProps)).toMatchObject({ UUID: 'one' });
   });
 
   it('handleAppendStep(): should append a step to another and update the store', async () => {
-    useIntegrationJsonStore
+    useFlowsStore
       .getState()
-      .insertStep({ name: 'lychee', UUID: 'lychee' } as IStepProps, 0);
-    expect(useIntegrationJsonStore.getState().integrationJson.steps).toHaveLength(1);
+      .insertStep('Camel Route-1', { integrationId: 'Camel Route-1', name: 'lychee', UUID: 'lychee', type: 'START' } as IStepProps, { mode: 'append' });
+
+    expect(useFlowsStore.getState().flows[0].steps).toHaveLength(1);
 
     // mock fetching additional parameters for new step
     jest
@@ -303,21 +306,22 @@ describe('stepsService', () => {
 
     await stepsService
       .handleAppendStep(
-        { name: 'lychee', UUID: 'lychee' } as IStepProps,
-        { name: 'raspberry', UUID: 'raspberry' } as IStepProps
+        { integrationId: 'Camel Route-1', name: 'lychee', UUID: 'lychee' } as IStepProps,
+        { integrationId: 'Camel Route-1', name: 'raspberry', UUID: 'raspberry' } as IStepProps
       )
       .then(() => {
-        expect(useIntegrationJsonStore.getState().integrationJson.steps).toHaveLength(2);
+        expect(useFlowsStore.getState().flows[0].steps).toHaveLength(2);
       });
 
     expect(fetchStepDetails).toHaveBeenCalled();
   });
 
   it('handleDropOnExistingStep(): should replace an existing step and update the store', async () => {
-    useIntegrationJsonStore
-      .getState()
-      .insertStep({ name: 'lychee', UUID: 'lychee', type: 'START' } as IStepProps, 0);
-    expect(useIntegrationJsonStore.getState().integrationJson.steps[0].UUID).toContain('lychee');
+      useFlowsStore
+        .getState()
+        .insertStep('Camel Route-1', { integrationId: 'Camel Route-1', name: 'lychee', UUID: 'lychee', type: 'START' } as IStepProps, { mode: 'append' });
+
+    expect(useFlowsStore.getState().flows[0].steps[0].UUID).toContain('lychee');
 
     // mock fetching additional parameters for new step
     jest
@@ -326,12 +330,12 @@ describe('stepsService', () => {
 
     await stepsService
       .handleDropOnExistingStep(
-        { step: { type: 'START' } } as IVizStepNodeData,
-        { name: 'lychee', UUID: 'Camel Route-1_lychee-0' } as IStepProps,
-        { name: 'raspberry', UUID: 'Camel Route-1_raspberry-0' } as IStepProps
+        { step: { integrationId: 'Camel Route-1', type: 'START' } } as IVizStepNodeData,
+        { integrationId: 'Camel Route-1', name: 'lychee', UUID: 'Camel Route-1_lychee-0' } as IStepProps,
+        { integrationId: 'Camel Route-1', name: 'raspberry', UUID: 'Camel Route-1_raspberry-0' } as IStepProps
       )
       .then(() => {
-        expect(useIntegrationJsonStore.getState().integrationJson.steps[0].UUID).toContain(
+        expect(useFlowsStore.getState().flows[0].steps[0].UUID).toContain(
           'Camel Route-1_raspberry'
         );
       });
@@ -340,17 +344,18 @@ describe('stepsService', () => {
   });
 
   it('handleInsertStep(): should insert a step between two specified steps and update the store', async () => {
-    useIntegrationJsonStore.setState({
-      integrationJson: {
-        ...useIntegrationJsonStore.getState().integrationJson,
+    useFlowsStore.setState({
+      flows: [{
+        ...useFlowsStore.getState().flows[0],
+        id: 'Camel Route-1',
         steps: [
-          { name: 'apple', UUID: 'apple-0', type: 'START' },
-          { name: 'watermelon', UUID: 'watermelon-1', type: 'MIDDLE' },
+          { integrationId: 'Camel Route-1', name: 'apple', UUID: 'apple-0', type: 'START' },
+          { integrationId: 'Camel Route-1', name: 'watermelon', UUID: 'watermelon-1', type: 'MIDDLE' },
         ] as IStepProps[],
-      },
+      }],
     });
 
-    expect(useIntegrationJsonStore.getState().integrationJson.steps[0].UUID).toContain('apple');
+    expect(useFlowsStore.getState().flows[0].steps[0].UUID).toContain('apple');
 
     // mock fetching additional parameters for new step
     jest
@@ -359,16 +364,16 @@ describe('stepsService', () => {
 
     await stepsService
       .handleInsertStep(
-        { data: { step: { name: 'watermelon', UUID: 'watermelon-1' } } } as IVizStepNode,
+        { data: { step: { integrationId: 'Camel Route-1', name: 'watermelon', UUID: 'watermelon-1' } } } as IVizStepNode,
         { name: 'grape', UUID: 'grape-1' } as IStepProps
       )
       .then(() => {
         // new step UUID should contain the target node's old index
-        expect(useIntegrationJsonStore.getState().integrationJson.steps[1].UUID).toContain(
+        expect(useFlowsStore.getState().flows[0].steps[1].UUID).toContain(
           'grape-1'
         );
         // UUID for watermelon should contain the new index
-        expect(useIntegrationJsonStore.getState().integrationJson.steps[2].UUID).toContain(
+        expect(useFlowsStore.getState().flows[0].steps[2].UUID).toContain(
           'watermelon-2'
         );
       });
@@ -377,17 +382,18 @@ describe('stepsService', () => {
   });
 
   it('handlePrependStep(): should insert a step before another and update the store', async () => {
-    useIntegrationJsonStore.setState({
-      integrationJson: {
-        ...useIntegrationJsonStore.getState().integrationJson,
+    useFlowsStore.setState({
+      flows: [{
+        ...useFlowsStore.getState().flows[0],
+        id: 'Camel Route-1',
         steps: [
-          { name: 'cherry', UUID: 'cherry-0', type: 'START' },
-          { name: 'peach', UUID: 'peach-1', type: 'MIDDLE' },
+          { integrationId: 'Camel Route-1', name: 'cherry', UUID: 'cherry-0', type: 'START' },
+          { integrationId: 'Camel Route-1', name: 'peach', UUID: 'peach-1', type: 'MIDDLE' },
         ] as IStepProps[],
-      },
+      }],
     });
 
-    expect(useIntegrationJsonStore.getState().integrationJson.steps[0].UUID).toContain('cherry');
+    expect(useFlowsStore.getState().flows[0].steps[0].UUID).toContain('cherry');
 
     // mock fetching additional parameters for new step
     jest
@@ -401,8 +407,8 @@ describe('stepsService', () => {
         { name: 'lime', UUID: 'lime-1' } as IStepProps
       )
       .then(() => {
-        expect(useIntegrationJsonStore.getState().integrationJson.steps[1].UUID).toContain('lime');
-        expect(useIntegrationJsonStore.getState().integrationJson.steps[2].UUID).toContain('peach');
+        expect(useFlowsStore.getState().flows[0].steps[1].UUID).toContain('lime');
+        expect(useFlowsStore.getState().flows[0].steps[2].UUID).toContain('peach');
       });
 
     expect(fetchStepDetails).toHaveBeenCalled();
@@ -695,7 +701,7 @@ describe('stepsService', () => {
   });
 
   it('replacePlaceholderStep(): should replace a placeholder with a step and update the store', async () => {
-    expect(useIntegrationJsonStore.getState().integrationJson.steps).toHaveLength(0);
+    expect(useFlowsStore.getState().flows[0].steps).toHaveLength(0);
 
     // mock fetching additional parameters for new step
     jest
@@ -704,12 +710,12 @@ describe('stepsService', () => {
 
     await stepsService
       .replacePlaceholderStep(
-        { step: { type: 'START' } } as IVizStepNodeData,
+        { step: { integrationId: 'Camel Route-1', type: 'START' } } as IVizStepNodeData,
         { name: 'strawberry', UUID: 'strawberry-0' } as IStepProps
       )
       .then(() => {
-        expect(useIntegrationJsonStore.getState().integrationJson.steps).toHaveLength(1);
-        expect(useIntegrationJsonStore.getState().integrationJson.steps[0].UUID).toContain(
+        expect(useFlowsStore.getState().flows[0].steps).toHaveLength(1);
+        expect(useFlowsStore.getState().flows[0].steps[0].UUID).toContain(
           'strawberry'
         );
       });
@@ -744,13 +750,13 @@ describe('stepsService', () => {
       name: 'plum',
       parameters: [{ type: 'string', id: 'description', value: 'wat' }] as IStepPropsParameters[],
     } as IStepProps;
-    useIntegrationJsonStore.getState().insertStep(step, 0);
+    useFlowsStore.getState().insertStep('Camel Route-1', step, { mode: 'append' });
 
     stepsService.updateStepParameters(step, { description: 'guava' });
 
-    expect(useIntegrationJsonStore.getState().integrationJson.steps).toHaveLength(1);
+    expect(useFlowsStore.getState().flows[0].steps).toHaveLength(1);
     expect(
-      useIntegrationJsonStore.getState().integrationJson.steps[0].parameters![0]
+      useFlowsStore.getState().flows[0].steps[0].parameters![0]
     ).toMatchObject({ type: 'string', id: 'description', value: 'guava' });
   });
 
@@ -759,9 +765,9 @@ describe('stepsService', () => {
       name: 'plum',
       parameters: [{ type: 'string', id: 'description', value: 'wat' }] as IStepPropsParameters[],
     } as IStepProps;
-    useIntegrationJsonStore.getState().insertStep(step, 0);
-    expect(useIntegrationJsonStore.getState().integrationJson.steps).toHaveLength(1);
-    expect(useIntegrationJsonStore.getState().views).toHaveLength(0);
+    useFlowsStore.getState().insertStep('Camel Route-1', step, { mode: 'append' });
+    expect(useFlowsStore.getState().flows[0].steps).toHaveLength(1);
+    expect(useFlowsStore.getState().views).toHaveLength(0);
 
     // mock fetching additional parameters for new step
     jest.mocked(fetchViews).mockResolvedValueOnce([
@@ -779,7 +785,7 @@ describe('stepsService', () => {
     ]);
 
     await stepsService.updateViews().then(() => {
-      expect(useIntegrationJsonStore.getState().views).toHaveLength(1);
+      expect(useFlowsStore.getState().views).toHaveLength(1);
     });
   });
 });

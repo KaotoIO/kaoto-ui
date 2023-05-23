@@ -2,7 +2,7 @@ import branchSteps from '../store/data/branchSteps';
 import nodes from '../store/data/nodes';
 import steps from '../store/data/steps';
 import { VisualizationService } from './visualizationService';
-import { useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
+import { useVisualizationStore } from '@kaoto/store';
 import {
   IStepProps,
   IStepPropsBranch,
@@ -590,10 +590,7 @@ describe('visualizationService', () => {
         } as IVizStepNode,
       ],
     });
-    const visualizationService = new VisualizationService(
-      useIntegrationJsonStore.getState(),
-      useVisualizationStore.getState()
-    );
+    const visualizationService = new VisualizationService();
 
     // it cannot be an end step, and it must be a first step
     const node: IVizStepNodeData = {

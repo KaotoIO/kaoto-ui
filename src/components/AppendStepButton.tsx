@@ -33,7 +33,7 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
   const [disableButton, setDisableButton] = useState(false);
 
   const stepsService = useMemo(() => new StepsService(), []);
-  const followingStep = stepsService.getFollowingStep(step.id);
+  const followingStepId = stepsService.getFollowingStep(step)?.id;
 
   useEffect(() => {
     setDisableButton(!showStepsTab && disableBranchesTab);
@@ -58,7 +58,7 @@ export const AppendStepButton: FunctionComponent<IAddStepButton> = ({
             dsl: currentDSL,
             type: ValidationService.appendableStepTypes(step.type),
             previousStep: step.id,
-            followingStep: followingStep?.id,
+            followingStep: followingStepId,
           }}
           step={step}
         >

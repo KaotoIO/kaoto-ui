@@ -23,7 +23,7 @@ export const PrependStepButton: FunctionComponent<IPrependStepButton> = ({
   const currentDSL = useSettingsStore((state) => state.settings.dsl.name);
 
   const stepsService = new StepsService();
-  const previousStepId = parentStepId ?? stepsService.getPreviousStep(step.UUID)?.id;
+  const previousStepId = parentStepId ?? stepsService.getPreviousStep(step)?.id;
 
   return (
     <Popover
@@ -39,7 +39,7 @@ export const PrependStepButton: FunctionComponent<IPrependStepButton> = ({
             dsl: currentDSL,
             type: ValidationService.prependableStepTypes(),
             previousStep: previousStepId,
-            followingStep: step?.id,
+            followingStep: step.id,
           }}
           step={step}
         />

@@ -1,4 +1,5 @@
-import { IIntegrationJsonStore, RFState, useIntegrationJsonStore, useVisualizationStore } from '@kaoto/store';
+import { RFState, useFlowsStore, useVisualizationStore } from '@kaoto/store';
+import { IFlowsWrapper } from '@kaoto/types';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { AlertProvider } from '../layout';
@@ -51,7 +52,7 @@ describe('Visualization.tsx', () => {
 
   test('should expands the details panel upon clicking on a step', async () => {
     useVisualizationStore.setState(stepsStub as unknown as RFState);
-    useIntegrationJsonStore.setState(integrationJSONStub as unknown as IIntegrationJsonStore);
+    useFlowsStore.setState({ flows: [integrationJSONStub], properties: {}, views: [] } as unknown as IFlowsWrapper);
 
     const wrapper = render(
       <AlertProvider>
