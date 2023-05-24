@@ -1,3 +1,6 @@
+import logo from '../assets/images/logo-kaoto-dark.png';
+import { AboutModal } from './AboutModal';
+import { ExportCanvasToPng } from './ExportCanvasToPng';
 import { fetchDefaultNamespace, startDeployment } from '@kaoto/api';
 import {
   AppearanceModal,
@@ -46,9 +49,6 @@ import {
 } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useCallback, useEffect, useState } from 'react';
-import logo from '../assets/images/logo-kaoto-dark.png';
-import { AboutModal } from './AboutModal';
-import { ExportCanvasToPng } from './ExportCanvasToPng';
 
 export interface IKaotoToolbar {
   toggleCatalog: () => void;
@@ -57,11 +57,16 @@ export interface IKaotoToolbar {
   hideLeftPanel: () => void;
 }
 
-export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, leftDrawerExpanded }: IKaotoToolbar) => {
+export const KaotoToolbar = ({
+  toggleCatalog,
+  toggleCodeEditor,
+  hideLeftPanel,
+  leftDrawerExpanded,
+}: IKaotoToolbar) => {
   const { settings, setSettings } = useSettingsStore((state) => state);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore((state) => state);
   const deleteAllIntegrations = useFlowsStore((state) => state.deleteAllIntegrations);
-  const [isActiveButton,setIsActiveButton] = useState('');
+  const [isActiveButton, setIsActiveButton] = useState('');
   const htmlTagElement = document.documentElement;
 
   const { deployment, setDeploymentCrd } = useDeploymentStore();
@@ -102,8 +107,8 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
 
   // configure UI theme
   useEffect(() => {
-    const uiTheme = localStorage.getItem(LOCAL_STORAGE_UI_THEME_KEY) ?? "true";
-    if (uiTheme === "true") {
+    const uiTheme = localStorage.getItem(LOCAL_STORAGE_UI_THEME_KEY) ?? 'true';
+    if (uiTheme === 'true') {
       htmlTagElement?.classList.remove(THEME_DARK_CLASS);
     } else {
       htmlTagElement?.classList.add(THEME_DARK_CLASS);
@@ -203,21 +208,42 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
       Appearance
     </DropdownItem>,
     <DropdownSeparator key="separator-01" />,
-    <ExportCanvasToPng key="export" fileName={settings.name} onClick={() => { setKebabIsOpen(false); }}/>,
+    <ExportCanvasToPng
+      key="export"
+      fileName={settings.name}
+      onClick={() => {
+        setKebabIsOpen(false);
+      }}
+    />,
     <DropdownSeparator key="separator-02" />,
-    <DropdownItem key="tutorial" href="https://kaoto.io/workshop/" target="_blank" className="pf-u-display-flex pf-u-justify-content-space-between">
+    <DropdownItem
+      key="tutorial"
+      href="https://kaoto.io/workshop/"
+      target="_blank"
+      className="pf-u-display-flex pf-u-justify-content-space-between"
+    >
       <span className="pf-u-mr-lg">Tutorial</span>
       <Icon isInline>
         <ExternalLinkAltIcon />
       </Icon>
     </DropdownItem>,
-    <DropdownItem key="help" href="https://kaoto.io/docs/" target="_blank" className="pf-u-display-flex pf-u-justify-content-space-between">
+    <DropdownItem
+      key="help"
+      href="https://kaoto.io/docs/"
+      target="_blank"
+      className="pf-u-display-flex pf-u-justify-content-space-between"
+    >
       <span className="pf-u-mr-lg">Help</span>
       <Icon isInline>
         <ExternalLinkAltIcon />
       </Icon>
     </DropdownItem>,
-    <DropdownItem key="feedback" href="https://github.com/KaotoIO/kaoto-ui/issues/new/choose" target="_blank"  className="pf-u-display-flex pf-u-justify-content-space-between">
+    <DropdownItem
+      key="feedback"
+      href="https://github.com/KaotoIO/kaoto-ui/issues/new/choose"
+      target="_blank"
+      className="pf-u-display-flex pf-u-justify-content-space-between"
+    >
       <span className="pf-u-mr-lg">Feedback</span>
       <Icon isInline>
         <GithubIcon />
@@ -264,13 +290,15 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
                 tabIndex={0}
                 variant="link"
                 isActive={isActiveButton == 'toolbar-step-catalog-btn' && leftDrawerExpanded}
-                data-testid={'toolbar-step-catalog-btn'}
+                data-testid="toolbar-step-catalog-btn"
                 icon={<CatalogIcon />}
-                onClick={()=>{
-                toggleCatalog()
-                setIsActiveButton('toolbar-step-catalog-btn')
+                onClick={() => {
+                  toggleCatalog();
+                  setIsActiveButton('toolbar-step-catalog-btn');
                 }}
-              />
+              >
+                Catalog
+              </Button>
             </Tooltip>
           </ToolbarItem>
 
@@ -278,15 +306,17 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
           <ToolbarItem>
             <Tooltip content={<div>Source Code</div>} position={'bottom'}>
               <Button
-                variant={'link'}
+                variant="link"
                 isActive={isActiveButton == 'toolbar-show-code-btn' && leftDrawerExpanded}
-                data-testid={'toolbar-show-code-btn'}
-                onClick={()=>{
-                toggleCodeEditor()
-                setIsActiveButton('toolbar-show-code-btn')
+                data-testid="toolbar-show-code-btn"
+                onClick={() => {
+                  toggleCodeEditor();
+                  setIsActiveButton('toolbar-show-code-btn');
                 }}
                 icon={<CodeIcon />}
-              />
+              >
+                Source
+              </Button>
             </Tooltip>
           </ToolbarItem>
 
@@ -410,7 +440,14 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
               <OverflowMenuControl hasAdditionalOptions>
                 <Dropdown
                   position={DropdownPosition.right}
-                  toggle={<KebabToggle data-testid="toolbar-kebab-dropdown-toggle" onToggle={(val) => {setKebabIsOpen(val);}} />}
+                  toggle={
+                    <KebabToggle
+                      data-testid="toolbar-kebab-dropdown-toggle"
+                      onToggle={(val) => {
+                        setKebabIsOpen(val);
+                      }}
+                    />
+                  }
                   isOpen={kebabIsOpen}
                   isPlain
                   data-testid="toolbar-kebab-dropdown-btn"
@@ -447,12 +484,14 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
         isModalOpen={expanded.deploymentsModal ?? false}
       />
 
-      {expanded.settingsModal &&
+      {expanded.settingsModal && (
         <SettingsModal
           handleCloseModal={() => {
             setExpanded({ ...expanded, settingsModal: !expanded.settingsModal });
           }}
-          isModalOpen={expanded.settingsModal} />}
+          isModalOpen={expanded.settingsModal}
+        />
+      )}
 
       <AppearanceModal
         handleCloseModal={() => {
@@ -464,11 +503,11 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
       />
 
       <AboutModal
-        handleCloseModal={() => { setExpanded({ ...expanded, aboutModal: false }); }}
+        handleCloseModal={() => {
+          setExpanded({ ...expanded, aboutModal: false });
+        }}
         isModalOpen={expanded.aboutModal}
       />
     </>
   );
 };
-
-export default KaotoToolbar;
