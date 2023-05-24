@@ -1,6 +1,11 @@
-import { AboutModal as PatternFlyAboutModal, TextContent, TextList, TextListItem } from '@patternfly/react-core';
 import logo from '../assets/images/logo-kaoto-dark.png';
-import { useSettingsStore } from '../store';
+import { useSettingsStore } from '@kaoto/store';
+import {
+  AboutModal as PatternFlyAboutModal,
+  TextContent,
+  TextList,
+  TextListItem,
+} from '@patternfly/react-core';
 
 export interface IAboutModal {
   handleCloseModal: () => void;
@@ -8,7 +13,7 @@ export interface IAboutModal {
 }
 
 export const AboutModal = ({ handleCloseModal, isModalOpen }: IAboutModal) => {
-  const backendVersion = useSettingsStore((state) => state.backendVersion);
+  const backendVersion = useSettingsStore((state) => state.settings.backendVersion);
 
   return (
     <PatternFlyAboutModal
@@ -21,9 +26,13 @@ export const AboutModal = ({ handleCloseModal, isModalOpen }: IAboutModal) => {
       <TextContent>
         <TextList component="dl">
           <TextListItem component="dt">Frontend Version</TextListItem>
-          <TextListItem component="dd" data-testid="about-frontend-version" >{KAOTO_VERSION}</TextListItem>
+          <TextListItem component="dd" data-testid="about-frontend-version">
+            {KAOTO_VERSION}
+          </TextListItem>
           <TextListItem component="dt">Backend Version</TextListItem>
-          <TextListItem component="dd" data-testid="about-backend-version" >{backendVersion}</TextListItem>
+          <TextListItem component="dd" data-testid="about-backend-version">
+            {backendVersion}
+          </TextListItem>
         </TextList>
       </TextContent>
     </PatternFlyAboutModal>

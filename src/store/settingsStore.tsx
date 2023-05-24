@@ -8,8 +8,6 @@ const isUILightMode = localStorage.getItem(LOCAL_STORAGE_UI_THEME_KEY) ?? 'true'
 interface ISettingsStore {
   settings: ISettings;
   setSettings: (vals?: Partial<ISettings>) => void;
-  backendVersion: string;
-  setBackendVersion: (backendVersion: string) => void;
 }
 
 export const initDsl: IDsl = {
@@ -31,6 +29,8 @@ export const initialSettings: ISettings = {
   editorIsLightMode: localStorage.getItem(LOCAL_STORAGE_EDITOR_THEME_KEY) === 'true',
   uiLightMode: isUILightMode === 'true',
   editorMode: CodeEditorMode.FREE_EDIT,
+  backendVersion: '',
+  capabilities: [],
 };
 
 export const useSettingsStore = create<ISettingsStore>((set) => ({
@@ -39,10 +39,4 @@ export const useSettingsStore = create<ISettingsStore>((set) => ({
     set((state) => ({
       settings: { ...state.settings, ...vals },
     })),
-  backendVersion: '',
-  setBackendVersion: (backendVersion: string) => {
-    set(() => ({
-      backendVersion: backendVersion,
-    }));
-  },
 }));

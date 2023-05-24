@@ -1,9 +1,10 @@
 import { WaitingPage } from '../components/WaitingPage';
-import { fetchBackendVersion } from '@kaoto/api';
+import { useSettingsStore } from '../store';
+import { fetchBackendVersion, fetchCapabilities } from '@kaoto/api';
 import { sleep } from '@kaoto/utils';
 import { Panel } from '@patternfly/react-core';
 import { ReactNode, useEffect, useState } from 'react';
-import { useSettingsStore } from '../store';
+import { shallow } from 'zustand/shallow';
 
 interface IAppLayout {
   children: ReactNode;
@@ -13,17 +14,20 @@ export const AppLayout = ({ children }: IAppLayout) => {
   const [backendAvailable, setBackendAvailable] = useState(false);
   const [message, setMessage] = useState('Trying to reach the Kaoto API');
   const [fetching, setFetching] = useState(true);
-  const setBackendVersion = useSettingsStore((state) => state.setBackendVersion);
+  const { namespace, setSettings } = useSettingsStore(
+    ({ settings, setSettings }) => ({ namespace: settings.namespace, setSettings }),
+    shallow,
+  );
 
   useEffect(() => {
     // Method that tries to connect to capabilities/version endpoint and evaluate if the API is available
     const tryApiAvailable = (retries: number) => {
       fetchBackendVersion()
-        .then((resp) => {
-          if (resp) {
+        .then((response) => {
+          if (response) {
             setBackendAvailable(true);
             setMessage('Trying to reach the Kaoto API');
-            setBackendVersion(resp);
+            setSettings({ backendVersion: response });
           }
         })
         .catch(() => {
@@ -41,6 +45,17 @@ export const AppLayout = ({ children }: IAppLayout) => {
     // try to fetch api for 120seconds
     tryApiAvailable(120);
   }, []);
+
+  useEffect(() => {
+    /** Dispatch call for getting the available capabilities without waiting for it */
+    fetchCapabilities(namespace).then((capabilities) => {
+      if (Array.isArray(capabilities?.dsls)) {
+        setSettings({ capabilities: capabilities.dsls });
+      }
+    }).catch((reason) => {
+      console.error('Error when fetching capabilities', reason);
+    });
+  }, [namespace, setSettings]);
 
   return (
     <Panel style={{ flexGrow: 1 }}>

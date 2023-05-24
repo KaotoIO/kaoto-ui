@@ -69,6 +69,14 @@ export interface ISettings {
   name: string;
   // Cluster namespace
   namespace: string;
+
+  /** Current backend version */
+  backendVersion: string;
+  /**
+   * All capabilities supported by the backend regardless
+   * of the current steps.
+   */
+  capabilities: IDsl[];
 }
 
 export interface ICapabilities {
