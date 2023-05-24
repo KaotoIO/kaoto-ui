@@ -1,5 +1,5 @@
 import { RequestService } from './requestService';
-import { IFlowsWrapper, IStepProps } from '@kaoto/types';
+import { ICapabilities, IFlowsWrapper, IStepProps } from '@kaoto/types';
 
 const apiVersion = '/v1';
 
@@ -23,7 +23,7 @@ export async function fetchBackendVersion(): Promise<string> {
  * domain-specific languages (DSLs)
  * Returns { dsls: { [val: string]: string }[] }
  */
-export async function fetchCapabilities(namespace?: string) {
+export async function fetchCapabilities(namespace?: string): Promise<ICapabilities> {
   try {
     const resp = await RequestService.get({
       endpoint: `${apiVersion}/capabilities`,
@@ -68,7 +68,7 @@ export async function fetchCatalogSteps(
     previousStep?: string;
     followingStep?: string;
   },
-  cache?: RequestCache | undefined
+  cache?: RequestCache | undefined,
 ) {
   try {
     if (!queryParams?.previousStep) {
@@ -166,7 +166,7 @@ export async function fetchDeployments(cache?: RequestCache | undefined, namespa
 export async function fetchDeploymentLogs(
   name: string,
   namespace?: string,
-  lines?: number
+  lines?: number,
 ): Promise<ReadableStream | unknown> {
   try {
     const resp = await RequestService.get({
@@ -197,7 +197,7 @@ export async function fetchDeploymentLogs(
 export async function fetchIntegrationJson(
   data: string,
   dsl: string,
-  namespace?: string
+  namespace?: string,
 ): Promise<IFlowsWrapper> {
   const resp = await RequestService.post({
     endpoint: `/v2/integrations`,

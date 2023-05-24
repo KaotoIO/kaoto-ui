@@ -25,12 +25,12 @@ describe('settingsStore', () => {
 
   it('setBackendVersion', () => {
     const { result } = renderHook(() => useSettingsStore());
-    expect(result.current.backendVersion).toEqual('');
+    expect(result.current.settings.backendVersion).toEqual('');
 
     act(() => {
-      result.current.setBackendVersion('1.0-test');
+      result.current.setSettings({ backendVersion: '1.0-test' });
     });
 
-    expect(result.current.backendVersion).toEqual('1.0-test');
+    expect(result.current.settings.backendVersion).toEqual('1.0-test');
   });
 });
