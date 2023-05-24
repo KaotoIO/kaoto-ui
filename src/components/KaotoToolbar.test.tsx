@@ -1,4 +1,4 @@
-import KaotoToolbar from './KaotoToolbar';
+import { KaotoToolbar } from './KaotoToolbar';
 import { AlertProvider } from '@kaoto/layout';
 import { screen, render, fireEvent, act } from '@testing-library/react';
 

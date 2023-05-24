@@ -9,7 +9,6 @@ import {
   SettingsModal,
 } from '@kaoto/components';
 import { LOCAL_STORAGE_UI_THEME_KEY, THEME_DARK_CLASS } from '@kaoto/constants';
-import { ValidationService } from '@kaoto/services';
 import {
   useDeploymentStore,
   useFlowsStore,
@@ -25,11 +24,9 @@ import {
   DropdownSeparator,
   DropdownToggle,
   Icon,
-  InputGroup,
   KebabToggle,
   OverflowMenu,
   OverflowMenuControl,
-  TextInput,
   Toolbar,
   ToolbarContent,
   ToolbarItem,
@@ -39,16 +36,13 @@ import {
   BarsIcon,
   BellIcon,
   CatalogIcon,
-  CheckIcon,
   CodeIcon,
   CubesIcon,
   ExternalLinkAltIcon,
   GithubIcon,
-  PencilAltIcon,
-  TimesIcon,
 } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface IKaotoToolbar {
   toggleCatalog: () => void;
@@ -73,14 +67,7 @@ export const KaotoToolbar = ({
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
   const [appMenuIsOpen, setAppMenuIsOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [isEditingName, setIsEditingName] = useState(false);
-  const focusIntegrationInput = useCallback((element: HTMLInputElement) => {
-    element?.focus();
-  }, []);
-  const [localName, setLocalName] = useState(settings.name);
-  const [nameValidation, setNameValidation] = useState<
-    'default' | 'warning' | 'success' | 'error' | undefined
-  >('default');
+
   const [expanded, setExpanded] = useState({
     aboutModal: false,
     appearanceModal: false,
@@ -89,12 +76,6 @@ export const KaotoToolbar = ({
   });
 
   const { addAlert } = useAlert() || {};
-
-  // change in name from elsewhere should update local value
-  // otherwise, on edit it will show the old value
-  useEffect(() => {
-    setLocalName(settings.name);
-  }, [settings.name]);
 
   // fetch default namespace from the API,
   useEffect(() => {
@@ -285,7 +266,7 @@ export const KaotoToolbar = ({
 
           {/* STEP CATALOG BUTTON */}
           <ToolbarItem>
-            <Tooltip content={<div>Step Catalog</div>} position={'bottom'}>
+            <Tooltip content={<div>Step Catalog</div>} position="bottom">
               <Button
                 tabIndex={0}
                 variant="link"
@@ -304,7 +285,7 @@ export const KaotoToolbar = ({
 
           {/* CODE TOGGLE BUTTON */}
           <ToolbarItem>
-            <Tooltip content={<div>Source Code</div>} position={'bottom'}>
+            <Tooltip content={<div>Source Code</div>} position="bottom">
               <Button
                 variant="link"
                 isActive={isActiveButton == 'toolbar-show-code-btn' && leftDrawerExpanded}
@@ -322,93 +303,11 @@ export const KaotoToolbar = ({
 
           <ToolbarItem variant="separator" />
 
-          {/* NAME */}
-          <ToolbarItem variant="label">
-            {isEditingName ? (
-              <InputGroup>
-                <TextInput
-                  name="edit-integration-name"
-                  id="edit-integration-name"
-                  data-testid={'kaoto-toolbar--name__edit'}
-                  type="text"
-                  ref={focusIntegrationInput}
-                  onChange={(val) => {
-                    // save to local state while typing
-                    setLocalName(val);
-                    if (ValidationService.isNameValidCheck(val)) {
-                      setNameValidation('success');
-                    } else {
-                      setNameValidation('error');
-                    }
-                  }}
-                  value={localName}
-                  aria-label="edit integration name"
-                  validated={nameValidation}
-                  aria-invalid={nameValidation === 'error'}
-                  onKeyUp={(e) => {
-                    // allow users to save by pressing enter
-                    if (e.key !== 'Enter') return;
-                    if (ValidationService.isNameValidCheck(localName)) {
-                      setIsEditingName(false);
-                      // only issue change if different from current settings
-                      if (localName !== settings.name) {
-                        setSettings({ ...settings, name: localName });
-                      }
-                    }
-                  }}
-                />
-                <Button
-                  variant="plain"
-                  aria-label="save button for editing integration name"
-                  onClick={() => {
-                    if (ValidationService.isNameValidCheck(localName)) {
-                      setIsEditingName(false);
-                      // only issue change if different from current settings
-                      if (localName !== settings.name) {
-                        setSettings({ ...settings, name: localName });
-                      }
-                    }
-                  }}
-                  data-testid={'kaoto-toolbar--name__edit--save'}
-                  aria-disabled={nameValidation === 'error'}
-                  isDisabled={nameValidation === 'error'}
-                >
-                  <CheckIcon />
-                </Button>
-                <Button
-                  variant="plain"
-                  aria-label="close button for editing integration name"
-                  data-testid={'kaoto-toolbar--name__edit--close'}
-                  onClick={() => {
-                    setLocalName(settings.name);
-                    setNameValidation('default');
-                    setIsEditingName(false);
-                  }}
-                >
-                  <TimesIcon />
-                </Button>
-              </InputGroup>
-            ) : (
-              <>
-                <span data-testid={'kaoto-toolbar--name'}>{settings.name}</span>&nbsp;&nbsp;
-                <Button
-                  variant={'link'}
-                  data-testid={'kaoto-toolbar--name__edit--start'}
-                  onClick={() => {
-                    setIsEditingName(true);
-                  }}
-                >
-                  <PencilAltIcon />
-                </Button>
-              </>
-            )}
-          </ToolbarItem>
-
           {/* DEPLOYMENT STATUS */}
           {deployment.crd ? (
             <ToolbarItem alignment={{ default: 'alignRight' }}>
-              <div className="status-container" data-testid={'toolbar-deployment-status'}>
-                <div className={`dot`}></div>
+              <div className="status-container" data-testid="toolbar-deployment-status">
+                <div className="dot"></div>
                 <div className="text">Running</div>
               </div>
             </ToolbarItem>
