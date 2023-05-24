@@ -90,14 +90,6 @@ export const KaotoToolbar = ({ toggleCatalog, toggleCodeEditor, hideLeftPanel, l
   useEffect(() => {
     setLocalName(settings.name);
   }, [settings.name]);
-  // fetch default namespace from the API,
-  useEffect(() => {
-    fetchDefaultNamespace().then((data) => {
-      const newSettings = settings;
-      newSettings.namespace = data.namespace;
-      setSettings(newSettings);
-    });
-  }, []);
 
   // fetch default namespace from the API,
   useEffect(() => {
