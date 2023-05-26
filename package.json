@@ -94,7 +94,7 @@
     "@storybook/builder-webpack5": "^6.5.16",
     "@storybook/manager-webpack5": "^6.5.16",
     "@storybook/react": "^7.0.8",
-    "@storybook/react-webpack5": "^7.0.15",
+    "@storybook/react-webpack5": "^7.0.17",
     "@storybook/testing-library": "^0.1.0",
     "@testing-library/dom": "^9.3.0",
     "@testing-library/jest-dom": "^5.16.5",
