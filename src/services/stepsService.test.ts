@@ -36,9 +36,14 @@ import {
   IVizStepNode,
   IVizStepNodeData,
 } from '@kaoto/types';
+import { FlowsService } from './FlowsService';
 
 describe('stepsService', () => {
   const stepsService = new StepsService();
+
+  beforeEach(() => {
+    useFlowsStore.setState({ flows: [FlowsService.getNewFlow('Camel Route', 'Camel Route-1')] });
+  });
 
   it('addBranch(): should add a branch to the specified step from the store', () => {
     useFlowsStore.setState({

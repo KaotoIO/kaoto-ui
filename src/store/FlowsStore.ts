@@ -1,6 +1,6 @@
 import { useNestedStepsStore } from './nestedStepsStore';
 import { initDsl, initialSettings } from './settingsStore';
-import { StepsService } from '@kaoto/services';
+import { FlowsService, StepsService } from '@kaoto/services';
 import { IFlowsWrapper, IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { setDeepValue } from '@kaoto/utils';
 import isEqual from 'lodash.isequal';
@@ -14,12 +14,12 @@ interface IInsertOptions {
   (
     integrationId: string,
     newStep: IStepProps,
-    options: { mode: 'replace'; path: string[] | undefined }
+    options: { mode: 'replace'; path: string[] | undefined },
   ): void;
   (
     integrationId: string,
     newStep: IStepProps,
-    options: { mode: 'append' | 'insert' | 'replace'; index: number; path: string[] | undefined }
+    options: { mode: 'append' | 'insert' | 'replace'; index: number; path: string[] | undefined },
   ): void;
 }
 
@@ -33,22 +33,21 @@ export interface IFlowsStoreData {
 export interface IFlowsStore extends IFlowsStoreData {
   insertStep: IInsertOptions;
   deleteStep: (integrationId: string, stepUUID: string) => void;
-  deleteAllIntegrations: () => void;
   updateViews: (views: IViewProps[]) => void;
   setFlowsWrapper: (flowsWrapper: IFlowsWrapper) => void;
+
+  /** General flow management */
+  addNewFlow: (dsl: string, flowId?: string) => void;
+  deleteAllFlows: () => void;
 }
 
 export const getInitialState = (previousState: Partial<IFlowsStoreData> = {}): IFlowsStoreData => {
   return {
     ...previousState,
-    flows: [
-      {
-        id: `${initDsl.name}-1`,
-        dsl: initDsl.name,
+    flows: previousState.flows ?? [
+      FlowsService.getNewFlow(initDsl.name, undefined, {
         metadata: { name: initialSettings.name, namespace: initialSettings.namespace },
-        steps: [],
-        params: [],
-      },
+      }),
     ],
     properties: {},
     views: [],
@@ -64,7 +63,7 @@ export const useFlowsStore = create<IFlowsStore>()(
       insertStep: (integrationId, newStep, options) => {
         set((state: IFlowsStore): IFlowsStore => {
           const integrationIndex = state.flows.findIndex(
-            (integration) => integration.id === integrationId
+            (integration) => integration.id === integrationId,
           );
           if (integrationIndex === -1) {
             return state;
@@ -104,7 +103,7 @@ export const useFlowsStore = create<IFlowsStore>()(
       deleteStep: (integrationId: string, stepUUID: string) => {
         set((state) => {
           const integrationIndex = state.flows.findIndex(
-            (integration) => integration.id === integrationId
+            (integration) => integration.id === integrationId,
           );
           if (integrationIndex === -1) {
             return { ...state };
@@ -122,7 +121,6 @@ export const useFlowsStore = create<IFlowsStore>()(
           return { ...state, flows: [...state.flows] };
         });
       },
-      deleteAllIntegrations: () => set((state) => getInitialState(state)),
       updateViews: (views: IViewProps[]) => {
         set({ views });
       },
@@ -152,6 +150,15 @@ export const useFlowsStore = create<IFlowsStore>()(
           };
         });
       },
+
+      /** General flow management */
+      addNewFlow: (dsl, flowId) =>
+        set((state) => {
+          const flows = state.flows.concat(FlowsService.getNewFlow(dsl, flowId));
+
+          return { ...state, currentDsl: dsl, flows };
+        }),
+      deleteAllFlows: () => set((state) => getInitialState({ ...state, flows: [] })),
     }),
     {
       partialize: (state) => {
@@ -159,6 +166,6 @@ export const useFlowsStore = create<IFlowsStore>()(
         return { flows };
       },
       equality: (a, b) => isEqual(a, b),
-    }
-  )
+    },
+  ),
 );

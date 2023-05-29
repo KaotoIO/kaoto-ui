@@ -1,5 +1,5 @@
 import { useDeploymentStore } from './deploymentStore';
-import { useFlowsStore } from './flowsStore';
+import { useFlowsStore } from './FlowsStore';
 import { useIntegrationSourceStore } from './integrationSourceStore';
 import { useNestedStepsStore } from './nestedStepsStore';
 import { useSettingsStore } from './settingsStore';
@@ -16,7 +16,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export * from './deploymentStore';
-export * from './flowsStore';
+export * from './FlowsStore';
+export * from './FlowsStoreFacade';
 export * from './integrationSourceStore';
 export * from './nestedStepsStore';
 export * from './settingsStore';

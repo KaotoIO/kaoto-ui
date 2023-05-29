@@ -21,7 +21,7 @@ interface ISourceCodeEditor {
   syncAction?: () => {};
 }
 
-const SourceCodeEditor = (props: ISourceCodeEditor) => {
+export const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<Parameters<EditorDidMount>[0] | null>(null);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
   const [syncedCode, setSyncedCode] = useState('');
@@ -42,7 +42,7 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
     : '';
 
   useEffect(() => {
-    if (previousFlows === flows || !Array.isArray(flows[0].steps)) return;
+    if (previousFlows === flows || !Array.isArray(flows[0]?.steps)) return;
 
     if (flows[0].dsl !== null && flows[0].dsl !== settings.dsl.name) {
       fetchCapabilities().then((capabilities: ICapabilities) => {
@@ -239,5 +239,3 @@ const SourceCodeEditor = (props: ISourceCodeEditor) => {
     </StepErrorBoundary>
   );
 };
-
-export { SourceCodeEditor };

@@ -1,12 +1,12 @@
 import { OrangeExclamationTriangleIcon } from './Icons';
 import { Button, Modal, ModalVariant } from '@patternfly/react-core';
+import { FunctionComponent, PropsWithChildren } from 'react';
 
-export interface IConfirmationModal {
+export interface IConfirmationModal extends PropsWithChildren {
   handleCancel: () => void;
   handleConfirm: () => void;
   isModalOpen: boolean;
   modalTitle?: string;
-  modalBody?: string;
 }
 
 /**
@@ -18,13 +18,13 @@ export interface IConfirmationModal {
  * @param modalTitle
  * @constructor
  */
-export const ConfirmationModal = ({
+export const ConfirmationModal: FunctionComponent<IConfirmationModal> = ({
+  children,
   handleCancel,
   handleConfirm,
   isModalOpen,
-  modalBody,
   modalTitle,
-}: IConfirmationModal) => {
+}) => {
   const onCancel = () => {
     handleCancel();
   };
@@ -34,7 +34,7 @@ export const ConfirmationModal = ({
   };
 
   return (
-    <div className={'confirmation-modal'} data-testid={'confirmation-modal'}>
+    <div className="confirmation-modal" data-testid="confirmation-modal">
       <Modal
         actions={[
           <Button key="confirm" variant="primary" onClick={onConfirm}>
@@ -47,15 +47,12 @@ export const ConfirmationModal = ({
         aria-describedby="modal-description"
         isOpen={isModalOpen}
         onClose={handleCancel}
-        className={'customClass'}
+        className="customClass"
         titleIconVariant={OrangeExclamationTriangleIcon}
         title={modalTitle ?? 'Confirmation'}
         variant={ModalVariant.small}
       >
-        <span id="modal-description">
-          {modalBody ??
-            'WARNING! This action is not reversible. Are you sure you would like to proceed?'}
-        </span>
+        {children}
       </Modal>
     </div>
   );
