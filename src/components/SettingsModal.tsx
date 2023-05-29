@@ -117,7 +117,9 @@ export const SettingsModal = ({ handleCloseModal, isModalOpen }: ISettingsModal)
     })
       .then((value) => {
         if (value) {
-          setAvailableDSLs(value);
+          if (Array.isArray(value)) {
+            setAvailableDSLs(value);
+          }
         }
       })
       .catch((e) => {
