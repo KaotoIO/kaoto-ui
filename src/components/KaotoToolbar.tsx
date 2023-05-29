@@ -1,5 +1,6 @@
 import logo from '../assets/images/logo-kaoto-dark.png';
 import { AboutModal } from './AboutModal';
+import { NewFlow } from './DSL/NewFlow';
 import { ExportCanvasToPng } from './ExportCanvasToPng';
 import { fetchDefaultNamespace, startDeployment } from '@kaoto/api';
 import {
@@ -18,6 +19,7 @@ import {
 import {
   AlertVariant,
   Button,
+  Chip,
   Dropdown,
   DropdownItem,
   DropdownPosition,
@@ -43,6 +45,7 @@ import {
 } from '@patternfly/react-icons';
 import { useAlert } from '@rhoas/app-services-ui-shared';
 import { useEffect, useState } from 'react';
+import { shallow } from 'zustand/shallow';
 
 export interface IKaotoToolbar {
   toggleCatalog: () => void;
@@ -57,9 +60,12 @@ export const KaotoToolbar = ({
   hideLeftPanel,
   leftDrawerExpanded,
 }: IKaotoToolbar) => {
-  const { settings, setSettings } = useSettingsStore((state) => state);
+  const { currentDsl, settings, setSettings } = useSettingsStore(
+    ({ settings, setSettings }) => ({ settings, setSettings, currentDsl: settings.dsl.name }),
+    shallow,
+  );
   const { sourceCode, setSourceCode } = useIntegrationSourceStore((state) => state);
-  const deleteAllIntegrations = useFlowsStore((state) => state.deleteAllIntegrations);
+  const deleteAllFlows = useFlowsStore((state) => state.deleteAllFlows, shallow);
   const [isActiveButton, setIsActiveButton] = useState('');
   const htmlTagElement = document.documentElement;
 
@@ -303,6 +309,18 @@ export const KaotoToolbar = ({
 
           <ToolbarItem variant="separator" />
 
+          {/* CURRENT DSL */}
+          <ToolbarItem>
+            <Chip isReadOnly>{currentDsl || 'None'}</Chip>
+          </ToolbarItem>
+
+          {/* NEW FLOW DROPDOWN BUTTON */}
+          <ToolbarItem>
+            <NewFlow />
+          </ToolbarItem>
+
+          <ToolbarItem variant="separator" />
+
           {/* DEPLOYMENT STATUS */}
           {deployment.crd ? (
             <ToolbarItem alignment={{ default: 'alignRight' }}>
@@ -364,17 +382,20 @@ export const KaotoToolbar = ({
         }}
         handleConfirm={() => {
           /** Delete all flows */
-          deleteAllIntegrations();
+          deleteAllFlows();
           setSourceCode('');
-          setSettings({ dsl: settings.dsl, name: 'integration', namespace: 'default' });
+
+          /** TODO: Check whether this configuration is required to be kept inside of settingsStore */
+          setSettings({ name: 'integration', namespace: 'default' });
           setIsConfirmationModalOpen(false);
         }}
         isModalOpen={isConfirmationModalOpen}
-        modalBody={
-          'This will clear the whole canvas and settings, and you will lose your current work. Are you sure you would' +
-          ' like to proceed?'
-        }
-      />
+      >
+        <p>
+          This will clear the whole canvas and settings, and you will lose your current work. Are
+          you sure you would like to proceed?
+        </p>
+      </ConfirmationModal>
 
       <DeploymentsModal
         handleCloseModal={() => {
