@@ -66,7 +66,9 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
     if (settings.namespace !== '') {
       fetchDeployments('no-cache', settings.namespace)
         .then((output) => {
-          setDeployments(output);
+          if (Array.isArray(output)) {
+            setDeployments(output);
+          }
         })
         .catch((e) => {
           throw Error(e);
@@ -101,7 +103,7 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
   let sortedDeployments = deployments;
 
   if (typeof activeSortIndex !== 'undefined') {
-    sortedDeployments = deployments.sort((a, b) => {
+    sortedDeployments = deployments.slice().sort((a, b) => {
       const aValue = getSortableRowValues(a)[activeSortIndex];
       const bValue = getSortableRowValues(b)[activeSortIndex];
       if (activeSortDirection === 'asc') {
