@@ -10,8 +10,19 @@ module.exports = {
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
 
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.{ts,tsx}',
+    '!<rootDir>/src/**/*.(test|stories).{ts,tsx}',
+    '!<rootDir>/src/**/index.ts',
+    '!<rootDir>/src/store/data/**',
+    '!<rootDir>/src/stubs/**',
+  ],
+
+  testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
+
   transform: {
-    '\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.jsx?$': 'babel-jest',
   },
 
   moduleNameMapper: {
@@ -20,7 +31,7 @@ module.exports = {
       path.resolve(__dirname, './src/__mocks__/fileMock.js'),
     '@patternfly/react-code-editor': path.resolve(
       __dirname,
-      './src/__mocks__/reactCodeEditorMock.js'
+      './src/__mocks__/reactCodeEditorMock.js',
     ),
     '@kaoto/api': path.resolve(__dirname, './src/api'),
     '@kaoto/assets': path.resolve(__dirname, './src/assets'),
@@ -33,7 +44,14 @@ module.exports = {
     '@kaoto/services': path.resolve(__dirname, './src/services'),
     '@kaoto/store': path.resolve(__dirname, './src/store'),
     '@kaoto/utils': path.resolve(__dirname, './src/utils'),
-    '@kie-tools/uniforms-patternfly/dist/esm': path.resolve(__dirname, 'node_modules/@kie-tools/uniforms-patternfly/dist/cjs'),
+    '@kie-tools/uniforms-patternfly/dist/esm': path.resolve(
+      __dirname,
+      'node_modules/@kie-tools/uniforms-patternfly/dist/cjs',
+    ),
+    '@patternfly/react-core/next': path.resolve(
+      __dirname,
+      'node_modules/@patternfly/react-core/dist/js/next',
+    ),
   },
 
   roots: ['<rootDir>'],
