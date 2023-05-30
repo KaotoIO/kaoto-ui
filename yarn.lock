@@ -16330,10 +16330,10 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zundo@^2.0.0-beta.17:
-  version "2.0.0-beta.17"
-  resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.17.tgz#15b39e4af499b8b0c331e0e3b1144f4a0a5959d4"
-  integrity sha512-VHPZpSdrugr4L/aTuXyIpzVf0UPKBYwMWEk4E67KFWy+NH3fE+O3yKJwuKuj3rrw93kXBgGCbch5Z9YQJ0y48w==
+zundo@^2.0.0-beta.18:
+  version "2.0.0-beta.18"
+  resolved "https://registry.yarnpkg.com/zundo/-/zundo-2.0.0-beta.18.tgz#e2dc9dce56b90f14f8aa9049db2badd7c0af1785"
+  integrity sha512-A7QhvIWNNwMND7hvnJ/jZPEIqYUEuWoJd5hzSgfGu+jYlnHU0LeBJHn1vqGTgeD1asYXRZZGXPPb4gqz7CEd2w==
 
 zustand@^4.3.1, zustand@^4.3.8:
   version "4.3.8"
