@@ -20,3 +20,4 @@ export * from './VisualizationControls';
 export * from './VisualizationStepViews';
 export * from './Visualization';
 export * from './VisualizationStep';
+export { MetadataToolbarItems } from './metadata/MetadataToolbarItems';

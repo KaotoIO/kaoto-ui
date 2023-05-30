@@ -238,6 +238,39 @@ export async function fetchIntegrationSourceCode(flowsWrapper: IFlowsWrapper, na
   }
 }
 
+/**
+ * @todo Fetch this from backend
+ * @param dsl
+ */
+export async function fetchMetadataSchema(dsl: string): Promise<{ [key: string]: any }> {
+  if (['Kamelet', 'Camel Route', 'Integration'].includes(dsl)) {
+    return Promise.resolve({
+      beans: {
+        title: 'Beans',
+        description: 'Beans Configuration',
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            name: {
+              type: 'string',
+            },
+            type: {
+              type: 'string',
+            },
+            properties: {
+              type: 'object',
+            },
+          },
+          required: ['name', 'type'],
+        },
+      },
+    });
+  }
+  return Promise.resolve({});
+}
+
 export async function fetchStepDetails(id?: string, namespace?: string) {
   try {
     const resp = await RequestService.get({
