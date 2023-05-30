@@ -83,7 +83,7 @@
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^2.2.3",
     "@babel/core": "^7.22.1",
-    "@babel/preset-env": "^7.21.5",
+    "@babel/preset-env": "^7.22.4",
     "@babel/preset-react": "^7.22.3",
     "@babel/preset-typescript": "^7.21.5",
     "@module-federation/typescript": "^2.3.0",
