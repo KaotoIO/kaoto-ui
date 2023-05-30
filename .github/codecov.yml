@@ -8,3 +8,7 @@ coverage:
         base: auto
 ignore:
   - "**/*.stories.tsx"
+  - "**/*.(test|stories).{ts,tsx}"
+  - "**/index.ts"
+  - "**/store/data/**"
+  - "**/stubs/**"
