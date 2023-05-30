@@ -145,7 +145,7 @@
     "react-refresh": "^0.14.0",
     "rimraf": "5.0.1",
     "source-map-loader": "4.0.1",
-    "storybook": "^7.0.17",
+    "storybook": "^7.0.18",
     "style-loader": "3.3.3",
     "tar-webpack-plugin": "^0.1.1",
     "ts-jest": "29.1.0",
