@@ -6,6 +6,7 @@ coverage:
         target: auto
         threshold: 0.5%
         base: auto
+        removed_code_behavior: adjust_base
 ignore:
   - "**/*.stories.tsx"
   - "**/*.(test|stories).{ts,tsx}"
