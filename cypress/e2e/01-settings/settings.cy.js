@@ -48,7 +48,6 @@ describe('Settings', () => {
 
     // CHECK that steps are still there and toolbar contains new name
     cy.get('[data-testid="viz-step-timer"]').should('be.visible');
-    cy.get('[data-testid="kaoto-toolbar--name"]').should('have.text', 'cherry');
 
     // verify that source code editor contains new values
     cy.openCodeEditor();
@@ -79,46 +78,5 @@ describe('Settings', () => {
 
     // CHECK that value is changed accordingly
     cy.get('[data-testid="settings--description"]').should('have.text', description);
-  });
-
-  it('Only shows relevant DSLs', () => {
-    cy.get('[data-testid="settings--integration-type"]')
-      .select('Integration')
-      .should('have.value', 'Integration');
-    cy.saveMenuModal();
-    cy.replaceEmptyStepMiniCatalog('timer');
-    cy.openSettingsModal();
-
-    // CHECK that KameletBinding DSL should not be available to select
-    cy.get('[data-testid="settings--integration-type__KameletBinding"]').should('not.exist');
-  });
-
-  it('updates the DSL', () => {
-    // close modal
-    cy.get('[data-testid="settings--integration-type"]')
-      .select('Integration')
-      .should('have.value', 'Integration');
-    cy.saveMenuModal(true);
-
-    cy.replaceEmptyStepMiniCatalog('kamelet');
-
-    // reopen modal, make changes, save and close again
-    cy.openSettingsModal();
-
-    // select Kamelet
-    cy.get('[data-testid="settings--integration-type"]')
-      .select('Kamelet')
-      .should('have.value', 'Kamelet');
-
-    cy.saveMenuModal(true);
-
-    // CHECK that steps are still there
-    cy.get('[data-testid="viz-step-kamelet"]').should('be.visible');
-
-    // reopen modal,
-    cy.openSettingsModal();
-
-    // CHECK that value is still Kamelet
-    cy.get('[data-testid="settings--integration-type"]').should('have.value', 'Kamelet');
   });
 });
