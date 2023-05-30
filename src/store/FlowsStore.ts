@@ -42,6 +42,8 @@ export interface IFlowsStore extends IFlowsStoreData {
   addNewFlow: (dsl: string, flowId?: string) => void;
   deleteFlow: (flowId: string) => void;
   deleteAllFlows: () => void;
+
+  setMetadata: (name: string, metadata: any) => void;
 }
 
 const getInitialState = (previousState: Partial<IFlowsStoreData> = {}): IFlowsStoreData => {
@@ -183,6 +185,13 @@ export const useFlowsStore = create<IFlowsStore>()(
         set((state) => getInitialState({ ...state, flows: [] }));
         VisualizationService.removeAllVisibleFlows();
       },
+
+      setMetadata: (name, metadata) =>
+        set((state) => {
+          const newMetadata = state.metadata;
+          newMetadata[name] = metadata;
+          return { ...state, metadata: newMetadata };
+        }),
     }),
     {
       partialize: (state) => {

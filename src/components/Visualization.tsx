@@ -101,7 +101,7 @@ const Visualization = () => {
     } else {
       fetchTheSourceCode({ flows, properties, metadata }, settings);
     }
-  }, [flows, properties]);
+  }, [flows, properties, metadata]);
 
   const fetchTheSourceCode = (currentFlowsWrapper: IFlowsWrapper, settings: ISettings) => {
     const updatedFlowWrapper = {

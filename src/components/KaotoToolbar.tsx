@@ -7,6 +7,7 @@ import { DeploymentsModal } from './DeploymentsModal';
 import { ExportCanvasToPng } from './ExportCanvasToPng';
 import { FlowsMenu } from './Flows/FlowsMenu';
 import { SettingsModal } from './SettingsModal';
+import { MetadataToolbarItems } from './metadata/MetadataToolbarItems';
 import { fetchDefaultNamespace, startDeployment } from '@kaoto/api';
 import { LOCAL_STORAGE_UI_THEME_KEY, THEME_DARK_CLASS } from '@kaoto/constants';
 import {
@@ -322,6 +323,10 @@ export const KaotoToolbar = ({
           <ToolbarItem>
             <FlowsMenu />
           </ToolbarItem>
+
+          <ToolbarItem variant="separator" />
+
+          <MetadataToolbarItems />
 
           <ToolbarItem variant="separator" />
 

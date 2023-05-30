@@ -1,0 +1,9 @@
+.metadataEditorModal {
+    --pf-c-modal-box--ZIndex: 500;
+    --pf-c-modal-box--Height: 90vh;
+    --pf-c-modal-box--Width: 90vw;
+    --pf-c-modal-box__body--MinHeight: 90vh;
+    --pf-c-modal-box__body--MaxHeight: 90vh;
+    --pf-c-modal-box__body--MinWidth: 90vw;
+    --pf-c-modal-box__body--MaxWidth: 90vw;
+}
