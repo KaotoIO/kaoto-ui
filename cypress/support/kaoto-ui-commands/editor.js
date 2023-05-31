@@ -51,6 +51,7 @@ Cypress.Commands.add('editorClickUndoXTimes', (times) => {
 
 Cypress.Commands.add('syncUpCodeChanges', () => {
     cy.get('[data-testid="sourceCode--applyButton"]').click();
+    cy.get('[data-testid="sourceCode--applyButton"]').trigger('mouseleave');
     cy.wait('@getIntegration');
     cy.wait('@getViewDefinitions');
 });
