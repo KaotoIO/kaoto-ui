@@ -56,6 +56,12 @@ Cypress.Commands.add('syncUpCodeChanges', () => {
     cy.wait('@getViewDefinitions');
 });
 
+Cypress.Commands.add('waitAndsyncUpCodeChanges', () => {
+    cy.wait('@getIntegration');
+    cy.wait('@getViewDefinitions');
+    cy.syncUpCodeChanges();
+});
+
 Cypress.Commands.add('checkCodeSpanLine', (spanText, linesCount) => {
     linesCount = linesCount ?? 1;
     cy.get('.code-editor')

@@ -3,7 +3,7 @@ describe('Test for Branching actions from the canvas', () => {
         cy.intercept('/v1/deployments*').as('getDeployments');
         cy.intercept('/v1/integrations/dsls').as('getDSLs');
         cy.intercept('/v1/view-definitions').as('getViewDefinitions');
-        cy.intercept('/v2/integrations*').as('getIntegration');
+        cy.intercept('POST', '/v2/integrations*').as('getIntegration');
 
         cy.openHomePage();
         cy.uploadFixture('EipAction.yaml');
@@ -30,7 +30,7 @@ describe('Test for Branching actions from the canvas', () => {
         cy.get('[data-testid="viz-step-slot"]').should('have.length', 1);
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-slot');
 
-        cy.syncUpCodeChanges()
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK after Sync your code button click
         cy.get('[data-testid="viz-step-choice"]').should('have.length', 2);
@@ -46,7 +46,7 @@ describe('Test for Branching actions from the canvas', () => {
         cy.get('.stepNode').eq(11).should('have.attr', 'data-testid', 'viz-step-kamelet:sink');
         cy.get('.code-editor').should('not.contain.text', '{{?bar}}')
 
-        cy.syncUpCodeChanges()
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK after Sync your code button click
         cy.get('[data-testid="viz-step-marshal"]').should('not.exist');
@@ -90,7 +90,7 @@ describe('Test for Branching actions from the canvas', () => {
         cy.get('.stepNode').eq(6).should('have.attr', 'data-testid', 'viz-step-activemq');
         cy.get('[data-testid="viz-step-activemq"]').should('be.visible');
 
-        cy.syncUpCodeChanges()
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK after Sync your code button click
         cy.get('.stepNode').eq(4).should('have.attr', 'data-testid', 'viz-step-digitalocean');
@@ -108,7 +108,7 @@ describe('Test for Branching actions from the canvas', () => {
         cy.get('.stepNode').eq(6).should('have.attr', 'data-testid', 'viz-step-set-header');
         cy.get('[data-testid="viz-step-activemq"]').should('be.visible');
 
-        cy.syncUpCodeChanges()
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK after Sync your code button click
         cy.get('.stepNode').eq(4).should('have.attr', 'data-testid', 'viz-step-activemq');
@@ -129,7 +129,7 @@ describe('Test for Branching actions from the canvas', () => {
         cy.get('.stepNode').eq(13).should('have.attr', 'data-testid', 'viz-step-filter');
         cy.get('[data-testid="viz-step-activemq"]').should('be.visible');
 
-        cy.syncUpCodeChanges()
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK after Sync your code button click
         cy.get('.stepNode').eq(5).should('have.attr', 'data-testid', 'viz-step-set-header');

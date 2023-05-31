@@ -3,7 +3,7 @@ describe('Test for Step actions from the canvas', () => {
         cy.intercept('/v1/deployments*').as('getDeployments');
         cy.intercept('/v1/integrations/dsls').as('getDSLs');
         cy.intercept('/v1/view-definitions').as('getViewDefinitions');
-        cy.intercept('/v2/integrations*').as('getIntegration');
+        cy.intercept('POST', '/v2/integrations*').as('getIntegration');
 
         cy.openHomePage();
         cy.uploadFixture('TimerLogCamelRoute.yaml');
@@ -50,7 +50,7 @@ describe('Test for Step actions from the canvas', () => {
         // CHECK that YAML not contains the 'timer:null'
         cy.get('.code-editor').should('not.contain.text', 'timer:null');
 
-        cy.syncUpCodeChanges();
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK that the step is deleted
         cy.get('[data-testid="viz-step-timer"]').should('not.exist');
@@ -78,7 +78,7 @@ describe('Test for Step actions from the canvas', () => {
         // CHECK that YAML not contains the 'timer:null'
         cy.get('.code-editor').should('not.contain.text', 'timer:null');
 
-        cy.syncUpCodeChanges();
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK that the step is deleted
         cy.get('[data-testid="viz-step-timer"]').should('not.exist');
@@ -107,7 +107,7 @@ describe('Test for Step actions from the canvas', () => {
         // CHECK that YAML not contains the 'timer:null'
         cy.get('.code-editor').should('not.contain.text', 'timer:null');
 
-        cy.syncUpCodeChanges();
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK that the step is deleted
         cy.get('[data-testid="viz-step-timer"]').should('not.exist');
@@ -123,7 +123,9 @@ describe('Test for Step actions from the canvas', () => {
 
     it('User appends a step(+ button to the right of the node)', () => {
         cy.deleteStep('log');
+        //Wait for backend sync
         cy.appendStepMiniCatalog('timer', 'aggregate');
+        //Wait for backend sync
         cy.appendStepMiniCatalog('aggregate', 'log', 'end');
 
         // CHECK that stepNodes are in the correct order
@@ -134,7 +136,7 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').should('have.length', 3);
         // CHECK YAML contains the  'aggregate: {}'
         cy.checkCodeSpanLine('aggregate: {}');
-        cy.syncUpCodeChanges();
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK that stepNodes are in the correct order
         cy.get('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-timer');
@@ -172,9 +174,11 @@ describe('Test for Step actions from the canvas', () => {
 
         cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');
         cy.deleteStep('log');
+        //Wait for backend sync
         cy.get('[data-testid="kaoto-right-drawer"]').should('not.be.visible');
 
         cy.openStepConfigurationTab('timer');
+        //Wait for backend sync
         cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');
         cy.deleteStep('choice');
         cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');

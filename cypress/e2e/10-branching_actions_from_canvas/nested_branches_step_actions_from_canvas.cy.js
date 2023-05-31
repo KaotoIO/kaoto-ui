@@ -4,7 +4,7 @@ describe('User completes normal actions on steps in a branch', () => {
         cy.intercept('/v1/steps/id/*').as('getStepDetails');
         cy.intercept('/v1/integrations/dsls').as('getDSLs');
         cy.intercept('/v1/view-definitions').as('getViewDefinitions');
-        cy.intercept('/v2/integrations*').as('getIntegration');
+        cy.intercept('POST', '/v2/integrations*').as('getIntegration');
 
         cy.openHomePage();
         cy.uploadFixture('EipAction.yaml');
@@ -42,7 +42,7 @@ describe('User completes normal actions on steps in a branch', () => {
         cy.get('[data-testid="viz-step-amqp"]').should('not.exist');
         cy.get('[data-testid="viz-step-slot"]').should('have.length', 2).and('be.visible');
 
-        cy.syncUpCodeChanges();
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK that amqp step is deleted and empty step is added
         cy.get('[data-testid="viz-step-amqp"]').should('not.exist');
