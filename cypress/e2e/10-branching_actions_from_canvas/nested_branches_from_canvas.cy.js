@@ -3,7 +3,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
         cy.intercept('/v1/deployments*').as('getDeployments');
         cy.intercept('/v1/integrations/dsls').as('getDSLs');
         cy.intercept('/v1/view-definitions').as('getViewDefinitions');
-        cy.intercept('/v2/integrations*').as('getIntegration');
+        cy.intercept('POST', '/v2/integrations*').as('getIntegration');
 
         cy.openHomePage();
         cy.uploadFixture('EipAction.yaml');
@@ -69,7 +69,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-slot');
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-log');
 
-        cy.syncUpCodeChanges()
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK after Sync your code button click
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-slot');
@@ -94,7 +94,6 @@ describe('Test for Nested Branching actions from the canvas', () => {
         // CHECK test setup
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-amqp');
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-slot');
-
         cy.appendStepMiniCatalog('amqp', 'activemq');
 
         // CHECK that there are activemq->amqp in the nested branch and second branch step is slot
@@ -102,7 +101,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-activemq');
         cy.get('.stepNode').eq(11).should('have.attr', 'data-testid', 'viz-step-slot');
 
-        cy.syncUpCodeChanges()
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK after Sync your code button click
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-amqp');
@@ -127,8 +126,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
 
         // CHECK test setup
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-amqp');
-        cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-slot');
-
+        cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-slot');        
         cy.prependStepMiniCatalog('amqp', 'activemq');
 
         // CHECK that there are amqp->activemq in the nested branch and second branch step is slot
@@ -136,7 +134,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-amqp');
         cy.get('.stepNode').eq(11).should('have.attr', 'data-testid', 'viz-step-slot');
 
-        cy.syncUpCodeChanges()
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK after Sync your code button click
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-activemq');
@@ -160,7 +158,6 @@ describe('Test for Nested Branching actions from the canvas', () => {
         // CHECK test setup
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-slot');
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-slot');
-
         cy.prependStepMiniCatalog('log', 'activemq');
 
         // CHECK that the activemq step was prepended before filter and after all the branches ends
@@ -170,7 +167,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
         cy.get('.stepNode').eq(12).should('have.attr', 'data-testid', 'viz-step-log');
         cy.get('[data-testid="viz-step-activemq"]').should('be.visible');
 
-        cy.syncUpCodeChanges()
+        cy.waitAndsyncUpCodeChanges()
 
         // CHECK after Sync your code button click
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-slot');

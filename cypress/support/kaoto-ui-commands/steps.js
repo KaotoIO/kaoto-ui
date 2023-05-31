@@ -48,6 +48,7 @@ Cypress.Commands.add('selectStepMiniCatalog', (step, stage) => {
     cy.get('[data-testid="miniCatalog"]').should('be.visible');
     cy.get('.pf-c-text-input-group__text-input').type(step);
     cy.get(`[data-testid="miniCatalog__stepItem--${step}"]`).first().click();
+    cy.waitVisualizationUpdate();
     cy.waitMiniCatalogItIsClosed();
 });
 
@@ -66,7 +67,6 @@ Cypress.Commands.add('deleteStep', (step, stepIndex) => {
         cy.get(`[data-testid="viz-step-${step}"]`).eq(stepIndex).trigger('mouseover').children('[data-testid="configurationTab__deleteBtn"]').click({ force: true });
 
         cy.waitVisualizationUpdate();
-
         /** Check whether the given step was removed */
         cy.get(`[data-testid="viz-step-${step}"]`).should('have.length.lessThan', previousStepsCount);
     });

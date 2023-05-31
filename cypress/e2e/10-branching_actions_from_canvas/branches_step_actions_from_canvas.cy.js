@@ -4,7 +4,7 @@ describe('User completes normal actions on steps in a branch', () => {
         cy.intercept('/v1/steps/id/*').as('getStepDetails');
         cy.intercept('/v1/integrations/dsls').as('getDSLs');
         cy.intercept('/v1/view-definitions').as('getViewDefinitions');
-        cy.intercept('/v2/integrations*').as('getIntegration');
+        cy.intercept('POST', '/v2/integrations*').as('getIntegration');
 
         cy.openHomePage();
         cy.uploadFixture('EipAction.yaml');
@@ -23,9 +23,9 @@ describe('User completes normal actions on steps in a branch', () => {
         cy.checkCodeSpanLine('oAuthToken: token');
     });
 
-    it(' User deletes a step in a branch', () => {
+    it('User deletes a step in a branch', () => {
         cy.deleteStep('digitalocean');
-        cy.syncUpCodeChanges();
+        cy.waitAndsyncUpCodeChanges();
 
         // CHECK that digitalocean step is deleted
         cy.get('[data-testid="viz-step-digitalocean"]').should('not.exist');
