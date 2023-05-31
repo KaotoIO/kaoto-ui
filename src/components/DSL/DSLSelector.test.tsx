@@ -30,13 +30,13 @@ describe('DSLSelector.tsx', () => {
   test('component renders', () => {
     const wrapper = render(<DSLSelector onSelect={onSelect} />);
 
-    const toggle = wrapper.queryByTestId('dsl-select');
+    const toggle = wrapper.queryByTestId('dsl-list-dropdown');
     expect(toggle).toBeInTheDocument();
   });
 
   test('should toggle list of DSLs', async () => {
     const wrapper = render(<DSLSelector onSelect={onSelect} />);
-    const toggle = await wrapper.findByTestId('dsl-select');
+    const toggle = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -56,7 +56,7 @@ describe('DSLSelector.tsx', () => {
 
   test('should show list of DSLs', async () => {
     const wrapper = render(<DSLSelector onSelect={onSelect} />);
-    const toggle = await wrapper.findByTestId('dsl-select');
+    const toggle = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -69,7 +69,7 @@ describe('DSLSelector.tsx', () => {
 
   test('should show selected value', async () => {
     const wrapper = render(<DSLSelector onSelect={onSelect} selectedDsl={dsl} />);
-    const toggle = await wrapper.findByTestId('dsl-select');
+    const toggle = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -94,7 +94,7 @@ describe('DSLSelector.tsx', () => {
 
   test('should not have anything selected if "isStatic=true"', async () => {
     const wrapper = render(<DSLSelector onSelect={onSelect} isStatic />);
-    const toggle = await wrapper.findByTestId('dsl-select');
+    const toggle = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -122,7 +122,7 @@ describe('DSLSelector.tsx', () => {
     const wrapper = render(
       <DSLSelector onSelect={onSelect} selectedDsl={capabilitiesStub.dsls[2]} />,
     );
-    const toggle = await wrapper.findByTestId('dsl-select');
+    const toggle = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -138,7 +138,7 @@ describe('DSLSelector.tsx', () => {
 
   test('should have selected the first DSL if selectedDsl is not provided', async () => {
     const wrapper = render(<DSLSelector onSelect={onSelect} />);
-    const toggle = await wrapper.findByTestId('dsl-select');
+    const toggle = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -154,7 +154,7 @@ describe('DSLSelector.tsx', () => {
 
   test('should close Select when pressing ESC', async () => {
     const wrapper = render(<DSLSelector onSelect={onSelect} />);
-    const toggle = await wrapper.findByTestId('dsl-select');
+    const toggle = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -179,7 +179,7 @@ describe('DSLSelector.tsx', () => {
 
   test('should call onSelect callback when provided', async () => {
     const wrapper = render(<DSLSelector onSelect={onSelect} isStatic />);
-    const toggle = await wrapper.findByTestId('dsl-select');
+    const toggle = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -199,7 +199,7 @@ describe('DSLSelector.tsx', () => {
 
   test('should not call onSelect spy when not provided', async () => {
     const wrapper = render(<DSLSelector onSelect={undefined} isStatic />);
-    const toggle = await wrapper.findByTestId('dsl-select');
+    const toggle = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -219,7 +219,7 @@ describe('DSLSelector.tsx', () => {
 
   test('should not call onSelect spy when the selected id does not exist', async () => {
     const wrapper = render(<DSLSelector onSelect={onSelect} isStatic />);
-    const toggle = await wrapper.findByTestId('dsl-select');
+    const toggle = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {

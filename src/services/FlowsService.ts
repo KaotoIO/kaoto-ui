@@ -14,7 +14,8 @@ export class FlowsService {
     flowId?: string,
     options?: { metadata: IIntegration['metadata'] },
   ): IIntegration {
-    const id = flowId ?? `${dsl}-${getRandomArbitraryNumber()}`;
+    const randomNumber = getRandomArbitraryNumber();
+    const id = flowId ?? `route-${randomNumber.toString(10).slice(0, 4)}`;
 
     return {
       id,

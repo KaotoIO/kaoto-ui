@@ -2,7 +2,7 @@ import branchSteps from '../store/data/branchSteps';
 import nodes from '../store/data/nodes';
 import steps from '../store/data/steps';
 import { VisualizationService } from './visualizationService';
-import { useVisualizationStore } from '@kaoto/store';
+import { useFlowsStore, useVisualizationStore } from '@kaoto/store';
 import {
   IStepProps,
   IStepPropsBranch,
@@ -16,7 +16,19 @@ import { Position } from 'reactflow';
 
 describe('visualizationService', () => {
   const groupWidth = 80;
-  const baseStep = { UUID: '', name: '', maxBranches: 0, minBranches: 0, type: '', integrationId: 'Camel Route-1' };
+  const baseStep = {
+    UUID: '',
+    name: '',
+    maxBranches: 0,
+    minBranches: 0,
+    type: '',
+    integrationId: 'Camel Route-1',
+  };
+  let service: VisualizationService;
+
+  beforeEach(() => {
+    service = new VisualizationService();
+  });
 
   it('buildBranchNodeParams(): should build params for a branch node', () => {
     const currentStep = steps[3];
@@ -70,7 +82,7 @@ describe('visualizationService', () => {
       const rootNode = { data: { step: {} } } as IVizStepNode;
       const rootNodeNext = { data: { step: {} } } as IVizStepNode;
       expect(
-        VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext)
+        VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext),
       ).toHaveLength(2);
     });
 
@@ -90,7 +102,12 @@ describe('visualizationService', () => {
       const rootNodeNext = { data: { step: {} } } as IVizStepNode;
 
       expect(
-        VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext, 'CUSTOM-NODE')
+        VisualizationService.buildBranchSingleStepEdges(
+          node,
+          rootNode,
+          rootNodeNext,
+          'CUSTOM-NODE',
+        ),
       ).toHaveLength(2);
     });
 
@@ -113,8 +130,119 @@ describe('visualizationService', () => {
       const rootNodeNext = { data: { step: {} } } as IVizStepNode;
 
       expect(
-        VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext)
+        VisualizationService.buildBranchSingleStepEdges(node, rootNode, rootNodeNext),
       ).toHaveLength(2);
+    });
+  });
+
+  describe('redrawDiagram', () => {
+    it('should process only visible flows', async () => {
+      useFlowsStore.getState().deleteAllFlows();
+      useFlowsStore.getState().addNewFlow('Integration', 'route-1234');
+      useFlowsStore.getState().addNewFlow('Integration', 'route-4321');
+
+      const getLayoutedElementsSpy = jest.spyOn(VisualizationService, 'getLayoutedElements');
+
+      await service.redrawDiagram(jest.fn());
+
+      expect(getLayoutedElementsSpy).toHaveBeenCalledTimes(1);
+      expect(getLayoutedElementsSpy).toHaveBeenCalledWith(
+        [
+          expect.objectContaining({
+            data: {
+              isPlaceholder: true,
+              label: 'ADD A STEP',
+              nextStepUuid: undefined,
+              step: {
+                UUID: expect.stringMatching(/placeholder-\d+/),
+                integrationId: 'route-4321',
+                name: '',
+                type: 'START',
+              },
+            },
+            draggable: false,
+            height: 80,
+            id: expect.stringMatching(/node_0--\d+/),
+            position: {
+              x: 0,
+              y: 0,
+            },
+            sourcePosition: 'right',
+            targetPosition: 'left',
+            type: 'step',
+            width: 80,
+          }),
+        ],
+        [],
+        'LR',
+      );
+    });
+
+    it('should process more than one visible flow', async () => {
+      useFlowsStore.getState().deleteAllFlows();
+      useFlowsStore.getState().addNewFlow('Integration', 'route-1234');
+      useFlowsStore.getState().addNewFlow('Integration', 'route-4321');
+      useVisualizationStore.getState().showAllFlows();
+
+      const getLayoutedElementsSpy = jest.spyOn(VisualizationService, 'getLayoutedElements');
+
+      await service.redrawDiagram(jest.fn());
+
+      expect(getLayoutedElementsSpy).toHaveBeenCalledTimes(1);
+      expect(getLayoutedElementsSpy).toHaveBeenCalledWith(
+        [
+          expect.objectContaining({
+            data: {
+              isPlaceholder: true,
+              label: 'ADD A STEP',
+              nextStepUuid: undefined,
+              step: {
+                UUID: expect.stringMatching(/placeholder-\d+/),
+                integrationId: 'route-1234',
+                name: '',
+                type: 'START',
+              },
+            },
+            draggable: false,
+            height: 80,
+            id: expect.stringMatching(/node_0--\d+/),
+            position: {
+              x: 0,
+              y: 0,
+            },
+            sourcePosition: 'right',
+            targetPosition: 'left',
+            type: 'step',
+            width: 80,
+          }),
+          expect.objectContaining({
+            data: {
+              isPlaceholder: true,
+              label: 'ADD A STEP',
+              nextStepUuid: undefined,
+              step: {
+                UUID: expect.stringMatching(/placeholder-\d+/),
+                integrationId: 'route-4321',
+                name: '',
+                type: 'START',
+              },
+            },
+            draggable: false,
+            height: 80,
+            id: expect.stringMatching(/node_0--\d+/),
+            position: {
+              x: 0,
+              y: expect.any(Number),
+            },
+            sourcePosition: 'right',
+            targetPosition: 'left',
+            type: 'step',
+            width: 80,
+          }),
+        ],
+        [],
+        'LR',
+      );
     });
   });
 
@@ -137,7 +265,10 @@ describe('visualizationService', () => {
         position: { x: 720, y: 250 },
       },
       {
-        data: { label: 'avro-deserialize-sink', step: { ...baseStep, UUID: 'example-1235', integrationId: 'Camel Route-1' } },
+        data: {
+          label: 'avro-deserialize-sink',
+          step: { ...baseStep, UUID: 'example-1235', integrationId: 'Camel Route-1' },
+        },
         id: 'dndnode_2',
         position: { x: 880, y: 250 },
       },
@@ -146,7 +277,11 @@ describe('visualizationService', () => {
     expect(VisualizationService.buildEdges(nodes)).toHaveLength(1);
 
     // let's test that it works for branching too
-    const stepNodes = VisualizationService.buildNodesFromSteps('Camel Route-1', branchSteps, 'RIGHT');
+    const stepNodes = VisualizationService.buildNodesFromSteps(
+      'Camel Route-1',
+      branchSteps,
+      'RIGHT',
+    );
 
     expect(VisualizationService.buildEdges(stepNodes)).toHaveLength(branchSteps.length - 1);
   });
@@ -184,7 +319,11 @@ describe('visualizationService', () => {
   });
 
   it.skip('buildNodesFromSteps(): should build visualization nodes from an array of steps with branches', () => {
-    const stepNodes = VisualizationService.buildNodesFromSteps('Camel Route-1', branchSteps, 'RIGHT');
+    const stepNodes = VisualizationService.buildNodesFromSteps(
+      'Camel Route-1',
+      branchSteps,
+      'RIGHT',
+    );
     expect(stepNodes[0].data.step.UUID).toBeDefined();
     expect(stepNodes).toHaveLength(branchSteps.length);
   });
@@ -221,7 +360,7 @@ describe('visualizationService', () => {
           id: 'dndnode_2',
           position: { x: 660, y: 250 },
         },
-      ])
+      ]),
     ).toBe(false);
   });
 
@@ -386,19 +525,21 @@ describe('visualizationService', () => {
     const something = 'something';
     const nothing = undefined;
     expect(VisualizationService.getNodeClass('example', 'example', ' stepNode__Hover')).toEqual(
-      ' stepNode__Hover'
+      ' stepNode__Hover',
     );
     expect(
-      VisualizationService.getNodeClass(something, nothing ?? 'example', ' stepNode__Hover')
+      VisualizationService.getNodeClass(something, nothing ?? 'example', ' stepNode__Hover'),
     ).toEqual('');
     expect(
-      VisualizationService.getNodeClass(something, nothing ?? something, ' stepNode__Hover')
+      VisualizationService.getNodeClass(something, nothing ?? something, ' stepNode__Hover'),
     ).toEqual(' stepNode__Hover');
   });
 
   it('insertAddStepPlaceholder(): should add an ADD STEP placeholder to the beginning of the array', () => {
     const nodes: IVizStepNode[] = [];
-    VisualizationService.insertAddStepPlaceholder('Camel Route-1', nodes, '', 'START', { nextStepUuid: '' });
+    VisualizationService.insertAddStepPlaceholder('Camel Route-1', nodes, '', 'START', {
+      nextStepUuid: '',
+    });
     expect(nodes).toHaveLength(1);
   });
 
@@ -417,7 +558,7 @@ describe('visualizationService', () => {
         branchInfo: {} as IVizStepNodeDataBranch,
         nextStepUuid: 'some-next-step',
         previousStepUuid: 'some-previous-step',
-      })
+      }),
     ).toBeFalsy();
   });
 
@@ -525,8 +666,8 @@ describe('visualizationService', () => {
           ...lastStepWithBranch,
           isLastStep: false,
         },
-        false
-      )
+        false,
+      ),
     ).toBeTruthy();
 
     // a trick step at the end of an array, an END step, with a branches array but no min/max branching.
@@ -534,8 +675,8 @@ describe('visualizationService', () => {
     expect(
       VisualizationService.showAppendStepButton(
         { isLastStep: true, step: { branches: [{}] as IStepPropsBranch[] } } as IVizStepNodeData,
-        true
-      )
+        true,
+      ),
     ).toBeFalsy();
   });
 
@@ -548,7 +689,7 @@ describe('visualizationService', () => {
       VisualizationService.showBranchesTab({
         ...step,
         branches: [],
-      })
+      }),
     ).toBeFalsy();
 
     expect(
@@ -557,7 +698,7 @@ describe('visualizationService', () => {
         branches: [],
         minBranches: 0,
         maxBranches: -1,
-      })
+      }),
     ).toBeTruthy();
 
     // if step has maximum number of branches already
@@ -567,7 +708,7 @@ describe('visualizationService', () => {
         branches: [{}, {}] as IStepPropsBranch[],
         minBranches: 0,
         maxBranches: 2,
-      })
+      }),
     ).toBeFalsy();
   });
 
@@ -601,7 +742,7 @@ describe('visualizationService', () => {
 
     // is a first step, is an end step
     expect(
-      visualizationService.showPrependStepButton({ ...node, step: { ...node.step, type: 'END' } })
+      visualizationService.showPrependStepButton({ ...node, step: { ...node.step, type: 'END' } }),
     ).toBeFalsy();
 
     // is a first step, is not an end step
@@ -609,7 +750,7 @@ describe('visualizationService', () => {
       visualizationService.showPrependStepButton({
         ...node,
         step: { ...node.step, type: 'MIDDLE' },
-      })
+      }),
     ).toBeTruthy();
 
     // is not a first step, is not an end step
@@ -618,7 +759,7 @@ describe('visualizationService', () => {
         ...node,
         step: { ...node.step, type: 'MIDDLE' },
         isFirstStep: false,
-      })
+      }),
     ).toBeFalsy();
 
     // is not a first step, is an end step
@@ -627,7 +768,7 @@ describe('visualizationService', () => {
         ...node,
         step: { ...node.step, type: 'END' },
         isFirstStep: false,
-      })
+      }),
     ).toBeFalsy();
 
     // current step is NOT an end step, but its previous step contains a branch
@@ -637,7 +778,7 @@ describe('visualizationService', () => {
         isFirstStep: false,
         previousStepUuid: 'step-one',
         step: { ...node.step, type: 'MIDDLE' } as IStepProps,
-      })
+      }),
     ).toBeTruthy();
   });
 
@@ -655,7 +796,7 @@ describe('visualizationService', () => {
       VisualizationService.showStepsTab({
         ...step,
         step: { ...step.step, branches: [{} as IStepPropsBranch] },
-      })
+      }),
     ).toBeTruthy();
 
     // contains branches, has a next step, should not show steps tab
@@ -664,7 +805,91 @@ describe('visualizationService', () => {
         ...step,
         step: { ...step.step, branches: [{} as IStepPropsBranch] },
         nextStepUuid: 'some-dummy-node-uuid',
-      })
+      }),
     ).toBeFalsy();
+  });
+
+  it('should allow consumers to get a static empty step', () => {
+    const result = VisualizationService.getEmptySelectedStep();
+
+    expect(result).toEqual({
+      maxBranches: 0,
+      minBranches: 0,
+      name: '',
+      type: '',
+      UUID: '',
+      integrationId: '',
+    });
+  });
+
+  describe('getVisibleFlowsInformation', () => {
+    it('should return the flow id for a single visible flow', () => {
+      const result = VisualizationService.getVisibleFlowsInformation({
+        'route-1234': true,
+        'route-4321': false,
+      });
+
+      expect(result).toMatchObject({
+        singleFlowId: 'route-1234',
+      });
+    });
+
+    it('should return undefined when there are more than one visible flow', () => {
+      const result = VisualizationService.getVisibleFlowsInformation({
+        'route-1234': true,
+        'route-4321': true,
+      });
+
+      expect(result).toMatchObject({
+        singleFlowId: undefined,
+      });
+    });
+
+    it('should return undefined when there is any visible flow', () => {
+      const result = VisualizationService.getVisibleFlowsInformation({
+        'route-1234': false,
+        'route-4321': false,
+      });
+
+      expect(result).toMatchObject({
+        singleFlowId: undefined,
+      });
+    });
+
+    it('should return the visible flows count - all flows visible', () => {
+      const result = VisualizationService.getVisibleFlowsInformation({
+        'route-1234': true,
+        'route-4321': true,
+      });
+
+      expect(result).toMatchObject({
+        currentVisible: 2,
+        flowsCount: 2,
+      });
+    });
+
+    it('should return the visible flows count - some flows visible', () => {
+      const result = VisualizationService.getVisibleFlowsInformation({
+        'route-1234': true,
+        'route-4321': false,
+      });
+
+      expect(result).toMatchObject({
+        currentVisible: 1,
+        flowsCount: 2,
+      });
+    });
+
+    it('should return the visible flows count - no flow visible', () => {
+      const result = VisualizationService.getVisibleFlowsInformation({
+        'route-1234': false,
+        'route-4321': false,
+      });
+
+      expect(result).toMatchObject({
+        currentVisible: 0,
+        flowsCount: 2,
+      });
+    });
   });
 });

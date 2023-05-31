@@ -1,7 +1,9 @@
 import { initialFlows, kameletSourceStepStub } from '../stubs';
 import { useFlowsStore } from './FlowsStore';
+import { useVisualizationStore } from './visualizationStore';
 import { StepsService } from '@kaoto/services';
 import { IFlowsWrapper, IViewProps } from '@kaoto/types';
+import { act, renderHook } from '@testing-library/react';
 
 describe('FlowsStoreFacade', () => {
   it('should start with a default value', () => {
@@ -10,7 +12,7 @@ describe('FlowsStoreFacade', () => {
     expect(initialState).toMatchObject({
       flows: [
         {
-          id: /Camel Route-[0-9]*/,
+          id: /Camel Route-\d*/,
           dsl: 'Camel Route',
           description: '',
           metadata: {},
@@ -31,7 +33,7 @@ describe('FlowsStoreFacade', () => {
       {
         description: '',
         dsl: 'Camel Route',
-        id: /Camel Route-[0-9]*/,
+        id: /Camel Route-\d*/,
         metadata: {
           name: 'integration',
           namespace: '',
@@ -42,7 +44,7 @@ describe('FlowsStoreFacade', () => {
       {
         description: '',
         dsl: 'Integration',
-        id: /Integration-[0-9]*/,
+        id: /Integration-\d*/,
         metadata: {},
         params: [],
         steps: [],
@@ -57,7 +59,7 @@ describe('FlowsStoreFacade', () => {
       {
         description: '',
         dsl: 'Camel Route',
-        id: /Camel Route-[0-9]*/,
+        id: /Camel Route-\d*/,
         metadata: {
           name: 'integration',
           namespace: '',
@@ -74,6 +76,24 @@ describe('FlowsStoreFacade', () => {
         steps: [],
       },
     ]);
+  });
+
+  it('should hide previous flows and only show the newly created one', () => {
+    const { result: visualizationStoreRef } = renderHook(() => useVisualizationStore());
+    const { result: flowsStoreRef } = renderHook(() => useFlowsStore());
+
+    act(() => {
+      flowsStoreRef.current.deleteAllFlows();
+      flowsStoreRef.current.addNewFlow('Integration', 'route-1234');
+      flowsStoreRef.current.addNewFlow('Integration', 'route-4321');
+    });
+
+    expect(flowsStoreRef.current.flows).toHaveLength(2);
+
+    expect(visualizationStoreRef.current.visibleFlows).toEqual({
+      'route-1234': false,
+      'route-4321': true,
+    });
   });
 
   it('should allow consumers to update views', () => {
@@ -99,8 +119,8 @@ describe('FlowsStoreFacade', () => {
     expect(extractNestedStepsSpy).toHaveBeenCalledWith([
       {
         ...kameletSourceStepStub,
-        UUID: 'Camel Route-0_timer-source-0',
-        integrationId: 'Camel Route-0',
+        UUID: 'Camel Route-1_timer-source-0',
+        integrationId: 'Camel Route-1',
       },
     ]);
   });
@@ -115,7 +135,7 @@ describe('FlowsStoreFacade', () => {
     expect(useFlowsStore.getState().flows).toMatchObject([
       {
         dsl: 'Camel Route',
-        id: 'Camel Route-0',
+        id: 'Camel Route-1',
         metadata: {
           name: 'integration',
           namespace: '',
@@ -123,13 +143,13 @@ describe('FlowsStoreFacade', () => {
         params: [],
         steps: [
           {
-            UUID: 'Camel Route-0_timer-source-0',
+            UUID: 'Camel Route-1_timer-source-0',
             branches: [],
             description: 'Produces periodic messages with a custom payload.',
             group: 'Timer',
             icon: 'data:image/svg+xml;base64,',
             id: 'timer-source',
-            integrationId: 'Camel Route-0',
+            integrationId: 'Camel Route-1',
             kind: 'Kamelet',
             maxBranches: 1,
             minBranches: 0,
@@ -144,9 +164,26 @@ describe('FlowsStoreFacade', () => {
     ]);
   });
 
+  it('should allow consumers to delete a flow', () => {
+    useFlowsStore.getState().deleteAllFlows();
+    useFlowsStore.getState().addNewFlow('Integration', 'route-1234');
+
+    useFlowsStore.getState().deleteFlow('route-1234');
+
+    expect(useFlowsStore.getState().flows).toHaveLength(0);
+  });
+
   it('should allow consumers to delete all flows', () => {
     useFlowsStore.getState().deleteAllFlows();
 
     expect(useFlowsStore.getState().flows).toHaveLength(0);
+  });
+
+  it('should clean useVisualizationStore.visibleFlows after deleting all flows', () => {
+    useFlowsStore.getState().addNewFlow('Integration');
+    useFlowsStore.getState().deleteAllFlows();
+
+    expect(useFlowsStore.getState().flows).toHaveLength(0);
+    expect(useVisualizationStore.getState().visibleFlows).toEqual({});
   });
 });

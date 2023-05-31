@@ -1,14 +1,13 @@
 import logo from '../assets/images/logo-kaoto-dark.png';
 import { AboutModal } from './AboutModal';
+import { AppearanceModal } from './AppearanceModal';
+import { ConfirmationModal } from './ConfirmationModal';
 import { NewFlow } from './DSL/NewFlow';
+import { DeploymentsModal } from './DeploymentsModal';
 import { ExportCanvasToPng } from './ExportCanvasToPng';
+import { FlowsMenu } from './Flows/FlowsMenu';
+import { SettingsModal } from './SettingsModal';
 import { fetchDefaultNamespace, startDeployment } from '@kaoto/api';
-import {
-  AppearanceModal,
-  ConfirmationModal,
-  DeploymentsModal,
-  SettingsModal,
-} from '@kaoto/components';
 import { LOCAL_STORAGE_UI_THEME_KEY, THEME_DARK_CLASS } from '@kaoto/constants';
 import {
   useDeploymentStore,
@@ -317,6 +316,11 @@ export const KaotoToolbar = ({
           {/* NEW FLOW DROPDOWN BUTTON */}
           <ToolbarItem>
             <NewFlow />
+          </ToolbarItem>
+
+          {/* FLOWS LIST DROPDOWN BUTTON */}
+          <ToolbarItem>
+            <FlowsMenu />
           </ToolbarItem>
 
           <ToolbarItem variant="separator" />
