@@ -1,13 +1,11 @@
+import { DeleteButtonEdge } from './DeleteButtonEdge';
+import { KaotoDrawer } from './KaotoDrawer';
+import { PlusButtonEdge } from './PlusButtonEdge';
+import { StepErrorBoundary } from './StepErrorBoundary';
 import './Visualization.css';
-import {
-  DeleteButtonEdge,
-  KaotoDrawer,
-  PlusButtonEdge,
-  StepErrorBoundary,
-  VisualizationControls,
-  VisualizationStep,
-  VisualizationStepViews,
-} from '@kaoto/components';
+import { VisualizationControls } from './VisualizationControls';
+import { VisualizationStep } from './VisualizationStep';
+import { VisualizationStepViews } from './VisualizationStepViews';
 import { StepsService, VisualizationService } from '@kaoto/services';
 import { useFlowsStore, useVisualizationStore } from '@kaoto/store';
 import { HandleDeleteStepFn, IStepProps, IVizStepNode } from '@kaoto/types';
@@ -26,18 +24,21 @@ const Visualization = () => {
     zoom: 1.2,
   });
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
-  const [selectedStep, setSelectedStep] = useState<IStepProps>({
-    maxBranches: 0,
-    minBranches: 0,
-    name: '',
-    type: '',
-    UUID: '',
-    integrationId: '',
-  });
-
-  const { selectedStepUuid, setSelectedStepUuid } = useVisualizationStore(({ selectedStepUuid, setSelectedStepUuid }) => ({ selectedStepUuid, setSelectedStepUuid }), shallow);
-  const { onNodesChange, onEdgesChange } = useVisualizationStore(({ onNodesChange, onEdgesChange }) => ({ onNodesChange, onEdgesChange }), shallow);
-  const layout = useVisualizationStore((state) => state.layout);
+  const [selectedStep, setSelectedStep] = useState<IStepProps>(
+    VisualizationService.getEmptySelectedStep(),
+  );
+  const { selectedStepUuid, setSelectedStepUuid } = useVisualizationStore(
+    ({ selectedStepUuid, setSelectedStepUuid }) => ({ selectedStepUuid, setSelectedStepUuid }),
+    shallow,
+  );
+  const { onNodesChange, onEdgesChange } = useVisualizationStore(
+    ({ onNodesChange, onEdgesChange }) => ({ onNodesChange, onEdgesChange }),
+    shallow,
+  );
+  const { layout, visibleFlows } = useVisualizationStore(({ layout, visibleFlows }) => ({
+    layout,
+    visibleFlows,
+  }));
   const nodes = useVisualizationStore((state) => state.nodes);
   const edges = useVisualizationStore((state) => state.edges);
   const flows = useFlowsStore((state) => state.flows);
@@ -65,27 +66,30 @@ const Visualization = () => {
     if (step) {
       setSelectedStep(step);
     } else {
-      setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '', integrationId: '' });
+      setSelectedStep(VisualizationService.getEmptySelectedStep());
       setSelectedStepUuid('');
       setIsPanelExpanded(false);
     }
   }, [flows, selectedStep.integrationId, selectedStepUuid, setSelectedStepUuid, stepsService]);
 
-  const handleDeleteStep: HandleDeleteStepFn = useCallback((integrationId, UUID) => {
-    if (!integrationId || !UUID) return;
+  const handleDeleteStep: HandleDeleteStepFn = useCallback(
+    (integrationId, UUID) => {
+      if (!integrationId || !UUID) return;
 
-    if (selectedStepUuid === UUID) {
-      setIsPanelExpanded(false);
-      setSelectedStep({ maxBranches: 0, minBranches: 0, name: '', type: '', UUID: '', integrationId: '' });
-      setSelectedStepUuid('');
-    }
+      if (selectedStepUuid === UUID) {
+        setIsPanelExpanded(false);
+        setSelectedStep(VisualizationService.getEmptySelectedStep());
+        setSelectedStepUuid('');
+      }
 
-    stepsService.deleteStep(integrationId, UUID);
-  }, [selectedStepUuid, setSelectedStepUuid, stepsService]);
+      stepsService.deleteStep(integrationId, UUID);
+    },
+    [selectedStepUuid, setSelectedStepUuid, stepsService],
+  );
 
   useEffect(() => {
-    visualizationService.redrawDiagram(handleDeleteStep, true).catch((e) => console.error(e));
-  }, [handleDeleteStep, flows, layout, visualizationService]);
+    visualizationService.redrawDiagram(handleDeleteStep).catch((e) => console.error(e));
+  }, [handleDeleteStep, flows, layout, visibleFlows, visualizationService]);
 
   const nodeTypes = useMemo(() => ({ step: VisualizationStep }), []);
   const edgeTypes = useMemo(
@@ -93,7 +97,7 @@ const Visualization = () => {
       delete: DeleteButtonEdge,
       insert: PlusButtonEdge,
     }),
-    []
+    [],
   );
 
   const onClosePanelClick = useCallback(() => {
@@ -125,7 +129,10 @@ const Visualization = () => {
       if (!e.target.classList.contains('stepNode__clickable')) return;
 
       if (!node.data.isPlaceholder) {
-        const step = stepsService.findStepWithUUID(node.data.step.integrationId, node.data.step.UUID);
+        const step = stepsService.findStepWithUUID(
+          node.data.step.integrationId,
+          node.data.step.UUID,
+        );
         if (step) {
           setSelectedStep(step);
           setSelectedStepUuid(step.UUID);
@@ -143,7 +150,7 @@ const Visualization = () => {
         }
       }
     },
-    [isPanelExpanded, selectedStepUuid, setSelectedStepUuid, stepsService]
+    [isPanelExpanded, selectedStepUuid, setSelectedStepUuid, stepsService],
   );
 
   /**
@@ -151,9 +158,12 @@ const Visualization = () => {
    * @param step
    * @param newValues
    */
-  const saveConfig = useCallback((step: IStepProps, newValues: Record<string, unknown>) => {
-    stepsService.updateStepParameters(step, newValues);
-  }, [stepsService]);
+  const saveConfig = useCallback(
+    (step: IStepProps, newValues: Record<string, unknown>) => {
+      stepsService.updateStepParameters(step, newValues);
+    },
+    [stepsService],
+  );
 
   return (
     <StepErrorBoundary>

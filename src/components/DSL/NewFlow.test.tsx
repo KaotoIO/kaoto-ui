@@ -15,9 +15,22 @@ describe('NewFlow.tsx', () => {
     });
   });
 
+  test('should add a new flow with the same type upon clicking on the action button', async () => {
+    const wrapper = render(<NewFlow />)
+    const trigger = await wrapper.findByTestId('dsl-list-btn');
+
+    /** Open Select */
+    act(() => {
+      fireEvent.click(trigger);
+    });
+
+    expect(useFlowsStore.getState().flows).toHaveLength(1);
+    expect(useFlowsStore.getState().flows[0].dsl).toEqual('Integration');
+  });
+
   test('should add a new flow', async () => {
     const wrapper = render(<NewFlow />);
-    const trigger = await wrapper.findByText('New route');
+    const trigger = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -38,7 +51,7 @@ describe('NewFlow.tsx', () => {
     useFlowsStore.getState().addNewFlow('Integration');
 
     const wrapper = render(<NewFlow />);
-    const trigger = await wrapper.findByText('New route');
+    const trigger = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -59,7 +72,7 @@ describe('NewFlow.tsx', () => {
     useFlowsStore.getState().addNewFlow('Integration');
 
     const wrapper = render(<NewFlow />);
-    const trigger = await wrapper.findByText('New route');
+    const trigger = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -85,7 +98,7 @@ describe('NewFlow.tsx', () => {
     useFlowsStore.getState().addNewFlow('Integration');
 
     const wrapper = render(<NewFlow />);
-    const trigger = await wrapper.findByText('New route');
+    const trigger = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {
@@ -111,7 +124,7 @@ describe('NewFlow.tsx', () => {
     useFlowsStore.getState().addNewFlow('Integration');
 
     const wrapper = render(<NewFlow />);
-    const trigger = await wrapper.findByText('New route');
+    const trigger = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */
     act(() => {

@@ -42,5 +42,3 @@ export function Extension(props: Props) {
     </StepErrorBoundary>
   );
 }
-
-export default Extension;

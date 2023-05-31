@@ -1,5 +1,5 @@
 import { useVisualizationStore } from './visualizationStore';
-import { IStepProps } from '@kaoto/types';
+import { IStepProps, IVizStepPropsEdge } from '@kaoto/types';
 import { MarkerType } from '@reactflow/core';
 import { act, renderHook } from '@testing-library/react';
 
@@ -64,6 +64,19 @@ describe('visualizationStore', () => {
     expect(result.current.edges).toHaveLength(1);
   });
 
+  it('setEdges', () => {
+    const { result } = renderHook(() => useVisualizationStore());
+    expect(result.current.edges).toEqual([]);
+
+    act(() => {
+      result.current.setEdges([
+        { id: 'id-1234', source: 'step-1', target: 'step-3' },
+      ] as IVizStepPropsEdge[]);
+    });
+
+    expect(result.current.edges).toEqual([{ id: 'id-1234', source: 'step-1', target: 'step-3' }]);
+  });
+
   it('setHoverStepUuid', () => {
     const { result } = renderHook(() => useVisualizationStore());
     expect(result.current.hoverStepUuid).toBe('');
@@ -98,6 +111,17 @@ describe('visualizationStore', () => {
     expect(result.current.selectedStepUuid).toBe('jackfruit');
   });
 
+  it('setLayout', () => {
+    const { result } = renderHook(() => useVisualizationStore());
+    expect(result.current.layout).toBe('LR');
+
+    act(() => {
+      result.current.setLayout('TB');
+    });
+
+    expect(result.current.layout).toBe('TB');
+  });
+
   it('updateNode', () => {
     const { result } = renderHook(() => useVisualizationStore());
     act(() => {
@@ -111,11 +135,65 @@ describe('visualizationStore', () => {
           position: { x: 0, y: 0 },
           data: { label: '', step: {} as IStepProps },
         },
-        0
+        0,
       );
     });
 
     expect(result.current.nodes).toHaveLength(1);
     expect(result.current.nodes[0].id).toEqual('starfruit');
+  });
+
+  describe('Visibility handlers', () => {
+    beforeEach(() => {
+      useVisualizationStore.getState().toggleFlowVisible('route-1234', false);
+      useVisualizationStore.getState().toggleFlowVisible('route-4321', false);
+    });
+
+    it('should allow consumers to set the visibility of a given flow', () => {
+      useVisualizationStore.getState().toggleFlowVisible('route-1234', true);
+      const visibleFlows = useVisualizationStore.getState().visibleFlows;
+
+      expect(visibleFlows).toEqual({
+        'route-1234': true,
+        'route-4321': false,
+      });
+    });
+
+    it('should allow consumers to toggle the visibility of a given flow', () => {
+      useVisualizationStore.getState().toggleFlowVisible('route-1234');
+      const visibleFlows = useVisualizationStore.getState().visibleFlows;
+
+      expect(visibleFlows).toEqual({
+        'route-1234': true,
+        'route-4321': false,
+      });
+    });
+
+    it('should allow consumers show all flows', () => {
+      useVisualizationStore.getState().showAllFlows();
+      const visibleFlows = useVisualizationStore.getState().visibleFlows;
+
+      expect(visibleFlows).toEqual({
+        'route-1234': true,
+        'route-4321': true,
+      });
+    });
+
+    it('should allow consumers to hide all flows', () => {
+      useVisualizationStore.getState().hideAllFlows();
+      const visibleFlows = useVisualizationStore.getState().visibleFlows;
+
+      expect(visibleFlows).toEqual({
+        'route-1234': false,
+        'route-4321': false,
+      });
+    });
+
+    it('should allow consumers to clear all flows', () => {
+      useVisualizationStore.getState().setVisibleFlows({});
+      const visibleFlows = useVisualizationStore.getState().visibleFlows;
+
+      expect(visibleFlows).toEqual({});
+    });
   });
 });

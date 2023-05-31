@@ -1,5 +1,5 @@
 import { Catalog } from './Catalog';
-import KaotoDrawer from './KaotoDrawer';
+import { KaotoDrawer } from './KaotoDrawer';
 import { DrawerContentBody } from '@patternfly/react-core';
 import { StoryFn, Meta } from '@storybook/react';
 

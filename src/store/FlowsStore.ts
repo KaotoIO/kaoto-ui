@@ -1,5 +1,6 @@
 import { useNestedStepsStore } from './nestedStepsStore';
 import { initDsl, initialSettings } from './settingsStore';
+import { useVisualizationStore } from './visualizationStore';
 import { FlowsService, StepsService } from '@kaoto/services';
 import { IFlowsWrapper, IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { setDeepValue } from '@kaoto/utils';
@@ -38,17 +39,19 @@ export interface IFlowsStore extends IFlowsStoreData {
 
   /** General flow management */
   addNewFlow: (dsl: string, flowId?: string) => void;
+  deleteFlow: (flowId: string) => void;
   deleteAllFlows: () => void;
 }
 
 export const getInitialState = (previousState: Partial<IFlowsStoreData> = {}): IFlowsStoreData => {
+  const flow = FlowsService.getNewFlow(initDsl.name, undefined, {
+    metadata: { name: initialSettings.name, namespace: initialSettings.namespace },
+  });
+  useVisualizationStore.getState().toggleFlowVisible(flow.id, true);
+
   return {
     ...previousState,
-    flows: previousState.flows ?? [
-      FlowsService.getNewFlow(initDsl.name, undefined, {
-        metadata: { name: initialSettings.name, namespace: initialSettings.namespace },
-      }),
-    ],
+    flows: previousState.flows ?? [flow],
     properties: {},
     views: [],
     metadata: {},
@@ -133,7 +136,7 @@ export const useFlowsStore = create<IFlowsStore>()(
            * This is needed until https://github.com/KaotoIO/kaoto-backend/issues/663 it's done
            */
           const flowsWithId = flowsWrapper.flows.map((flow, index) => {
-            const id = `${flow.dsl}-${index}`;
+            const id = flow.id ?? `${flow.dsl}-${index}`;
             const steps = StepsService.regenerateUuids(id, flow.steps);
             allSteps.push(...steps);
 
@@ -141,6 +144,17 @@ export const useFlowsStore = create<IFlowsStore>()(
           });
 
           useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(allSteps));
+
+          /** TODO: Move this to the VisualizationService */
+          const visibleFlows = flowsWithId.reduce(
+            (acc, flow, index) => ({
+              ...acc,
+              /** Make visible only the first flow */
+              [flow.id]: index === 0,
+            }),
+            {} as Record<string, boolean>,
+          );
+          useVisualizationStore.getState().setVisibleFlows(visibleFlows);
 
           return {
             ...state,
@@ -154,11 +168,26 @@ export const useFlowsStore = create<IFlowsStore>()(
       /** General flow management */
       addNewFlow: (dsl, flowId) =>
         set((state) => {
-          const flows = state.flows.concat(FlowsService.getNewFlow(dsl, flowId));
+          const flow = FlowsService.getNewFlow(dsl, flowId);
+          const flows = state.flows.concat(flow);
+          useVisualizationStore.getState().hideAllFlows();
+          useVisualizationStore.getState().toggleFlowVisible(flow.id, true);
 
           return { ...state, currentDsl: dsl, flows };
         }),
-      deleteAllFlows: () => set((state) => getInitialState({ ...state, flows: [] })),
+      deleteFlow: (flowId) =>
+        set((state) => {
+          const filteredFlows = state.flows.filter((flow) => flowId !== flow.id);
+
+          return {
+            ...state,
+            flows: filteredFlows,
+          };
+        }),
+      deleteAllFlows: () => {
+        set((state) => getInitialState({ ...state, flows: [] }));
+        useVisualizationStore.getState().setVisibleFlows({});
+      },
     }),
     {
       partialize: (state) => {

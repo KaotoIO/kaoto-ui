@@ -32,6 +32,13 @@ export type RFState = {
    * @param nodeToUpdate
    */
   updateNode: (nodeToUpdate: IVizStepNode, nodeIndex: number) => void;
+
+  /** Visibility related handlers */
+  visibleFlows: Record<string, boolean>;
+  toggleFlowVisible: (flowId: string, isVisible?: boolean) => void;
+  showAllFlows: () => void;
+  hideAllFlows: () => void;
+  setVisibleFlows: (flows: Record<string, boolean>) => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -74,6 +81,51 @@ export const useVisualizationStore = create<RFState>((set, get) => ({
     newNodes[nodeIndex] = newNode;
     set(() => ({ nodes: newNodes }));
   },
+
+  /** Visibility related handlers */
+  visibleFlows: {},
+  toggleFlowVisible: (flowId, isVisible) => {
+    set(({ visibleFlows }) => {
+      const currentVisibility = !!visibleFlows[flowId];
+      const isFlowVisible = isVisible === undefined ? !currentVisibility : isVisible;
+
+      return {
+        visibleFlows: { ...visibleFlows, [flowId]: isFlowVisible },
+      };
+    });
+  },
+  showAllFlows: () => {
+    set(({ visibleFlows }) => ({
+      visibleFlows: toggleFlowsVisibility(visibleFlows, true),
+    }));
+  },
+  hideAllFlows: () => {
+    set(({ visibleFlows }) => ({
+      visibleFlows: toggleFlowsVisibility(visibleFlows, false),
+    }));
+  },
+  setVisibleFlows: (visibleFlows) => {
+    set(() => ({
+      visibleFlows,
+    }));
+  },
 }));
 
-export default useVisualizationStore;
+/**
+ * TODO: The following function should be moved
+ * to the VisualizationService, the problem at the
+ * moment is that VisualizationService should be split
+ * into a service that doesn't import the VisualizationStore
+ * and a VisualizationFacade which does.
+ *
+ * This will prevent the circular dependency created by
+ * importing the Store into the service and the other way around
+ */
+const toggleFlowsVisibility = (
+  visibleFlows: Record<string, boolean>,
+  isVisible: boolean,
+): Record<string, boolean> =>
+  Object.keys(visibleFlows).reduce((acc, flowId) => {
+    acc[flowId] = isVisible;
+    return acc;
+  }, {} as Record<string, boolean>);

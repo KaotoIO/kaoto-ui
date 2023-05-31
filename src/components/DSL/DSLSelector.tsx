@@ -1,6 +1,6 @@
 import { useSettingsStore } from '@kaoto/store';
 import { IDsl } from '@kaoto/types';
-import { MenuToggle, MenuToggleElement } from '@patternfly/react-core';
+import { MenuToggle, MenuToggleAction, MenuToggleElement } from '@patternfly/react-core';
 import { Select, SelectList, SelectOption } from '@patternfly/react-core/next';
 import {
   FunctionComponent,
@@ -19,16 +19,21 @@ interface IDSLSelector extends PropsWithChildren {
 }
 
 export const DSLSelector: FunctionComponent<IDSLSelector> = (props) => {
-  const capabilities = useSettingsStore((state) => state.settings.capabilities, shallow);
+  const { capabilities, dsl } = useSettingsStore(
+    ({ settings }) => ({ capabilities: settings.capabilities, dsl: settings.dsl }),
+    shallow,
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<IDsl | undefined>(
     props.isStatic ? undefined : props.selectedDsl ?? capabilities[0],
   );
 
+  /** Toggle the DSL dropdown */
   const onToggleClick = () => {
     setIsOpen(!isOpen);
   };
 
+  /** Selecting a DSL checking the the existing flows */
   const onSelect = useCallback(
     (
       _: ReactMouseEvent<Element, MouseEvent> | undefined,
@@ -48,21 +53,38 @@ export const DSLSelector: FunctionComponent<IDSLSelector> = (props) => {
     [capabilities, props],
   );
 
+  /** Selecting the same DSL directly*/
+  const onNewSameTypeRoute = useCallback(() => {
+    onSelect(undefined, dsl.name);
+  }, [dsl.name, onSelect]);
+
   const toggle = (toggleRef: Ref<MenuToggleElement>) => (
     <MenuToggle
-      data-testid="dsl-select"
+      data-testid="dsl-list-dropdown"
       ref={toggleRef}
       onClick={onToggleClick}
       isExpanded={isOpen}
       isFullWidth
-    >
-      {props.children}
-    </MenuToggle>
+      splitButtonOptions={{
+        variant: 'action',
+        items: [
+          <MenuToggleAction
+            id="dsl-list-btn"
+            key="dsl-list-btn"
+            data-testid="dsl-list-btn"
+            aria-label="DSL list"
+            onClick={onNewSameTypeRoute}
+          >
+            {props.children}
+          </MenuToggleAction>,
+        ],
+      }}
+    />
   );
 
   return (
     <Select
-      id="dsl-select"
+      id="dsl-list-select"
       isOpen={isOpen}
       selected={selected?.name}
       onSelect={onSelect}

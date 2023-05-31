@@ -1,9 +1,6 @@
 import { StepsService } from './stepsService';
 import { ValidationService } from './validationService';
-import {
-  useFlowsStore,
-  useVisualizationStore,
-} from '@kaoto/store';
+import { useFlowsStore, useVisualizationStore } from '@kaoto/store';
 import {
   HandleDeleteStepFn,
   IStepProps,
@@ -40,7 +37,7 @@ export class VisualizationService {
     step: IStepProps,
     nodeId: string,
     layout: string,
-    dataProps?: { [prop: string]: any }
+    dataProps?: { [prop: string]: any },
   ): IVizStepNode {
     return {
       data: {
@@ -71,7 +68,7 @@ export class VisualizationService {
     node: IVizStepNode,
     rootNode: IVizStepNode,
     rootNextNode: IVizStepNode,
-    edgeType?: string
+    edgeType?: string,
   ): IVizStepPropsEdge[] {
     const branchPlaceholderEdges: IVizStepPropsEdge[] = [];
     let edgeProps = VisualizationService.buildEdgeParams(rootNode, node, edgeType ?? 'default');
@@ -83,7 +80,7 @@ export class VisualizationService {
 
     if (rootNextNode) {
       branchPlaceholderEdges.push(
-        VisualizationService.buildEdgeParams(node, rootNextNode, 'default')
+        VisualizationService.buildEdgeParams(node, rootNextNode, 'default'),
       );
     }
 
@@ -102,7 +99,7 @@ export class VisualizationService {
 
       const parentNodeIndex = VisualizationService.findNodeIdxWithUUID(
         node.data.branchInfo?.parentStepUuid,
-        stepNodes
+        stepNodes,
       );
 
       if (node.data.branchInfo) {
@@ -115,11 +112,11 @@ export class VisualizationService {
         ) {
           const branchStepNextIdx = VisualizationService.findNodeIdxWithUUID(
             node.data.nextStepUuid,
-            stepNodes
+            stepNodes,
           );
           if (stepNodes[branchStepNextIdx]) {
             specialEdges.push(
-              VisualizationService.buildEdgeParams(node, stepNodes[branchStepNextIdx], 'insert')
+              VisualizationService.buildEdgeParams(node, stepNodes[branchStepNextIdx], 'insert'),
             );
           }
         }
@@ -129,12 +126,12 @@ export class VisualizationService {
           const parentStepNode: IVizStepNode = stepNodes[parentNodeIndex];
           const showDeleteEdge = ValidationService.reachedMinBranches(
             parentStepNode.data.step.branches.length,
-            parentStepNode.data.step.minBranches
+            parentStepNode.data.step.minBranches,
           );
           let edgeProps = VisualizationService.buildEdgeParams(
             parentStepNode,
             node,
-            showDeleteEdge ? 'delete' : 'default'
+            showDeleteEdge ? 'delete' : 'default',
           );
 
           if (node.data.branchInfo?.branchIdentifier)
@@ -148,11 +145,11 @@ export class VisualizationService {
           const parentStepNode: IVizStepNode = stepNodes[parentNodeIndex];
           const parentStepNextIdx = VisualizationService.findNodeIdxWithUUID(
             node.data.branchInfo?.parentStepNextUuid,
-            stepNodes
+            stepNodes,
           );
           const showDeleteEdge = ValidationService.reachedMinBranches(
             parentStepNode.data.step.branches.length,
-            parentStepNode.data.step.minBranches
+            parentStepNode.data.step.minBranches,
           );
 
           specialEdges.push(
@@ -160,8 +157,8 @@ export class VisualizationService {
               node,
               stepNodes[parentNodeIndex],
               stepNodes[parentStepNextIdx],
-              showDeleteEdge ? 'delete' : 'default'
-            )
+              showDeleteEdge ? 'delete' : 'default',
+            ),
           );
         }
 
@@ -169,13 +166,13 @@ export class VisualizationService {
         if (node.data.isLastStep && !StepsService.isEndStep(node.data.step)) {
           const parentStepNextIdx = VisualizationService.findNodeIdxWithUUID(
             node.data.branchInfo?.parentStepNextUuid,
-            stepNodes
+            stepNodes,
           );
 
           if (stepNodes[parentStepNextIdx]) {
             // it needs to merge back
             specialEdges.push(
-              VisualizationService.buildEdgeParams(node, stepNodes[parentStepNextIdx], 'default')
+              VisualizationService.buildEdgeParams(node, stepNodes[parentStepNextIdx], 'default'),
             );
           }
         }
@@ -193,7 +190,7 @@ export class VisualizationService {
   static buildEdgeParams(
     sourceStep: IVizStepNode,
     targetStep: IVizStepNode,
-    type?: string
+    type?: string,
   ): IVizStepPropsEdge {
     return {
       arrowHeadType: 'arrowclosed',
@@ -235,8 +232,8 @@ export class VisualizationService {
           VisualizationService.buildEdgeParams(
             node,
             nodes[nextNodeIdx],
-            node.data.branchInfo || node.data.step.branches?.length > 0 ? 'default' : 'insert'
-          )
+            node.data.branchInfo || node.data.step.branches?.length > 0 ? 'default' : 'insert',
+          ),
         );
       }
     });
@@ -248,7 +245,7 @@ export class VisualizationService {
     step: IStepProps,
     newId: string,
     props?: { [prop: string]: any },
-    branchInfo?: IVizStepNodeDataBranch
+    branchInfo?: IVizStepNodeDataBranch,
   ): IVizStepNode {
     return {
       data: {
@@ -274,21 +271,22 @@ export class VisualizationService {
    * Builds React Flow nodes and edges from current integration JSON.
    * @param handleDeleteStep
    */
-  buildNodesAndEdges(handleDeleteStep: HandleDeleteStepFn) {
-    const layout = useVisualizationStore.getState().layout;
+  private buildNodesAndEdges(handleDeleteStep: HandleDeleteStepFn) {
+    const { layout, visibleFlows } = useVisualizationStore.getState();
 
     // build all nodes
     let stepNodes: IVizStepNode[] = [];
 
-    const integrations = useFlowsStore.getState().flows;
-    stepNodes = integrations.reduce((acc, currentIntegration) => acc.concat(
-      VisualizationService.buildNodesFromSteps(
-        currentIntegration.id,
-        currentIntegration.steps,
-        layout,
-        { handleDeleteStep },
-      ),
-    ), [] as IVizStepNode[]);
+    const flows = useFlowsStore.getState().flows;
+    stepNodes = flows.reduce((acc, flow) => {
+      if (!visibleFlows[flow.id]) {
+        return acc;
+      }
+
+      return acc.concat(
+        VisualizationService.buildNodesFromSteps(flow.id, flow.steps, layout, { handleDeleteStep }),
+      );
+    }, [] as IVizStepNode[]);
 
     // build edges only for main nodes
     const filteredNodes = stepNodes.filter((node) => !node.data.branchInfo);
@@ -312,7 +310,7 @@ export class VisualizationService {
     steps: IStepProps[],
     layout: string,
     props?: { [prop: string]: any },
-    branchInfo?: IVizStepNodeDataBranch
+    branchInfo?: IVizStepNodeDataBranch,
   ): IVizStepNode[] {
     let stepNodes: IVizStepNode[] = [];
     let id = 0;
@@ -378,7 +376,7 @@ export class VisualizationService {
               // parentStepUuid is always the parent of the branch step, no matter how nested
               parentStepNextUuid: steps[index + 1]?.UUID ?? branchInfo?.rootStepNextUuid,
               parentStepUuid: steps[index].UUID,
-            })
+            }),
           );
         });
       }
@@ -414,7 +412,7 @@ export class VisualizationService {
   static async getLayoutedElements(
     nodes: IVizStepNode[],
     edges: IVizStepPropsEdge[],
-    direction: string
+    direction: string,
   ) {
     const dagreGraph = new dagre.graphlib.Graph();
     dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -440,7 +438,7 @@ export class VisualizationService {
       const sourceNode = nodes.find((node) => node.id === edge.source);
       const dagreWeightedValues = VisualizationService.getDagreWeightedValues(
         isHorizontal,
-        sourceNode
+        sourceNode,
       );
 
       dagreGraph.setEdge(edge.source, edge.target, dagreWeightedValues);
@@ -469,7 +467,7 @@ export class VisualizationService {
 
   static getDagreWeightedValues(
     isHorizontal: boolean,
-    sourceNode?: IVizStepNode
+    sourceNode?: IVizStepNode,
   ): { minlen: number; weight: number } {
     return {
       minlen: isHorizontal ? (sourceNode?.data.step.branches?.length > 1 ? 2 : 1) : 1.5,
@@ -496,7 +494,7 @@ export class VisualizationService {
     stepNodes: IVizStepNode[],
     id: string,
     type: string,
-    props: { [prop: string]: any }
+    props: { [prop: string]: any },
   ) {
     return stepNodes.unshift({
       data: {
@@ -524,7 +522,7 @@ export class VisualizationService {
     position: { x: number; y: number },
     groupHeight: number,
     groupWidth: number,
-    props?: { [prop: string]: any }
+    props?: { [prop: string]: any },
   ) {
     return stepNodes.unshift({
       id: getRandomArbitraryNumber().toString(),
@@ -560,22 +558,13 @@ export class VisualizationService {
    * @param handleDeleteStep
    * @param rebuildNodes
    */
-  async redrawDiagram(handleDeleteStep: HandleDeleteStepFn, rebuildNodes: boolean) {
-    let stepNodes = useVisualizationStore.getState().nodes;
-    let stepEdges = useVisualizationStore.getState().edges;
-    if (rebuildNodes) {
-      const ne = this.buildNodesAndEdges(handleDeleteStep);
-      stepNodes = ne.stepNodes;
-      stepEdges = ne.stepEdges;
-    }
-    VisualizationService.getLayoutedElements(
-      stepNodes,
-      stepEdges,
-      useVisualizationStore.getState().layout
-    ).then((res) => {
-      const { layoutedNodes, layoutedEdges } = res;
-      useVisualizationStore.getState().setNodes(layoutedNodes);
-      useVisualizationStore.getState().setEdges(layoutedEdges);
+  async redrawDiagram(handleDeleteStep: HandleDeleteStepFn): Promise<void> {
+    const ne = this.buildNodesAndEdges(handleDeleteStep);
+    const layout = useVisualizationStore.getState().layout;
+
+    VisualizationService.getLayoutedElements(ne.stepNodes, ne.stepEdges, layout).then((res) => {
+      useVisualizationStore.getState().setNodes(res.layoutedNodes);
+      useVisualizationStore.getState().setEdges(res.layoutedEdges);
     });
   }
 
@@ -605,7 +594,7 @@ export class VisualizationService {
       return !(
         ValidationService.reachedMaxBranches(
           nodeData.step.branches.length,
-          nodeData.step.maxBranches
+          nodeData.step.maxBranches,
         ) && nodeData.nextStepUuid
       );
 
@@ -624,7 +613,7 @@ export class VisualizationService {
       // check if the previous step contains (nested) branches.
       const prevNodeIdx = VisualizationService.findNodeIdxWithUUID(
         nodeData.previousStepUuid,
-        useVisualizationStore.getState().nodes
+        useVisualizationStore.getState().nodes,
       );
       return !!(
         useVisualizationStore.getState().nodes[prevNodeIdx] &&
@@ -652,5 +641,44 @@ export class VisualizationService {
     if (StepsService.containsBranches(nodeData.step) && !nodeData.nextStepUuid) return true;
     // if it doesn't contain branches, don't show the steps tab
     return !StepsService.containsBranches(nodeData.step);
+  }
+
+  static getEmptySelectedStep(): IStepProps {
+    return {
+      maxBranches: 0,
+      minBranches: 0,
+      name: '',
+      type: '',
+      UUID: '',
+      integrationId: '',
+    };
+  }
+
+  static getVisibleFlowsInformation(visibleFlows: Record<string, boolean>): {
+    singleFlowId: string | undefined;
+    currentVisible: number;
+    flowsCount: number;
+  } {
+    const flowsArray = Object.entries(visibleFlows);
+    const visibleFlowsIdArray = flowsArray.filter((flow) => flow[1]).map((flow) => flow[0]);
+
+    /** If there's only one flow visible, we return its ID */
+    if (visibleFlowsIdArray.length === 1) {
+      return {
+        singleFlowId: visibleFlowsIdArray[0],
+        currentVisible: 1,
+        flowsCount: flowsArray.length,
+      };
+    }
+
+    /**
+     * Otherwise, we return undefined to signal the UI that there
+     * could be more than one or no flow visible
+     */
+    return {
+      singleFlowId: undefined,
+      currentVisible: visibleFlowsIdArray.length,
+      flowsCount: flowsArray.length,
+    };
   }
 }

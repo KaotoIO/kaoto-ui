@@ -1,8 +1,8 @@
 import { AppendStepButton } from './AppendStepButton';
 import { BranchBuilder } from './BranchBuilder';
+import { MiniCatalog } from './MiniCatalog';
 import { PrependStepButton } from './PrependStepButton';
 import './Visualization.css';
-import { MiniCatalog } from '@kaoto/components';
 import { usePosition } from '@kaoto/hooks';
 import { StepsService, VisualizationService } from '@kaoto/services';
 import { useSettingsStore, useVisualizationStore } from '@kaoto/store';
@@ -104,7 +104,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     return VisualizationService.getNodeClass(
       visualizationStore.selectedStepUuid,
       data.step.UUID,
-      ' stepNode__Selected'
+      ' stepNode__Selected',
     );
   };
 
@@ -112,7 +112,7 @@ const VisualizationStep = ({ data }: NodeProps<IVizStepNodeData>) => {
     return VisualizationService.getNodeClass(
       visualizationStore.hoverStepUuid,
       data.branchInfo?.rootStepUuid ?? data.step.UUID,
-      ' stepNode__Hover'
+      ' stepNode__Hover',
     );
   };
 

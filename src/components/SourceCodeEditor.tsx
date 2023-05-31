@@ -1,5 +1,5 @@
+import { StepErrorBoundary } from './StepErrorBoundary';
 import { fetchCapabilities, fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
-import { StepErrorBoundary } from '@kaoto/components';
 import { useFlowsStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
 import { CodeEditorMode, ICapabilities, IFlowsWrapper, ISettings } from '@kaoto/types';
 import { usePrevious } from '@kaoto/utils';
@@ -15,7 +15,7 @@ interface ISourceCodeEditor {
   initialData?: string;
   language?: Language;
   theme?: string;
-  mode?: CodeEditorMode | CodeEditorMode.FREE_EDIT;
+  mode?: CodeEditorMode;
   schemaUri?: string;
   editable?: boolean | false;
   syncAction?: () => {};
@@ -33,7 +33,7 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
       metadata,
       setFlowsWrapper,
     }),
-    shallow
+    shallow,
   );
   const previousFlows = usePrevious(flows);
 
@@ -48,7 +48,7 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
       fetchCapabilities().then((capabilities: ICapabilities) => {
         capabilities.dsls.forEach((dsl) => {
           if (dsl.name === flows[0].dsl) {
-            const tmpSettings = { ...settings, dsl: dsl };
+            const tmpSettings = { ...settings, dsl };
             setSettings(tmpSettings);
             fetchTheSourceCode({ flows, properties, metadata }, tmpSettings);
           }
@@ -64,7 +64,6 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
       ...currentFlowsWrapper,
       flows: currentFlowsWrapper.flows.map((flow) => ({
         ...flow,
-        metadata: { ...flow.metadata, ...settings },
         dsl: settings.dsl.name,
       })),
     };
@@ -90,7 +89,6 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
           settings.name = tmpInt.metadata.name;
           setSettings({ name: tmpInt.metadata.name });
         }
-        tmpInt.metadata = { ...tmpInt.metadata, ...settings };
         setFlowsWrapper(flowsWrapper);
       })
       .catch((e) => {
@@ -119,7 +117,7 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
     editor?.onDidAttemptReadOnlyEdit(() => {
       messageContribution?.showMessage(
         'Cannot edit in read-only editor mode.',
-        editor.getPosition()
+        editor.getPosition(),
       );
     });
 

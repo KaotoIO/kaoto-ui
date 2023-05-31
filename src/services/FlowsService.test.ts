@@ -5,7 +5,7 @@ describe('FlowsService', () => {
     const newFlow = FlowsService.getNewFlow('Integration');
 
     expect(newFlow).toMatchObject({
-      id: /Integration-[0-9]*/,
+      id: /Integration-\d*/,
       dsl: 'Integration',
       description: '',
       metadata: {},

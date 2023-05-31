@@ -1,5 +1,7 @@
+import { Extension } from './Extension';
+import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
+import { StepErrorBoundary } from './StepErrorBoundary';
 import { dynamicImport } from './import';
-import { Extension, JsonSchemaConfigurator, StepErrorBoundary } from '@kaoto/components';
 import { StepsService } from '@kaoto/services';
 import { useFlowsStore } from '@kaoto/store';
 import { IStepProps, IStepPropsParameters } from '@kaoto/types';
@@ -34,8 +36,14 @@ const VisualizationStepViews = ({
   saveConfig,
   step,
 }: IStepViewsProps) => {
-  const debouncedSaveConfig = useDebouncedCallback(saveConfig, 1_000, { leading: false, trailing: true });
-  const views = useFlowsStore((state) => state.views.filter((view) => view.step === step.UUID), shallow);
+  const debouncedSaveConfig = useDebouncedCallback(saveConfig, 1_000, {
+    leading: false,
+    trailing: true,
+  });
+  const views = useFlowsStore(
+    (state) => state.views.filter((view) => view.step === step.UUID),
+    shallow,
+  );
 
   const hasDetailView = views?.some((v) => v.id === 'detail-step');
   const detailsTabIndex = views?.length! + 1; // provide an index that won't be used by custom views
@@ -81,15 +89,14 @@ const VisualizationStepViews = ({
   };
 
   useEffect(() => {
-    setActiveTabKey(()=>
-    step.parameters?.length ? configTabIndex : detailsTabIndex);
+    setActiveTabKey(() => (step.parameters?.length ? configTabIndex : detailsTabIndex));
     let tempSchemaObject: { [label: string]: { type: string; value?: any; description?: string } } =
       {};
 
     let tempModelObject = {} as IStepPropsParameters;
 
     step.parameters?.forEach((p) =>
-      StepsService.buildStepSchemaAndModel(p, tempModelObject, tempSchemaObject)
+      StepsService.buildStepSchemaAndModel(p, tempModelObject, tempSchemaObject),
     );
 
     setStepPropertySchema(tempSchemaObject);
@@ -165,7 +172,13 @@ const VisualizationStepViews = ({
           {views?.length! > 0 &&
             views?.map((view, index) => {
               const StepExtension = lazy(() => dynamicImport(view.scope, view.module, view.url));
-              const kaotoApi = stepsService.createKaotoApi(step, (values) => {saveConfig(step, values)}, alertKaoto);
+              const kaotoApi = stepsService.createKaotoApi(
+                step,
+                (values) => {
+                  saveConfig(step, values);
+                },
+                alertKaoto,
+              );
 
               return (
                 <Tab

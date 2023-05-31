@@ -2,7 +2,6 @@ import { ConfirmationModal } from '../ConfirmationModal';
 import { DSLSelector } from './DSLSelector';
 import { FlowsStoreFacade, useFlowsStore, useSettingsStore } from '@kaoto/store';
 import { IDsl } from '@kaoto/types';
-import { Tooltip } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { FunctionComponent, PropsWithChildren, useCallback, useState } from 'react';
 import { shallow } from 'zustand/shallow';
@@ -23,34 +22,35 @@ export const NewFlow: FunctionComponent<PropsWithChildren> = () => {
   const [proposedDsl, setProposedNewDsl] = useState<IDsl>();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
-  const checkBeforeAddNewFlow = useCallback((dsl: IDsl) => {
-    const isSameDsl = FlowsStoreFacade.isSameDsl(dsl.name);
+  const checkBeforeAddNewFlow = useCallback(
+    (dsl: IDsl) => {
+      const isSameDsl = FlowsStoreFacade.isSameDsl(dsl.name);
 
-    if (isSameDsl) {
-      /**
-       * If it's the same DSL as we have in the existing Flows list,
-       * we don't need to do anything special, just add a new flow if
-       * supported
-       */
-      addNewFlow(dsl.name);
-    } else {
-      /**
-       * If it is not the same DSL, this operation might result in
-       * removing the existing flows, so then we warn the user first
-       */
-      setProposedNewDsl(dsl);
-      setIsConfirmationModalOpen(true);
-    }
-  }, [addNewFlow]);
+      if (isSameDsl) {
+        /**
+         * If it's the same DSL as we have in the existing Flows list,
+         * we don't need to do anything special, just add a new flow if
+         * supported
+         */
+        addNewFlow(dsl.name);
+      } else {
+        /**
+         * If it is not the same DSL, this operation might result in
+         * removing the existing flows, so then we warn the user first
+         */
+        setProposedNewDsl(dsl);
+        setIsConfirmationModalOpen(true);
+      }
+    },
+    [addNewFlow],
+  );
 
   return (
     <>
-      <Tooltip content="Create a new route" position="right">
-        <DSLSelector isStatic onSelect={checkBeforeAddNewFlow}>
-          <PlusIcon />
-          <span className="pf-u-m-sm-on-lg">New route</span>
-        </DSLSelector>
-      </Tooltip>
+      <DSLSelector isStatic onSelect={checkBeforeAddNewFlow}>
+        <PlusIcon />
+        <span className="pf-u-m-sm-on-lg">New route</span>
+      </DSLSelector>
 
       <ConfirmationModal
         handleCancel={() => {

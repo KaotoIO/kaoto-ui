@@ -1,11 +1,11 @@
-import { JsonSchemaConfigurator } from '@kaoto/components';
+import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { act, fireEvent, render } from '@testing-library/react';
 import { AlertProvider } from '../layout';
 import { debeziumMongoDBStep } from '../stubs';
 import { VisualizationStepViews } from './VisualizationStepViews';
 
-jest.mock('@kaoto/components', () => {
-  const actual = jest.requireActual('@kaoto/components');
+jest.mock('./JsonSchemaConfigurator', () => {
+  const actual = jest.requireActual('./JsonSchemaConfigurator');
 
   const JsonSchemaConfiguratorMock: typeof JsonSchemaConfigurator = (props) => (<>
     <p>JsonSchemaConfigurator mock</p>

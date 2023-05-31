@@ -1,5 +1,6 @@
+import { BranchBuilder } from './BranchBuilder';
 import './CustomEdge.css';
-import { BranchBuilder, MiniCatalog } from '@kaoto/components';
+import { MiniCatalog } from './MiniCatalog';
 import { usePosition, useShowBranchTab } from '@kaoto/hooks';
 import { StepsService, ValidationService } from '@kaoto/services';
 import { useFlowsStore } from '@kaoto/store';
@@ -55,7 +56,7 @@ const PlusButtonEdge = ({
   const views = useFlowsStore((state) => state.views, shallow);
   const { disableBranchesTab, disableBranchesTabMsg } = useShowBranchTab(
     sourceNode?.data.step,
-    views
+    views,
   );
 
   const [edgePath, edgeCenterX, edgeCenterY] = getBezierPath({
@@ -106,7 +107,7 @@ const PlusButtonEdge = ({
                 queryParams={{
                   type: ValidationService.insertableStepTypes(
                     sourceNode?.data.step,
-                    targetNode?.data.step
+                    targetNode?.data.step,
                   ),
                   previousStep: sourceNode?.data.step.id,
                   followingStep: targetNode?.data.step.id,
