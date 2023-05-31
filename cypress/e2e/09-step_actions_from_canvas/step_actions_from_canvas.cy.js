@@ -123,9 +123,7 @@ describe('Test for Step actions from the canvas', () => {
 
     it('User appends a step(+ button to the right of the node)', () => {
         cy.deleteStep('log');
-        //Wait for backend sync
         cy.appendStepMiniCatalog('timer', 'aggregate');
-        //Wait for backend sync
         cy.appendStepMiniCatalog('aggregate', 'log', 'end');
 
         // CHECK that stepNodes are in the correct order
@@ -174,11 +172,9 @@ describe('Test for Step actions from the canvas', () => {
 
         cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');
         cy.deleteStep('log');
-        //Wait for backend sync
         cy.get('[data-testid="kaoto-right-drawer"]').should('not.be.visible');
 
         cy.openStepConfigurationTab('timer');
-        //Wait for backend sync
         cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');
         cy.deleteStep('choice');
         cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');

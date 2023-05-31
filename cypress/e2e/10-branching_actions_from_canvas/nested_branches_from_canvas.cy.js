@@ -158,6 +158,7 @@ describe('Test for Nested Branching actions from the canvas', () => {
         // CHECK test setup
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-slot');
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-slot');
+
         cy.prependStepMiniCatalog('log', 'activemq');
 
         // CHECK that the activemq step was prepended before filter and after all the branches ends
