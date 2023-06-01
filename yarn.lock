@@ -2107,6 +2107,11 @@
   resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.28.0.tgz#14851d9233041f717d8a04703bbe1baac9d668c3"
   integrity sha512-SajjXB2BjRMAMOMNr/e8KX2h3swtg5fSQh0QWQZAqXyZKGJvKMpLJN5S05ypQw5ZkUzBNMgM8Ba6DvI4/Kskiw==
 
+"@kie-tools-core/patternfly-base@0.29.0":
+  version "0.29.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.29.0.tgz#ceab5e27b2cd56aa370c8a055601d5d55c597212"
+  integrity sha512-YvDx8xk/JoLECnjwa+yT8SNP2C0DmsI5+LaEG9ew3EDecOJrKm9CY37Z2CD4znIL0hY5V6ihBBn2yjDr7KNkqQ==
+
 "@kie-tools-core/workspace@0.28.0":
   version "0.28.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/workspace/-/workspace-0.28.0.tgz#b7187956c546e8eaabd9d60a1b9ff9ed94ffb860"
