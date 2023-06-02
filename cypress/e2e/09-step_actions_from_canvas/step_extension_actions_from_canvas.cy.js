@@ -28,11 +28,17 @@ describe('Test for Step extensions', () => {
         cy.waitExtensionLoaded();
 
         // Fill the step name
-        cy.get('[data-testid="set-header-name-input"]').clear().type('test-name');
+        cy.get('[data-testid="set-header-name-input"]').as('headerNameInput');
+        cy.get('@headerNameInput').clear();
+        cy.get('@headerNameInput').type('test-name');
+
         // Select jq syntax
         cy.get('[data-testid="expression-syntax-select"]').select('jq');
         // Fill the expression
-        cy.get('[data-testid="expression-string-input"]').clear().type('jq-test');
+        cy.get('[data-testid="expression-string-input"]').as('expressionInput');
+        cy.get('@expressionInput').clear();
+        cy.get('@expressionInput').type('jq-test');
+
         // Click on the "Apply" button
         cy.get('[data-testid="set-header-apply-button"]').click();
 

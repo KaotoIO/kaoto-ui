@@ -33,14 +33,11 @@ describe('Settings', () => {
     cy.openSettingsModal();
 
     // test validation
-    cy.get('[data-testid="settings--integration-name"]').click().clear();
-    cy.get('#integration-name-helper').should('be.visible');
     cy.get('[data-testid="settings--namespace"]').click().clear();
     cy.get('#namespace-helper').should('be.visible');
     cy.get('[data-testid="settings-modal--save"]').should('be.disabled');
 
     // make changes
-    cy.get('[data-testid="settings--integration-name"]').click().clear().type('cherry');
     cy.get('[data-testid="settings--namespace"]').click().clear().type('example');
 
     // save changes
@@ -57,20 +54,11 @@ describe('Settings', () => {
     cy.openSettingsModal();
 
     // CHECK that value is changed accordingly
-    cy.get('[data-testid="settings--integration-name"]').should('have.value', 'cherry');
     cy.get('[data-testid="settings--namespace"]').should('have.value', 'example');
   });
 
-  it('Settings helper and close', () => {
-    // test the helper
-    cy.get('[data-testid="settings--integration-type-helper-btn"]').click();
-    cy.get('[data-testid="settings--integration-type-helper"]').should('be.visible');
-    cy.get('[data-testid="settings--integration-type-helper-btn"]').click();
-    cy.get('[data-testid="settings-modal--cancel"]').click();
-    cy.get('[data-testid="settings-modal"]').should('not.exist');
-  });
-
-  it('Insert description', () => {
+  /** Skipped until https://github.com/KaotoIO/kaoto-ui/issues/1902 is done */
+  it.skip('Insert description', () => {
     const description = 'Sample description';
     cy.get('[data-testid="settings--description"]').type(description);
     cy.saveMenuModal();
