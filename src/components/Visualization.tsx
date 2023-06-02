@@ -27,20 +27,30 @@ const Visualization = () => {
   const [selectedStep, setSelectedStep] = useState<IStepProps>(
     VisualizationService.getEmptySelectedStep(),
   );
-  const { selectedStepUuid, setSelectedStepUuid } = useVisualizationStore(
-    ({ selectedStepUuid, setSelectedStepUuid }) => ({ selectedStepUuid, setSelectedStepUuid }),
-    shallow,
-  );
-  const { onNodesChange, onEdgesChange } = useVisualizationStore(
-    ({ onNodesChange, onEdgesChange }) => ({ onNodesChange, onEdgesChange }),
-    shallow,
-  );
-  const { layout, visibleFlows } = useVisualizationStore(({ layout, visibleFlows }) => ({
+
+  const {
+    selectedStepUuid,
+    setSelectedStepUuid,
+    onNodesChange,
+    onEdgesChange,
     layout,
     visibleFlows,
-  }));
-  const nodes = useVisualizationStore((state) => state.nodes);
-  const edges = useVisualizationStore((state) => state.edges);
+    nodes,
+    edges,
+  } = useVisualizationStore(
+    (state) => ({
+      selectedStepUuid: state.selectedStepUuid,
+      setSelectedStepUuid: state.setSelectedStepUuid,
+      onNodesChange: state.onNodesChange,
+      onEdgesChange: state.onEdgesChange,
+      layout: state.layout,
+      visibleFlows: state.visibleFlows,
+      nodes: state.nodes,
+      edges: state.edges,
+    }),
+    shallow,
+  );
+
   const flows = useFlowsStore((state) => state.flows);
   const visualizationService = useMemo(() => new VisualizationService(), []);
   const stepsService = useMemo(() => new StepsService(), []);
