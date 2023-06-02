@@ -1,4 +1,4 @@
-import useDeploymentStore from './deploymentStore';
+import { useDeploymentStore } from './deploymentStore';
 import { act, renderHook } from '@testing-library/react';
 
 describe('deploymentStore', () => {

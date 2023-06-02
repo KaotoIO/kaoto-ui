@@ -24,5 +24,3 @@ export const useDeploymentStore = create<IDeploymentStore>((set) => ({
       deployment: { ...state.deployment, crd: val },
     })),
 }));
-
-export default useDeploymentStore;

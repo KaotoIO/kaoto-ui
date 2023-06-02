@@ -9,5 +9,3 @@ export const useIntegrationSourceStore = create<ISourceCodeStore>((set) => ({
   sourceCode: '',
   setSourceCode: (val?: string) => set({ sourceCode: val }),
 }));
-
-export default useIntegrationSourceStore;

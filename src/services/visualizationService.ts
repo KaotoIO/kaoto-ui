@@ -1,6 +1,6 @@
 import { StepsService } from './stepsService';
 import { ValidationService } from './validationService';
-import { useFlowsStore, useVisualizationStore } from '@kaoto/store';
+import { FlowsStoreFacade, useVisualizationStore } from '@kaoto/store';
 import {
   HandleDeleteStepFn,
   IStepProps,
@@ -277,7 +277,7 @@ export class VisualizationService {
     // build all nodes
     let stepNodes: IVizStepNode[] = [];
 
-    const flows = useFlowsStore.getState().flows;
+    const flows = FlowsStoreFacade.getFlows();
     stepNodes = flows.reduce((acc, flow) => {
       if (!visibleFlows[flow.id]) {
         return acc;
@@ -562,10 +562,12 @@ export class VisualizationService {
     const ne = this.buildNodesAndEdges(handleDeleteStep);
     const layout = useVisualizationStore.getState().layout;
 
-    VisualizationService.getLayoutedElements(ne.stepNodes, ne.stepEdges, layout).then((res) => {
-      useVisualizationStore.getState().setNodes(res.layoutedNodes);
-      useVisualizationStore.getState().setEdges(res.layoutedEdges);
-    });
+    return VisualizationService.getLayoutedElements(ne.stepNodes, ne.stepEdges, layout).then(
+      (res) => {
+        useVisualizationStore.getState().setNodes(res.layoutedNodes);
+        useVisualizationStore.getState().setEdges(res.layoutedEdges);
+      },
+    );
   }
 
   /**

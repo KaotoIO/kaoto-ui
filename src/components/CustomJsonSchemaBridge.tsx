@@ -1,4 +1,4 @@
-import DisabledField from './DisabledField';
+import { DisabledField } from './DisabledField';
 import { FieldLabelIcon } from './FieldLabelIcon';
 import JSONSchemaBridge from 'uniforms-bridge-json-schema';
 

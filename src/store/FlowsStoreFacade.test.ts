@@ -3,33 +3,42 @@ import { FlowsStoreFacade } from './FlowsStoreFacade';
 import { IIntegration } from '@kaoto/types';
 
 describe('FlowsStoreFacade', () => {
-  it('should return "true" if all existing flows are the same as the provided type', () => {
-    useFlowsStore.setState({
-      flows: [{ dsl: 'Integration' }, { dsl: 'Integration' }],
-    } as IFlowsStore);
+  describe('isSameDsl', () => {
+    it('should return "true" if all existing flows are the same as the provided type', () => {
+      useFlowsStore.setState({
+        flows: [{ dsl: 'Integration' }, { dsl: 'Integration' }],
+      } as IFlowsStore);
 
-    const isSameDsl = FlowsStoreFacade.isSameDsl('Integration');
+      const isSameDsl = FlowsStoreFacade.isSameDsl('Integration');
 
-    expect(isSameDsl).toBeTruthy();
+      expect(isSameDsl).toBeTruthy();
+    });
+
+    it('should return "true" if there is no flows', () => {
+      useFlowsStore.setState({
+        flows: [] as IIntegration[],
+      } as IFlowsStore);
+
+      const isSameDsl = FlowsStoreFacade.isSameDsl('Integration');
+
+      expect(isSameDsl).toBeTruthy();
+    });
+
+    it('should return "false" if not all existing flows are the same as the provided type', () => {
+      useFlowsStore.setState({
+        flows: [{ dsl: 'Integration' }, { dsl: 'Integration' }],
+      } as IFlowsStore);
+
+      const isSameDsl = FlowsStoreFacade.isSameDsl('Kamelet');
+
+      expect(isSameDsl).toBeFalsy();
+    });
   });
 
-  it('should return "true" if there is no flows', () => {
-    useFlowsStore.setState({
-      flows: [] as IIntegration[],
-    } as IFlowsStore);
+  it('should return the flows from useFlowsStore', () => {
+    const facadeFlows = FlowsStoreFacade.getFlows();
+    const storeFlows = useFlowsStore.getState().flows;
 
-    const isSameDsl = FlowsStoreFacade.isSameDsl('Integration');
-
-    expect(isSameDsl).toBeTruthy();
-  });
-
-  it('should return "false" if not all existing flows are the same as the provided type', () => {
-    useFlowsStore.setState({
-      flows: [{ dsl: 'Integration' }, { dsl: 'Integration' }],
-    } as IFlowsStore);
-
-    const isSameDsl = FlowsStoreFacade.isSameDsl('Kamelet');
-
-    expect(isSameDsl).toBeFalsy();
+    expect(facadeFlows).toBe(storeFlows);
   });
 });
