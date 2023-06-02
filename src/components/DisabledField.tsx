@@ -5,7 +5,7 @@ export type DisabledFieldProps = {
   labelIcon: JSX.Element | undefined;
 };
 
-function DisabledField(props: DisabledFieldProps) {
+function DisconnectedDisabledField(props: DisabledFieldProps) {
   return (
     <div className="pf-u-disabled-color-100 pf-u-background-color-200">
       {props.label} {props.labelIcon}
@@ -13,4 +13,4 @@ function DisabledField(props: DisabledFieldProps) {
   );
 }
 
-export default connectField<DisabledFieldProps>(DisabledField);
+export const DisabledField = connectField<DisabledFieldProps>(DisconnectedDisabledField);

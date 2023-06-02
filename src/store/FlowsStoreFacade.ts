@@ -1,4 +1,5 @@
 import { useFlowsStore } from '@kaoto/store';
+import { IIntegration } from '@kaoto/types';
 
 /**
  * Flows Store Facade
@@ -12,5 +13,9 @@ import { useFlowsStore } from '@kaoto/store';
 export class FlowsStoreFacade {
   static isSameDsl(dsl: string): boolean {
     return useFlowsStore.getState().flows.every((flow) => flow.dsl === dsl);
+  }
+
+  static getFlows(): IIntegration[] {
+    return useFlowsStore.getState().flows;
   }
 }

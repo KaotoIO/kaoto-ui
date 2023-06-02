@@ -33,5 +33,3 @@ export const useNestedStepsStore = create<INestedStepStore>((set, get) => ({
     return set({ nestedSteps: newSteps });
   },
 }));
-
-export default useNestedStepsStore;
