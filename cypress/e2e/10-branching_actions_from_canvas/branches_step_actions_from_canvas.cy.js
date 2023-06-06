@@ -25,7 +25,6 @@ describe('User completes normal actions on steps in a branch', () => {
 
     it('User deletes a step in a branch', () => {
         cy.deleteStep('digitalocean');
-        cy.waitAndsyncUpCodeChanges();
 
         // CHECK that digitalocean step is deleted
         cy.get('[data-testid="viz-step-digitalocean"]').should('not.exist');

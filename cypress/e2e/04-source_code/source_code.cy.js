@@ -14,7 +14,7 @@ describe('source code and drag and drop', () => {
     cy.dragAndDropFromCatalog('timer-source', 'kafka-source', 'start');
 
     // CHECK that the code editor contains the new timer source step
-    cy.get('[data-testid="toolbar-show-code-btn"]').click();
+    cy.openCodeEditor();
     cy.get('.pf-c-code-editor__code').contains('timer-source').should('exist');
   });
 });

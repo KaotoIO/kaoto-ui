@@ -1,0 +1,27 @@
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: ''
+spec:
+  flows:
+  - from:
+      uri: cron:cron
+      parameters:
+        schedule: '1000'
+      steps:
+      - set-body:
+          simple: body
+      - to:
+          uri: log:log1
+---
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: ''
+spec:
+  flows:
+  - from:
+      uri: timer:test
+      steps:
+      - to:
+          uri: log:log2

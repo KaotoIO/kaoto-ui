@@ -69,8 +69,6 @@ describe('Test for Nested Branching actions from the canvas', () => {
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-slot');
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-log');
 
-        cy.waitAndsyncUpCodeChanges()
-
         // CHECK after Sync your code button click
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-slot');
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-log');
@@ -100,8 +98,6 @@ describe('Test for Nested Branching actions from the canvas', () => {
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-amqp');
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-activemq');
         cy.get('.stepNode').eq(11).should('have.attr', 'data-testid', 'viz-step-slot');
-
-        cy.waitAndsyncUpCodeChanges()
 
         // CHECK after Sync your code button click
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-amqp');
@@ -134,8 +130,6 @@ describe('Test for Nested Branching actions from the canvas', () => {
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-amqp');
         cy.get('.stepNode').eq(11).should('have.attr', 'data-testid', 'viz-step-slot');
 
-        cy.waitAndsyncUpCodeChanges()
-
         // CHECK after Sync your code button click
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-activemq');
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-amqp');
@@ -167,8 +161,6 @@ describe('Test for Nested Branching actions from the canvas', () => {
         cy.get('.stepNode').eq(11).should('have.attr', 'data-testid', 'viz-step-activemq');
         cy.get('.stepNode').eq(12).should('have.attr', 'data-testid', 'viz-step-log');
         cy.get('[data-testid="viz-step-activemq"]').should('be.visible');
-
-        cy.waitAndsyncUpCodeChanges()
 
         // CHECK after Sync your code button click
         cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-slot');

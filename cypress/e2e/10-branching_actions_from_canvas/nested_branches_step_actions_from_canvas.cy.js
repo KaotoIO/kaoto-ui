@@ -42,8 +42,6 @@ describe('User completes normal actions on steps in a branch', () => {
         cy.get('[data-testid="viz-step-amqp"]').should('not.exist');
         cy.get('[data-testid="viz-step-slot"]').should('have.length', 2).and('be.visible');
 
-        cy.waitAndsyncUpCodeChanges()
-
         // CHECK that amqp step is deleted and empty step is added
         cy.get('[data-testid="viz-step-amqp"]').should('not.exist');
         cy.get('[data-testid="viz-step-slot"]').should('have.length', 2).and('be.visible');
