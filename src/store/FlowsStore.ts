@@ -1,8 +1,8 @@
 import { FlowsService } from '../services/FlowsService';
 import { NestedStepsService } from '../services/NestedStepsService';
+import { VisualizationService } from '../services/visualizationService';
 import { useNestedStepsStore } from './nestedStepsStore';
 import { initDsl, initialSettings } from './settingsStore';
-import { useVisualizationStore } from './visualizationStore';
 import { IFlowsWrapper, IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { setDeepValue } from '@kaoto/utils';
 import isEqual from 'lodash.isequal';
@@ -44,11 +44,11 @@ export interface IFlowsStore extends IFlowsStoreData {
   deleteAllFlows: () => void;
 }
 
-export const getInitialState = (previousState: Partial<IFlowsStoreData> = {}): IFlowsStoreData => {
+const getInitialState = (previousState: Partial<IFlowsStoreData> = {}): IFlowsStoreData => {
   const flow = FlowsService.getNewFlow(initDsl.name, undefined, {
     metadata: { name: initialSettings.name, namespace: initialSettings.namespace },
   });
-  useVisualizationStore.getState().toggleFlowVisible(flow.id, true);
+  VisualizationService.displaySingleFlow(flow.id);
 
   return {
     ...previousState,
@@ -148,16 +148,8 @@ export const useFlowsStore = create<IFlowsStore>()(
             .getState()
             .updateSteps(NestedStepsService.extractNestedSteps(allSteps));
 
-          /** TODO: Move this to the VisualizationService */
-          const visibleFlows = flowsWithId.reduce(
-            (acc, flow, index) => ({
-              ...acc,
-              /** Make visible only the first flow */
-              [flow.id]: index === 0,
-            }),
-            {} as Record<string, boolean>,
-          );
-          useVisualizationStore.getState().setVisibleFlows(visibleFlows);
+          const flowsIds = flowsWithId.map((flow) => flow.id);
+          VisualizationService.setVisibleFlows(flowsIds);
 
           return {
             ...state,
@@ -173,14 +165,14 @@ export const useFlowsStore = create<IFlowsStore>()(
         set((state) => {
           const flow = FlowsService.getNewFlow(dsl, flowId);
           const flows = state.flows.concat(flow);
-          useVisualizationStore.getState().hideAllFlows();
-          useVisualizationStore.getState().toggleFlowVisible(flow.id, true);
+          VisualizationService.displaySingleFlow(flow.id);
 
           return { ...state, currentDsl: dsl, flows };
         }),
       deleteFlow: (flowId) =>
         set((state) => {
           const filteredFlows = state.flows.filter((flow) => flowId !== flow.id);
+          VisualizationService.deleteFlowFromVisibleFlows(flowId);
 
           return {
             ...state,
@@ -189,7 +181,7 @@ export const useFlowsStore = create<IFlowsStore>()(
         }),
       deleteAllFlows: () => {
         set((state) => getInitialState({ ...state, flows: [] }));
-        useVisualizationStore.getState().setVisibleFlows({});
+        VisualizationService.removeAllVisibleFlows();
       },
     }),
     {

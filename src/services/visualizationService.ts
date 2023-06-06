@@ -684,4 +684,32 @@ export class VisualizationService {
       flowsCount: flowsArray.length,
     };
   }
+
+  static displaySingleFlow(flowId: string): void {
+    useVisualizationStore.getState().hideAllFlows();
+    useVisualizationStore.getState().toggleFlowVisible(flowId, true);
+  }
+
+  static deleteFlowFromVisibleFlows(flowId: string): void {
+    const visibleFlows = useVisualizationStore.getState().visibleFlows;
+    delete visibleFlows[flowId];
+
+    useVisualizationStore.getState().setVisibleFlows(visibleFlows);
+  }
+
+  static setVisibleFlows(flowsIds: string[]): void {
+    const visibleFlows = flowsIds.reduce(
+      (acc, flow, index) => ({
+        ...acc,
+        /** Make visible only the first flow */
+        [flow]: index === 0,
+      }),
+      {} as Record<string, boolean>,
+    );
+    useVisualizationStore.getState().setVisibleFlows(visibleFlows);
+  }
+
+  static removeAllVisibleFlows(): void {
+    useVisualizationStore.getState().setVisibleFlows({});
+  }
 }
