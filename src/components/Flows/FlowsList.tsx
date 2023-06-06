@@ -1,5 +1,5 @@
 import { useFlowsStore, useVisualizationStore } from '@kaoto/store';
-import { Button } from '@patternfly/react-core';
+import { Button, Icon } from '@patternfly/react-core';
 import { EyeIcon, EyeSlashIcon, TrashIcon } from '@patternfly/react-icons';
 import { TableComposable, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import { FunctionComponent, useCallback, useRef } from 'react';
@@ -71,14 +71,16 @@ export const FlowsList: FunctionComponent<IFlowsList> = (props) => {
                 data-testid={`toggle-btn-${flow.id}`}
                 icon={
                   visibleFlows[flow.id] ? (
-                    <EyeIcon data-testid={`toggle-btn-${flow.id}-visible`} />
+                    <Icon isInline><EyeIcon data-testid={`toggle-btn-${flow.id}-visible`} /></Icon>
                   ) : (
-                    <EyeSlashIcon data-testid={`toggle-btn-${flow.id}-hidden`} />
+                    <Icon isInline><EyeSlashIcon data-testid={`toggle-btn-${flow.id}-hidden`} /></Icon>
                   )
                 }
                 variant="plain"
-                onClick={() => {
+                onClick={(event) => {
                   toggleFlowVisible(flow.id);
+                  /** Required to avoid closing the Dropdown after clicking in the icon */
+                  event.stopPropagation();
                 }}
               />
             </Td>
@@ -87,8 +89,10 @@ export const FlowsList: FunctionComponent<IFlowsList> = (props) => {
                 data-testid={`delete-btn-${flow.id}`}
                 icon={<TrashIcon />}
                 variant="plain"
-                onClick={() => {
+                onClick={(event) => {
                   deleteFlow(flow.id);
+                  /** Required to avoid closing the Dropdown after clicking in the icon */
+                  event.stopPropagation();
                 }}
               />
             </Td>

@@ -25,7 +25,6 @@ export const FlowsMenu: FunctionComponent = () => {
       data-testid="flows-list-dropdown"
       ref={toggleRef}
       onClick={onToggleClick}
-      isExpanded={isOpen}
       isFullWidth
       splitButtonOptions={{
         variant: 'action',
