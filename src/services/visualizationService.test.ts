@@ -1,8 +1,9 @@
+import { useFlowsStore } from '../store/FlowsStore';
 import branchSteps from '../store/data/branchSteps';
 import nodes from '../store/data/nodes';
 import steps from '../store/data/steps';
+import { useVisualizationStore } from '../store/visualizationStore';
 import { VisualizationService } from './visualizationService';
-import { useFlowsStore, useVisualizationStore } from '@kaoto/store';
 import {
   IStepProps,
   IStepPropsBranch,

@@ -1,5 +1,6 @@
-import { IIntegration } from '@kaoto/types';
+import { IIntegration, IStepProps } from '@kaoto/types';
 import { getRandomArbitraryNumber } from '@kaoto/utils';
+import cloneDeep from 'lodash.clonedeep';
 
 /**
  * Flows Store Service
@@ -25,5 +26,33 @@ export class FlowsService {
       params: [],
       steps: [],
     };
+  }
+
+  /**
+   * Regenerate a UUID for a list of Steps
+   * Every time there is a change to steps or their positioning in the Steps array,
+   * their UUIDs need to be regenerated
+   * @param steps
+   * @param prefix
+   */
+  static regenerateUuids(
+    integrationId: string,
+    steps: IStepProps[],
+    prefix?: string,
+  ): IStepProps[] {
+    let newSteps = cloneDeep(steps);
+    const integrationPrefix = prefix ?? `${integrationId}_`;
+
+    newSteps.forEach((step, stepIndex) => {
+      step.UUID = `${integrationPrefix}${step.name}-${stepIndex}`;
+      step.integrationId = integrationId;
+
+      step.branches?.forEach((branch, branchIndex) => {
+        branch.branchUuid = `${step.UUID}_branch-${branchIndex}`;
+        branch.steps = this.regenerateUuids(integrationId, branch.steps, `${branch.branchUuid}_`);
+      });
+    });
+
+    return newSteps;
   }
 }

@@ -1,7 +1,8 @@
+import { FlowsService } from '../services/FlowsService';
+import { NestedStepsService } from '../services/NestedStepsService';
 import { useNestedStepsStore } from './nestedStepsStore';
 import { initDsl, initialSettings } from './settingsStore';
 import { useVisualizationStore } from './visualizationStore';
-import { FlowsService, StepsService } from '@kaoto/services';
 import { IFlowsWrapper, IIntegration, IStepProps, IViewProps } from '@kaoto/types';
 import { setDeepValue } from '@kaoto/utils';
 import isEqual from 'lodash.isequal';
@@ -93,12 +94,12 @@ export const useFlowsStore = create<IFlowsStore>()(
               clonedSteps.splice(options.index, 1, newStep);
           }
 
-          const stepsWithNewUuids = StepsService.regenerateUuids(integrationId, clonedSteps);
+          const stepsWithNewUuids = FlowsService.regenerateUuids(integrationId, clonedSteps);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
           state.flows = [...state.flows];
           useNestedStepsStore
             .getState()
-            .updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
+            .updateSteps(NestedStepsService.extractNestedSteps(stepsWithNewUuids));
 
           return { ...state };
         });
@@ -115,11 +116,11 @@ export const useFlowsStore = create<IFlowsStore>()(
           const filteredSteps = state.flows[integrationIndex].steps
             .slice()
             .filter((step: IStepProps) => step.UUID !== stepUUID);
-          const stepsWithNewUuids = StepsService.regenerateUuids(integrationId, filteredSteps);
+          const stepsWithNewUuids = FlowsService.regenerateUuids(integrationId, filteredSteps);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
           useNestedStepsStore
             .getState()
-            .updateSteps(StepsService.extractNestedSteps(stepsWithNewUuids));
+            .updateSteps(NestedStepsService.extractNestedSteps(stepsWithNewUuids));
 
           return { ...state, flows: [...state.flows] };
         });
@@ -137,13 +138,15 @@ export const useFlowsStore = create<IFlowsStore>()(
            */
           const flowsWithId = flowsWrapper.flows.map((flow, index) => {
             const id = flow.id ?? `${flow.dsl}-${index}`;
-            const steps = StepsService.regenerateUuids(id, flow.steps);
+            const steps = FlowsService.regenerateUuids(id, flow.steps);
             allSteps.push(...steps);
 
             return { ...flow, id, steps };
           });
 
-          useNestedStepsStore.getState().updateSteps(StepsService.extractNestedSteps(allSteps));
+          useNestedStepsStore
+            .getState()
+            .updateSteps(NestedStepsService.extractNestedSteps(allSteps));
 
           /** TODO: Move this to the VisualizationService */
           const visibleFlows = flowsWithId.reduce(

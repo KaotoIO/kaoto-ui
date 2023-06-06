@@ -1,6 +1,7 @@
 import { StepsService } from './stepsService';
 import { ValidationService } from './validationService';
-import { FlowsStoreFacade, useVisualizationStore } from '@kaoto/store';
+import { FlowsStoreFacade } from '../store/FlowsStoreFacade';
+import { useVisualizationStore } from '../store/visualizationStore';
 import {
   HandleDeleteStepFn,
   IStepProps,
