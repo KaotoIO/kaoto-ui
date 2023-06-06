@@ -80,6 +80,7 @@ Cypress.Commands.add('openStepConfigurationTab', (step, EIP, stepIndex) => {
     if (!EIP) {
         cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');
     }
+    cy.waitVisualizationUpdate();
 });
 
 Cypress.Commands.add('closeStepConfigurationTab', () => {

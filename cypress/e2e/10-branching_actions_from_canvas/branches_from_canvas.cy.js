@@ -30,8 +30,6 @@ describe('Test for Branching actions from the canvas', () => {
         cy.get('[data-testid="viz-step-slot"]').should('have.length', 1);
         cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-slot');
 
-        cy.waitAndsyncUpCodeChanges()
-
         // CHECK after Sync your code button click
         cy.get('[data-testid="viz-step-choice"]').should('have.length', 2);
         cy.get('[data-testid="viz-step-slot"]').should('have.length', 1);

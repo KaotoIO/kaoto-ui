@@ -14,7 +14,7 @@ describe('3 step integration', () => {
     cy.dragAndDropFromCatalog('timer', 'slot', 'start');
 
     // CHECK the code editor contains the new timer step
-    cy.get('[data-testid="toolbar-show-code-btn"]').click();
+    cy.openCodeEditor();
     cy.get('.code-editor').should('contain.text', 'timer');
 
     // add an action from the mini catalog
