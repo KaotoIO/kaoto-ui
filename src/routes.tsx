@@ -1,7 +1,7 @@
 import { Dashboard } from './layout/Dashboard';
 import { NotFound } from './layout/NotFound';
 import { accessibleRouteChangeHandler } from './utils';
-import { useDocumentTitle } from './utils';
+import { useDocumentTitle } from './hooks';
 import { ComponentType, ReactElement, useEffect } from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { LastLocationProvider, useLastLocation } from 'react-router-last-location';

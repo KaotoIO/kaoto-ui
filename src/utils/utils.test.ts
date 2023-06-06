@@ -1,14 +1,39 @@
-import { IIntegration } from '@kaoto/types';
 import nestedBranch from '../store/data/kamelet.nested-branch.steps';
 import {
+  accessibleRouteChangeHandler,
   findPath,
+  formatDateTime,
   getDeepValue,
   getDescriptionIfExists,
   getRandomArbitraryNumber,
   setDeepValue,
-} from './index';
+  shorten,
+  truncateString,
+} from './utils';
+import { IIntegration } from '@kaoto/types';
 
 describe('utils', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.clearAllTimers();
+    jest.useRealTimers();
+  });
+
+  it('should schedule a focus on the main container', () => {
+    const mainContainer = { focus: jest.fn() };
+    jest
+      .spyOn(document, 'getElementById')
+      .mockReturnValueOnce(mainContainer as unknown as HTMLElement);
+
+    accessibleRouteChangeHandler();
+    jest.runAllTimers();
+
+    expect(mainContainer.focus).toHaveBeenCalled();
+  });
+
   it('findPath(): should find the path from a deeply nested object, given a value', () => {
     expect(findPath(nestedBranch, 'set-body-877932', 'UUID')).toEqual([
       '2',
@@ -23,15 +48,37 @@ describe('utils', () => {
     ]);
   });
 
-  /**
-   * getDeepValue
-   */
-  it('getDeepValue(): given a complex object & path, should return the value of the object at the path', () => {
-    const object = { a: [{ bar: { c: 3 }, baz: { d: 2 } }] };
-    expect(getDeepValue(object, 'a[0].baz.d')).toEqual(2);
+  it('should allow consumers to format Dates using formatDateTime()', () => {
+    const spy = jest.spyOn(Intl, 'DateTimeFormat');
 
-    const objectArray = [object];
-    expect(getDeepValue(objectArray, '[0].a[0].bar.c')).toEqual(3);
+    formatDateTime('1971-03-15T00:00:00.000Z');
+
+    expect(spy).toHaveBeenCalledWith('en-GB', {
+      dateStyle: 'medium',
+      timeStyle: 'long',
+    });
+  });
+
+  describe('getDeepValue()', () => {
+    it('getDeepValue(): return undefined for an empty path', () => {
+      expect(getDeepValue({ foo: 'bar' }, '')).toBeUndefined();
+    });
+
+    it('getDeepValue(): given a complex object & path, should return the value of the object at the path', () => {
+      const object = { a: [{ bar: { c: 3 }, baz: { d: 2 } }] };
+      expect(getDeepValue(object, 'a[0].baz.d')).toEqual(2);
+
+      const objectArray = [object];
+      expect(getDeepValue(objectArray, '[0].a[0].bar.c')).toEqual(3);
+    });
+
+    it('getDeepValue(): given a complex object & path, should return the value of the object using a path array', () => {
+      const object = { a: [{ bar: { c: 3 }, baz: { d: 2 } }] };
+      expect(getDeepValue(object, ['a', '0', 'baz', 'd'])).toEqual(2);
+
+      const objectArray = [object];
+      expect(getDeepValue(objectArray, ['0', 'a', '0', 'bar', 'c'])).toEqual(3);
+    });
   });
 
   /**
@@ -55,33 +102,92 @@ describe('utils', () => {
     ]);
   });
 
-  it.skip('getRandomArbitraryNumber(): should get a random arbitrary number', () => {
-    const mGetRandomValues = jest.fn().mockReturnValueOnce(new Uint32Array(10));
-
-    Object.defineProperty(window, 'crypto', {
-      value: { getRandomValues: mGetRandomValues },
+  describe('shortenString()', () => {
+    it('should return undefined for an empty string', () => {
+      expect(shorten('', 10)).toBeUndefined();
     });
 
-    expect(getRandomArbitraryNumber()).toEqual(new Uint32Array(10));
-    expect(mGetRandomValues).toBeCalledWith(new Uint8Array(1));
+    it('should return the string if it is shorter than the max length', () => {
+      expect(shorten('foo', 10)).toEqual('foo');
+    });
+
+    it('should return the string if it is equal to the max length', () => {
+      expect(shorten('foo', 3)).toEqual('foo');
+    });
+
+    it('should return the portion of the string up to the max length', () => {
+      expect(shorten('foobar', 3, '')).toEqual('foo..');
+    });
+
+    it('should return the portion of the string up to the max length without truncating a word', () => {
+      expect(shorten('the lazy old fox', 5, ' ')).toEqual('the..');
+    });
   });
 
-  it('test getDescription from different DSLs', () => {
-    const kamelet = {
-      metadata: {
-        definition: {
+  describe('truncateString()', () => {
+    it('should the portion of the string up to the max length', () => {
+      expect(truncateString('foobar', 3)).toEqual('foo..');
+    });
+
+    it('should the the same string if it is smaller than the desired length', () => {
+      expect(truncateString('foobar', 20)).toEqual('foobar');
+    });
+  });
+
+  describe('getRandomArbitraryNumber()', () => {
+    it('should return a random number', () => {
+      expect(getRandomArbitraryNumber()).toEqual(expect.any(Number));
+    });
+
+    it('should return a random number using msCrypto if crypto module is not available', () => {
+      Object.defineProperty(global, 'msCrypto', {
+        value: global.crypto,
+        writable: true,
+      });
+
+      jest
+        .spyOn(global, 'crypto', 'get')
+        .mockImplementationOnce(() => undefined as unknown as Crypto);
+
+      expect(getRandomArbitraryNumber()).toEqual(expect.any(Number));
+    });
+  });
+
+  describe('getDescriptionIfExists()', () => {
+    it('should get description from Kamelets', () => {
+      const kamelet = {
+        metadata: {
+          definition: {
+            description: 'test',
+          },
+        },
+      };
+      expect(getDescriptionIfExists(kamelet as unknown as IIntegration)).toEqual('test');
+    });
+
+    it('should get description from Integration', () => {
+      const integration = {
+        description: 'test',
+      };
+      expect(getDescriptionIfExists(integration as unknown as IIntegration)).toEqual('test');
+    });
+
+    it('should get description from metadata', () => {
+      const integration = {
+        metadata: {
           description: 'test',
         },
-      },
-    };
-    const integration1 = {
-      steps: [],
-    };
-    const integration2 = { ...integration1, description: 'test' };
-    const integration3 = { ...integration1, metadata: { description: 'test' } };
-    expect(getDescriptionIfExists(kamelet as unknown as IIntegration)).toEqual('test');
-    expect(getDescriptionIfExists(integration1 as unknown as IIntegration)).toEqual(undefined);
-    expect(getDescriptionIfExists(integration2 as unknown as IIntegration)).toEqual('test');
-    expect(getDescriptionIfExists(integration3 as unknown as IIntegration)).toEqual('test');
+      };
+      expect(getDescriptionIfExists(integration as unknown as IIntegration)).toEqual('test');
+    });
+
+    it('should return undefined if metadata does not contain description', () => {
+      const integration = {};
+      expect(getDescriptionIfExists(integration as unknown as IIntegration)).toBeUndefined();
+    });
+
+    it('should return undefined for an undefined integrationJson', () => {
+      expect(getDescriptionIfExists(undefined as unknown as IIntegration)).toBeUndefined();
+    });
   });
 });

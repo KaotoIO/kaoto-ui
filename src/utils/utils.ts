@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react';
-import { IIntegration } from 'src/types';
+import { IIntegration } from '@kaoto/types';
 
 export function accessibleRouteChangeHandler() {
   return window.setTimeout(() => {
@@ -35,7 +34,7 @@ export function findPath(o: any, target: string, key: string): string[] | undefi
 
 export function formatDateTime(date: string) {
   return new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'long' }).format(
-    Date.parse(date)
+    Date.parse(date),
   );
 }
 
@@ -54,7 +53,7 @@ export function getDeepValue<T = any>(obj: any, path: any) {
   // Find value
   return pathArray.reduce(
     (prevObj: { [x: string]: any }, key: string | number) => prevObj && prevObj[key],
-    obj
+    obj,
   ) as T;
 }
 
@@ -84,7 +83,7 @@ export function setDeepValue(obj: any, path: any, value: any) {
 export function shorten(str: string, maxLen: number, separator = ' ') {
   if (!str) return;
   if (str.length <= maxLen) return str;
-  return str.substr(0, str.lastIndexOf(separator, maxLen)) + '..';
+  return str.substring(0, str.lastIndexOf(separator, maxLen)) + '..';
 }
 
 export function truncateString(str: string, num: number) {
@@ -93,33 +92,6 @@ export function truncateString(str: string, num: number) {
   } else {
     return str;
   }
-}
-
-/**
- * A custom hook for setting the page title.
- * @param title
- */
-export function useDocumentTitle(title: string) {
-  useEffect(() => {
-    const originalTitle = document.title;
-    document.title = title;
-
-    return () => {
-      document.title = originalTitle;
-    };
-  }, [title]);
-}
-
-/**
- * A custom hook for setting mutable refs.
- * @param value
- */
-export function usePrevious(value: any) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
 }
 
 /**
@@ -139,6 +111,7 @@ export function bindUndoRedo(undoCallback: () => void, redoCallback: () => void)
   return callback;
 }
 
+/** TODO: Merge bindUndoRedo and unbindUIndoRedo in a custom hook to fire and forget removing the event listener */
 export function unbindUndoRedo(callback: (event: KeyboardEvent) => void) {
   document.removeEventListener('keydown', callback);
 }
@@ -148,20 +121,21 @@ export function sleep(ms: number) {
 }
 
 export function getRandomArbitraryNumber(): number {
-  const crypto = window.crypto;
-  return Math.floor(crypto?.getRandomValues(new Uint32Array(1))[0]);
+  const cryptoObj = window.crypto || (window as Window & { msCrypto?: Crypto }).msCrypto;
+
+  return Math.floor(cryptoObj?.getRandomValues(new Uint32Array(1))[0]);
 }
 
 export function getDescriptionIfExists(integrationJson?: IIntegration) {
+  if (integrationJson === undefined) return undefined;
+
   // kamelet description location
-  if (integrationJson?.metadata?.definition) {
-    return integrationJson?.metadata.definition.description;
+  if (integrationJson.metadata?.definition) {
+    return integrationJson.metadata.definition.description;
     // integration/camel-route desrciption
-  } else if (integrationJson?.description) {
-    return integrationJson?.description;
-  } else if (integrationJson?.metadata?.description) {
-    return integrationJson?.metadata.description;
-  } else {
-    return undefined;
+  } else if (integrationJson.description) {
+    return integrationJson.description;
+  } else if (integrationJson.metadata?.description) {
+    return integrationJson.metadata.description;
   }
 }
