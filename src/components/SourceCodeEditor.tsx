@@ -1,8 +1,8 @@
+import { usePrevious } from '../hooks';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import { fetchCapabilities, fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
 import { useFlowsStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
 import { CodeEditorMode, ICapabilities, IFlowsWrapper, ISettings } from '@kaoto/types';
-import { usePrevious } from '@kaoto/utils';
 import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
 import { Alert } from '@patternfly/react-core';
 import { CheckCircleIcon, EraserIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';

@@ -10,16 +10,16 @@ import { temporal } from 'zundo';
 import { create } from 'zustand';
 
 interface IInsertOptions {
-  (integrationId: string, newStep: IStepProps, options: { mode: 'append' }): void;
-  (integrationId: string, newStep: IStepProps, options: { mode: 'insert'; index: number }): void;
-  (integrationId: string, newStep: IStepProps, options: { mode: 'replace'; index: number }): void;
+  (flowId: string, newStep: IStepProps, options: { mode: 'append' }): void;
+  (flowId: string, newStep: IStepProps, options: { mode: 'insert'; index: number }): void;
+  (flowId: string, newStep: IStepProps, options: { mode: 'replace'; index: number }): void;
   (
-    integrationId: string,
+    flowId: string,
     newStep: IStepProps,
     options: { mode: 'replace'; path: string[] | undefined },
   ): void;
   (
-    integrationId: string,
+    flowId: string,
     newStep: IStepProps,
     options: { mode: 'append' | 'insert' | 'replace'; index: number; path: string[] | undefined },
   ): void;
@@ -34,7 +34,7 @@ export interface IFlowsStoreData {
 
 export interface IFlowsStore extends IFlowsStoreData {
   insertStep: IInsertOptions;
-  deleteStep: (integrationId: string, stepUUID: string) => void;
+  deleteStep: (flowId: string, stepUUID: string) => void;
   updateViews: (views: IViewProps[]) => void;
   setFlowsWrapper: (flowsWrapper: IFlowsWrapper) => void;
 
@@ -64,16 +64,16 @@ export const useFlowsStore = create<IFlowsStore>()(
     (set) => ({
       ...getInitialState(),
 
-      insertStep: (integrationId, newStep, options) => {
+      insertStep: (flowId, newStep, options) => {
         set((state: IFlowsStore): IFlowsStore => {
           const integrationIndex = state.flows.findIndex(
-            (integration) => integration.id === integrationId,
+            (integration) => integration.id === flowId,
           );
           if (integrationIndex === -1) {
             return state;
           }
 
-          newStep.integrationId = integrationId;
+          newStep.integrationId = flowId;
           const clonedSteps = state.flows[integrationIndex].steps.slice();
 
           switch (options.mode) {
@@ -94,7 +94,7 @@ export const useFlowsStore = create<IFlowsStore>()(
               clonedSteps.splice(options.index, 1, newStep);
           }
 
-          const stepsWithNewUuids = FlowsService.regenerateUuids(integrationId, clonedSteps);
+          const stepsWithNewUuids = FlowsService.regenerateUuids(flowId, clonedSteps);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
           state.flows = [...state.flows];
           useNestedStepsStore
@@ -104,19 +104,19 @@ export const useFlowsStore = create<IFlowsStore>()(
           return { ...state };
         });
       },
-      deleteStep: (integrationId: string, stepUUID: string) => {
+      deleteStep: (flowId: string, stepUUID: string) => {
         set((state) => {
           const integrationIndex = state.flows.findIndex(
-            (integration) => integration.id === integrationId,
+            (integration) => integration.id === flowId,
           );
           if (integrationIndex === -1) {
-            return { ...state };
+            return state;
           }
 
           const filteredSteps = state.flows[integrationIndex].steps
             .slice()
             .filter((step: IStepProps) => step.UUID !== stepUUID);
-          const stepsWithNewUuids = FlowsService.regenerateUuids(integrationId, filteredSteps);
+          const stepsWithNewUuids = FlowsService.regenerateUuids(flowId, filteredSteps);
           state.flows[integrationIndex].steps = stepsWithNewUuids;
           useNestedStepsStore
             .getState()

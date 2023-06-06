@@ -1,8 +1,8 @@
+import { usePrevious } from '../hooks';
 import { fetchIntegrationSourceCode } from '@kaoto/api';
 import { ValidationService } from '@kaoto/services';
 import { useFlowsStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
 import { ISettings } from '@kaoto/types';
-import { usePrevious } from '@kaoto/utils';
 import {
   AlertVariant,
   Button,
