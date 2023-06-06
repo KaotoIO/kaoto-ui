@@ -1,7 +1,7 @@
+import { NestedStepsService } from '../services/NestedStepsService';
 import { initialFlows, kameletSourceStepStub } from '../stubs';
 import { useFlowsStore } from './FlowsStore';
 import { useVisualizationStore } from './visualizationStore';
-import { StepsService } from '@kaoto/services';
 import { IFlowsWrapper, IViewProps } from '@kaoto/types';
 import { act, renderHook } from '@testing-library/react';
 
@@ -107,7 +107,7 @@ describe('FlowsStoreFacade', () => {
   });
 
   it('should extract nested steps upon setting the Flows wrapper object', () => {
-    const extractNestedStepsSpy = jest.spyOn(StepsService, 'extractNestedSteps');
+    const extractNestedStepsSpy = jest.spyOn(NestedStepsService, 'extractNestedSteps');
 
     useFlowsStore.getState().setFlowsWrapper({
       flows: [{ ...initialFlows[0], steps: [kameletSourceStepStub] }],
