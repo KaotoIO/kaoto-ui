@@ -3,8 +3,6 @@
 # dependencies
 /node_modules
 dist
-# no longer using yarn berry
-/.yarn
 .pnp.js
 .pnp.cjs
 .pnp.loader.mjs

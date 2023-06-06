@@ -1,7 +1,6 @@
 {
   "name": "@kaoto/kaoto-ui",
   "version": "1.0.1-dev",
-  "private": false,
   "federatedModuleName": "kaoto",
   "engines": {
     "node": ">=16.x"
@@ -206,5 +205,6 @@
   ],
   "msw": {
     "workerDirectory": "public"
-  }
+  },
+  "packageManager": "yarn@3.6.0"
 }
