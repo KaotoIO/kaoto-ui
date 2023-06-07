@@ -1,12 +1,11 @@
-import { usePrevious } from '../hooks';
 import { StepErrorBoundary } from './StepErrorBoundary';
-import { fetchCapabilities, fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
+import { fetchIntegrationJson } from '@kaoto/api';
 import { useFlowsStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
-import { CodeEditorMode, ICapabilities, IFlowsWrapper, ISettings } from '@kaoto/types';
+import { CodeEditorMode } from '@kaoto/types';
 import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
 import { Alert } from '@patternfly/react-core';
 import { CheckCircleIcon, EraserIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { EditorDidMount } from 'react-monaco-editor';
 import { useDebouncedCallback } from 'use-debounce';
 import { shallow } from 'zustand/shallow';
@@ -24,57 +23,13 @@ interface ISourceCodeEditor {
 export const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<Parameters<EditorDidMount>[0] | null>(null);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
-  const [syncedCode, setSyncedCode] = useState('');
+  const syncedSourceCode = useIntegrationSourceStore((state) => state.syncedSourceCode, shallow);
   const { settings, setSettings } = useSettingsStore();
-  const { flows, properties, metadata, setFlowsWrapper } = useFlowsStore(
-    ({ flows, properties, metadata, setFlowsWrapper }) => ({
-      flows,
-      properties,
-      metadata,
-      setFlowsWrapper,
-    }),
-    shallow,
-  );
-  const previousFlows = usePrevious(flows);
+  const setFlowsWrapper = useFlowsStore((state) => state.setFlowsWrapper, shallow);
 
   const schemaUri = settings.dsl.validationSchema
     ? process.env.KAOTO_API + settings.dsl.validationSchema
     : '';
-
-  useEffect(() => {
-    if (previousFlows === flows || !Array.isArray(flows[0]?.steps)) return;
-
-    if (flows[0].dsl !== null && flows[0].dsl !== settings.dsl.name) {
-      fetchCapabilities().then((capabilities: ICapabilities) => {
-        capabilities.dsls.forEach((dsl) => {
-          if (dsl.name === flows[0].dsl) {
-            const tmpSettings = { ...settings, dsl };
-            setSettings(tmpSettings);
-            fetchTheSourceCode({ flows, properties, metadata }, tmpSettings);
-          }
-        });
-      });
-    } else {
-      fetchTheSourceCode({ flows, properties, metadata }, settings);
-    }
-  }, [flows, properties]);
-
-  const fetchTheSourceCode = (currentFlowsWrapper: IFlowsWrapper, settings: ISettings) => {
-    const updatedFlowWrapper = {
-      ...currentFlowsWrapper,
-      flows: currentFlowsWrapper.flows.map((flow) => ({
-        ...flow,
-        dsl: settings.dsl.name,
-      })),
-    };
-
-    fetchIntegrationSourceCode(updatedFlowWrapper, settings.namespace).then((newSrc) => {
-      if (typeof newSrc === 'string') {
-        setSourceCode(newSrc);
-        setSyncedCode(newSrc);
-      }
-    });
-  };
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
@@ -202,7 +157,7 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
 
   return (
     <StepErrorBoundary>
-      {syncedCode !== sourceCode && (
+      {syncedSourceCode !== sourceCode && (
         <Alert
           title="Any invalid code will be replaced after sync. If you don't want to lose your changes
           please make a backup."
