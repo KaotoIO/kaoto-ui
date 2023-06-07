@@ -1,5 +1,4 @@
 import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
-import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
 
@@ -34,7 +33,7 @@ describe('JsonSchemaConfigurator.tsx', () => {
     const validator = jest.fn();
     const bridge = new JSONSchemaBridge(stepPropertySchema, validator);
 
-    render(
+    const wrapper = render(
       <JsonSchemaConfigurator
         schema={bridge}
         configuration={stepPropertyModel}
@@ -42,7 +41,7 @@ describe('JsonSchemaConfigurator.tsx', () => {
         parametersOrder={[]}
       />
     );
-    const element = screen.getByTestId('json-schema-configurator');
+    const element = wrapper.getByTestId('json-schema-configurator');
     expect(element).toBeInTheDocument();
   });
 });
