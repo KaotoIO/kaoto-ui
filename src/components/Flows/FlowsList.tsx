@@ -1,3 +1,4 @@
+import { FlowsListEmptyState } from './FlowsListEmptyState';
 import { useFlowsStore, useVisualizationStore } from '@kaoto/store';
 import { Button, Icon } from '@patternfly/react-core';
 import { EyeIcon, EyeSlashIcon, TrashIcon } from '@patternfly/react-icons';
@@ -10,8 +11,9 @@ interface IFlowsList {
 }
 
 export const FlowsList: FunctionComponent<IFlowsList> = (props) => {
-  const { flows, deleteFlow } = useFlowsStore(
+  const { isListEmpty, flows, deleteFlow } = useFlowsStore(
     (state) => ({
+      isListEmpty: state.flows.length === 0,
       flows: state.flows,
       deleteFlow: state.deleteFlow,
     }),
@@ -42,7 +44,9 @@ export const FlowsList: FunctionComponent<IFlowsList> = (props) => {
     [hideAllFlows, props, toggleFlowVisible],
   );
 
-  return (
+  return isListEmpty ? (
+    <FlowsListEmptyState data-testid="flows-list-empty-state" />
+  ) : (
     <TableComposable variant="compact" data-testid="flows-list-table">
       <Thead>
         <Tr>
@@ -71,9 +75,13 @@ export const FlowsList: FunctionComponent<IFlowsList> = (props) => {
                 data-testid={`toggle-btn-${flow.id}`}
                 icon={
                   visibleFlows[flow.id] ? (
-                    <Icon isInline><EyeIcon data-testid={`toggle-btn-${flow.id}-visible`} /></Icon>
+                    <Icon isInline>
+                      <EyeIcon data-testid={`toggle-btn-${flow.id}-visible`} />
+                    </Icon>
                   ) : (
-                    <Icon isInline><EyeSlashIcon data-testid={`toggle-btn-${flow.id}-hidden`} /></Icon>
+                    <Icon isInline>
+                      <EyeSlashIcon data-testid={`toggle-btn-${flow.id}-hidden`} />
+                    </Icon>
                   )
                 }
                 variant="plain"

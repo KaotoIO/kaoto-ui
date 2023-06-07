@@ -1,7 +1,13 @@
 import { FlowsList } from './FlowsList';
 import { VisualizationService } from '@kaoto/services';
 import { useVisualizationStore } from '@kaoto/store';
-import { Badge, MenuToggle, MenuToggleAction, MenuToggleElement } from '@patternfly/react-core';
+import {
+  Badge,
+  Icon,
+  MenuToggle,
+  MenuToggleAction,
+  MenuToggleElement,
+} from '@patternfly/react-core';
 import { Select } from '@patternfly/react-core/next';
 import { ListIcon } from '@patternfly/react-icons';
 import { FunctionComponent, Ref, useState } from 'react';
@@ -36,7 +42,9 @@ export const FlowsMenu: FunctionComponent = () => {
             aria-label="flows list"
             onClick={onToggleClick}
           >
-            <ListIcon />
+            <Icon isInline>
+              <ListIcon />
+            </Icon>
             <span data-testid="flows-list-route-id" className="pf-u-m-sm-on-lg">
               {visibleFlowsInformation.singleFlowId ?? 'Routes'}
             </span>

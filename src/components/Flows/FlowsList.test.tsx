@@ -16,6 +16,15 @@ describe('FlowsList.tsx', () => {
     expect(flows).toHaveLength(2);
   });
 
+  test('should display an empty state when there is no routes available', async () => {
+    useFlowsStore.getState().deleteAllFlows();
+    const wrapper = render(<FlowsList />);
+
+    const emptyState = await wrapper.findByTestId('flows-list-empty-state');
+
+    expect(emptyState).toBeInTheDocument();
+  });
+
   test('should render the flows ids', async () => {
     const wrapper = render(<FlowsList />);
     const flow1 = await wrapper.findByText('route-1234');
