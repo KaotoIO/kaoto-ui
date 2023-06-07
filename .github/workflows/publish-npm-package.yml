@@ -17,6 +17,6 @@ jobs:
       - run: yarn build
       - run: yarn build:lib
       - name: 📦 Publish Package to npm
-        run: yarn publish
+        run: yarn npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
