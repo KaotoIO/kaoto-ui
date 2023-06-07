@@ -3,11 +3,14 @@
 # dependencies
 /node_modules
 dist
-# no longer using yarn berry
-/.yarn
-.pnp.js
-.pnp.cjs
-.pnp.loader.mjs
+
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # testing
 /coverage
