@@ -7,11 +7,13 @@ import { VisualizationControls } from './VisualizationControls';
 import { VisualizationStep } from './VisualizationStep';
 import { VisualizationStepViews } from './VisualizationStepViews';
 import { StepsService, VisualizationService } from '@kaoto/services';
-import { useFlowsStore, useVisualizationStore } from '@kaoto/store';
-import { HandleDeleteStepFn, IStepProps, IVizStepNode } from '@kaoto/types';
+import { useFlowsStore, useIntegrationSourceStore, useSettingsStore, useVisualizationStore } from '@kaoto/store';
+import { HandleDeleteStepFn, IStepProps, IVizStepNode, ICapabilities, IFlowsWrapper, ISettings } from '@kaoto/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
 import { shallow } from 'zustand/shallow';
+import { usePrevious } from '../hooks';
+import { fetchCapabilities, fetchIntegrationSourceCode } from '@kaoto/api';
 
 const Visualization = () => {
   // `nodes` is an array of UI-specific objects that represent
@@ -51,10 +53,55 @@ const Visualization = () => {
     shallow,
   );
 
-  const flows = useFlowsStore((state) => state.flows);
+  const { settings, setSettings } = useSettingsStore((state) => state);
+  const [ setSourceCode, setSyncedSourceCode ] = useIntegrationSourceStore(
+    (state) => [state.setSourceCode, state.setSyncedSourceCode], shallow);
+  const { flows, properties, metadata } = useFlowsStore(
+    ({ flows, properties, metadata }) => ({
+      flows,
+      properties,
+      metadata,
+    }), shallow
+  );
   const visualizationService = useMemo(() => new VisualizationService(), []);
   const stepsService = useMemo(() => new StepsService(), []);
 
+  const previousFlows = usePrevious(flows);
+
+  useEffect(() => {
+    if (previousFlows === flows || !Array.isArray(flows[0]?.steps)) return;
+    if (flows[0].dsl !== null && flows[0].dsl !== settings.dsl.name) {
+      fetchCapabilities().then((capabilities: ICapabilities) => {
+        capabilities.dsls.forEach((dsl) => {
+          if (dsl.name === flows[0].dsl) {
+            const tmpSettings = { ...settings, dsl: dsl };
+            setSettings(tmpSettings);
+            fetchTheSourceCode({ flows, properties, metadata }, tmpSettings);
+          }
+        });
+      });
+    } else {
+      fetchTheSourceCode({ flows, properties, metadata }, settings);
+    }
+  }, [flows, properties]);
+
+  const fetchTheSourceCode = (currentFlowsWrapper: IFlowsWrapper, settings: ISettings) => {
+    const updatedFlowWrapper = {
+      ...currentFlowsWrapper,
+      flows: currentFlowsWrapper.flows.map((flow) => ({
+        ...flow,
+        metadata: { ...flow.metadata, ...settings },
+        dsl: settings.dsl.name,
+      })),
+    };
+
+    fetchIntegrationSourceCode(updatedFlowWrapper, settings.namespace).then((newSrc) => {
+      if (typeof newSrc === 'string') {
+        setSourceCode(newSrc);
+        setSyncedSourceCode(newSrc);
+      }
+    });
+  };
   /**
    * Check for changes to integrationJson,
    * which causes Visualization nodes to all be redrawn

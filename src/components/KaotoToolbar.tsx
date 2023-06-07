@@ -310,7 +310,7 @@ export const KaotoToolbar = ({
 
           {/* CURRENT DSL */}
           <ToolbarItem>
-            <Chip isReadOnly>{currentDsl || 'None'}</Chip>
+            <Chip data-testid="toolbar-current-dsl" isReadOnly>{currentDsl || 'None'}</Chip>
           </ToolbarItem>
 
           {/* NEW FLOW DROPDOWN BUTTON */}
