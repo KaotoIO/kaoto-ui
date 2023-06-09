@@ -79,8 +79,8 @@ Cypress.Commands.add('openStepConfigurationTab', (step, EIP, stepIndex) => {
     cy.get('[data-testid="configurationTab"]').click();
     if (!EIP) {
         cy.get('[data-testid="kaoto-right-drawer"]').should('be.visible');
+        cy.waitVisualizationUpdate();
     }
-    cy.waitVisualizationUpdate();
 });
 
 Cypress.Commands.add('closeStepConfigurationTab', () => {

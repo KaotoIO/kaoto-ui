@@ -52,14 +52,11 @@ Cypress.Commands.add('editorClickUndoXTimes', (times) => {
 Cypress.Commands.add('syncUpCodeChanges', () => {
     cy.get('[data-testid="sourceCode--applyButton"]').click();
     cy.get('[data-testid="sourceCode--applyButton"]').trigger('mouseleave');
+    //Request flows jsons based on the route yaml in the code editor
     cy.wait('@getIntegration');
     cy.wait('@getViewDefinitions');
-});
-
-Cypress.Commands.add('waitAndsyncUpCodeChanges', () => {
+    //Request route yaml based on the flow jsons
     cy.wait('@getIntegration');
-    cy.wait('@getViewDefinitions');
-    cy.syncUpCodeChanges();
 });
 
 Cypress.Commands.add('checkCodeSpanLine', (spanText, linesCount) => {
