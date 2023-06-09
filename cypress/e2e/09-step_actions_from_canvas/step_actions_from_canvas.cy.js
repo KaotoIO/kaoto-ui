@@ -50,7 +50,7 @@ describe('Test for Step actions from the canvas', () => {
         // CHECK that YAML not contains the 'timer:null'
         cy.get('.code-editor').should('not.contain.text', 'timer:null');
 
-        cy.waitAndsyncUpCodeChanges()
+        cy.syncUpCodeChanges()
 
         // CHECK that the step is deleted
         cy.get('[data-testid="viz-step-timer"]').should('not.exist');
@@ -78,7 +78,7 @@ describe('Test for Step actions from the canvas', () => {
         // CHECK that YAML not contains the 'timer:null'
         cy.get('.code-editor').should('not.contain.text', 'timer:null');
 
-        cy.waitAndsyncUpCodeChanges()
+        cy.syncUpCodeChanges()
 
         // CHECK that the step is deleted
         cy.get('[data-testid="viz-step-timer"]').should('not.exist');
@@ -107,7 +107,7 @@ describe('Test for Step actions from the canvas', () => {
         // CHECK that YAML not contains the 'timer:null'
         cy.get('.code-editor').should('not.contain.text', 'timer:null');
 
-        cy.waitAndsyncUpCodeChanges()
+        cy.syncUpCodeChanges()
 
         // CHECK that the step is deleted
         cy.get('[data-testid="viz-step-timer"]').should('not.exist');
@@ -134,7 +134,8 @@ describe('Test for Step actions from the canvas', () => {
         cy.get('.stepNode').should('have.length', 3);
         // CHECK YAML contains the  'aggregate: {}'
         cy.checkCodeSpanLine('aggregate: {}');
-        cy.waitAndsyncUpCodeChanges()
+        cy.checkCodeSpanLine('uri: \'log:\'');
+        cy.syncUpCodeChanges()
 
         // CHECK that stepNodes are in the correct order
         cy.get('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-timer');

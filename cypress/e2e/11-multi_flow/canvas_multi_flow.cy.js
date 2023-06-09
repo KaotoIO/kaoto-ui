@@ -26,28 +26,40 @@ describe('Test for Multi route actions from the canvas', () => {
     cy.createNewRoute();
     cy.createNewRoute();
 
+    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "1/3");
+
     cy.toggleRouteVisibility(0);
     cy.toggleRouteVisibility(1);
 
+    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "3/3");
     cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 3);
 
     cy.toggleRouteVisibility(0);
     cy.toggleRouteVisibility(1);
     cy.toggleRouteVisibility(2);
 
+    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "0/3");
     cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 0);
   });
 
-  it('User deletes routes in the canvas', () => {
+  it('User deletes routes in the canvas till there are no routes', () => {
     cy.switchIntegrationType('Integration');
     cy.createNewRoute();
     cy.createNewRoute();
     cy.showAllRoutes();
 
+    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "3/3");
+
     cy.deleteRoute(0);
     cy.deleteRoute(0);
     cy.deleteRoute(0);
     cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 0);
+    cy.get('[data-testid="flows-list-empty-state"]').should('have.length', 1);
+    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "0/0");
+
+    cy.get('[data-testid="flows-list-empty-state"]').within(() => {
+      cy.get('h4.pf-c-title').should('have.text', "There's no routes to show");
+    });
   });
 
   it('User creates multiple routes in canvas', () => {
