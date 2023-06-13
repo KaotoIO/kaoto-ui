@@ -85,9 +85,14 @@ const Visualization = () => {
   const stepsService = useMemo(() => new StepsService(), []);
 
   const previousFlows = usePrevious(flows);
+  const previousMetadata = usePrevious(metadata);
 
   useEffect(() => {
-    if (previousFlows === flows || !Array.isArray(flows[0]?.steps)) return;
+    if (
+      (previousFlows === flows && previousMetadata === metadata) ||
+      !Array.isArray(flows[0]?.steps)
+    )
+      return;
     if (flows[0].dsl !== null && flows[0].dsl !== settings.dsl.name) {
       fetchCapabilities().then((capabilities: ICapabilities) => {
         capabilities.dsls.forEach((dsl) => {

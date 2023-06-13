@@ -1,4 +1,5 @@
 import { MetadataEditorModal } from './MetadataEditorModal';
+import { mockSchema } from './TestUtil';
 import { useArgs } from '@storybook/client-api';
 import { StoryFn, Meta } from '@storybook/react';
 
@@ -29,55 +30,14 @@ const Template: StoryFn<typeof MetadataEditorModal> = (args) => {
   );
 };
 
-export const schemaMock = {
-  beans: {
-    title: 'Beans',
-    description: 'Beans Configuration',
-    type: 'array',
-    items: {
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        name: {
-          type: 'string',
-        },
-        type: {
-          type: 'string',
-        },
-        properties: {
-          type: 'object',
-        },
-      },
-      required: ['name', 'type'],
-    },
-  },
-  single: {
-    title: 'Single Object',
-    description: 'Single Object Configuration',
-    type: 'object',
-    additionalProperties: false,
-    properties: {
-      name: {
-        type: 'string',
-      },
-      type: {
-        type: 'string',
-      },
-      properties: {
-        type: 'object',
-      },
-    },
-  },
-};
-
 export const BeansArray = Template.bind({});
 BeansArray.args = {
   name: 'beans',
-  schema: schemaMock.beans,
+  schema: mockSchema.beans,
 };
 
 export const SingleObject = Template.bind({});
 SingleObject.args = {
   name: 'singleObject',
-  schema: schemaMock.single,
+  schema: mockSchema.single,
 };

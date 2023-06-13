@@ -101,7 +101,7 @@ export function MetadataEditorModal({
   function renderTopmostArrayView() {
     return (
       <Split hasGutter>
-        <SplitItem isFilled>
+        <SplitItem className="metadataEditorModalListView">
           <TopmostArrayTable
             model={metadata}
             itemSchema={getFormSchema()}
@@ -112,7 +112,7 @@ export function MetadataEditorModal({
           />
         </SplitItem>
 
-        <SplitItem>
+        <SplitItem className="metadataEditorModalDetailsView">
           <Stack hasGutter>
             <StackItem>
               <Title headingLevel="h2">Details</Title>
@@ -142,17 +142,17 @@ export function MetadataEditorModal({
   }
 
   return (
-    <StepErrorBoundary>
-      <Modal
-        className="metadataEditorModal"
-        data-testid={`metadata-${name}-modal`}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        title={schema.title + ' Configuration'}
-        variant={ModalVariant.large}
-      >
+    <Modal
+      className="metadataEditorModal"
+      data-testid={`metadata-${name}-modal`}
+      isOpen={isModalOpen}
+      onClose={handleCloseModal}
+      title={schema.title + ' Configuration'}
+      variant={ModalVariant.large}
+    >
+      <StepErrorBoundary>
         {isTopmostArray() ? renderTopmostArrayView() : renderDetailsForm()}
-      </Modal>
-    </StepErrorBoundary>
+      </StepErrorBoundary>
+    </Modal>
   );
 }

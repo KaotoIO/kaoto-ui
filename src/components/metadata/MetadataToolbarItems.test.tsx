@@ -1,4 +1,4 @@
-import { schemaMock } from './MetadataEditorModal.stories';
+import { mockSchema } from './TestUtil';
 import * as api from '@kaoto/api';
 import { MetadataToolbarItems } from '@kaoto/components';
 import { screen } from '@testing-library/dom';
@@ -13,7 +13,7 @@ jest.mock('@kaoto/api', () => {
 
 describe('MetadataToolbarItems.tsx', () => {
   test('component renders multiple metadata items', async () => {
-    jest.spyOn(api, 'fetchMetadataSchema').mockResolvedValue(schemaMock);
+    jest.spyOn(api, 'fetchMetadataSchema').mockResolvedValue(mockSchema);
     render(<MetadataToolbarItems />);
     const beansBtn = await waitFor(() => screen.getByTestId('toolbar-metadata-beans-btn'));
     await waitFor(() => screen.getByTestId('toolbar-metadata-single-btn'));
