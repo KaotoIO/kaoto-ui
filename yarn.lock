@@ -3940,7 +3940,7 @@ __metadata:
     "@types/jest": ^29.5.2
     "@types/lodash.clonedeep": ^4.5.7
     "@types/lodash.isequal": ^4.5.6
-    "@types/node": ^18.16.3
+    "@types/node": ^20.3.1
     "@types/react": 18.2.11
     "@types/react-dom": 18.2.4
     "@types/react-router-dom": 5.3.3
@@ -8002,10 +8002,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.16.3":
-  version: 18.16.10
-  resolution: "@types/node@npm:18.16.10"
-  checksum: 1db35543ae98d4a98731037a11a9478480d1260ff3778da70b9a137a3023666d20bab1573b584c401058f76c0d5f7dfbbc157b70a059452e086c8da5639cc653
+"@types/node@npm:^20.3.1":
+  version: 20.3.1
+  resolution: "@types/node@npm:20.3.1"
+  checksum: 63a393ab6d947be17320817b35d7277ef03728e231558166ed07ee30b09fd7c08861be4d746f10fdc63ca7912e8cd023939d4eab887ff6580ff704ff24ed810c
   languageName: node
   linkType: hard
 
