@@ -3913,7 +3913,7 @@ __metadata:
     "@opentelemetry/instrumentation-document-load": ^0.32.2
     "@opentelemetry/instrumentation-fetch": ^0.40.0
     "@opentelemetry/instrumentation-long-task": ^0.32.4
-    "@opentelemetry/instrumentation-user-interaction": ^0.32.3
+    "@opentelemetry/instrumentation-user-interaction": ^0.32.4
     "@opentelemetry/resources": ^1.14.0
     "@opentelemetry/sdk-trace-web": ^1.14.0
     "@patternfly/patternfly": 4.224.2
@@ -4553,17 +4553,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/instrumentation-user-interaction@npm:^0.32.3":
-  version: 0.32.3
-  resolution: "@opentelemetry/instrumentation-user-interaction@npm:0.32.3"
+"@opentelemetry/instrumentation-user-interaction@npm:^0.32.4":
+  version: 0.32.4
+  resolution: "@opentelemetry/instrumentation-user-interaction@npm:0.32.4"
   dependencies:
     "@opentelemetry/core": ^1.8.0
-    "@opentelemetry/instrumentation": ^0.39.1
+    "@opentelemetry/instrumentation": ^0.40.0
     "@opentelemetry/sdk-trace-web": ^1.8.0
   peerDependencies:
     "@opentelemetry/api": ^1.3.0
     zone.js: 0.11.4
-  checksum: ad28d3dce65736667ad57ff5536ba4ac86514d13b2fb66c8f69a00c5cedd0bfb09b54b3924ca2080d03cdac9939a2177b6d9e83dce8f0a82de4147eba75410f3
+  checksum: a39f9477c36d6aeed5f0802a106fc204c57844e486b064efc659d1819a2e6418c24da2fb82935debfe2d4c9ac9d37b87b4b7b885ad92b8fc8cc7be50095ee1d8
   languageName: node
   linkType: hard
 
