@@ -43,7 +43,7 @@
     "@opentelemetry/instrumentation": "^0.40.0",
     "@opentelemetry/instrumentation-document-load": "^0.32.2",
     "@opentelemetry/instrumentation-fetch": "^0.40.0",
-    "@opentelemetry/instrumentation-long-task": "^0.32.4",
+    "@opentelemetry/instrumentation-long-task": "^0.32.5",
     "@opentelemetry/instrumentation-user-interaction": "^0.32.3",
     "@opentelemetry/resources": "^1.14.0",
     "@opentelemetry/sdk-trace-web": "^1.14.0",

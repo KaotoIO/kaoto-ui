@@ -3912,7 +3912,7 @@ __metadata:
     "@opentelemetry/instrumentation": ^0.40.0
     "@opentelemetry/instrumentation-document-load": ^0.32.2
     "@opentelemetry/instrumentation-fetch": ^0.40.0
-    "@opentelemetry/instrumentation-long-task": ^0.32.4
+    "@opentelemetry/instrumentation-long-task": ^0.32.5
     "@opentelemetry/instrumentation-user-interaction": ^0.32.3
     "@opentelemetry/resources": ^1.14.0
     "@opentelemetry/sdk-trace-web": ^1.14.0
@@ -4540,16 +4540,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/instrumentation-long-task@npm:^0.32.4":
-  version: 0.32.4
-  resolution: "@opentelemetry/instrumentation-long-task@npm:0.32.4"
+"@opentelemetry/instrumentation-long-task@npm:^0.32.5":
+  version: 0.32.5
+  resolution: "@opentelemetry/instrumentation-long-task@npm:0.32.5"
   dependencies:
     "@opentelemetry/core": ^1.8.0
-    "@opentelemetry/instrumentation": ^0.39.1
+    "@opentelemetry/instrumentation": ^0.40.0
     "@opentelemetry/sdk-trace-web": ^1.8.0
   peerDependencies:
     "@opentelemetry/api": ^1.3.0
-  checksum: 9c1175e11a9e7083cf01fa2fef1b8b73fcff387993340cb2cd8fd74d02bd4e2a8c2ff5c916c4eb448da18f26c55b29e8fc96ad4384dfd5a0b3f5a1194aa625ce
+  checksum: 5f8aef4c175996c37daadc09b3fb3cd6ca6888dd20d99b4bc47e8a89a5b7efbec63569b3275ac193efebffd389925c7b5ed92e59d2585b407393b39a63e1b387
   languageName: node
   linkType: hard
 
