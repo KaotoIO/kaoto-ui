@@ -4009,7 +4009,7 @@ __metadata:
     webpack-dev-server: 4.15.1
     webpack-merge: ^5.9.0
     whatwg-fetch: ^3.6.2
-    zundo: ^2.0.0-beta.19
+    zundo: ^2.0.0-beta.20
     zustand: ^4.3.8
   peerDependencies:
     "@patternfly/patternfly": "*"
@@ -16612,7 +16612,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.isequal@npm:^4.5.0":
+"lodash.isequal@npm:4.5.0, lodash.isequal@npm:^4.5.0":
   version: 4.5.0
   resolution: "lodash.isequal@npm:4.5.0"
   checksum: da27515dc5230eb1140ba65ff8de3613649620e8656b19a6270afe4866b7bd461d9ba2ac8a48dcc57f7adac4ee80e1de9f965d89d4d81a0ad52bb3eec2609644
@@ -23404,12 +23404,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zundo@npm:^2.0.0-beta.19":
-  version: 2.0.0-beta.19
-  resolution: "zundo@npm:2.0.0-beta.19"
+"zundo@npm:^2.0.0-beta.20":
+  version: 2.0.0-experimental.0
+  resolution: "zundo@npm:2.0.0-experimental.0"
+  dependencies:
+    lodash.isequal: 4.5.0
   peerDependencies:
-    zustand: ^4.3.0
-  checksum: f77fefb816a7dbb50cb09bc7f7447beb364d1aa12f9e783bc746a6e5981ecb74724f664cc40da178c80d5d36bd39a8092582846928702e8452409f8e67b3591d
+    react: ">=16"
+    zustand: ^4.0.0
+  checksum: 7287d94f236dcb3775b9c4dd5c25e2336be156ffbd6f72f8f649acc327966b0af28aca4013d0c0fe975d189dcb05036fb597d3520d9f68ff549cb907500e0f19
   languageName: node
   linkType: hard
 
