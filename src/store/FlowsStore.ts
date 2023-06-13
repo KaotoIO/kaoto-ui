@@ -188,7 +188,7 @@ export const useFlowsStore = create<IFlowsStore>()(
 
       setMetadata: (name, metadata) =>
         set((state) => {
-          const newMetadata = state.metadata;
+          const newMetadata = { ...state.metadata };
           newMetadata[name] = metadata;
           return { ...state, metadata: newMetadata };
         }),

@@ -1,16 +1,18 @@
 import { MetadataEditorModal } from './MetadataEditorModal';
-import { schemaMock } from './MetadataEditorModal.stories';
+import { mockModel, mockSchema } from './TestUtil';
+import { useFlowsStore } from '@kaoto/store';
 import { screen } from '@testing-library/dom';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 
 describe('MetadataEditorModal.tsx', () => {
   test('component renders if open', () => {
+    useFlowsStore.getState().setMetadata('beans', []);
     render(
       <MetadataEditorModal
         handleCloseModal={jest.fn()}
         isModalOpen={true}
         name="beans"
-        schema={schemaMock.beans}
+        schema={mockSchema.beans}
       />,
     );
     const element = screen.queryByTestId('metadata-beans-modal');
@@ -18,25 +20,27 @@ describe('MetadataEditorModal.tsx', () => {
   });
 
   test('component does not render if closed', () => {
+    useFlowsStore.getState().setMetadata('beans', []);
     render(
       <MetadataEditorModal
         handleCloseModal={jest.fn()}
         isModalOpen={false}
         name="beans"
-        schema={schemaMock.beans}
+        schema={mockSchema.beans}
       />,
     );
     const element = screen.queryByTestId('metadata-beans-modal');
     expect(element).not.toBeInTheDocument();
   });
 
-  test('editor works', async () => {
+  test('Details disabled if empty', async () => {
+    useFlowsStore.getState().setMetadata('beans', []);
     render(
       <MetadataEditorModal
         handleCloseModal={jest.fn()}
         isModalOpen={true}
         name="beans"
-        schema={schemaMock.beans}
+        schema={mockSchema.beans}
       />,
     );
     const inputs = screen
@@ -44,64 +48,58 @@ describe('MetadataEditorModal.tsx', () => {
       .filter((input) => input.getAttribute('name') === 'name');
     expect(inputs.length).toBe(1);
     expect(inputs[0]).toBeDisabled();
-    const addPropsBtn = screen.getByTestId('properties-add-property--popover-btn');
-    expect(addPropsBtn).toBeDisabled();
-    screen.getByText('No beans');
+    const addStringPropBtn = screen.getByTestId('properties-add-string-property--btn');
+    expect(addStringPropBtn).toBeDisabled();
+    const addObjectPropBtn = screen.getByTestId('properties-add-object-property--btn');
+    expect(addObjectPropBtn).toBeDisabled();
+  });
 
-    const addBeansBtns = screen.getAllByTestId('metadata-add-beans-btn');
-    expect(addBeansBtns.length).toBe(2);
-    fireEvent.click(addBeansBtns[1]);
-    const noBeans2 = screen.queryByText('No beans');
-    expect(noBeans2).not.toBeInTheDocument();
-    const inputs2 = screen
+  test('Details enabled if select', async () => {
+    useFlowsStore.getState().setMetadata('beans', mockModel.beans);
+    render(
+      <MetadataEditorModal
+        handleCloseModal={jest.fn()}
+        isModalOpen={true}
+        name="beans"
+        schema={mockSchema.beans}
+      />,
+    );
+    const row = screen.getByTestId('metadata-row-0');
+    fireEvent.click(row);
+    const inputs = screen
       .getAllByTestId('text-field')
       .filter((input) => input.getAttribute('name') === 'name');
-    expect(inputs2.length).toBe(1);
-    expect(inputs2[0]).toBeEnabled();
-    screen.getByText('No properties');
-
-    const addPropsBtns = screen.getAllByTestId('properties-add-property--popover-btn');
-    expect(addPropsBtns.length).toBe(2);
-    fireEvent.click(addPropsBtns[1]);
-    await waitFor(() => screen.getByTestId('properties-add-property--popover'));
-    const propNameInput = screen.getByTestId('properties-add-property--name-input');
-    fireEvent.input(propNameInput, { target: { value: 'propObj' } });
-    const propTypeObjectRadio = screen.getByTestId('properties-add-property--type-object');
-    fireEvent.click(propTypeObjectRadio);
-    const propAddBtn = screen.getByTestId('properties-add-property--add-btn');
-    fireEvent.click(propAddBtn);
-
-    const addPropsPropObjBtn = await waitFor(() =>
-      screen.getByTestId('properties-add-property-propObj-popover-btn'),
+    expect(inputs.length).toBe(1);
+    expect(inputs[0]).toBeEnabled();
+    const addStringPropBtn = screen.getByTestId('properties-add-string-property--btn');
+    expect(addStringPropBtn).toBeEnabled();
+    const addObjectPropBtn = screen.getByTestId('properties-add-object-property--btn');
+    expect(addObjectPropBtn).toBeEnabled();
+    const propObj2AddStringPropBtn = screen.getByTestId(
+      'properties-add-string-property-propObj1-btn',
     );
-    fireEvent.click(addPropsPropObjBtn);
-    const propNamePropObjInput = await waitFor(() =>
-      screen.getByTestId('properties-add-property-propObj-name-input'),
-    );
-    fireEvent.input(propNamePropObjInput, { target: { value: 'subPropName' } });
-    const propValueInput = screen.getByTestId('properties-add-property-propObj-value-input');
-    fireEvent.input(propValueInput, { target: { value: 'subPropValue' } });
-    const propAddBtn2 = screen.getByTestId('properties-add-property-propObj-add-btn');
-    fireEvent.click(propAddBtn2);
-    const noProps2 = screen.queryByText('No properties');
-    expect(noProps2).not.toBeInTheDocument();
+    fireEvent.click(propObj2AddStringPropBtn);
+    const input = screen.getByTestId('properties-propObj1-placeholder-name-input');
+    fireEvent.input(input, { target: { value: 'propObj1Child' } });
+    fireEvent.blur(input);
+  });
 
-    const expandBtn = screen.getByLabelText('Expand row 0');
-    fireEvent.click(expandBtn);
-    const subPropInput = await waitFor(() =>
-      screen.getByTestId('properties-propObj-subPropName-value-input'),
+  test('render properties empty state', async () => {
+    useFlowsStore.getState().setMetadata('beans', mockModel.beansNoProp);
+    render(
+      <MetadataEditorModal
+        handleCloseModal={jest.fn()}
+        isModalOpen={true}
+        name="beans"
+        schema={mockSchema.beans}
+      />,
     );
-    fireEvent.input(subPropInput, { target: { value: 'subPropValueModified' } });
-
-    const deletePropObjBtn = screen.getByTestId('properties-delete-property-propObj-btn');
-    fireEvent.click(deletePropObjBtn);
-    const deletePropObjBtn2 = screen.queryByTestId('properties-delete-property-propObj-btn');
-    expect(deletePropObjBtn2).not.toBeInTheDocument();
-    screen.getByText('No properties');
-    const deleteBeansBtn = screen.getByTestId('metadata-delete-0-btn');
-    fireEvent.click(deleteBeansBtn);
-    const deleteBeansBtn2 = screen.queryByTestId('metadata-delete-0-btn');
-    expect(deleteBeansBtn2).not.toBeInTheDocument();
-    screen.getByText('No beans');
+    const row = screen.getByTestId('metadata-row-0');
+    fireEvent.click(row);
+    let addStringPropBtns = screen.getAllByTestId('properties-add-string-property--btn');
+    expect(addStringPropBtns.length).toBe(2);
+    fireEvent.click(addStringPropBtns[1]);
+    addStringPropBtns = screen.getAllByTestId('properties-add-string-property--btn');
+    expect(addStringPropBtns.length).toBe(1);
   });
 });

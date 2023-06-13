@@ -1,3 +1,4 @@
+import './MetadataEditorModal.css';
 import { Button, EmptyState, EmptyStateBody, Tooltip, Truncate } from '@patternfly/react-core';
 import { PlusCircleIcon, TrashIcon } from '@patternfly/react-icons';
 import {
@@ -59,7 +60,7 @@ export function TopmostArrayTable(props: TopmostArrayTableProps) {
                     {name.toUpperCase()}
                   </Th>
                 ))}
-              <Th modifier="nowrap" key="buttons">
+              <Td modifier="nowrap" key="buttons" isActionCell>
                 <Tooltip content={`Add new ${props.name}`}>
                   <Button
                     data-testid={'metadata-add-' + props.name + '-btn'}
@@ -68,7 +69,7 @@ export function TopmostArrayTable(props: TopmostArrayTableProps) {
                     onClick={() => handleAddNew()}
                   ></Button>
                 </Tooltip>
-              </Th>
+              </Td>
             </Tr>
           </Thead>
           <Tbody>
@@ -92,6 +93,7 @@ export function TopmostArrayTable(props: TopmostArrayTableProps) {
               props.model.map((item, index) => (
                 <Tr
                   key={index}
+                  data-testid={'metadata-row-' + index}
                   isHoverable
                   isSelectable
                   onRowClick={() => props.onSelected(index)}
@@ -103,7 +105,7 @@ export function TopmostArrayTable(props: TopmostArrayTableProps) {
                         <Truncate content={item[name]} />
                       </Td>
                     ))}
-                  <Td key="buttons">
+                  <Td key="buttons" isActionCell>
                     <Tooltip content={`Delete ${props.name}`}>
                       <Button
                         data-testid={'metadata-delete-' + index + '-btn'}

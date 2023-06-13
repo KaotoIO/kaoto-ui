@@ -255,12 +255,16 @@ export async function fetchMetadataSchema(dsl: string): Promise<{ [key: string]:
           properties: {
             name: {
               type: 'string',
+              description: 'Bean name',
             },
             type: {
               type: 'string',
+              description:
+                'What type to use for creating the bean. Can be one of: #class,#type,bean,groovy,joor,language,mvel,ognl. #class or #type then the bean is created via the fully qualified classname, such as #class:com.foo.MyBean The others are scripting languages that gives more power to create the bean with an inlined code in the script section, such as using groovy.',
             },
             properties: {
               type: 'object',
+              description: 'Optional properties to set on the created local bean',
             },
           },
           required: ['name', 'type'],

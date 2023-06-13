@@ -1,4 +1,5 @@
-import { AddPropertyButton } from './AddPropertyButton';
+import { AddPropertyButtons } from './AddPropertyButtons';
+import { PropertyPlaceholderRow } from './PropertyPlaceholderRow';
 import { PropertyRow } from './PropertyRow';
 import wrapField from '@kie-tools/uniforms-patternfly/dist/cjs/wrapField';
 import { EmptyState, EmptyStateBody, Stack, StackItem } from '@patternfly/react-core';
@@ -27,10 +28,29 @@ export type PropertiesFieldProps = HTMLFieldProps<any, HTMLDivElement>;
  */
 function Properties(props: PropertiesFieldProps) {
   const [expandedNodes, setExpandedNodes] = useState<string[]>([]);
+  const [placeholderState, setPlaceholderState] = useState<PlaceholderState | null>(null);
 
   const handleModelChange = useCallback(() => {
+    setPlaceholderState(null);
     props.onChange(props.value ? props.value : {}, props.name);
   }, [props.onChange, props.value, props.name]);
+
+  type PlaceholderState = {
+    isObject: boolean;
+    parentNodeId: string;
+  };
+
+  function getNodeId(path: string[]) {
+    return path.join('-');
+  }
+
+  function handleCreatePlaceHolder(state: PlaceholderState) {
+    setPlaceholderState({ ...state });
+    if (state.parentNodeId && state.parentNodeId.length > 0) {
+      expandedNodes.includes(state.parentNodeId) ||
+        setExpandedNodes([...expandedNodes, state.parentNodeId]);
+    }
+  }
 
   function renderRows(
     [node, ...remainingNodes]: [string, any][],
@@ -42,32 +62,33 @@ function Properties(props: PropertiesFieldProps) {
     isHidden = false,
   ): ReactNode[] {
     if (!node) {
-      return [];
+      // placeholder is rendered as a last sibling
+      return placeholderState && placeholderState.parentNodeId === getNodeId(parentPath)
+        ? [
+            <PropertyPlaceholderRow
+              key="placeholder"
+              propertyName={props.name}
+              path={parentPath}
+              parentModel={parentModel}
+              level={level}
+              posinset={posinset}
+              rowIndex={rowIndex}
+              isObject={placeholderState.isObject}
+              onChangeModel={handleModelChange}
+            />,
+          ]
+        : [];
     }
+
     const nodeName = node[0];
     const nodeValue = node[1];
-    const isExpanded = expandedNodes.includes(nodeName);
     const path = parentPath.slice();
     path.push(nodeName);
-
-    const treeRow: TdProps['treeRow'] = {
-      onCollapse: () =>
-        setExpandedNodes((prevExpanded) => {
-          const otherExpandedNodeNames = prevExpanded.filter((name) => name !== nodeName);
-          return isExpanded ? otherExpandedNodeNames : [...otherExpandedNodeNames, nodeName];
-        }),
-      rowIndex,
-      props: {
-        isExpanded,
-        isHidden,
-        'aria-level': level,
-        'aria-posinset': posinset,
-        'aria-setsize': typeof nodeValue === 'object' ? Object.keys(nodeValue).length : 0,
-      },
-    };
+    const nodeId = getNodeId(path);
+    const isExpanded = expandedNodes.includes(nodeId);
 
     const childRows =
-      typeof nodeValue === 'object' && Object.keys(nodeValue).length
+      typeof nodeValue === 'object'
         ? renderRows(
             Object.entries(nodeValue),
             nodeValue,
@@ -79,9 +100,35 @@ function Properties(props: PropertiesFieldProps) {
           )
         : [];
 
+    const siblingRows = renderRows(
+      remainingNodes,
+      parentModel,
+      parentPath,
+      level,
+      posinset + 1,
+      rowIndex + 1 + childRows.length,
+      isHidden,
+    );
+
+    const treeRow: TdProps['treeRow'] = {
+      onCollapse: () =>
+        setExpandedNodes((prevExpanded) => {
+          const otherExpandedNodeIds = prevExpanded.filter((id) => id !== nodeId);
+          return isExpanded ? otherExpandedNodeIds : [...otherExpandedNodeIds, nodeId];
+        }),
+      rowIndex,
+      props: {
+        isExpanded,
+        isHidden,
+        'aria-level': level,
+        'aria-posinset': posinset,
+        'aria-setsize': typeof nodeValue === 'object' ? Object.keys(nodeValue).length : 0,
+      },
+    };
+
     return [
       <PropertyRow
-        key={`${props.name}-${path.join('-')}`}
+        key={`${props.name}-${getNodeId(path)}`}
         propertyName={props.name}
         nodeName={nodeName}
         nodeValue={nodeValue}
@@ -90,17 +137,15 @@ function Properties(props: PropertiesFieldProps) {
         treeRow={treeRow}
         isObject={typeof nodeValue === 'object'}
         onChangeModel={handleModelChange}
+        createPlaceholder={(isObject) => {
+          handleCreatePlaceHolder({
+            isObject: isObject,
+            parentNodeId: getNodeId(path),
+          });
+        }}
       />,
       ...childRows,
-      ...renderRows(
-        remainingNodes,
-        parentModel,
-        parentPath,
-        level,
-        posinset + 1,
-        rowIndex + 1 + childRows.length,
-        isHidden,
-      ),
+      ...siblingRows,
     ];
   }
 
@@ -121,30 +166,38 @@ function Properties(props: PropertiesFieldProps) {
                 <Tr key={`${props.name}-header`}>
                   <Th modifier="nowrap">NAME</Th>
                   <Th modifier="nowrap">VALUE</Th>
-                  <Th modifier="nowrap">
-                    <AddPropertyButton
-                      model={props.value}
+                  <Td modifier="nowrap" isActionCell>
+                    <AddPropertyButtons
                       path={[]}
                       disabled={props.disabled}
-                      onChangeModel={handleModelChange}
+                      createPlaceholder={(isObject) =>
+                        handleCreatePlaceHolder({
+                          isObject: isObject,
+                          parentNodeId: '',
+                        })
+                      }
                     />
-                  </Th>
+                  </Td>
                 </Tr>
               </Thead>
               <Tbody>
-                {props.value && Object.keys(props.value).length > 0
+                {(props.value && Object.keys(props.value).length > 0) || placeholderState
                   ? renderRows(Object.entries(props.value), props.value)
                   : !props.disabled && (
                       <Tr key={`${props.name}-empty`}>
                         <Td colSpan={3}>
                           <EmptyState>
                             <EmptyStateBody>No {props.name}</EmptyStateBody>
-                            <AddPropertyButton
-                              textLabel="Add property"
-                              model={props.value}
+                            <AddPropertyButtons
+                              showLabel={true}
                               path={[]}
                               disabled={props.disabled}
-                              onChangeModel={handleModelChange}
+                              createPlaceholder={(isObject) =>
+                                handleCreatePlaceHolder({
+                                  isObject: isObject,
+                                  parentNodeId: '',
+                                })
+                              }
                             />
                           </EmptyState>
                         </Td>

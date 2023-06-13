@@ -1,9 +1,19 @@
 .metadataEditorModal {
-    --pf-c-modal-box--ZIndex: 500;
-    --pf-c-modal-box--Height: 90vh;
-    --pf-c-modal-box--Width: 90vw;
-    --pf-c-modal-box__body--MinHeight: 90vh;
-    --pf-c-modal-box__body--MaxHeight: 90vh;
-    --pf-c-modal-box__body--MinWidth: 90vw;
-    --pf-c-modal-box__body--MaxWidth: 90vw;
+    height: 90vh;
+    width: 90vw;
+}
+
+.metadataEditorModalListView {
+    width: 50vw;
+}
+
+.metadataEditorModalDetailsView {
+    width: 50vw;
+}
+
+.propertyRow {
+    --pf-c-table--m-compact--cell--PaddingTop: 0px;
+    --pf-c-table--m-compact--cell--PaddingBottom: 0px;
+    --pf-c-table--m-compact--cell--PaddingRight: 0px;
+    --pf-c-table--m-compact--cell--PaddingLeft: 0px;
 }
