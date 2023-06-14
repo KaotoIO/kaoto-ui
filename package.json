@@ -116,7 +116,7 @@
     "copyfiles": "^2.4.1",
     "cpr": "^3.0.1",
     "css-loader": "^6.8.1",
-    "css-minimizer-webpack-plugin": "^5.0.0",
+    "css-minimizer-webpack-plugin": "^5.0.1",
     "cypress": "12.14.0",
     "cypress-file-upload": "^5.0.8",
     "dotenv-webpack": "8.0.1",
