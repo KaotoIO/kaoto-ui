@@ -1,12 +1,12 @@
 import { IDataTestID } from '@kaoto/types';
 import { EmptyState, EmptyStateBody, EmptyStateIcon, Title } from '@patternfly/react-core';
-import { ListIcon } from '@patternfly/react-icons';
+import { CubesIcon } from '@patternfly/react-icons';
 import { FunctionComponent } from 'react';
 
 export const FlowsListEmptyState: FunctionComponent<IDataTestID> = (props) => {
   return (
     <EmptyState data-testid={props['data-testid']}>
-      <EmptyStateIcon icon={ListIcon} />
+      <EmptyStateIcon icon={CubesIcon} />
       <Title headingLevel="h4" size="md">
         There's no routes to show
       </Title>
