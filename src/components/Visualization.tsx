@@ -1,19 +1,33 @@
+import { usePrevious } from '../hooks';
+import { useFlowsVisibility } from '../hooks/flows-visibility.hook';
 import { DeleteButtonEdge } from './DeleteButtonEdge';
 import { KaotoDrawer } from './KaotoDrawer';
 import { PlusButtonEdge } from './PlusButtonEdge';
 import { StepErrorBoundary } from './StepErrorBoundary';
 import './Visualization.css';
+import { VisualizationEmptyState } from './Visualization/VisualizationEmptyState';
 import { VisualizationControls } from './VisualizationControls';
 import { VisualizationStep } from './VisualizationStep';
 import { VisualizationStepViews } from './VisualizationStepViews';
+import { fetchCapabilities, fetchIntegrationSourceCode } from '@kaoto/api';
 import { StepsService, VisualizationService } from '@kaoto/services';
-import { useFlowsStore, useIntegrationSourceStore, useSettingsStore, useVisualizationStore } from '@kaoto/store';
-import { HandleDeleteStepFn, IStepProps, IVizStepNode, ICapabilities, IFlowsWrapper, ISettings } from '@kaoto/types';
+import {
+  useFlowsStore,
+  useIntegrationSourceStore,
+  useSettingsStore,
+  useVisualizationStore,
+} from '@kaoto/store';
+import {
+  HandleDeleteStepFn,
+  IStepProps,
+  IVizStepNode,
+  ICapabilities,
+  IFlowsWrapper,
+  ISettings,
+} from '@kaoto/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
 import { shallow } from 'zustand/shallow';
-import { usePrevious } from '../hooks';
-import { fetchCapabilities, fetchIntegrationSourceCode } from '@kaoto/api';
 
 const Visualization = () => {
   // `nodes` is an array of UI-specific objects that represent
@@ -52,16 +66,20 @@ const Visualization = () => {
     }),
     shallow,
   );
+  const visibleFlowsInformation = useFlowsVisibility();
 
   const { settings, setSettings } = useSettingsStore((state) => state);
-  const [ setSourceCode, setSyncedSourceCode ] = useIntegrationSourceStore(
-    (state) => [state.setSourceCode, state.setSyncedSourceCode], shallow);
+  const [setSourceCode, setSyncedSourceCode] = useIntegrationSourceStore(
+    (state) => [state.setSourceCode, state.setSyncedSourceCode],
+    shallow,
+  );
   const { flows, properties, metadata } = useFlowsStore(
     ({ flows, properties, metadata }) => ({
       flows,
       properties,
       metadata,
-    }), shallow
+    }),
+    shallow,
   );
   const visualizationService = useMemo(() => new VisualizationService(), []);
   const stepsService = useMemo(() => new StepsService(), []);
@@ -243,28 +261,35 @@ const Visualization = () => {
         defaultSize="500px"
         minSize="150px"
       >
-        <div className="reactflow-wrapper" data-testid="react-flow-wrapper">
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            defaultViewport={defaultViewport.current}
-            edgeTypes={edgeTypes}
-            nodeTypes={nodeTypes}
-            onDragOver={onDragOver}
-            onNodeClick={onNodeClick}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            snapToGrid
-            snapGrid={[15, 15]}
-            deleteKeyCode={null}
-            zoomOnDoubleClick={false}
-            className="panelCustom"
-          >
-            {/*<MiniMap nodeBorderRadius={2} className={'visualization__minimap'} />*/}
-            <VisualizationControls />
-            <Background color="#aaa" gap={16} />
-          </ReactFlow>
-        </div>
+        {visibleFlowsInformation.isCanvasEmpty ? (
+          <VisualizationEmptyState
+            visibleFlowsInformation={visibleFlowsInformation}
+            data-testid="visualization-empty-state"
+          />
+        ) : (
+          <div className="reactflow-wrapper" data-testid="react-flow-wrapper">
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              defaultViewport={defaultViewport.current}
+              edgeTypes={edgeTypes}
+              nodeTypes={nodeTypes}
+              onDragOver={onDragOver}
+              onNodeClick={onNodeClick}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              snapToGrid
+              snapGrid={[15, 15]}
+              deleteKeyCode={null}
+              zoomOnDoubleClick={false}
+              className="panelCustom"
+            >
+              {/*<MiniMap nodeBorderRadius={2} className={'visualization__minimap'} />*/}
+              <VisualizationControls />
+              <Background color="#aaa" gap={16} />
+            </ReactFlow>
+          </div>
+        )}
       </KaotoDrawer>
     </StepErrorBoundary>
   );

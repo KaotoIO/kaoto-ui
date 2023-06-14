@@ -1,6 +1,5 @@
+import { useFlowsVisibility } from '../../hooks/flows-visibility.hook';
 import { FlowsList } from './FlowsList';
-import { VisualizationService } from '@kaoto/services';
-import { useVisualizationStore } from '@kaoto/store';
 import {
   Badge,
   Icon,
@@ -11,14 +10,9 @@ import {
 import { Select } from '@patternfly/react-core/next';
 import { ListIcon } from '@patternfly/react-icons';
 import { FunctionComponent, Ref, useState } from 'react';
-import { shallow } from 'zustand/shallow';
 
 export const FlowsMenu: FunctionComponent = () => {
-  const visibleFlowsInformation = useVisualizationStore(
-    ({ visibleFlows }) => VisualizationService.getVisibleFlowsInformation(visibleFlows),
-    shallow,
-  );
-
+  const visibleFlowsInformation = useFlowsVisibility();
   const [isOpen, setIsOpen] = useState(false);
 
   /** Toggle the DSL dropdown */
@@ -49,7 +43,7 @@ export const FlowsMenu: FunctionComponent = () => {
               {visibleFlowsInformation.singleFlowId ?? 'Routes'}
             </span>
             <Badge data-testid="flows-list-route-count" isRead>
-              {visibleFlowsInformation.currentVisible}/{visibleFlowsInformation.flowsCount}
+              {visibleFlowsInformation.visibleFlowsCount}/{visibleFlowsInformation.totalFlowsCount}
             </Badge>
           </MenuToggleAction>,
         ],

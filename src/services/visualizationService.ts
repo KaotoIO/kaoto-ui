@@ -1,7 +1,7 @@
-import { StepsService } from './stepsService';
-import { ValidationService } from './validationService';
 import { FlowsStoreFacade } from '../store/FlowsStoreFacade';
 import { useVisualizationStore } from '../store/visualizationStore';
+import { StepsService } from './stepsService';
+import { ValidationService } from './validationService';
 import {
   HandleDeleteStepFn,
   IStepProps,
@@ -657,34 +657,6 @@ export class VisualizationService {
     };
   }
 
-  static getVisibleFlowsInformation(visibleFlows: Record<string, boolean>): {
-    singleFlowId: string | undefined;
-    currentVisible: number;
-    flowsCount: number;
-  } {
-    const flowsArray = Object.entries(visibleFlows);
-    const visibleFlowsIdArray = flowsArray.filter((flow) => flow[1]).map((flow) => flow[0]);
-
-    /** If there's only one flow visible, we return its ID */
-    if (visibleFlowsIdArray.length === 1) {
-      return {
-        singleFlowId: visibleFlowsIdArray[0],
-        currentVisible: 1,
-        flowsCount: flowsArray.length,
-      };
-    }
-
-    /**
-     * Otherwise, we return undefined to signal the UI that there
-     * could be more than one or no flow visible
-     */
-    return {
-      singleFlowId: undefined,
-      currentVisible: visibleFlowsIdArray.length,
-      flowsCount: flowsArray.length,
-    };
-  }
-
   static displaySingleFlow(flowId: string): void {
     useVisualizationStore.getState().hideAllFlows();
     useVisualizationStore.getState().toggleFlowVisible(flowId, true);
@@ -694,7 +666,7 @@ export class VisualizationService {
     const visibleFlows = useVisualizationStore.getState().visibleFlows;
     delete visibleFlows[flowId];
 
-    useVisualizationStore.getState().setVisibleFlows(visibleFlows);
+    useVisualizationStore.getState().setVisibleFlows({ ...visibleFlows });
   }
 
   static setVisibleFlows(flowsIds: string[]): void {
