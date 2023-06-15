@@ -36,6 +36,10 @@ export interface IFetch {
 export class RequestService {
   private static apiURL = process.env.KAOTO_API;
 
+  static getApiURL(): string | undefined {
+    return this.apiURL;
+  }
+
   static setApiURL(apiUrl: string): void {
     this.apiURL = apiUrl;
   }
@@ -71,7 +75,8 @@ export class RequestService {
 
     let options: RequestInit = {
       method,
-      body: contentType?.includes('application/json') && stringifyBody ? JSON.stringify(body) : body,
+      body:
+        contentType?.includes('application/json') && stringifyBody ? JSON.stringify(body) : body,
       cache: cache ?? 'default',
       /**
        * TODO: Omit for now, reassess for prod
@@ -94,11 +99,13 @@ export class RequestService {
     }
 
     return fetch(`${this.apiURL}${endpoint}`, options);
-  };
+  }
 
   // converts an object into a query string
   // ex: {type : 'Kamelet'} -> &type=Kamelet
-  private static objectToQueryString(obj: { [x: string]: string | undefined | null | number | boolean }) {
+  private static objectToQueryString(obj: {
+    [x: string]: string | undefined | null | number | boolean;
+  }) {
     return Object.keys(obj)
       .map((key) => key + '=' + obj[key])
       .join('&');

@@ -1,11 +1,12 @@
 import { StepErrorBoundary } from './StepErrorBoundary';
-import { fetchIntegrationJson } from '@kaoto/api';
+import { fetchIntegrationJson, RequestService } from '@kaoto/api';
 import { useFlowsStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
 import { CodeEditorMode } from '@kaoto/types';
 import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
 import { Alert } from '@patternfly/react-core';
 import { CheckCircleIcon, EraserIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';
-import { useRef } from 'react';
+import { setDiagnosticsOptions } from 'monaco-yaml';
+import { useEffect, useRef } from 'react';
 import { EditorDidMount } from 'react-monaco-editor';
 import { useDebouncedCallback } from 'use-debounce';
 import { shallow } from 'zustand/shallow';
@@ -24,12 +25,34 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<Parameters<EditorDidMount>[0] | null>(null);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
   const syncedSourceCode = useIntegrationSourceStore((state) => state.syncedSourceCode, shallow);
-  const { settings, setSettings } = useSettingsStore();
+  const { schemaUri, settings, setSettings } = useSettingsStore(
+    (state) => ({
+      schemaUri: state.settings.dsl.validationSchema
+        ? RequestService.getApiURL() + state.settings.dsl.validationSchema
+        : '',
+      settings: state.settings,
+      setSettings: state.setSettings,
+    }),
+    shallow,
+  );
+
   const setFlowsWrapper = useFlowsStore((state) => state.setFlowsWrapper, shallow);
 
-  const schemaUri = settings.dsl.validationSchema
-    ? process.env.KAOTO_API + settings.dsl.validationSchema
-    : '';
+  useEffect(() => {
+    setDiagnosticsOptions({
+      enableSchemaRequest: schemaUri !== '',
+      hover: false,
+      completion: true,
+      validate: schemaUri !== '',
+      format: true,
+      schemas: [
+        {
+          uri: schemaUri,
+          fileMatch: ['*'],
+        },
+      ],
+    });
+  }, [schemaUri]);
 
   /**
    * On detected changes to YAML state, issue POST to external endpoint
@@ -52,22 +75,6 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
   };
 
   const handleEditorDidMount: EditorDidMount = (editor) => {
-    import('monaco-yaml').then((im) => {
-      im.setDiagnosticsOptions({
-        enableSchemaRequest: props.schemaUri !== '',
-        hover: false,
-        completion: true,
-        validate: props.schemaUri !== '',
-        format: true,
-        schemas: [
-          {
-            uri: schemaUri,
-            fileMatch: ['*'],
-          },
-        ],
-      });
-    });
-
     const messageContribution: any = editor?.getContribution('editor.contrib.messageController');
     editor?.onDidAttemptReadOnlyEdit(() => {
       messageContribution?.showMessage(
@@ -168,7 +175,7 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
         code={sourceCode ?? props.initialData}
         className="code-editor"
         height="80vh"
-        width={'100%'}
+        width="100%"
         onCodeChange={syncChanges}
         language={Language.yaml}
         onEditorDidMount={handleEditorDidMount}
