@@ -161,6 +161,14 @@ describe('stepsService', () => {
       expect(stopDeployment).toHaveBeenCalled();
     });
 
+    it('updateStep(): should delegate the update to updateStepParameters method', () => {
+      const updateStepParametersSpy = jest.spyOn(stepsService, 'updateStepParameters').mockImplementationOnce(() => {});
+
+      stepsService.createKaotoApi(step, jest.fn(), jest.fn()).updateStep({ name: 'pineapple' } as IStepProps);
+
+      expect(updateStepParametersSpy).toHaveBeenCalled();
+    });
+
     it('updateStepParams(): should call the provided callback for updating step params', () => {
       const saveConfig = jest.fn();
       stepsService.createKaotoApi(step, saveConfig, jest.fn()).updateStepParams({ name: 'pizza' });
