@@ -35,6 +35,7 @@ Cypress.Commands.add('closeCatalogOrCodeEditor', () => {
   cy.get('[data-testid="kaoto-left-drawer"]').within(() => {
     cy.get('.pf-c-drawer__close > .pf-c-button').click();
   });
+  cy.get('[data-testid="kaoto-left-drawer"]').should('be.hidden');
 });
 
 Cypress.Commands.add('openMenuDropDown', () => {
