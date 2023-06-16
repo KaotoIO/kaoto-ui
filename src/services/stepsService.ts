@@ -137,9 +137,9 @@ export class StepsService {
         });
       },
       /** TODO: Evaluate if makes sense to keep this duplicated method in the API */
-      updateStep: (newStep: IStepProps) => {
+      updateStep: (newStep: IStepProps, newValues?: Record<string, unknown>) => {
         /** TODO: Passing an empty object to avoid setting new parameters to the step */
-        this.updateStepParameters(newStep, {});
+        this.updateStepParameters(newStep, newValues ?? {});
       },
       updateStepParams,
     };
