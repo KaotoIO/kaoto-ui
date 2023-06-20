@@ -1,13 +1,7 @@
-import {
-  Catalog,
-  Console,
-  KaotoDrawer,
-  KaotoToolbar,
-  SourceCodeEditor,
-  Visualization,
-} from '../components';
+import { Console, KaotoDrawer, KaotoToolbar, Visualization } from '../components';
+import { useLocalStorage } from '../hooks';
 import './Dashboard.css';
-import { useSettingsStore } from '@kaoto/store';
+import { LeftPanel } from './DashboardLeftPanel';
 import {
   Banner,
   DrawerColorVariant,
@@ -18,22 +12,18 @@ import {
   PageSection,
 } from '@patternfly/react-core';
 import { TerminalIcon } from '@patternfly/react-icons';
-import { useRef, useState } from 'react';
 import { ReactFlowProvider } from 'reactflow';
 
-const Dashboard = () => {
-  const [bottomDrawerExpanded, setBottomDrawerExpanded] = useState(false);
-  const [leftDrawerExpanded, setLeftDrawerExpanded] = useState(false);
-  const leftDrawerModel = useRef('catalog');
-  const { settings } = useSettingsStore((state) => state);
-
-  const drawerCatalog = (
-    <DrawerContentBody style={{ padding: '10px' }}>
-      <Catalog handleClose={() => setLeftDrawerExpanded(false)} />
-    </DrawerContentBody>
+export const Dashboard = () => {
+  const [bottomDrawerExpanded, setBottomDrawerExpanded] = useLocalStorage(
+    'bottomDrawerExpanded',
+    false,
   );
-
-  const [leftDrawerContent, setLeftDrawerContent] = useState(drawerCatalog);
+  const [leftDrawerExpanded, setLeftDrawerExpanded] = useLocalStorage('leftDrawerExpanded', false);
+  const [leftDrawerMode, setLeftDrawerMode] = useLocalStorage<'code' | 'catalog'>(
+    'leftDrawerMode',
+    'catalog',
+  );
 
   const drawerConsole = (
     <DrawerContentBody tabIndex={bottomDrawerExpanded ? 0 : -1}>
@@ -45,31 +35,24 @@ const Dashboard = () => {
     </DrawerContentBody>
   );
 
-  const drawerCodeEditor = (
-    <DrawerContentBody hasPadding={false}>
-      <SourceCodeEditor mode={settings.editorMode} schemaUri={settings.dsl.validationSchema} />
-    </DrawerContentBody>
-  );
-
   const handleToggleCodeEditor = () => {
-    if (leftDrawerModel.current === 'code') {
+    if (leftDrawerMode === 'code') {
       // it's already showing the code editor, just toggle it
       setLeftDrawerExpanded(!leftDrawerExpanded);
     } else {
-      setLeftDrawerContent(drawerCodeEditor);
-      leftDrawerModel.current = 'code';
+      setLeftDrawerMode('code');
       setLeftDrawerExpanded(true);
     }
   };
+
   const handleToggleCatalog = () => {
-    if (leftDrawerModel.current === 'catalog') {
+    if (leftDrawerMode === 'catalog') {
       // it's already showing the catalog, just toggle it
       setLeftDrawerExpanded(!leftDrawerExpanded);
     } else {
       // currently showing code editor content;
       // set to catalog, only close if already open
-      setLeftDrawerContent(drawerCatalog);
-      leftDrawerModel.current = 'catalog';
+      setLeftDrawerMode('catalog');
 
       if (!leftDrawerExpanded) {
         setLeftDrawerExpanded(!leftDrawerExpanded);
@@ -112,7 +95,12 @@ const Dashboard = () => {
                 <KaotoDrawer
                   colorVariant={DrawerColorVariant.light200}
                   dataTestId={'kaoto-left-drawer'}
-                  panelContent={leftDrawerContent}
+                  panelContent={
+                    <LeftPanel
+                      onCatalogClose={() => setLeftDrawerExpanded(false)}
+                      mode={leftDrawerMode}
+                    />
+                  }
                   id={'kaoto-left-drawer'}
                   isExpanded={leftDrawerExpanded}
                   minSize={'525px'}
@@ -147,5 +135,3 @@ const Dashboard = () => {
     </>
   );
 };
-
-export { Dashboard };
