@@ -1,21 +1,5 @@
 import 'cypress-file-upload';
 
-Cypress.Commands.add('insertBranch', (insertIndex) => {
-    insertIndex = insertIndex ?? 0;
-    cy.get('[data-testid="stepNode__insertStep-btn"]').eq(insertIndex).click();
-    cy.get('[data-testid="miniCatalog__branches"]').click();
-    cy.get('[data-testid="addBranch__button"]').click();
-    cy.waitVisualizationUpdate();
-});
-
-Cypress.Commands.add('appendBranch', (choiceIndex) => {
-    choiceIndex = choiceIndex ?? 0;
-    cy.get('[data-testid="viz-step-choice"]').eq(choiceIndex).children('[data-testid="stepNode__appendStep-btn"]').click();
-    cy.get('[data-testid="miniCatalog__branches"]').click();
-    cy.get('[data-testid="addBranch__button"]').click();
-    cy.waitVisualizationUpdate();
-});
-
 Cypress.Commands.add('deleteBranch', (branchIndex) => {
     branchIndex = branchIndex ?? 0;
     cy.get('[data-testid="stepNode__deleteBranch-btn"]').eq(branchIndex).click();
