@@ -15,7 +15,7 @@ import {
   Thead,
   Tr,
 } from '@patternfly/react-table';
-import { ReactNode, useCallback, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { HTMLFieldProps, connectField } from 'uniforms';
 
 export type PropertiesFieldProps = HTMLFieldProps<any, HTMLDivElement>;
@@ -29,6 +29,12 @@ export type PropertiesFieldProps = HTMLFieldProps<any, HTMLDivElement>;
 function Properties(props: PropertiesFieldProps) {
   const [expandedNodes, setExpandedNodes] = useState<string[]>([]);
   const [placeholderState, setPlaceholderState] = useState<PlaceholderState | null>(null);
+
+  useEffect(() => {
+    if (!props.value) {
+      props.onChange({}, props.name);
+    }
+  }, []);
 
   const handleModelChange = useCallback(() => {
     setPlaceholderState(null);
