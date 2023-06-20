@@ -3916,7 +3916,7 @@ __metadata:
     "@rhoas/app-services-ui-shared": ^0.16.6
     "@storybook/addon-actions": ^7.0.8
     "@storybook/addon-essentials": ^7.0.21
-    "@storybook/addon-interactions": ^7.0.21
+    "@storybook/addon-interactions": ^7.0.22
     "@storybook/addon-links": ^7.0.8
     "@storybook/builder-webpack5": ^6.5.16
     "@storybook/manager-webpack5": ^6.5.16
@@ -5244,20 +5244,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-interactions@npm:^7.0.21":
-  version: 7.0.21
-  resolution: "@storybook/addon-interactions@npm:7.0.21"
+"@storybook/addon-interactions@npm:^7.0.22":
+  version: 7.0.22
+  resolution: "@storybook/addon-interactions@npm:7.0.22"
   dependencies:
-    "@storybook/client-logger": 7.0.21
-    "@storybook/components": 7.0.21
-    "@storybook/core-common": 7.0.21
-    "@storybook/core-events": 7.0.21
+    "@storybook/client-logger": 7.0.22
+    "@storybook/components": 7.0.22
+    "@storybook/core-common": 7.0.22
+    "@storybook/core-events": 7.0.22
     "@storybook/global": ^5.0.0
-    "@storybook/instrumenter": 7.0.21
-    "@storybook/manager-api": 7.0.21
-    "@storybook/preview-api": 7.0.21
-    "@storybook/theming": 7.0.21
-    "@storybook/types": 7.0.21
+    "@storybook/instrumenter": 7.0.22
+    "@storybook/manager-api": 7.0.22
+    "@storybook/preview-api": 7.0.22
+    "@storybook/theming": 7.0.22
+    "@storybook/types": 7.0.22
     jest-mock: ^27.0.6
     polished: ^4.2.2
     ts-dedent: ^2.2.0
@@ -5269,7 +5269,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 9b0c0af861335b5e3f09796d87e2305b8788178c2503a3464616d7d2ebb639b42570b2f2d10702b0b246a7756cd12934e44aa3da1d381d55376d24c5e75c7ea0
+  checksum: e12d0ae87eb27f622981f8c61b91b69c5d7718609305c02e049ffc983c0822e3511b148b68a3b6a546f3d8ba80cd86c37df48417fea5afdd82b28ad42501caab
   languageName: node
   linkType: hard
 
@@ -6439,16 +6439,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/instrumenter@npm:7.0.21":
-  version: 7.0.21
-  resolution: "@storybook/instrumenter@npm:7.0.21"
+"@storybook/instrumenter@npm:7.0.22":
+  version: 7.0.22
+  resolution: "@storybook/instrumenter@npm:7.0.22"
   dependencies:
-    "@storybook/channels": 7.0.21
-    "@storybook/client-logger": 7.0.21
-    "@storybook/core-events": 7.0.21
+    "@storybook/channels": 7.0.22
+    "@storybook/client-logger": 7.0.22
+    "@storybook/core-events": 7.0.22
     "@storybook/global": ^5.0.0
-    "@storybook/preview-api": 7.0.21
-  checksum: a129525b22ca5d6e6e120bb9c8be55a7d838f034425f294f14fb79a41394b7fad4d7c9ddf0b82fa5cc36ead899bd4b32b5366a896a8969bfc06efbd076e7bada
+    "@storybook/preview-api": 7.0.22
+  checksum: fc935cd71cf1383f139804164afb53d35a41279e59d84f8fbff9fe5f93530a52361f6691cb7fbf82e849cd8ca2b938f412e70de5460c0001aa4fe881f24526a5
   languageName: node
   linkType: hard
 
