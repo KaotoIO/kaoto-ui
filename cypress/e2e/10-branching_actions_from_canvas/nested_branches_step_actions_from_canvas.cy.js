@@ -10,13 +10,7 @@ describe('User completes normal actions on steps in a branch', () => {
         cy.uploadFixture('EipAction.yaml');
 
         cy.zoomOutXTimes(3)
-        // Blocked due to: https://github.com/KaotoIO/kaoto-ui/issues/1381
-        // cy.insertBranch(3);
-        // cy.replaceEmptyStepMiniCatalog('activemq');
-        // cy.appendBranch(1);
-        // cy.replaceEmptyStepMiniCatalog('amqp');
 
-        // Workaround for: https://github.com/KaotoIO/kaoto-ui/issues/1381
         cy.openStepConfigurationTab('choice', true, 1);
         cy.addBranchChoiceExtension();
         cy.addBranchChoiceExtension('other');

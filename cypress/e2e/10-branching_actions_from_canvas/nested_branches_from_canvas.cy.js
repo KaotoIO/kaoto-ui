@@ -12,48 +12,36 @@ describe('Test for Nested Branching actions from the canvas', () => {
     });
 
     it('User inserts/appends a nested branch from the canvas', () => {
-        // Blocked due to:
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1381
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1473
-        // cy.insertBranch(3);
-        // cy.replaceEmptyStepMiniCatalog('activemq');
-        // cy.appendBranch(1);
-        // cy.replaceEmptyStepMiniCatalog('amqp');
-
-        // CHECK that two new nodes were created with indexes 9 and 10 and contain viz-step-slot
-        // cy.get('[data-testid="viz-step-activemq"]').should('be.visible');
-        // cy.get('[data-testid="viz-step-amqp"]').should('be.visible');
-        // cy.get('[data-testid="viz-step-choice"]').should('have.length', 2);
-        // cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-activemq');
-        // cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-amqp');
-
-        // cy.syncUpCodeChanges()
-
-        // // CHECK after Sync your code button click
-        // cy.get('[data-testid="viz-step-activemq"]').should('be.visible');
-        // cy.get('[data-testid="viz-step-amqp"]').should('be.visible');
-        // cy.get('[data-testid="viz-step-choice"]').should('have.length', 2);
-        // cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-activemq');
-        // cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-amqp');
-
-        // Temporary blocker check
         cy.get('[data-testid="stepNode__insertStep-btn"]').eq(3).click();
         cy.get('[data-testid="miniCatalog__branches"]').should('have.attr', 'aria-disabled', 'true')
         cy.get('.pf-c-button.pf-m-plain').click();
         cy.openStepConfigurationTab('choice', true, 1);
         cy.addBranchChoiceExtension();
+        cy.addBranchChoiceExtension('other');
         cy.closeStepConfigurationTab();
+        cy.replaceEmptyStepMiniCatalog('activemq');
+        cy.replaceEmptyStepMiniCatalog('amqp');
+
+        // CHECK that two new nodes were created with indexes 9 and 10 and contain viz-step-slot
+        cy.get('[data-testid="viz-step-activemq"]').should('be.visible');
+        cy.get('[data-testid="viz-step-amqp"]').should('be.visible');
+        cy.get('[data-testid="viz-step-choice"]').should('have.length', 2);
+        cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-activemq');
+        cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-amqp');
+
+        cy.syncUpCodeChanges()
+
+        // CHECK after Sync your code button click
+        cy.get('[data-testid="viz-step-activemq"]').should('be.visible');
+        cy.get('[data-testid="viz-step-amqp"]').should('be.visible');
+        cy.get('[data-testid="viz-step-choice"]').should('have.length', 2);
+        cy.get('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-activemq');
+        cy.get('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-amqp');
+
         cy.get('[data-testid="viz-step-choice"]').eq(1).children('[data-testid="stepNode__appendStep-btn"]').should('be.disabled');
     })
 
     it('User deletes a branch from the canvas', () => {
-        // Blocked due to:
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1381
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1473
-        // cy.insertBranch(3);
-        // cy.appendBranch(1);
-
-        // Temporary workaround:
         cy.openStepConfigurationTab('choice', true, 1);
         cy.addBranchChoiceExtension();
         cy.addBranchChoiceExtension('other');
@@ -75,14 +63,6 @@ describe('Test for Nested Branching actions from the canvas', () => {
     });
 
     it('User appends a step in a nested branch from the canvas (last in the branch)', () => {
-        // Blocked due to:
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1381
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1473
-        // cy.insertBranch(3);
-        // cy.replaceEmptyStepMiniCatalog('amqp');
-        // cy.appendBranch(1);
-
-        // Temporary workaround:
         cy.openStepConfigurationTab('choice', true, 1);
         cy.addBranchChoiceExtension();
         cy.addBranchChoiceExtension('other');
@@ -106,14 +86,6 @@ describe('Test for Nested Branching actions from the canvas', () => {
     });
 
     it('User prepends a step in a nested branch from the canvas (first in the branch)', () => {
-        // Blocked due to:
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1381
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1473
-        // cy.insertBranch(3);
-        // cy.replaceEmptyStepMiniCatalog('amqp');
-        // cy.appendBranch(1);
-
-        // Temporary workaround:
         cy.openStepConfigurationTab('choice', true, 1);
         cy.addBranchChoiceExtension();
         cy.addBranchChoiceExtension('other');
@@ -137,13 +109,6 @@ describe('Test for Nested Branching actions from the canvas', () => {
     });
 
     it('User prepends a step to a step whose previous step contains nested branches', () => {
-        // Blocked due to:
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1381
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1473
-        // cy.insertBranch(3);
-        // cy.appendBranch(1);
-
-        // Temporary workaround:
         cy.openStepConfigurationTab('choice', true, 1);
         cy.addBranchChoiceExtension();
         cy.addBranchChoiceExtension('other');

@@ -12,15 +12,9 @@ describe('Test for Branching actions from the canvas', () => {
     });
 
     it(' User appends a branch from the canvas', () => {
-        // Blocked due to:
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1381
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1473
-        // cy.appendBranch(0);
 
-        // Temporary Blocker check
         cy.get('[data-testid="viz-step-choice"]').eq(0).children('[data-testid="stepNode__appendStep-btn"]').should('be.disabled');
 
-        // Temporary solution with Choice extension
         cy.openStepConfigurationTab('choice', true, 0);
         cy.addBranchChoiceExtension();
         cy.closeStepConfigurationTab();
@@ -57,27 +51,24 @@ describe('Test for Branching actions from the canvas', () => {
 
         // CHECK new choice step added
         cy.get('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-choice');
-        // Blocked due to:
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1381
-        //      https://github.com/KaotoIO/kaoto-ui/issues/1473
-        // cy.insertBranch(1);
+        cy.openStepConfigurationTab('choice', true, 0);
+        cy.addBranchChoiceExtension();
+        cy.closeStepConfigurationTab();
 
-        // // CHECK that new node with empty slot was created
-        // cy.get('[data-testid="viz-step-choice"]').should('have.length', 3);
-        // cy.get('[data-testid="viz-step-slot"]').should('have.length', 1);
-        // cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-slot');
+        // CHECK that new node with empty slot was created
+        cy.get('[data-testid="viz-step-choice"]').should('have.length', 3);
+        cy.get('[data-testid="viz-step-slot"]').should('have.length', 1);
+        cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-slot');
 
-        // cy.syncUpCodeChanges()
+        cy.syncUpCodeChanges()
 
-        // // CHECK after Sync your code button click
-        // cy.get('[data-testid="viz-step-choice"]').should('have.length', 3);
-        // cy.get('[data-testid="viz-step-slot"]').should('have.length', 1);
-        // cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-slot');
-
-        // Temporary Blocker check
-        cy.get('[data-testid="stepNode__insertStep-btn"]').eq(1).click();
-        cy.get('[data-testid="miniCatalog__branches"]').should('have.attr', 'aria-disabled', 'true')
-    });
+        // CHECK after Sync your code button click
+        cy.get('[data-testid="viz-step-slot"]').should('have.length', 1);
+        cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-slot');
+        
+        // CHECK that the choice add button is disabled
+        cy.get('[data-testid="viz-step-choice"]').eq(0).children('[data-testid="stepNode__appendStep-btn"]').should('be.disabled');
+});
 
     it('User appends a step in a branch from the canvas (last in the branch)', () => {
         cy.appendStepMiniCatalog('set-header', 'activemq');
