@@ -14,6 +14,9 @@ jobs:
     # Job steps
     steps:
       - uses: actions/checkout@v3
+        with:
+          # 👇 Fetches all Git history so that Chromatic can compare against the previous version
+          fetch-depth: 0
       - name: Install dependencies
         # 👇 Install dependencies with the same package manager used in the project (replace it as needed), e.g. yarn, npm, pnpm
         run: yarn
