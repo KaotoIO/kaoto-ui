@@ -149,6 +149,12 @@ function Properties(props: PropertiesFieldProps) {
     ];
   }
 
+  let modelValue = props.value;
+  if (!modelValue) {
+    modelValue = {};
+    props.onChange(modelValue, props.name);
+  }
+
   return wrapField(
     props,
     <Stack hasGutter>
@@ -181,8 +187,8 @@ function Properties(props: PropertiesFieldProps) {
                 </Tr>
               </Thead>
               <Tbody>
-                {(props.value && Object.keys(props.value).length > 0) || placeholderState
-                  ? renderRows(Object.entries(props.value), props.value)
+                {Object.keys(modelValue).length > 0 || placeholderState
+                  ? renderRows(Object.entries(modelValue), modelValue)
                   : !props.disabled && (
                       <Tr key={`${props.name}-empty`}>
                         <Td colSpan={3}>
