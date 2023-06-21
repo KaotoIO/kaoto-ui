@@ -75,7 +75,7 @@ export function MetadataEditorModal({
 
   function getFormModel() {
     if (isTopmostArray()) {
-      return selected !== -1 && metadata[selected];
+      return metadata && selected !== -1 ? metadata[selected] : undefined;
     }
     return metadata;
   }

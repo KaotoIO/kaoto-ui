@@ -10,6 +10,16 @@ jest.mock('@kaoto/api', () => {
     ...jest.requireActual('@kaoto/api'),
   };
 });
+jest.mock('../../hooks/flows-visibility.hook', () => {
+  return {
+    useFlowsVisibility: () => ({
+      singleFlowId: '',
+      visibleFlowsCount: 1,
+      totalFlowsCount: 1,
+      isCanvasEmpty: false,
+    }),
+  };
+});
 
 describe('MetadataToolbarItems.tsx', () => {
   test('component renders multiple metadata items', async () => {

@@ -1,3 +1,4 @@
+import { useFlowsVisibility } from '../../hooks/flows-visibility.hook';
 import { MetadataEditorModal } from './MetadataEditorModal';
 import { fetchMetadataSchema } from '@kaoto/api';
 import { useSettingsStore } from '@kaoto/store';
@@ -14,6 +15,7 @@ export function MetadataToolbarItems() {
   const dsl = useSettingsStore((state) => state.settings.dsl.name);
   const [metadataSchemaMap, setMetadataSchemaMap] = useState<{ [key: string]: any }>({});
   const [expanded, setExpanded] = useState({} as { [key: string]: boolean });
+  const visibleFlowsInformation = useFlowsVisibility();
 
   useEffect(() => {
     fetchMetadataSchema(dsl).then((schema) => {
@@ -33,31 +35,41 @@ export function MetadataToolbarItems() {
     handleSetExpanded(name, !expanded[name]);
   }
 
-  return (
-    <>
-      {metadataSchemaMap &&
-        Object.entries(metadataSchemaMap).map(([metadataName, metadataSchema]) => {
-          return (
-            <ToolbarItem key={'toolbar-metadata-' + metadataName}>
-              <Tooltip content={<div>{metadataSchema.description}</div>} position="bottom">
-                <Button
-                  variant="link"
-                  isActive={expanded[metadataName]}
-                  data-testid={'toolbar-metadata-' + metadataName + '-btn'}
-                  onClick={() => toggleExpanded(metadataName)}
-                >
-                  {metadataSchema.title}
-                </Button>
-              </Tooltip>
-              <MetadataEditorModal
-                name={metadataName}
-                schema={metadataSchema}
-                handleCloseModal={() => handleSetExpanded(metadataName, false)}
-                isModalOpen={expanded[metadataName]}
-              />
-            </ToolbarItem>
-          );
-        })}
-    </>
-  );
+  function renderMetadataToolbarItems() {
+    if (
+      visibleFlowsInformation.isCanvasEmpty ||
+      !metadataSchemaMap ||
+      Object.keys(metadataSchemaMap).length === 0
+    ) {
+      return [];
+    }
+
+    return [
+      ...Object.entries(metadataSchemaMap).map(([metadataName, metadataSchema]) => {
+        return (
+          <ToolbarItem key={'toolbar-metadata-' + metadataName}>
+            <Tooltip content={<div>{metadataSchema.description}</div>} position="bottom">
+              <Button
+                variant="link"
+                isActive={expanded[metadataName]}
+                data-testid={'toolbar-metadata-' + metadataName + '-btn'}
+                onClick={() => toggleExpanded(metadataName)}
+              >
+                {metadataSchema.title}
+              </Button>
+            </Tooltip>
+            <MetadataEditorModal
+              name={metadataName}
+              schema={metadataSchema}
+              handleCloseModal={() => handleSetExpanded(metadataName, false)}
+              isModalOpen={expanded[metadataName]}
+            />
+          </ToolbarItem>
+        );
+      }),
+      <ToolbarItem key="toolbar-metadata-separator" variant="separator" />,
+    ];
+  }
+
+  return <>{renderMetadataToolbarItems()}</>;
 }

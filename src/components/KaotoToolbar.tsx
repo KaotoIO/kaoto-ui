@@ -311,7 +311,9 @@ export const KaotoToolbar = ({
 
           {/* CURRENT DSL */}
           <ToolbarItem>
-            <Chip data-testid="toolbar-current-dsl" isReadOnly>{currentDsl || 'None'}</Chip>
+            <Chip data-testid="toolbar-current-dsl" isReadOnly>
+              {currentDsl || 'None'}
+            </Chip>
           </ToolbarItem>
 
           {/* NEW FLOW DROPDOWN BUTTON */}
@@ -327,8 +329,6 @@ export const KaotoToolbar = ({
           <ToolbarItem variant="separator" />
 
           <MetadataToolbarItems />
-
-          <ToolbarItem variant="separator" />
 
           {/* DEPLOYMENT STATUS */}
           {deployment.crd ? (
