@@ -14,7 +14,7 @@ import {
   StackItem,
   Title,
 } from '@patternfly/react-core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { shallow } from 'zustand/shallow';
 
 export interface IMetadataEditorModalProps {
@@ -46,6 +46,11 @@ export function MetadataEditorModal({
     setMetadata,
     shallow,
   }));
+  const [preparedModel, setPreparedModel] = useState<any>(null);
+
+  useEffect(() => {
+    setPreparedModel(null);
+  }, [metadata, setMetadata]);
 
   function isTopmostArray() {
     return schema.type === 'array' && schema.items;
@@ -84,14 +89,22 @@ export function MetadataEditorModal({
     setMetadata(name, config.slice());
   }
 
-  function handleChangeDetails(details: any) {
+  function prepareModelChange(model: any) {
+    setPreparedModel(model);
+  }
+
+  function commitModelChange() {
+    if (preparedModel == null) {
+      return;
+    }
     if (isTopmostArray()) {
       const newMetadata = metadata ? metadata.slice() : [];
-      newMetadata[selected] = details;
+      newMetadata[selected] = preparedModel;
       setMetadata(name, newMetadata);
     } else {
-      setMetadata(name, typeof details === `object` ? { ...details } : details);
+      setMetadata(name, typeof preparedModel === `object` ? { ...preparedModel } : preparedModel);
     }
+    setPreparedModel(null);
   }
 
   function handleSetSelected(index: number) {
@@ -129,10 +142,11 @@ export function MetadataEditorModal({
       <AutoForm
         schema={getSchemaBridge()}
         model={getFormModel()}
-        onChangeModel={(model: any) => handleChangeDetails(model)}
+        onChangeModel={(model: any) => prepareModelChange(model)}
         data-testid={'metadata-editor-form-' + name}
         placeholder={true}
         disabled={isFormDisabled()}
+        onBlur={() => commitModelChange()}
       >
         <AutoFields />
         <ErrorsField />
