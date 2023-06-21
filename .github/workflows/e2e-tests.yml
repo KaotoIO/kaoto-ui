@@ -57,6 +57,8 @@ jobs:
         ports:
           # will assign a random free host port
           - 8081/tcp
+        env:
+          QUARKUS_HTTP_CORS_ORIGINS: "http://localhost:1337"
     steps:
       - name: 👷‍♀️ Checkout
         uses: actions/checkout@v3
@@ -111,6 +113,8 @@ jobs:
         ports:
           # will assign a random free host port
           - 8081/tcp
+        env:
+          QUARKUS_HTTP_CORS_ORIGINS: "http://localhost:1337"
     steps:
       - name: 👷‍♀️ Checkout
         uses: actions/checkout@v3
@@ -166,6 +170,8 @@ jobs:
         ports:
           # will assign a random free host port
           - 8081/tcp
+        env:
+          QUARKUS_HTTP_CORS_ORIGINS: "http://localhost:1337"
     steps:
       - name: 👷‍♀️ Checkout
         uses: actions/checkout@v3
