@@ -1,5 +1,6 @@
 import { usePrevious } from '../hooks';
 import { useFlowsVisibility } from '../hooks/flows-visibility.hook';
+import { SelectedStep } from '../providers';
 import { DeleteButtonEdge } from './DeleteButtonEdge';
 import { KaotoDrawer } from './KaotoDrawer';
 import { PlusButtonEdge } from './PlusButtonEdge';
@@ -17,17 +18,12 @@ import {
   useSettingsStore,
   useVisualizationStore,
 } from '@kaoto/store';
-import {
-  HandleDeleteStepFn,
-  IStepProps,
-  IVizStepNode,
-  IFlowsWrapper,
-} from '@kaoto/types';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { HandleDeleteStepFn, IFlowsWrapper, IStepProps, IVizStepNode } from '@kaoto/types';
+import { FunctionComponent, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
 import { shallow } from 'zustand/shallow';
 
-const Visualization = () => {
+export const Visualization: FunctionComponent = () => {
   // `nodes` is an array of UI-specific objects that represent
   // the Integration.Steps model visually, while `edges` connect them
 
@@ -37,10 +33,7 @@ const Visualization = () => {
     y: (window.innerHeight - 77) / 2 - 80 / 2,
     zoom: 1.2,
   });
-  const [isPanelExpanded, setIsPanelExpanded] = useState(false);
-  const [selectedStep, setSelectedStep] = useState<IStepProps>(
-    VisualizationService.getEmptySelectedStep(),
-  );
+  const { editStep, isPanelExpanded, selectedStep } = useContext(SelectedStep);
 
   const {
     selectedStepUuid,
@@ -136,28 +129,29 @@ const Visualization = () => {
     }
 
     const step = stepsService.findStepWithUUID(selectedStep.integrationId, selectedStepUuid);
-    if (step) {
-      setSelectedStep(step);
-    } else {
-      setSelectedStep(VisualizationService.getEmptySelectedStep());
-      setSelectedStepUuid('');
-      setIsPanelExpanded(false);
-    }
-  }, [flows, selectedStep.integrationId, selectedStepUuid, setSelectedStepUuid, stepsService]);
+    editStep(step);
+    setSelectedStepUuid(step?.UUID ?? '');
+  }, [
+    editStep,
+    flows,
+    selectedStep.integrationId,
+    selectedStepUuid,
+    setSelectedStepUuid,
+    stepsService,
+  ]);
 
   const handleDeleteStep: HandleDeleteStepFn = useCallback(
     (integrationId, UUID) => {
       if (!integrationId || !UUID) return;
 
       if (selectedStepUuid === UUID) {
-        setIsPanelExpanded(false);
-        setSelectedStep(VisualizationService.getEmptySelectedStep());
+        editStep(undefined);
         setSelectedStepUuid('');
       }
 
       stepsService.deleteStep(integrationId, UUID);
     },
-    [selectedStepUuid, setSelectedStepUuid, stepsService],
+    [editStep, selectedStepUuid, setSelectedStepUuid, stepsService],
   );
 
   useEffect(() => {
@@ -174,9 +168,9 @@ const Visualization = () => {
   );
 
   const onClosePanelClick = useCallback(() => {
-    setIsPanelExpanded(false);
+    editStep(undefined);
     setSelectedStepUuid('');
-  }, [setSelectedStepUuid]);
+  }, [editStep, setSelectedStepUuid]);
 
   /**
    * Called when a catalog step is dragged over the visualization canvas
@@ -207,23 +201,20 @@ const Visualization = () => {
           node.data.step.UUID,
         );
         if (step) {
-          setSelectedStep(step);
+          editStep(step);
           setSelectedStepUuid(step.UUID);
         }
-
-        /** If the details panel is collapsed, we expanded for the user */
-        if (!isPanelExpanded) setIsPanelExpanded(true);
 
         /**
          * If the details panel is already expanded and the step it's already
          * selected, we collapse it for the user */
         if (isPanelExpanded && selectedStepUuid === node.data.step.UUID) {
-          setIsPanelExpanded(false);
+          editStep(undefined);
           setSelectedStepUuid('');
         }
       }
     },
-    [isPanelExpanded, selectedStepUuid, setSelectedStepUuid, stepsService],
+    [editStep, isPanelExpanded, selectedStepUuid, setSelectedStepUuid, stepsService],
   );
 
   /**
@@ -282,7 +273,6 @@ const Visualization = () => {
               zoomOnDoubleClick={false}
               className="panelCustom"
             >
-              {/*<MiniMap nodeBorderRadius={2} className={'visualization__minimap'} />*/}
               <VisualizationControls />
               <Background color="#aaa" gap={16} />
             </ReactFlow>
@@ -292,5 +282,3 @@ const Visualization = () => {
     </StepErrorBoundary>
   );
 };
-
-export { Visualization };

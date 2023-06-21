@@ -6,6 +6,7 @@ import {
   SourceCodeEditor,
   Visualization,
 } from '../components';
+import { SelectedStepProvider } from '../providers/selected-step.provider';
 import './Dashboard.css';
 import { useSettingsStore } from '@kaoto/store';
 import {
@@ -120,7 +121,9 @@ const Dashboard = () => {
                 >
                   {/* VISUALIZATION / CANVAS */}
                   <ReactFlowProvider>
-                    <Visualization />
+                    <SelectedStepProvider>
+                      <Visualization />
+                    </SelectedStepProvider>
                   </ReactFlowProvider>
                 </KaotoDrawer>
               </PageSection>
