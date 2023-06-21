@@ -29,6 +29,7 @@ import { findPath, getDeepValue } from '@kaoto/utils';
  * A collection of business logic to handle logical model objects of the integration,
  * which is represented by a collection of "Step".
  * This class focuses on handling logical model objects. For handling visualization,
+ * see {@link VisualizationService}.
  * Note: Methods are declared in alphabetical order.
  * @see IStepProps
  * @see IStepPropsBranch
@@ -448,7 +449,7 @@ export class StepsService {
           useFlowsStore.getState().insertStep(node.step.integrationId, step, { mode: 'replace', path: newPath });
         }
       } else {
-        useFlowsStore.getState().insertStep(node.step.integrationId, step, { mode: 'append' });
+        useFlowsStore.getState().insertStep(node.step.integrationId, step, { mode: 'insert', index: 0 });
       }
 
       return validation;
