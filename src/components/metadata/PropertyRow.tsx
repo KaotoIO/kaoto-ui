@@ -81,7 +81,6 @@ export function PropertyRow({
     <TreeRowWrapper
       key={`${propertyName}-${path.join('-')}`}
       row={{ props: treeRow!.props }}
-      className="propertyRow"
     >
       <Td dataLabel="NAME" treeRow={treeRow}>
         <TextInput

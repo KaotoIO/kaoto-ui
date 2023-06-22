@@ -10,10 +10,3 @@
 .metadataEditorModalDetailsView {
     width: 50vw;
 }
-
-.propertyRow {
-    --pf-c-table--m-compact--cell--PaddingTop: 0px;
-    --pf-c-table--m-compact--cell--PaddingBottom: 0px;
-    --pf-c-table--m-compact--cell--PaddingRight: 0px;
-    --pf-c-table--m-compact--cell--PaddingLeft: 0px;
-}
