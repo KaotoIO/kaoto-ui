@@ -14,9 +14,11 @@ metadata:
 spec:
   source:
     ref:
+      apiVersion: camel.apache.org/v1alpha1
+      kind: Kamelet
       name: kafka-source
   sink:
     ref:
+      apiVersion: camel.apache.org/v1alpha1
+      kind: Kamelet
       name: kafka-sink
-      storage: true
-      version: v1alpha1

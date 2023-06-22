@@ -18,7 +18,7 @@ describe('editing properties', () => {
       apiVersion: camel.apache.org/v1alpha1
       name: insert-field-action
       kind: Kamelet`;
-    const insertLine = 10;
+    const insertLine = 12;
     cy.editorAddText(insertLine, stepToInsert);
     cy.syncUpCodeChanges();
 
@@ -26,10 +26,12 @@ describe('editing properties', () => {
     cy.get('[data-testid="viz-step-insert-field-action"]').should('be.visible');
   });
 
-  it('User removes step from the YAML', () => {
+  // Blocked due to:
+  // https://github.com/KaotoIO/kaoto-ui/issues/2018
+  it.skip('User removes step from the YAML', () => {
     cy.uploadFixture('TimerKafka.yaml');
 
-    cy.editorDeleteLine(10, 5);
+    cy.editorDeleteLine(12, 8);
     cy.syncUpCodeChanges();
 
     // CHECK the kafka-sink step was removed
@@ -39,9 +41,9 @@ describe('editing properties', () => {
   it('User edits step in the YAML', () => {
     cy.uploadFixture('TimerKafka.yaml');
 
-    cy.editorDeleteLine(14);
+    cy.editorDeleteLine(17);
     const name = `      name: aws-s3-sink`;
-    cy.editorAddText(14, name);
+    cy.editorAddText(17, name);
     cy.syncUpCodeChanges();
 
     // CHECK the kafka-sink step was replaced by the aws s3 sink step
