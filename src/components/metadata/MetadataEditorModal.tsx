@@ -4,7 +4,7 @@ import './MetadataEditorModal.css';
 import { TopmostArrayTable } from './ToopmostArrayTable';
 import { StepErrorBoundary } from '@kaoto/components';
 import { useFlowsStore } from '@kaoto/store';
-import { AutoFields, AutoForm, ErrorsField } from '@kie-tools/uniforms-patternfly/dist/esm';
+import { AutoField, AutoForm, ErrorsField } from '@kie-tools/uniforms-patternfly/dist/esm';
 import {
   Modal,
   ModalVariant,
@@ -14,7 +14,7 @@ import {
   StackItem,
   Title,
 } from '@patternfly/react-core';
-import { useEffect, useState } from 'react';
+import { createElement, useEffect, useRef, useState } from 'react';
 import { shallow } from 'zustand/shallow';
 
 export interface IMetadataEditorModalProps {
@@ -40,6 +40,8 @@ export function MetadataEditorModal({
   name,
   schema,
 }: IMetadataEditorModalProps) {
+  const schemaBridge = new MetadataEditorBridge(getFormSchema(), createValidator(getFormSchema()));
+  const firstInputRef = useRef<HTMLInputElement>();
   const [selected, setSelected] = useState(-1);
   const { metadata, setMetadata } = useFlowsStore(({ metadata, setMetadata }) => ({
     metadata: metadata[name] as any,
@@ -51,6 +53,10 @@ export function MetadataEditorModal({
   useEffect(() => {
     setPreparedModel(null);
   }, [metadata, setMetadata]);
+
+  useEffect(() => {
+    firstInputRef.current?.focus();
+  }, [selected]);
 
   function isTopmostArray() {
     return schema.type === 'array' && schema.items;
@@ -78,11 +84,6 @@ export function MetadataEditorModal({
       return selected !== -1 && metadata[selected];
     }
     return metadata;
-  }
-
-  function getSchemaBridge() {
-    const schemaValidator = createValidator(getFormSchema());
-    return new MetadataEditorBridge(getFormSchema(), schemaValidator);
   }
 
   function handleChangeArrayModel(config: any) {
@@ -137,10 +138,24 @@ export function MetadataEditorModal({
     );
   }
 
+  function renderAutoFields(props: any = {}) {
+    return createElement(
+      'div',
+      props,
+      schemaBridge.getSubfields().map((field, index) => {
+        const props: any = { key: field, name: field };
+        if (index === 0) {
+          props.inputRef = firstInputRef;
+        }
+        return createElement(AutoField, props);
+      }),
+    );
+  }
+
   function renderDetailsForm() {
     return (
       <AutoForm
-        schema={getSchemaBridge()}
+        schema={schemaBridge}
         model={getFormModel()}
         onChangeModel={(model: any) => prepareModelChange(model)}
         data-testid={'metadata-editor-form-' + name}
@@ -148,7 +163,7 @@ export function MetadataEditorModal({
         disabled={isFormDisabled()}
         onBlur={() => commitModelChange()}
       >
-        <AutoFields />
+        {renderAutoFields()}
         <ErrorsField />
         <br />
       </AutoForm>
