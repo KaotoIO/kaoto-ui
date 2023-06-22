@@ -65,7 +65,7 @@ export function PropertyPlaceholderRow({
   }
 
   return (
-    <TreeRowWrapper row={{ props: treeRow!.props }} className="pf-m-selected propertyRow">
+    <TreeRowWrapper row={{ props: treeRow!.props }} className="pf-m-selected">
       <Td dataLabel="NAME" treeRow={treeRow}>
         <TextInput
           autoFocus={true}
