@@ -97,7 +97,7 @@ const Visualization = () => {
       fetchCapabilities().then((capabilities: ICapabilities) => {
         capabilities.dsls.forEach((dsl) => {
           if (dsl.name === flows[0].dsl) {
-            const tmpSettings = { ...settings, dsl: dsl };
+            const tmpSettings = { ...settings, dsl };
             setSettings(tmpSettings);
             fetchTheSourceCode({ flows, properties, metadata }, tmpSettings);
           }
@@ -113,7 +113,7 @@ const Visualization = () => {
       ...currentFlowsWrapper,
       flows: currentFlowsWrapper.flows.map((flow) => ({
         ...flow,
-        metadata: { ...flow.metadata, ...settings },
+        metadata: { ...flow.metadata },
         dsl: settings.dsl.name,
       })),
     };
