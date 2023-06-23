@@ -8,7 +8,7 @@ export const ThemeSwitcher = () => {
   const { settings, setSettings } = useSettingsStore();
 
   const onToggleSwitchTheme = (newUiCheckedState: boolean) => {
-    setSettings({ ...settings, uiLightMode: newUiCheckedState });
+    setSettings({ uiLightMode: newUiCheckedState });
     localStorage.setItem(LOCAL_STORAGE_UI_THEME_KEY, `${newUiCheckedState}`);
   };
 

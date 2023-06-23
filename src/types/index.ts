@@ -64,7 +64,6 @@ export interface ISettings {
   uiLightMode: boolean;
   editorMode: CodeEditorMode;
 
-  icon?: string;
   // name of integration or deployment
   name: string;
   // Cluster namespace

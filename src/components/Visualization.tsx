@@ -98,7 +98,7 @@ const Visualization = () => {
         capabilities.dsls.forEach((dsl) => {
           if (dsl.name === flows[0].dsl) {
             const tmpSettings = { ...settings, dsl };
-            setSettings(tmpSettings);
+            setSettings({ dsl });
             fetchTheSourceCode({ flows, properties, metadata }, tmpSettings);
           }
         });

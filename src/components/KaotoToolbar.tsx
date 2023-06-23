@@ -86,9 +86,8 @@ export const KaotoToolbar = ({
   // fetch default namespace from the API,
   useEffect(() => {
     fetchDefaultNamespace().then((data) => {
-      const newSettings = settings;
-      newSettings.namespace = data.namespace;
-      setSettings(newSettings);
+      const namespace = data.namespace;
+      setSettings({ namespace});
     });
   }, []);
 

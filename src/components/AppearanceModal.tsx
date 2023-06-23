@@ -38,7 +38,7 @@ const AppearanceModal = ({ handleCloseModal, isModalOpen }: IAppearanceModal) =>
   }, [settings.editorIsLightMode, storedTheme]);
 
   const onToggleSwitchEditorTheme = (newEditorCheckedState: boolean) => {
-    setSettings({ ...settings, editorIsLightMode: newEditorCheckedState });
+    setSettings({ editorIsLightMode: newEditorCheckedState });
     localStorage.setItem(LOCAL_STORAGE_EDITOR_THEME_KEY, `${newEditorCheckedState}`);
   };
 
