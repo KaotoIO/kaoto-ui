@@ -1,4 +1,3 @@
-import svg from '../assets/images/kaoto.svg';
 import { LOCAL_STORAGE_EDITOR_THEME_KEY, LOCAL_STORAGE_UI_THEME_KEY } from '@kaoto/constants';
 import { CodeEditorMode, IDsl, ISettings } from '@kaoto/types';
 import { create } from 'zustand';
@@ -23,7 +22,6 @@ export const initDsl: IDsl = {
 export const initialSettings: ISettings = {
   description: '',
   dsl: initDsl,
-  icon: svg,
   name: 'integration',
   namespace: '',
   editorIsLightMode: localStorage.getItem(LOCAL_STORAGE_EDITOR_THEME_KEY) === 'true',
