@@ -111,7 +111,7 @@
     "@typescript-eslint/eslint-plugin": "^5.60.0",
     "@typescript-eslint/parser": "^5.60.0",
     "babel-loader": "^9.1.2",
-    "chromatic": "^6.19.8",
+    "chromatic": "^6.19.9",
     "copy-webpack-plugin": "^11.0.0",
     "copyfiles": "^2.4.1",
     "cpr": "^3.0.1",
