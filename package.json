@@ -34,7 +34,7 @@
     "@kie-tools-core/editor": "0.29.0",
     "@kie-tools-core/guided-tour": "0.28.0",
     "@kie-tools-core/monaco-editor": "0.29.0",
-    "@kie-tools-core/notifications": "0.29.0",
+    "@kie-tools-core/notifications": "0.30.0",
     "@kie-tools-core/patternfly-base": "0.29.0",
     "@kie-tools-core/workspace": "0.29.0",
     "@kie-tools/uniforms-patternfly": "0.29.0",
