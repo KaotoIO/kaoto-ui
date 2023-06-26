@@ -21,9 +21,8 @@ const common = (mode) => {
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
     module: {
       rules: [
-
         {
-          test: /\.css|s[ac]ss$/i,
+          test: /\.(css|sass|scss)$/i,
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
           include: (stylesheet) => !isPatternflyStyles(stylesheet),
           sideEffects: true,
@@ -40,7 +39,7 @@ const common = (mode) => {
         },
         {
           test: /\.(svg|jpg|jpeg|png|gif)$/i,
-          type: 'asset/inline',
+          type: 'asset',
         },
       ],
     },
