@@ -1,4 +1,4 @@
-FROM node:16-alpine3.17 as appbuild
+FROM node:16-alpine3.17 AS appbuild
 ARG KAOTO_API_URL="/api"
 WORKDIR /app
 
