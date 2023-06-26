@@ -1,6 +1,38 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:base",
+    ":dependencyDashboard"
+  ],
+  "packageRules": [
+    {
+      "groupName": "react monorepo",
+      "matchPackageNames": [
+        "@types/react",
+        "@types/react-dom"
+      ]
+    },
+    {
+      "groupName": "eslint",
+      "matchPackagePatterns": ["eslint"]
+    },
+    {
+      "groupName": "@kie-tools",
+      "matchPackagePatterns": ["@kie-tools"]
+    },
+    {
+      "groupName": "@kie-tools",
+      "matchPackagePatterns": ["@opentelemetry"]
+    },
+    {
+      "extends": "monorepo:storybook",
+      "groupName": "storybook monorepo",
+      "matchUpdateTypes": [
+        "digest",
+        "patch",
+        "minor",
+        "major"
+      ]
+    }
   ]
 }
