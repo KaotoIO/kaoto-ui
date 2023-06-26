@@ -1,3 +1,4 @@
+import { FlowsService } from '../../services/FlowsService';
 import { FlowsList } from './FlowsList';
 import { useFlowsStore, useVisualizationStore } from '@kaoto/store';
 import { act, fireEvent, render } from '@testing-library/react';
@@ -5,8 +6,11 @@ import { act, fireEvent, render } from '@testing-library/react';
 describe('FlowsList.tsx', () => {
   beforeEach(() => {
     useFlowsStore.getState().deleteAllFlows();
-    useFlowsStore.getState().addNewFlow('Integration', 'route-1234');
-    useFlowsStore.getState().addNewFlow('Integration', 'route-4321');
+
+    jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce('route-1234');
+    jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce('route-4321');
+    useFlowsStore.getState().addNewFlow('Integration');
+    useFlowsStore.getState().addNewFlow('Integration');
   });
 
   test('should render the existing flows', async () => {

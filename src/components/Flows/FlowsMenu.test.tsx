@@ -1,3 +1,4 @@
+import { FlowsService } from '../../services';
 import { FlowsMenu } from './FlowsMenu';
 import { useFlowsStore, useVisualizationStore } from '@kaoto/store';
 import { act, fireEvent, render, waitFor } from '@testing-library/react';
@@ -5,8 +6,11 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react';
 describe('FlowsMenu.tsx', () => {
   beforeEach(() => {
     useFlowsStore.getState().deleteAllFlows();
-    useFlowsStore.getState().addNewFlow('Integration', 'route-1234');
-    useFlowsStore.getState().addNewFlow('Integration', 'route-4321');
+
+    jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce('route-1234');
+    jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce('route-4321');
+    useFlowsStore.getState().addNewFlow('Integration');
+    useFlowsStore.getState().addNewFlow('Integration');
   });
 
   test('should open the flows list when clicking the dropdown', async () => {

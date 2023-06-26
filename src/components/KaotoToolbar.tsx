@@ -87,7 +87,7 @@ export const KaotoToolbar = ({
   useEffect(() => {
     fetchDefaultNamespace().then((data) => {
       const namespace = data.namespace;
-      setSettings({ namespace});
+      setSettings({ namespace });
     });
   }, []);
 
@@ -394,7 +394,7 @@ export const KaotoToolbar = ({
           setSourceCode('');
 
           /** TODO: Check whether this configuration is required to be kept inside of settingsStore */
-          setSettings({ name: 'integration', namespace: 'default' });
+          setSettings({ namespace: 'default' });
           setIsConfirmationModalOpen(false);
         }}
         isModalOpen={isConfirmationModalOpen}

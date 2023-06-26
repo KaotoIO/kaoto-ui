@@ -12,17 +12,16 @@ import cloneDeep from 'lodash.clonedeep';
 export class FlowsService {
   static getNewFlow(
     dsl: string,
-    flowId?: string,
     options?: { metadata: IIntegration['metadata'] },
   ): IIntegration {
-    const randomNumber = getRandomArbitraryNumber();
-    const id = flowId ?? `route-${randomNumber.toString(10).slice(0, 4)}`;
+    const metadata = options?.metadata ?? {};
+    const id = metadata.name ?? this.getNewFlowId();
 
     return {
       id,
       dsl,
       description: '',
-      metadata: options?.metadata ?? {},
+      metadata: {...metadata, name: metadata.name ?? id},
       params: [],
       steps: [],
     };
@@ -54,5 +53,10 @@ export class FlowsService {
     });
 
     return newSteps;
+  }
+
+  static getNewFlowId(): string {
+    const randomNumber = getRandomArbitraryNumber();
+    return `route-${randomNumber.toString(10).slice(0, 4)}`
   }
 }

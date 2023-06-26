@@ -18,11 +18,10 @@ Cypress.Commands.add('openCodeEditor', () => {
 });
 
 Cypress.Commands.add('editorAddText', (line, text) => {
-    const arr = text.split('\n');
-    Array.from({ length: arr.length }).forEach((_, i) => {
+    text.split('\n').forEach((lineToWrite, i) => {
         cy.get('.code-editor')
             .click()
-            .type('{pageUp}{pageUp}' + '{downArrow}'.repeat(line + i) + '{enter}{upArrow}' + arr[i], {
+            .type('{pageUp}{pageUp}' + '{downArrow}'.repeat(line + i) + '{enter}{upArrow}' + lineToWrite, {
                 delay: 1,
             });
     });

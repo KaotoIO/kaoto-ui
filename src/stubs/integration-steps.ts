@@ -607,7 +607,7 @@ export const flowWithBranch: IIntegration = {
   dsl: 'Camel Route',
   description: '',
   metadata: {
-    name: 'integration',
+    name: 'route-1814',
     namespace: '',
   },
   params: [],

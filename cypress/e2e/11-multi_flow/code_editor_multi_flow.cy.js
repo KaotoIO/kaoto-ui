@@ -94,8 +94,7 @@ spec:
     cy.get('[data-testid="viz-step-set-header"]').should('be.visible');
   });
 
-  // Blocked by - https://github.com/KaotoIO/kaoto-ui/issues/1910
-  it.skip('User adds step to the second route using code editor', () => {
+  it('User adds step to the second route using code editor', () => {
     cy.uploadFixture('IntegrationMultiFlow.yaml');
 
     cy.showAllRoutes();

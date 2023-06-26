@@ -1,22 +1,9 @@
-jest.mock('@kaoto/api', () => {
-  const actual = jest.requireActual('@kaoto/api');
-
-  return {
-    ...actual,
-    fetchDeployment: jest.fn(),
-    fetchIntegrationSourceCode: jest.fn(),
-    fetchStepDetails: jest.fn(),
-    fetchViews: jest.fn(),
-    startDeployment: jest.fn(),
-    stopDeployment: jest.fn()
-  };
-});
-
 import branchSteps from '../store/data/branchSteps';
 import deployment from '../store/data/deployment';
 import nestedBranch from '../store/data/kamelet.nested-branch.steps';
 import steps from '../store/data/steps';
 import YAML from '../store/data/yaml';
+import { FlowsService } from './FlowsService';
 import { StepsService } from './stepsService';
 import {
   fetchDeployment,
@@ -35,29 +22,53 @@ import {
   IVizStepNode,
   IVizStepNodeData,
 } from '@kaoto/types';
-import { FlowsService } from './FlowsService';
+
+jest.mock('@kaoto/api', () => {
+  const actual = jest.requireActual('@kaoto/api');
+
+  return {
+    ...actual,
+    fetchDeployment: jest.fn(),
+    fetchStepDetails: jest.fn(),
+    fetchViews: jest.fn(),
+    startDeployment: jest.fn(),
+    stopDeployment: jest.fn(),
+  };
+});
 
 describe('stepsService', () => {
   const stepsService = new StepsService();
+  const MOCK_FLOW_ID = 'route-1234';
 
   beforeEach(() => {
-    useFlowsStore.setState({ flows: [FlowsService.getNewFlow('Camel Route', 'Camel Route-1')] });
+    useFlowsStore.getState().deleteAllFlows();
+
+    jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce(MOCK_FLOW_ID);
+    useFlowsStore.getState().addNewFlow('Integration');
   });
 
   it('addBranch(): should add a branch to the specified step from the store', () => {
     useFlowsStore.setState({
-      flows: [{
-        ...useFlowsStore.getState().flows[0],
-        id: 'Camel Route-1',
-        steps: [
-          { integrationId: 'Camel Route-1', UUID: 'blueberry', name: 'blueberry', minBranches: 0, maxBranches: -1 },
-        ] as IStepProps[],
-      }],
+      flows: [
+        {
+          ...useFlowsStore.getState().flows[0],
+          id: MOCK_FLOW_ID,
+          steps: [
+            {
+              integrationId: MOCK_FLOW_ID,
+              UUID: 'blueberry',
+              name: 'blueberry',
+              minBranches: 0,
+              maxBranches: -1,
+            },
+          ] as IStepProps[],
+        },
+      ],
     });
 
     stepsService.addBranch(
-      { integrationId: 'Camel Route-1', UUID: 'blueberry', name: 'blueberry' } as IStepProps,
-      { branchUuid: 'blueberry-branch-01', steps: [] as IStepProps[] } as IStepPropsBranch
+      { integrationId: MOCK_FLOW_ID, UUID: 'blueberry', name: 'blueberry' } as IStepProps,
+      { branchUuid: 'blueberry-branch-01', steps: [] as IStepProps[] } as IStepPropsBranch,
     );
 
     expect(useFlowsStore.getState().flows[0].steps[0].branches).toHaveLength(1);
@@ -148,9 +159,9 @@ describe('stepsService', () => {
     });
 
     it('stepParams: should return the current step parameters', () => {
-      expect(
-        stepsService.createKaotoApi(step, jest.fn(), jest.fn()).stepParams,
-      ).toMatchObject({ description: 'A fruit' });
+      expect(stepsService.createKaotoApi(step, jest.fn(), jest.fn()).stepParams).toMatchObject({
+        description: 'A fruit',
+      });
     });
 
     it('stopDeployment(): should call apiService to stop the current running deployment', async () => {
@@ -162,9 +173,13 @@ describe('stepsService', () => {
     });
 
     it('updateStep(): should delegate the update to updateStepParameters method', () => {
-      const updateStepParametersSpy = jest.spyOn(stepsService, 'updateStepParameters').mockImplementationOnce(() => {});
+      const updateStepParametersSpy = jest
+        .spyOn(stepsService, 'updateStepParameters')
+        .mockImplementationOnce(() => {});
 
-      stepsService.createKaotoApi(step, jest.fn(), jest.fn()).updateStep({ name: 'pineapple' } as IStepProps);
+      stepsService
+        .createKaotoApi(step, jest.fn(), jest.fn())
+        .updateStep({ name: 'pineapple' } as IStepProps);
 
       expect(updateStepParametersSpy).toHaveBeenCalled();
     });
@@ -186,24 +201,28 @@ describe('stepsService', () => {
     } as IStepProps;
 
     useFlowsStore.setState({
-      flows: [{
-        ...useFlowsStore.getState().flows[0],
-        steps: [step],
-      }],
+      flows: [
+        {
+          ...useFlowsStore.getState().flows[0],
+          steps: [step],
+        },
+      ],
     });
 
     expect(useFlowsStore.getState().flows[0].steps[0].branches).toHaveLength(1);
 
-    stepsService.deleteBranch('Camel Route-1', step, 'peach-0_branch-0');
+    stepsService.deleteBranch(MOCK_FLOW_ID, step, 'peach-0_branch-0');
 
     expect(useFlowsStore.getState().flows[0].steps[0].branches).toHaveLength(0);
   });
 
   it('deleteStep(): should delete specified step from the store', () => {
-    useFlowsStore.getState().insertStep('Camel Route-1', { name: 'pineapple' } as IStepProps, { mode: 'append' });
+    useFlowsStore
+      .getState()
+      .insertStep(MOCK_FLOW_ID, { name: 'pineapple' } as IStepProps, { mode: 'append' });
     expect(useFlowsStore.getState().flows[0].steps).toHaveLength(1);
 
-    useFlowsStore.getState().deleteStep('Camel Route-1', 'Camel Route-1_pineapple-0');
+    useFlowsStore.getState().deleteStep(MOCK_FLOW_ID, `${MOCK_FLOW_ID}_pineapple-0`);
     expect(useFlowsStore.getState().flows[0].steps).toHaveLength(0);
   });
 
@@ -222,15 +241,17 @@ describe('stepsService', () => {
       branches: [{ steps: [{ UUID: 'nested-step-0' }, { UUID: 'nested-step-1' }] }, {}],
     } as IStepProps);
     expect(
-      stepsService.findStepIdxWithUUID('nested-step-1', nestedSteps[3].branches![0].steps)
+      stepsService.findStepIdxWithUUID('nested-step-1', nestedSteps[3].branches![0].steps),
     ).toEqual(1);
 
     // testing without explicitly passing a steps array
     useFlowsStore.setState({
-      flows: [{
-        ...useFlowsStore.getState().flows[0],
-        steps,
-      }],
+      flows: [
+        {
+          ...useFlowsStore.getState().flows[0],
+          steps,
+        },
+      ],
     });
 
     expect(stepsService.findStepIdxWithUUID('caffeine-action-2', steps)).toEqual(2);
@@ -257,17 +278,26 @@ describe('stepsService', () => {
       {
         UUID: 'three',
       } as IStepProps,
-    ]
+    ];
 
     useFlowsStore.setState({
-      flows: [{
-        ...useFlowsStore.getState().flows[0],
-        steps,
-      }],
+      flows: [
+        {
+          ...useFlowsStore.getState().flows[0],
+          steps,
+        },
+      ],
     });
 
-    expect(stepsService.getFollowingStep({ integrationId: 'Camel Route-1', UUID: 'two' } as IStepProps)).toMatchObject({ UUID: 'three' });
-    expect(stepsService.getFollowingStep({ integrationId: 'Camel Route-1', UUID: 'three' } as IStepProps)).toBeFalsy();
+    expect(
+      stepsService.getFollowingStep({ integrationId: MOCK_FLOW_ID, UUID: 'two' } as IStepProps),
+    ).toMatchObject({ UUID: 'three' });
+    expect(
+      stepsService.getFollowingStep({
+        integrationId: MOCK_FLOW_ID,
+        UUID: 'three',
+      } as IStepProps),
+    ).toBeFalsy();
   });
 
   it('getStepNested(): gets a nested step with its UUID', () => {
@@ -275,7 +305,7 @@ describe('stepsService', () => {
     expect(stepsService.getStepNested('strawberry')).toMatchObject({ stepUuid: 'strawberry' });
   });
 
-  it( 'getPreviousStep(): should return the step preceding the one provided', () => {
+  it('getPreviousStep(): should return the step preceding the one provided', () => {
     const steps = [
       {
         UUID: 'one',
@@ -286,23 +316,36 @@ describe('stepsService', () => {
       {
         UUID: 'three',
       } as IStepProps,
-    ]
+    ];
 
     useFlowsStore.setState({
-      flows: [{
-        ...useFlowsStore.getState().flows[0],
-        steps,
-      }],
+      flows: [
+        {
+          ...useFlowsStore.getState().flows[0],
+          steps,
+        },
+      ],
     });
 
-    expect(stepsService.getPreviousStep({ integrationId: 'Camel Route-1', UUID: 'one' } as IStepProps)).toBeFalsy();
-    expect(stepsService.getPreviousStep({ integrationId: 'Camel Route-1', UUID: 'two' } as IStepProps)).toMatchObject({ UUID: 'one' });
+    expect(
+      stepsService.getPreviousStep({ integrationId: MOCK_FLOW_ID, UUID: 'one' } as IStepProps),
+    ).toBeFalsy();
+    expect(
+      stepsService.getPreviousStep({ integrationId: MOCK_FLOW_ID, UUID: 'two' } as IStepProps),
+    ).toMatchObject({ UUID: 'one' });
   });
 
   it('handleAppendStep(): should append a step to another and update the store', async () => {
-    useFlowsStore
-      .getState()
-      .insertStep('Camel Route-1', { integrationId: 'Camel Route-1', name: 'lychee', UUID: 'lychee', type: 'START' } as IStepProps, { mode: 'append' });
+    useFlowsStore.getState().insertStep(
+      MOCK_FLOW_ID,
+      {
+        integrationId: MOCK_FLOW_ID,
+        name: 'lychee',
+        UUID: 'lychee',
+        type: 'START',
+      } as IStepProps,
+      { mode: 'append' },
+    );
 
     expect(useFlowsStore.getState().flows[0].steps).toHaveLength(1);
 
@@ -313,8 +356,8 @@ describe('stepsService', () => {
 
     await stepsService
       .handleAppendStep(
-        { integrationId: 'Camel Route-1', name: 'lychee', UUID: 'lychee' } as IStepProps,
-        { integrationId: 'Camel Route-1', name: 'raspberry', UUID: 'raspberry' } as IStepProps
+        { integrationId: MOCK_FLOW_ID, name: 'lychee', UUID: 'lychee' } as IStepProps,
+        { integrationId: MOCK_FLOW_ID, name: 'raspberry', UUID: 'raspberry' } as IStepProps,
       )
       .then(() => {
         expect(useFlowsStore.getState().flows[0].steps).toHaveLength(2);
@@ -324,9 +367,16 @@ describe('stepsService', () => {
   });
 
   it('handleDropOnExistingStep(): should replace an existing step and update the store', async () => {
-      useFlowsStore
-        .getState()
-        .insertStep('Camel Route-1', { integrationId: 'Camel Route-1', name: 'lychee', UUID: 'lychee', type: 'START' } as IStepProps, { mode: 'append' });
+    useFlowsStore.getState().insertStep(
+      MOCK_FLOW_ID,
+      {
+        integrationId: MOCK_FLOW_ID,
+        name: 'lychee',
+        UUID: 'lychee',
+        type: 'START',
+      } as IStepProps,
+      { mode: 'append' },
+    );
 
     expect(useFlowsStore.getState().flows[0].steps[0].UUID).toContain('lychee');
 
@@ -337,13 +387,21 @@ describe('stepsService', () => {
 
     await stepsService
       .handleDropOnExistingStep(
-        { step: { integrationId: 'Camel Route-1', type: 'START' } } as IVizStepNodeData,
-        { integrationId: 'Camel Route-1', name: 'lychee', UUID: 'Camel Route-1_lychee-0' } as IStepProps,
-        { integrationId: 'Camel Route-1', name: 'raspberry', UUID: 'Camel Route-1_raspberry-0' } as IStepProps
+        { step: { integrationId: MOCK_FLOW_ID, type: 'START' } } as IVizStepNodeData,
+        {
+          integrationId: MOCK_FLOW_ID,
+          name: 'lychee',
+          UUID: `${MOCK_FLOW_ID}_lychee-0`,
+        } as IStepProps,
+        {
+          integrationId: MOCK_FLOW_ID,
+          name: 'raspberry',
+          UUID: `${MOCK_FLOW_ID}_raspberry-0`,
+        } as IStepProps,
       )
       .then(() => {
         expect(useFlowsStore.getState().flows[0].steps[0].UUID).toContain(
-          'Camel Route-1_raspberry'
+          `${MOCK_FLOW_ID}_raspberry`,
         );
       });
 
@@ -352,14 +410,21 @@ describe('stepsService', () => {
 
   it('handleInsertStep(): should insert a step between two specified steps and update the store', async () => {
     useFlowsStore.setState({
-      flows: [{
-        ...useFlowsStore.getState().flows[0],
-        id: 'Camel Route-1',
-        steps: [
-          { integrationId: 'Camel Route-1', name: 'apple', UUID: 'apple-0', type: 'START' },
-          { integrationId: 'Camel Route-1', name: 'watermelon', UUID: 'watermelon-1', type: 'MIDDLE' },
-        ] as IStepProps[],
-      }],
+      flows: [
+        {
+          ...useFlowsStore.getState().flows[0],
+          id: MOCK_FLOW_ID,
+          steps: [
+            { integrationId: MOCK_FLOW_ID, name: 'apple', UUID: 'apple-0', type: 'START' },
+            {
+              integrationId: MOCK_FLOW_ID,
+              name: 'watermelon',
+              UUID: 'watermelon-1',
+              type: 'MIDDLE',
+            },
+          ] as IStepProps[],
+        },
+      ],
     });
 
     expect(useFlowsStore.getState().flows[0].steps[0].UUID).toContain('apple');
@@ -371,18 +436,18 @@ describe('stepsService', () => {
 
     await stepsService
       .handleInsertStep(
-        { data: { step: { integrationId: 'Camel Route-1', name: 'watermelon', UUID: 'watermelon-1' } } } as IVizStepNode,
-        { name: 'grape', UUID: 'grape-1' } as IStepProps
+        {
+          data: {
+            step: { integrationId: MOCK_FLOW_ID, name: 'watermelon', UUID: 'watermelon-1' },
+          },
+        } as IVizStepNode,
+        { name: 'grape', UUID: 'grape-1' } as IStepProps,
       )
       .then(() => {
         // new step UUID should contain the target node's old index
-        expect(useFlowsStore.getState().flows[0].steps[1].UUID).toContain(
-          'grape-1'
-        );
+        expect(useFlowsStore.getState().flows[0].steps[1].UUID).toContain('grape-1');
         // UUID for watermelon should contain the new index
-        expect(useFlowsStore.getState().flows[0].steps[2].UUID).toContain(
-          'watermelon-2'
-        );
+        expect(useFlowsStore.getState().flows[0].steps[2].UUID).toContain('watermelon-2');
       });
 
     expect(fetchStepDetails).toHaveBeenCalled();
@@ -390,14 +455,16 @@ describe('stepsService', () => {
 
   it('handlePrependStep(): should insert a step before another and update the store', async () => {
     useFlowsStore.setState({
-      flows: [{
-        ...useFlowsStore.getState().flows[0],
-        id: 'Camel Route-1',
-        steps: [
-          { integrationId: 'Camel Route-1', name: 'cherry', UUID: 'cherry-0', type: 'START' },
-          { integrationId: 'Camel Route-1', name: 'peach', UUID: 'peach-1', type: 'MIDDLE' },
-        ] as IStepProps[],
-      }],
+      flows: [
+        {
+          ...useFlowsStore.getState().flows[0],
+          id: MOCK_FLOW_ID,
+          steps: [
+            { integrationId: MOCK_FLOW_ID, name: 'cherry', UUID: 'cherry-0', type: 'START' },
+            { integrationId: MOCK_FLOW_ID, name: 'peach', UUID: 'peach-1', type: 'MIDDLE' },
+          ] as IStepProps[],
+        },
+      ],
     });
 
     expect(useFlowsStore.getState().flows[0].steps[0].UUID).toContain('cherry');
@@ -409,9 +476,9 @@ describe('stepsService', () => {
 
     await stepsService
       .handlePrependStep(
-        'Camel Route-1',
+        MOCK_FLOW_ID,
         { name: 'peach', UUID: 'peach-1' } as IStepProps,
-        { name: 'lime', UUID: 'lime-1' } as IStepProps
+        { name: 'lime', UUID: 'lime-1' } as IStepProps,
       )
       .then(() => {
         expect(useFlowsStore.getState().flows[0].steps[1].UUID).toContain('lime');
@@ -425,7 +492,7 @@ describe('stepsService', () => {
     it('should return "false" for empty views', () => {
       const result = StepsService.hasCustomStepExtension(
         { UUID: 'random-id' } as IStepProps,
-        [] as IViewProps[]
+        [] as IViewProps[],
       );
 
       expect(result).toBeFalsy();
@@ -434,7 +501,7 @@ describe('stepsService', () => {
     it('should return "false" for a matching view with no URL available', () => {
       const result = StepsService.hasCustomStepExtension(
         { UUID: 'random-id' } as IStepProps,
-        [{ step: 'random-id', url: '' }] as IViewProps[]
+        [{ step: 'random-id', url: '' }] as IViewProps[],
       );
 
       expect(result).toBeFalsy();
@@ -443,7 +510,7 @@ describe('stepsService', () => {
     it('should return "false" for non-matching views', () => {
       const result = StepsService.hasCustomStepExtension(
         { UUID: 'random-id' } as IStepProps,
-        [{ step: 'not-a-random-id', url: '/dev/null' }] as IViewProps[]
+        [{ step: 'not-a-random-id', url: '/dev/null' }] as IViewProps[],
       );
 
       expect(result).toBeFalsy();
@@ -452,7 +519,7 @@ describe('stepsService', () => {
     it('should return "true" for matching views and an URL available', () => {
       const result = StepsService.hasCustomStepExtension(
         { UUID: 'random-id' } as IStepProps,
-        [{ step: 'random-id', url: '/dev/null' }] as IViewProps[]
+        [{ step: 'random-id', url: '/dev/null' }] as IViewProps[],
       );
 
       expect(result).toBeTruthy();
@@ -497,7 +564,7 @@ describe('stepsService', () => {
           kind: 'Kamelet',
           title: 'PDF Action',
         } as IStepProps,
-      ])
+      ]),
     ).toBe(false);
   });
 
@@ -526,14 +593,12 @@ describe('stepsService', () => {
 
     await stepsService
       .replacePlaceholderStep(
-        { step: { integrationId: 'Camel Route-1', type: 'START' } } as IVizStepNodeData,
-        { name: 'strawberry', UUID: 'strawberry-0' } as IStepProps
+        { step: { integrationId: MOCK_FLOW_ID, type: 'START' } } as IVizStepNodeData,
+        { name: 'strawberry', UUID: 'strawberry-0' } as IStepProps,
       )
       .then(() => {
         expect(useFlowsStore.getState().flows[0].steps).toHaveLength(1);
-        expect(useFlowsStore.getState().flows[0].steps[0].UUID).toContain(
-          'strawberry'
-        );
+        expect(useFlowsStore.getState().flows[0].steps[0].UUID).toContain('strawberry');
       });
 
     expect(fetchStepDetails).toHaveBeenCalled();
@@ -545,7 +610,7 @@ describe('stepsService', () => {
         UUID: 'with-branches',
         minBranches: 0,
         maxBranches: -1,
-      } as IStepProps)
+      } as IStepProps),
     ).toBeTruthy();
 
     // we should NOT rely on the `branches` array to determine if a step supports branching,
@@ -554,7 +619,7 @@ describe('stepsService', () => {
       StepsService.supportsBranching({
         UUID: 'no-min-max-props',
         branches: [] as IStepPropsBranch[],
-      } as IStepProps)
+      } as IStepProps),
     ).toBeFalsy();
 
     expect(StepsService.supportsBranching({ UUID: 'no-branches' } as IStepProps)).toBeFalsy();
@@ -562,18 +627,20 @@ describe('stepsService', () => {
 
   it('updateStepParameters(): should update existing parameters for specified step, with provided values', () => {
     const step = {
-      UUID: 'Camel Route-1_plum-0',
+      UUID: `${MOCK_FLOW_ID}_plum-0`,
       name: 'plum',
       parameters: [{ type: 'string', id: 'description', value: 'wat' }] as IStepPropsParameters[],
     } as IStepProps;
-    useFlowsStore.getState().insertStep('Camel Route-1', step, { mode: 'append' });
+    useFlowsStore.getState().insertStep(MOCK_FLOW_ID, step, { mode: 'append' });
 
     stepsService.updateStepParameters(step, { description: 'guava' });
 
     expect(useFlowsStore.getState().flows[0].steps).toHaveLength(1);
-    expect(
-      useFlowsStore.getState().flows[0].steps[0].parameters![0]
-    ).toMatchObject({ type: 'string', id: 'description', value: 'guava' });
+    expect(useFlowsStore.getState().flows[0].steps[0].parameters![0]).toMatchObject({
+      type: 'string',
+      id: 'description',
+      value: 'guava',
+    });
   });
 
   it('updateViews(): should call on apiService to fetch views for provided steps', async () => {
@@ -581,7 +648,7 @@ describe('stepsService', () => {
       name: 'plum',
       parameters: [{ type: 'string', id: 'description', value: 'wat' }] as IStepPropsParameters[],
     } as IStepProps;
-    useFlowsStore.getState().insertStep('Camel Route-1', step, { mode: 'append' });
+    useFlowsStore.getState().insertStep(MOCK_FLOW_ID, step, { mode: 'append' });
     expect(useFlowsStore.getState().flows[0].steps).toHaveLength(1);
     expect(useFlowsStore.getState().views).toHaveLength(0);
 
