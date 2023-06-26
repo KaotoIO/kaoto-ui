@@ -1,17 +1,25 @@
-FROM node:16 as appbuild
+FROM node:16-alpine3.17 as appbuild
 ARG KAOTO_API_URL="/api"
 WORKDIR /app
 
+# Copy yarn configuration files
 COPY .yarn/plugins ./.yarn/plugins
 COPY .yarn/releases ./.yarn/releases
 COPY .yarnrc.yml .
-COPY yarn.lock .
-COPY package.json .
 
+# Main entrypoint
+COPY public ./public/
+
+# Source code
+COPY src ./src/
+
+# Webpack and Typescript config files
+COPY package.json yarn.lock webpack.* tsconfig.* ./
+
+# Install dependencies
 RUN yarn install --mode=skip-build --immutable
 
-COPY . .
-
+# Build Kaoto UI
 RUN KAOTO_API=${KAOTO_API_URL} yarn run build
 
 FROM nginxinc/nginx-unprivileged
