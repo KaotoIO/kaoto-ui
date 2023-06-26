@@ -9,6 +9,7 @@ on: push
 # List of jobs
 jobs:
   chromatic-deployment:
+    if: github.actor != 'renovate[bot]'
     # Operating System
     runs-on: ubuntu-latest
     # Job steps
