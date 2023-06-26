@@ -105,7 +105,7 @@ function KogitoEditorIntegrationProviderInternal(
     [pastStates, redo, undo],
   );
 
-  // Update the integrationJson to reflect an KaotoEditor content change (only if not triggered via Kaoto UI).
+  // Update the integrationJson to reflect a KaotoEditor content change (only if not triggered via Kaoto UI).
   useCancelableEffect(
     useCallback(
       ({ canceled }) => {
