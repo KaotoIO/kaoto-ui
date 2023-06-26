@@ -432,24 +432,22 @@ export class StepsService {
       step.UUID = proposedStep.UUID;
       const validation = ValidationService.canStepBeReplaced(node, step);
 
-      if (!validation.isValid) {
-        return validation;
-      }
+      if (validation.isValid) {
+        // update the steps, the new node will be created automatically
+        if (node.branchInfo) {
+          if (node.isPlaceholder) {
+            const pathToBranch = findPath(
+              this.getIntegration(node.step.integrationId)?.steps ?? [],
+              node.branchInfo.branchUuid!,
+              'branchUuid'
+            );
+            const newPath = pathToBranch?.concat('steps', '0');
 
-      // update the steps, the new node will be created automatically
-      if (node.branchInfo) {
-        if (node.isPlaceholder) {
-          const pathToBranch = findPath(
-            this.getIntegration(node.step.integrationId)?.steps ?? [],
-            node.branchInfo.branchUuid!,
-            'branchUuid'
-          );
-          const newPath = pathToBranch?.concat('steps', '0');
-
-          useFlowsStore.getState().insertStep(node.step.integrationId, step, { mode: 'replace', path: newPath });
+            useFlowsStore.getState().insertStep(node.step.integrationId, step, { mode: 'replace', path: newPath });
+          }
+        } else {
+          useFlowsStore.getState().insertStep(node.step.integrationId, step, { mode: 'insert', index: 0 });
         }
-      } else {
-        useFlowsStore.getState().insertStep(node.step.integrationId, step, { mode: 'insert', index: 0 });
       }
 
       return validation;
