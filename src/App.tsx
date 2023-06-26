@@ -1,4 +1,5 @@
 import './App.css';
+import { CapabilitiesProvider } from './providers';
 import { useFlowsStore } from './store';
 import { bindUndoRedo } from './utils';
 import { AlertProvider, AppLayout, MASLoading } from '@kaoto/layout';
@@ -22,15 +23,17 @@ bindUndoRedo(undo, redo);
 
 export const App = () => {
   return (
-    <AlertProvider>
-      <Router>
-        <Suspense fallback={<MASLoading />}>
-          <AppLayout>
-            <AppRoutes />
-          </AppLayout>
-        </Suspense>
-      </Router>
-    </AlertProvider>
+    <CapabilitiesProvider>
+      <AlertProvider>
+        <Router>
+          <Suspense fallback={<MASLoading />}>
+            <AppLayout>
+              <AppRoutes />
+            </AppLayout>
+          </Suspense>
+        </Router>
+      </AlertProvider>
+    </CapabilitiesProvider>
   );
 };
 

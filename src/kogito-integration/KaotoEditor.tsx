@@ -1,12 +1,17 @@
-import "./KaotoEditor.css";
-import { Suspense, forwardRef, useState, useCallback, useImperativeHandle, useRef } from "react";
-import { HashRouter as Router } from "react-router-dom";
-import { WorkspaceEdit } from "@kie-tools-core/workspace/dist/api";
-import { Notification } from "@kie-tools-core/notifications/dist/api";
-import { ChannelType, EditorApi, StateControlCommand } from "@kie-tools-core/editor/dist/api";
-import { AlertProvider, MASLoading, AppLayout } from "@kaoto/layout";
-import { AppRoutes } from "@kaoto/routes";
-import { KaotoIntegrationProviderRef, KogitoEditorIntegrationProvider, ContentOperation } from "./KogitoEditorIntegrationProvider";
+import './KaotoEditor.css';
+import {
+  ContentOperation,
+  KaotoIntegrationProviderRef,
+  KogitoEditorIntegrationProvider,
+} from './KogitoEditorIntegrationProvider';
+import { AlertProvider, AppLayout, MASLoading } from '@kaoto/layout';
+import { AppRoutes } from '@kaoto/routes';
+import { ChannelType, EditorApi, StateControlCommand } from '@kie-tools-core/editor/dist/api';
+import { Notification } from '@kie-tools-core/notifications/dist/api';
+import { WorkspaceEdit } from '@kie-tools-core/workspace/dist/api';
+import { Suspense, forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
+import { HashRouter as Router } from 'react-router-dom';
+import { CapabilitiesProvider } from '../providers';
 
 interface Props {
   /**
@@ -52,31 +57,30 @@ export const KaotoEditor = forwardRef<EditorApi, Props>((props, forwardedRef) =>
    * the editorContent, which is the state that has the kaoto yaml.
    */
   const getContent = useCallback(() => {
-    return editorContent || "";
+    return editorContent || '';
   }, [editorContent]);
-
 
   /**
    * Callback is exposed to the Channel that is called when a new file is opened. It sets the originalContent to the received value.
    */
-  const setContent = useCallback(
-    (path: string, content: string) => {
-      setEditorContent(content);
-      setContentPath(path);
-    },
-    []
-  );
+  const setContent = useCallback((path: string, content: string) => {
+    setEditorContent(content);
+    setContentPath(path);
+  }, []);
 
-  const onContentChanged = useCallback((newContent: string, operation: ContentOperation) => {
-    setEditorContent(newContent);
-    if (operation === ContentOperation.EDIT) {
-      props.onNewEdit(new WorkspaceEdit(newContent));
-    } else if (operation === ContentOperation.UNDO) {
-      props.onStateControlCommandUpdate(StateControlCommand.UNDO);
-    } else if (operation === ContentOperation.REDO) {
-      props.onStateControlCommandUpdate(StateControlCommand.REDO);
-    }
-  }, [props]);
+  const onContentChanged = useCallback(
+    (newContent: string, operation: ContentOperation) => {
+      setEditorContent(newContent);
+      if (operation === ContentOperation.EDIT) {
+        props.onNewEdit(new WorkspaceEdit(newContent));
+      } else if (operation === ContentOperation.UNDO) {
+        props.onStateControlCommandUpdate(StateControlCommand.UNDO);
+      } else if (operation === ContentOperation.REDO) {
+        props.onStateControlCommandUpdate(StateControlCommand.REDO);
+      }
+    },
+    [props],
+  );
 
   /**
    * The useImperativeHandler gives the control of the Editor component to who has it's reference, making it possible to communicate with the Editor.
@@ -102,24 +106,28 @@ export const KaotoEditor = forwardRef<EditorApi, Props>((props, forwardedRef) =>
   return (
     <>
       {editorContent !== undefined && contentPath !== undefined ? (
-        <KogitoEditorIntegrationProvider
-        content={editorContent}
-        contentPath={contentPath}
-        onContentChanged={onContentChanged}
-        onReady={props.onReady}
-        ref={providerRef}
-      >
-        <AlertProvider>
-          <Router>
-            <Suspense fallback={<MASLoading />}>
-              <AppLayout>
-                <AppRoutes />
-              </AppLayout>
-            </Suspense>
-          </Router>
-        </AlertProvider>
-      </KogitoEditorIntegrationProvider>
-      ) : <MASLoading />}
+        <CapabilitiesProvider>
+          <KogitoEditorIntegrationProvider
+            content={editorContent}
+            contentPath={contentPath}
+            onContentChanged={onContentChanged}
+            onReady={props.onReady}
+            ref={providerRef}
+          >
+            <AlertProvider>
+              <Router>
+                <Suspense fallback={<MASLoading />}>
+                  <AppLayout>
+                    <AppRoutes />
+                  </AppLayout>
+                </Suspense>
+              </Router>
+            </AlertProvider>
+          </KogitoEditorIntegrationProvider>
+        </CapabilitiesProvider>
+      ) : (
+        <MASLoading />
+      )}
     </>
   );
 });

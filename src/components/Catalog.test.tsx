@@ -2,9 +2,9 @@ import { AlertProvider } from '../layout';
 import { Catalog } from './Catalog';
 import { jest } from '@jest/globals';
 import { fetchCatalogSteps } from '@kaoto/api';
-import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 
 jest.mock('@kaoto/api');
 const mockedValue = [
@@ -70,56 +70,62 @@ describe('Catalog.tsx', () => {
   const user = userEvent.setup();
   beforeAll(() => {
     method = (fetchCatalogSteps as jest.Mock<typeof fetchCatalogSteps>).mockResolvedValue(
-      mockedValue
+      mockedValue,
     );
   });
 
   test('component renders correctly', async () => {
-    render(
-      <AlertProvider>
-        <Catalog handleClose={jest.fn()} />
-      </AlertProvider>
+    const wrapper = await act(async () =>
+      render(
+        <AlertProvider>
+          <Catalog handleClose={jest.fn()} />
+        </AlertProvider>,
+      ),
     );
     //test if mocked method have been called
     expect(method).toHaveBeenCalled();
     //find the start-step
-    let element = await screen.findByText('start-step');
+    let element = await wrapper.findByText('start-step');
     expect(element).toBeInTheDocument();
 
-    element = await screen.findByText('actions');
-    expect(element).toBeInTheDocument();
-    user.click(element);
-
-    element = await screen.findByText('claim-check');
-    expect(element).toBeInTheDocument();
-
-    element = await screen.findByText('end');
+    element = await wrapper.findByText('actions');
     expect(element).toBeInTheDocument();
     user.click(element);
 
-    element = await screen.findByText('end-step');
+    element = await wrapper.findByText('claim-check');
+    expect(element).toBeInTheDocument();
+
+    element = await wrapper.findByText('end');
+    expect(element).toBeInTheDocument();
+    user.click(element);
+
+    element = await wrapper.findByText('end-step');
     expect(element).toBeInTheDocument();
   });
 
   test('Search input works correctly', async () => {
     const user = userEvent.setup();
-    render(
-      <AlertProvider>
-        <Catalog handleClose={jest.fn()} />
-      </AlertProvider>
+    const wrapper = await act(async () =>
+      render(
+        <AlertProvider>
+          <Catalog handleClose={jest.fn()} />
+        </AlertProvider>,
+      ),
     );
 
     expect(method).toHaveBeenCalled();
 
-    let element = await screen.findByText('actions');
-    expect(element).toBeInTheDocument();
-    await user.click(element);
+    await act(async () => {
+      let element = await wrapper.findByText('actions');
+      expect(element).toBeInTheDocument();
+      await user.click(element);
 
-    await user.click(screen.getByPlaceholderText('search for a step...'));
-    await user.keyboard('unmar');
+      await user.click(wrapper.getByPlaceholderText('search for a step...'));
+      await user.keyboard('unmar');
+    });
 
-    expect(screen.queryByText('claim-check')).not.toBeInTheDocument();
-    expect(screen.getByText('unmarshal')).toBeInTheDocument();
+    expect(wrapper.queryByText('claim-check')).not.toBeInTheDocument();
+    expect(wrapper.getByText('unmarshal')).toBeInTheDocument();
   });
 
   test('Alert is fired when there is an error with fetching', async () => {
@@ -127,19 +133,21 @@ describe('Catalog.tsx', () => {
       return;
     });
     method = (fetchCatalogSteps as jest.Mock<typeof fetchCatalogSteps>).mockImplementation(() =>
-      Promise.reject('fail')
+      Promise.reject('fail'),
     );
-    render(
-      <AlertProvider>
-        <Catalog handleClose={jest.fn()} />
-      </AlertProvider>
+    const wrapper = await act(async () =>
+      render(
+        <AlertProvider>
+          <Catalog handleClose={jest.fn()} />
+        </AlertProvider>,
+      ),
     );
 
     expect(method).toHaveBeenCalled();
     expect(
-      await screen.findByText(
-        'There was a problem fetching the catalog steps. Please try again later.'
-      )
+      await wrapper.findByText(
+        'There was a problem fetching the catalog steps. Please try again later.',
+      ),
     ).toBeInTheDocument();
   });
 });
