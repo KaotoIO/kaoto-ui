@@ -7,8 +7,6 @@ const { dependencies, federatedModuleName, version } = require('./package.json')
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-// const CopyPlugin = require('copy-webpack-plugin');
-// const FederatedTypesPlugin = require('@module-federation/typescript');
 
 const isPatternflyStyles = (stylesheet) =>
   stylesheet.includes('@patternfly/react-core/') ||
@@ -83,14 +81,6 @@ const common = (mode) => {
           document.head.appendChild(linkTag);
         },
       }),
-      // new CopyPlugin({
-      //   patterns: [
-      //     {
-      //       from: path.resolve(__dirname, 'src', '@kaoto/types'),
-      //       to: path.resolve(__dirname, 'dist', '@kaoto/types'),
-      //     },
-      //   ],
-      // }),
       new webpack.container.ModuleFederationPlugin({
         name: federatedModuleName,
         filename: 'remoteEntry.js',
