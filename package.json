@@ -166,6 +166,17 @@
     "react": "*",
     "react-dom": "*"
   },
+  "dependenciesMeta": {
+    "@4tw/cypress-drag-drop": {
+      "built": true
+    },
+    "cypress": {
+      "built": true
+    },
+    "cypress-file-upload": {
+      "built": true
+    }
+  },
   "lint-staged": {
     "*.js": "eslint --cache --fix",
     "*.{tsx,ts}": "prettier --write",
