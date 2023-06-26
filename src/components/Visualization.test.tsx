@@ -1,23 +1,10 @@
 import { AlertProvider } from '../layout';
-import { capabilitiesStub } from '../stubs';
 import { integrationJSONStub, stepsStub } from '../stubs/steps';
 import { Visualization } from './Visualization';
-import { fetchCapabilities, fetchIntegrationSourceCode, fetchViews } from '@kaoto/api';
 import { RFState, useFlowsStore, useVisualizationStore } from '@kaoto/store';
 import { IFlowsWrapper } from '@kaoto/types';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-
-jest.mock('@kaoto/api', () => {
-  const actual = jest.requireActual('@kaoto/api');
-
-  return {
-    ...actual,
-    fetchViews: jest.fn(),
-    fetchCapabilities: jest.fn(),
-    fetchIntegrationSourceCode: jest.fn(),
-  };
-});
 
 beforeAll(() => {
   // Setup ResizeObserver and offset* properties
@@ -45,10 +32,6 @@ beforeAll(() => {
   });
 
   (window.SVGElement as any).prototype.getBBox = () => ({ x: 0, y: 0, width: 0, height: 0 });
-
-  jest.mocked(fetchCapabilities).mockResolvedValue(capabilitiesStub);
-  jest.mocked(fetchIntegrationSourceCode).mockResolvedValue('');
-  jest.mocked(fetchViews).mockResolvedValue([]);
 });
 
 beforeEach(() => {

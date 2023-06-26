@@ -1,7 +1,7 @@
 apiVersion: camel.apache.org/v1
 kind: Integration
 metadata:
-  name: ''
+  name: 'Integration-1'
 spec:
   flows:
   - from:
@@ -17,7 +17,7 @@ spec:
 apiVersion: camel.apache.org/v1
 kind: Integration
 metadata:
-  name: ''
+  name: 'Integration-2'
 spec:
   flows:
   - from:

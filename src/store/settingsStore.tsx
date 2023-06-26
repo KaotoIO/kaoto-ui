@@ -22,7 +22,7 @@ export const initDsl: IDsl = {
 export const initialSettings: ISettings = {
   description: '',
   dsl: initDsl,
-  name: 'integration',
+  name: '',
   namespace: '',
   editorIsLightMode: localStorage.getItem(LOCAL_STORAGE_EDITOR_THEME_KEY) === 'true',
   uiLightMode: isUILightMode === 'true',

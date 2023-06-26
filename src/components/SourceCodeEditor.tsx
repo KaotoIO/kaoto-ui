@@ -25,12 +25,14 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
   const editorRef = useRef<Parameters<EditorDidMount>[0] | null>(null);
   const { sourceCode, setSourceCode } = useIntegrationSourceStore();
   const syncedSourceCode = useIntegrationSourceStore((state) => state.syncedSourceCode, shallow);
-  const { schemaUri, settings, setSettings } = useSettingsStore(
+  const { schemaUri, currentDsl, capabilities, editorIsLightMode, setSettings } = useSettingsStore(
     (state) => ({
       schemaUri: state.settings.dsl.validationSchema
         ? RequestService.getApiURL() + state.settings.dsl.validationSchema
         : '',
-      settings: state.settings,
+      currentDsl: state.settings.dsl.name,
+      capabilities: state.settings.capabilities,
+      editorIsLightMode: state.settings.editorIsLightMode,
       setSettings: state.setSettings,
     }),
     shallow,
@@ -60,13 +62,15 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
    */
   const handleChanges = (incomingData: string) => {
     // update integration JSON state with changes
-    fetchIntegrationJson(incomingData, settings.dsl.name)
+    fetchIntegrationJson(incomingData, currentDsl)
       .then((flowsWrapper) => {
-        let tmpInt = flowsWrapper.flows[0];
-        if (typeof tmpInt.metadata?.name === 'string' && tmpInt.metadata.name !== '') {
-          settings.name = tmpInt.metadata.name;
-          setSettings({ name: tmpInt.metadata.name });
+        const newDsl = flowsWrapper.flows?.[0].dsl ?? '';
+
+        if (newDsl !== currentDsl) {
+          const dsl = capabilities.find((dsl) => dsl.name === newDsl);
+          setSettings({ dsl });
         }
+
         setFlowsWrapper(flowsWrapper);
       })
       .catch((e) => {
@@ -182,7 +186,7 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
         toolTipPosition="top"
         customControls={[UndoButton, RedoButton, ClearButton, UpdateButton]}
         isCopyEnabled
-        isDarkTheme={!settings.editorIsLightMode}
+        isDarkTheme={!editorIsLightMode}
         isDownloadEnabled
         isLanguageLabelVisible
         allowFullScreen={true}

@@ -39,7 +39,7 @@ export interface IFlowsStore extends IFlowsStoreData {
   setFlowsWrapper: (flowsWrapper: IFlowsWrapper) => void;
 
   /** General flow management */
-  addNewFlow: (dsl: string, flowId?: string) => void;
+  addNewFlow: (dsl: string) => void;
   deleteFlow: (flowId: string) => void;
   deleteAllFlows: () => void;
 
@@ -47,8 +47,8 @@ export interface IFlowsStore extends IFlowsStoreData {
 }
 
 const getInitialState = (previousState: Partial<IFlowsStoreData> = {}): IFlowsStoreData => {
-  const flow = FlowsService.getNewFlow(initDsl.name, undefined, {
-    metadata: { name: initialSettings.name, namespace: initialSettings.namespace },
+  const flow = FlowsService.getNewFlow(initDsl.name, {
+    metadata: { namespace: initialSettings.namespace },
   });
   VisualizationService.displaySingleFlow(flow.id);
 
@@ -134,16 +134,22 @@ export const useFlowsStore = create<IFlowsStore>()(
         set((state) => {
           let allSteps: IStepProps[] = [];
 
-          /**
-           * TODO: Temporarily assign IDs to each flows and steps
-           * This is needed until https://github.com/KaotoIO/kaoto-backend/issues/663 it's done
-           */
-          const flowsWithId = flowsWrapper.flows.map((flow, index) => {
-            const id = flow.id ?? `${flow.dsl}-${index}`;
-            const steps = FlowsService.regenerateUuids(id, flow.steps);
-            allSteps.push(...steps);
+          /** Ensure that all the routes are unique... otherwise we would have problems */
+          const flowsIdSet = new Set<string>();
+          const flowsWithId = flowsWrapper.flows.map((flow) => {
+            let id = flow.metadata?.name ?? FlowsService.getNewFlowId();
 
-            return { ...flow, id, steps };
+            if (flowsIdSet.has(id)) {
+              id = FlowsService.getNewFlowId();
+            }
+
+            const metadata = { ...(flow.metadata ?? {}), name: id };
+            const steps = FlowsService.regenerateUuids(id, flow.steps);
+
+            allSteps.push(...steps);
+            flowsIdSet.add(id);
+
+            return { ...flow, metadata, id, steps };
           });
 
           useNestedStepsStore
@@ -163,9 +169,9 @@ export const useFlowsStore = create<IFlowsStore>()(
       },
 
       /** General flow management */
-      addNewFlow: (dsl, flowId) =>
+      addNewFlow: (dsl) =>
         set((state) => {
-          const flow = FlowsService.getNewFlow(dsl, flowId);
+          const flow = FlowsService.getNewFlow(dsl);
           const flows = state.flows.concat(flow);
           VisualizationService.displaySingleFlow(flow.id);
 

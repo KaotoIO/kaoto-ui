@@ -3,6 +3,7 @@ import branchSteps from '../store/data/branchSteps';
 import nodes from '../store/data/nodes';
 import steps from '../store/data/steps';
 import { useVisualizationStore } from '../store/visualizationStore';
+import { FlowsService } from './FlowsService';
 import { VisualizationService } from './visualizationService';
 import {
   IStepProps,
@@ -29,6 +30,10 @@ describe('visualizationService', () => {
 
   beforeEach(() => {
     service = new VisualizationService();
+
+    useFlowsStore.setState({
+      flows: [{ ...FlowsService.getNewFlow('Camel Route'), id: 'Camel Route-1' }],
+    });
   });
 
   it('buildBranchNodeParams(): should build params for a branch node', () => {
@@ -137,10 +142,14 @@ describe('visualizationService', () => {
   });
 
   describe('redrawDiagram', () => {
+    beforeEach(() => {
+      jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce('route-1234');
+      jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce('route-4321');
+    });
+
     it('should process only visible flows', async () => {
-      useFlowsStore.getState().deleteAllFlows();
-      useFlowsStore.getState().addNewFlow('Integration', 'route-1234');
-      useFlowsStore.getState().addNewFlow('Integration', 'route-4321');
+      useFlowsStore.getState().addNewFlow('Integration');
+      useFlowsStore.getState().addNewFlow('Integration');
 
       const getLayoutedElementsSpy = jest.spyOn(VisualizationService, 'getLayoutedElements');
 
@@ -180,9 +189,8 @@ describe('visualizationService', () => {
     });
 
     it('should process more than one visible flow', async () => {
-      useFlowsStore.getState().deleteAllFlows();
-      useFlowsStore.getState().addNewFlow('Integration', 'route-1234');
-      useFlowsStore.getState().addNewFlow('Integration', 'route-4321');
+      useFlowsStore.getState().addNewFlow('Integration');
+      useFlowsStore.getState().addNewFlow('Integration');
       useVisualizationStore.getState().showAllFlows();
 
       const getLayoutedElementsSpy = jest.spyOn(VisualizationService, 'getLayoutedElements');
@@ -319,14 +327,14 @@ describe('visualizationService', () => {
     expect(stepNodes[0].id).toContain(stepNodes[0].data.step.UUID);
   });
 
-  it.skip('buildNodesFromSteps(): should build visualization nodes from an array of steps with branches', () => {
+  it('buildNodesFromSteps(): should build visualization nodes from an array of steps with branches', () => {
     const stepNodes = VisualizationService.buildNodesFromSteps(
       'Camel Route-1',
       branchSteps,
       'RIGHT',
     );
     expect(stepNodes[0].data.step.UUID).toBeDefined();
-    expect(stepNodes).toHaveLength(branchSteps.length);
+    expect(stepNodes).toHaveLength(11); // 4 Main steps + 7 branch steps
   });
 
   it('containsAddStepPlaceholder(): should determine if there is an ADD STEP placeholder in the steps', () => {
@@ -544,7 +552,7 @@ describe('visualizationService', () => {
     expect(nodes).toHaveLength(1);
   });
 
-  it.skip('insertBranchGroupNode', () => {
+  it('insertBranchGroupNode', () => {
     const nodes: IVizStepNode[] = [];
     VisualizationService.insertBranchGroupNode(nodes, { x: 0, y: 0 }, 150, groupWidth);
     expect(nodes).toHaveLength(1);

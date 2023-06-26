@@ -4,7 +4,7 @@ export const initialFlows: IIntegration[] = [
   {
     id: 'Camel Route-1',
     dsl: 'Camel Route',
-    metadata: { name: 'integration', namespace: '' },
+    metadata: { name: 'Camel Route-1', namespace: '' },
     steps: [
       {
         name: 'timer',
@@ -386,7 +386,7 @@ export const initialFlows: IIntegration[] = [
   {
     id: 'Camel Route-2',
     dsl: 'Camel Route',
-    metadata: { name: 'integration', namespace: '' },
+    metadata: { name: 'Camel Route-2', namespace: '' },
     steps: [
       {
         name: 'timer',

@@ -9,7 +9,7 @@ import { VisualizationEmptyState } from './Visualization/VisualizationEmptyState
 import { VisualizationControls } from './VisualizationControls';
 import { VisualizationStep } from './VisualizationStep';
 import { VisualizationStepViews } from './VisualizationStepViews';
-import { fetchCapabilities, fetchIntegrationSourceCode } from '@kaoto/api';
+import { fetchIntegrationSourceCode } from '@kaoto/api';
 import { StepsService, VisualizationService } from '@kaoto/services';
 import {
   useFlowsStore,
@@ -21,9 +21,7 @@ import {
   HandleDeleteStepFn,
   IStepProps,
   IVizStepNode,
-  ICapabilities,
   IFlowsWrapper,
-  ISettings,
 } from '@kaoto/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
@@ -68,7 +66,13 @@ const Visualization = () => {
   );
   const visibleFlowsInformation = useFlowsVisibility();
 
-  const { settings, setSettings } = useSettingsStore((state) => state);
+  const { currentDsl, namespace } = useSettingsStore(
+    (state) => ({
+      currentDsl: state.settings.dsl.name,
+      namespace: state.settings.namespace,
+    }),
+    shallow,
+  );
   const [setSourceCode, setSyncedSourceCode] = useIntegrationSourceStore(
     (state) => [state.setSourceCode, state.setSyncedSourceCode],
     shallow,
@@ -87,44 +91,33 @@ const Visualization = () => {
   const previousFlows = usePrevious(flows);
   const previousMetadata = usePrevious(metadata);
 
+  // Update SourceCode editor content after an integrationJson change (the user interacted with the Kaoto UI).
   useEffect(() => {
     if (
       (previousFlows === flows && previousMetadata === metadata) ||
       !Array.isArray(flows[0]?.steps)
-    )
+    ) {
       return;
-    if (flows[0].dsl !== null && flows[0].dsl !== settings.dsl.name) {
-      fetchCapabilities().then((capabilities: ICapabilities) => {
-        capabilities.dsls.forEach((dsl) => {
-          if (dsl.name === flows[0].dsl) {
-            const tmpSettings = { ...settings, dsl };
-            setSettings({ dsl });
-            fetchTheSourceCode({ flows, properties, metadata }, tmpSettings);
-          }
-        });
-      });
-    } else {
-      fetchTheSourceCode({ flows, properties, metadata }, settings);
     }
-  }, [flows, properties, metadata]);
 
-  const fetchTheSourceCode = (currentFlowsWrapper: IFlowsWrapper, settings: ISettings) => {
-    const updatedFlowWrapper = {
-      ...currentFlowsWrapper,
-      flows: currentFlowsWrapper.flows.map((flow) => ({
+    const updatedFlowWrapper: IFlowsWrapper = {
+      flows: flows.map((flow) => ({
         ...flow,
-        metadata: { ...flow.metadata },
-        dsl: settings.dsl.name,
+        metadata: flow.metadata,
+        dsl: currentDsl,
       })),
+      properties,
+      metadata,
     };
 
-    fetchIntegrationSourceCode(updatedFlowWrapper, settings.namespace).then((newSrc) => {
+    fetchIntegrationSourceCode(updatedFlowWrapper, namespace).then((newSrc) => {
       if (typeof newSrc === 'string') {
         setSourceCode(newSrc);
         setSyncedSourceCode(newSrc);
       }
     });
-  };
+  }, [flows, properties, metadata]);
+
   /**
    * Check for changes to integrationJson,
    * which causes Visualization nodes to all be redrawn

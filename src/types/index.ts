@@ -64,7 +64,7 @@ export interface ISettings {
   uiLightMode: boolean;
   editorMode: CodeEditorMode;
 
-  // name of integration or deployment
+  // name used for VS Code
   name: string;
   // Cluster namespace
   namespace: string;

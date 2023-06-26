@@ -1,3 +1,4 @@
+import { FlowsService } from '../services/FlowsService';
 import { NestedStepsService } from '../services/NestedStepsService';
 import { debeziumMongoDBStep, flowWithBranch, initialFlows, kameletSourceStepStub } from '../stubs';
 import { useFlowsStore } from './FlowsStore';
@@ -5,9 +6,7 @@ import { useVisualizationStore } from './visualizationStore';
 import { IFlowsWrapper, IIntegration, IViewProps } from '@kaoto/types';
 import { act, renderHook } from '@testing-library/react';
 
-describe('FlowsStoreFacade', () => {
-  const flowId = 'route-1234';
-
+describe('FlowsStore - initial state', () => {
   it('should start with a default value', () => {
     const initialState = useFlowsStore.getState();
 
@@ -27,6 +26,22 @@ describe('FlowsStoreFacade', () => {
       metadata: {},
     });
   });
+});
+
+describe('FlowsStore', () => {
+  const MOCK_FLOW_ID = 'route-1234';
+  const MOCK_FLOW_ID_2 = 'route-4321';
+
+  beforeEach(() => {
+    useFlowsStore.getState().deleteAllFlows();
+
+    jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce(MOCK_FLOW_ID);
+    jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce(MOCK_FLOW_ID_2);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
   describe('insertStep', () => {
     it('should return the same state if the flow does not exist', () => {
@@ -34,7 +49,7 @@ describe('FlowsStoreFacade', () => {
 
       act(() => {
         result.current.deleteAllFlows();
-        result.current.insertStep(flowId, debeziumMongoDBStep, { mode: 'append' });
+        result.current.insertStep('non-existing-id', debeziumMongoDBStep, { mode: 'append' });
       });
 
       expect(result.current.flows).toMatchObject([]);
@@ -44,19 +59,18 @@ describe('FlowsStoreFacade', () => {
       const { result } = renderHook(() => useFlowsStore());
 
       act(() => {
-        result.current.deleteAllFlows();
-        result.current.addNewFlow('Integration', flowId);
-        result.current.insertStep(flowId, debeziumMongoDBStep, { mode: 'append' });
+        result.current.addNewFlow('Integration');
+        result.current.insertStep(MOCK_FLOW_ID, debeziumMongoDBStep, { mode: 'append' });
       });
 
       expect(result.current.flows).toMatchObject([
         {
-          id: flowId,
+          id: MOCK_FLOW_ID,
           steps: [
             {
               ...debeziumMongoDBStep,
-              UUID: 'route-1234_debezium-mongodb-0',
-              integrationId: flowId,
+              UUID: `${MOCK_FLOW_ID}_debezium-mongodb-0`,
+              integrationId: MOCK_FLOW_ID,
             },
           ],
         },
@@ -67,25 +81,27 @@ describe('FlowsStoreFacade', () => {
       const { result } = renderHook(() => useFlowsStore());
 
       act(() => {
-        result.current.deleteAllFlows();
-        result.current.addNewFlow('Integration', flowId);
-        result.current.insertStep(flowId, debeziumMongoDBStep, { mode: 'append' });
-        result.current.insertStep(flowId, kameletSourceStepStub, { mode: 'insert', index: 1 });
+        result.current.addNewFlow('Integration');
+        result.current.insertStep(MOCK_FLOW_ID, debeziumMongoDBStep, { mode: 'append' });
+        result.current.insertStep(MOCK_FLOW_ID, kameletSourceStepStub, {
+          mode: 'insert',
+          index: 1,
+        });
       });
 
       expect(result.current.flows).toMatchObject([
         {
-          id: flowId,
+          id: MOCK_FLOW_ID,
           steps: [
             {
               ...debeziumMongoDBStep,
-              UUID: 'route-1234_debezium-mongodb-0',
-              integrationId: flowId,
+              UUID: `${MOCK_FLOW_ID}_debezium-mongodb-0`,
+              integrationId: MOCK_FLOW_ID,
             },
             {
               ...kameletSourceStepStub,
-              UUID: 'route-1234_timer-source-1',
-              integrationId: flowId,
+              UUID: `${MOCK_FLOW_ID}_timer-source-1`,
+              integrationId: MOCK_FLOW_ID,
             },
           ],
         },
@@ -96,25 +112,27 @@ describe('FlowsStoreFacade', () => {
       const { result } = renderHook(() => useFlowsStore());
 
       act(() => {
-        result.current.deleteAllFlows();
-        result.current.addNewFlow('Integration', flowId);
-        result.current.insertStep(flowId, debeziumMongoDBStep, { mode: 'append' });
-        result.current.insertStep(flowId, kameletSourceStepStub, { mode: 'insert', index: 0 });
+        result.current.addNewFlow('Integration');
+        result.current.insertStep(MOCK_FLOW_ID, debeziumMongoDBStep, { mode: 'append' });
+        result.current.insertStep(MOCK_FLOW_ID, kameletSourceStepStub, {
+          mode: 'insert',
+          index: 0,
+        });
       });
 
       expect(result.current.flows).toMatchObject([
         {
-          id: flowId,
+          id: MOCK_FLOW_ID,
           steps: [
             {
               ...kameletSourceStepStub,
-              UUID: 'route-1234_timer-source-0',
-              integrationId: flowId,
+              UUID: `${MOCK_FLOW_ID}_timer-source-0`,
+              integrationId: MOCK_FLOW_ID,
             },
             {
               ...debeziumMongoDBStep,
-              UUID: 'route-1234_debezium-mongodb-1',
-              integrationId: flowId,
+              UUID: `${MOCK_FLOW_ID}_debezium-mongodb-1`,
+              integrationId: MOCK_FLOW_ID,
             },
           ],
         },
@@ -125,26 +143,28 @@ describe('FlowsStoreFacade', () => {
       const { result } = renderHook(() => useFlowsStore());
 
       act(() => {
-        result.current.deleteAllFlows();
-        result.current.addNewFlow('Integration', flowId);
-        result.current.insertStep(flowId, kameletSourceStepStub, { mode: 'append' });
-        result.current.insertStep(flowId, kameletSourceStepStub, { mode: 'append' });
-        result.current.insertStep(flowId, debeziumMongoDBStep, { mode: 'replace', index: 0 });
+        result.current.addNewFlow('Integration');
+        result.current.insertStep(MOCK_FLOW_ID, kameletSourceStepStub, { mode: 'append' });
+        result.current.insertStep(MOCK_FLOW_ID, kameletSourceStepStub, { mode: 'append' });
+        result.current.insertStep(MOCK_FLOW_ID, debeziumMongoDBStep, {
+          mode: 'replace',
+          index: 0,
+        });
       });
 
       expect(result.current.flows).toMatchObject([
         {
-          id: flowId,
+          id: MOCK_FLOW_ID,
           steps: [
             {
               ...debeziumMongoDBStep,
-              UUID: 'route-1234_debezium-mongodb-0',
-              integrationId: flowId,
+              UUID: `${MOCK_FLOW_ID}_debezium-mongodb-0`,
+              integrationId: MOCK_FLOW_ID,
             },
             {
               ...kameletSourceStepStub,
-              UUID: 'route-1234_timer-source-1',
-              integrationId: flowId,
+              UUID: `${MOCK_FLOW_ID}_timer-source-1`,
+              integrationId: MOCK_FLOW_ID,
             },
           ],
         },
@@ -155,26 +175,28 @@ describe('FlowsStoreFacade', () => {
       const { result } = renderHook(() => useFlowsStore());
 
       act(() => {
-        result.current.deleteAllFlows();
-        result.current.addNewFlow('Integration', flowId);
-        result.current.insertStep(flowId, kameletSourceStepStub, { mode: 'append' });
-        result.current.insertStep(flowId, kameletSourceStepStub, { mode: 'append' });
-        result.current.insertStep(flowId, debeziumMongoDBStep, { mode: 'replace', path: ['0'] });
+        result.current.addNewFlow('Integration');
+        result.current.insertStep(MOCK_FLOW_ID, kameletSourceStepStub, { mode: 'append' });
+        result.current.insertStep(MOCK_FLOW_ID, kameletSourceStepStub, { mode: 'append' });
+        result.current.insertStep(MOCK_FLOW_ID, debeziumMongoDBStep, {
+          mode: 'replace',
+          path: ['0'],
+        });
       });
 
       expect(result.current.flows).toMatchObject([
         {
-          id: flowId,
+          id: MOCK_FLOW_ID,
           steps: [
             {
               ...debeziumMongoDBStep,
-              UUID: 'route-1234_debezium-mongodb-0',
-              integrationId: flowId,
+              UUID: `${MOCK_FLOW_ID}_debezium-mongodb-0`,
+              integrationId: MOCK_FLOW_ID,
             },
             {
               ...kameletSourceStepStub,
-              UUID: 'route-1234_timer-source-1',
-              integrationId: flowId,
+              UUID: `${MOCK_FLOW_ID}_timer-source-1`,
+              integrationId: MOCK_FLOW_ID,
             },
           ],
         },
@@ -222,17 +244,18 @@ describe('FlowsStoreFacade', () => {
       const { result } = renderHook(() => useFlowsStore());
 
       act(() => {
-        result.current.deleteAllFlows();
-        result.current.addNewFlow('Integration', 'another-flow');
-        result.current.deleteStep(flowId, 'step-1234');
+        result.current.addNewFlow('Integration'); // MOCK_FLOW_ID
+        result.current.deleteStep(MOCK_FLOW_ID, 'step-1234');
       });
 
       expect(result.current.flows).toMatchObject([
         {
           description: '',
           dsl: 'Integration',
-          id: 'another-flow',
-          metadata: {},
+          id: MOCK_FLOW_ID,
+          metadata: {
+            name: MOCK_FLOW_ID,
+          },
           params: [],
           steps: [],
         },
@@ -243,15 +266,14 @@ describe('FlowsStoreFacade', () => {
       const { result } = renderHook(() => useFlowsStore());
 
       act(() => {
-        result.current.deleteAllFlows();
-        result.current.addNewFlow('Integration', flowId);
-        result.current.insertStep(flowId, kameletSourceStepStub, { mode: 'append' });
-        result.current.deleteStep(flowId, 'route-1234_timer-source-0');
+        result.current.addNewFlow('Integration');
+        result.current.insertStep(MOCK_FLOW_ID, kameletSourceStepStub, { mode: 'append' });
+        result.current.deleteStep(MOCK_FLOW_ID, `${MOCK_FLOW_ID}_timer-source-0`);
       });
 
       expect(result.current.flows).toMatchObject([
         {
-          id: flowId,
+          id: MOCK_FLOW_ID,
           steps: [],
         },
       ]);
@@ -274,7 +296,10 @@ describe('FlowsStoreFacade', () => {
           id: 'route-1814',
           steps: [
             flowWithBranch.steps[0],
-            { ...flowWithBranch.steps[1], branches: [{ steps: [] }] },
+            {
+              ...flowWithBranch.steps[1],
+              branches: [{ ...flowWithBranch.steps[1].branches, steps: [] }],
+            },
           ],
         },
       ]);
@@ -284,72 +309,48 @@ describe('FlowsStoreFacade', () => {
   describe('addNewFlow', () => {
     it('should allow consumers to add a new flow', () => {
       useFlowsStore.getState().addNewFlow('Integration');
+      useFlowsStore.getState().addNewFlow('Integration');
 
       expect(useFlowsStore.getState().flows).toMatchObject([
         {
           description: '',
-          dsl: 'Camel Route',
-          id: /Camel Route-\d*/,
+          dsl: 'Integration',
+          id: MOCK_FLOW_ID,
           metadata: {
-            name: 'integration',
-            namespace: '',
+            name: MOCK_FLOW_ID,
           },
           params: [],
           steps: [],
         },
         {
+          /** Newly created flow */
           description: '',
           dsl: 'Integration',
-          id: /Integration-\d*/,
-          metadata: {},
+          id: MOCK_FLOW_ID_2,
+          metadata: {
+            name: MOCK_FLOW_ID_2,
+          },
           params: [],
           steps: [],
         },
       ]);
     });
 
-    it('should allow consumers to add a new flow with a given ID', () => {
-      useFlowsStore.getState().addNewFlow('Integration', 'Arbitrary ID');
+    it('should hide previous flows and only show the newly created one', () => {
+      const { result: visualizationStoreRef } = renderHook(() => useVisualizationStore());
+      const { result: flowsStoreRef } = renderHook(() => useFlowsStore());
 
-      expect(useFlowsStore.getState().flows).toMatchObject([
-        {
-          description: '',
-          dsl: 'Camel Route',
-          id: /Camel Route-\d*/,
-          metadata: {
-            name: 'integration',
-            namespace: '',
-          },
-          params: [],
-          steps: [],
-        },
-        {
-          description: '',
-          dsl: 'Integration',
-          id: 'Arbitrary ID',
-          metadata: {},
-          params: [],
-          steps: [],
-        },
-      ]);
-    });
-  });
+      act(() => {
+        flowsStoreRef.current.addNewFlow('Integration');
+        flowsStoreRef.current.addNewFlow('Integration');
+      });
 
-  it('should hide previous flows and only show the newly created one', () => {
-    const { result: visualizationStoreRef } = renderHook(() => useVisualizationStore());
-    const { result: flowsStoreRef } = renderHook(() => useFlowsStore());
+      expect(flowsStoreRef.current.flows).toHaveLength(2);
 
-    act(() => {
-      flowsStoreRef.current.deleteAllFlows();
-      flowsStoreRef.current.addNewFlow('Integration', 'route-1234');
-      flowsStoreRef.current.addNewFlow('Integration', 'route-4321');
-    });
-
-    expect(flowsStoreRef.current.flows).toHaveLength(2);
-
-    expect(visualizationStoreRef.current.visibleFlows).toEqual({
-      'route-1234': false,
-      'route-4321': true,
+      expect(visualizationStoreRef.current.visibleFlows).toEqual({
+        [MOCK_FLOW_ID]: false,
+        [MOCK_FLOW_ID_2]: true,
+      });
     });
   });
 
@@ -395,7 +396,7 @@ describe('FlowsStoreFacade', () => {
           dsl: 'Camel Route',
           id: 'Camel Route-1',
           metadata: {
-            name: 'integration',
+            name: 'Camel Route-1',
             namespace: '',
           },
           params: [],
@@ -422,11 +423,14 @@ describe('FlowsStoreFacade', () => {
       ]);
     });
 
-    it('should set a flow id is not set already', () => {
+    it('should set a flow id using the metadata.name field', () => {
       useFlowsStore.getState().setFlowsWrapper({
         flows: [
           {
             ...initialFlows[0],
+            metadata: {
+              name: 'A-custom-name',
+            },
             dsl: 'KameletBinding',
             id: undefined,
             steps: [kameletSourceStepStub],
@@ -439,21 +443,20 @@ describe('FlowsStoreFacade', () => {
       expect(useFlowsStore.getState().flows).toMatchObject([
         {
           dsl: 'KameletBinding',
-          id: 'KameletBinding-0',
+          id: 'A-custom-name',
           metadata: {
-            name: 'integration',
-            namespace: '',
+            name: 'A-custom-name',
           },
           params: [],
           steps: [
             {
-              UUID: 'KameletBinding-0_timer-source-0',
+              UUID: 'A-custom-name_timer-source-0',
               branches: [],
               description: 'Produces periodic messages with a custom payload.',
               group: 'Timer',
               icon: 'data:image/svg+xml;base64,',
               id: 'timer-source',
-              integrationId: 'KameletBinding-0',
+              integrationId: 'A-custom-name',
               kind: 'Kamelet',
               maxBranches: 1,
               minBranches: 0,
@@ -467,13 +470,98 @@ describe('FlowsStoreFacade', () => {
         },
       ]);
     });
+
+    it('should set a random flow id if none is provided', () => {
+      useFlowsStore.getState().setFlowsWrapper({
+        flows: [
+          {
+            ...initialFlows[0],
+            metadata: undefined,
+            dsl: 'KameletBinding',
+            id: undefined,
+            steps: [kameletSourceStepStub],
+          } as unknown as IIntegration,
+        ],
+        metadata: {},
+        properties: {},
+      } as IFlowsWrapper);
+
+      expect(useFlowsStore.getState().flows).toMatchObject([
+        {
+          dsl: 'KameletBinding',
+          id: MOCK_FLOW_ID,
+          metadata: {
+            name: MOCK_FLOW_ID,
+          },
+          params: [],
+          steps: [
+            {
+              UUID: `${MOCK_FLOW_ID}_timer-source-0`,
+              branches: [],
+              description: 'Produces periodic messages with a custom payload.',
+              group: 'Timer',
+              icon: 'data:image/svg+xml;base64,',
+              id: 'timer-source',
+              integrationId: MOCK_FLOW_ID,
+              kind: 'Kamelet',
+              maxBranches: 1,
+              minBranches: 0,
+              name: 'timer-source',
+              parameters: [],
+              required: [],
+              title: 'Timer Source',
+              type: 'START',
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should update the id of a duplicated flow id', () => {
+      jest.spyOn(FlowsService, 'getNewFlowId').mockReset().mockReturnValue(MOCK_FLOW_ID_2);
+
+      useFlowsStore.getState().setFlowsWrapper({
+        flows: [
+          {
+            metadata: { name: MOCK_FLOW_ID },
+            dsl: 'KameletBinding',
+            steps: [],
+          } as unknown as IIntegration,
+          {
+            metadata: { name: MOCK_FLOW_ID },
+            dsl: 'KameletBinding',
+            steps: [],
+          } as unknown as IIntegration,
+        ],
+        metadata: {},
+        properties: {},
+      } as IFlowsWrapper);
+
+      expect(useFlowsStore.getState().flows).toMatchObject([
+        {
+          dsl: 'KameletBinding',
+          id: MOCK_FLOW_ID,
+          metadata: {
+            name: MOCK_FLOW_ID,
+          },
+          steps: [],
+        },
+        {
+          dsl: 'KameletBinding',
+          id: MOCK_FLOW_ID_2,
+          metadata: {
+            name: MOCK_FLOW_ID_2,
+          },
+          steps: [],
+        },
+      ]);
+    });
   });
 
   it('should allow consumers to delete a flow', () => {
-    useFlowsStore.getState().deleteAllFlows();
-    useFlowsStore.getState().addNewFlow('Integration', 'route-1234');
+    useFlowsStore.getState().addNewFlow('Integration');
 
-    useFlowsStore.getState().deleteFlow('route-1234');
+    useFlowsStore.getState().deleteFlow(MOCK_FLOW_ID);
 
     expect(useFlowsStore.getState().flows).toHaveLength(0);
   });
@@ -490,5 +578,13 @@ describe('FlowsStoreFacade', () => {
 
     expect(useFlowsStore.getState().flows).toHaveLength(0);
     expect(useVisualizationStore.getState().visibleFlows).toEqual({});
+  });
+
+  it('should allow consumers to update the metadata property', () => {
+    useFlowsStore.getState().deleteAllFlows();
+
+    useFlowsStore.getState().setMetadata('beans', { name: 'foo', type: 'bar' });
+
+    expect(useFlowsStore.getState().metadata).toEqual({ beans: { name: 'foo', type: 'bar' } });
   });
 });

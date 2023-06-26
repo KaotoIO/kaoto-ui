@@ -671,11 +671,17 @@ export class VisualizationService {
   }
 
   static setVisibleFlows(flowsIds: string[]): void {
+    const previousVisibleFlows = useVisualizationStore.getState().visibleFlows;
+
     const visibleFlows = flowsIds.reduce(
       (acc, flow, index) => ({
         ...acc,
-        /** Make visible only the first flow */
-        [flow]: index === 0,
+        /**
+         * We keep the previous visibility state if any
+         * otherwise, we set the first flow to visible
+         * and the rest to invisible
+         */
+        [flow]: previousVisibleFlows[flow] ?? index === 0,
       }),
       {} as Record<string, boolean>,
     );
