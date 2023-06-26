@@ -30,12 +30,15 @@ jobs:
         uses: cypress-io/github-action@v5.8.3
         with:
           runTests: false
+          install-command: yarn install --immutable
           build: yarn build
           record: true
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Enabling post scripts is required for the Cypress binary installation command to work
+          CYPRESS_YARN_ENABLE_SCRIPTS: "true"
 
       - name: 💾 Save build folder
         uses: actions/upload-artifact@v3

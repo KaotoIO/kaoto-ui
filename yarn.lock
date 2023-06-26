@@ -4015,6 +4015,13 @@ __metadata:
     "@types/react": "*"
     react: "*"
     react-dom: "*"
+  dependenciesMeta:
+    "@4tw/cypress-drag-drop":
+      built: true
+    cypress:
+      built: true
+    cypress-file-upload:
+      built: true
   languageName: unknown
   linkType: soft
 
