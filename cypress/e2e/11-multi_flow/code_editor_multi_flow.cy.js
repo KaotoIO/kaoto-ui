@@ -23,11 +23,12 @@ describe('Test for Multi route actions from the code editor', () => {
   it('User adds new route to Camel multi-route using code editor', () => {
     cy.uploadFixture('CamelRouteMultiFlow.yaml');
 
-    const stepToInsert = `- from:
-    uri: null
-    steps: []`;
+    const stepToInsert = `- route:
+    from:
+      uri: null
+      steps: []`;
 
-    cy.editorAddText(14, stepToInsert);
+    cy.editorAddText(18, stepToInsert);
     cy.syncUpCodeChanges();
     cy.showAllRoutes();
 
