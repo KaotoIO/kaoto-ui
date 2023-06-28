@@ -1,44 +1,105 @@
-import { ICapabilities } from '@kaoto/types';
+import { IDsl, IRawDsl } from '@kaoto/types';
 
-export const capabilitiesStub: ICapabilities = {
-  dsls: [
-    {
-      output: 'true',
-      input: 'true',
-      validationSchema: '/v1/capabilities/Integration/schema',
-      deployable: 'true',
-      name: 'Integration',
-      description: 'An Integration defines a workflow of actions and steps.',
-      stepKinds: '[CAMEL-CONNECTOR, EIP, EIP-BRANCH]',
-    },
-    {
-      output: 'true',
-      input: 'true',
-      validationSchema: '/v1/capabilities/Camel Route/schema',
-      deployable: 'false',
-      name: 'Camel Route',
-      description: 'A camel route is a non deployable in cluster workflow of actions and steps.',
-      stepKinds: '[CAMEL-CONNECTOR, EIP, EIP-BRANCH]',
-    },
-    {
-      output: 'true',
-      input: 'true',
-      validationSchema: '/v1/capabilities/Kamelet/schema',
-      deployable: 'true',
-      name: 'Kamelet',
-      description:
-        'A Kamelet is a snippet of a route. It defines meta building blocks or steps that can be reused on integrations.',
-      stepKinds: '[CAMEL-CONNECTOR, EIP, EIP-BRANCH]',
-    },
-    {
-      output: 'true',
-      input: 'true',
-      validationSchema: '/v1/capabilities/KameletBinding/schema',
-      deployable: 'true',
-      name: 'KameletBinding',
-      description:
-        'Kamelet Bindings are used to create simple integrations that link a start step to an end step with optional intermediate action steps.',
-      stepKinds: '[KAMELET, KNATIVE]',
-    },
-  ],
-};
+export const capabilitiesStub: IDsl[] = [
+  {
+    output: true,
+    input: true,
+    validationSchema: '/v1/capabilities/Integration/schema',
+    deployable: true,
+    name: 'Integration',
+    description: 'An Integration defines a workflow of actions and steps.',
+    stepKinds: ['CAMEL-CONNECTOR', 'EIP', 'EIP-BRANCH'],
+    default: false,
+    supportsMultipleFlows: true,
+    vocabulary: {},
+  },
+  {
+    output: true,
+    input: true,
+    validationSchema: '/v1/capabilities/Camel Route/schema',
+    deployable: false,
+    name: 'Camel Route',
+    description: 'A camel route is a non deployable in cluster workflow of actions and steps.',
+    stepKinds: ['CAMEL-CONNECTOR', 'EIP', 'EIP-BRANCH'],
+    default: true,
+    supportsMultipleFlows: true,
+    vocabulary: {},
+  },
+  {
+    output: true,
+    input: true,
+    validationSchema: '/v1/capabilities/Kamelet/schema',
+    deployable: true,
+    name: 'Kamelet',
+    description:
+      'A Kamelet is a snippet of a route. It defines meta building blocks or steps that can be reused on integrations.',
+    stepKinds: ['CAMEL-CONNECTOR', 'EIP', 'EIP-BRANCH'],
+    default: false,
+    supportsMultipleFlows: false,
+    vocabulary: {},
+  },
+  {
+    output: true,
+    input: true,
+    validationSchema: '/v1/capabilities/KameletBinding/schema',
+    deployable: true,
+    name: 'KameletBinding',
+    description:
+      'Kamelet Bindings are used to create simple integrations that link a start step to an end step with optional intermediate action steps.',
+    stepKinds: ['KAMELET', 'KNATIVE'],
+    default: false,
+    supportsMultipleFlows: false,
+    vocabulary: {},
+  },
+];
+
+export const rawCapabilitiesStub: IRawDsl[] = [
+  {
+    output: 'true',
+    input: 'true',
+    validationSchema: '/v1/capabilities/Integration/schema',
+    vocabulary: { stepsName: 'Steps' },
+    deployable: 'true',
+    name: 'Integration',
+    description: 'An Integration defines a workflow of actions and steps.',
+    supportsMultipleFlows: 'true',
+    stepKinds: '[CAMEL-CONNECTOR, EIP, EIP-BRANCH]',
+  },
+  {
+    output: 'true',
+    input: 'true',
+    validationSchema: '/v1/capabilities/Camel Route/schema',
+    vocabulary: { stepsName: 'Steps' },
+    deployable: 'false',
+    name: 'Camel Route',
+    description: 'A camel route is a non deployable in cluster workflow of actions and steps.',
+    supportsMultipleFlows: 'true',
+    stepKinds:
+      '[CAMEL-CONNECTOR, EIP, EIP-BRANCH, CAMEL-REST-DSL, CAMEL-REST-VERB, CAMEL-REST-ENDPOINT]',
+  },
+  {
+    output: 'true',
+    input: 'true',
+    validationSchema: '/v1/capabilities/Kamelet/schema',
+    vocabulary: { stepsName: 'Steps' },
+    deployable: 'true',
+    name: 'Kamelet',
+    description:
+      'A Kamelet is a snippet of a route. It defines meta building blocks or steps that can be reused on integrations.',
+    supportsMultipleFlows: 'false',
+    stepKinds: '[CAMEL-CONNECTOR, EIP, EIP-BRANCH]',
+  },
+  {
+    output: 'true',
+    input: 'true',
+    default: 'true',
+    validationSchema: '/v1/capabilities/KameletBinding/schema',
+    vocabulary: { stepsName: 'Steps' },
+    deployable: 'true',
+    name: 'KameletBinding',
+    description:
+      'Kamelet Bindings are used to create simple integrations that link a start step to an end step with optional intermediate action steps.',
+    supportsMultipleFlows: 'false',
+    stepKinds: '[KAMELET, KNATIVE]',
+  },
+];

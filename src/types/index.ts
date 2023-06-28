@@ -1,4 +1,5 @@
 import { Edge, Node } from 'reactflow';
+import { IDsl } from './dsl.model';
 
 declare global {
   interface Window {
@@ -76,20 +77,6 @@ export interface ISettings {
    * of the current steps.
    */
   capabilities: IDsl[];
-}
-
-export interface ICapabilities {
-  dsls: IDsl[];
-}
-
-export interface IDsl {
-  output: string;
-  input: string;
-  deployable: string;
-  name: string;
-  description: string;
-  stepKinds: string;
-  validationSchema: string;
 }
 
 /**
@@ -263,5 +250,6 @@ export interface IFlowsWrapper {
 
 export type HandleDeleteStepFn = (integrationId: string, UUID: string) => void;
 
-export * from './react-components';
-export * from './visualization';
+export * from './dsl.model';
+export * from './react-components.model';
+export * from './visualization.model';

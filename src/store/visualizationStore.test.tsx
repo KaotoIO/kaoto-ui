@@ -1,6 +1,6 @@
 import { useVisualizationStore } from './visualizationStore';
-import { IStepProps, IVizStepPropsEdge } from '@kaoto/types';
-import { MarkerType } from '@reactflow/core';
+import { IStepProps, IVizStepNode, IVizStepPropsEdge } from '@kaoto/types';
+import { MarkerType, Position } from '@reactflow/core';
 import { act, renderHook } from '@testing-library/react';
 
 describe('visualizationStore', () => {
@@ -19,6 +19,47 @@ describe('visualizationStore', () => {
       ]);
 
       result.current.deleteNode(1);
+    });
+
+    expect(result.current.nodes).toHaveLength(1);
+  });
+
+  it('onNodesChange', () => {
+    const { result } = renderHook(() => useVisualizationStore());
+    act(() => {
+      result.current.setNodes([
+        {
+          "data": {
+            "label": "ADD A STEP",
+            "step": {
+              "name": "",
+              "type": "START",
+              "UUID": "placeholder-4271109058",
+              "integrationId": "route-2747"
+            },
+            "isPlaceholder": true
+          },
+          "id": "node_0--266733212",
+          "draggable": false,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "type": "step",
+          "width": 80,
+          "height": 80,
+          "targetPosition": Position.Left,
+          "sourcePosition": Position.Right,
+        } as IVizStepNode,
+      ]);
+
+      result.current.onNodesChange([
+        {
+          "id": "node_0--266733212",
+          "type": "select",
+          "selected": true
+        },
+      ]);
     });
 
     expect(result.current.nodes).toHaveLength(1);

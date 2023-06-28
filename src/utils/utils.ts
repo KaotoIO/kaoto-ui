@@ -123,7 +123,7 @@ export function sleep(ms: number) {
 export function getRandomArbitraryNumber(): number {
   const cryptoObj = window.crypto || (window as Window & { msCrypto?: Crypto }).msCrypto;
 
-  return Math.floor(cryptoObj?.getRandomValues(new Uint32Array(1))[0]);
+  return Math.floor(cryptoObj?.getRandomValues(new Uint32Array(1))[0] ?? Date.now());
 }
 
 export function getDescriptionIfExists(integrationJson?: IIntegration) {

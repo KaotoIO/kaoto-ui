@@ -1,6 +1,6 @@
 import { useSettingsStore } from '@kaoto/store';
 import { IDsl } from '@kaoto/types';
-import { MenuToggle, MenuToggleAction, MenuToggleElement } from '@patternfly/react-core';
+import { MenuToggle, MenuToggleAction, MenuToggleElement, Tooltip } from '@patternfly/react-core';
 import { Select, SelectList, SelectOption } from '@patternfly/react-core/next';
 import {
   FunctionComponent,
@@ -19,8 +19,8 @@ interface IDSLSelector extends PropsWithChildren {
 }
 
 export const DSLSelector: FunctionComponent<IDSLSelector> = (props) => {
-  const { capabilities, dsl } = useSettingsStore(
-    ({ settings }) => ({ capabilities: settings.capabilities, dsl: settings.dsl }),
+  const { capabilities, currentDsl } = useSettingsStore(
+    (state) => ({ capabilities: state.settings.capabilities, currentDsl: state.settings.dsl }),
     shallow,
   );
   const [isOpen, setIsOpen] = useState(false);
@@ -55,8 +55,8 @@ export const DSLSelector: FunctionComponent<IDSLSelector> = (props) => {
 
   /** Selecting the same DSL directly*/
   const onNewSameTypeRoute = useCallback(() => {
-    onSelect(undefined, dsl.name);
-  }, [dsl.name, onSelect]);
+    onSelect(undefined, currentDsl.name);
+  }, [currentDsl.name, onSelect]);
 
   const toggle = (toggleRef: Ref<MenuToggleElement>) => (
     <MenuToggle
@@ -68,15 +68,28 @@ export const DSLSelector: FunctionComponent<IDSLSelector> = (props) => {
       splitButtonOptions={{
         variant: 'action',
         items: [
-          <MenuToggleAction
-            id="dsl-list-btn"
-            key="dsl-list-btn"
-            data-testid="dsl-list-btn"
-            aria-label="DSL list"
-            onClick={onNewSameTypeRoute}
+          <Tooltip
+            key="dsl-list-tooltip"
+            position="bottom"
+            content={
+              currentDsl.supportsMultipleFlows ? (
+                <p>Add a new {currentDsl.name} route</p>
+              ) : (
+                <p>The {currentDsl.name} type doesn't support multiple routes</p>
+              )
+            }
           >
-            {props.children}
-          </MenuToggleAction>,
+            <MenuToggleAction
+              id="dsl-list-btn"
+              key="dsl-list-btn"
+              data-testid="dsl-list-btn"
+              aria-label="DSL list"
+              onClick={onNewSameTypeRoute}
+              isDisabled={!currentDsl.supportsMultipleFlows}
+            >
+              {props.children}
+            </MenuToggleAction>
+          </Tooltip>,
         ],
       }}
     />
@@ -96,13 +109,19 @@ export const DSLSelector: FunctionComponent<IDSLSelector> = (props) => {
     >
       <SelectList>
         {capabilities.map((capability) => {
+          const isOptionDisabled =
+            capability.name === currentDsl.name && !capability.supportsMultipleFlows;
+
           return (
             <SelectOption
               key={`dsl-${capability.name}`}
+              data-testid={`dsl-${capability.name}`}
               itemId={capability.name}
               description={<span className="pf-u-text-break-word">{capability.description}</span>}
+              isDisabled={isOptionDisabled}
             >
               {capability.name}
+              {isOptionDisabled && ' (single route only)'}
             </SelectOption>
           );
         })}

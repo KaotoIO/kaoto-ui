@@ -2,6 +2,7 @@ import { CapabilitiesProvider } from './capabilities.provider';
 import { fetchBackendVersion, fetchCapabilities } from '@kaoto/api';
 import { initDsl, useSettingsStore } from '@kaoto/store';
 import { act, render } from '@testing-library/react';
+import { capabilitiesStub } from '../stubs';
 
 jest.mock('@kaoto/api', () => {
   const actual = jest.requireActual('@kaoto/api');
@@ -63,28 +64,6 @@ describe('capabilities.provider.tsx', () => {
     expect(element).toBeInTheDocument();
   });
 
-  test('component times out and display error message when there are no capabilities', async () => {
-    (fetchBackendVersion as jest.Mock).mockResolvedValueOnce('1.0-backend-version');
-    (fetchCapabilities as jest.Mock).mockResolvedValueOnce({ ds: [] });
-
-    const wrapper = await act(async () =>
-      render(
-        <CapabilitiesProvider>
-          <span data-testid="children">This is a placeholder</span>
-        </CapabilitiesProvider>,
-      ),
-    );
-
-    for (let i = 0; i <= 120; i++) {
-      await act(async () => {
-        jest.advanceTimersByTime(1_100);
-      });
-    }
-
-    const element = wrapper.queryByText('Kaoto API is unreachable');
-    expect(element).toBeInTheDocument();
-  });
-
   test('component times out and display error message when the capabilities API fails', async () => {
     (fetchBackendVersion as jest.Mock).mockResolvedValueOnce('1.0-backend-version');
     (fetchCapabilities as jest.Mock).mockRejectedValueOnce(new Error('Wild error!'));
@@ -109,7 +88,7 @@ describe('capabilities.provider.tsx', () => {
 
   test('component display its children once the API has been reached', async () => {
     (fetchBackendVersion as jest.Mock).mockResolvedValueOnce('1.0-backend-version');
-    (fetchCapabilities as jest.Mock).mockResolvedValueOnce({ dsls: [initDsl] });
+    (fetchCapabilities as jest.Mock).mockResolvedValueOnce([initDsl]);
 
     const wrapper = await act(async () =>
       render(
@@ -129,19 +108,7 @@ describe('capabilities.provider.tsx', () => {
 
   test('component fetch capabilities and saves it to the settings store', async () => {
     (fetchBackendVersion as jest.Mock).mockResolvedValueOnce('1.0-backend-version');
-    (fetchCapabilities as jest.Mock).mockResolvedValueOnce({
-      dsls: [
-        {
-          output: 'true',
-          input: 'true',
-          validationSchema: '/v1/capabilities/Integration/schema',
-          deployable: 'true',
-          name: 'Integration',
-          description: 'An Integration defines a workflow of actions and steps.',
-          'step-kinds': '[CAMEL-CONNECTOR, EIP, EIP-BRANCH]',
-        },
-      ],
-    });
+    (fetchCapabilities as jest.Mock).mockResolvedValueOnce([capabilitiesStub[0]]);
 
     await act(async () =>
       render(

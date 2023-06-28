@@ -1,6 +1,7 @@
 import nestedBranch from '../store/data/kamelet.nested-branch.steps';
 import {
   accessibleRouteChangeHandler,
+  bindUndoRedo,
   findPath,
   formatDateTime,
   getDeepValue,
@@ -8,7 +9,9 @@ import {
   getRandomArbitraryNumber,
   setDeepValue,
   shorten,
+  sleep,
   truncateString,
+  unbindUndoRedo,
 } from './utils';
 import { IIntegration } from '@kaoto/types';
 
@@ -134,9 +137,100 @@ describe('utils', () => {
     });
   });
 
+  describe('bindUndoRedo()', () => {
+    it('should bind "undo" and "redo" callbacks to a keyboard event', () => {
+      const addEventListenerSpy = jest.spyOn(document, 'addEventListener');
+
+      const callback = bindUndoRedo(jest.fn(), jest.fn());
+
+      expect(addEventListenerSpy).toHaveBeenCalledWith('keydown', expect.any(Function));
+      document.removeEventListener('keydown', callback);
+    });
+
+    it('should call "redo" function when pressing CTRL + SHIFT + Z', () => {
+      const redoSpy = jest.fn();
+
+      const callback = bindUndoRedo(jest.fn(), redoSpy);
+
+      document.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          ctrlKey: true,
+          shiftKey: true,
+          key: 'Z',
+        }),
+      );
+
+      expect(redoSpy).toHaveBeenCalled();
+      document.removeEventListener('keydown', callback);
+    });
+
+    it('should call "redo" function when pressing CTRL + y', () => {
+      const redoSpy = jest.fn();
+
+      const callback = bindUndoRedo(jest.fn(), redoSpy);
+
+      document.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          ctrlKey: true,
+          shiftKey: false,
+          key: 'y',
+        }),
+      );
+
+      expect(redoSpy).toHaveBeenCalled();
+      document.removeEventListener('keydown', callback);
+    });
+
+    it('should call "undo" function when pressing CTRL + z', () => {
+      const undoSpy = jest.fn();
+
+      const callback = bindUndoRedo(undoSpy, jest.fn());
+
+      document.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          ctrlKey: true,
+          shiftKey: false,
+          key: 'z',
+        }),
+      );
+
+      expect(undoSpy).toHaveBeenCalled();
+      document.removeEventListener('keydown', callback);
+    });
+  });
+
+  it('bindUndoRedo should unbind a keydown event callback', () => {
+    const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
+
+    const callback = jest.fn();
+    document.addEventListener('keydown', callback);
+    unbindUndoRedo(callback);
+
+    expect(removeEventListenerSpy).toHaveBeenCalledWith('keydown', callback);
+  });
+
+  it('sleep should return a promise that resolves after a given time', async () => {
+    const start = Date.now();
+    const sleepPromise = sleep(100_000).then(() => Date.now() - start);
+    jest.runAllTimers();
+
+    await expect(sleepPromise).resolves.toEqual(100_000);
+  });
+
   describe('getRandomArbitraryNumber()', () => {
     it('should return a random number', () => {
       expect(getRandomArbitraryNumber()).toEqual(expect.any(Number));
+    });
+
+    it('should return a random number using Date.now() if crypto module is not available', () => {
+      jest
+        .spyOn(global, 'crypto', 'get')
+        .mockImplementationOnce(() => undefined as unknown as Crypto);
+      jest.spyOn(global.Date, 'now').mockReturnValueOnce(888);
+
+      const result = getRandomArbitraryNumber();
+
+      expect(result).toEqual(888);
     });
 
     it('should return a random number using msCrypto if crypto module is not available', () => {
