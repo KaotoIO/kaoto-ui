@@ -60,8 +60,13 @@ export const KaotoToolbar = ({
   hideLeftPanel,
   leftDrawerExpanded,
 }: IKaotoToolbar) => {
-  const { currentDsl, settings, setSettings } = useSettingsStore(
-    ({ settings, setSettings }) => ({ settings, setSettings, currentDsl: settings.dsl.name }),
+  const { currentDsl, settings, setSettings, deployable } = useSettingsStore(
+    ({ settings, setSettings }) => ({
+      settings,
+      setSettings,
+      currentDsl: settings.dsl.name,
+      deployable: settings.dsl.deployable,
+    }),
     shallow,
   );
   const { sourceCode, setSourceCode } = useIntegrationSourceStore((state) => state);
@@ -133,8 +138,6 @@ export const KaotoToolbar = ({
     setAppMenuIsOpen(false);
     onFocusAppMenu();
   };
-
-  const deployable = settings.dsl.deployable === 'true' ? 'true' : undefined;
 
   const appMenuItems = [
     <DropdownItem
@@ -344,9 +347,9 @@ export const KaotoToolbar = ({
           {deployment.crd && <ToolbarItem variant="separator" />}
 
           {/* DEPLOY BUTTON */}
-          <ToolbarItem>
-            <Tooltip content={<div>Deploy</div>} position={'bottom'}>
-              {deployable && (
+          {deployable && (
+            <ToolbarItem>
+              <Tooltip content={<div>Deploy</div>} position={'bottom'}>
                 <Button
                   tabIndex={0}
                   variant="primary"
@@ -355,9 +358,9 @@ export const KaotoToolbar = ({
                 >
                   Deploy
                 </Button>
-              )}
-            </Tooltip>
-          </ToolbarItem>
+              </Tooltip>
+            </ToolbarItem>
+          )}
 
           {/* KEBAB DROPDOWN MENU */}
           <ToolbarItem variant="overflow-menu">

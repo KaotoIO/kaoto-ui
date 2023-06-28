@@ -59,8 +59,7 @@ export const NewFlow: FunctionComponent<PropsWithChildren> = () => {
         handleConfirm={() => {
           deleteAllFlows();
 
-          /** TODO: Check whether this configuration is required to be kept inside of settingsStore */
-          setSettings({ dsl: proposedDsl, name: 'integration', namespace });
+          setSettings({ dsl: proposedDsl, namespace });
 
           addNewFlow(proposedDsl!.name);
           setIsConfirmationModalOpen(false);

@@ -9,8 +9,8 @@ describe('NewFlow.tsx', () => {
     useSettingsStore.setState({
       settings: {
         ...useSettingsStore.getState().settings,
-        dsl: capabilitiesStub.dsls[0],
-        capabilities: capabilitiesStub.dsls,
+        dsl: capabilitiesStub[0],
+        capabilities: capabilitiesStub,
       },
     });
   });

@@ -54,12 +54,8 @@ export const CapabilitiesProvider: FunctionComponent<PropsWithChildren> = ({ chi
   useEffect(() => {
     /** Dispatch call for getting the available capabilities without waiting for it */
     fetchCapabilities(namespace)
-      .then((response) => {
-        if (!Array.isArray(response?.dsls) || !response?.dsls?.length) {
-          throw new Error('Invalid response from capabilities endpoint');
-        }
-
-        setSettings({ capabilities: response.dsls });
+      .then((capabilities) => {
+        setSettings({ capabilities });
       })
       .catch((reason) => {
         console.error('Error when fetching capabilities', reason);

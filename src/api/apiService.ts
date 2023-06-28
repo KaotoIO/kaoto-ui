@@ -1,5 +1,5 @@
 import { RequestService } from './requestService';
-import { ICapabilities, IFlowsWrapper, IStepProps } from '@kaoto/types';
+import { IDsl, IFlowsWrapper, IRawDsl, IStepProps } from '@kaoto/types';
 
 const apiVersion = '/v1';
 
@@ -21,11 +21,10 @@ export async function fetchBackendVersion(): Promise<string> {
 /**
  * Returns a list of all capabilities, including all
  * domain-specific languages (DSLs)
- * Returns { dsls: { [val: string]: string }[] }
  */
-export async function fetchCapabilities(namespace?: string): Promise<ICapabilities> {
+export async function fetchCapabilities(namespace?: string): Promise<IDsl[]> {
   try {
-    const resp = await RequestService.get({
+    const response = await RequestService.get({
       endpoint: `${apiVersion}/capabilities`,
       contentType: 'application/json',
       queryParams: {
@@ -33,7 +32,13 @@ export async function fetchCapabilities(namespace?: string): Promise<ICapabiliti
       },
     });
 
-    return await resp.json();
+    const payload = await response.json();
+
+    if (!Array.isArray(payload?.dsls) || !payload?.dsls?.length) {
+      throw new Error('Invalid response from capabilities endpoint');
+    }
+
+    return payload.dsls.map((dsl: IRawDsl) => new IDsl(dsl));
   } catch (err) {
     throw new Error(`Unable to fetch Capabilities ${err}`);
   }
@@ -88,7 +93,6 @@ export async function fetchCatalogSteps(
 
     return await resp.json();
   } catch (err) {
-    console.error(err);
     return err;
   }
 }
@@ -286,7 +290,6 @@ export async function fetchStepDetails(id?: string, namespace?: string) {
 
     return resp.json();
   } catch (err) {
-    console.error(err);
     return err;
   }
 }

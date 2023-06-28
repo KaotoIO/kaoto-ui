@@ -10,12 +10,24 @@ interface ISettingsStore {
 }
 
 export const initDsl: IDsl = {
-  deployable: 'false',
-  description: '',
-  input: '',
-  output: '',
-  stepKinds: '',
+  stepKinds: [
+    'CAMEL-CONNECTOR',
+    'EIP',
+    'EIP-BRANCH',
+    'CAMEL-REST-DSL',
+    'CAMEL-REST-VERB',
+    'CAMEL-REST-ENDPOINT',
+  ],
+  output: true,
+  input: true,
+  deployable: false,
+  supportsMultipleFlows: true,
+  vocabulary: {
+    stepsName: 'Steps',
+  },
+  default: false,
   name: 'Camel Route',
+  description: 'A camel route is a non deployable in cluster workflow of actions and steps.',
   validationSchema: '/v1/capabilities/Camel%20Route/schema',
 };
 

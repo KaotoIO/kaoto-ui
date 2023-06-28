@@ -1,20 +1,11 @@
 import { capabilitiesStub } from '../../stubs';
 import { DSLSelector } from './DSLSelector';
 import { useSettingsStore } from '@kaoto/store';
-import { IDsl } from '@kaoto/types';
 import { act, fireEvent, render, waitFor } from '@testing-library/react';
 
 describe('DSLSelector.tsx', () => {
   let onSelect: jest.Mock;
-  const dsl: IDsl = {
-    name: 'Capability 1',
-    deployable: '',
-    description: '',
-    input: '',
-    output: '',
-    stepKinds: '',
-    validationSchema: '',
-  };
+  const dsl = capabilitiesStub[0];
 
   beforeEach(() => {
     onSelect = jest.fn();
@@ -22,7 +13,8 @@ describe('DSLSelector.tsx', () => {
     useSettingsStore.setState({
       settings: {
         ...useSettingsStore.getState().settings,
-        capabilities: capabilitiesStub.dsls,
+        capabilities: capabilitiesStub,
+        dsl: dsl,
       },
     });
   });
@@ -65,6 +57,30 @@ describe('DSLSelector.tsx', () => {
 
     const element = await wrapper.findByText('Integration');
     expect(element).toBeInTheDocument();
+  });
+
+  test('should disable a SelectOption if is already selected and does not support multiple flows', async () => {
+    useSettingsStore.setState({
+      settings: {
+        ...useSettingsStore.getState().settings,
+        capabilities: capabilitiesStub,
+        dsl: capabilitiesStub[2],
+      },
+    });
+
+    const wrapper = render(<DSLSelector onSelect={onSelect} />);
+    const toggle = await wrapper.findByTestId('dsl-list-dropdown');
+
+    /** Open Select */
+    act(() => {
+      fireEvent.click(toggle);
+    });
+
+    const element = await wrapper.findByText('Kamelet (single route only)');
+    expect(element).toBeInTheDocument();
+
+    const option = await wrapper.findByTestId('dsl-Kamelet');
+    expect(option).toHaveClass('pf-m-disabled');
   });
 
   test('should show selected value', async () => {
@@ -120,7 +136,7 @@ describe('DSLSelector.tsx', () => {
 
   test('should have selected DSL if provided', async () => {
     const wrapper = render(
-      <DSLSelector onSelect={onSelect} selectedDsl={capabilitiesStub.dsls[2]} />,
+      <DSLSelector onSelect={onSelect} selectedDsl={capabilitiesStub[2]} />,
     );
     const toggle = await wrapper.findByTestId('dsl-list-dropdown');
 
@@ -162,6 +178,9 @@ describe('DSLSelector.tsx', () => {
     });
 
     const menu = await wrapper.findByRole('listbox');
+
+    expect(menu).toBeInTheDocument();
+
     /** Press Escape key to close the menu */
     act(() => {
       fireEvent.focus(menu);

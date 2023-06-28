@@ -77,4 +77,17 @@ describe('sortParameters', () => {
       'transactionTopic',
     ]);
   });
+
+  it('should ignore move all the required parameters to the top and sort them alphabetically', () => {
+    const sortedParameters = getSortedParameters({ ...debeziumMongoDBStep, required: undefined });
+    const idList = sortedParameters.slice(0, 3);
+
+    expect(idList).toMatchObject(['additionalProperties', 'bridgeErrorHandler', 'captureMode']);
+  });
+
+  it('should return an empty array if there are no parameters in the step', () => {
+    const sortedParameters = getSortedParameters({ ...debeziumMongoDBStep, parameters: undefined });
+
+    expect(sortedParameters).toEqual([]);
+  });
 });
