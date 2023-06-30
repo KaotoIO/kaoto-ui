@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: 🎥 Should we record?
-        run: echo '::set-output name=record::${{  env.CYPRESS_PROJECT_ID != '' }}'
+        run: echo "{record}={${{  env.CYPRESS_PROJECT_ID != '' }}}" >> $GITHUB_OUTPUT
         id: should-we-record
 
       - name: 👩‍🏭 Cypress install
