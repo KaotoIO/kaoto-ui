@@ -83,7 +83,7 @@ describe('editing properties', () => {
   it('User undoes a change they saved, syncs with canvas', () => {
     cy.uploadFixture('EipAction.yaml');
 
-    cy.editorDeleteLine(31, 7);
+    cy.editorDeleteLine(30, 7);
     cy.syncUpCodeChanges();
 
     // CHECK branch with digitalocean and set header step was deleted
@@ -93,7 +93,7 @@ describe('editing properties', () => {
     // First click undo button => reverted automatic adjustments
     cy.editorClickUndoXTimes();
     // Second click undo button => changes reverted & alert is displayed
-    cy.editorClickUndoXTimes();
+    cy.editorClickUndoXTimes(7);
     // CHECK alert is displayed
     cy.get('.pf-c-alert__title').contains('Any invalid code will be replaced after sync. If you don\'t want to lose your changes please make a backup.');
     cy.syncUpCodeChanges();
