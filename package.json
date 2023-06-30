@@ -133,7 +133,7 @@
     "html-webpack-plugin": "5.5.3",
     "jest": "29.5.0",
     "jest-environment-jsdom": "^29.3.1",
-    "lint-staged": "12.5.0",
+    "lint-staged": "13.2.3",
     "mini-css-extract-plugin": "2.7.6",
     "msw": "^1.2.2",
     "msw-storybook-addon": "^1.8.0",
