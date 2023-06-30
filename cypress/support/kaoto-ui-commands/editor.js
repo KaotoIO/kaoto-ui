@@ -29,16 +29,32 @@ Cypress.Commands.add('editorAddText', (line, text) => {
 
 Cypress.Commands.add('editorDeleteLine', (line, repeatCount) => {
     repeatCount = repeatCount ?? 1;
+    // Open the Go to Line dialog
     cy.get('.code-editor')
         .click()
         .type(
-            '{pageUp}' +
-            '{downArrow}'.repeat(line) +
-            '{shift}' +
-            '{downArrow}'.repeat(repeatCount) +
-            '{backspace}',
-            { delay: 1 }
+            '{ctrl}' +
+            '{g}',
+            { delay: 1 },
         );
+
+    // Type the line number to delete
+    cy.get('input[aria-describedby="quickInput_message"][aria-controls="quickInput_list"]')
+        .click()
+        .type(
+            `${line + 1}` +
+            '{enter}',
+            { delay: 1 },
+        );
+
+    // Delete the line as many times as specified
+    for (let i = 0; i < repeatCount; i++) {
+        cy.focused()
+            .type(
+                '{ctrl}{shift}{k}',
+                { delay: 1 },
+            );
+        }
 });
 
 Cypress.Commands.add('editorClickUndoXTimes', (times) => {

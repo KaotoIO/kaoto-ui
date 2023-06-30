@@ -13,7 +13,7 @@ describe('Test for Multi route actions from the code editor', () => {
   it('User deletes first route from multi-route using code editor', () => {
     cy.uploadFixture('IntegrationMultiFlow.yaml');
 
-    cy.editorDeleteLine(0, 15);
+    cy.editorDeleteLine(6, 11);
     cy.syncUpCodeChanges();
 
     cy.showAllRoutes();
@@ -37,19 +37,14 @@ describe('Test for Multi route actions from the code editor', () => {
     cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 3);
   });
 
-  it('User adds new route to Integration multi-route using code editor', () => {
+  /** Skip until https://github.com/KaotoIO/kaoto-backend/issues/738 is done */
+  it.skip('User adds new route to Integration multi-route using code editor', () => {
     cy.uploadFixture('IntegrationMultiFlow.yaml');
 
-    const stepToInsert = `---
-apiVersion: camel.apache.org/v1
-kind: Integration
-metadata:
-  name: ''
-spec:
-  flows:
-  - from:
-      uri: null
-      steps: []`;
+    const stepToInsert = `  - route:
+      from:
+        uri: null
+        steps: []`;
 
     cy.editorAddText(28, stepToInsert);
     cy.syncUpCodeChanges();
@@ -63,7 +58,7 @@ spec:
   it('User deletes second route from multi-route using code editor', () => {
     cy.uploadFixture('IntegrationMultiFlow.yaml');
 
-    cy.editorDeleteLine(15, 12);
+    cy.editorDeleteLine(17, 7);
     cy.syncUpCodeChanges();
 
     cy.showAllRoutes();
@@ -73,7 +68,7 @@ spec:
   it('User deletes step from first route using code editor', () => {
     cy.uploadFixture('IntegrationMultiFlow.yaml');
 
-    cy.editorDeleteLine(11, 2);
+    cy.editorDeleteLine(13, 2);
     cy.syncUpCodeChanges();
 
     cy.showAllRoutes();
@@ -84,9 +79,9 @@ spec:
   it('User adds step to the first route using code editor', () => {
     cy.uploadFixture('IntegrationMultiFlow.yaml');
 
-    const stepToInsert = `      - set-header:
-          constant: test`;
-    const insertLine = 11;
+    const stepToInsert = `        - set-header:
+            constant: test`;
+    const insertLine = 13;
     cy.editorAddText(insertLine, stepToInsert);
     cy.syncUpCodeChanges();
 
@@ -98,9 +93,9 @@ spec:
     cy.uploadFixture('IntegrationMultiFlow.yaml');
 
     cy.showAllRoutes();
-    const stepToInsert = `      - set-body:
-          constant: test`;
-    const insertLine = 25;
+    const stepToInsert = `        - set-body:
+            constant: test`;
+    const insertLine = 22;
     cy.editorAddText(insertLine, stepToInsert);
     cy.syncUpCodeChanges();
     // CHECK the insert-field-action step was added
@@ -119,7 +114,7 @@ spec:
     // First click undo button => reverted automatic adjustments
     cy.editorClickUndoXTimes();
     // Second click undo button => changes reverted & alert is displayed
-    cy.editorClickUndoXTimes();
+    cy.editorClickUndoXTimes(12);
     cy.syncUpCodeChanges();
 
     cy.showAllRoutes();
