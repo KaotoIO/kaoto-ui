@@ -3918,7 +3918,7 @@ __metadata:
     "@storybook/addon-essentials": ^7.0.23
     "@storybook/addon-interactions": ^7.0.23
     "@storybook/addon-links": ^7.0.8
-    "@storybook/builder-webpack5": ^6.5.16
+    "@storybook/builder-webpack5": ^7.0.0
     "@storybook/manager-webpack5": ^6.5.16
     "@storybook/react": ^7.0.8
     "@storybook/react-webpack5": ^7.0.23
@@ -5504,7 +5504,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/builder-webpack5@npm:7.0.24":
+"@storybook/builder-webpack5@npm:7.0.24, @storybook/builder-webpack5@npm:^7.0.0":
   version: 7.0.24
   resolution: "@storybook/builder-webpack5@npm:7.0.24"
   dependencies:
@@ -5558,58 +5558,6 @@ __metadata:
     typescript:
       optional: true
   checksum: 22fc60decff55afd7d6a2aa62d042e2c90e28d9d95ecc15305771d0c88c57f69274a3b26291a087c5424da349f35937e3c80594246107579473ec3593065bfd9
-  languageName: node
-  linkType: hard
-
-"@storybook/builder-webpack5@npm:^6.5.16":
-  version: 6.5.16
-  resolution: "@storybook/builder-webpack5@npm:6.5.16"
-  dependencies:
-    "@babel/core": ^7.12.10
-    "@storybook/addons": 6.5.16
-    "@storybook/api": 6.5.16
-    "@storybook/channel-postmessage": 6.5.16
-    "@storybook/channels": 6.5.16
-    "@storybook/client-api": 6.5.16
-    "@storybook/client-logger": 6.5.16
-    "@storybook/components": 6.5.16
-    "@storybook/core-common": 6.5.16
-    "@storybook/core-events": 6.5.16
-    "@storybook/node-logger": 6.5.16
-    "@storybook/preview-web": 6.5.16
-    "@storybook/router": 6.5.16
-    "@storybook/semver": ^7.3.2
-    "@storybook/store": 6.5.16
-    "@storybook/theming": 6.5.16
-    "@types/node": ^14.0.10 || ^16.0.0
-    babel-loader: ^8.0.0
-    babel-plugin-named-exports-order: ^0.0.2
-    browser-assert: ^1.2.1
-    case-sensitive-paths-webpack-plugin: ^2.3.0
-    core-js: ^3.8.2
-    css-loader: ^5.0.1
-    fork-ts-checker-webpack-plugin: ^6.0.4
-    glob: ^7.1.6
-    glob-promise: ^3.4.0
-    html-webpack-plugin: ^5.0.0
-    path-browserify: ^1.0.1
-    process: ^0.11.10
-    stable: ^0.1.8
-    style-loader: ^2.0.0
-    terser-webpack-plugin: ^5.0.3
-    ts-dedent: ^2.0.0
-    util-deprecate: ^1.0.2
-    webpack: ^5.9.0
-    webpack-dev-middleware: ^4.1.0
-    webpack-hot-middleware: ^2.25.1
-    webpack-virtual-modules: ^0.4.1
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 0a6631f307c5ac56423860216d42ed95757906b004e949ed3dc2cce4f81d83d38de5cddbae65a0e65083eece6e4e8af05f6aabf5d78a80a7a7f62cf157a4e577
   languageName: node
   linkType: hard
 
@@ -7219,7 +7167,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/glob@npm:*, @types/glob@npm:^8.0.0":
+"@types/glob@npm:^8.0.0":
   version: 8.1.0
   resolution: "@types/glob@npm:8.1.0"
   dependencies:
@@ -13529,17 +13477,6 @@ __metadata:
   dependencies:
     is-glob: ^4.0.3
   checksum: c13ee97978bef4f55106b71e66428eb1512e71a7466ba49025fc2aec59a5bfb0954d5abd58fc5ee6c9b076eef4e1f6d3375c2e964b88466ca390da4419a786a8
-  languageName: node
-  linkType: hard
-
-"glob-promise@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "glob-promise@npm:3.4.0"
-  dependencies:
-    "@types/glob": "*"
-  peerDependencies:
-    glob: "*"
-  checksum: 84a2c076e7581c9f8aa7a8a151ad5f9352c4118ba03c5673ecfcf540f4c53aa75f8d32fe493c2286d471dccd7a75932b9bfe97bf782564c1f4a50b9c7954e3b6
   languageName: node
   linkType: hard
 
