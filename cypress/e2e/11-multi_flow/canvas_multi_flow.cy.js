@@ -62,7 +62,30 @@ describe('Test for Multi route actions from the canvas', () => {
     });
   });
 
-  it('User creates multiple routes in canvas', () => {
+  const testData = ['KameletBinding', 'Kamelet'];
+  // Iterate over testData
+  testData.forEach((data) => {
+    it('User can\'t create multiple routes in canvas of type ' + data, () => {
+      cy.switchIntegrationType(data);
+      cy.get('[data-testid="dsl-list-dropdown"]').click({ force: true });
+      cy.get('.pf-c-menu__item-text').contains(data).closest('button').should('be.disabled');
+      cy.get('[data-testid="dsl-list-btn"]').should('be.disabled');
+  
+      cy.get('[data-testid="flows-list-route-count"]').should("have.text", "1/1");
+    });  
+  });
+
+  it('User creates multiple CamelRoute type routes in canvas', () => {
+    // Camel Route is set as default type - simply add new routes
+    cy.createNewRoute();
+    cy.createNewRoute();
+
+    cy.showAllRoutes();
+    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 3);
+    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "3/3");
+  });
+
+  it('User creates multiple Integration routes in canvas', () => {
     cy.switchIntegrationType('Integration');
     cy.createNewRoute();
     cy.createNewRoute();
