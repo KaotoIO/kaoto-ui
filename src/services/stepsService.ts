@@ -24,6 +24,7 @@ import {
   IVizStepNodeData,
 } from '@kaoto/types';
 import { findPath, getDeepValue } from '@kaoto/utils';
+import cloneDeep from 'lodash.clonedeep';
 
 /**
  * A collection of business logic to handle logical model objects of the integration,
@@ -39,7 +40,7 @@ export class StepsService {
   addBranch(step: IStepProps, branch: IStepPropsBranch) {
     const integrationId = step.integrationId;
     const currentStepNested = this.getStepNested(step.UUID);
-    const newStep = { ...step };
+    const newStep = cloneDeep(step);
 
     if (!newStep.branches) {
       newStep.branches = [branch];
@@ -100,10 +101,9 @@ export class StepsService {
     updateStepParams: (values: any) => void,
     alertKaoto: (title: string, body?: string, variant?: string) => void
   ): IKaotoApi {
-    let stepParams = {};
+    let stepParams: Record<string, unknown> = {};
     step.parameters?.forEach((parameter) => {
       const paramKey = parameter.id;
-      // @ts-ignore
       stepParams[paramKey] = parameter.value ?? parameter.defaultValue;
     });
 
@@ -478,34 +478,31 @@ export class StepsService {
    * @param newValues
    */
   updateStepParameters(step: IStepProps, newValues: Record<string, unknown>) {
-    let newStep: IStepProps = step;
     const integrationId = step.integrationId;
-    const newStepParameters = newStep.parameters?.slice();
+    let newStep = cloneDeep(step);
 
-    if (newStepParameters && newStepParameters.length > 0) {
-      Object.entries(newValues).forEach(([key, value]) => {
-        const paramIndex = newStepParameters.findIndex((p) => p.id === key);
-        newStepParameters[paramIndex].value = value;
-      });
+    newStep.parameters = newStep.parameters?.map((param) => {
+      return {
+        ...param,
+        value: newValues[param.id] ?? param.value,
+      };
+    });
 
-      // check if the step being modified is nested
-      if (useNestedStepsStore.getState().nestedSteps.some((ns) => ns.stepUuid === newStep.UUID)) {
-        // use its path to replace only this part of the original step
-        const currentStepNested = useNestedStepsStore
+    // check if the step being modified is nested
+    if (useNestedStepsStore.getState().nestedSteps.some((ns) => ns.stepUuid === newStep.UUID)) {
+      // use its path to replace only this part of the original step
+      const currentStepNested = useNestedStepsStore
+        .getState()
+        .nestedSteps.find((ns) => ns.stepUuid === newStep.UUID);
+      if (currentStepNested) {
+        useFlowsStore
           .getState()
-          .nestedSteps.find((ns) => ns.stepUuid === newStep.UUID);
-        if (currentStepNested) {
-          useFlowsStore
-            .getState()
-            .insertStep(integrationId, newStep, { mode: 'replace', path: currentStepNested.pathToStep });
-        }
-      } else {
-        const integration = this.getIntegration(integrationId);
-        const oldStepIdx = this.findStepIdxWithUUID(step.UUID, integration?.steps ?? []);
-        useFlowsStore.getState().insertStep(integrationId, newStep, { mode: 'replace', index: oldStepIdx });
+          .insertStep(integrationId, newStep, { mode: 'replace', path: currentStepNested.pathToStep });
       }
     } else {
-      return;
+      const integration = this.getIntegration(integrationId);
+      const oldStepIdx = this.findStepIdxWithUUID(step.UUID, integration?.steps ?? []);
+      useFlowsStore.getState().insertStep(integrationId, newStep, { mode: 'replace', index: oldStepIdx });
     }
   }
 
