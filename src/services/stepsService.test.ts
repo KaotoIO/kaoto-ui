@@ -3,7 +3,9 @@ import deployment from '../store/data/deployment';
 import nestedBranch from '../store/data/kamelet.nested-branch.steps';
 import steps from '../store/data/steps';
 import YAML from '../store/data/yaml';
+import { flowWithBranch } from '../stubs';
 import { FlowsService } from './FlowsService';
+import { NestedStepsService } from './NestedStepsService';
 import { StepsService } from './stepsService';
 import {
   fetchDeployment,
@@ -40,6 +42,13 @@ describe('stepsService', () => {
   const stepsService = new StepsService();
   const MOCK_FLOW_ID = 'route-1234';
 
+  const step = {
+    name: 'pineapple',
+    parameters: [
+      { title: 'Description', type: 'string', id: 'description', value: 'A fruit' },
+    ] as IStepPropsParameters[],
+  } as IStepProps;
+
   beforeEach(() => {
     useFlowsStore.getState().deleteAllFlows();
 
@@ -47,31 +56,50 @@ describe('stepsService', () => {
     useFlowsStore.getState().addNewFlow('Integration');
   });
 
-  it('addBranch(): should add a branch to the specified step from the store', () => {
-    useFlowsStore.setState({
-      flows: [
-        {
-          ...useFlowsStore.getState().flows[0],
-          id: MOCK_FLOW_ID,
-          steps: [
-            {
-              integrationId: MOCK_FLOW_ID,
-              UUID: 'blueberry',
-              name: 'blueberry',
-              minBranches: 0,
-              maxBranches: -1,
-            },
-          ] as IStepProps[],
-        },
-      ],
+  describe('addBranch()', () => {
+    beforeEach(() => {
+      useFlowsStore.setState({ flows: [flowWithBranch] });
+    });
+    const newBranch = {
+      branchUuid: 'blueberry-branch-01',
+      steps: [] as IStepProps[],
+    } as IStepPropsBranch;
+
+    it('should add a branch to the specified step from the store', () => {
+      stepsService.addBranch(
+        { ...flowWithBranch.steps[0], branches: undefined } as IStepProps,
+        newBranch,
+      );
+
+      expect(useFlowsStore.getState().flows[0].steps[0].branches).toHaveLength(1);
     });
 
-    stepsService.addBranch(
-      { integrationId: MOCK_FLOW_ID, UUID: 'blueberry', name: 'blueberry' } as IStepProps,
-      { branchUuid: 'blueberry-branch-01', steps: [] as IStepProps[] } as IStepPropsBranch,
-    );
+    it('should add another branch to the branches array', () => {
+      stepsService.addBranch(
+        { ...flowWithBranch.steps[0], branches: [newBranch] } as IStepProps,
+        { branchUuid: 'blueberry-branch-02', steps: [] as IStepProps[] } as IStepPropsBranch,
+      );
 
-    expect(useFlowsStore.getState().flows[0].steps[0].branches).toHaveLength(1);
+      expect(useFlowsStore.getState().flows[0].steps[0].branches).toHaveLength(2);
+    });
+
+    it('should update a nested step parameter', () => {
+      useNestedStepsStore
+        .getState()
+        .updateSteps(NestedStepsService.extractNestedSteps(flowWithBranch.steps));
+
+      const nestedLogStep = flowWithBranch.steps[1].branches![0].steps[0];
+      stepsService.addBranch(nestedLogStep, {
+        branchUuid: 'blueberry-branch-02',
+        steps: [] as IStepProps[],
+      } as IStepPropsBranch);
+
+      const updatedBranchStep = StepsService.flattenSteps(flowWithBranch.steps).find(
+        (step) => step.id === nestedLogStep.id,
+      );
+
+      expect(updatedBranchStep?.branches).toHaveLength(1);
+    });
   });
 
   it('buildStepSchemaAndModel(): should ignore empty array parameter', () => {
@@ -120,13 +148,6 @@ describe('stepsService', () => {
   });
 
   describe('createKaotoApi(): should create an instance of IKaotoApi for step extensions to consume', () => {
-    const step = {
-      name: 'pineapple',
-      parameters: [
-        { title: 'Description', type: 'string', id: 'description', value: 'A fruit' },
-      ] as IStepPropsParameters[],
-    } as IStepProps;
-
     it('getDeployment(): should call apiService to return the current running deployment', async () => {
       jest.mocked(fetchDeployment).mockResolvedValueOnce(deployment);
       await stepsService
@@ -188,6 +209,97 @@ describe('stepsService', () => {
       const saveConfig = jest.fn();
       stepsService.createKaotoApi(step, saveConfig, jest.fn()).updateStepParams({ name: 'pizza' });
       expect(saveConfig).toHaveBeenCalled();
+    });
+  });
+
+  describe('updateStepParameters()', () => {
+    beforeEach(() => {
+      useFlowsStore.getState().insertStep(MOCK_FLOW_ID, step, { mode: 'append' });
+    });
+
+    it.each([
+      {},
+      { description: 'This is an updated description' },
+      { anotherProperty: 'This is another property' },
+      { description: undefined },
+      { description: null },
+    ])('should not mutate the provided step "%s"', (newValues) => {
+      stepsService.updateStepParameters(step, newValues);
+
+      expect(step.parameters).toEqual([
+        { title: 'Description', type: 'string', id: 'description', value: 'A fruit' },
+      ]);
+    });
+
+    it.each([
+      ['This is an updated description', 'This is an updated description'],
+      [undefined, 'A fruit'],
+      [null, 'A fruit'],
+    ])('should update the provided step\'s parameters "%s"', (updatedValue, value) => {
+      stepsService.updateStepParameters(step, { description: updatedValue });
+
+      const updatedStep = useFlowsStore.getState().flows[0].steps[0];
+      expect(updatedStep).toEqual({
+        ...step,
+        UUID: `${MOCK_FLOW_ID}_pineapple-0`,
+        parameters: [
+          {
+            title: 'Description',
+            type: 'string',
+            id: 'description',
+            value,
+          },
+        ],
+      });
+    });
+
+    it("should ignore the provided step's parameters if they are not defined", () => {
+      stepsService.updateStepParameters(
+        { ...step, parameters: undefined },
+        { description: 'A vegetable' },
+      );
+
+      const updatedStep = useFlowsStore.getState().flows[0].steps[0];
+      expect(updatedStep).toEqual({
+        ...step,
+        UUID: `${MOCK_FLOW_ID}_pineapple-0`,
+        parameters: undefined,
+      });
+    });
+
+    it('should update a nested step parameter', () => {
+      useFlowsStore.setState({
+        flows: [flowWithBranch],
+      });
+      useNestedStepsStore
+        .getState()
+        .updateSteps(NestedStepsService.extractNestedSteps(flowWithBranch.steps));
+
+      stepsService.updateStepParameters(
+        // log step
+        {
+          ...flowWithBranch.steps[1].branches![0].steps[0],
+          parameters: [
+            { title: 'Message', type: 'string', id: 'message', value: 'An old message' },
+          ],
+        },
+        {
+          message: 'A new hope',
+        },
+      );
+
+      const updatedStep = useFlowsStore.getState().flows[0].steps[1].branches![0].steps[0];
+
+      expect(updatedStep).toMatchObject({
+        parameters: [
+          {
+            title: 'Message',
+            type: 'string',
+            id: 'message',
+            value: 'A new hope',
+          },
+        ],
+      });
     });
   });
 
@@ -255,6 +367,50 @@ describe('stepsService', () => {
     });
 
     expect(stepsService.findStepIdxWithUUID('caffeine-action-2', steps)).toEqual(2);
+  });
+
+  describe('findStepWithUUID()', () => {
+    it('should return "undefined" for a non existing integrationId', () => {
+      useFlowsStore.setState({ flows: [flowWithBranch] });
+      const step = stepsService.findStepWithUUID(
+        'non-existing-integration-id',
+        'route-1814_pipeline-1',
+      );
+
+      expect(step).toBeUndefined();
+    });
+
+    it('should return "undefined" for a non existing UUID', () => {
+      useFlowsStore.setState({ flows: [flowWithBranch] });
+      const step = stepsService.findStepWithUUID(
+        'route-1814',
+        'non-existing-uuid',
+      );
+
+      expect(step).toBeUndefined();
+    });
+
+    it('should return a step', () => {
+      useFlowsStore.setState({ flows: [flowWithBranch] });
+      const step = stepsService.findStepWithUUID(
+        'route-1814',
+        'route-1814_pipeline-1',
+      );
+
+      expect(step).toBeDefined();
+      expect(step).toEqual(flowWithBranch.steps[1]);
+    });
+
+    it('should return a nested step', () => {
+      useFlowsStore.setState({ flows: [flowWithBranch] });
+      const step = stepsService.findStepWithUUID(
+        'route-1814',
+        'route-1814_pipeline-1_branch-0_log-0',
+      );
+
+      expect(step).toBeDefined();
+      expect(step).toEqual(flowWithBranch.steps[1].branches![0].steps[0]);
+    });
   });
 
   it('flattenSteps(): should flatten an array of deeply nested steps', () => {
