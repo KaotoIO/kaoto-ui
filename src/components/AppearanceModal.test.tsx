@@ -8,7 +8,7 @@ describe('AppearanceModal.tsx', () => {
     render(
       <AlertProvider>
         <AppearanceModal handleCloseModal={jest.fn()} isModalOpen={true} />
-      </AlertProvider>
+      </AlertProvider>,
     );
     const element = screen.queryByTestId('appearance-modal');
     expect(element).toBeInTheDocument();
@@ -18,7 +18,7 @@ describe('AppearanceModal.tsx', () => {
     render(
       <AlertProvider>
         <AppearanceModal handleCloseModal={jest.fn()} isModalOpen={false} />
-      </AlertProvider>
+      </AlertProvider>,
     );
     const element = screen.queryByTestId('appearance-modal');
     expect(element).not.toBeInTheDocument();

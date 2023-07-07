@@ -1,7 +1,7 @@
+import { useDocumentTitle } from './hooks';
 import { Dashboard } from './layout/Dashboard';
 import { NotFound } from './layout/NotFound';
 import { accessibleRouteChangeHandler } from './utils';
-import { useDocumentTitle } from './hooks';
 import { ComponentType, ReactElement, useEffect } from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { LastLocationProvider, useLastLocation } from 'react-router-last-location';
@@ -76,7 +76,7 @@ const PageNotFound = ({ title }: { title: string }) => {
 
 const flattenedRoutes: IAppRoute[] = routes.reduce(
   (flattened, route) => [...flattened, ...(route.routes ? route.routes : [route])],
-  [] as IAppRoute[]
+  [] as IAppRoute[],
 );
 
 const AppRoutes = (): ReactElement => {

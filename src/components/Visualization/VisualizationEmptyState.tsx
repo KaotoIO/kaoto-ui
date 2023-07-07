@@ -6,15 +6,22 @@ import {
   EmptyStateIcon,
   Title,
 } from '@patternfly/react-core';
-import { CubesIcon as PatternFlyCubesIcon, EyeSlashIcon as PatternFlyEyeSlashIcon } from '@patternfly/react-icons';
+import {
+  CubesIcon as PatternFlyCubesIcon,
+  EyeSlashIcon as PatternFlyEyeSlashIcon,
+} from '@patternfly/react-icons';
 import { FunctionComponent } from 'react';
 
 interface IVisualizationEmptyState extends IDataTestID {
   visibleFlowsInformation: IVisibleFlowsInformation;
 }
 
-const CubesIcon: FunctionComponent = (props) => <PatternFlyCubesIcon data-testid="cubes-icon" {...props} />;
-const EyeSlashIcon: FunctionComponent = (props) => <PatternFlyEyeSlashIcon data-testid="eye-slash-icon" {...props} />;
+const CubesIcon: FunctionComponent = (props) => (
+  <PatternFlyCubesIcon data-testid="cubes-icon" {...props} />
+);
+const EyeSlashIcon: FunctionComponent = (props) => (
+  <PatternFlyEyeSlashIcon data-testid="eye-slash-icon" {...props} />
+);
 
 export const VisualizationEmptyState: FunctionComponent<IVisualizationEmptyState> = (props) => {
   return (

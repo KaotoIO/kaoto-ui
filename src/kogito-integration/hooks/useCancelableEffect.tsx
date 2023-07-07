@@ -1,4 +1,4 @@
-import { EffectCallback, useCallback, useEffect, useRef, useState } from "react";
+import { EffectCallback, useCallback, useEffect, useRef, useState } from 'react';
 
 export function usePrevious<T>(value: T): T | undefined {
   const ref = useRef<T>();
@@ -46,7 +46,9 @@ export type CancelableEffectParams = {
   canceled: Holder<boolean>;
 };
 
-export function useCancelableEffect(effect: (args: CancelableEffectParams) => ReturnType<EffectCallback>) {
+export function useCancelableEffect(
+  effect: (args: CancelableEffectParams) => ReturnType<EffectCallback>,
+) {
   useEffect(() => {
     const canceled = new Holder(false);
 

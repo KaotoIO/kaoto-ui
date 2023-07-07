@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { RefObject, createRef } from "react";
-
+import { RequestService } from '../api';
+import { KaotoEditor } from './KaotoEditor';
 import {
   Editor,
   EditorApi,
@@ -23,17 +22,16 @@ import {
   EditorTheme,
   KogitoEditorChannelApi,
   KogitoEditorEnvelopeContextType,
-} from "@kie-tools-core/editor/dist/api";
-import { DEFAULT_RECT } from "@kie-tools-core/guided-tour/dist/api";
-import { Notification } from "@kie-tools-core/notifications/dist/api";
-import { KaotoEditor } from "./KaotoEditor";
-import { RequestService } from '../api';
+} from '@kie-tools-core/editor/dist/api';
+import { DEFAULT_RECT } from '@kie-tools-core/guided-tour/dist/api';
+import { Notification } from '@kie-tools-core/notifications/dist/api';
+import { RefObject, createRef } from 'react';
 
 export class KaotoEditorView implements Editor {
   private readonly editorRef: RefObject<EditorApi>;
   af_isReact = true;
-  af_componentId = "kaoto-editor";
-  af_componentTitle = "Kaoto Editor";
+  af_componentId = 'kaoto-editor';
+  af_componentTitle = 'Kaoto Editor';
 
   constructor(
     private readonly envelopeContext: KogitoEditorEnvelopeContextType<KogitoEditorChannelApi>,
@@ -73,10 +71,15 @@ export class KaotoEditorView implements Editor {
           this.envelopeContext.channelApi.notifications.kogitoWorkspace_newEdit.send(edit);
         }}
         setNotifications={(path, notifications) =>
-          this.envelopeContext.channelApi.notifications.kogitoNotifications_setNotifications.send(path, notifications)
+          this.envelopeContext.channelApi.notifications.kogitoNotifications_setNotifications.send(
+            path,
+            notifications,
+          )
         }
         onStateControlCommandUpdate={(command) =>
-          this.envelopeContext.channelApi.notifications.kogitoEditor_stateControlCommandUpdate.send(command)
+          this.envelopeContext.channelApi.notifications.kogitoEditor_stateControlCommandUpdate.send(
+            command,
+          )
         }
       />
     );

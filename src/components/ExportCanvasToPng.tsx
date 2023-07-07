@@ -9,7 +9,7 @@ const downloadImage = (dataUrl: string, fileName: string) => {
   a.setAttribute('download', `${fileName}.png`);
   a.setAttribute('href', dataUrl);
   a.click();
-}
+};
 
 interface IExportCanvasToPng {
   fileName: string;
@@ -26,8 +26,10 @@ export const ExportCanvasToPng = ({ fileName, onClick }: IExportCanvasToPng) => 
     toPng(reactFlowNode, {
       filter: (node) => {
         /** Filter ReactFlow minimap and controls */
-        return !node?.classList?.contains('react-flow__minimap')
-          && !node?.classList?.contains('react-flow__controls');
+        return (
+          !node?.classList?.contains('react-flow__minimap') &&
+          !node?.classList?.contains('react-flow__controls')
+        );
       },
     }).then((dataUrl) => {
       downloadImage(dataUrl, fileName);
@@ -35,8 +37,12 @@ export const ExportCanvasToPng = ({ fileName, onClick }: IExportCanvasToPng) => 
   }, [onClick, fileName]);
 
   return (
-    <DropdownItem data-testid="kaotoToolbar-kebab__export" component="button" onClick={scheduleExport}>
+    <DropdownItem
+      data-testid="kaotoToolbar-kebab__export"
+      component="button"
+      onClick={scheduleExport}
+    >
       Export canvas to PNG
     </DropdownItem>
   );
-  }
+};

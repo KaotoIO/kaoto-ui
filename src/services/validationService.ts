@@ -31,7 +31,7 @@ export class ValidationService {
    */
   static canStepBeReplaced(
     existingNode: IVizStepNodeData,
-    proposedStep: IStepProps
+    proposedStep: IStepProps,
   ): { isValid: boolean; message?: string } {
     let isValid = false;
     let message = undefined;
@@ -91,7 +91,7 @@ export class ValidationService {
   static getBranchTabTooltipMsg(
     supportsBranching: boolean,
     maxBranches: number,
-    branchesLength: number | undefined
+    branchesLength: number | undefined,
   ): string {
     if (!supportsBranching) {
       return "This step doesn't support branching";

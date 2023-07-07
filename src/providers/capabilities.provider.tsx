@@ -3,7 +3,14 @@ import { useSettingsStore } from '../store';
 import { IDsl } from '../types';
 import { sleep } from '../utils';
 import { fetchBackendVersion, fetchCapabilities } from '@kaoto/api';
-import { FunctionComponent, PropsWithChildren, createContext, useCallback, useEffect, useState } from 'react';
+import {
+  FunctionComponent,
+  PropsWithChildren,
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { shallow } from 'zustand/shallow';
 
 export const Capabilities = createContext<IDsl[]>([]);

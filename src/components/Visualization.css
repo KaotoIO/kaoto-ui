@@ -1,185 +1,187 @@
-.pf-c-drawer__content.panelCustom, .react-flow.panelCustom {
-    background-color: var(--pf-global--BackgroundColor--200);
+.pf-c-drawer__content.panelCustom,
+.react-flow.panelCustom {
+  background-color: var(--pf-global--BackgroundColor--200);
 }
 
 .pf-c-drawer__content.panelCustom {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .visualization {
-    position: relative;
+  position: relative;
 }
 
 .react-flow__attribution {
-    background: transparent !important;
-    color: #000 !important; /* Fallback for older browsers */
-    color: rgba(0, 0, 0, 0.5) !important;
-    opacity: 0.7;
-    transform: rotate(90deg);
-    bottom: 35px !important;
-    right: -20px !important;
+  background: transparent !important;
+  color: #000 !important; /* Fallback for older browsers */
+  color: rgba(0, 0, 0, 0.5) !important;
+  opacity: 0.7;
+  transform: rotate(90deg);
+  bottom: 35px !important;
+  right: -20px !important;
 }
 
 .reactflow-wrapper {
-    width: 100vw;
-    height: calc(100vh - 77px);
+  width: 100vw;
+  height: calc(100vh - 77px);
 }
 
 .stepHandle {
-    width: 8px !important;
-    height: 8px !important;
-    background: var(--pf-global--BorderColor--200) !important;
-    border-radius: 100% !important;
+  width: 8px !important;
+  height: 8px !important;
+  background: var(--pf-global--BorderColor--200) !important;
+  border-radius: 100% !important;
 }
 
 .stepNode {
-    align-items: center;
-    background: var(--pf-global--BackgroundColor--100);
-    border: 2px solid var(--pf-global--BorderColor--100);
-    border-radius: 50%;
-    display: block;
-    font-family: Ubuntu, serif;
-    font-size: small;
-    height: 80px;
-    justify-content: center;
-    padding: 10px;
-    text-align: center;
-    width: 80px;
+  align-items: center;
+  background: var(--pf-global--BackgroundColor--100);
+  border: 2px solid var(--pf-global--BorderColor--100);
+  border-radius: 50%;
+  display: block;
+  font-family: Ubuntu, serif;
+  font-size: small;
+  height: 80px;
+  justify-content: center;
+  padding: 10px;
+  text-align: center;
+  width: 80px;
 }
 
 .stepNode__Hover {
-    border: 2px solid rgb(0, 136, 206);
+  border: 2px solid rgb(0, 136, 206);
 }
 
 .stepNode__Selected {
-    border: 3px solid rgb(0, 136, 206);
+  border: 3px solid rgb(0, 136, 206);
 }
 
 .stepNode .stepNode__Add {
-    position: absolute;
-    right: -24px;
-    top: 38%;
+  position: absolute;
+  right: -24px;
+  top: 38%;
 }
 
 .stepNode.stepNode--vertical .stepNode__Add {
-    right: 30px;
-    bottom: -63%;
-    top: auto;
+  right: 30px;
+  bottom: -63%;
+  top: auto;
 }
 
-button[data-disable-branchestab="true"][data-disable-stepstab="true"] {
-    cursor: not-allowed;
-    color:rgb(210, 210, 210)
+button[data-disable-branchestab='true'][data-disable-stepstab='true'] {
+  cursor: not-allowed;
+  color: rgb(210, 210, 210);
 }
 
-button[data-disable-branchestab="true"][data-disable-stepstab="true"]:hover {
-    background: var(--pf-global--Color--light-200)
+button[data-disable-branchestab='true'][data-disable-stepstab='true']:hover {
+  background: var(--pf-global--Color--light-200);
 }
 
 .stepNode__Delete {
-    position: absolute;
-    left: 0;
-    top: 0;
- }
-
- .stepNode__Icon {
-    position: relative;
-    top: 55%;
-    transform: translateY(-50%);
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
-.stepNode__Icon img, .stepNode__Icon svg {
-    height: 40px;
-    left: 0;
-    pointer-events: none;
-    right: 0;
-    width: 40px;
+.stepNode__Icon {
+  position: relative;
+  top: 55%;
+  transform: translateY(-50%);
+}
+
+.stepNode__Icon img,
+.stepNode__Icon svg {
+  height: 40px;
+  left: 0;
+  pointer-events: none;
+  right: 0;
+  width: 40px;
 }
 
 .stepNode__Insert {
-    height: 6px;
-    position: absolute;
-    left: -3.6em;
-    top: 40%;
-    transform: translateY(-50%);
-    width: 6px;
+  height: 6px;
+  position: absolute;
+  left: -3.6em;
+  top: 40%;
+  transform: translateY(-50%);
+  width: 6px;
 }
 
 .stepNode__Label {
-    bottom: -30px;
-    left: -75%;
-    position: relative;
-    width: 250%;
-    pointer-events: none;
+  bottom: -30px;
+  left: -75%;
+  position: relative;
+  width: 250%;
+  pointer-events: none;
 }
 
 .stepNode__Label span {
-    background: var(--pf-global--BackgroundColor--150);
-    border-radius: 15%;
-    padding: 0.4em;
-    pointer-events: auto;
+  background: var(--pf-global--BackgroundColor--150);
+  border-radius: 15%;
+  padding: 0.4em;
+  pointer-events: auto;
 }
 
 .stepNode__Prepend {
-    position: absolute;
-    left: -24px;
-    top: 38%;
+  position: absolute;
+  left: -24px;
+  top: 38%;
 }
 
 .stepNode.stepNode--vertical .stepNode__Prepend {
-    left: 30px;
-    top: -30%;
+  left: 30px;
+  top: -30%;
 }
 
 .stepNode__Slot {
-    border: 2px solid var(--pf-global--BorderColor--100);
-    border-radius: 50%;
+  border: 2px solid var(--pf-global--BorderColor--100);
+  border-radius: 50%;
 }
 
 .stepNode__Grey {
-    border: 2px solid rgb(204, 204, 204);
-    border-radius: 50%;
+  border: 2px solid rgb(204, 204, 204);
+  border-radius: 50%;
 }
 
 .stepNode__DarkBlue {
-    border: 2px solid rgb(0, 136, 206);
-    border-radius: 50%;
+  border: 2px solid rgb(0, 136, 206);
+  border-radius: 50%;
 }
 
 .stepNode__LightBlue {
-    border: 2px solid rgb(149, 213, 245);
-    border-radius: 50%;
+  border: 2px solid rgb(149, 213, 245);
+  border-radius: 50%;
 }
 
 /* SHOWN FOR EMPTY STATE PLACEHOLDERS */
 .nodeHintArrow {
-    margin-right: 6px;
-    font-size: 16px;
-    font-weight: 900;
-    position: relative;
-    top: 6px;
+  margin-right: 6px;
+  font-size: 16px;
+  font-weight: 900;
+  position: relative;
+  top: 6px;
 }
 
 .nodeHintWrapper {
-    position: absolute;
-    top: -34px;
-    left: 50px;
-    font-size: 11px;
-    font-weight: 400;
-    text-align: left;
-    line-height: 1.1;
-    color: #999;
-    width: 120px;
-    display: flex;
-    align-items: flex-end;
-    pointer-events: none;
+  position: absolute;
+  top: -34px;
+  left: 50px;
+  font-size: 11px;
+  font-weight: 400;
+  text-align: left;
+  line-height: 1.1;
+  color: #999;
+  width: 120px;
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none;
 }
 
 .react-flow__minimap.visualization__minimap {
-    right: 50px;
+  right: 50px;
 }
 
 .visualization__controls {
-    left: unset !important;
-    right: 0;
+  left: unset !important;
+  right: 0;
 }

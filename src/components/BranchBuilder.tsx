@@ -7,11 +7,7 @@ interface IBranchBuilder {
 const BranchBuilder = ({ handleAddBranch }: IBranchBuilder) => {
   return (
     <>
-      <Button 
-        variant={'primary'}
-        onClick={handleAddBranch}
-        data-testid={'addBranch__button'}
-        >
+      <Button variant={'primary'} onClick={handleAddBranch} data-testid={'addBranch__button'}>
         Add a Branch
       </Button>
     </>

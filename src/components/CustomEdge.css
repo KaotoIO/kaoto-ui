@@ -1,40 +1,45 @@
-.deleteButton, .plusButton, .trashButton {
-    width: 20px;
-    height: 20px;
-    background: var(--pf-global--Color--light-200);
-    color: rgb(0, 0, 0);
-    border: 1px solid #fff;
-    cursor: pointer;
-    border-radius: 50%;
-    font-size: 12px;
-    line-height: 1;
-    padding: 1px;
+.deleteButton,
+.plusButton,
+.trashButton {
+  width: 20px;
+  height: 20px;
+  background: var(--pf-global--Color--light-200);
+  color: rgb(0, 0, 0);
+  border: 1px solid #fff;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+  padding: 1px;
 }
 
 .trashButton {
-    visibility: hidden;
+  visibility: hidden;
 }
 
-.deleteButton:hover, .trashButton:hover {
-    background: #B2A3FF;
-    box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
+.deleteButton:hover,
+.trashButton:hover {
+  background: #b2a3ff;
+  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
 }
 
 .plusButton:hover {
-    background:#F4C145;
-    box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
+  background: #f4c145;
+  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
 }
 
-.deleteButton-foreignObject span, .trashButton-foreignObject span, .plusButton-foreignObject span {
-    background: transparent;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 40px;
+.deleteButton-foreignObject span,
+.trashButton-foreignObject span,
+.plusButton-foreignObject span {
+  background: transparent;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40px;
 }
 
 .stepNode:hover .trashButton {
-    visibility: visible;
+  visibility: visible;
 }

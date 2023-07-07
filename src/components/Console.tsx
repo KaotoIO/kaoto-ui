@@ -17,7 +17,6 @@ import {
   PauseIcon,
   PlayIcon,
 } from '@patternfly/react-icons';
-
 import { LogViewer, LogViewerSearch } from '@patternfly/react-log-viewer';
 import { Fragment, useEffect, useRef, useState } from 'react';
 

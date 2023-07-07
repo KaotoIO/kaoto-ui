@@ -2,6 +2,7 @@ import { useCancelableEffect } from './hooks/useCancelableEffect';
 import { fetchIntegrationJson, fetchIntegrationSourceCode } from '@kaoto/api';
 import { useFlowsStore, useSettingsStore } from '@kaoto/store';
 import { IFlowsWrapper } from '@kaoto/types';
+import cloneDeep from 'lodash.clonedeep';
 import isEqual from 'lodash.isequal';
 import { basename } from 'path';
 import {
@@ -16,7 +17,6 @@ import {
   useState,
 } from 'react';
 import { shallow } from 'zustand/shallow';
-import cloneDeep from 'lodash.clonedeep';
 
 // Create context
 const KogitoEditorIntegrationContext = createContext({});
@@ -66,9 +66,7 @@ function KogitoEditorIntegrationProviderInternal(
   // The history is used to keep a log of every change to the content. Then, this log is used to undo and redo content.
   const { undo, redo, pastStates } = useFlowsStore.temporal.getState();
 
-  const previousFlowWrapper = useRef<IFlowsWrapper>(
-    cloneDeep({ flows, properties, metadata }),
-  );
+  const previousFlowWrapper = useRef<IFlowsWrapper>(cloneDeep({ flows, properties, metadata }));
   const previousContent = useRef<string>();
   const initialIntegrationJson = useRef<IFlowsWrapper>();
   const [lastAction, setLastAction] = useState<

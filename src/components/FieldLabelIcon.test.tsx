@@ -8,13 +8,13 @@ describe('FieldLabelIcon.tsx', () => {
     render(
       <AlertProvider>
         <FieldLabelIcon disabled={false} />
-      </AlertProvider>
+      </AlertProvider>,
     );
     const element = screen.getByTestId('field-label-icon');
     expect(element).toBeInTheDocument();
     fireEvent.click(element);
     await waitFor(() =>
-      expect(screen.getByTestId('property-description-popover')).toBeInTheDocument()
+      expect(screen.getByTestId('property-description-popover')).toBeInTheDocument(),
     );
   });
 });

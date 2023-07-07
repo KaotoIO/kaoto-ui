@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-
+import { ThemeSwitcher } from './ThemeSwitcher';
 import { LOCAL_STORAGE_EDITOR_THEME_KEY } from '@kaoto/constants';
 import { useSettingsStore } from '@kaoto/store';
 import {
@@ -11,9 +10,7 @@ import {
   Switch,
 } from '@patternfly/react-core';
 import { MoonIcon, SunIcon } from '@patternfly/react-icons';
-
-import { ThemeSwitcher } from './ThemeSwitcher';
-
+import { useEffect } from 'react';
 
 export interface IAppearanceModal {
   handleCloseModal: () => void;
@@ -33,7 +30,7 @@ const AppearanceModal = ({ handleCloseModal, isModalOpen }: IAppearanceModal) =>
   useEffect(() => {
     localStorage.setItem(
       LOCAL_STORAGE_EDITOR_THEME_KEY,
-      storedTheme ?? settings.editorIsLightMode.toString()
+      storedTheme ?? settings.editorIsLightMode.toString(),
     );
   }, [settings.editorIsLightMode, storedTheme]);
 

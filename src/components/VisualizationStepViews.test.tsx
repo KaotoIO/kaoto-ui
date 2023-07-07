@@ -1,23 +1,30 @@
-import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
-import { act, fireEvent, render } from '@testing-library/react';
 import { AlertProvider } from '../layout';
 import { debeziumMongoDBStep } from '../stubs';
+import { JsonSchemaConfigurator } from './JsonSchemaConfigurator';
 import { VisualizationStepViews } from './VisualizationStepViews';
+import { act, fireEvent, render } from '@testing-library/react';
 
 jest.mock('./JsonSchemaConfigurator', () => {
   const actual = jest.requireActual('./JsonSchemaConfigurator');
 
-  const JsonSchemaConfiguratorMock: typeof JsonSchemaConfigurator = (props) => (<>
-    <p>JsonSchemaConfigurator mock</p>
-    <button data-testid="triggerOnChangeModel" onClick={() => { props.onChangeModel(props.schema.properties, true); } }>
-      Click to trigger onChangeModel
-    </button>
-  </>);
+  const JsonSchemaConfiguratorMock: typeof JsonSchemaConfigurator = (props) => (
+    <>
+      <p>JsonSchemaConfigurator mock</p>
+      <button
+        data-testid="triggerOnChangeModel"
+        onClick={() => {
+          props.onChangeModel(props.schema.properties, true);
+        }}
+      >
+        Click to trigger onChangeModel
+      </button>
+    </>
+  );
 
   return {
     ...actual,
     JsonSchemaConfigurator: JsonSchemaConfiguratorMock,
-  }
+  };
 });
 
 describe('VisualizationStepViews', () => {
@@ -40,7 +47,7 @@ describe('VisualizationStepViews', () => {
           saveConfig={jest.fn()}
           step={step}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const element = wrapper.queryByTestId('detailsTab');
@@ -58,7 +65,7 @@ describe('VisualizationStepViews', () => {
           saveConfig={saveConfigSpy}
           step={step}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const changeModelTrigger = await wrapper.findByTestId('triggerOnChangeModel');
@@ -81,7 +88,7 @@ describe('VisualizationStepViews', () => {
           saveConfig={saveConfigSpy}
           step={step}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const changeModelTrigger = await wrapper.findByTestId('triggerOnChangeModel');
@@ -108,5 +115,4 @@ describe('VisualizationStepViews', () => {
       expect(saveConfigSpy).toHaveBeenCalledTimes(2);
     });
   });
-
 });

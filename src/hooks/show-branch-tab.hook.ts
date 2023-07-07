@@ -6,7 +6,7 @@ export const useShowBranchTab = (step: IStepProps, views: IViewProps[]) => {
   const supportsBranching = StepsService.supportsBranching(step);
 
   const [hasCustomStepExtension, setHasCustomStepExtension] = useState(
-    StepsService.hasCustomStepExtension(step, views)
+    StepsService.hasCustomStepExtension(step, views),
   );
 
   const [disableBranchesTab, setDisableBranchesTab] = useState(false);
@@ -31,8 +31,8 @@ export const useShowBranchTab = (step: IStepProps, views: IViewProps[]) => {
       ValidationService.getBranchTabTooltipMsg(
         supportsBranching,
         step.maxBranches,
-        step.branches?.length
-      )
+        step.branches?.length,
+      ),
     );
   }, [hasCustomStepExtension, step, supportsBranching]);
 

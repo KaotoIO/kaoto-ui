@@ -1,3 +1,5 @@
+import './CustomEdge.css';
+import { OrangeExclamationTriangleIcon } from './Icons';
 import { usePosition } from '@kaoto/hooks';
 import { StepsService } from '@kaoto/services';
 import { IVizStepNode } from '@kaoto/types';
@@ -5,8 +7,6 @@ import { Button, Popover, Tooltip } from '@patternfly/react-core';
 import { MinusIcon } from '@patternfly/react-icons';
 import { ReactNode, useMemo } from 'react';
 import { EdgeText, getBezierPath, Position } from 'reactflow';
-import './CustomEdge.css';
-import { OrangeExclamationTriangleIcon } from './Icons';
 
 const foreignObjectSize = 40;
 
@@ -59,7 +59,11 @@ const DeleteButtonEdge = ({
 
   const handleDeleteBranch = () => {
     // we will modify source node, and target node has the branchInfo we need
-    stepsService.deleteBranch(sourceNode?.data.step.integrationId, sourceNode?.data.step, targetNode?.data.branchInfo.branchUuid);
+    stepsService.deleteBranch(
+      sourceNode?.data.step.integrationId,
+      sourceNode?.data.step,
+      targetNode?.data.branchInfo.branchUuid,
+    );
   };
 
   return (
@@ -109,10 +113,7 @@ const DeleteButtonEdge = ({
             hideOnOutsideClick={true}
             position={'right-start'}
           >
-            <Tooltip
-              content={'Delete branch'}
-              position={tooltipPosition}
-            >
+            <Tooltip content={'Delete branch'} position={tooltipPosition}>
               <button className="deleteButton" data-testid={'stepNode__deleteBranch-btn'}>
                 <MinusIcon />
               </button>

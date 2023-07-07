@@ -17,12 +17,7 @@ import {
   useSettingsStore,
   useVisualizationStore,
 } from '@kaoto/store';
-import {
-  HandleDeleteStepFn,
-  IStepProps,
-  IVizStepNode,
-  IFlowsWrapper,
-} from '@kaoto/types';
+import { HandleDeleteStepFn, IStepProps, IVizStepNode, IFlowsWrapper } from '@kaoto/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Viewport } from 'reactflow';
 import { shallow } from 'zustand/shallow';

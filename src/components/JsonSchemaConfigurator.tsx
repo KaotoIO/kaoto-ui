@@ -1,8 +1,8 @@
+import { CustomJsonSchemaBridge } from './CustomJsonSchemaBridge';
+import './JsonSchemaConfigurator.css';
 import { AutoFields, AutoForm, ErrorsField } from '@kie-tools/uniforms-patternfly/dist/esm';
 import Ajv from 'ajv';
 import { useRef } from 'react';
-import { CustomJsonSchemaBridge } from './CustomJsonSchemaBridge';
-import './JsonSchemaConfigurator.css';
 
 const ajv = new Ajv({
   allErrors: true,
@@ -49,7 +49,7 @@ export const JsonSchemaConfigurator = ({
       data-testid={'json-schema-configurator'}
       placeholder={true}
     >
-      <AutoFields fields={parametersOrder}/>
+      <AutoFields fields={parametersOrder} />
       <ErrorsField />
       <br />
     </AutoForm>

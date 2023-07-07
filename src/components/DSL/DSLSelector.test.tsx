@@ -135,9 +135,7 @@ describe('DSLSelector.tsx', () => {
   });
 
   test('should have selected DSL if provided', async () => {
-    const wrapper = render(
-      <DSLSelector onSelect={onSelect} selectedDsl={capabilitiesStub[2]} />,
-    );
+    const wrapper = render(<DSLSelector onSelect={onSelect} selectedDsl={capabilitiesStub[2]} />);
     const toggle = await wrapper.findByTestId('dsl-list-dropdown');
 
     /** Open Select */

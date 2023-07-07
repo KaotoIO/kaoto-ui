@@ -13,7 +13,7 @@ describe('<MASLoading/>', () => {
   it('should render MASLoading with bullseyeProps props', () => {
     //arrange
     const { container } = render(
-      <MASLoading bullseyeProps={{ className: 'test-class', component: 'span' }} />
+      <MASLoading bullseyeProps={{ className: 'test-class', component: 'span' }} />,
     );
 
     //assert
@@ -27,7 +27,7 @@ describe('<MASLoading/>', () => {
       <MASLoading
         bullseyeProps={{ className: 'test-class', component: 'span' }}
         spinnerProps={{ className: 'spinner-class', size: 'sm' }}
-      />
+      />,
     );
 
     //assert

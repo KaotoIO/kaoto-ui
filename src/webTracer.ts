@@ -1,16 +1,14 @@
-import { WebTracerProvider, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-web';
-import { registerInstrumentations } from '@opentelemetry/instrumentation';
-import { Resource } from '@opentelemetry/resources';
-import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
-
+import { registerInstrumentations } from '@opentelemetry/instrumentation';
+import { DocumentLoadInstrumentation } from '@opentelemetry/instrumentation-document-load';
 import { FetchInstrumentation } from '@opentelemetry/instrumentation-fetch';
 import { LongTaskInstrumentation } from '@opentelemetry/instrumentation-long-task';
 import { UserInteractionInstrumentation } from '@opentelemetry/instrumentation-user-interaction';
-import { DocumentLoadInstrumentation } from '@opentelemetry/instrumentation-document-load';
+import { Resource } from '@opentelemetry/resources';
+import { WebTracerProvider, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-web';
+import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 
 const WebTracer = async () => {
-
   const provider = new WebTracerProvider({
     resource: new Resource({
       [SemanticResourceAttributes.SERVICE_NAME]: 'kaoto-ui',
@@ -26,7 +24,7 @@ const WebTracer = async () => {
       new FetchInstrumentation(),
       new DocumentLoadInstrumentation(),
       new LongTaskInstrumentation(),
-      new UserInteractionInstrumentation()
+      new UserInteractionInstrumentation(),
     ],
   });
 };

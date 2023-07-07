@@ -37,10 +37,20 @@ export const ConfirmationModal: FunctionComponent<IConfirmationModal> = ({
     <div className="confirmation-modal" data-testid="confirmation-modal">
       <Modal
         actions={[
-          <Button key="confirm" variant="primary" data-testid="confirmation-modal-confirm" onClick={onConfirm}>
+          <Button
+            key="confirm"
+            variant="primary"
+            data-testid="confirmation-modal-confirm"
+            onClick={onConfirm}
+          >
             Confirm
           </Button>,
-          <Button key="cancel" variant="link" data-testid="confirmation-modal-cancel" onClick={onCancel}>
+          <Button
+            key="cancel"
+            variant="link"
+            data-testid="confirmation-modal-cancel"
+            onClick={onCancel}
+          >
             Cancel
           </Button>,
         ]}

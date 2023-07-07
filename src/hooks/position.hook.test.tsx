@@ -1,15 +1,13 @@
+import { usePosition } from './position.hook';
+import { useVisualizationStore } from '@kaoto/store';
 import { TooltipPosition } from '@patternfly/react-core';
 import { render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { Position } from 'reactflow';
-import { useVisualizationStore } from '@kaoto/store';
-import { usePosition } from './position.hook';
 
 describe('usePosition', () => {
   it('initial state', async () => {
-    const wrapper = render(
-      <TestComponent />
-    );
+    const wrapper = render(<TestComponent />);
 
     const element = await wrapper.findByTestId('test-element');
 
@@ -22,9 +20,7 @@ describe('usePosition', () => {
   });
 
   it('should update position atrributes when layout="TB"', async () => {
-    const wrapper = render(
-      <TestComponent />
-    );
+    const wrapper = render(<TestComponent />);
 
     act(() => {
       useVisualizationStore.getState().setLayout('TB');

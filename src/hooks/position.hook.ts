@@ -8,13 +8,23 @@ export const usePosition = () => {
 
   const [layoutCssClass, setLayoutCssClass] = useState(layout === 'LR' ? 'horizontal' : 'vertical');
 
-  const [plusIconPosition, setPlusIconPosition] = useState(layout === 'LR' ? Position.Top : Position.Right);
-  const [minusIconPosition, setMinusIconPosition] = useState(layout === 'LR' ? Position.Top : Position.Left);
+  const [plusIconPosition, setPlusIconPosition] = useState(
+    layout === 'LR' ? Position.Top : Position.Right,
+  );
+  const [minusIconPosition, setMinusIconPosition] = useState(
+    layout === 'LR' ? Position.Top : Position.Left,
+  );
 
-  const [leftHandlePosition, setLeftHandlePosition] = useState(layout === 'LR' ? Position.Left : Position.Top);
-  const [rightHandlePosition, setRightHandlePosition] = useState(layout === 'LR' ? Position.Right : Position.Bottom);
+  const [leftHandlePosition, setLeftHandlePosition] = useState(
+    layout === 'LR' ? Position.Left : Position.Top,
+  );
+  const [rightHandlePosition, setRightHandlePosition] = useState(
+    layout === 'LR' ? Position.Right : Position.Bottom,
+  );
 
-  const [tooltipPosition, setTooltipPosition] = useState(layout === 'LR' ? TooltipPosition.top : TooltipPosition.right);
+  const [tooltipPosition, setTooltipPosition] = useState(
+    layout === 'LR' ? TooltipPosition.top : TooltipPosition.right,
+  );
 
   useEffect(() => {
     setLayoutCssClass(layout === 'LR' ? 'horizontal' : 'vertical');
@@ -36,4 +46,4 @@ export const usePosition = () => {
     rightHandlePosition,
     tooltipPosition,
   };
-}
+};

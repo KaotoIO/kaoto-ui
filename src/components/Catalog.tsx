@@ -106,7 +106,8 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
             <>
               <ToolbarItem style={{ padding: '0', marginRight: '0' }}>
                 <InputGroup>
-                  <SearchInput style={{ width: '250px' }}
+                  <SearchInput
+                    style={{ width: '250px' }}
                     name={'stepSearch'}
                     id={'stepSearch'}
                     type={'search'}
