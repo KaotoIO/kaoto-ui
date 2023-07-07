@@ -10,6 +10,7 @@ import {
   useCallback,
   useState,
 } from 'react';
+import { useFlowsVisibility } from '../../hooks/flows-visibility.hook';
 import { shallow } from 'zustand/shallow';
 
 interface IDSLSelector extends PropsWithChildren {
@@ -23,6 +24,7 @@ export const DSLSelector: FunctionComponent<IDSLSelector> = (props) => {
     (state) => ({ capabilities: state.settings.capabilities, currentDsl: state.settings.dsl }),
     shallow,
   );
+  const { totalFlowsCount } = useFlowsVisibility();
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<IDsl | undefined>(
     props.isStatic ? undefined : props.selectedDsl ?? capabilities[0],
@@ -85,7 +87,7 @@ export const DSLSelector: FunctionComponent<IDSLSelector> = (props) => {
               data-testid="dsl-list-btn"
               aria-label="DSL list"
               onClick={onNewSameTypeRoute}
-              isDisabled={!currentDsl.supportsMultipleFlows}
+              isDisabled={!currentDsl.supportsMultipleFlows && totalFlowsCount > 0}
             >
               {props.children}
             </MenuToggleAction>
@@ -110,7 +112,9 @@ export const DSLSelector: FunctionComponent<IDSLSelector> = (props) => {
       <SelectList>
         {capabilities.map((capability) => {
           const isOptionDisabled =
-            capability.name === currentDsl.name && !capability.supportsMultipleFlows;
+            capability.name === currentDsl.name &&
+            !capability.supportsMultipleFlows &&
+            totalFlowsCount > 0;
 
           return (
             <SelectOption
