@@ -117,7 +117,7 @@
     "cpr": "^3.0.1",
     "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^5.0.1",
-    "cypress": "12.16.0",
+    "cypress": "12.17.0",
     "cypress-file-upload": "^5.0.8",
     "dotenv-webpack": "8.0.1",
     "eslint": "8.44.0",
