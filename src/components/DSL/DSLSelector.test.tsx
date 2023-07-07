@@ -1,6 +1,7 @@
+import { ISettings } from '../../types';
 import { capabilitiesStub } from '../../stubs';
 import { DSLSelector } from './DSLSelector';
-import { useSettingsStore } from '@kaoto/store';
+import { useSettingsStore, useVisualizationStore } from '@kaoto/store';
 import { act, fireEvent, render, waitFor } from '@testing-library/react';
 
 describe('DSLSelector.tsx', () => {
@@ -24,6 +25,77 @@ describe('DSLSelector.tsx', () => {
 
     const toggle = wrapper.queryByTestId('dsl-list-dropdown');
     expect(toggle).toBeInTheDocument();
+  });
+
+  test('should call onSelect when clicking on the MenuToggleAction', async () => {
+    const wrapper = render(
+      <DSLSelector onSelect={onSelect} isStatic>
+        <span>This is a children</span>
+      </DSLSelector>,
+    );
+    const toggle = await wrapper.findByTestId('dsl-list-btn');
+
+    /** Click on button */
+    act(() => {
+      fireEvent.click(toggle);
+    });
+
+    waitFor(() => {
+      expect(onSelect).toHaveBeenCalled();
+    });
+  });
+
+  test('should call onSelect many times when clicking on the MenuToggleAction if the current DSL supports multiple flows', async () => {
+    useSettingsStore.setState({
+      settings: {
+        dsl: capabilitiesStub[1],
+        capabilities: capabilitiesStub,
+      } as ISettings,
+    });
+    useVisualizationStore.setState({
+      visibleFlows: { 'route-1234': true },
+    });
+
+    const wrapper = render(
+      <DSLSelector onSelect={onSelect} isStatic>
+        <span>This is a children</span>
+      </DSLSelector>,
+    );
+    const toggle = await wrapper.findByTestId('dsl-list-btn');
+
+    /** Click on button */
+    act(() => {
+      fireEvent.click(toggle);
+      fireEvent.click(toggle);
+      fireEvent.click(toggle);
+    });
+
+    waitFor(() => {
+      expect(onSelect).toHaveBeenCalledTimes(3);
+    });
+  });
+
+  test('should disable the MenuToggleAction if the current DSL does not support multiple flows and there is an existing flow', async () => {
+    useSettingsStore.setState({
+      settings: {
+        dsl: capabilitiesStub[2],
+        capabilities: capabilitiesStub,
+      } as ISettings,
+    });
+    useVisualizationStore.setState({
+      visibleFlows: { 'route-1234': true },
+    });
+
+    const wrapper = render(
+      <DSLSelector onSelect={onSelect} isStatic>
+        <span>This is a children</span>
+      </DSLSelector>,
+    );
+    const toggle = await wrapper.findByTestId('dsl-list-btn');
+
+    waitFor(() => {
+      expect(toggle).toBeDisabled();
+    });
   });
 
   test('should toggle list of DSLs', async () => {
@@ -60,6 +132,10 @@ describe('DSLSelector.tsx', () => {
   });
 
   test('should disable a SelectOption if is already selected and does not support multiple flows', async () => {
+    useVisualizationStore.setState({
+      visibleFlows: { 'route-1234': true },
+    });
+
     useSettingsStore.setState({
       settings: {
         ...useSettingsStore.getState().settings,
@@ -81,6 +157,34 @@ describe('DSLSelector.tsx', () => {
 
     const option = await wrapper.findByTestId('dsl-Kamelet');
     expect(option).toHaveClass('pf-m-disabled');
+  });
+
+  test('should not disable a SelectOption if there are no exsting flows', async () => {
+    useVisualizationStore.setState({
+      visibleFlows: {},
+    });
+
+    useSettingsStore.setState({
+      settings: {
+        ...useSettingsStore.getState().settings,
+        capabilities: capabilitiesStub,
+        dsl: capabilitiesStub[2],
+      },
+    });
+
+    const wrapper = render(<DSLSelector onSelect={onSelect} />);
+    const toggle = await wrapper.findByTestId('dsl-list-dropdown');
+
+    /** Open Select */
+    act(() => {
+      fireEvent.click(toggle);
+    });
+
+    const element = await wrapper.findByText('Kamelet');
+    expect(element).toBeInTheDocument();
+
+    const option = await wrapper.findByTestId('dsl-Kamelet');
+    expect(option).not.toHaveClass('pf-m-disabled');
   });
 
   test('should show selected value', async () => {
