@@ -29,35 +29,35 @@ describe('visualizationStore', () => {
     act(() => {
       result.current.setNodes([
         {
-          "data": {
-            "label": "ADD A STEP",
-            "step": {
-              "name": "",
-              "type": "START",
-              "UUID": "placeholder-4271109058",
-              "integrationId": "route-2747"
+          data: {
+            label: 'ADD A STEP',
+            step: {
+              name: '',
+              type: 'START',
+              UUID: 'placeholder-4271109058',
+              integrationId: 'route-2747',
             },
-            "isPlaceholder": true
+            isPlaceholder: true,
           },
-          "id": "node_0--266733212",
-          "draggable": false,
-          "position": {
-            "x": 0,
-            "y": 0
+          id: 'node_0--266733212',
+          draggable: false,
+          position: {
+            x: 0,
+            y: 0,
           },
-          "type": "step",
-          "width": 80,
-          "height": 80,
-          "targetPosition": Position.Left,
-          "sourcePosition": Position.Right,
+          type: 'step',
+          width: 80,
+          height: 80,
+          targetPosition: Position.Left,
+          sourcePosition: Position.Right,
         } as IVizStepNode,
       ]);
 
       result.current.onNodesChange([
         {
-          "id": "node_0--266733212",
-          "type": "select",
-          "selected": true
+          id: 'node_0--266733212',
+          type: 'select',
+          selected: true,
         },
       ]);
     });

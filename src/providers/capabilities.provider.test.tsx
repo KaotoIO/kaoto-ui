@@ -1,8 +1,8 @@
+import { capabilitiesStub } from '../stubs';
 import { CapabilitiesProvider } from './capabilities.provider';
 import { fetchBackendVersion, fetchCapabilities } from '@kaoto/api';
 import { initDsl, useSettingsStore } from '@kaoto/store';
 import { act, render } from '@testing-library/react';
-import { capabilitiesStub } from '../stubs';
 
 jest.mock('@kaoto/api', () => {
   const actual = jest.requireActual('@kaoto/api');

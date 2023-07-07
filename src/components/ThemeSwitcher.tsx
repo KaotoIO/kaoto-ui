@@ -1,8 +1,8 @@
 import './ThemeSwitcher.css';
 import { LOCAL_STORAGE_UI_THEME_KEY } from '@kaoto/constants';
+import { useSettingsStore } from '@kaoto/store';
 import { PageHeaderTools, Switch } from '@patternfly/react-core';
 import { MoonIcon, SunIcon } from '@patternfly/react-icons';
-import { useSettingsStore } from '@kaoto/store';
 
 export const ThemeSwitcher = () => {
   const { settings, setSettings } = useSettingsStore();

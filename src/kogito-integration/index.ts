@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-export * from "./KaotoEditor";
-export * from "./KaotoEditorFactory";
-export * from "./KaotoEditorView";
-export * from "./KogitoEditorIntegrationProvider";
-export * from "./KaotoEditorEnvelopeApp";
+export * from './KaotoEditor';
+export * from './KaotoEditorFactory';
+export * from './KaotoEditorView';
+export * from './KogitoEditorIntegrationProvider';
+export * from './KaotoEditorEnvelopeApp';

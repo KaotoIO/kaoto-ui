@@ -11,13 +11,14 @@ describe('VisualizationEmptyState.tsx', () => {
   };
 
   describe('when there are no routes', () => {
-    const flowsInfoNoRoutes: IVisibleFlowsInformation = { ...visibleFlowsInformation, totalFlowsCount: 0 };
+    const flowsInfoNoRoutes: IVisibleFlowsInformation = {
+      ...visibleFlowsInformation,
+      totalFlowsCount: 0,
+    };
 
     it('should render the CubesIcon whenever there are no routes', () => {
       const wrapper = render(
-        <VisualizationEmptyState
-          visibleFlowsInformation={flowsInfoNoRoutes}
-        />,
+        <VisualizationEmptyState visibleFlowsInformation={flowsInfoNoRoutes} />,
       );
 
       const icon = wrapper.getByTestId('cubes-icon');
@@ -27,13 +28,13 @@ describe('VisualizationEmptyState.tsx', () => {
 
     it('should state that there are no routes', () => {
       const wrapper = render(
-        <VisualizationEmptyState
-          visibleFlowsInformation={flowsInfoNoRoutes}
-        />,
+        <VisualizationEmptyState visibleFlowsInformation={flowsInfoNoRoutes} />,
       );
 
       const noRoutesTitle = wrapper.getByText('There are no routes defined');
-      const noRoutesSuggestion = wrapper.getByText('You can create a new route using the New route button');
+      const noRoutesSuggestion = wrapper.getByText(
+        'You can create a new route using the New route button',
+      );
 
       expect(noRoutesTitle).toBeInTheDocument();
       expect(noRoutesSuggestion).toBeInTheDocument();
@@ -41,13 +42,14 @@ describe('VisualizationEmptyState.tsx', () => {
   });
 
   describe('when there are routes but they are not visible', () => {
-    const flowsInfoNoVisibleRoutes: IVisibleFlowsInformation = { ...visibleFlowsInformation, visibleFlowsCount: 0 };
+    const flowsInfoNoVisibleRoutes: IVisibleFlowsInformation = {
+      ...visibleFlowsInformation,
+      visibleFlowsCount: 0,
+    };
 
     it('should render the EyeSlashIcon whenever there are no routes', () => {
       const wrapper = render(
-        <VisualizationEmptyState
-          visibleFlowsInformation={flowsInfoNoVisibleRoutes}
-        />,
+        <VisualizationEmptyState visibleFlowsInformation={flowsInfoNoVisibleRoutes} />,
       );
 
       const icon = wrapper.getByTestId('eye-slash-icon');
@@ -57,13 +59,13 @@ describe('VisualizationEmptyState.tsx', () => {
 
     it('should state that there are no visible routes', () => {
       const wrapper = render(
-        <VisualizationEmptyState
-          visibleFlowsInformation={flowsInfoNoVisibleRoutes}
-        />,
+        <VisualizationEmptyState visibleFlowsInformation={flowsInfoNoVisibleRoutes} />,
       );
 
       const noRoutesTitle = wrapper.getByText('There are no visible routes');
-      const noRoutesSuggestion = wrapper.getByText('You can toggle the visibility of a route by using Routes list');
+      const noRoutesSuggestion = wrapper.getByText(
+        'You can toggle the visibility of a route by using Routes list',
+      );
 
       expect(noRoutesTitle).toBeInTheDocument();
       expect(noRoutesSuggestion).toBeInTheDocument();

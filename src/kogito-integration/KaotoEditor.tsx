@@ -1,3 +1,4 @@
+import { CapabilitiesProvider } from '../providers';
 import './KaotoEditor.css';
 import {
   ContentOperation,
@@ -11,7 +12,6 @@ import { Notification } from '@kie-tools-core/notifications/dist/api';
 import { WorkspaceEdit } from '@kie-tools-core/workspace/dist/api';
 import { Suspense, forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
-import { CapabilitiesProvider } from '../providers';
 
 interface Props {
   /**

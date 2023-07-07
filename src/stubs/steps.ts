@@ -17,7 +17,7 @@ export const kameletSourceStepStub: IStepProps = {
   maxBranches: 1,
   UUID: 'timer-source-0',
   integrationId: 'Camel Route-1',
-}
+};
 
 export const stepsStub = {
   nodes: [
@@ -28,13 +28,13 @@ export const stepsStub = {
         label: 'timer-source',
         step: kameletSourceStepStub,
         isPlaceholder: false,
-        isLastStep: true
+        isLastStep: true,
       },
       draggable: false,
       id: 'node_0-timer-source-0-4076175505',
       position: {
         x: -28,
-        y: -28
+        y: -28,
       },
       type: 'step',
       width: 80,
@@ -42,18 +42,18 @@ export const stepsStub = {
       isLastStep: true,
       targetPosition: Position.Left,
       sourcePosition: Position.Right,
-      selected: true
-    }
+      selected: true,
+    },
   ],
   edges: [],
-  layout: MarkerType.Arrow
-}
+  layout: MarkerType.Arrow,
+};
 
 export const integrationJSONStub = {
   dsl: 'KameletBinding',
   metadata: {
     name: 'integration',
-    namespace: 'default'
+    namespace: 'default',
   },
   steps: [
     {
@@ -72,10 +72,10 @@ export const integrationJSONStub = {
       maxBranches: 0,
       UUID: 'timer-source-0',
       integrationId: 'Camel Route-1',
-    }
+    },
   ],
-  params: []
-}
+  params: [],
+};
 
 export const stepsCatalog: IStepProps[] = [
   {
@@ -85,7 +85,8 @@ export const stepsCatalog: IStepProps[] = [
     kind: 'Camel-Connector',
     icon: 'data:image/svg+xml;base64,',
     title: 'ActiveMQ',
-    description: 'Send messages to (or consume from) Apache ActiveMQ. This component extends the Camel JMS component.',
+    description:
+      'Send messages to (or consume from) Apache ActiveMQ. This component extends the Camel JMS component.',
     group: 'Camel-Component',
     minBranches: 0,
     maxBranches: 0,
@@ -99,7 +100,8 @@ export const stepsCatalog: IStepProps[] = [
     kind: 'Camel-Connector',
     icon: 'data:image/svg+xml;base64,',
     title: 'ActiveMQ',
-    description: 'Send messages to (or consume from) Apache ActiveMQ. This component extends the Camel JMS component.',
+    description:
+      'Send messages to (or consume from) Apache ActiveMQ. This component extends the Camel JMS component.',
     group: 'Camel-Component',
     minBranches: 0,
     maxBranches: 0,
@@ -113,7 +115,8 @@ export const stepsCatalog: IStepProps[] = [
     kind: 'Camel-Connector',
     icon: 'data:image/svg+xml;base64,',
     title: 'ActiveMQ',
-    description: 'Send messages to (or consume from) Apache ActiveMQ. This component extends the Camel JMS component.',
+    description:
+      'Send messages to (or consume from) Apache ActiveMQ. This component extends the Camel JMS component.',
     group: 'Camel-Component',
     minBranches: 0,
     maxBranches: 0,

@@ -1,5 +1,5 @@
-import { Edge, Node } from 'reactflow';
 import { IDsl } from './dsl.model';
+import { Edge, Node } from 'reactflow';
 
 declare global {
   interface Window {
@@ -90,7 +90,7 @@ export interface IKaotoApi {
   startDeployment: (
     integration: any,
     deploymentName: string,
-    namespace?: string
+    namespace?: string,
   ) => Promise<string | unknown>;
   step: IStepProps;
   stepParams: { [p: string]: any };

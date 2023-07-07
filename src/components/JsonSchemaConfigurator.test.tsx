@@ -39,7 +39,7 @@ describe('JsonSchemaConfigurator.tsx', () => {
         configuration={stepPropertyModel}
         onChangeModel={jest.fn()}
         parametersOrder={[]}
-      />
+      />,
     );
     const element = wrapper.getByTestId('json-schema-configurator');
     expect(element).toBeInTheDocument();

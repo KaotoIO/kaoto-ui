@@ -66,7 +66,14 @@ export const KaotoDrawer = ({
   );
 
   return (
-    <Drawer id={id} isExpanded={isExpanded} onExpand={onExpand} position={position} style={style} {...rest}>
+    <Drawer
+      id={id}
+      isExpanded={isExpanded}
+      onExpand={onExpand}
+      position={position}
+      style={style}
+      {...rest}
+    >
       <DrawerContent panelContent={panelContentWrapper} className={'panelCustom'}>
         <DrawerContentBody>{children}</DrawerContentBody>
       </DrawerContent>

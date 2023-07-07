@@ -16,7 +16,7 @@ describe('NewFlow.tsx', () => {
   });
 
   test('should add a new flow with the same type upon clicking on the action button', async () => {
-    const wrapper = render(<NewFlow />)
+    const wrapper = render(<NewFlow />);
     const trigger = await wrapper.findByTestId('dsl-list-btn');
 
     /** Open Select */

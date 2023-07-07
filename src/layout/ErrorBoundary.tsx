@@ -5,21 +5,21 @@ type Props = PropsWithChildren<{
 }>;
 
 type State = {
-  error: boolean
-}
+  error: boolean;
+};
 
 export class ErrorBoundary extends Component<Props, State> {
-  constructor (props: Props) {
+  constructor(props: Props) {
     super(props);
 
     this.state = { error: false };
   }
 
-  static getDerivedStateFromError () {
+  static getDerivedStateFromError() {
     return { error: true };
   }
 
-  render () {
+  render() {
     if (this.state.error) return this.props.fallback;
 
     return this.props.children;

@@ -1,7 +1,7 @@
 export async function dynamicImport(
   scope: string | undefined,
   module: string | undefined,
-  url: string | undefined
+  url: string | undefined,
 ) {
   // @ts-ignore
   await __webpack_init_sharing__('default');

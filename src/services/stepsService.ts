@@ -36,7 +36,6 @@ import cloneDeep from 'lodash.clonedeep';
  * @see IStepPropsBranch
  */
 export class StepsService {
-
   addBranch(step: IStepProps, branch: IStepPropsBranch) {
     const integrationId = step.integrationId;
     const currentStepNested = this.getStepNested(step.UUID);
@@ -49,13 +48,16 @@ export class StepsService {
     }
 
     if (currentStepNested) {
-      useFlowsStore
-        .getState()
-        .insertStep(integrationId, newStep, { mode: 'replace', path: currentStepNested.pathToStep });
+      useFlowsStore.getState().insertStep(integrationId, newStep, {
+        mode: 'replace',
+        path: currentStepNested.pathToStep,
+      });
     } else {
       const integration = this.getIntegration(integrationId);
       const currentIdx = this.findStepIdxWithUUID(step.UUID, integration?.steps ?? []);
-      useFlowsStore.getState().insertStep(integrationId, newStep, { mode: 'replace', index: currentIdx });
+      useFlowsStore
+        .getState()
+        .insertStep(integrationId, newStep, { mode: 'replace', index: currentIdx });
     }
   }
 
@@ -75,9 +77,10 @@ export class StepsService {
         branches: step.branches?.filter((b) => b.branchUuid !== branchUuid),
       };
 
-      useFlowsStore
-        .getState()
-        .insertStep(integrationId, newParentStep, { mode: 'replace', path: currentStepNested.pathToStep });
+      useFlowsStore.getState().insertStep(integrationId, newParentStep, {
+        mode: 'replace',
+        path: currentStepNested.pathToStep,
+      });
     } else {
       const newStep = {
         ...step,
@@ -86,7 +89,9 @@ export class StepsService {
 
       const integration = this.getIntegration(integrationId);
       const oldStepIdx = this.findStepIdxWithUUID(newStep.UUID, integration?.steps ?? []);
-      useFlowsStore.getState().insertStep(integrationId, newStep, { mode: 'replace', index: oldStepIdx });
+      useFlowsStore
+        .getState()
+        .insertStep(integrationId, newStep, { mode: 'replace', index: oldStepIdx });
     }
   }
 
@@ -99,7 +104,7 @@ export class StepsService {
   createKaotoApi(
     step: IStepProps,
     updateStepParams: (values: any) => void,
-    alertKaoto: (title: string, body?: string, variant?: string) => void
+    alertKaoto: (title: string, body?: string, variant?: string) => void,
   ): IKaotoApi {
     let stepParams: Record<string, unknown> = {};
     step.parameters?.forEach((parameter) => {
@@ -111,7 +116,7 @@ export class StepsService {
       fetchStepDetails,
       getDeployment: async (
         deploymentName: string,
-        namespace?: string
+        namespace?: string,
       ): Promise<string | unknown> => {
         return fetchDeployment(deploymentName, namespace).then((deployment: string | unknown) => {
           return deployment;
@@ -124,7 +129,7 @@ export class StepsService {
       startDeployment: async (
         integrationSourceCode: string,
         deploymentName: string,
-        namespace?: string
+        namespace?: string,
       ): Promise<string> => {
         return startDeployment(integrationSourceCode, deploymentName, namespace).then((res) => {
           return res;
@@ -157,12 +162,13 @@ export class StepsService {
       if (parentStep === undefined || branch === undefined) return;
 
       parentStep.branches[currentStepNested.branchIndex].steps = branch.steps.filter(
-        (branchStep) => branchStep.UUID !== UUID
+        (branchStep) => branchStep.UUID !== UUID,
       );
 
-      useFlowsStore
-        .getState()
-        .insertStep(integrationId, parentStep, { mode: 'replace', path: currentStepNested.pathToParentStep });
+      useFlowsStore.getState().insertStep(integrationId, parentStep, {
+        mode: 'replace',
+        path: currentStepNested.pathToParentStep,
+      });
     } else {
       const integration = this.getIntegration(integrationId);
       const stepsIndex = this.findStepIdxWithUUID(UUID, integration?.steps ?? []);
@@ -230,7 +236,9 @@ export class StepsService {
    * @param stepUuid
    */
   getStepNested(stepUuid: string) {
-    return useNestedStepsStore.getState().nestedSteps.find((nestedStep) => nestedStep.stepUuid === stepUuid);
+    return useNestedStepsStore
+      .getState()
+      .nestedSteps.find((nestedStep) => nestedStep.stepUuid === stepUuid);
   }
 
   getPreviousStep(step: IStepProps) {
@@ -263,9 +271,10 @@ export class StepsService {
         const newBranch = newParentStep.branches[currentStepNested.branchIndex];
         newParentStep.branches[currentStepNested.branchIndex].steps = [...newBranch.steps, newStep];
 
-        useFlowsStore
-          .getState()
-          .insertStep(integrationId, newParentStep, { mode: 'replace', path: currentStepNested.pathToParentStep });
+        useFlowsStore.getState().insertStep(integrationId, newParentStep, {
+          mode: 'replace',
+          path: currentStepNested.pathToParentStep,
+        });
       } else {
         useFlowsStore.getState().insertStep(integrationId, newStep, { mode: 'append' });
       }
@@ -282,7 +291,7 @@ export class StepsService {
   async handleDropOnExistingStep(
     node: IVizStepNodeData,
     currentStep: IStepProps,
-    proposedStep: IStepProps
+    proposedStep: IStepProps,
   ) {
     // fetch parameters and other details
     return fetchStepDetails(proposedStep.id).then((newStep) => {
@@ -294,14 +303,17 @@ export class StepsService {
         if (node.branchInfo) {
           const currentStepNested = this.getStepNested(currentStep.UUID);
           if (currentStepNested) {
-            useFlowsStore
-              .getState()
-              .insertStep(integrationId, newStep, { mode: 'replace', path: currentStepNested.pathToStep });
+            useFlowsStore.getState().insertStep(integrationId, newStep, {
+              mode: 'replace',
+              path: currentStepNested.pathToStep,
+            });
           }
         } else {
           const integration = this.getIntegration(integrationId);
           const currentIdx = this.findStepIdxWithUUID(currentStep.UUID, integration?.steps ?? []);
-          useFlowsStore.getState().insertStep(integrationId, newStep, { mode: 'replace', index: currentIdx });
+          useFlowsStore
+            .getState()
+            .insertStep(integrationId, newStep, { mode: 'replace', index: currentIdx });
         }
       }
       return validation;
@@ -331,16 +343,22 @@ export class StepsService {
           parentStep.branches[currentStepNested.branchIndex].steps = StepsService.insertStep(
             newBranch.steps,
             targetIdx,
-            newStep
+            newStep,
           );
 
-          useFlowsStore
-            .getState()
-            .insertStep(integrationId, parentStep, { mode: 'replace', path: currentStepNested.pathToParentStep });
+          useFlowsStore.getState().insertStep(integrationId, parentStep, {
+            mode: 'replace',
+            path: currentStepNested.pathToParentStep,
+          });
         }
       } else {
-        const currentIdx = this.findStepIdxWithUUID(targetNode?.data.step.UUID, integration?.steps ?? []);
-        useFlowsStore.getState().insertStep(integrationId, newStep, { mode: 'insert', index: currentIdx });
+        const currentIdx = this.findStepIdxWithUUID(
+          targetNode?.data.step.UUID,
+          integration?.steps ?? [],
+        );
+        useFlowsStore
+          .getState()
+          .insertStep(integrationId, newStep, { mode: 'insert', index: currentIdx });
       }
     });
   }
@@ -354,7 +372,11 @@ export class StepsService {
    * @param currentStep
    * @param selectedStep
    */
-  async handlePrependStep(integrationId: string, currentStep: IStepProps, selectedStep: IStepProps): Promise<void> {
+  async handlePrependStep(
+    integrationId: string,
+    currentStep: IStepProps,
+    selectedStep: IStepProps,
+  ): Promise<void> {
     // fetch parameters and other details
     fetchStepDetails(selectedStep.id).then((newStep) => {
       newStep.UUID = selectedStep.UUID;
@@ -369,16 +391,19 @@ export class StepsService {
         parentStep.branches[currentStepNested.branchIndex].steps = StepsService.insertStep(
           [...branch.steps],
           currentStepIdx,
-          newStep
+          newStep,
         );
 
-        useFlowsStore
-          .getState()
-          .insertStep(integrationId, parentStep, { mode: 'replace', path: currentStepNested.pathToParentStep });
+        useFlowsStore.getState().insertStep(integrationId, parentStep, {
+          mode: 'replace',
+          path: currentStepNested.pathToParentStep,
+        });
       } else {
         const integration = this.getIntegration(integrationId);
         const currentIdx = this.findStepIdxWithUUID(currentStep.UUID, integration?.steps ?? []);
-        useFlowsStore.getState().insertStep(integrationId, newStep, { mode: 'insert', index: currentIdx });
+        useFlowsStore
+          .getState()
+          .insertStep(integrationId, newStep, { mode: 'insert', index: currentIdx });
       }
     });
   }
@@ -426,7 +451,10 @@ export class StepsService {
    * @param node
    * @param proposedStep
    */
-  async replacePlaceholderStep(node: IVizStepNodeData, proposedStep: IStepProps): Promise<{ isValid: boolean; message?: string }> {
+  async replacePlaceholderStep(
+    node: IVizStepNodeData,
+    proposedStep: IStepProps,
+  ): Promise<{ isValid: boolean; message?: string }> {
     // fetch parameters and other details
     return fetchStepDetails(proposedStep.id).then((step) => {
       step.UUID = proposedStep.UUID;
@@ -439,14 +467,18 @@ export class StepsService {
             const pathToBranch = findPath(
               this.getIntegration(node.step.integrationId)?.steps ?? [],
               node.branchInfo.branchUuid!,
-              'branchUuid'
+              'branchUuid',
             );
             const newPath = pathToBranch?.concat('steps', '0');
 
-            useFlowsStore.getState().insertStep(node.step.integrationId, step, { mode: 'replace', path: newPath });
+            useFlowsStore
+              .getState()
+              .insertStep(node.step.integrationId, step, { mode: 'replace', path: newPath });
           }
         } else {
-          useFlowsStore.getState().insertStep(node.step.integrationId, step, { mode: 'insert', index: 0 });
+          useFlowsStore
+            .getState()
+            .insertStep(node.step.integrationId, step, { mode: 'insert', index: 0 });
         }
       }
 
@@ -495,14 +527,17 @@ export class StepsService {
         .getState()
         .nestedSteps.find((ns) => ns.stepUuid === newStep.UUID);
       if (currentStepNested) {
-        useFlowsStore
-          .getState()
-          .insertStep(integrationId, newStep, { mode: 'replace', path: currentStepNested.pathToStep });
+        useFlowsStore.getState().insertStep(integrationId, newStep, {
+          mode: 'replace',
+          path: currentStepNested.pathToStep,
+        });
       }
     } else {
       const integration = this.getIntegration(integrationId);
       const oldStepIdx = this.findStepIdxWithUUID(step.UUID, integration?.steps ?? []);
-      useFlowsStore.getState().insertStep(integrationId, newStep, { mode: 'replace', index: oldStepIdx });
+      useFlowsStore
+        .getState()
+        .insertStep(integrationId, newStep, { mode: 'replace', index: oldStepIdx });
     }
   }
 
@@ -511,11 +546,9 @@ export class StepsService {
    */
   async updateViews() {
     const steps = useFlowsStore.getState().flows.reduce((acc, flow) => {
-        acc.push(...flow.steps);
-        return acc;
-      },
-      [] as IStepProps[],
-    );
+      acc.push(...flow.steps);
+      return acc;
+    }, [] as IStepProps[]);
 
     return fetchViews(steps).then((views: IViewProps[]) => {
       if (Array.isArray(views)) {
@@ -543,7 +576,7 @@ export class StepsService {
         uniforms?: { placeholder: any };
         label?: string;
       };
-    }
+    },
   ) {
     const propKey = parameter.id;
     const { type, defaultValue, description, title } = parameter;
@@ -552,7 +585,7 @@ export class StepsService {
         type,
         defaultValue,
         description,
-        ...(type === "number" || type === "integer") && {step : 1},
+        ...((type === 'number' || type === 'integer') && { step: 1 }),
         uniforms: { placeholder: defaultValue },
         label: title,
       };
@@ -560,7 +593,10 @@ export class StepsService {
     }
   }
 
-  private getParentStep(integrationId: string, nestedStep: INestedStep): {parentStep: Required<IStepProps> | undefined, branch: IStepPropsBranch | undefined} {
+  private getParentStep(
+    integrationId: string,
+    nestedStep: INestedStep,
+  ): { parentStep: Required<IStepProps> | undefined; branch: IStepPropsBranch | undefined } {
     const stepsCopy = this.getIntegration(integrationId)?.steps ?? [];
 
     const parentStep = getDeepValue<Required<IStepProps>>(stepsCopy, nestedStep.pathToParentStep);

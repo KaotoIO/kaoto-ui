@@ -2,14 +2,15 @@
 
 html,
 body,
-#root, #app {
+#root,
+#app {
   height: calc(100vh);
 }
 
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-  'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -26,7 +27,9 @@ code {
   clears the extra 'X' for Google Chrome, Microsoft Edge (Chromium)
   from the Step Catalogs's Search box
 */
-#stepSearch input[type="search"]::-webkit-search-decoration,
-#stepSearch input[type="search"]::-webkit-search-cancel-button,
-#stepSearch input[type="search"]::-webkit-search-results-button,
-#stepSearch input[type="search"]::-webkit-search-results-decoration { display: none; }
+#stepSearch input[type='search']::-webkit-search-decoration,
+#stepSearch input[type='search']::-webkit-search-cancel-button,
+#stepSearch input[type='search']::-webkit-search-results-button,
+#stepSearch input[type='search']::-webkit-search-results-decoration {
+  display: none;
+}

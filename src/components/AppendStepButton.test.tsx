@@ -1,5 +1,5 @@
-import { kameletSourceStepStub } from '../stubs/steps';
 import { AlertProvider } from '../layout';
+import { kameletSourceStepStub } from '../stubs/steps';
 import { AppendStepButton } from './AppendStepButton';
 import { StepsService } from '@kaoto/services';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -30,7 +30,7 @@ describe('AppendStepButton.tsx', () => {
           showStepsTab={true}
           step={kameletSourceStepStub}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const element = screen.queryByTestId('stepNode__appendStep-btn');
@@ -47,7 +47,7 @@ describe('AppendStepButton.tsx', () => {
           showStepsTab={true}
           step={kameletSourceStepStub}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const element = screen.getByTestId('stepNode__appendStep-btn');
@@ -73,7 +73,7 @@ describe('AppendStepButton.tsx', () => {
             branches: [{ branchUuid: 'random-uuid', identifier: 'branch-1', steps: [] }],
           }}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const plusIcon = screen.getByTestId('stepNode__appendStep-btn');
@@ -108,7 +108,7 @@ describe('AppendStepButton.tsx', () => {
           showStepsTab={true}
           step={kameletSourceStepStub}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const plusIcon = screen.getByTestId('stepNode__appendStep-btn');
@@ -143,7 +143,7 @@ describe('AppendStepButton.tsx', () => {
           showStepsTab={true}
           step={kameletSourceStepStub}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const plusIcon = screen.getByTestId('stepNode__appendStep-btn');
@@ -181,7 +181,7 @@ describe('AppendStepButton.tsx', () => {
           showStepsTab={false}
           step={kameletSourceStepStub}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const plusIcon = screen.getByTestId('stepNode__appendStep-btn');
@@ -213,7 +213,7 @@ describe('AppendStepButton.tsx', () => {
           showStepsTab={true}
           step={kameletSourceStepStub}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const plusIcon = screen.getByTestId('stepNode__appendStep-btn');
@@ -235,7 +235,7 @@ describe('AppendStepButton.tsx', () => {
           showStepsTab={true}
           step={kameletSourceStepStub}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const plusIcon = screen.getByTestId('stepNode__appendStep-btn');
@@ -254,7 +254,7 @@ describe('AppendStepButton.tsx', () => {
           showStepsTab={false}
           step={kameletSourceStepStub}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const plusIcon = screen.getByTestId('stepNode__appendStep-btn');
@@ -271,7 +271,7 @@ describe('AppendStepButton.tsx', () => {
           showStepsTab={true}
           step={kameletSourceStepStub}
         />
-      </AlertProvider>
+      </AlertProvider>,
     );
 
     const plusIcon = screen.getByTestId('stepNode__appendStep-btn');

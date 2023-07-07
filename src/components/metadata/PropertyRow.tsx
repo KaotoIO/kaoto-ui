@@ -78,10 +78,7 @@ export function PropertyRow({
   }
 
   return (
-    <TreeRowWrapper
-      key={`${propertyName}-${path.join('-')}`}
-      row={{ props: treeRow!.props }}
-    >
+    <TreeRowWrapper key={`${propertyName}-${path.join('-')}`} row={{ props: treeRow!.props }}>
       <Td dataLabel="NAME" treeRow={treeRow}>
         <TextInput
           aria-label={`${propertyName}-${path.join('-')}-name`}

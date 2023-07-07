@@ -472,7 +472,7 @@ export class VisualizationService {
   ): { minlen: number; weight: number } {
     const adjustedHorizontalSpacing = sourceNode?.data.step.branches?.length > 1 ? 2 : 1;
     return {
-      minlen: isHorizontal ? (adjustedHorizontalSpacing) : 1.5,
+      minlen: isHorizontal ? adjustedHorizontalSpacing : 1.5,
       weight: sourceNode?.data.step.branches?.length > 0 ? 2 : 1,
     };
   }

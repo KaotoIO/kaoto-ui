@@ -54,7 +54,7 @@ export const DeploymentsModal = ({ handleCloseModal, isModalOpen }: IDeployments
   const { settings } = useSettingsStore();
   const [activeSortIndex, setActiveSortIndex] = useState<number | undefined>(2);
   const [activeSortDirection, setActiveSortDirection] = useState<'asc' | 'desc' | undefined>(
-    'desc'
+    'desc',
   );
   const { deployment } = useDeploymentStore();
   const searchInputRef = useRef<HTMLInputElement>(null);

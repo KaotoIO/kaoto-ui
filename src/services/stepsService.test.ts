@@ -382,20 +382,14 @@ describe('stepsService', () => {
 
     it('should return "undefined" for a non existing UUID', () => {
       useFlowsStore.setState({ flows: [flowWithBranch] });
-      const step = stepsService.findStepWithUUID(
-        'route-1814',
-        'non-existing-uuid',
-      );
+      const step = stepsService.findStepWithUUID('route-1814', 'non-existing-uuid');
 
       expect(step).toBeUndefined();
     });
 
     it('should return a step', () => {
       useFlowsStore.setState({ flows: [flowWithBranch] });
-      const step = stepsService.findStepWithUUID(
-        'route-1814',
-        'route-1814_pipeline-1',
-      );
+      const step = stepsService.findStepWithUUID('route-1814', 'route-1814_pipeline-1');
 
       expect(step).toBeDefined();
       expect(step).toEqual(flowWithBranch.steps[1]);

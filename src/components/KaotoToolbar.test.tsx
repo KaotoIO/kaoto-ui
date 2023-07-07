@@ -1,8 +1,8 @@
 import { KaotoToolbar } from './KaotoToolbar';
 import { fetchDefaultNamespace } from '@kaoto/api';
 import { AlertProvider } from '@kaoto/layout';
-import { act, fireEvent, render } from '@testing-library/react';
 import { useSettingsStore } from '@kaoto/store';
+import { act, fireEvent, render } from '@testing-library/react';
 
 describe('KaotoToolbar.tsx', () => {
   test('component renders correctly', async () => {

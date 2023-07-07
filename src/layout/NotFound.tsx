@@ -1,4 +1,3 @@
-import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import {
   PageSection,
   Title,
@@ -7,6 +6,7 @@ import {
   EmptyStateIcon,
   EmptyStateBody,
 } from '@patternfly/react-core';
+import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import { useHistory } from 'react-router-dom';
 
 const NotFound = () => {

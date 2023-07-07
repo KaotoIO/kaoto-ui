@@ -18,17 +18,17 @@ spec:
       steps:
         - choice:
             when:
-              - simple: "{{?foo}}"
+              - simple: '{{?foo}}'
                 steps:
                   - set-header:
                       name: bar
                       simple: foo
-              - simple: "{{?foo2}}"
+              - simple: '{{?foo2}}'
                 steps:
                   - set-header:
                       name: bar
                       simple: foo2
-              - simple: "{{?foo3}}"
+              - simple: '{{?foo3}}'
                 steps:
                   - set-header:
                       name: bar
