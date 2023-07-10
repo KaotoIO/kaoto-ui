@@ -111,10 +111,10 @@ jobs:
       - name: 🥸 Set up GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '17'
+          java-version: '17.0.7'
+          distribution: 'graalvm-community'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: '22.2.0'
           cache: 'maven'
       - name: 🛃 Find the right backend version
         run: 'echo "backend_version=$(git tag --list | grep ${{ env.frontend_version }} | tail -n 1)" >> $GITHUB_ENV'
@@ -138,7 +138,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: 🤳 Build Native Quarkus
-        run: mvn install -Pnative -DskipTests
+        run: mvn install -Pnative -DskipTests -Dquarkus.native.native-image-xmx=5g
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
