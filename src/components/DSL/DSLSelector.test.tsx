@@ -1,5 +1,5 @@
-import { ISettings } from '../../types';
 import { capabilitiesStub } from '../../stubs';
+import { ISettings } from '../../types';
 import { DSLSelector } from './DSLSelector';
 import { useSettingsStore, useVisualizationStore } from '@kaoto/store';
 import { act, fireEvent, render, waitFor } from '@testing-library/react';

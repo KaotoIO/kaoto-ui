@@ -1,3 +1,4 @@
+import { useFlowsVisibility } from '../../hooks/flows-visibility.hook';
 import { useSettingsStore } from '@kaoto/store';
 import { IDsl } from '@kaoto/types';
 import { MenuToggle, MenuToggleAction, MenuToggleElement, Tooltip } from '@patternfly/react-core';
@@ -10,7 +11,6 @@ import {
   useCallback,
   useState,
 } from 'react';
-import { useFlowsVisibility } from '../../hooks/flows-visibility.hook';
 import { shallow } from 'zustand/shallow';
 
 interface IDSLSelector extends PropsWithChildren {
