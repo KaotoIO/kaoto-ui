@@ -125,10 +125,7 @@ const toggleFlowsVisibility = (
   visibleFlows: Record<string, boolean>,
   isVisible: boolean,
 ): Record<string, boolean> =>
-  Object.keys(visibleFlows).reduce(
-    (acc, flowId) => {
-      acc[flowId] = isVisible;
-      return acc;
-    },
-    {} as Record<string, boolean>,
-  );
+  Object.keys(visibleFlows).reduce((acc, flowId) => {
+    acc[flowId] = isVisible;
+    return acc;
+  }, {} as Record<string, boolean>);
