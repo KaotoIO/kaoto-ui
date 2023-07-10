@@ -1,4 +1,3 @@
-import { usePrevious } from '../hooks';
 import { useFlowsVisibility } from '../hooks/flows-visibility.hook';
 import { DeleteButtonEdge } from './DeleteButtonEdge';
 import { KaotoDrawer } from './KaotoDrawer';
@@ -83,18 +82,8 @@ const Visualization = () => {
   const visualizationService = useMemo(() => new VisualizationService(), []);
   const stepsService = useMemo(() => new StepsService(), []);
 
-  const previousFlows = usePrevious(flows);
-  const previousMetadata = usePrevious(metadata);
-
   // Update SourceCode editor content after an integrationJson change (the user interacted with the Kaoto UI).
   useEffect(() => {
-    if (
-      (previousFlows === flows && previousMetadata === metadata) ||
-      !Array.isArray(flows[0]?.steps)
-    ) {
-      return;
-    }
-
     const updatedFlowWrapper: IFlowsWrapper = {
       flows: flows.map((flow) => ({
         ...flow,
@@ -277,7 +266,6 @@ const Visualization = () => {
               zoomOnDoubleClick={false}
               className="panelCustom"
             >
-              {/*<MiniMap nodeBorderRadius={2} className={'visualization__minimap'} />*/}
               <VisualizationControls />
               <Background color="#aaa" gap={16} />
             </ReactFlow>
