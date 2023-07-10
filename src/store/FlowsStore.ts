@@ -169,26 +169,29 @@ export const useFlowsStore = create<IFlowsStore>()(
       },
 
       /** General flow management */
-      addNewFlow: (dsl) =>
+      addNewFlow: (dsl) => {
         set((state) => {
           const flow = FlowsService.getNewFlow(dsl);
           const flows = state.flows.concat(flow);
           VisualizationService.displaySingleFlow(flow.id);
 
-          return { ...state, currentDsl: dsl, flows };
-        }),
-      deleteFlow: (flowId) =>
+          return { flows };
+        });
+      },
+      deleteFlow: (flowId) => {
         set((state) => {
-          const filteredFlows = state.flows.filter((flow) => flowId !== flow.id);
-          VisualizationService.deleteFlowFromVisibleFlows(flowId);
+          const flows = state.flows.filter((flow) => flowId !== flow.id);
 
-          return {
-            ...state,
-            flows: filteredFlows,
-          };
-        }),
+          return { flows };
+        });
+
+        VisualizationService.deleteFlowFromVisibleFlows(flowId);
+      },
       deleteAllFlows: () => {
-        set((state) => getInitialState({ ...state, flows: [] }));
+        set((state) => {
+          return getInitialState({ ...state, flows: [] });
+        });
+
         VisualizationService.removeAllVisibleFlows();
       },
 

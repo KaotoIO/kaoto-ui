@@ -15,6 +15,24 @@ describe('NewFlow.tsx', () => {
     });
   });
 
+  test('should set the new DSL into the settings store', async () => {
+    const wrapper = render(<NewFlow />);
+    const trigger = await wrapper.findByTestId('dsl-list-dropdown');
+
+    /** Open Select */
+    act(() => {
+      fireEvent.click(trigger);
+    });
+
+    /** Select an option */
+    act(() => {
+      const element = wrapper.getByText('Kamelet');
+      fireEvent.click(element);
+    });
+
+    expect(useSettingsStore.getState().settings.dsl).toEqual(capabilitiesStub[2]);
+  });
+
   test('should add a new flow with the same type upon clicking on the action button', async () => {
     const wrapper = render(<NewFlow />);
     const trigger = await wrapper.findByTestId('dsl-list-btn');

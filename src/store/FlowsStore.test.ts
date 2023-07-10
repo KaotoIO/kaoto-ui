@@ -245,7 +245,7 @@ describe('FlowsStore', () => {
 
       act(() => {
         result.current.addNewFlow('Integration'); // MOCK_FLOW_ID
-        result.current.deleteStep(MOCK_FLOW_ID, 'step-1234');
+        result.current.deleteStep('non-existing-flow', 'step-1234');
       });
 
       expect(result.current.flows).toMatchObject([

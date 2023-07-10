@@ -1,6 +1,10 @@
 import { AlertProvider } from '../layout';
+import { StepsService } from '../services/stepsService';
+import { VisualizationService } from '../services/visualizationService';
+import { flowWithBranch } from '../stubs';
 import { integrationJSONStub, stepsStub } from '../stubs/steps';
 import { Visualization } from './Visualization';
+import { fetchIntegrationSourceCode } from '@kaoto/api';
 import { RFState, useFlowsStore, useVisualizationStore } from '@kaoto/store';
 import { IFlowsWrapper } from '@kaoto/types';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -56,6 +60,91 @@ describe('Visualization.tsx', () => {
     await waitFor(() => {
       const element = screen.getByTestId('react-flow-wrapper');
       expect(element).toBeInTheDocument();
+    });
+  });
+
+  it('should sync the source code upon adding a flow', async () => {
+    useFlowsStore.getState().deleteAllFlows();
+
+    act(() => {
+      render(
+        <AlertProvider>
+          <Visualization />
+        </AlertProvider>,
+      );
+    });
+
+    act(() => {
+      (fetchIntegrationSourceCode as jest.Mock).mockClear();
+      useFlowsStore.getState().addNewFlow('Camel Route');
+    });
+
+    await waitFor(() => {
+      expect(fetchIntegrationSourceCode).toHaveBeenCalledTimes(1);
+      expect(fetchIntegrationSourceCode).toHaveBeenCalledWith(
+        {
+          flows: [
+            {
+              description: '',
+              dsl: 'Camel Route',
+              id: expect.any(String),
+              metadata: { name: expect.any(String) },
+              params: [],
+              steps: [],
+            },
+          ],
+          metadata: {},
+          properties: {},
+        },
+        '',
+      );
+    });
+  });
+
+  describe('selecting a step', () => {
+    it('should not call StepsService if the selectedStepUuid property is empty', async () => {
+      const findStepWithUUIDSpy = jest.spyOn(StepsService.prototype, 'findStepWithUUID');
+
+      act(() => {
+        render(
+          <AlertProvider>
+            <Visualization />
+          </AlertProvider>,
+        );
+      });
+
+      await act(async () => {
+        useFlowsStore.getState().addNewFlow('Camel Route');
+      });
+
+      await act(async () => {
+        useVisualizationStore.setState({ selectedStepUuid: '' });
+      });
+
+      expect(findStepWithUUIDSpy).not.toHaveBeenCalled();
+    });
+
+    it.skip('should update the SelectedStep property if the step is found', async () => {
+      jest
+        .spyOn(StepsService.prototype, 'findStepWithUUID')
+        .mockReturnValueOnce(flowWithBranch.steps[0]);
+      const getEmptySelectedStepSpy = jest.spyOn(VisualizationService, 'getEmptySelectedStep');
+      useFlowsStore.setState({ flows: [flowWithBranch] });
+
+      act(() => {
+        render(
+          <AlertProvider>
+            <Visualization />
+          </AlertProvider>,
+        );
+      });
+
+      await act(async () => {
+        getEmptySelectedStepSpy.mockClear();
+        useVisualizationStore.setState({ selectedStepUuid: 'route-1814_timer-0' });
+      });
+
+      expect(getEmptySelectedStepSpy).not.toHaveBeenCalled();
     });
   });
 
