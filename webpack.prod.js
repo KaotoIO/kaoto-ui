@@ -18,7 +18,13 @@ module.exports = merge(common('production'), {
   },
   plugins: [
     new webpack.DefinePlugin({
-      KAOTO_API: JSON.stringify(process.env.KAOTO_API || '/api'),
+      /**
+       * This ENV needs to be set when running the yarn build command, i.e.:
+       * KAOTO_API=/api yarn build
+       * this is on purpose since we would fallback to '/api' which is the
+       * default path for kaoto-standalone
+       */
+      KAOTO_API: JSON.stringify(process.env.KAOTO_API ?? '/api'),
     }),
   ],
   module: {

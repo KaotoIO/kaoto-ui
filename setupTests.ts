@@ -5,6 +5,8 @@ import 'whatwg-fetch';
 
 global.TextEncoder = TextEncoder;
 global.KAOTO_VERSION = '1.0-test';
+global.KAOTO_API = '/api';
+global.NODE_ENV = 'test';
 
 jest.mock('@kaoto/api', () => {
   const actual = jest.requireActual('@kaoto/api');

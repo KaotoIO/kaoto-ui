@@ -1,6 +1,7 @@
 const { merge } = require('webpack-merge');
 const { common } = require('./webpack.common.js');
 const webpack = require('webpack');
+require('dotenv').config();
 
 module.exports = merge(common('development'), {
   devtool: 'inline-source-map',
