@@ -22,6 +22,7 @@ export const initDsl: IDsl = {
   input: true,
   deployable: false,
   supportsMultipleFlows: true,
+  supportsResourceDescription: false,
   vocabulary: {
     stepsName: 'Steps',
   },

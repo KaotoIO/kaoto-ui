@@ -29,15 +29,23 @@ describe('Settings', () => {
 
   it('Updates the fields', () => {
     cy.cancelMenuModal();
+    cy.switchIntegrationType('Integration');
     cy.replaceEmptyStepMiniCatalog('timer');
     cy.openSettingsModal();
 
     // test validation
+    cy.get('[data-testid="settings--integration-name"]').click().clear();
+    cy.get('[data-testid="settings--integration-description"]').click().clear();
     cy.get('[data-testid="settings--namespace"]').click().clear();
     cy.get('#namespace-helper').should('be.visible');
     cy.get('[data-testid="settings-modal--save"]').should('be.disabled');
 
     // make changes
+    cy.get('[data-testid="settings--integration-name"]').click().clear().type('cherry');
+    cy.get('[data-testid="settings--integration-description"]')
+      .click()
+      .clear()
+      .type('some description');
     cy.get('[data-testid="settings--namespace"]').click().clear().type('example');
 
     // save changes
@@ -54,6 +62,11 @@ describe('Settings', () => {
     cy.openSettingsModal();
 
     // CHECK that value is changed accordingly
+    cy.get('[data-testid="settings--integration-name"]').should('have.value', 'cherry');
+    cy.get('[data-testid="settings--integration-description"]').should(
+      'have.value',
+      'some description',
+    );
     cy.get('[data-testid="settings--namespace"]').should('have.value', 'example');
   });
 

@@ -15,6 +15,7 @@ describe('DSL Model', () => {
     expect(dsl.input).toBe(true);
     expect(dsl.deployable).toBe(true);
     expect(dsl.supportsMultipleFlows).toBe(true);
+    expect(dsl.supportsResourceDescription).toBe(true);
   });
 
   it('should parse the "default" property', () => {
@@ -45,12 +46,17 @@ describe('DSL Model', () => {
 
   it('should not throw if there is a parsing error', () => {
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    const rawDsl = { ...rawCapabilitiesStub[0], output: '}{' };
+    const rawDsl = {
+      ...rawCapabilitiesStub[0],
+      output: '}{',
+      supportsResourceDescription: 'not boolean',
+    };
 
     expect(() => new IDsl(rawDsl)).not.toThrow();
 
     const dsl = new IDsl(rawDsl);
     expect(dsl.output).toEqual(false);
+    expect(dsl.supportsResourceDescription).toEqual(false);
 
     consoleSpy.mockRestore();
   });
