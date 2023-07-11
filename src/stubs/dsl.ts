@@ -11,6 +11,7 @@ export const capabilitiesStub: IDsl[] = [
     stepKinds: ['CAMEL-CONNECTOR', 'EIP', 'EIP-BRANCH'],
     default: false,
     supportsMultipleFlows: true,
+    supportsResourceDescription: true,
     vocabulary: {},
   },
   {
@@ -23,6 +24,7 @@ export const capabilitiesStub: IDsl[] = [
     stepKinds: ['CAMEL-CONNECTOR', 'EIP', 'EIP-BRANCH'],
     default: true,
     supportsMultipleFlows: true,
+    supportsResourceDescription: false,
     vocabulary: {},
   },
   {
@@ -36,6 +38,7 @@ export const capabilitiesStub: IDsl[] = [
     stepKinds: ['CAMEL-CONNECTOR', 'EIP', 'EIP-BRANCH'],
     default: false,
     supportsMultipleFlows: false,
+    supportsResourceDescription: true,
     vocabulary: {},
   },
   {
@@ -49,6 +52,7 @@ export const capabilitiesStub: IDsl[] = [
     stepKinds: ['KAMELET', 'KNATIVE'],
     default: false,
     supportsMultipleFlows: false,
+    supportsResourceDescription: true,
     vocabulary: {},
   },
 ];
@@ -63,6 +67,7 @@ export const rawCapabilitiesStub: IRawDsl[] = [
     name: 'Integration',
     description: 'An Integration defines a workflow of actions and steps.',
     supportsMultipleFlows: 'true',
+    supportsResourceDescription: 'true',
     stepKinds: '[CAMEL-CONNECTOR, EIP, EIP-BRANCH]',
   },
   {
@@ -74,6 +79,7 @@ export const rawCapabilitiesStub: IRawDsl[] = [
     name: 'Camel Route',
     description: 'A camel route is a non deployable in cluster workflow of actions and steps.',
     supportsMultipleFlows: 'true',
+    supportsResourceDescription: 'true',
     stepKinds:
       '[CAMEL-CONNECTOR, EIP, EIP-BRANCH, CAMEL-REST-DSL, CAMEL-REST-VERB, CAMEL-REST-ENDPOINT]',
   },
@@ -87,6 +93,7 @@ export const rawCapabilitiesStub: IRawDsl[] = [
     description:
       'A Kamelet is a snippet of a route. It defines meta building blocks or steps that can be reused on integrations.',
     supportsMultipleFlows: 'false',
+    supportsResourceDescription: 'true',
     stepKinds: '[CAMEL-CONNECTOR, EIP, EIP-BRANCH]',
   },
   {
@@ -100,6 +107,7 @@ export const rawCapabilitiesStub: IRawDsl[] = [
     description:
       'Kamelet Bindings are used to create simple integrations that link a start step to an end step with optional intermediate action steps.',
     supportsMultipleFlows: 'false',
+    supportsResourceDescription: 'true',
     stepKinds: '[KAMELET, KNATIVE]',
   },
 ];

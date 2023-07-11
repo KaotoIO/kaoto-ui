@@ -18,6 +18,7 @@ export interface IRawDsl {
   deployable: string;
   validationSchema: string;
   supportsMultipleFlows: string;
+  supportsResourceDescription: string;
   vocabulary: Record<string, string>;
   default?: string;
 }
@@ -33,6 +34,7 @@ export class IDsl
   deployable = false;
   validationSchema: string;
   supportsMultipleFlows = false;
+  supportsResourceDescription = false;
   vocabulary: Record<string, string> = {};
   default = false;
 
@@ -49,6 +51,7 @@ export class IDsl
       this.input = JSON.parse(rawDsl.input);
       this.deployable = JSON.parse(rawDsl.deployable);
       this.supportsMultipleFlows = JSON.parse(rawDsl.supportsMultipleFlows);
+      this.supportsResourceDescription = JSON.parse(rawDsl.supportsResourceDescription);
       this.default = JSON.parse(rawDsl.default ?? 'false');
     } catch (error) {
       console.error(`Error while parsing DSL ${rawDsl.name}`);
