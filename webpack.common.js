@@ -2,7 +2,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
 const { dependencies, federatedModuleName, version } = require('./package.json');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -53,10 +52,6 @@ const common = (mode) => {
         favicon: path.resolve(__dirname, 'src/assets/images', 'favicon.svg'),
         template: path.resolve(__dirname, 'public', 'index.html'),
       }),
-      new Dotenv({
-        systemvars: true,
-        silent: true,
-      }),
       new MonacoWebpackPlugin({
         languages: ['yaml'],
         globalAPI: true,
@@ -93,6 +88,7 @@ const common = (mode) => {
       // new FederatedTypesPlugin(),
       new webpack.DefinePlugin({
         KAOTO_VERSION: JSON.stringify(version),
+        NODE_ENV: JSON.stringify(mode),
       }),
     ],
     resolve: {

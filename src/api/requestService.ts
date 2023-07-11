@@ -34,7 +34,7 @@ export interface IFetch {
 }
 
 export class RequestService {
-  private static apiURL = process.env.KAOTO_API;
+  private static apiURL = KAOTO_API;
 
   static getApiURL(): string | undefined {
     return this.apiURL;

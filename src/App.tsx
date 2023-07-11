@@ -14,7 +14,7 @@ import '@patternfly/patternfly/utilities/Sizing/sizing.css';
 import '@patternfly/patternfly/utilities/Spacing/spacing.css';
 import '@patternfly/patternfly/utilities/Text/text.css';
 import { Suspense } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 import 'reactflow/dist/style.css';
 
 const { undo, redo } = useFlowsStore.temporal.getState();

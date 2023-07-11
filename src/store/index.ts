@@ -6,7 +6,14 @@ import { useSettingsStore } from './settingsStore';
 import { useVisualizationStore } from './visualizationStore';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 
-if (process.env.NODE_ENV === 'development') {
+let isDevMode = false;
+try {
+  isDevMode = NODE_ENV === 'development';
+} catch (error) {
+  console.info('NODE_ENV is not defined');
+}
+
+if (isDevMode) {
   mountStoreDevtool('deploymentStore', useDeploymentStore);
   mountStoreDevtool('flowsStore', useFlowsStore);
   mountStoreDevtool('integrationSourceStore', useIntegrationSourceStore);
