@@ -1,6 +1,4 @@
-const {
-  merge
-} = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const prod = require('../webpack.prod.js');
 const path = require('path');
 const webpack = require('webpack');
@@ -15,7 +13,7 @@ module.exports = {
     return options;
   },
   docs: {
-    autodocs: true
+    autodocs: true,
   },
   typescript: {
     check: false,
@@ -23,12 +21,13 @@ module.exports = {
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
       shouldExtractLiteralValuesFromEnum: true,
-      propFilter: (prop: { parent: { fileName: string; }; }) => prop.parent ? !/node_modules/.test(prop.parent.fileName) : true
-    }
+      propFilter: (prop: { parent: { fileName: string } }) =>
+        prop.parent ? !/node_modules/.test(prop.parent.fileName) : true,
+    },
   },
   framework: {
     name: '@storybook/react-webpack5',
-    options: {}
+    options: {},
   },
   webpackFinal: async (config: any, {}: any) => {
     // Make whatever fine-grained changes you need
@@ -47,9 +46,9 @@ module.exports = {
           '@kaoto/routes': path.resolve(__dirname, '../src/routes/'),
           '@kaoto/services': path.resolve(__dirname, '../src/services/'),
           '@kaoto/store': path.resolve(__dirname, '../src/store/'),
-          '@kaoto/utils': path.resolve(__dirname, '../src/utils/')
-        }
-      }
+          '@kaoto/utils': path.resolve(__dirname, '../src/utils/'),
+        },
+      },
     });
 
     updatedConfig.module.rules.unshift({
@@ -68,9 +67,10 @@ module.exports = {
     updatedConfig.plugins.push(
       new webpack.DefinePlugin({
         KAOTO_VERSION: JSON.stringify(version),
+        KAOTO_API: JSON.stringify('/api'),
       }),
     );
 
     return updatedConfig;
-  }
+  },
 };
