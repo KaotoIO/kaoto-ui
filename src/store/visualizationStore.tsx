@@ -1,4 +1,4 @@
-import { IVizStepPropsEdge, IVizStepNode } from '@kaoto/types';
+import { IVizStepPropsEdge, IVizStepNode, IVisibleFlows } from '@kaoto/types';
 import {
   Connection,
   EdgeChange,
@@ -34,11 +34,11 @@ export type RFState = {
   updateNode: (nodeToUpdate: IVizStepNode, nodeIndex: number) => void;
 
   /** Visibility related handlers */
-  visibleFlows: Record<string, boolean>;
+  visibleFlows: IVisibleFlows;
   toggleFlowVisible: (flowId: string, isVisible?: boolean) => void;
   showAllFlows: () => void;
   hideAllFlows: () => void;
-  setVisibleFlows: (flows: Record<string, boolean>) => void;
+  setVisibleFlows: (flows: IVisibleFlows) => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -121,11 +121,8 @@ export const useVisualizationStore = create<RFState>((set, get) => ({
  * This will prevent the circular dependency created by
  * importing the Store into the service and the other way around
  */
-const toggleFlowsVisibility = (
-  visibleFlows: Record<string, boolean>,
-  isVisible: boolean,
-): Record<string, boolean> =>
+const toggleFlowsVisibility = (visibleFlows: IVisibleFlows, isVisible: boolean): IVisibleFlows =>
   Object.keys(visibleFlows).reduce((acc, flowId) => {
     acc[flowId] = isVisible;
     return acc;
-  }, {} as Record<string, boolean>);
+  }, {} as IVisibleFlows);

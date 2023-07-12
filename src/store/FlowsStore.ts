@@ -42,7 +42,9 @@ export interface IFlowsStore extends IFlowsStoreData {
   addNewFlow: (dsl: string) => void;
   deleteFlow: (flowId: string) => void;
   deleteAllFlows: () => void;
+  setFlowName: (flowId: string, name: string) => void;
 
+  /** General metadata management */
   setMetadata: (name: string, metadata: any) => void;
 }
 
@@ -193,6 +195,29 @@ export const useFlowsStore = create<IFlowsStore>()(
         });
 
         VisualizationService.removeAllVisibleFlows();
+      },
+      setFlowName: (flowId, name) => {
+        set((state) => {
+          const flows = state.flows;
+          const integrationIndex = flows.findIndex((integration) => integration.id === flowId);
+          if (integrationIndex === -1) {
+            return state;
+          }
+
+          const flow = {
+            ...flows[integrationIndex],
+            id: name,
+            steps: FlowsService.regenerateUuids(name, flows[integrationIndex].steps),
+            metadata: { ...flows[integrationIndex].metadata, name },
+          };
+
+          flows.splice(integrationIndex, 1, flow);
+          const flowsIds = flows.map((flow) => flow.id);
+          VisualizationService.renameVisibleFlow(flowId, name);
+          VisualizationService.setVisibleFlows(flowsIds);
+
+          return { flows: flows.slice() };
+        });
       },
 
       setMetadata: (name, metadata) =>

@@ -1,3 +1,6 @@
+import { ValidationService } from '../../services';
+import { InlineEdit } from '../InlineEdit/InlineEdit';
+import './FlowsList.css';
 import { FlowsListEmptyState } from './FlowsListEmptyState';
 import { useFlowsStore, useVisualizationStore } from '@kaoto/store';
 import { Button, Icon } from '@patternfly/react-core';
@@ -11,10 +14,11 @@ interface IFlowsList {
 }
 
 export const FlowsList: FunctionComponent<IFlowsList> = (props) => {
-  const { isListEmpty, flows, deleteFlow } = useFlowsStore(
+  const { isListEmpty, flows, setFlowName, deleteFlow } = useFlowsStore(
     (state) => ({
       isListEmpty: state.flows.length === 0,
       flows: state.flows,
+      setFlowName: state.setFlowName,
       deleteFlow: state.deleteFlow,
     }),
     shallow,
@@ -47,7 +51,7 @@ export const FlowsList: FunctionComponent<IFlowsList> = (props) => {
   return isListEmpty ? (
     <FlowsListEmptyState data-testid="flows-list-empty-state" />
   ) : (
-    <TableComposable variant="compact" data-testid="flows-list-table">
+    <TableComposable className="FlowsListTable" variant="compact" data-testid="flows-list-table">
       <Thead>
         <Tr>
           <Th>{columnNames.current.id}</Th>
@@ -59,17 +63,20 @@ export const FlowsList: FunctionComponent<IFlowsList> = (props) => {
         {flows.map((flow) => (
           <Tr key={flow.id} data-testid={`flows-list-row-${flow.id}`} isHoverable>
             <Td dataLabel={columnNames.current.id}>
-              <Button
-                data-testid={`goto-btn-${flow.id}`}
+              <InlineEdit
+                data-testid={`goto-btn-${flow.metadata.name}`}
+                value={flow.metadata.name}
+                validator={ValidationService.validateUniqueName}
                 onClick={() => {
                   onSelectFlow(flow.id);
                 }}
-                variant="plain"
-              >
-                <p>{flow.id}</p>
-                <p>{flow.description}</p>
-              </Button>
+                onChange={(name) => {
+                  setFlowName(flow.id, name);
+                }}
+              />
+              <p>{flow.description}</p>
             </Td>
+
             <Td dataLabel={columnNames.current.isVisible}>
               <Button
                 data-testid={`toggle-btn-${flow.id}`}
@@ -92,6 +99,7 @@ export const FlowsList: FunctionComponent<IFlowsList> = (props) => {
                 }}
               />
             </Td>
+
             <Td dataLabel={columnNames.current.delete}>
               <Button
                 data-testid={`delete-btn-${flow.id}`}

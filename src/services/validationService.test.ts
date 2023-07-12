@@ -1,7 +1,14 @@
+import { FlowsStoreFacade } from '../store/FlowsStoreFacade';
 import { ValidationService } from './validationService';
-import { IStepProps, IVizStepNodeData } from '@kaoto/types';
+import { IStepProps, IVizStepNodeData, ValidationStatus } from '@kaoto/types';
 
 describe('validationService', () => {
+  it('appendableStepTypes(): should return a string of possible steps that can be appended to an existing step', () => {
+    expect(ValidationService.appendableStepTypes('START')).toEqual('MIDDLE,END');
+    expect(ValidationService.appendableStepTypes('MIDDLE')).toEqual('MIDDLE,END');
+    expect(ValidationService.appendableStepTypes('END')).toEqual('');
+  });
+
   it('canStepBeReplaced(): should return a boolean to determine if a step can be replaced', () => {
     // start steps
     expect(
@@ -113,6 +120,31 @@ describe('validationService', () => {
     );
   });
 
+  it.each([
+    [undefined, undefined, 'START,MIDDLE,END'],
+    [undefined, {} as IStepProps, 'MIDDLE'],
+    [{} as IStepProps, undefined, 'MIDDLE,END'],
+    [{} as IStepProps, {} as IStepProps, 'MIDDLE'],
+  ])(
+    'insertableStepTypes() should return "%s" when prevStep="%s" nextStep="%s"',
+    (prevStep, nextStep, result) => {
+      expect(ValidationService.insertableStepTypes(prevStep, nextStep)).toEqual(result);
+    },
+  );
+
+  it.each([
+    ['', false],
+    ['.', false],
+    ['/', false],
+    ['Route', false],
+    ['Route 1234', false],
+    ['444', true],
+    ['route', true],
+    ['route-1234', true],
+  ])('isNameValidCheck() should return "%s" when name="%s"', (name, result) => {
+    expect(ValidationService.isNameValidCheck(name)).toEqual(result);
+  });
+
   it('prependableStepTypes(): should return a comma-separated string of step types that can be prepended to a step', () => {
     expect(ValidationService.prependableStepTypes()).toEqual('MIDDLE');
   });
@@ -132,5 +164,48 @@ describe('validationService', () => {
     expect(ValidationService.reachedMinBranches(1, 2)).toBeFalsy();
     expect(ValidationService.reachedMinBranches(2, 2)).toBeFalsy();
     expect(ValidationService.reachedMinBranches(3, 2)).toBeTruthy();
+  });
+
+  describe('validateUniqueName()', () => {
+    it('should return sucess if the name is unique', () => {
+      jest.spyOn(FlowsStoreFacade, 'getFlowsIds').mockReturnValue(['flow-1234']);
+
+      const result = ValidationService.validateUniqueName('unique-name');
+
+      expect(result.status).toEqual(ValidationStatus.Success);
+      expect(result.errMessages).toHaveLength(0);
+    });
+
+    it('should return an error if the name is not unique', () => {
+      jest.spyOn(FlowsStoreFacade, 'getFlowsIds').mockReturnValue(['flow-1234']);
+
+      const result = ValidationService.validateUniqueName('flow-1234');
+
+      expect(result.status).toEqual(ValidationStatus.Error);
+      expect(result.errMessages).toEqual(['Name must be unique']);
+    });
+
+    it('should return an error if the name is not a valid URI', () => {
+      jest.spyOn(FlowsStoreFacade, 'getFlowsIds').mockReturnValue(['flow-1234']);
+
+      const result = ValidationService.validateUniqueName('The amazing Route');
+
+      expect(result.status).toEqual(ValidationStatus.Error);
+      expect(result.errMessages).toEqual([
+        'Name should only contain lowercase letters, numbers, and dashes',
+      ]);
+    });
+
+    it('should return an error if the name is not unique neither a valid URI', () => {
+      jest.spyOn(FlowsStoreFacade, 'getFlowsIds').mockReturnValue(['The amazing Route']);
+
+      const result = ValidationService.validateUniqueName('The amazing Route');
+
+      expect(result.status).toEqual(ValidationStatus.Error);
+      expect(result.errMessages).toEqual([
+        'Name should only contain lowercase letters, numbers, and dashes',
+        'Name must be unique',
+      ]);
+    });
   });
 });

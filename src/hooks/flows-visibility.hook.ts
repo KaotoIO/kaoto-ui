@@ -1,5 +1,5 @@
 import { useVisualizationStore } from '../store/visualizationStore';
-import { IVisibleFlowsInformation } from '../types';
+import { IVisibleFlows, IVisibleFlowsInformation } from '../types';
 import { useEffect, useState } from 'react';
 
 /**
@@ -19,9 +19,7 @@ export const useFlowsVisibility = () => {
   return visibleFlowsInformation;
 };
 
-function getVisibleFlowsInformation(
-  visibleFlows: Record<string, boolean>,
-): IVisibleFlowsInformation {
+function getVisibleFlowsInformation(visibleFlows: IVisibleFlows): IVisibleFlowsInformation {
   const flowsArray = Object.entries(visibleFlows);
   const visibleFlowsIdArray = flowsArray.filter((flow) => flow[1]).map((flow) => flow[0]);
 

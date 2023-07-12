@@ -580,6 +580,24 @@ describe('FlowsStore', () => {
     expect(useVisualizationStore.getState().visibleFlows).toEqual({});
   });
 
+  describe('setFlowName', () => {
+    it('should allow consumers to set the name of a flow', () => {
+      useFlowsStore.getState().addNewFlow('Integration');
+
+      useFlowsStore.getState().setFlowName(MOCK_FLOW_ID, 'new-name');
+
+      expect(useFlowsStore.getState().flows[0].metadata.name).toEqual('new-name');
+    });
+
+    it('should ignore non existing flows', () => {
+      const initialState = useFlowsStore.getState();
+
+      useFlowsStore.getState().setFlowName('non-existing-flow', 'new-name');
+
+      expect(useFlowsStore.getState()).toEqual(initialState);
+    });
+  });
+
   it('should allow consumers to update the metadata property', () => {
     useFlowsStore.getState().deleteAllFlows();
 

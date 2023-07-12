@@ -141,120 +141,6 @@ describe('visualizationService', () => {
     });
   });
 
-  describe('redrawDiagram', () => {
-    beforeEach(() => {
-      jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce('route-1234');
-      jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce('route-4321');
-    });
-
-    it('should process only visible flows', async () => {
-      useFlowsStore.getState().addNewFlow('Integration');
-      useFlowsStore.getState().addNewFlow('Integration');
-
-      const getLayoutedElementsSpy = jest.spyOn(VisualizationService, 'getLayoutedElements');
-
-      await service.redrawDiagram(jest.fn());
-
-      expect(getLayoutedElementsSpy).toHaveBeenCalledTimes(1);
-      expect(getLayoutedElementsSpy).toHaveBeenCalledWith(
-        [
-          expect.objectContaining({
-            data: {
-              isPlaceholder: true,
-              label: 'ADD A STEP',
-              nextStepUuid: undefined,
-              step: {
-                UUID: expect.stringMatching(/placeholder-\d+/),
-                integrationId: 'route-4321',
-                name: '',
-                type: 'START',
-              },
-            },
-            draggable: false,
-            height: 80,
-            id: expect.stringMatching(/node_0--\d+/),
-            position: {
-              x: 0,
-              y: 0,
-            },
-            sourcePosition: 'right',
-            targetPosition: 'left',
-            type: 'step',
-            width: 80,
-          }),
-        ],
-        [],
-        'LR',
-      );
-    });
-
-    it('should process more than one visible flow', async () => {
-      useFlowsStore.getState().addNewFlow('Integration');
-      useFlowsStore.getState().addNewFlow('Integration');
-      useVisualizationStore.getState().showAllFlows();
-
-      const getLayoutedElementsSpy = jest.spyOn(VisualizationService, 'getLayoutedElements');
-
-      await service.redrawDiagram(jest.fn());
-
-      expect(getLayoutedElementsSpy).toHaveBeenCalledTimes(1);
-      expect(getLayoutedElementsSpy).toHaveBeenCalledWith(
-        [
-          expect.objectContaining({
-            data: {
-              isPlaceholder: true,
-              label: 'ADD A STEP',
-              nextStepUuid: undefined,
-              step: {
-                UUID: expect.stringMatching(/placeholder-\d+/),
-                integrationId: 'route-1234',
-                name: '',
-                type: 'START',
-              },
-            },
-            draggable: false,
-            height: 80,
-            id: expect.stringMatching(/node_0--\d+/),
-            position: {
-              x: 0,
-              y: 0,
-            },
-            sourcePosition: 'right',
-            targetPosition: 'left',
-            type: 'step',
-            width: 80,
-          }),
-          expect.objectContaining({
-            data: {
-              isPlaceholder: true,
-              label: 'ADD A STEP',
-              nextStepUuid: undefined,
-              step: {
-                UUID: expect.stringMatching(/placeholder-\d+/),
-                integrationId: 'route-4321',
-                name: '',
-                type: 'START',
-              },
-            },
-            draggable: false,
-            height: 80,
-            id: expect.stringMatching(/node_0--\d+/),
-            position: {
-              x: 0,
-              y: expect.any(Number),
-            },
-            sourcePosition: 'right',
-            targetPosition: 'left',
-            type: 'step',
-            width: 80,
-          }),
-        ],
-        [],
-        'LR',
-      );
-    });
-  });
-
   it("buildEdgeParams(): should build an edge's default parameters for a single given node", () => {
     const currentStep = nodes[1];
     const previousStep = nodes[0];
@@ -321,20 +207,22 @@ describe('visualizationService', () => {
     });
   });
 
-  it('buildNodesFromSteps(): should build visualization nodes from an array of steps', () => {
-    const stepNodes = VisualizationService.buildNodesFromSteps('Camel Route-1', steps, 'RIGHT');
-    expect(stepNodes[0].data.step.UUID).toBeDefined();
-    expect(stepNodes[0].id).toContain(stepNodes[0].data.step.UUID);
-  });
+  describe('buildNodesFromSteps()', () => {
+    it('should build visualization nodes from an array of steps', () => {
+      const stepNodes = VisualizationService.buildNodesFromSteps('Camel Route-1', steps, 'RIGHT');
+      expect(stepNodes[0].data.step.UUID).toBeDefined();
+      expect(stepNodes[0].id).toContain(stepNodes[0].data.step.UUID);
+    });
 
-  it('buildNodesFromSteps(): should build visualization nodes from an array of steps with branches', () => {
-    const stepNodes = VisualizationService.buildNodesFromSteps(
-      'Camel Route-1',
-      branchSteps,
-      'RIGHT',
-    );
-    expect(stepNodes[0].data.step.UUID).toBeDefined();
-    expect(stepNodes).toHaveLength(11); // 4 Main steps + 7 branch steps
+    it('should build visualization nodes from an array of steps with branches', () => {
+      const stepNodes = VisualizationService.buildNodesFromSteps(
+        'Camel Route-1',
+        branchSteps,
+        'RIGHT',
+      );
+      expect(stepNodes[0].data.step.UUID).toBeDefined();
+      expect(stepNodes).toHaveLength(11); // 4 Main steps + 7 branch steps
+    });
   });
 
   it('containsAddStepPlaceholder(): should determine if there is an ADD STEP placeholder in the steps', () => {
@@ -571,6 +459,120 @@ describe('visualizationService', () => {
     ).toBeFalsy();
   });
 
+  describe('redrawDiagram', () => {
+    beforeEach(() => {
+      jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce('route-1234');
+      jest.spyOn(FlowsService, 'getNewFlowId').mockReturnValueOnce('route-4321');
+    });
+
+    it('should process only visible flows', async () => {
+      useFlowsStore.getState().addNewFlow('Integration');
+      useFlowsStore.getState().addNewFlow('Integration');
+
+      const getLayoutedElementsSpy = jest.spyOn(VisualizationService, 'getLayoutedElements');
+
+      await service.redrawDiagram(jest.fn());
+
+      expect(getLayoutedElementsSpy).toHaveBeenCalledTimes(1);
+      expect(getLayoutedElementsSpy).toHaveBeenCalledWith(
+        [
+          expect.objectContaining({
+            data: {
+              isPlaceholder: true,
+              label: 'ADD A STEP',
+              nextStepUuid: undefined,
+              step: {
+                UUID: expect.stringMatching(/placeholder-\d+/),
+                integrationId: 'route-4321',
+                name: '',
+                type: 'START',
+              },
+            },
+            draggable: false,
+            height: 80,
+            id: expect.stringMatching(/node_0--\d+/),
+            position: {
+              x: 0,
+              y: 0,
+            },
+            sourcePosition: 'right',
+            targetPosition: 'left',
+            type: 'step',
+            width: 80,
+          }),
+        ],
+        [],
+        'LR',
+      );
+    });
+
+    it('should process more than one visible flow', async () => {
+      useFlowsStore.getState().addNewFlow('Integration');
+      useFlowsStore.getState().addNewFlow('Integration');
+      useVisualizationStore.getState().showAllFlows();
+
+      const getLayoutedElementsSpy = jest.spyOn(VisualizationService, 'getLayoutedElements');
+
+      await service.redrawDiagram(jest.fn());
+
+      expect(getLayoutedElementsSpy).toHaveBeenCalledTimes(1);
+      expect(getLayoutedElementsSpy).toHaveBeenCalledWith(
+        [
+          expect.objectContaining({
+            data: {
+              isPlaceholder: true,
+              label: 'ADD A STEP',
+              nextStepUuid: undefined,
+              step: {
+                UUID: expect.stringMatching(/placeholder-\d+/),
+                integrationId: 'route-1234',
+                name: '',
+                type: 'START',
+              },
+            },
+            draggable: false,
+            height: 80,
+            id: expect.stringMatching(/node_0--\d+/),
+            position: {
+              x: 0,
+              y: 0,
+            },
+            sourcePosition: 'right',
+            targetPosition: 'left',
+            type: 'step',
+            width: 80,
+          }),
+          expect.objectContaining({
+            data: {
+              isPlaceholder: true,
+              label: 'ADD A STEP',
+              nextStepUuid: undefined,
+              step: {
+                UUID: expect.stringMatching(/placeholder-\d+/),
+                integrationId: 'route-4321',
+                name: '',
+                type: 'START',
+              },
+            },
+            draggable: false,
+            height: 80,
+            id: expect.stringMatching(/node_0--\d+/),
+            position: {
+              x: 0,
+              y: expect.any(Number),
+            },
+            sourcePosition: 'right',
+            targetPosition: 'left',
+            type: 'step',
+            width: 80,
+          }),
+        ],
+        [],
+        'LR',
+      );
+    });
+  });
+
   it('shouldAddEdge(): given a node, should determine whether to add an edge for it', () => {
     const nodeWithoutBranches = {
       id: 'node-without-branches',
@@ -689,38 +691,6 @@ describe('visualizationService', () => {
     ).toBeFalsy();
   });
 
-  it('showBranchesTab(): given node data, should determine whether to show the branches tab in mini catalog', () => {
-    const step = {} as IStepProps;
-
-    expect(VisualizationService.showBranchesTab(step)).toBeFalsy();
-    // has branches but not branch support
-    expect(
-      VisualizationService.showBranchesTab({
-        ...step,
-        branches: [],
-      }),
-    ).toBeFalsy();
-
-    expect(
-      VisualizationService.showBranchesTab({
-        ...step,
-        branches: [],
-        minBranches: 0,
-        maxBranches: -1,
-      }),
-    ).toBeTruthy();
-
-    // if step has maximum number of branches already
-    expect(
-      VisualizationService.showBranchesTab({
-        ...step,
-        branches: [{}, {}] as IStepPropsBranch[],
-        minBranches: 0,
-        maxBranches: 2,
-      }),
-    ).toBeFalsy();
-  });
-
   it('showPrependStepButton(): given a node, should determine whether to show a prepend step button for it', () => {
     const vizStoreState = useVisualizationStore.getState();
     useVisualizationStore.setState({
@@ -791,6 +761,38 @@ describe('visualizationService', () => {
     ).toBeTruthy();
   });
 
+  it('showBranchesTab(): given node data, should determine whether to show the branches tab in mini catalog', () => {
+    const step = {} as IStepProps;
+
+    expect(VisualizationService.showBranchesTab(step)).toBeFalsy();
+    // has branches but not branch support
+    expect(
+      VisualizationService.showBranchesTab({
+        ...step,
+        branches: [],
+      }),
+    ).toBeFalsy();
+
+    expect(
+      VisualizationService.showBranchesTab({
+        ...step,
+        branches: [],
+        minBranches: 0,
+        maxBranches: -1,
+      }),
+    ).toBeTruthy();
+
+    // if step has maximum number of branches already
+    expect(
+      VisualizationService.showBranchesTab({
+        ...step,
+        branches: [{}, {}] as IStepPropsBranch[],
+        minBranches: 0,
+        maxBranches: 2,
+      }),
+    ).toBeFalsy();
+  });
+
   it('showStepsTab(): given node data, should determine whether to show the steps tab in mini catalog', () => {
     const step: IVizStepNodeData = {
       label: '',
@@ -818,7 +820,7 @@ describe('visualizationService', () => {
     ).toBeFalsy();
   });
 
-  it('should allow consumers to get a static empty step', () => {
+  it('getEmptySelectedStep(): should allow consumers to get a static empty step', () => {
     const result = VisualizationService.getEmptySelectedStep();
 
     expect(result).toEqual({
@@ -829,5 +831,92 @@ describe('visualizationService', () => {
       UUID: '',
       integrationId: '',
     });
+  });
+
+  it('displaySingleFlow(): should display a single flow in the store', () => {
+    useVisualizationStore.setState({
+      visibleFlows: {
+        'route-1': true,
+        'route-2': false,
+      },
+    });
+
+    VisualizationService.displaySingleFlow('route-2');
+
+    expect(useVisualizationStore.getState().visibleFlows).toEqual({
+      'route-1': false,
+      'route-2': true,
+    });
+  });
+
+  it('deleteFlowFromVisibleFlows(): should delete a flow from the visible flows in the store', () => {
+    useVisualizationStore.setState({
+      visibleFlows: {
+        'route-1': true,
+        'route-2': false,
+      },
+    });
+
+    VisualizationService.deleteFlowFromVisibleFlows('route-1');
+
+    expect(useVisualizationStore.getState().visibleFlows).toEqual({
+      'route-2': false,
+    });
+  });
+
+  it('renameVisibleFlow(): should rename a visible flow in the store', () => {
+    useVisualizationStore.setState({
+      visibleFlows: {
+        'route-1': true,
+        'route-2': false,
+      },
+    });
+
+    VisualizationService.renameVisibleFlow('route-1', 'route-1-renamed');
+
+    expect(useVisualizationStore.getState().visibleFlows).toEqual({
+      'route-1-renamed': true,
+      'route-2': false,
+    });
+  });
+
+  describe('setVisibleFlows()', () => {
+    it('should set the visible flows in the store with the first one visible', () => {
+      VisualizationService.setVisibleFlows(['route-1', 'route-2']);
+
+      expect(useVisualizationStore.getState().visibleFlows).toEqual({
+        'route-1': true,
+        'route-2': false,
+      });
+    });
+
+    it('should preserve the previous visible flows status', () => {
+      useVisualizationStore.setState({
+        visibleFlows: {
+          'route-1': true,
+          'route-2': true,
+        },
+      });
+
+      VisualizationService.setVisibleFlows(['route-1', 'route-2']);
+
+      expect(useVisualizationStore.getState().visibleFlows).toEqual({
+        'route-1': true,
+        'route-2': true,
+      });
+    });
+  });
+
+  it('removeAllVisibleFlows(): should remove all visible flows from the store', () => {
+    useVisualizationStore.setState({
+      visibleFlows: {
+        'route-1': true,
+        'route-2': true,
+      },
+    });
+
+    VisualizationService.removeAllVisibleFlows();
+
+    expect(useVisualizationStore.getState().visibleFlows).toEqual({});
   });
 });
