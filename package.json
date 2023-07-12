@@ -138,7 +138,7 @@
     "msw": "^1.2.2",
     "msw-storybook-addon": "^1.8.0",
     "null-loader": "^4.0.1",
-    "prettier": "2.8.8",
+    "prettier": "3.0.0",
     "prop-types": "15.8.1",
     "react-refresh": "^0.14.0",
     "rimraf": "5.0.1",
