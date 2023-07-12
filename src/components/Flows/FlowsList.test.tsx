@@ -109,4 +109,21 @@ describe('FlowsList.tsx', () => {
     expect(useFlowsStore.getState().flows).toHaveLength(1);
     expect(useFlowsStore.getState().flows[0].id).toEqual('route-4321');
   });
+
+  test('should allow the user to edit a flow name', async () => {
+    const wrapper = render(<FlowsList />);
+
+    act(() => {
+      const editFlowId = wrapper.getByTestId('goto-btn-route-4321--edit');
+      fireEvent.click(editFlowId);
+    });
+
+    act(() => {
+      const input = wrapper.getByTestId('goto-btn-route-4321--text-input');
+      fireEvent.change(input, { target: { value: 'new-name' } });
+      fireEvent.keyDown(input, { key: 'Enter' });
+    });
+
+    expect(useFlowsStore.getState().flows[1].id).toEqual('new-name');
+  });
 });

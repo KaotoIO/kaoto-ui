@@ -59,7 +59,7 @@ export const FlowsMenu: FunctionComponent = () => {
         setIsOpen(isOpen);
       }}
       toggle={toggle}
-      minWidth="300px"
+      minWidth="400px"
     >
       <FlowsList
         onClose={() => {

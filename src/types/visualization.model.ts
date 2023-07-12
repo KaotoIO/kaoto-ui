@@ -4,3 +4,5 @@ export interface IVisibleFlowsInformation {
   totalFlowsCount: number;
   isCanvasEmpty: boolean;
 }
+
+export type IVisibleFlows = Record<string, boolean>;

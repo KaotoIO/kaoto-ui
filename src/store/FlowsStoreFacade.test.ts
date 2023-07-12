@@ -41,4 +41,14 @@ describe('FlowsStoreFacade', () => {
 
     expect(facadeFlows).toBe(storeFlows);
   });
+
+  it('should return the flows ids from useFlowsStore', () => {
+    useFlowsStore.setState({
+      flows: [{ id: '1' }, { id: '2' }] as IIntegration[],
+    } as IFlowsStore);
+
+    const facadeFlowsIds = FlowsStoreFacade.getFlowsIds();
+
+    expect(facadeFlowsIds).toEqual(['1', '2']);
+  });
 });

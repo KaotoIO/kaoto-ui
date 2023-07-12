@@ -1,4 +1,5 @@
-import { IStepProps, IVizStepNodeData } from '@kaoto/types';
+import { FlowsStoreFacade } from '../store/FlowsStoreFacade';
+import { IStepProps, IVizStepNodeData, ValidationResult, ValidationStatus } from '@kaoto/types';
 
 /**
  *  * A collection of business logic to process validation related tasks.
@@ -6,6 +7,8 @@ import { IStepProps, IVizStepNodeData } from '@kaoto/types';
  *  * @see VisualizationService
  */
 export class ValidationService {
+  private static URI_REGEXP = /^[a-z\d]([-a-z\d]*[a-z\d])?(\.[a-z\d]([-a-z\d]*[a-z\d])?)*$/gm;
+
   /**
    * Checks kind of steps can be appended onto an existing step.
    * @param existingStepType
@@ -144,9 +147,11 @@ export class ValidationService {
    * Regex: [a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*
    * @param name
    */
-  static isNameValidCheck(name: string) {
-    const regexPattern = /^[a-z\d]([-a-z\d]*[a-z\d])?(\.[a-z\d]([-a-z\d]*[a-z\d])?)*$/gm;
-    return regexPattern.test(name);
+  static isNameValidCheck(name: string): boolean {
+    const isValid = ValidationService.URI_REGEXP.test(name);
+    ValidationService.URI_REGEXP.lastIndex = 0;
+
+    return isValid;
   }
 
   /**
@@ -173,5 +178,25 @@ export class ValidationService {
    */
   static reachedMinBranches(branchLength: number, minBranches: number): boolean {
     return branchLength >= minBranches + 1;
+  }
+
+  static validateUniqueName(flowName: string): ValidationResult {
+    const errMessages = [];
+    const flowsIds = FlowsStoreFacade.getFlowsIds();
+
+    const isValidURI = ValidationService.isNameValidCheck(flowName);
+    if (!isValidURI) {
+      errMessages.push('Name should only contain lowercase letters, numbers, and dashes');
+    }
+
+    const isUnique = !flowsIds.includes(flowName);
+    if (!isUnique) {
+      errMessages.push('Name must be unique');
+    }
+
+    return {
+      status: isValidURI && isUnique ? ValidationStatus.Success : ValidationStatus.Error,
+      errMessages,
+    };
   }
 }

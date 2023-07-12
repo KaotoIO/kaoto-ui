@@ -18,4 +18,8 @@ export class FlowsStoreFacade {
   static getFlows(): IIntegration[] {
     return useFlowsStore.getState().flows;
   }
+
+  static getFlowsIds(): string[] {
+    return FlowsStoreFacade.getFlows().map((flow) => flow.id);
+  }
 }

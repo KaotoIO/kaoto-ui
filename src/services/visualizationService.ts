@@ -5,6 +5,7 @@ import { ValidationService } from './validationService';
 import {
   HandleDeleteStepFn,
   IStepProps,
+  IVisibleFlows,
   IVizStepNode,
   IVizStepNodeData,
   IVizStepNodeDataBranch,
@@ -670,6 +671,15 @@ export class VisualizationService {
     useVisualizationStore.getState().setVisibleFlows({ ...visibleFlows });
   }
 
+  static renameVisibleFlow(oldId: string, newId: string): void {
+    const visibleFlows = useVisualizationStore.getState().visibleFlows;
+    const isFlowVisible = visibleFlows[oldId];
+    delete visibleFlows[oldId];
+    visibleFlows[newId] = isFlowVisible;
+
+    useVisualizationStore.getState().setVisibleFlows(visibleFlows);
+  }
+
   static setVisibleFlows(flowsIds: string[]): void {
     const previousVisibleFlows = useVisualizationStore.getState().visibleFlows;
 
@@ -683,7 +693,7 @@ export class VisualizationService {
          */
         [flow]: previousVisibleFlows[flow] ?? index === 0,
       }),
-      {} as Record<string, boolean>,
+      {} as IVisibleFlows,
     );
     useVisualizationStore.getState().setVisibleFlows(visibleFlows);
   }

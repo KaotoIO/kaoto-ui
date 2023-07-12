@@ -23,6 +23,20 @@ describe('settingsStore', () => {
     expect(result.current.settings.namespace).toEqual('KameletBinding');
   });
 
+  it('should provide a default value for uiLightMode', () => {
+    jest.spyOn(Storage.prototype, 'getItem').mockReturnValueOnce(null);
+
+    const { result } = renderHook(() => useSettingsStore());
+    expect(result.current.settings.uiLightMode).toBeTruthy();
+  });
+
+  it('should disable uiLightMode if the key is "false" in local storae', () => {
+    jest.spyOn(Storage.prototype, 'getItem').mockReturnValueOnce('false');
+
+    const { result } = renderHook(() => useSettingsStore());
+    expect(result.current.settings.uiLightMode).toBeTruthy();
+  });
+
   it('setBackendVersion', () => {
     const { result } = renderHook(() => useSettingsStore());
     expect(result.current.settings.backendVersion).toEqual('');
