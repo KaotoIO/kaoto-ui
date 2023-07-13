@@ -9,6 +9,9 @@ export default {
     toggleCatalog: { action: 'toggled' },
     toggleCodeEditor: { action: 'toggled' },
   },
+  parameters: {
+    chromatic: { disableSnapshot: true }, // due to random route ID suffix
+  },
 } as Meta<typeof KaotoToolbar>;
 
 const Template: StoryFn<typeof KaotoToolbar> = (args) => {
