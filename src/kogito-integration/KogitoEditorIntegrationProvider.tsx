@@ -140,7 +140,13 @@ function KogitoEditorIntegrationProviderInternal(
   useCancelableEffect(
     useCallback(
       ({ canceled }) => {
-        if (!flows || isEqual(previousFlowWrapper.current.flows, flows)) return;
+        if (
+          !flows ||
+          (isEqual(previousFlowWrapper.current.flows, flows) &&
+            isEqual(previousFlowWrapper.current.properties, properties) &&
+            isEqual(previousFlowWrapper.current.metadata, metadata))
+        )
+          return;
 
         const updatedFlowWrapper: IFlowsWrapper = {
           flows: flows.map((flow) => ({
@@ -170,7 +176,7 @@ function KogitoEditorIntegrationProviderInternal(
           }
         });
       },
-      [flows],
+      [flows, properties, metadata],
     ),
   );
 
