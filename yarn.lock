@@ -3723,10 +3723,10 @@ __metadata:
     "@opentelemetry/api": ^1.4.1
     "@opentelemetry/exporter-trace-otlp-http": ^0.41.0
     "@opentelemetry/instrumentation": ^0.41.0
-    "@opentelemetry/instrumentation-document-load": ^0.32.3
+    "@opentelemetry/instrumentation-document-load": ^0.33.0
     "@opentelemetry/instrumentation-fetch": ^0.41.0
-    "@opentelemetry/instrumentation-long-task": ^0.32.5
-    "@opentelemetry/instrumentation-user-interaction": ^0.32.4
+    "@opentelemetry/instrumentation-long-task": ^0.33.0
+    "@opentelemetry/instrumentation-user-interaction": ^0.33.0
     "@opentelemetry/resources": ^1.14.0
     "@opentelemetry/sdk-trace-web": ^1.14.0
     "@patternfly/patternfly": 4.224.2
@@ -4341,18 +4341,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/instrumentation-document-load@npm:^0.32.3":
-  version: 0.32.3
-  resolution: "@opentelemetry/instrumentation-document-load@npm:0.32.3"
+"@opentelemetry/instrumentation-document-load@npm:^0.33.0":
+  version: 0.33.0
+  resolution: "@opentelemetry/instrumentation-document-load@npm:0.33.0"
   dependencies:
     "@opentelemetry/core": ^1.8.0
-    "@opentelemetry/instrumentation": ^0.40.0
+    "@opentelemetry/instrumentation": ^0.41.0
     "@opentelemetry/sdk-trace-base": ^1.0.0
-    "@opentelemetry/sdk-trace-web": ^1.8.0
+    "@opentelemetry/sdk-trace-web": ^1.15.0
     "@opentelemetry/semantic-conventions": ^1.0.0
+    tslib: ^2.3.1
   peerDependencies:
     "@opentelemetry/api": ^1.3.0
-  checksum: 114dec27ee17b55dcdc9b21bd2c9e981ee46d08f08776ae8873c17fa313b3b873ad1ed3af29cc247c32fd4142dcab860a4709c149c921023fb378bd54df75b98
+  checksum: 54d344d5bfea622c152eac4f0bee58037519d5dbcdd73231a704b6dc416c3ae081deea4b2f0a3df439608239bb62d75007cdbe648994e9740d48767a6962d1ff
   languageName: node
   linkType: hard
 
@@ -4371,30 +4372,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/instrumentation-long-task@npm:^0.32.5":
-  version: 0.32.5
-  resolution: "@opentelemetry/instrumentation-long-task@npm:0.32.5"
+"@opentelemetry/instrumentation-long-task@npm:^0.33.0":
+  version: 0.33.0
+  resolution: "@opentelemetry/instrumentation-long-task@npm:0.33.0"
   dependencies:
     "@opentelemetry/core": ^1.8.0
-    "@opentelemetry/instrumentation": ^0.40.0
+    "@opentelemetry/instrumentation": ^0.41.0
     "@opentelemetry/sdk-trace-web": ^1.8.0
+    tslib: ^2.3.1
   peerDependencies:
     "@opentelemetry/api": ^1.3.0
-  checksum: 5f8aef4c175996c37daadc09b3fb3cd6ca6888dd20d99b4bc47e8a89a5b7efbec63569b3275ac193efebffd389925c7b5ed92e59d2585b407393b39a63e1b387
+  checksum: dee04efa4392a0bcf12ab9bf8ae3c26c3ba3e6ac8f31c933b4539962e75b3807f7953ab3536d258a197b2bc7df3d0f111581cdfbedd56c8fe41febaac0913e33
   languageName: node
   linkType: hard
 
-"@opentelemetry/instrumentation-user-interaction@npm:^0.32.4":
-  version: 0.32.4
-  resolution: "@opentelemetry/instrumentation-user-interaction@npm:0.32.4"
+"@opentelemetry/instrumentation-user-interaction@npm:^0.33.0":
+  version: 0.33.0
+  resolution: "@opentelemetry/instrumentation-user-interaction@npm:0.33.0"
   dependencies:
     "@opentelemetry/core": ^1.8.0
-    "@opentelemetry/instrumentation": ^0.40.0
+    "@opentelemetry/instrumentation": ^0.41.0
     "@opentelemetry/sdk-trace-web": ^1.8.0
+    tslib: ^2.3.1
   peerDependencies:
     "@opentelemetry/api": ^1.3.0
     zone.js: 0.11.4
-  checksum: a39f9477c36d6aeed5f0802a106fc204c57844e486b064efc659d1819a2e6418c24da2fb82935debfe2d4c9ac9d37b87b4b7b885ad92b8fc8cc7be50095ee1d8
+  checksum: aaae63db22ac388fd0c502a1dea1b309bc8d8dad82ec3ceaf15066a0e0b3c3326aa19305c72a8ca2689f48c81f78a273275053d99992e70ec8a24e2684a7fbd8
   languageName: node
   linkType: hard
 
@@ -4411,21 +4414,6 @@ __metadata:
   peerDependencies:
     "@opentelemetry/api": ^1.3.0
   checksum: ea6cf28ad6ce34549eef0501928a5070a7289a86431709ec2dde1c7f6e7e593137599d31c5de22269a259a3fca5116287e3b74bc717cdba0df1b072726265b8c
-  languageName: node
-  linkType: hard
-
-"@opentelemetry/instrumentation@npm:^0.40.0":
-  version: 0.40.0
-  resolution: "@opentelemetry/instrumentation@npm:0.40.0"
-  dependencies:
-    "@types/shimmer": ^1.0.2
-    import-in-the-middle: 1.3.5
-    require-in-the-middle: ^7.1.0
-    semver: ^7.3.2
-    shimmer: ^1.2.1
-  peerDependencies:
-    "@opentelemetry/api": ^1.3.0
-  checksum: 03755fc091ed1659b7353d96de17370dc9d1c4986dfa046e38aeb2962f642055179515ccbb1e24b65a2888a075228a1245a459492a0dd7053e74c66905bda7f7
   languageName: node
   linkType: hard
 
@@ -4538,7 +4526,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/sdk-trace-web@npm:1.15.0, @opentelemetry/sdk-trace-web@npm:^1.14.0, @opentelemetry/sdk-trace-web@npm:^1.8.0":
+"@opentelemetry/sdk-trace-web@npm:1.15.0, @opentelemetry/sdk-trace-web@npm:^1.14.0, @opentelemetry/sdk-trace-web@npm:^1.15.0, @opentelemetry/sdk-trace-web@npm:^1.8.0":
   version: 1.15.0
   resolution: "@opentelemetry/sdk-trace-web@npm:1.15.0"
   dependencies:
@@ -14144,15 +14132,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"import-in-the-middle@npm:1.3.5":
-  version: 1.3.5
-  resolution: "import-in-the-middle@npm:1.3.5"
-  dependencies:
-    module-details-from-path: ^1.0.3
-  checksum: e8420c863cf0c7eb53647afea6b870357eeb2fa74624827452f94635fea43d022947cd49e3b9404c2cdcd1adf8bac5a61c3bae3321de1aa5d219a3a88297e7b6
-  languageName: node
-  linkType: hard
-
 "import-in-the-middle@npm:1.4.1":
   version: 1.4.1
   resolution: "import-in-the-middle@npm:1.4.1"
@@ -19514,17 +19493,6 @@ __metadata:
   version: 2.0.2
   resolution: "require-from-string@npm:2.0.2"
   checksum: a03ef6895445f33a4015300c426699bc66b2b044ba7b670aa238610381b56d3f07c686251740d575e22f4c87531ba662d06937508f0f3c0f1ddc04db3130560b
-  languageName: node
-  linkType: hard
-
-"require-in-the-middle@npm:^7.1.0":
-  version: 7.1.0
-  resolution: "require-in-the-middle@npm:7.1.0"
-  dependencies:
-    debug: ^4.1.1
-    module-details-from-path: ^1.0.3
-    resolve: ^1.22.1
-  checksum: 086e346be2e22277c26de9cc7a9bacea5ec62e360ac825be884c5ec3a852e3530aba3bf77b7f37122cfb431b7450303455ae0e15a2cb635e5cc3b3d12f988363
   languageName: node
   linkType: hard
 
