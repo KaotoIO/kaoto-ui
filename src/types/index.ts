@@ -252,4 +252,5 @@ export type HandleDeleteStepFn = (integrationId: string, UUID: string) => void;
 
 export * from './dsl.model';
 export * from './react-components.model';
+export * from './validation.model';
 export * from './visualization.model';
