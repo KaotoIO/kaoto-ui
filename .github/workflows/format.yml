@@ -16,6 +16,6 @@ jobs:
       - name: 🤹‍♀️ Install modules
         run: yarn
       - name: 💅 Run format check
-        run: yarn format
+        run: yarn workspace @kaoto/kaoto-ui run format
       - name: 💅 Run lint check
-        run: yarn lint
+        run: yarn workspace @kaoto/kaoto-ui run lint

@@ -3148,9 +3148,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kaoto/kaoto-ui@workspace:.":
+"@kaoto/kaoto-ui@workspace:packages/kaoto-ui":
   version: 0.0.0-use.local
-  resolution: "@kaoto/kaoto-ui@workspace:."
+  resolution: "@kaoto/kaoto-ui@workspace:packages/kaoto-ui"
   dependencies:
     "@4tw/cypress-drag-drop": ^2.2.4
     "@babel/core": ^7.22.5
@@ -3282,13 +3282,6 @@ __metadata:
     "@types/react": "*"
     react: "*"
     react-dom: "*"
-  dependenciesMeta:
-    "@4tw/cypress-drag-drop":
-      built: true
-    cypress:
-      built: true
-    cypress-file-upload:
-      built: true
   languageName: unknown
   linkType: soft
 
@@ -19341,6 +19334,12 @@ __metadata:
   checksum: 006accc40578ee2beae382757c4ce2908a826b27e2b079efdcd2959ee544ddf210b7b5d7d5e80467807604244e7388427330f5c6d4cd61e6edaddc5773ccc393
   languageName: node
   linkType: hard
+
+"root@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "root@workspace:."
+  languageName: unknown
+  linkType: soft
 
 "run-applescript@npm:^5.0.0":
   version: 5.0.0

@@ -31,7 +31,7 @@ jobs:
         with:
           runTests: false
           install-command: yarn install --immutable
-          build: yarn build
+          build: yarn workspace @kaoto/kaoto-ui run build
           record: true
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
@@ -80,7 +80,7 @@ jobs:
           browser: firefox
           # we have already installed all dependencies above
           #          install: false
-          start: yarn start
+          start: yarn workspace @kaoto/kaoto-ui run start
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
           wait-on-timeout: 120
@@ -137,7 +137,7 @@ jobs:
           browser: chrome
           # we have already installed all dependencies above
           #          install: false
-          start: yarn start
+          start: yarn workspace @kaoto/kaoto-ui run start
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
           wait-on-timeout: 120
@@ -194,7 +194,7 @@ jobs:
           browser: edge
           # we have already installed all dependencies above
           #          install: false
-          start: yarn start
+          start: yarn workspace @kaoto/kaoto-ui run start
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
           wait-on-timeout: 120

@@ -44,14 +44,10 @@ module.exports = {
     '@kaoto/services': path.resolve(__dirname, './src/services'),
     '@kaoto/store': path.resolve(__dirname, './src/store'),
     '@kaoto/utils': path.resolve(__dirname, './src/utils'),
-    '@kie-tools/uniforms-patternfly/dist/esm': path.resolve(
-      __dirname,
-      'node_modules/@kie-tools/uniforms-patternfly/dist/cjs',
+    '@kie-tools/uniforms-patternfly/dist/esm': require.resolve(
+      '@kie-tools/uniforms-patternfly/dist/cjs',
     ),
-    '@patternfly/react-core/next': path.resolve(
-      __dirname,
-      'node_modules/@patternfly/react-core/dist/js/next',
-    ),
+    '@patternfly/react-core/next': require.resolve('@patternfly/react-core/dist/js/next'),
   },
 
   roots: ['<rootDir>'],
