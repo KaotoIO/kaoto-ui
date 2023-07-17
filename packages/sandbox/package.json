@@ -1,0 +1,47 @@
+{
+  "name": "@kaoto/sandbox",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@kaoto/kaoto-ui": "workspace:*",
+    "@kie-tools-core/editor": "0.30.0",
+    "@kie-tools-core/guided-tour": "0.28.0",
+    "@kie-tools-core/monaco-editor": "0.30.0",
+    "@kie-tools-core/notifications": "0.30.0",
+    "@kie-tools-core/patternfly-base": "0.30.0",
+    "@kie-tools-core/workspace": "0.30.0",
+    "@kie-tools/serverless-workflow-language-service": "0.30.0",
+    "@kie-tools/uniforms-patternfly": "0.30.0",
+    "@patternfly/patternfly": "4.224.2",
+    "@patternfly/react-code-editor": "4.82.115",
+    "@patternfly/react-core": "4.276.8",
+    "@patternfly/react-icons": "4.93.6",
+    "@patternfly/react-log-viewer": "4.87.100",
+    "@patternfly/react-table": "4.113.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "@typescript-eslint/eslint-plugin": "^5.60.0",
+    "@typescript-eslint/parser": "^5.60.0",
+    "@vitejs/plugin-react": "^4.0.1",
+    "eslint": "8.44.0",
+    "eslint-config-prettier": "8.8.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "sass": "^1.63.6",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.0"
+  }
+}

@@ -107,7 +107,7 @@ Cypress.Commands.add('switchIntegrationType', (type) => {
     .then((element) => {
       cy.wrap(element).click();
     });
-    cy.get('[data-testid="confirmation-modal-confirm"]').click({ force: true });
+  cy.get('[data-testid="confirmation-modal-confirm"]').click({ force: true });
   cy.wait('@getViewDefinitions');
 });
 
