@@ -14,9 +14,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@kaoto'
       - run: yarn
-      - run: yarn build
-      - run: yarn build:lib
+      - run: yarn workspace @kaoto/kaoto-ui run build
+      - run: yarn workspace @kaoto/kaoto-ui run build:lib
       - name: 📦 Publish Package to npm
-        run: yarn npm publish --access=public
+        run: yarn workspace @kaoto/kaoto-ui run npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -17,5 +17,5 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@kaoto'
       - run: yarn
-      - run: yarn build
-      - run: yarn build:lib
+      - run: yarn workspace @kaoto/kaoto-ui run build
+      - run: yarn workspace @kaoto/kaoto-ui run build:lib

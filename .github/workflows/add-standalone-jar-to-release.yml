@@ -26,12 +26,12 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@kaoto'
       - name: 🛸 Build Frontend
-        run: yarn install && KAOTO_API="" yarn build
+        run: yarn install && KAOTO_API="" yarn workspace @kaoto/kaoto-ui run build
       - name: 📩 Save dist folder
         uses: actions/upload-artifact@v3
         with:
           name: dist
-          path: dist/
+          path: packages/kaoto-ui/dist/
           retention-days: 1
 
   build-standalone-jar:

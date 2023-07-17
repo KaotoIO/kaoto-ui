@@ -16,6 +16,6 @@ jobs:
       - name: 🤹‍♀️ Install modules
         run: yarn
       - name: 🤺 Run tests
-        run: yarn test --coverage
+        run: yarn workspace @kaoto/kaoto-ui run test --coverage
       - name: 💅 Upload coverage to Codecov
         uses: codecov/codecov-action@v3
