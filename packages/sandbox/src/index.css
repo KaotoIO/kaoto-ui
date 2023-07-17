@@ -1,0 +1,9 @@
+div#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+form > div {
+  display: inherit;
+  gap: inherit;
+}
