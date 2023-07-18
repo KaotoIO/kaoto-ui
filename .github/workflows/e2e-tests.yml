@@ -43,9 +43,9 @@ jobs:
       - name: 💾 Save build folder
         uses: actions/upload-artifact@v3
         with:
-          name: dist
+          name: kaoto-ui-dist
           if-no-files-found: error
-          path: dist
+          path: packages/kaoto-ui/dist
 
   test-on-firefox:
     needs: install
@@ -69,11 +69,12 @@ jobs:
       - name: 🗄️ Download the build folders
         uses: actions/download-artifact@v3
         with:
-          name: dist
-          path: dist
+          name: kaoto-ui-dist
+          path: packages/kaoto-ui/dist
 
       - name: 🤓 Set KAOTO_API
-        run: echo "KAOTO_API=http://kaoto:8081" > .env
+        run: echo "KAOTO_API=http://kaoto:8081" > packages/kaoto-ui/.env
+
       - name: 🔨 Cypress run
         uses: cypress-io/github-action@v5.8.3
         with:
@@ -81,6 +82,7 @@ jobs:
           # we have already installed all dependencies above
           #          install: false
           start: yarn workspace @kaoto/kaoto-ui run start
+          working-directory: packages/kaoto-ui
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
           wait-on-timeout: 120
@@ -94,14 +96,14 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: videos-firefox
-          path: cypress/videos
+          path: packages/kaoto-ui/cypress/videos
 
       - name: 💾 Save screenshots
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: screenshots-firefox
-          path: cypress/screenshots
+          path: packages/kaoto-ui/cypress/screenshots
 
   test-on-chrome:
     needs: install
@@ -125,11 +127,11 @@ jobs:
       - name: 🗄️ Download the build folders
         uses: actions/download-artifact@v3
         with:
-          name: dist
-          path: dist
+          name: kaoto-ui-dist
+          path: packages/kaoto-ui/dist
 
       - name: 🤓 Set KAOTO_API
-        run: echo "KAOTO_API=http://kaoto:8081" > .env
+        run: echo "KAOTO_API=http://kaoto:8081" > packages/kaoto-ui/.env
 
       - name: 🔨 Cypress run
         uses: cypress-io/github-action@v5.8.3
@@ -138,6 +140,7 @@ jobs:
           # we have already installed all dependencies above
           #          install: false
           start: yarn workspace @kaoto/kaoto-ui run start
+          working-directory: packages/kaoto-ui
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
           wait-on-timeout: 120
@@ -151,14 +154,14 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: videos-chrome
-          path: cypress/videos
+          path: packages/kaoto-ui/cypress/videos
 
       - name: 💾 Save screenshots
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: screenshots-chrome
-          path: cypress/screenshots
+          path: packages/kaoto-ui/cypress/screenshots
 
   test-on-edge:
     needs: install
@@ -182,11 +185,11 @@ jobs:
       - name: 🗄️ Download the build folders
         uses: actions/download-artifact@v3
         with:
-          name: dist
-          path: dist
+          name: kaoto-ui-dist
+          path: packages/kaoto-ui/dist
 
       - name: 🤓 Set KAOTO_API
-        run: echo "KAOTO_API=http://kaoto:8081" > .env
+        run: echo "KAOTO_API=http://kaoto:8081" > packages/kaoto-ui/.env
 
       - name: 🔨 Cypress run
         uses: cypress-io/github-action@v5.8.3
@@ -195,6 +198,7 @@ jobs:
           # we have already installed all dependencies above
           #          install: false
           start: yarn workspace @kaoto/kaoto-ui run start
+          working-directory: packages/kaoto-ui
           record: ${{needs.install.outputs.record}}
           wait-on: 'http://localhost:1337'
           wait-on-timeout: 120
@@ -208,11 +212,11 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: videos-edge
-          path: cypress/videos
+          path: packages/kaoto-ui/cypress/videos
 
       - name: 💾 Save screenshots
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: screenshots-edge
-          path: cypress/screenshots
+          path: packages/kaoto-ui/cypress/screenshots

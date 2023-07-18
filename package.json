@@ -7,5 +7,16 @@
     "@types/react": "18.2.15",
     "react": "18.2.0",
     "react-dom": "18.2.0"
+  },
+  "dependenciesMeta": {
+    "@4tw/cypress-drag-drop": {
+      "built": true
+    },
+    "cypress": {
+      "built": true
+    },
+    "cypress-file-upload": {
+      "built": true
+    }
   }
 }

@@ -20100,6 +20100,13 @@ __metadata:
 "root@workspace:.":
   version: 0.0.0-use.local
   resolution: "root@workspace:."
+  dependenciesMeta:
+    "@4tw/cypress-drag-drop":
+      built: true
+    cypress:
+      built: true
+    cypress-file-upload:
+      built: true
   languageName: unknown
   linkType: soft
 
