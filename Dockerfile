@@ -6,25 +6,20 @@ WORKDIR /app
 COPY .yarn/plugins ./.yarn/plugins
 COPY .yarn/releases ./.yarn/releases
 COPY .yarnrc.yml .
-
-# Main entrypoint
-COPY public ./public/
+COPY package.json yarn.lock ./
 
 # Source code
-COPY src ./src/
-
-# Webpack and Typescript config files
-COPY package.json yarn.lock webpack.* tsconfig.* ./
+COPY packages ./packages/
 
 # Install dependencies
-RUN yarn install --mode=skip-build --immutable
+RUN yarn workspaces focus @kaoto/kaoto-ui
 
 # Build Kaoto UI
-RUN KAOTO_API=${KAOTO_API_URL} yarn run build
+RUN KAOTO_API=${KAOTO_API_URL} yarn workspace @kaoto/kaoto-ui run build
 
 FROM nginxinc/nginx-unprivileged
 
-COPY --from=appbuild /app/dist/* /usr/share/nginx/html/
+COPY --from=appbuild /app/packages/kaoto-ui/dist/* /usr/share/nginx/html/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 8080
