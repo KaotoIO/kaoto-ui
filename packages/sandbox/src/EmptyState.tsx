@@ -24,9 +24,10 @@ import {
   EmptyStateVariant,
 } from "@patternfly/react-core/dist/js/components/EmptyState";
 import { CubesIcon } from "@patternfly/react-icons/dist/js/icons/cubes-icon";
+import { KaotoFileType } from './models';
 
 interface NewProps {
-  newContent: (type: string) => void;
+  newContent: (type: KaotoFileType) => void;
 }
 
 interface UploadProps {
@@ -47,7 +48,7 @@ export const KaotoEmptyState = (props: AllProps) => (
     </EmptyStateBody>
     <FileChooser setContent={props.setContent} />
     <EmptyStateSecondaryActions>
-      <Button variant="link" onClick={(e) => props.newContent("yaml")} ouiaId="new-button">
+      <Button variant="link" onClick={(_event) => props.newContent("yaml")} ouiaId="new-button">
         New YAML
       </Button>
       <Button variant="link" ouiaId="new-button" isDisabled={true}>
@@ -68,7 +69,7 @@ const FileChooser = (props: UploadProps) => {
       reader.onload = async (e2: ProgressEvent<FileReader>) => {
         const text: string | ArrayBuffer | null | undefined = e2.target?.result;
         if (text) {
-          props.setContent(file.name, text?.toString() as string);
+          props.setContent(file.name, text.toString());
         }
       };
 

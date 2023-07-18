@@ -19,7 +19,7 @@ import { MenuButtons } from './MenuButtons';
 import {
   ChannelType,
   EditorEnvelopeLocator,
-  EnvelopeContent,
+  EditorTheme,
   EnvelopeContentType,
   EnvelopeMapping,
 } from '@kie-tools-core/editor/dist/api';
@@ -39,16 +39,10 @@ import {
   PageSection,
 } from '@patternfly/react-core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
-export type KaotoFileType = 'yml' | 'yaml';
-
-interface File {
-  path: string;
-  content: string;
-}
+import { KaotoFile, KaotoFileType } from './models';
 
 export const App = () => {
-  const [file, setFile] = useState<File | undefined>(undefined);
+  const [file, setFile] = useState<KaotoFile | undefined>(undefined);
   const [kaotoEmbeddedEditorFile, setKaotoEmbeddedEditorFile] = useState<EmbeddedEditorFile>();
   const [textEmbeddedEditorFile, setTextEmbeddedEditorFile] = useState<EmbeddedEditorFile>();
   const { editor: kaotoEditor, editorRef: kaotoEditorRef } = useEditorRef();
@@ -99,7 +93,7 @@ export const App = () => {
   const onGetContent = useCallback(async () => kaotoEditor?.getContent() ?? '', [kaotoEditor]);
 
   const onSetTheme = useCallback(
-    async (theme) => {
+    async (theme: EditorTheme) => {
       kaotoEditor?.setTheme(theme);
     },
     [kaotoEditor],
@@ -185,7 +179,7 @@ export const App = () => {
   );
 
   const updateEditors = useCallback(
-    async (f: File) => {
+    async (f: KaotoFile) => {
       if (!textEditor || !kaotoEditor) {
         return;
       }
