@@ -93,19 +93,16 @@ const RefForwardingServerlessWorkflowTextEditor: ForwardRefRenderFunction<
         },
         undo: (): Promise<void> => {
           props.onStateControlCommandUpdate(StateControlCommand.UNDO);
-          // @ts-expect-error
           return swfTextEditorRef.current?.undo() || Promise.resolve();
         },
         redo: (): Promise<void> => {
           props.onStateControlCommandUpdate(StateControlCommand.REDO);
-          // @ts-expect-error
           return swfTextEditorRef.current?.redo() || Promise.resolve();
         },
         validate: (): Promise<Notification[]> => {
           return Promise.resolve([]);
         },
         setTheme: (theme: EditorTheme): Promise<void> => {
-          // @ts-expect-error
           return swfTextEditorRef.current?.setTheme(theme) || Promise.resolve();
         },
         moveCursorToNode: (nodeName: string): void => {
@@ -136,7 +133,7 @@ const RefForwardingServerlessWorkflowTextEditor: ForwardRefRenderFunction<
           endColumn: error.endColumn,
         },
       }));
-      props.setNotifications.apply(initialContent.path, notifications);
+      props.setNotifications.apply(null, [initialContent.path, notifications]);
     },
     [initialContent, props.setNotifications]
   );

@@ -30,8 +30,8 @@ export interface ServerlessWorkflowTextEditorApi extends Editor {
 export class ServerlessWorkflowTextEditorView implements ServerlessWorkflowTextEditorApi {
   private readonly editorRef: RefObject<ServerlessWorkflowTextEditorApi>;
   public af_isReact = true;
-  public af_componentId: "serverless-workflow-text-editor";
-  public af_componentTitle: "Serverless Workflow Text Editor";
+  public af_componentId = "serverless-workflow-text-editor";
+  public af_componentTitle = "Serverless Workflow Text Editor";
 
   constructor(
     private readonly envelopeContext: KogitoEditorEnvelopeContextType<ServerlessWorkflowTextEditorChannelApi>,

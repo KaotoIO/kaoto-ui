@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { EditorTheme } from "@kie-tools-core/editor/dist/api";
-import { OperatingSystem } from "@kie-tools-core/operating-system";
-// import { FileLanguage, SwfLanguageServiceCommandIds } from "@kie-tools/serverless-workflow-language-service/dist/api";
-// import { SwfJsonOffsets, SwfYamlOffsets } from "@kie-tools/serverless-workflow-language-service/dist/editor";
-import { editor, KeyCode, KeyMod, Position } from "monaco-editor";
-import { initJsonSchemaDiagnostics } from "./augmentation/language/json";
-import { initYamlSchemaDiagnostics } from "./augmentation/language/yaml";
+import { initJsonSchemaDiagnostics } from './augmentation/language/json';
+import { initYamlSchemaDiagnostics } from './augmentation/language/yaml';
+import { EditorTheme } from '@kie-tools-core/editor/dist/api';
+import { OperatingSystem } from '@kie-tools-core/operating-system';
+import { FileLanguage, SwfLanguageServiceCommandIds } from '@kie-tools/serverless-workflow-language-service/dist/api';
+import { editor, KeyCode, KeyMod, Position } from 'monaco-editor';
+import {
+  getJsonStateNameFromOffset,
+  getJsonStateNameOffset,
+  getYamlStateNameFromOffset,
+  getYamlStateNameOffset,
+} from "@kie-tools/serverless-workflow-language-service/dist/editor";
 
 initJsonSchemaDiagnostics();
 initYamlSchemaDiagnostics();
@@ -45,30 +49,25 @@ export enum SwfTextEditorOperation {
 }
 
 export interface SwfTextEditorInstance {
-  // commands: SwfLanguageServiceCommandIds;
-  commands: [];
+  commands: SwfLanguageServiceCommandIds;
   instance: editor.IStandaloneCodeEditor;
 }
 
 export class SwfTextEditorController implements SwfTextEditorApi {
   private readonly model: editor.ITextModel;
-  // private swfJsonOffsets = new SwfJsonOffsets();
-  // private swfYamlOffsets = new SwfYamlOffsets();
 
   public editor: editor.IStandaloneCodeEditor | undefined;
 
   constructor(
     content: string,
     private readonly onContentChange: (content: string, operation: SwfTextEditorOperation) => void,
-    // private readonly language: FileLanguage,
-    private readonly language: any,
+    private readonly language: FileLanguage,
     private readonly operatingSystem: OperatingSystem | undefined,
     private readonly isReadOnly: boolean,
     private readonly setValidationErrors: (errors: editor.IMarker[]) => void,
-    private readonly onSelectionChanged: (nodeName: string) => void
+    private readonly onSelectionChanged: (nodeName: string) => void,
   ) {
-    // this.model = editor.createModel(content, this.language);
-    this.model = editor.createModel(content);
+    this.model = editor.createModel(content, this.language);
     this.model.onDidChangeContent((event) => {
       if (!event.isUndoing && !event.isRedoing) {
         this.editor?.pushUndoStop();
@@ -85,18 +84,14 @@ export class SwfTextEditorController implements SwfTextEditorApi {
     });
   }
 
-  // private get swfOffsetsApi(): SwfJsonOffsets | SwfYamlOffsets {
-  //   return this.language === FileLanguage.YAML ? this.swfYamlOffsets : this.swfJsonOffsets;
-  // }
-
   public redo(): void {
     this.editor?.focus();
-    this.editor?.trigger("editor", "redo", null);
+    this.editor?.trigger('editor', 'redo', null);
   }
 
   public undo(): void {
     this.editor?.focus();
-    this.editor?.trigger("editor", "undo", null);
+    this.editor?.trigger('editor', 'undo', null);
   }
 
   public getValidationMarkers = (): editor.IMarker[] => {
@@ -107,9 +102,12 @@ export class SwfTextEditorController implements SwfTextEditorApi {
     editor.setTheme(this.getMonacoThemeByEditorTheme(theme));
   }
 
-  public show(container: HTMLDivElement, theme: EditorTheme = EditorTheme.LIGHT): editor.IStandaloneCodeEditor {
+  public show(
+    container: HTMLDivElement,
+    theme: EditorTheme = EditorTheme.LIGHT,
+  ): editor.IStandaloneCodeEditor {
     if (!container) {
-      throw new Error("We need a container to show the editor!");
+      throw new Error('We need a container to show the editor!');
     }
     if (this.editor !== undefined) {
       this.setTheme(theme);
@@ -118,7 +116,7 @@ export class SwfTextEditorController implements SwfTextEditorApi {
 
     this.editor = editor.create(container, {
       model: this.model,
-      // language: this.language,
+      language: this.language,
       scrollBeyondLastLine: false,
       automaticLayout: true,
       fontSize: 12,
@@ -144,7 +142,7 @@ export class SwfTextEditorController implements SwfTextEditorApi {
   }
 
   public getContent(): string {
-    return this.editor?.getModel()?.getValue() || "";
+    return this.editor?.getModel()?.getValue() || '';
   }
 
   public forceRedraw() {
@@ -162,21 +160,26 @@ export class SwfTextEditorController implements SwfTextEditorApi {
       return;
     }
 
-    // this.swfOffsetsApi.parseContent(this.getContent());
+    const getStateNameOffsetArgs = {
+      content: this.getContent(),
+      stateName: nodeName,
+    };
+    const targetOffset =
+      this.language === FileLanguage.JSON
+        ? getJsonStateNameOffset(getStateNameOffsetArgs)
+        : getYamlStateNameOffset(getStateNameOffsetArgs);
 
-    // const targetOffset = this.swfOffsetsApi.getStateNameOffset(nodeName);
+    if (!targetOffset) {
+      return;
+    }
 
-    // if (!targetOffset) {
-    //   return;
-    // }
+    const targetPosition = this.editor?.getModel()?.getPositionAt(targetOffset);
 
-    // const targetPosition = this.editor?.getModel()?.getPositionAt(targetOffset);
+    if (!targetPosition) {
+      return;
+    }
 
-    // if (!targetPosition) {
-    //   return;
-    // }
-
-    // this.moveCursorToPosition(targetPosition);
+    this.moveCursorToPosition(targetPosition);
   }
 
   /**
@@ -209,24 +212,27 @@ export class SwfTextEditorController implements SwfTextEditorApi {
       return;
     }
 
-    // this.swfOffsetsApi.parseContent(this.getContent());
+    const getStateNameFromOffsetArgs = { content: this.getContent(), offset };
+    const nodeName =
+      this.language === FileLanguage.JSON
+        ? getJsonStateNameFromOffset(getStateNameFromOffsetArgs)
+        : getYamlStateNameFromOffset(getStateNameFromOffsetArgs);
 
-    // const nodeName = this.swfOffsetsApi.getStateNameFromOffset(offset);
-    // if (!nodeName) {
-    //   return;
-    // }
+    if (!nodeName) {
+      return;
+    }
 
-    // this.onSelectionChanged(nodeName);
+    this.onSelectionChanged(nodeName);
   }
 
   private getMonacoThemeByEditorTheme(theme?: EditorTheme): string {
     switch (theme) {
       case EditorTheme.DARK:
-        return "vs-dark";
+        return 'vs-dark';
       case EditorTheme.HIGH_CONTRAST:
-        return "hc-black";
+        return 'hc-black';
       default:
-        return "vs";
+        return 'vs';
     }
   }
 

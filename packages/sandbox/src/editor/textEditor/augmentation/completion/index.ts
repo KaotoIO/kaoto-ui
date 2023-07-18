@@ -32,7 +32,7 @@ export function initCompletion(
     provideCompletionItems: async (
       model: monaco.editor.ITextModel,
       cursorPosition: monaco.Position,
-      context: monaco.languages.CompletionContext,
+      _context: monaco.languages.CompletionContext,
       cancellationToken: monaco.CancellationToken
     ) => {
       const currentWordPosition = model.getWordAtPosition(cursorPosition);

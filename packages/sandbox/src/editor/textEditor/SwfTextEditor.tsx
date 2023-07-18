@@ -13,17 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { useEffect, useImperativeHandle, useMemo, useRef, useCallback, ForwardRefRenderFunction, forwardRef } from "react";
-import { SwfTextEditorController, SwfTextEditorApi } from "./SwfTextEditorController";
-// import { initCompletion } from "./augmentation/completion";
-// import { initJsonCodeLenses } from "./augmentation/codeLenses";
-// import { initAugmentationCommands } from "./augmentation/commands";
-import { ChannelType, EditorTheme, useKogitoEditorEnvelopeContext } from "@kie-tools-core/editor/dist/api";
-import { useSharedValue } from "@kie-tools-core/envelope-bus/dist/hooks";
-// import { getFileLanguage } from "@kie-tools/serverless-workflow-language-service/dist/api";
-import { ServerlessWorkflowTextEditorChannelApi } from "../api";
-import { editor } from "monaco-editor";
+import { ServerlessWorkflowTextEditorChannelApi } from '../api';
+import { SwfTextEditorApi, SwfTextEditorController } from './SwfTextEditorController';
+import {
+  ChannelType,
+  EditorTheme,
+  useKogitoEditorEnvelopeContext,
+} from '@kie-tools-core/editor/dist/api';
+import { useSharedValue } from '@kie-tools-core/envelope-bus/dist/hooks';
+import { getFileLanguage } from '@kie-tools/serverless-workflow-language-service/dist/api';
+import { editor } from 'monaco-editor';
+import {
+  ForwardRefRenderFunction,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from 'react';
 
 interface Props {
   content: string;
@@ -36,41 +44,36 @@ interface Props {
 
 const RefForwardingSwfTextEditor: ForwardRefRenderFunction<SwfTextEditorApi | undefined, Props> = (
   { content, fileName, onContentChange, channelType, isReadOnly, setValidationErrors },
-  forwardedRef
+  forwardedRef,
 ) => {
   const container = useRef<HTMLDivElement>(null);
-  const editorEnvelopeCtx = useKogitoEditorEnvelopeContext<ServerlessWorkflowTextEditorChannelApi>();
+  const editorEnvelopeCtx =
+    useKogitoEditorEnvelopeContext<ServerlessWorkflowTextEditorChannelApi>();
   const [theme] = useSharedValue(editorEnvelopeCtx.channelApi?.shared.kogitoEditor_theme);
-  // const [services] = useSharedValue(editorEnvelopeCtx.channelApi?.shared.kogitoSwfServiceCatalog_services);
-  // const [serviceRegistriesSettings] = useSharedValue(
-  //   editorEnvelopeCtx.channelApi?.shared.kogitoSwfServiceCatalog_serviceRegistriesSettings
-  // );
 
-  // const fileLanguage = useMemo(() => getFileLanguage(fileName), [fileName]);
+  const fileLanguage = useMemo(() => getFileLanguage(fileName), [fileName]);
 
   const onSelectionChanged = useCallback((nodeName: string) => {
-    editorEnvelopeCtx.channelApi.notifications.kogitoSwfTextEditor__onSelectionChanged.send({ nodeName });
+    editorEnvelopeCtx.channelApi.notifications.kogitoSwfTextEditor__onSelectionChanged.send({
+      nodeName,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const controller: SwfTextEditorApi = useMemo<SwfTextEditorApi>(() => {
-    // if (fileLanguage !== null) {
-      return new SwfTextEditorController(
-        content,
-        onContentChange,
-        // fileLanguage,
-        '',
-        editorEnvelopeCtx.operatingSystem,
-        isReadOnly,
-        setValidationErrors,
-        onSelectionChanged
-      );
-    // }
-    throw new Error(`Unsupported extension '${fileName}'`);
-  }, [content, editorEnvelopeCtx.operatingSystem, fileName, onContentChange, isReadOnly, setValidationErrors]);
+    return new SwfTextEditorController(
+      content,
+      onContentChange,
+      fileLanguage!,
+      editorEnvelopeCtx.operatingSystem,
+      isReadOnly,
+      setValidationErrors,
+      onSelectionChanged,
+    );
+  }, [content, editorEnvelopeCtx.operatingSystem, fileLanguage, isReadOnly, onContentChange, onSelectionChanged, setValidationErrors]);
 
   useEffect(() => {
     controller.forceRedraw();
-  // }, [services, serviceRegistriesSettings, controller]);
   }, [controller]);
 
   useEffect(() => {
@@ -82,16 +85,10 @@ const RefForwardingSwfTextEditor: ForwardRefRenderFunction<SwfTextEditorApi | un
       return;
     }
 
-    const instance = controller.show(container.current, theme ?? EditorTheme.LIGHT);
-    // const commands = initAugmentationCommands(instance, editorEnvelopeCtx.channelApi);
-
-    // const completion = initCompletion(commands, editorEnvelopeCtx.channelApi);
-    // const codeLenses = initJsonCodeLenses(commands, editorEnvelopeCtx.channelApi);
+    controller.show(container.current, theme ?? EditorTheme.LIGHT);
 
     return () => {
       controller.dispose();
-      // codeLenses.dispose();
-      // completion.dispose();
     };
   }, [
     content,
@@ -105,7 +102,7 @@ const RefForwardingSwfTextEditor: ForwardRefRenderFunction<SwfTextEditorApi | un
 
   useImperativeHandle(forwardedRef, () => controller, [controller]);
 
-  return <div style={{ height: "100%" }} ref={container} />;
+  return <div style={{ height: '100%' }} ref={container} />;
 };
 
 export const SwfTextEditor = forwardRef(RefForwardingSwfTextEditor);
