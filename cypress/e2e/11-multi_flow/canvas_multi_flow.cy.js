@@ -42,6 +42,30 @@ describe('Test for Multi route actions from the canvas', () => {
     cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 0);
   });
 
+  it('User renames routes', () => {
+    cy.uploadFixture('IntegrationMultiFlow.yaml');
+    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "1/2");
+
+    cy.get('[data-testid=flows-list-dropdown]').click();
+    cy.get('[data-testid=goto-btn-route-1234--edit]').click();
+    cy.get('[data-testid=goto-btn-route-1234--text-input]').dblclick();
+    cy.get('[data-testid=goto-btn-route-1234--text-input]').clear().type('route-4321');
+
+    cy.get('div.pf-c-form__helper-text').should("have.text", "Name must be unique")
+
+    cy.get('[data-testid=goto-btn-route-1234--text-input]').dblclick();
+    cy.get('[data-testid=goto-btn-route-1234--text-input]').clear().type('test 2');
+
+    cy.get('div.pf-c-form__helper-text').should("have.text", "Name should only contain lowercase letters, numbers, and dashes")
+    
+    cy.get('[data-testid=goto-btn-route-1234--text-input]').dblclick();
+    cy.get('[data-testid=goto-btn-route-1234--text-input]').clear().type('test3');
+    cy.get('[data-testid=goto-btn-route-1234--save]').click();
+
+    cy.checkCodeSpanLine('id: test3');
+    cy.checkCodeSpanLine('id: route-1234', 0);
+  });
+
   it('User deletes routes in the canvas till there are no routes', () => {
     cy.switchIntegrationType('Integration');
     cy.createNewRoute();
