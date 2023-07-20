@@ -327,18 +327,14 @@ export async function fetchViews(data: IStepProps[], namespace?: string) {
  * @param namespace
  */
 export async function startDeployment(integrationSource: string, name: string, namespace?: string) {
-  try {
-    const params = namespace ? `?namespace=${namespace}` : '';
-    const resp = await RequestService.post({
-      endpoint: `${apiVersion}/deployments/${name.toLowerCase()}${params}`,
-      contentType: 'text/yaml',
-      body: integrationSource,
-    });
+  const params = namespace ? `?namespace=${namespace}` : '';
+  const resp = await RequestService.post({
+    endpoint: `${apiVersion}/deployments/${name.toLowerCase()}${params}`,
+    contentType: 'text/yaml',
+    body: integrationSource,
+  });
 
-    return await resp.text();
-  } catch (err) {
-    throw err;
-  }
+  return await resp.text();
 }
 
 /**
@@ -347,15 +343,11 @@ export async function startDeployment(integrationSource: string, name: string, n
  * @param namespace
  */
 export async function stopDeployment(deploymentName: string, namespace?: string) {
-  try {
-    const resp = await RequestService.delete({
-      endpoint: `${apiVersion}/deployments/${deploymentName.toLowerCase()}`,
-      contentType: 'application/json',
-      queryParams: { namespace: namespace ?? 'default' },
-    });
+  const resp = await RequestService.delete({
+    endpoint: `${apiVersion}/deployments/${deploymentName.toLowerCase()}`,
+    contentType: 'application/json',
+    queryParams: { namespace: namespace ?? 'default' },
+  });
 
-    return await resp.text();
-  } catch (err) {
-    throw err;
-  }
+  return await resp.text();
 }

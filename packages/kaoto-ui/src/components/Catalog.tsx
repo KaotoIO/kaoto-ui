@@ -74,7 +74,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
     setIsSelected(event.currentTarget.id);
   };
 
-  function search(items: any[]) {
+  function search(items: IStepProps[]): IStepProps[] {
     /**
      * Returns a list of items that meet the condition
      * of the `type` matching the `isSelected` value,
@@ -157,9 +157,9 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
         style={{ flex: '1 1', overflow: 'auto', padding: '0 10px', alignContent: 'flex-start' }}
       >
         {catalogData &&
-          search(catalogData).map((step, idx) => {
+          search(catalogData).map((step) => {
             return (
-              <GalleryItem key={idx}>
+              <GalleryItem key={step.name}>
                 <Card
                   className={'catalog__step'}
                   data-testid={`catalog-step-${step.name}`}
@@ -188,7 +188,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
                       <CardTitle>
                         <span>{step.name}</span>
                       </CardTitle>
-                      <CardBody>{shorten(step?.description, 60)}</CardBody>
+                      <CardBody>{shorten(step.description ?? '', 60)}</CardBody>
                     </GridItem>
                     <GridItem span={3}>
                       <Label
@@ -196,7 +196,7 @@ export const Catalog = ({ handleClose }: { handleClose: () => void }) => {
                         data-testid={'catalog__stepLabel'}
                         style={{ marginTop: '0.8em' }}
                       >
-                        {truncateString(step.kind, 8)}
+                        {truncateString(step.kind ?? '', 8)}
                       </Label>
                     </GridItem>
                   </Grid>

@@ -8,6 +8,8 @@ import {
   fetchDefaultNamespace,
   fetchDeployment,
   fetchDeployments,
+  startDeployment,
+  stopDeployment,
 } from './apiService';
 import { RequestService } from './requestService';
 import { IDsl } from '@kaoto/types';
@@ -346,6 +348,74 @@ describe('apiService', () => {
       jest.spyOn(RequestService, 'get').mockRejectedValueOnce('Wrong URL');
 
       await expect(fetchDeployments()).resolves.toEqual('Wrong URL');
+    });
+  });
+
+  describe('startDeployment', () => {
+    it('should use the default namespace if not specified', async () => {
+      const postSpy = jest.spyOn(RequestService, 'post').mockResolvedValueOnce({
+        text: async () => 'default deployment',
+      } as unknown as Response);
+
+      await startDeployment('integration-body', 'integration-name');
+
+      expect(postSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          body: 'integration-body',
+          contentType: 'text/yaml',
+          endpoint: '/v1/deployments/integration-name',
+        }),
+      );
+    });
+
+    it('should use the provided namespace', async () => {
+      const postSpy = jest.spyOn(RequestService, 'post').mockResolvedValueOnce({
+        text: async () => 'default deployment',
+      } as unknown as Response);
+
+      await startDeployment('integration-body', 'integration-name', 'hidden-namespace');
+
+      expect(postSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          body: 'integration-body',
+          contentType: 'text/yaml',
+          endpoint: '/v1/deployments/integration-name?namespace=hidden-namespace',
+        }),
+      );
+    });
+  });
+
+  describe('stopDeployment', () => {
+    it('should use the default namespace if not specified', async () => {
+      const deleteSpy = jest.spyOn(RequestService, 'delete').mockResolvedValueOnce({
+        text: async () => 'default deployment',
+      } as unknown as Response);
+
+      await stopDeployment('integration-name');
+
+      expect(deleteSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          endpoint: '/v1/deployments/integration-name',
+          contentType: 'application/json',
+          queryParams: { namespace: 'default' },
+        }),
+      );
+    });
+
+    it('should use the provided namespace', async () => {
+      const deleteSpy = jest.spyOn(RequestService, 'delete').mockResolvedValueOnce({
+        text: async () => 'default deployment',
+      } as unknown as Response);
+
+      await stopDeployment('integration-name', 'hidden-namespace');
+
+      expect(deleteSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          endpoint: '/v1/deployments/integration-name',
+          contentType: 'application/json',
+          queryParams: { namespace: 'hidden-namespace' },
+        }),
+      );
     });
   });
 });
