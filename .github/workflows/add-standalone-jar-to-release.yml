@@ -94,9 +94,9 @@ jobs:
           - os: ubuntu-latest
             asset_name: kaoto-linux-amd64
             file: -runner
-#          - os: windows-latest
-#            asset_name: kaoto-windows-amd64
-#            file: -runner.exe
+          - os: windows-latest
+            asset_name: kaoto-windows-amd64
+            file: -runner.exe
           - os: macos-latest
             asset_name: kaoto-macos-amd64
             file: -runner
@@ -138,7 +138,10 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: 🤳 Build Native Quarkus
-        run: mvn install -Pnative -DskipTests -Dquarkus.native.native-image-xmx=5g
+        # Until https://github.com/PowerShell/PowerShell/issues/6291 is done, we cannot use -Dquarkus.native.native-image-xmx=5g
+        run: mvn install -Pnative -DskipTests
+        env:
+          QUARKUS_NATIVE_NATIVE_IMAGE_XMX: "5g"
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
