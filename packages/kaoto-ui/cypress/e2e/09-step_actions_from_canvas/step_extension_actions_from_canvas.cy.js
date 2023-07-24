@@ -17,9 +17,9 @@ describe('Test for Step extensions', () => {
         cy.waitExtensionLoaded();
 
         // CHECK that transform extension elements are visible
-        cy.get('[data-testid="expression-syntax-select"]').should('be.visible');
-        cy.get('[data-testid="expression-string-input"]').should('be.visible');
-        cy.get('[data-testid="transform-apply-button"]').should('be.visible');
+        cy.isomorphicGet('[data-testid="expression-syntax-select"]').should('be.visible');
+        cy.isomorphicGet('[data-testid="expression-string-input"]').should('be.visible');
+        cy.isomorphicGet('[data-testid="transform-apply-button"]').should('be.visible');
     });
 
     it('User configures a step from a step extension (set-header)', () => {
@@ -28,22 +28,22 @@ describe('Test for Step extensions', () => {
         cy.waitExtensionLoaded();
 
         // Fill the step name
-        cy.get('[data-testid="set-header-name-input"]').as('headerNameInput');
-        cy.get('@headerNameInput').clear();
-        cy.get('@headerNameInput').type('test-name');
+        cy.isomorphicGet('[data-testid="set-header-name-input"]').as('headerNameInput');
+        cy.isomorphicGet('@headerNameInput').clear();
+        cy.isomorphicGet('@headerNameInput').type('test-name');
 
         // Select jq syntax
-        cy.get('[data-testid="expression-syntax-select"]').select('jq');
+        cy.isomorphicGet('[data-testid="expression-syntax-select"]').select('jq');
         // Fill the expression
-        cy.get('[data-testid="expression-string-input"]').as('expressionInput');
-        cy.get('@expressionInput').clear();
-        cy.get('@expressionInput').type('jq-test');
+        cy.isomorphicGet('[data-testid="expression-string-input"]').as('expressionInput');
+        cy.isomorphicGet('@expressionInput').clear();
+        cy.isomorphicGet('@expressionInput').type('jq-test');
 
         // Click on the "Apply" button
-        cy.get('[data-testid="set-header-apply-button"]').click();
+        cy.isomorphicGet('[data-testid="set-header-apply-button"]').click();
 
         // CHECK alert message
-        cy.get('.pf-c-alert').should('be.visible').and('contain.text', 'Set Header step updated');
+        cy.isomorphicGet('.pf-c-alert').should('be.visible').and('contain.text', 'Set Header step updated');
         // CHECK that the YAML is updated
         cy.checkCodeSpanLine('name: test-name');
         cy.checkCodeSpanLine('jq: jq-test');
@@ -64,20 +64,20 @@ describe('Test for Step extensions', () => {
         // Check that the YAML is updated
         cy.checkCodeSpanLine("jq: jq-test");
         cy.checkCodeSpanLine("simple: simple-test");
-        cy.get('.code-editor').should('contain.text', 'otherwise')
+        cy.isomorphicGet('.code-editor').should('contain.text', 'otherwise')
 
         cy.deleteBranchChoiceExtension(0);
         cy.deleteBranchChoiceExtension('otherwise');
 
         // Close Configuration tab
-        cy.get('.pf-c-button.pf-m-plain').click();
+        cy.isomorphicGet('.pf-c-button.pf-m-plain').click();
 
         // CHECK that canvas has 1 empty step
-        cy.get('[data-testid="viz-step-slot"]').should('have.length', 1).and('be.visible');
+        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 1).and('be.visible');
 
         // Check that the YAML is updated
-        cy.get('.code-editor').should('not.contain.text', 'jq-test');
-        cy.get('.code-editor').should('contain.text', 'simple-test');
-        cy.get('.code-editor').should('not.contain.text', 'otherwise');
+        cy.isomorphicGet('.code-editor').should('not.contain.text', 'jq-test');
+        cy.isomorphicGet('.code-editor').should('contain.text', 'simple-test');
+        cy.isomorphicGet('.code-editor').should('not.contain.text', 'otherwise');
     });
 });

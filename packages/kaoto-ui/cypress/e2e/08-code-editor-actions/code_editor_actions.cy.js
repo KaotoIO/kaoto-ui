@@ -23,7 +23,7 @@ describe('editing properties', () => {
     cy.syncUpCodeChanges();
 
     // CHECK the insert-field-action step was added
-    cy.get('[data-testid="viz-step-insert-field-action"]').should('be.visible');
+    cy.isomorphicGet('[data-testid="viz-step-insert-field-action"]').should('be.visible');
   });
 
   // Blocked due to:
@@ -35,7 +35,7 @@ describe('editing properties', () => {
     cy.syncUpCodeChanges();
 
     // CHECK the kafka-sink step was removed
-    cy.get('[data-testid="viz-step-kafka-sink"]').should('not.exist');
+    cy.isomorphicGet('[data-testid="viz-step-kafka-sink"]').should('not.exist');
   });
 
   it('User edits step in the YAML', () => {
@@ -47,8 +47,8 @@ describe('editing properties', () => {
     cy.syncUpCodeChanges();
 
     // CHECK the kafka-sink step was replaced by the aws s3 sink step
-    cy.get('[data-testid="viz-step-kafka-sink"]').should('not.exist');
-    cy.get('[data-testid="viz-step-aws-s3-sink"]').should('be.visible');
+    cy.isomorphicGet('[data-testid="viz-step-kafka-sink"]').should('not.exist');
+    cy.isomorphicGet('[data-testid="viz-step-aws-s3-sink"]').should('be.visible');
   });
 
   it('User Deletes branch in the YAML', () => {
@@ -58,15 +58,15 @@ describe('editing properties', () => {
     cy.syncUpCodeChanges();
 
     // CHECK branch with digitalocean and set header step was deleted
-    cy.get('[data-testid="viz-step-digitalocean"]').should('not.exist');
-    cy.get('[data-testid="viz-step-set-header"]').should('not.exist');
+    cy.isomorphicGet('[data-testid="viz-step-digitalocean"]').should('not.exist');
+    cy.isomorphicGet('[data-testid="viz-step-set-header"]').should('not.exist');
   });
 
   it('User Add a new branch in the YAML', () => {
     cy.uploadFixture('EipAction.yaml');
 
     // CHECK atlasmap step is not
-    cy.get('[data-testid="viz-step-atlasmap"]').should('not.exist');
+    cy.isomorphicGet('[data-testid="viz-step-atlasmap"]').should('not.exist');
 
     const stepToInsert = `          - simple: '{{}{{}?test}}'
             steps:
@@ -77,7 +77,7 @@ describe('editing properties', () => {
     cy.syncUpCodeChanges();
 
     // CHECK branch with atlasmap was created
-    cy.get('[data-testid="viz-step-atlasmap"]').should('be.visible');
+    cy.isomorphicGet('[data-testid="viz-step-atlasmap"]').should('be.visible');
   });
 
   it('User undoes a change they saved, syncs with canvas', () => {
@@ -87,29 +87,29 @@ describe('editing properties', () => {
     cy.syncUpCodeChanges();
 
     // CHECK branch with digitalocean and set header step was deleted
-    cy.get('[data-testid="viz-step-digitalocean"]').should('not.exist');
-    cy.get('[data-testid="viz-step-set-header"]').should('not.exist');
+    cy.isomorphicGet('[data-testid="viz-step-digitalocean"]').should('not.exist');
+    cy.isomorphicGet('[data-testid="viz-step-set-header"]').should('not.exist');
 
     // First click undo button => reverted automatic adjustments
     cy.editorClickUndoXTimes();
     // Second click undo button => changes reverted & alert is displayed
     cy.editorClickUndoXTimes(7);
     // CHECK alert is displayed
-    cy.get('.pf-c-alert__title').contains(
+    cy.isomorphicGet('.pf-c-alert__title').contains(
       "Any invalid code will be replaced after sync. If you don't want to lose your changes please make a backup.",
     );
     cy.syncUpCodeChanges();
 
     // CHECK branch with digitalocean and set header step was deleted
-    cy.get('[data-testid="viz-step-digitalocean"]').should('be.visible');
-    cy.get('[data-testid="viz-step-set-header"]').should('be.visible');
+    cy.isomorphicGet('[data-testid="viz-step-digitalocean"]').should('be.visible');
+    cy.isomorphicGet('[data-testid="viz-step-set-header"]').should('be.visible');
   });
 
   it('User uploads YAML file, syncs with canvas', () => {
     cy.uploadFixture('TimerKafka.yaml');
 
     // CHECK the kafka-sink and timer-source were imported
-    cy.get('[data-testid="viz-step-timer-source"]').should('be.visible');
-    cy.get('[data-testid="viz-step-kafka-sink"]').should('be.visible');
+    cy.isomorphicGet('[data-testid="viz-step-timer-source"]').should('be.visible');
+    cy.isomorphicGet('[data-testid="viz-step-kafka-sink"]').should('be.visible');
   });
 });

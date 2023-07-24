@@ -16,21 +16,21 @@ describe('Test for catalog actions', () => {
         cy.dragAndDropFromCatalog('timer', 'digitalocean', 'start', 0, true);
 
         // CHECK digitalocean step is visible
-        cy.get('[data-testid="viz-step-digitalocean"]').should('be.visible');
+        cy.isomorphicGet('[data-testid="viz-step-digitalocean"]').should('be.visible');
         // CHECK aggregation step was not created
-        cy.get('[data-testid="viz-step-timer"]').should('not.exist');
+        cy.isomorphicGet('[data-testid="viz-step-timer"]').should('not.exist');
         // CHECK alert box is visible and contains error message
-        cy.get('[data-testid="alert-box-replace-unsuccessful"]').should('be.visible');
-        cy.get('[data-testid="alert-box-replace-unsuccessful"]').should('contain', 'You cannot replace a middle step with a start step');
+        cy.isomorphicGet('[data-testid="alert-box-replace-unsuccessful"]').should('be.visible');
+        cy.isomorphicGet('[data-testid="alert-box-replace-unsuccessful"]').should('contain', 'You cannot replace a middle step with a start step');
     });
 
     it("User replaces a placeholder step via drag & drop from the big catalog", () => {
         cy.dragAndDropFromCatalog('delay', 'digitalocean');
 
         // CHECK digitalocean step was replaced
-        cy.get('[data-testid="viz-step-digitalocean"]').should('not.exist');
+        cy.isomorphicGet('[data-testid="viz-step-digitalocean"]').should('not.exist');
         // CHECK delay step was created
-        cy.get('[data-testid="viz-step-delay"]').should('be.visible');
+        cy.isomorphicGet('[data-testid="viz-step-delay"]').should('be.visible');
     });
 
     // Replace the digitalocean step with the delay step with the mini catalog (Delete and Prepend)
@@ -40,9 +40,9 @@ describe('Test for catalog actions', () => {
         cy.prependStepMiniCatalog('set-header', 'delay');
 
         // CHECK digitalocean step was replaced
-        cy.get('[data-testid="viz-step-digitalocean"]').should('not.exist');
+        cy.isomorphicGet('[data-testid="viz-step-digitalocean"]').should('not.exist');
         // CHECK delay step was created
-        cy.get('[data-testid="viz-step-delay"]').should('be.visible');
+        cy.isomorphicGet('[data-testid="viz-step-delay"]').should('be.visible');
     });
 
 });

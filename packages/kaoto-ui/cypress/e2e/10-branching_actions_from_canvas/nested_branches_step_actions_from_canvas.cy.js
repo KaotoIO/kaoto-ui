@@ -33,19 +33,19 @@ describe('User completes normal actions on steps in a branch', () => {
         cy.deleteStep('amqp');
 
         // CHECK that amqp step is deleted and empty step is added
-        cy.get('[data-testid="viz-step-amqp"]').should('not.exist');
-        cy.get('[data-testid="viz-step-slot"]').should('have.length', 2).and('be.visible');
+        cy.isomorphicGet('[data-testid="viz-step-amqp"]').should('not.exist');
+        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 2).and('be.visible');
 
         // CHECK that amqp step is deleted and empty step is added
-        cy.get('[data-testid="viz-step-amqp"]').should('not.exist');
-        cy.get('[data-testid="viz-step-slot"]').should('have.length', 2).and('be.visible');
+        cy.isomorphicGet('[data-testid="viz-step-amqp"]').should('not.exist');
+        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 2).and('be.visible');
     });
 
     it('User replaces a step in a branch', () => {
         cy.dragAndDropFromCatalog('arangodb', 'amqp');
 
         // CHECK digitalocean step was replaced with amqp
-        cy.get('[data-testid="viz-step-activemq"]').should('not.exist');
-        cy.get('[data-testid="viz-step-arangodb"]').should('have.length', 1).and('be.visible');
+        cy.isomorphicGet('[data-testid="viz-step-activemq"]').should('not.exist');
+        cy.isomorphicGet('[data-testid="viz-step-arangodb"]').should('have.length', 1).and('be.visible');
     });
 });

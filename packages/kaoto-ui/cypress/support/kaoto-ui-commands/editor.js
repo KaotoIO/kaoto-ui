@@ -5,21 +5,21 @@ Cypress.Commands.add('uploadFixture', (fixture, open) => {
     if (open) {
         cy.openCodeEditor();
     }
-    cy.get('[data-testid="sourceCode--clearButton"]').should('be.visible').click({ force: true });
-    cy.get('.pf-c-code-editor__main').should('be.visible');
-    cy.get('.pf-c-code-editor__main > input').attachFile(fixture);
+    cy.isomorphicGet('[data-testid="sourceCode--clearButton"]').should('be.visible').click({ force: true });
+    cy.isomorphicGet('.pf-c-code-editor__main').should('be.visible');
+    cy.isomorphicGet('.pf-c-code-editor__main > input').attachFile(fixture);
     cy.syncUpCodeChanges();
 });
 
 Cypress.Commands.add('openCodeEditor', () => {
-    cy.get('[data-testid="toolbar-show-code-btn"]').click();
-    cy.get('[data-testid="toolbar-show-code-btn"]').trigger('mouseleave');
+    cy.isomorphicGet('[data-testid="toolbar-show-code-btn"]').click();
+    cy.isomorphicGet('[data-testid="toolbar-show-code-btn"]').trigger('mouseleave');
     cy.wait('@getIntegration');
 });
 
 Cypress.Commands.add('editorAddText', (line, text) => {
     text.split('\n').forEach((lineToWrite, i) => {
-        cy.get('.code-editor')
+        cy.isomorphicGet('.code-editor')
             .click()
             .type('{pageUp}{pageUp}' + '{downArrow}'.repeat(line + i) + '{enter}{upArrow}' + lineToWrite, {
                 delay: 1,
@@ -30,7 +30,7 @@ Cypress.Commands.add('editorAddText', (line, text) => {
 Cypress.Commands.add('editorDeleteLine', (line, repeatCount) => {
     repeatCount = repeatCount ?? 1;
     // Open the Go to Line dialog
-    cy.get('.code-editor')
+    cy.isomorphicGet('.code-editor')
         .click()
         .type(
             '{ctrl}' +
@@ -39,7 +39,7 @@ Cypress.Commands.add('editorDeleteLine', (line, repeatCount) => {
         );
 
     // Type the line number to delete
-    cy.get('input[aria-describedby="quickInput_message"][aria-controls="quickInput_list"]')
+    cy.isomorphicGet('input[aria-describedby="quickInput_message"][aria-controls="quickInput_list"]')
         .click()
         .type(
             `${line + 1}` +
@@ -60,13 +60,13 @@ Cypress.Commands.add('editorDeleteLine', (line, repeatCount) => {
 Cypress.Commands.add('editorClickUndoXTimes', (times) => {
     times = times ?? 1;
     Array.from({ length: times }).forEach(() => {
-        return cy.get('[data-testid="sourceCode--undoButton"]').click();
+        return cy.isomorphicGet('[data-testid="sourceCode--undoButton"]').click();
     });
 });
 
 Cypress.Commands.add('syncUpCodeChanges', () => {
-    cy.get('[data-testid="sourceCode--applyButton"]').click();
-    cy.get('[data-testid="sourceCode--applyButton"]').trigger('mouseleave');
+    cy.isomorphicGet('[data-testid="sourceCode--applyButton"]').click();
+    cy.isomorphicGet('[data-testid="sourceCode--applyButton"]').trigger('mouseleave');
     //Request flows jsons based on the route yaml in the code editor
     cy.wait('@getIntegration');
     cy.wait('@getViewDefinitions');
@@ -76,7 +76,7 @@ Cypress.Commands.add('syncUpCodeChanges', () => {
 
 Cypress.Commands.add('checkCodeSpanLine', (spanText, linesCount) => {
     linesCount = linesCount ?? 1;
-    cy.get('.code-editor')
+    cy.isomorphicGet('.code-editor')
         .within (() => {
             cy.get('span:only-child').contains(spanText)
             .should("have.length", linesCount)
