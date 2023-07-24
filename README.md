@@ -30,14 +30,14 @@ For trial purposes, there is a docker image that can be run as described on [the
 
 Follow the instructions on https://github.com/KaotoIO/kaoto-operator/
 
-## Contributing 
+## Contributing
 
 If you want to run Kaoto-ui in your machine, follow these instructions. Remember that you need a [backend](https://KaotoIO/kaoto-backend/) running.
 
 ### Requirements
 
 - Node >= 16
-- [Yarn](https://classic.yarnpkg.com/en/docs/install#mac-stable) (1.x)
+- [Yarn](https://yarnpkg.com/getting-started/install) (3.x)
 
 ### Install & Setup
 
@@ -47,7 +47,7 @@ If you want to run Kaoto-ui in your machine, follow these instructions. Remember
 yarn install
 ```
 
-2. Duplicate the `.env.example` file and name it `.env`.
+2. From the `packages/kaoto-ui` folder, duplicate the `.env.example` file and name it `.env`.
 3. Update `KAOTO_API` in the file with the correct host for the API backend. If using Kaoto locally, this should be `http://localhost:8081`, but please check.
 
 ### Development
@@ -55,7 +55,14 @@ yarn install
 Run the app in development mode:
 
 ```bash
+# From the packages/kaoto-ui/
 yarn start
+```
+
+alternatively from the root folder
+```bash
+# From the root folder
+yarn workspace @kaoto/kaoto-ui run start
 ```
 
 Open [http://localhost:1337](http://localhost:1337) to view it in the browser.
@@ -70,7 +77,14 @@ You will also see any lint errors in the console.
 Run all [Jest](https://testing-library.com/docs/react-testing-library/intro) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) unit tests:
 
 ```bash
+# From the packages/kaoto-ui/
 yarn test
+````
+
+alternatively from the root folder
+```bash
+# From the root folder
+yarn workspace @kaoto/kaoto-ui run test
 ````
 
 Launches the test runner in the interactive watch mode.\
@@ -82,15 +96,15 @@ E2E tests are located in the `/cypress` directory. Run all [Cypress](https://doc
 
 ```bash
 // in the browser
-yarn e2e
+yarn workspace @kaoto/kaoto-ui run e2e
 
 // headlessly
-yarn e2e:headless
+yarn workspace @kaoto/kaoto-ui run e2e:headless
 
 // with a specific browser
 // options: chrome, chromium, edge, electron, firefox
 // or specify a path: /usr/bin/chromium
-yarn e2e --browser firefox
+yarn workspace @kaoto/kaoto-ui run e2e --browser firefox
 ```
 
 See the [Cypress docs](https://docs.cypress.io) for more information. There are also GitHub Actions workflows in `.github/workflows` that run the tests automatically on opening a pull request.
@@ -99,19 +113,18 @@ See the [Cypress docs](https://docs.cypress.io) for more information. There are 
 
 Storybook builds are enabled for all non-Dependabot pull requests to `kaoto-ui`, thanks to [Chromatic](https://main--61040cd029d0ce003b570dad.chromatic.com/). It gives you the ability to view stories for each pull request, which makes it easy to share development of new UI components with team members. Storybook also makes it easy to keep presentational components isolated. You can learn more about how to create a story for your UI component [here](https://storybook.js.org/docs/react/writing-stories/introduction).
 
-To run Storybook locally: `yarn storybook`
+To run Storybook locally: `yarn workspace @kaoto/kaoto-ui run storybook`
 
-To publish to Chromatic: `yarn chromatic`
+To publish to Chromatic: `yarn workspace @kaoto/kaoto-ui run chromatic`
 
 ## Build
 
 ```bash
-yarn build
+yarn workspace @kaoto/kaoto-ui build
 ```
 
-Builds the app for production to the `build` folder.\
+Builds the app for production to the `dist` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
-
