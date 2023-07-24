@@ -21,7 +21,7 @@ Cypress.Commands.add('dragAndDropFromCatalog', (source, target, catalog, targetI
 
 Cypress.Commands.add('replaceEmptyStepMiniCatalog', (step, stepIndex) => {
     stepIndex = stepIndex ?? 0;
-    cy.isomorphicGet('[data-testid="viz-step-slot"]').eq(stepIndex).click().click();
+    cy.isomorphicGet('[data-testid="viz-step-slot"]').eq(stepIndex).click();
     cy.selectStepMiniCatalog(step);
 });
 
