@@ -15,6 +15,6 @@ describe('source code and drag and drop', () => {
 
     // CHECK that the code editor contains the new timer source step
     cy.openCodeEditor();
-    cy.get('.pf-c-code-editor__code').contains('timer-source').should('exist');
+    cy.isomorphicGet('.pf-c-code-editor__code').contains('timer-source').should('exist');
   });
 });

@@ -12,13 +12,13 @@ describe('Test for Multi route actions from the canvas', () => {
 
   it('User changes route type in the canvas', () => {
     cy.switchIntegrationType('Integration');
-    cy.get('.pf-c-chip__text').contains('Integration');
+    cy.isomorphicGet('.pf-c-chip__text').contains('Integration');
     cy.switchIntegrationType('Camel Route');
-    cy.get('.pf-c-chip__text').contains('Camel Route');
+    cy.isomorphicGet('.pf-c-chip__text').contains('Camel Route');
     cy.switchIntegrationType('Kamelet');
-    cy.get('.pf-c-chip__text').contains('Kamelet');
+    cy.isomorphicGet('.pf-c-chip__text').contains('Kamelet');
     cy.switchIntegrationType('KameletBinding');
-    cy.get('.pf-c-chip__text').contains('KameletBinding');
+    cy.isomorphicGet('.pf-c-chip__text').contains('KameletBinding');
   });
 
   it('User shows and hides a route', () => {
@@ -26,20 +26,20 @@ describe('Test for Multi route actions from the canvas', () => {
     cy.createNewRoute();
     cy.createNewRoute();
 
-    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "1/3");
+    cy.isomorphicGet('[data-testid="flows-list-route-count"]').should("have.text", "1/3");
 
     cy.toggleRouteVisibility(0);
     cy.toggleRouteVisibility(1);
 
-    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "3/3");
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 3);
+    cy.isomorphicGet('[data-testid="flows-list-route-count"]').should("have.text", "3/3");
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 3);
 
     cy.toggleRouteVisibility(0);
     cy.toggleRouteVisibility(1);
     cy.toggleRouteVisibility(2);
 
-    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "0/3");
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 0);
+    cy.isomorphicGet('[data-testid="flows-list-route-count"]').should("have.text", "0/3");
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 0);
   });
 
   it('User renames routes', () => {
@@ -72,17 +72,17 @@ describe('Test for Multi route actions from the canvas', () => {
     cy.createNewRoute();
     cy.showAllRoutes();
 
-    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "3/3");
+    cy.isomorphicGet('[data-testid="flows-list-route-count"]').should("have.text", "3/3");
 
     cy.deleteRoute(0);
     cy.deleteRoute(0);
     cy.deleteRoute(0);
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 0);
-    cy.get('[data-testid="flows-list-empty-state"]').should('have.length', 1);
-    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "0/0");
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 0);
+    cy.isomorphicGet('[data-testid="flows-list-empty-state"]').should('have.length', 1);
+    cy.isomorphicGet('[data-testid="flows-list-route-count"]').should("have.text", "0/0");
 
-    cy.get('[data-testid="flows-list-empty-state"]').within(() => {
-      cy.get('h4.pf-c-title').should('have.text', "There's no routes to show");
+    cy.isomorphicGet('[data-testid="flows-list-empty-state"]').within(() => {
+      cy.isomorphicGet('h4.pf-c-title').should('have.text', "There's no routes to show");
     });
   });
 
@@ -91,12 +91,12 @@ describe('Test for Multi route actions from the canvas', () => {
   testData.forEach((data) => {
     it('User can\'t create multiple routes in canvas of type ' + data, () => {
       cy.switchIntegrationType(data);
-      cy.get('[data-testid="dsl-list-dropdown"]').click({ force: true });
-      cy.get('.pf-c-menu__item-text').contains(data).closest('button').should('be.disabled');
-      cy.get('[data-testid="dsl-list-btn"]').should('be.disabled');
-  
-      cy.get('[data-testid="flows-list-route-count"]').should("have.text", "1/1");
-    });  
+      cy.isomorphicGet('[data-testid="dsl-list-dropdown"]').click({ force: true });
+      cy.isomorphicGet('.pf-c-menu__item-text').contains(data).closest('button').should('be.disabled');
+      cy.isomorphicGet('[data-testid="dsl-list-btn"]').should('be.disabled');
+
+      cy.isomorphicGet('[data-testid="flows-list-route-count"]').should("have.text", "1/1");
+    });
   });
 
   it('User creates multiple CamelRoute type routes in canvas', () => {
@@ -105,8 +105,8 @@ describe('Test for Multi route actions from the canvas', () => {
     cy.createNewRoute();
 
     cy.showAllRoutes();
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 3);
-    cy.get('[data-testid="flows-list-route-count"]').should("have.text", "3/3");
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 3);
+    cy.isomorphicGet('[data-testid="flows-list-route-count"]').should("have.text", "3/3");
   });
 
   it('User creates multiple Integration routes in canvas', () => {
@@ -115,7 +115,7 @@ describe('Test for Multi route actions from the canvas', () => {
     cy.createNewRoute();
 
     cy.hideAllRoutes();
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 0);
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 0);
     cy.toggleRouteVisibility(0);
 
     cy.replaceEmptyStepMiniCatalog('timer');
@@ -132,8 +132,8 @@ describe('Test for Multi route actions from the canvas', () => {
     cy.appendStepMiniCatalog('timer', 'log');
 
     cy.showAllRoutes();
-    cy.get('[data-testid="viz-step-timer"]').should('have.length', 3);
-    cy.get('[data-testid="viz-step-log"]').should('have.length', 3);
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 3);
+    cy.isomorphicGet('[data-testid="viz-step-timer"]').should('have.length', 3);
+    cy.isomorphicGet('[data-testid="viz-step-log"]').should('have.length', 3);
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 3);
   });
 });

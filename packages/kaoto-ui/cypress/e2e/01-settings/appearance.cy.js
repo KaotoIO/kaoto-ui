@@ -14,7 +14,7 @@ describe('Settings: Appearance', () => {
     cy.openAppearanceModal();
 
     // Check that the modal is open
-    cy.get('[data-testid="appearance-modal"').should('be.visible');
+    cy.isomorphicGet('[data-testid="appearance-modal"').should('be.visible');
   });
 
   it('Enables dark mode in Kaoto', () => {
@@ -23,15 +23,15 @@ describe('Settings: Appearance', () => {
     });
 
     // Check that theme is dark
-    cy.get('.pf-theme-dark').should('exist');
-    cy.get('html').should('have.class', 'pf-theme-dark').and('have.css', 'color-scheme', 'dark');
+    cy.isomorphicGet('.pf-theme-dark').should('exist');
+    cy.isomorphicGet('html').should('have.class', 'pf-theme-dark').and('have.css', 'color-scheme', 'dark');
 
     // Reload Page and check that theme is still dark
     cy.openHomePage().should(() => {
       expect(localStorage.getItem('KAOTO_UI_THEME_IS_LIGHT')).to.eq('false');
     });
-    cy.get('.pf-theme-dark').should('exist');
-    cy.get('html').should('have.class', 'pf-theme-dark').and('have.css', 'color-scheme', 'dark');
+    cy.isomorphicGet('.pf-theme-dark').should('exist');
+    cy.isomorphicGet('html').should('have.class', 'pf-theme-dark').and('have.css', 'color-scheme', 'dark');
 
     cy.openAppearanceModal();
     cy.switchAppearanceTheme().should(() => {
@@ -39,15 +39,15 @@ describe('Settings: Appearance', () => {
     });
 
     // Check that theme is not dark
-    cy.get('.pf-theme-dark').should('not.exist');
-    cy.get('html').should('not.have.class', 'pf-theme-dark').and('not.have.css', 'color-scheme', 'dark');
+    cy.isomorphicGet('.pf-theme-dark').should('not.exist');
+    cy.isomorphicGet('html').should('not.have.class', 'pf-theme-dark').and('not.have.css', 'color-scheme', 'dark');
 
     // Reload Page and check that theme is still not dark
     cy.openHomePage().should(() => {
       expect(localStorage.getItem('KAOTO_UI_THEME_IS_LIGHT')).to.eq('true');
     });;
-    cy.get('.pf-theme-dark').should('not.exist');
-    cy.get('html').should('not.have.class', 'pf-theme-dark').and('not.have.css', 'color-scheme', 'dark');
+    cy.isomorphicGet('.pf-theme-dark').should('not.exist');
+    cy.isomorphicGet('html').should('not.have.class', 'pf-theme-dark').and('not.have.css', 'color-scheme', 'dark');
   });
 
   it('Enables light mode in code editor', () => {
@@ -58,27 +58,27 @@ describe('Settings: Appearance', () => {
 
     // Check that theme is not dark
     cy.openCodeEditor();
-    cy.get('.monaco-scrollable-element').should('not.have.class', 'vs-dark');
+    cy.isomorphicGet('.monaco-scrollable-element').should('not.have.class', 'vs-dark');
 
     // Reload Page and check that theme is still not dark
     cy.openHomePage().should(() => {
       expect(localStorage.getItem('KAOTO_EDITOR_THEME_IS_LIGHT')).to.eq('true');
     });
     cy.openCodeEditor();
-    cy.get('.monaco-scrollable-element').should('not.have.class', 'vs-dark');
+    cy.isomorphicGet('.monaco-scrollable-element').should('not.have.class', 'vs-dark');
 
     cy.openAppearanceModal();
     cy.switchAppearanceTheme('editor')
     cy.closeAppearanceModal();
 
     // Check that theme is dark
-    cy.get('.monaco-scrollable-element').should('have.class', 'vs-dark');
+    cy.isomorphicGet('.monaco-scrollable-element').should('have.class', 'vs-dark');
 
     // Reload Page and check that theme is still dark
     cy.openHomePage().should(() => {
       expect(localStorage.getItem('KAOTO_EDITOR_THEME_IS_LIGHT')).to.eq('false');
     });
     cy.openCodeEditor();
-    cy.get('.monaco-scrollable-element').should('have.class', 'vs-dark');
+    cy.isomorphicGet('.monaco-scrollable-element').should('have.class', 'vs-dark');
   });
 });

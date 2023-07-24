@@ -17,7 +17,7 @@ describe('Test for Multi route actions from the code editor', () => {
     cy.syncUpCodeChanges();
 
     cy.showAllRoutes();
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 1);
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 1);
   });
 
   it('User adds new route to Camel multi-route using code editor', () => {
@@ -33,8 +33,8 @@ describe('Test for Multi route actions from the code editor', () => {
     cy.showAllRoutes();
 
     // CHECK the new empty route was added
-    cy.get('[data-testid="viz-step-slot"]').should('have.length', 1).and('be.visible');
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 3);
+    cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 1).and('be.visible');
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 3);
   });
 
   /** Skip until https://github.com/KaotoIO/kaoto-backend/issues/738 is done */
@@ -51,8 +51,8 @@ describe('Test for Multi route actions from the code editor', () => {
     cy.showAllRoutes();
 
     // CHECK the new empty route was added
-    cy.get('[data-testid="viz-step-slot"]').should('have.length', 1).and('be.visible');
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 3);
+    cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 1).and('be.visible');
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 3);
   });
 
   it('User deletes second route from multi-route using code editor', () => {
@@ -62,7 +62,7 @@ describe('Test for Multi route actions from the code editor', () => {
     cy.syncUpCodeChanges();
 
     cy.showAllRoutes();
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 1);
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 1);
   });
 
   it('User deletes step from first route using code editor', () => {
@@ -72,8 +72,8 @@ describe('Test for Multi route actions from the code editor', () => {
     cy.syncUpCodeChanges();
 
     cy.showAllRoutes();
-    cy.get('[data-testid="viz-step-set-body"]').should('not.exist');
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 2);
+    cy.isomorphicGet('[data-testid="viz-step-set-body"]').should('not.exist');
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 2);
   });
 
   it('User adds step to the first route using code editor', () => {
@@ -86,7 +86,7 @@ describe('Test for Multi route actions from the code editor', () => {
     cy.syncUpCodeChanges();
 
     // CHECK the set-header step was added
-    cy.get('[data-testid="viz-step-set-header"]').should('be.visible');
+    cy.isomorphicGet('[data-testid="viz-step-set-header"]').should('be.visible');
   });
 
   it('User adds step to the second route using code editor', () => {
@@ -99,7 +99,7 @@ describe('Test for Multi route actions from the code editor', () => {
     cy.editorAddText(insertLine, stepToInsert);
     cy.syncUpCodeChanges();
     // CHECK the insert-field-action step was added
-    cy.get('[data-testid="viz-step-set-body"]').should('be.visible');
+    cy.isomorphicGet('[data-testid="viz-step-set-body"]').should('be.visible');
   });
 
   it('User reverts route deletion using code editor', () => {
@@ -109,7 +109,7 @@ describe('Test for Multi route actions from the code editor', () => {
     cy.syncUpCodeChanges();
 
     cy.showAllRoutes();
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 1);
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 1);
 
     // First click undo button => reverted automatic adjustments
     cy.editorClickUndoXTimes();
@@ -118,6 +118,6 @@ describe('Test for Multi route actions from the code editor', () => {
     cy.syncUpCodeChanges();
 
     cy.showAllRoutes();
-    cy.get('[data-testid^="rf__node-node_0"]').should('have.length', 2);
+    cy.isomorphicGet('[data-testid^="rf__node-node_0"]').should('have.length', 2);
   });
 });

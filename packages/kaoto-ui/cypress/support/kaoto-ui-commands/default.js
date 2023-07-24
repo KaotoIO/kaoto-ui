@@ -1,5 +1,25 @@
 import 'cypress-file-upload';
 
+Cypress.Commands.add('isomorphicGet', (selector) => {
+  const isIframeEnabled = Cypress.env('IFRAME_ENABLED');
+  cy.log(`isIframeEnabled: ${isIframeEnabled}`);
+
+  if (isIframeEnabled) {
+    return (
+      cy
+        .get('iframe[src="envelope-kaoto-editor.html"]', { log: false })
+        .its('0.contentDocument', { log: false })
+        // wraps "body" DOM element to allow
+        // chaining more Cypress commands, like ".find(...)"
+        // https://on.cypress.io/wrap
+        // .then((body) => cy.wrap(body, { log: false }))
+        .find(selector, { log: false })
+    );
+  }
+
+  return cy.get(selector);
+});
+
 Cypress.Commands.add('openHomePage', () => {
   let url = Cypress.config().baseUrl;
   cy.visit(url);
@@ -9,12 +29,12 @@ Cypress.Commands.add('openHomePage', () => {
 Cypress.Commands.add('zoomOutXTimes', (times) => {
   times = times ?? 1;
   Array.from({ length: times }).forEach(() => {
-    cy.get('.react-flow__controls-button.react-flow__controls-zoomout').click();
+    cy.isomorphicGet('.react-flow__controls-button.react-flow__controls-zoomout').click();
   });
 });
 
 Cypress.Commands.add('waitVisualizationUpdate', () => {
-  cy.get('body').then((body) => {
+  cy.isomorphicGet('body').then((body) => {
     /**
      * If the code editor is visible, it means that we would need
      * to wait for the getIntegration call, otherwise, the operation
@@ -32,53 +52,60 @@ Cypress.Commands.add('waitOpenHomePage', () => {
 });
 
 Cypress.Commands.add('closeCatalogOrCodeEditor', () => {
-  cy.get('[data-testid="kaoto-left-drawer"]').within(() => {
+  cy.isomorphicGet('[data-testid="kaoto-left-drawer"]').within(() => {
     cy.get('.pf-c-drawer__close > .pf-c-button').click();
   });
-  cy.get('[data-testid="kaoto-left-drawer"]').should('be.hidden');
+  cy.isomorphicGet('[data-testid="kaoto-left-drawer"]').should('be.hidden');
 });
 
 Cypress.Commands.add('openMenuDropDown', () => {
-  cy.get('.pf-c-toolbar__content-section').click();
-  cy.get('[data-testid="toolbar-kebab-dropdown-btn"]').click();
+  cy.isomorphicGet('.pf-c-toolbar__content-section').click();
+  cy.isomorphicGet('[data-testid="toolbar-kebab-dropdown-btn"]').click();
 });
 
 Cypress.Commands.add('openAboutModal', () => {
   cy.openMenuDropDown();
-  cy.get('[data-testid="kaotoToolbar-kebab__about"]').click();
+  cy.isomorphicGet('[data-testid="kaotoToolbar-kebab__about"]').click();
 });
 
 Cypress.Commands.add('openAppearanceModal', () => {
   cy.openMenuDropDown();
-  cy.get('[data-testid="kaotoToolbar-kebab__appearance"]').click();
+  cy.isomorphicGet('[data-testid="kaotoToolbar-kebab__appearance"]').click();
 });
 
 Cypress.Commands.add('openSettingsModal', () => {
   cy.openMenuDropDown();
-  cy.get('[data-testid="kaotoToolbar-kebab__settings"]').click();
+  cy.isomorphicGet('[data-testid="kaotoToolbar-kebab__settings"]').click();
 });
 
 Cypress.Commands.add('closeAppearanceModal', () => {
-  cy.get('[data-ouia-component-id="appearance-modal"] > button[aria-label="Close"]').click();
+  cy.isomorphicGet(
+    '[data-ouia-component-id="appearance-modal"] > button[aria-label="Close"]',
+  ).click();
 });
 
 Cypress.Commands.add('closeAboutModal', () => {
-  cy.get('.pf-c-button.pf-m-plain').click();
+  cy.isomorphicGet('.pf-c-button.pf-m-plain').click();
 });
 
 Cypress.Commands.add('closeMenuModal', () => {
-  cy.get('[data-ouia-component-id="settings-modal"] > button[aria-label="Close"]').click();
+  cy.isomorphicGet(
+    '[data-ouia-component-id="settings-modal"] > button[aria-label="Close"]',
+  ).click();
 });
 
 Cypress.Commands.add('cancelMenuModal', () => {
-  cy.get('[data-testid="settings-modal--cancel"]').click();
+  cy.isomorphicGet('[data-testid="settings-modal--cancel"]').click();
 });
 
 Cypress.Commands.add('saveMenuModal', (integrationChanged) => {
   integrationChanged = integrationChanged ?? false;
-  cy.get('[data-testid="settings-modal--save"]').click();
-  cy.get('.pf-c-alert').should('contain.text', 'Configuration settings saved successfully.');
-  cy.get('.pf-c-alert__action').children('button').click();
+  cy.isomorphicGet('[data-testid="settings-modal--save"]').click();
+  cy.isomorphicGet('.pf-c-alert').should(
+    'contain.text',
+    'Configuration settings saved successfully.',
+  );
+  cy.isomorphicGet('.pf-c-alert__action').children('button').click();
   cy.wait('@getIntegration');
   if (integrationChanged) {
     cy.waitVisualizationUpdate();
@@ -89,9 +116,9 @@ Cypress.Commands.add('saveMenuModal', (integrationChanged) => {
 Cypress.Commands.add('switchAppearanceTheme', (object) => {
   object = object ?? '';
   if (object === 'editor') {
-    cy.get('[data-testid="appearance--theme-editor-switch"]').click({ force: true });
+    cy.isomorphicGet('[data-testid="appearance--theme-editor-switch"]').click({ force: true });
   } else {
-    cy.get('[data-testid="appearance--theme-ui-switch"]').click({ force: true });
+    cy.isomorphicGet('[data-testid="appearance--theme-ui-switch"]').click({ force: true });
   }
 });
 
@@ -100,25 +127,25 @@ Cypress.Commands.add('switchAppearanceTheme', (object) => {
  * Possible values are - Integration, Camel Route, Kamelet, KameletBinding
  */
 Cypress.Commands.add('switchIntegrationType', (type) => {
-  cy.get('[data-testid="dsl-list-dropdown"]').click({ force: true });
+  cy.isomorphicGet('[data-testid="dsl-list-dropdown"]').click({ force: true });
 
-  cy.get('.pf-c-menu__item-text')
+  cy.isomorphicGet('.pf-c-menu__item-text')
     .contains(type)
     .then((element) => {
       cy.wrap(element).click();
     });
-  cy.get('[data-testid="confirmation-modal-confirm"]').click({ force: true });
+  cy.isomorphicGet('[data-testid="confirmation-modal-confirm"]').click({ force: true });
   cy.wait('@getViewDefinitions');
 });
 
 Cypress.Commands.add('createNewRoute', () => {
-  cy.get('[data-testid="dsl-list-btn"]').click({ force: true });
+  cy.isomorphicGet('[data-testid="dsl-list-btn"]').click({ force: true });
   cy.wait('@getViewDefinitions');
 });
 
 Cypress.Commands.add('disableRouteVisibility', (index) => {
   cy.toggleFlowsList();
-  cy.get('svg[data-testid^="toggle-btn-route"]').each(($element) => {
+  cy.isomorphicGet('svg[data-testid^="toggle-btn-route"]').each(($element) => {
     const attributeValue = $element.attr('data-testid');
     if (attributeValue.endsWith('visible')) {
       cy.wrap($element).click();
@@ -129,9 +156,9 @@ Cypress.Commands.add('disableRouteVisibility', (index) => {
 
 Cypress.Commands.add('allignAllRoutesVisibility', (switchvisibility) => {
   cy.toggleFlowsList();
-  cy.get('[data-testid=flows-list-table]').then((body) => {
+  cy.isomorphicGet('[data-testid=flows-list-table]').then((body) => {
     if (body.find(`svg[data-testid$="${switchvisibility}"]`).length > 0) {
-      cy.get(`svg[data-testid$="${switchvisibility}"]`).then(($element) => {
+      cy.isomorphicGet(`svg[data-testid$="${switchvisibility}"]`).then(($element) => {
         if ($element.attr('data-testid').endsWith(`${switchvisibility}`)) {
           cy.wrap($element[0]).click();
           cy.closeFlowsListIfVisible();
@@ -153,7 +180,7 @@ Cypress.Commands.add('showAllRoutes', () => {
 
 Cypress.Commands.add('toggleRouteVisibility', (index) => {
   cy.toggleFlowsList();
-  cy.get('button[data-testid^="toggle-btn-route"]').then((buttons) => {
+  cy.isomorphicGet('button[data-testid^="toggle-btn-route"]').then((buttons) => {
     cy.wrap(buttons[index]).click();
   });
   cy.closeFlowsListIfVisible();
@@ -161,16 +188,16 @@ Cypress.Commands.add('toggleRouteVisibility', (index) => {
 
 Cypress.Commands.add('deleteRoute', (index) => {
   cy.toggleFlowsList();
-  cy.get('button[data-testid^="delete-btn-route"]').then((buttons) => {
+  cy.isomorphicGet('button[data-testid^="delete-btn-route"]').then((buttons) => {
     cy.wrap(buttons[index]).click();
   });
   cy.closeFlowsListIfVisible();
 });
 
 Cypress.Commands.add('closeFlowsListIfVisible', () => {
-  cy.get('body').then((body) => {
+  cy.isomorphicGet('body').then((body) => {
     if (body.find('[data-testid="flows-list-table"]').length > 0) {
-      cy.get('[data-testid="flows-list-table"]').then(($element) => {
+      cy.isomorphicGet('[data-testid="flows-list-table"]').then(($element) => {
         if ($element.length > 0) {
           cy.toggleFlowsList();
         }
@@ -180,5 +207,5 @@ Cypress.Commands.add('closeFlowsListIfVisible', () => {
 });
 
 Cypress.Commands.add('toggleFlowsList', () => {
-  cy.get('[data-testid="flows-list-dropdown"]').click({ force: true });
+  cy.isomorphicGet('[data-testid="flows-list-dropdown"]').click({ force: true });
 });

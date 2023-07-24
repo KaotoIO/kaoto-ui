@@ -15,19 +15,19 @@ describe('3 step integration', () => {
 
     // CHECK the code editor contains the new timer step
     cy.openCodeEditor();
-    cy.get('.code-editor').should('contain.text', 'timer');
+    cy.isomorphicGet('.code-editor').should('contain.text', 'timer');
 
     // add an action from the mini catalog
     cy.appendStepMiniCatalog('timer', 'aggregate');
 
     // CHECK the code editor contains the new timer aggregate
-    cy.get('.code-editor').should('contain.text', 'aggregate');
+    cy.isomorphicGet('.code-editor').should('contain.text', 'aggregate');
 
     // add kafka from the mini catalog
     cy.appendStepMiniCatalog('aggregate', 'kafka');
 
     // CHECK the code editor contains the new kafka step
-    cy.get('.code-editor').should('contain.text', 'kafka');
+    cy.isomorphicGet('.code-editor').should('contain.text', 'kafka');
 
     // delete middle step
     cy.deleteStep('aggregate');
@@ -47,30 +47,30 @@ describe('3 step integration', () => {
     cy.openCodeEditor();
 
     // CHECK the code editor has the correct steps (debezium-postgres, chunk, kafka)
-    cy.get('.code-editor')
+    cy.isomorphicGet('.code-editor')
       .should('contain.text', 'debezium-postgres')
       .and('contain.text', 'chunk')
       .and('contain.text', 'kafka');
     // CHECK that stepNodes contains of the three steps
-    cy.get('.stepNode').should('have.length', 3);
+    cy.isomorphicGet('.stepNode').should('have.length', 3);
     // CHECK that stepNodes are in the correct order
-    cy.get('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-debezium-postgres');
-    cy.get('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-chunk');
-    cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-kafka');
+    cy.isomorphicGet('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-debezium-postgres');
+    cy.isomorphicGet('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-chunk');
+    cy.isomorphicGet('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-kafka');
 
     // Sync up code editor
     cy.syncUpCodeChanges();
 
     // CHECK the code editor has the correct steps (debezium-postgres, chunk, kafka)
-    cy.get('.code-editor')
+    cy.isomorphicGet('.code-editor')
       .should('contain.text', 'debezium-postgres')
       .and('contain.text', 'chunk')
       .and('contain.text', 'kafka');
     // CHECK that stepNodes contains of the three steps
-    cy.get('.stepNode').should('have.length', 3);
+    cy.isomorphicGet('.stepNode').should('have.length', 3);
     // CHECK that stepNodes are in the correct order
-    cy.get('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-debezium-postgres');
-    cy.get('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-chunk');
-    cy.get('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-kafka');
+    cy.isomorphicGet('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-debezium-postgres');
+    cy.isomorphicGet('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-chunk');
+    cy.isomorphicGet('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-kafka');
   });
 });
