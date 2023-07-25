@@ -4,7 +4,11 @@
 name: 📖 Storybook (via Chromatic)
 
 # Event for the workflow
-on: push
+on:
+  push:
+    branches-ignore:
+      - "renovate/**"
+      - "dependabot/**"
 
 # List of jobs
 jobs:
@@ -29,3 +33,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: 14f589a59855
           buildScriptName: build:storybook
+          workingDir: packages/kaoto-ui

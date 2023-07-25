@@ -15,7 +15,7 @@
     "build:lib": "rimraf dist/lib && yarn copy:css && yarn copy:images && tsc -p tsconfig.lib.json && node ./scripts/fixTsPathsAlias.js",
     "build:lib:watch": "tsc-watch --noClear -p tsconfig.lib.json",
     "build:storybook": "storybook build",
-    "chromatic": "chromatic --build-script-name 'build:storybook' --skip 'dependabot/**' --exit-zero-on-changes",
+    "chromatic": "chromatic --build-script-name 'build:storybook' --skip 'renovate/**' --exit-zero-on-changes",
     "copy:css": "copyfiles -u 1 \"src/**/*.{sass,scss,css}\" dist/lib/",
     "copy:images": "cpr ./src/assets ./dist/lib/assets",
     "clean": "rimraf dist",
