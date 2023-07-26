@@ -1,3 +1,4 @@
+import { CANVAS_NODE_LAYOUT } from '@kaoto/constants';
 import { IVizStepPropsEdge, IVizStepNode, IVisibleFlows } from '@kaoto/types';
 import {
   Connection,
@@ -50,7 +51,7 @@ export const useVisualizationStore = create<RFState>((set, get) => ({
       nodes: [...state.nodes.filter((_n, idx) => idx !== nodeIndex)],
     })),
   hoverStepUuid: '',
-  layout: 'LR', // e.g. LR, TB
+  layout: localStorage.getItem(CANVAS_NODE_LAYOUT) ?? 'LR', // e.g. LR, TB
   onNodesChange: (changes: NodeChange[]) =>
     set((state) => ({
       nodes: applyNodeChanges(changes, state.nodes),
@@ -71,7 +72,10 @@ export const useVisualizationStore = create<RFState>((set, get) => ({
     }),
   setHoverStepUuid: (stepUuid: string) => set({ hoverStepUuid: stepUuid }),
   setSelectedStepUuid: (stepUuid: string) => set({ selectedStepUuid: stepUuid }),
-  setLayout: (newLayout: string) => set({ layout: newLayout }),
+  setLayout: (newLayout: string) => {
+    localStorage.setItem(CANVAS_NODE_LAYOUT, `${newLayout}`);
+    set(() => ({ layout: newLayout }));
+  },
   setNodes: (newNodes: IVizStepNode[]) =>
     set({
       nodes: [...newNodes],
