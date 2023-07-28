@@ -13,7 +13,7 @@ export * from './KaotoToolbar';
 export * from './PlusButtonEdge';
 export * from './MiniCatalog';
 export * from './SettingsModal';
-export * from './SourceCodeEditor';
+export * from './SourceCode/SourceCodeEditor';
 export * from './StepErrorBoundary';
 export * from './ThemeSwitcher';
 export * from './VisualizationControls';

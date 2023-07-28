@@ -1,12 +1,13 @@
-import { StepErrorBoundary } from './StepErrorBoundary';
-import { fetchIntegrationJson, RequestService } from '@kaoto/api';
+import { StepErrorBoundary } from '../StepErrorBoundary';
+import { SyncButton } from './SyncButton';
+import { RequestService, fetchIntegrationJson } from '@kaoto/api';
 import { useFlowsStore, useIntegrationSourceStore, useSettingsStore } from '@kaoto/store';
 import { CodeEditorMode } from '@kaoto/types';
 import { CodeEditor, CodeEditorControl, Language } from '@patternfly/react-code-editor';
 import { Alert } from '@patternfly/react-core';
-import { CheckCircleIcon, EraserIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';
+import { EraserIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';
 import { setDiagnosticsOptions } from 'monaco-yaml';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { EditorDidMount } from 'react-monaco-editor';
 import { useDebouncedCallback } from 'use-debounce';
 import { shallow } from 'zustand/shallow';
@@ -39,6 +40,13 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
   );
 
   const setFlowsWrapper = useFlowsStore((state) => state.setFlowsWrapper, shallow);
+  const [isDirty, setIsDirty] = useState(false);
+  const [isUpdateButtonVisible, setIsUpdateButtonVisible] = useState(false);
+
+  useEffect(() => {
+    setIsDirty(sourceCode !== syncedSourceCode);
+    setIsUpdateButtonVisible(sourceCode !== '' && props.mode === CodeEditorMode.FREE_EDIT);
+  }, [props.mode, sourceCode, syncedSourceCode]);
 
   useEffect(() => {
     setDiagnosticsOptions({
@@ -155,14 +163,10 @@ export const SourceCodeEditor = (props: ISourceCodeEditor) => {
   );
 
   const UpdateButton = (
-    <CodeEditorControl
-      key="updateButton"
-      icon={<CheckCircleIcon color={'green'} />}
-      aria-label="Apply the code"
-      data-testid={'sourceCode--applyButton'}
+    <SyncButton
+      isDirty={isDirty}
+      isVisible={isUpdateButtonVisible}
       onClick={updateModelFromTheEditor}
-      tooltipProps={{ content: 'Sync your code', position: 'top' }}
-      isVisible={sourceCode !== '' && props.mode === CodeEditorMode.FREE_EDIT}
     />
   );
 
