@@ -1,5 +1,4 @@
 import { AddPropertyButtons } from './AddPropertyButtons';
-import { PropertyPlaceholderRow } from './PropertyPlaceholderRow';
 import { PropertyRow } from './PropertyRow';
 import wrapField from '@kie-tools/uniforms-patternfly/dist/cjs/wrapField';
 import { EmptyState, EmptyStateBody, Stack, StackItem } from '@patternfly/react-core';
@@ -15,7 +14,7 @@ import {
   Thead,
   Tr,
 } from '@patternfly/react-table';
-import { ReactNode, useCallback, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { HTMLFieldProps, connectField } from 'uniforms';
 
 export type PropertiesFieldProps = HTMLFieldProps<any, HTMLDivElement>;
@@ -29,16 +28,17 @@ export type PropertiesFieldProps = HTMLFieldProps<any, HTMLDivElement>;
 function Properties(props: PropertiesFieldProps) {
   const [expandedNodes, setExpandedNodes] = useState<string[]>([]);
   const [placeholderState, setPlaceholderState] = useState<PlaceholderState | null>(null);
-
-  const handleModelChange = useCallback(() => {
-    setPlaceholderState(null);
-    props.onChange(props.value ? props.value : {}, props.name);
-  }, [props.onChange, props.value, props.name]);
+  const propertiesModel = props.value ? { ...props.value } : {};
 
   type PlaceholderState = {
     isObject: boolean;
     parentNodeId: string;
   };
+
+  function handleModelChange() {
+    setPlaceholderState(null);
+    props.onChange(propertiesModel, props.name);
+  }
 
   function getNodeId(path: string[]) {
     return path.join('-');
@@ -63,18 +63,33 @@ function Properties(props: PropertiesFieldProps) {
   ): ReactNode[] {
     if (!node) {
       // placeholder is rendered as a last sibling
+      const placeholderTreeRow: TdProps['treeRow'] = {
+        rowIndex,
+        onCollapse: () => {},
+        props: {
+          isRowSelected: true,
+          isExpanded: false,
+          isHidden: false,
+          'aria-level': level,
+          'aria-posinset': posinset,
+          'aria-setsize': 0,
+        },
+      };
+
       return placeholderState && placeholderState.parentNodeId === getNodeId(parentPath)
         ? [
-            <PropertyPlaceholderRow
+            <PropertyRow
+              isPlaceholder={true}
               key="placeholder"
               propertyName={props.name}
+              nodeName=""
+              nodeValue={placeholderState.isObject ? {} : ''}
               path={parentPath}
               parentModel={parentModel}
-              level={level}
-              posinset={posinset}
-              rowIndex={rowIndex}
+              treeRow={placeholderTreeRow}
               isObject={placeholderState.isObject}
               onChangeModel={handleModelChange}
+              createPlaceholder={() => {}}
             />,
           ]
         : [];
@@ -149,12 +164,6 @@ function Properties(props: PropertiesFieldProps) {
     ];
   }
 
-  let modelValue = props.value;
-  if (!modelValue) {
-    modelValue = {};
-    props.onChange(modelValue, props.name);
-  }
-
   return wrapField(
     props,
     <Stack hasGutter>
@@ -187,8 +196,8 @@ function Properties(props: PropertiesFieldProps) {
                 </Tr>
               </Thead>
               <Tbody>
-                {Object.keys(modelValue).length > 0 || placeholderState
-                  ? renderRows(Object.entries(modelValue), modelValue)
+                {Object.keys(propertiesModel).length > 0 || placeholderState
+                  ? renderRows(Object.entries(propertiesModel), propertiesModel)
                   : !props.disabled && (
                       <Tr key={`${props.name}-empty`}>
                         <Td colSpan={3}>

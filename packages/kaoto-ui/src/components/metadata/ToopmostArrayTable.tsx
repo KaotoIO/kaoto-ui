@@ -19,7 +19,7 @@ type TopmostArrayTableProps = {
   name: string;
   selected: number;
   onSelected: (index: number) => void;
-  onChangeModel: (model: any) => void;
+  onChangeModel: (model: any[]) => void;
 };
 
 /**

@@ -6,6 +6,7 @@ import { StepErrorBoundary } from '@kaoto/components';
 import { useFlowsStore } from '@kaoto/store';
 import { AutoField, AutoForm, ErrorsField } from '@kie-tools/uniforms-patternfly/dist/esm';
 import {
+  Button,
   Modal,
   ModalVariant,
   Split,
@@ -66,7 +67,8 @@ export function MetadataEditorModal({
     if (!isTopmostArray()) {
       return false;
     }
-    return selected === -1 || selected > metadata?.length - 1;
+    const targetModel = preparedModel != null ? preparedModel : metadata;
+    return !targetModel || selected === -1 || selected > targetModel?.length - 1;
   }
 
   function getFormSchema() {
@@ -80,31 +82,33 @@ export function MetadataEditorModal({
   }
 
   function getFormModel() {
+    const targetModel = preparedModel != null ? preparedModel : metadata?.slice();
     if (isTopmostArray()) {
-      return metadata && selected !== -1 ? metadata[selected] : undefined;
+      return targetModel && selected !== -1 ? targetModel[selected] : undefined;
     }
-    return metadata;
+    return targetModel;
   }
 
-  function handleChangeArrayModel(config: any) {
-    setMetadata(name, config.slice());
-  }
-
-  function prepareModelChange(model: any) {
-    setPreparedModel(model);
+  function prepareFormModelChange(model: any) {
+    if (isTopmostArray()) {
+      const newMetadata = metadata ? metadata.slice() : [];
+      const newPreparedModel = preparedModel ? preparedModel.slice() : newMetadata;
+      newPreparedModel[selected] = model;
+      setPreparedModel(newPreparedModel);
+    } else {
+      setPreparedModel(typeof model === `object` ? { ...preparedModel } : preparedModel);
+    }
   }
 
   function commitModelChange() {
     if (preparedModel == null) {
       return;
     }
-    if (isTopmostArray()) {
-      const newMetadata = metadata ? metadata.slice() : [];
-      newMetadata[selected] = preparedModel;
-      setMetadata(name, newMetadata);
-    } else {
-      setMetadata(name, typeof preparedModel === `object` ? { ...preparedModel } : preparedModel);
-    }
+    setMetadata(name, preparedModel);
+    setPreparedModel(null);
+  }
+
+  function cancelModelChange() {
     setPreparedModel(null);
   }
 
@@ -117,12 +121,12 @@ export function MetadataEditorModal({
       <Split hasGutter>
         <SplitItem className="metadataEditorModalListView">
           <TopmostArrayTable
-            model={metadata}
+            model={preparedModel != null ? preparedModel : metadata}
             itemSchema={getFormSchema()}
             name={name}
             selected={selected}
             onSelected={handleSetSelected}
-            onChangeModel={handleChangeArrayModel}
+            onChangeModel={setPreparedModel}
           />
         </SplitItem>
 
@@ -157,11 +161,10 @@ export function MetadataEditorModal({
       <AutoForm
         schema={schemaBridge}
         model={getFormModel()}
-        onChangeModel={(model: any) => prepareModelChange(model)}
+        onChangeModel={(model: any) => prepareFormModelChange(model)}
         data-testid={'metadata-editor-form-' + name}
         placeholder={true}
         disabled={isFormDisabled()}
-        onBlur={() => commitModelChange()}
       >
         {renderAutoFields()}
         <ErrorsField />
@@ -178,6 +181,31 @@ export function MetadataEditorModal({
       onClose={handleCloseModal}
       title={schema.title + ' Configuration'}
       variant={ModalVariant.large}
+      actions={[
+        <Button
+          key="save"
+          data-testid={`metadata-${name}-save-btn`}
+          variant="primary"
+          isDisabled={preparedModel == null}
+          onClick={() => {
+            commitModelChange();
+            handleCloseModal();
+          }}
+        >
+          Save
+        </Button>,
+        <Button
+          key="cancel"
+          data-testid={`metadata-${name}-cancel-btn`}
+          variant="secondary"
+          onClick={() => {
+            cancelModelChange();
+            handleCloseModal();
+          }}
+        >
+          Cancel
+        </Button>,
+      ]}
     >
       <StepErrorBoundary>
         {isTopmostArray() ? renderTopmostArrayView() : renderDetailsForm()}

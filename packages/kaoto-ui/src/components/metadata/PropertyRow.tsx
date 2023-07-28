@@ -1,7 +1,15 @@
 import { AddPropertyButtons } from './AddPropertyButtons';
 import './MetadataEditorModal.css';
-import { Button, HelperText, HelperTextItem, TextInput, Tooltip } from '@patternfly/react-core';
-import { TrashIcon } from '@patternfly/react-icons';
+import {
+  Button,
+  HelperText,
+  HelperTextItem,
+  Split,
+  SplitItem,
+  TextInput,
+  Tooltip,
+} from '@patternfly/react-core';
+import { CheckIcon, PencilAltIcon, TimesIcon, TrashIcon } from '@patternfly/react-icons';
 import { Td, TdProps, TreeRowWrapper } from '@patternfly/react-table';
 import { FormEvent, useState } from 'react';
 
@@ -15,6 +23,7 @@ type PropertyRowProps = {
   isObject: boolean;
   onChangeModel: () => void;
   createPlaceholder: (isObject: boolean) => void;
+  isPlaceholder?: boolean;
 };
 
 /**
@@ -39,6 +48,7 @@ export function PropertyRow({
   isObject,
   onChangeModel,
   createPlaceholder,
+  isPlaceholder = false,
 }: PropertyRowProps) {
   function handleTrashClick(parentModel: any, nodeName: string) {
     delete parentModel[nodeName];
@@ -47,6 +57,7 @@ export function PropertyRow({
   const [userInputValue, setUserInputValue] = useState<string>(nodeValue);
   const [userInputName, setUserInputName] = useState<string>(nodeName);
   const [isUserInputNameDuplicate, setUserInputNameDuplicate] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(isPlaceholder);
 
   function handleUserInputName(name: string, event: FormEvent<HTMLInputElement>) {
     event.stopPropagation();
@@ -59,69 +70,138 @@ export function PropertyRow({
     setUserInputValue(value);
   }
 
-  function commitUserInputName() {
-    if (userInputName != null && userInputName !== nodeName && !isUserInputNameDuplicate) {
-      const value = parentModel[nodeName];
+  function isUserInputInvalid() {
+    return !userInputName || isUserInputNameDuplicate;
+  }
+
+  function commitUserInput() {
+    const value =
+      userInputValue != null && userInputValue !== nodeValue ? userInputValue : nodeValue;
+    if (!isUserInputInvalid() && userInputName !== nodeName) {
       delete parentModel[nodeName];
       parentModel[userInputName] = value;
       onChangeModel();
-    } else {
-      setUserInputName(nodeName);
+    } else if (value !== nodeValue) {
+      parentModel[nodeName] = value;
+      onChangeModel();
     }
+    cancelEditing();
   }
 
-  function commitUserInputValue() {
-    if (userInputValue != null && userInputValue !== nodeValue) {
-      parentModel[nodeName] = userInputValue;
+  function cancelEditing() {
+    setUserInputName(nodeName);
+    setUserInputValue(nodeValue);
+    setIsEditing(false);
+    if (isPlaceholder) {
       onChangeModel();
     }
   }
 
+  function getKey() {
+    return `${propertyName}-${path.join('-')}${isPlaceholder ? '-placeholder' : ''}`;
+  }
+
   return (
-    <TreeRowWrapper key={`${propertyName}-${path.join('-')}`} row={{ props: treeRow!.props }}>
+    <TreeRowWrapper key={getKey()} row={{ props: treeRow!.props }}>
       <Td dataLabel="NAME" treeRow={treeRow}>
-        <TextInput
-          aria-label={`${propertyName}-${path.join('-')}-name`}
-          data-testid={`${propertyName}-${path.join('-')}-name-input`}
-          name={`properties-input-${propertyName}-${path.join('-')}-name`}
-          type="text"
-          aria-invalid={isUserInputNameDuplicate}
-          value={userInputName}
-          onKeyDown={(event) => event.stopPropagation()}
-          onChange={(value, event) => handleUserInputName(value, event)}
-          onBlur={commitUserInputName}
-        />
-        {isUserInputNameDuplicate && (
-          <HelperText>
-            <HelperTextItem variant="error">Please specify a unique property name</HelperTextItem>
-          </HelperText>
+        {isEditing ? (
+          <>
+            <TextInput
+              autoFocus={true}
+              aria-label={`${getKey()}-name`}
+              data-testid={`${getKey()}-name-input`}
+              name={`properties-input-${getKey()}-name`}
+              type="text"
+              aria-invalid={isUserInputNameDuplicate}
+              value={userInputName}
+              onKeyDown={(event) => event.stopPropagation()}
+              onChange={(value, event) => handleUserInputName(value, event)}
+            />
+            {isUserInputNameDuplicate && (
+              <HelperText>
+                <HelperTextItem variant="error">
+                  Please specify a unique property name
+                </HelperTextItem>
+              </HelperText>
+            )}
+          </>
+        ) : (
+          <div data-testid={`${getKey()}-name-label`}>{nodeName}</div>
         )}
       </Td>
       <Td dataLabel="VALUE">
-        {isObject ? (
-          <AddPropertyButtons path={path} createPlaceholder={createPlaceholder} />
-        ) : (
-          <TextInput
-            aria-label={`${propertyName}-${path.join('-')}-value`}
-            data-testid={`${propertyName}-${path.join('-')}-value-input`}
-            name={`properties-input-${propertyName}-${path.join('-')}-value`}
-            type="text"
-            value={userInputValue}
-            onKeyDown={(event) => event.stopPropagation()}
-            onChange={(value, event) => handleUserInputValue(value, event)}
-            onBlur={commitUserInputValue}
-          />
-        )}
+        {(() => {
+          if (isObject && !isEditing) {
+            return <AddPropertyButtons path={path} createPlaceholder={createPlaceholder} />;
+          } else if (!isObject && isEditing) {
+            return (
+              <TextInput
+                aria-label={`${getKey()}-value`}
+                data-testid={`${getKey()}-value-input`}
+                name={`properties-input-${getKey()}-value`}
+                type="text"
+                value={userInputValue}
+                onKeyDown={(event) => event.stopPropagation()}
+                onChange={(value, event) => handleUserInputValue(value, event)}
+              />
+            );
+          } else if (!isObject && !isEditing) {
+            return <div data-testid={`${getKey()}-value-label`}>{nodeValue}</div>;
+          } else {
+            return <></>;
+          }
+        })()}
       </Td>
       <Td isActionCell>
-        <Tooltip content="Delete property">
-          <Button
-            data-testid={'properties-delete-property-' + nodeName + '-btn'}
-            icon={<TrashIcon />}
-            variant="link"
-            onClick={() => handleTrashClick(parentModel, nodeName)}
-          ></Button>
-        </Tooltip>
+        <Split>
+          {isEditing
+            ? [
+                <SplitItem key={`${getKey()}-property-edit-confirm-${nodeName}`}>
+                  <Tooltip content="Confirm edit">
+                    <Button
+                      data-testid={`${getKey()}-property-edit-confirm-${nodeName}-btn`}
+                      icon={<CheckIcon />}
+                      variant="link"
+                      isDisabled={isUserInputInvalid()}
+                      onClick={commitUserInput}
+                    />
+                  </Tooltip>
+                </SplitItem>,
+                <SplitItem key={`${getKey()}-property-edit-cancel-${nodeName}`}>
+                  <Tooltip content="Cancel edit">
+                    <Button
+                      data-testid={`${getKey()}-property-edit-cancel-${nodeName}-btn`}
+                      icon={<TimesIcon />}
+                      variant="link"
+                      onClick={cancelEditing}
+                    />
+                  </Tooltip>
+                </SplitItem>,
+              ]
+            : [
+                <SplitItem key={`${getKey()}-property-edit-${nodeName}`}>
+                  <Tooltip content="Edit property">
+                    <Button
+                      data-testid={`${getKey()}-property-edit-${nodeName}-btn`}
+                      icon={<PencilAltIcon />}
+                      variant="link"
+                      onClick={() => setIsEditing(true)}
+                    />
+                  </Tooltip>
+                </SplitItem>,
+                <SplitItem key={`${getKey()}-property-edit-spacer-${nodeName}`}></SplitItem>,
+              ]}
+          <SplitItem key={`${getKey()}-property-delete-${nodeName}`}>
+            <Tooltip content="Delete property">
+              <Button
+                data-testid={`${getKey()}-delete-${nodeName}-btn`}
+                icon={<TrashIcon />}
+                variant="link"
+                onClick={() => handleTrashClick(parentModel, nodeName)}
+              ></Button>
+            </Tooltip>
+          </SplitItem>
+        </Split>
       </Td>
     </TreeRowWrapper>
   );
