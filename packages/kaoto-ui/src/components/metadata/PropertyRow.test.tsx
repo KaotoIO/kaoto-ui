@@ -36,18 +36,20 @@ describe('PropertyRow.tsx', () => {
         </tbody>
       </table>,
     );
+    const propertyEditBtn = screen.getByTestId('beans-one-two-property-edit-foo-btn');
+    fireEvent.click(propertyEditBtn);
     const valueInput = screen.getByTestId('beans-one-two-value-input');
     expect(valueInput).toHaveValue('bar');
     fireEvent.input(valueInput, { target: { value: 'barModified' } });
-    fireEvent.blur(valueInput);
-    expect(model.foo).toBe('barModified');
-    expect(onChangeModel).toBe(1);
     const nameInput = screen.getByTestId('beans-one-two-name-input');
     expect(nameInput).toHaveValue('foo');
     fireEvent.input(nameInput, { target: { value: 'fooModified' } });
-    fireEvent.blur(nameInput);
+    const propertyEditConfirmBtn = screen.getByTestId(
+      'beans-one-two-property-edit-confirm-foo-btn',
+    );
+    fireEvent.click(propertyEditConfirmBtn);
     expect(model.fooModified).toBe('barModified');
-    expect(onChangeModel).toBe(2);
+    expect(onChangeModel).toBe(1);
   });
 
   test('render string property delete', () => {
@@ -83,7 +85,7 @@ describe('PropertyRow.tsx', () => {
         </tbody>
       </table>,
     );
-    const deleteBtn = screen.getByTestId('properties-delete-property-foo-btn');
+    const deleteBtn = screen.getByTestId('beans-one-two-delete-foo-btn');
     fireEvent.click(deleteBtn);
     expect(Object.keys(model).length).toBe(0);
     expect(onChangeModel).toBe(1);
