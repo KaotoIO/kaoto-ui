@@ -24,7 +24,7 @@
     "@patternfly/react-core": "4.276.8",
     "@patternfly/react-icons": "4.93.6",
     "@patternfly/react-log-viewer": "4.87.100",
-    "@patternfly/react-table": "4.113.0",
+    "@patternfly/react-table": "4.113.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
