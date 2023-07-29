@@ -48,7 +48,7 @@
     "@opentelemetry/resources": "^1.14.0",
     "@opentelemetry/sdk-trace-web": "^1.14.0",
     "@patternfly/patternfly": "4.224.2",
-    "@patternfly/react-code-editor": "4.82.115",
+    "@patternfly/react-code-editor": "5.0.0",
     "@patternfly/react-core": "4.276.8",
     "@patternfly/react-icons": "4.93.6",
     "@patternfly/react-log-viewer": "4.87.100",
