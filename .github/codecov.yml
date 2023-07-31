@@ -13,3 +13,5 @@ ignore:
   - "**/index.ts"
   - "**/store/data/**"
   - "**/stubs/**"
+  # Ignore SourceCode editor coverage because it's not possible to test it through Jest (it's a monaco editor)
+  - "packages/kaoto-ui/src/components/SourceCode/*.{ts,tsx}"

@@ -16,6 +16,7 @@ module.exports = {
     '!<rootDir>/src/**/index.ts',
     '!<rootDir>/src/store/data/**',
     '!<rootDir>/src/stubs/**',
+    '!<rootDir>/src/components/SourceCode/**',
   ],
 
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
