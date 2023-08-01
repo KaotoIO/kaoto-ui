@@ -4,8 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "vite",
-    "build": "tsc && vite build",
+    "start": "webpack serve -c ./webpack.config.cjs --host 0.0.0.0 --env dev",
+    "build": "webpack build -c ./webpack.config.cjs --env prod",
+    "start-vite": "vite",
+    "build-vite": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -40,8 +42,16 @@
     "eslint": "8.46.0",
     "eslint-config-prettier": "8.9.0",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "html-webpack-plugin": "5.5.3",
+    "path-browserify": "^1.0.1",
     "sass": "^1.63.6",
+    "tar-webpack-plugin": "^0.1.1",
+    "tsconfig-paths-webpack-plugin": "^4.0.1",
     "typescript": "^5.0.2",
-    "vite": "^4.4.0"
+    "vite": "^4.4.0",
+    "webpack": "5.88.2",
+    "webpack-cli": "5.1.4",
+    "webpack-dev-server": "4.15.1",
+    "webpack-merge": "^5.9.0"
   }
 }
