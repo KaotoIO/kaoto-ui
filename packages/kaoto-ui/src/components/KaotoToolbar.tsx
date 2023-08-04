@@ -1,5 +1,5 @@
 import logo from '../assets/images/logo-kaoto-dark.png';
-import { AboutModal } from './AboutModal';
+import { AboutModal } from './About/AboutModal';
 import { AppearanceModal } from './AppearanceModal';
 import { ConfirmationModal } from './ConfirmationModal';
 import { NewFlow } from './DSL/NewFlow';

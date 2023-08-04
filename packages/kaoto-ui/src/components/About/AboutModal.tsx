@@ -1,4 +1,5 @@
-import logo from '../assets/images/logo-kaoto-dark.png';
+import logo from '../../assets/images/logo-kaoto-dark.png';
+import { BuildInfo } from './BuildInfo';
 import { useSettingsStore } from '@kaoto/store';
 import {
   AboutModal as PatternFlyAboutModal,
@@ -33,6 +34,8 @@ export const AboutModal = ({ handleCloseModal, isModalOpen }: IAboutModal) => {
           <TextListItem component="dd" data-testid="about-backend-version">
             {backendVersion}
           </TextListItem>
+
+          <BuildInfo />
         </TextList>
       </TextContent>
     </PatternFlyAboutModal>

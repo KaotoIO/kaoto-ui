@@ -3422,6 +3422,7 @@ __metadata:
     eslint-plugin-storybook: ^0.6.12
     eslint-plugin-testing-library: 5.11.0
     file-selector: ^0.6.0
+    git-revision-webpack-plugin: ^5.0.0
     html-to-image: ^1.11.11
     html-webpack-plugin: 5.5.3
     immer: ^10.0.2
@@ -13456,6 +13457,15 @@ __metadata:
   bin:
     giget: dist/cli.mjs
   checksum: 76ad0f7e792ee95dd6c4e1096697fdcce61a2a3235a6c21761fc3e0d1053342074ce71c80059d6d4363fd34152e5d7b2e58221412f300c852ff7d4a12d0321fe
+  languageName: node
+  linkType: hard
+
+"git-revision-webpack-plugin@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "git-revision-webpack-plugin@npm:5.0.0"
+  peerDependencies:
+    webpack: ^5.0.0
+  checksum: be40634cf0a317f02b6231e77a7f97f5ae85855f87d88ee821500e8ad33a25168b96d47f1be8f2d3e814c22b58b7b9fef732aea5e0ba054b1d181c93d4212de7
   languageName: node
   linkType: hard
 

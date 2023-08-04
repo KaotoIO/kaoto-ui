@@ -2,10 +2,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const { dependencies, federatedModuleName, version } = require('./package.json');
+const { name, dependencies, federatedModuleName, version } = require('./package.json');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
+const gitRevisionPlugin = new GitRevisionPlugin();
 
 const isPatternflyStyles = (stylesheet) =>
   stylesheet.includes('@patternfly/react-core/') ||
@@ -89,6 +91,14 @@ const common = (mode) => {
       new webpack.DefinePlugin({
         KAOTO_VERSION: JSON.stringify(version),
         NODE_ENV: JSON.stringify(mode),
+
+        BUILD_INFO: {
+          NAME: JSON.stringify(name),
+          VERSION: JSON.stringify(gitRevisionPlugin.version()),
+          COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash()),
+          BRANCH: JSON.stringify(gitRevisionPlugin.branch()),
+          LASTCOMMITDATETIME: JSON.stringify(gitRevisionPlugin.lastcommitdatetime()),
+        },
       }),
     ],
     resolve: {
