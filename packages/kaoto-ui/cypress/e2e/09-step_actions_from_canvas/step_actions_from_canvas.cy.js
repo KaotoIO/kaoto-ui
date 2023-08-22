@@ -111,12 +111,13 @@ describe('Test for Step actions from the canvas', () => {
 
         // CHECK that the step is deleted
         cy.isomorphicGet('[data-testid="viz-step-timer"]').should('not.exist');
-        // CHECK that stepNodes contains of the three steps
-        cy.isomorphicGet('.stepNode').should('have.length', 3);
+        // CHECK that stepNodes contains of the four steps after sync, since aggregate brings is a placeholder for its steps property
+        cy.isomorphicGet('.stepNode').should('have.length', 4);
         // CHECK that stepNodes are in the correct order
         cy.isomorphicGet('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-slot');
         cy.isomorphicGet('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-aggregate');
-        cy.isomorphicGet('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-log');
+        cy.isomorphicGet('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-slot'); // aggregate steps placeholder
+        cy.isomorphicGet('.stepNode').eq(3).should('have.attr', 'data-testid', 'viz-step-log');
         // CHECK that YAML not contains the 'timer:null'
         cy.isomorphicGet('.code-editor').should('not.contain.text', 'timer:null');
     });
@@ -140,9 +141,10 @@ describe('Test for Step actions from the canvas', () => {
         // CHECK that stepNodes are in the correct order
         cy.isomorphicGet('.stepNode').eq(0).should('have.attr', 'data-testid', 'viz-step-timer');
         cy.isomorphicGet('.stepNode').eq(1).should('have.attr', 'data-testid', 'viz-step-aggregate');
-        cy.isomorphicGet('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-log');
+        cy.isomorphicGet('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-slot'); // aggregate steps placeholder
+        cy.isomorphicGet('.stepNode').eq(3).should('have.attr', 'data-testid', 'viz-step-log');
         // CHECK that stepNodes contains of the three steps
-        cy.isomorphicGet('.stepNode').should('have.length', 3);
+        cy.isomorphicGet('.stepNode').should('have.length', 4);
         // CHECK YAML contains the  'aggregate: {}'
         cy.checkCodeSpanLine('aggregate: {}');
     });

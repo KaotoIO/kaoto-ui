@@ -34,11 +34,13 @@ describe('User completes normal actions on steps in a branch', () => {
 
         // CHECK that amqp step is deleted and empty step is added
         cy.isomorphicGet('[data-testid="viz-step-amqp"]').should('not.exist');
-        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 2).and('be.visible');
+        // 1 for the existing empty step, 1 for the aggregate steps property and lastly 1 for the recently deleted step
+        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 3).and('be.visible');
 
         // CHECK that amqp step is deleted and empty step is added
         cy.isomorphicGet('[data-testid="viz-step-amqp"]').should('not.exist');
-        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 2).and('be.visible');
+        // 1 for the existing empty step, 1 for the aggregate steps property and lastly 1 for the recently deleted step
+        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 3).and('be.visible');
     });
 
     it('User replaces a step in a branch', () => {
