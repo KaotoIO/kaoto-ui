@@ -14,7 +14,7 @@ describe('editing properties', () => {
     // Configure timer - source step
     cy.openStepConfigurationTab('timer-source');
     cy.interactWithConfigInputObject('period', '3000');
-    cy.checkCodeSpanLine('period: \'3000\'');
+    cy.checkCodeSpanLine('period: 3000');
     cy.closeStepConfigurationTab();
 
     // Configure kafka-sink step
@@ -37,6 +37,6 @@ describe('editing properties', () => {
     cy.closeStepConfigurationTab();
 
     // CHECK that previous change is still there
-    cy.checkCodeSpanLine('period: \'3000\'');
+    cy.checkCodeSpanLine('period: 3000');
   });
 });

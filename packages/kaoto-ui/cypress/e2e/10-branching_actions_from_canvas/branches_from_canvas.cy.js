@@ -21,12 +21,14 @@ describe('Test for Branching actions from the canvas', () => {
 
         // CHECK that new node with empty slot was created
         cy.isomorphicGet('[data-testid="viz-step-choice"]').should('have.length', 2);
-        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 1);
+        // 1 slot for the aggregate step and another one recently created
+        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 2);
         cy.isomorphicGet('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-slot');
 
         // CHECK after Sync your code button click
         cy.isomorphicGet('[data-testid="viz-step-choice"]').should('have.length', 2);
-        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 1);
+        // 1 slot for the aggregate step and another one recently created
+        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 2);
         cy.isomorphicGet('.stepNode').eq(10).should('have.attr', 'data-testid', 'viz-step-slot');
     });
 
@@ -35,14 +37,14 @@ describe('Test for Branching actions from the canvas', () => {
 
         // CHECK that the branch was deleted and the node with index 11 contains the viz-step-kamelet:sink
         cy.isomorphicGet('[data-testid="viz-step-marshal"]').should('not.exist');
-        cy.isomorphicGet('.stepNode').eq(11).should('have.attr', 'data-testid', 'viz-step-kamelet:sink');
+        cy.isomorphicGet('.stepNode').eq(12).should('have.attr', 'data-testid', 'viz-step-kamelet:sink');
         cy.isomorphicGet('.code-editor').should('not.contain.text', '{{?bar}}')
 
         cy.syncUpCodeChanges()
 
         // CHECK after Sync your code button click
         cy.isomorphicGet('[data-testid="viz-step-marshal"]').should('not.exist');
-        cy.isomorphicGet('.stepNode').eq(11).should('have.attr', 'data-testid', 'viz-step-kamelet:sink');
+        cy.isomorphicGet('.stepNode').eq(12).should('have.attr', 'data-testid', 'viz-step-kamelet:sink');
         cy.isomorphicGet('.code-editor').should('not.contain.text', '{{?bar}}')
     });
 
@@ -57,13 +59,15 @@ describe('Test for Branching actions from the canvas', () => {
 
         // CHECK that new node with empty slot was created
         cy.isomorphicGet('[data-testid="viz-step-choice"]').should('have.length', 3);
-        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 1);
+        // 1 slot for the aggregate step and another one recently created
+        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 2);
         cy.isomorphicGet('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-slot');
 
         cy.syncUpCodeChanges()
 
         // CHECK after Sync your code button click
-        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 1);
+        // 1 slot for the aggregate step and another one recently created
+        cy.isomorphicGet('[data-testid="viz-step-slot"]').should('have.length', 2);
         cy.isomorphicGet('.stepNode').eq(2).should('have.attr', 'data-testid', 'viz-step-slot');
 
         // CHECK that the choice add button is disabled
@@ -114,8 +118,9 @@ describe('Test for Branching actions from the canvas', () => {
         cy.isomorphicGet('.stepNode').eq(7).should('have.attr', 'data-testid', 'viz-step-marshal');
         cy.isomorphicGet('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-log');
         cy.isomorphicGet('.stepNode').eq(11).should('have.attr', 'data-testid', 'viz-step-aggregate');
-        cy.isomorphicGet('.stepNode').eq(12).should('have.attr', 'data-testid', 'viz-step-activemq');
-        cy.isomorphicGet('.stepNode').eq(13).should('have.attr', 'data-testid', 'viz-step-filter');
+        cy.isomorphicGet('.stepNode').eq(12).should('have.attr', 'data-testid', 'viz-step-slot'); // aggregate slot for steps property
+        cy.isomorphicGet('.stepNode').eq(13).should('have.attr', 'data-testid', 'viz-step-activemq');
+        cy.isomorphicGet('.stepNode').eq(14).should('have.attr', 'data-testid', 'viz-step-filter');
         cy.isomorphicGet('[data-testid="viz-step-activemq"]').should('be.visible');
 
         cy.syncUpCodeChanges()
@@ -125,8 +130,9 @@ describe('Test for Branching actions from the canvas', () => {
         cy.isomorphicGet('.stepNode').eq(7).should('have.attr', 'data-testid', 'viz-step-marshal');
         cy.isomorphicGet('.stepNode').eq(9).should('have.attr', 'data-testid', 'viz-step-log');
         cy.isomorphicGet('.stepNode').eq(11).should('have.attr', 'data-testid', 'viz-step-aggregate');
-        cy.isomorphicGet('.stepNode').eq(12).should('have.attr', 'data-testid', 'viz-step-activemq');
-        cy.isomorphicGet('.stepNode').eq(13).should('have.attr', 'data-testid', 'viz-step-filter');
+        cy.isomorphicGet('.stepNode').eq(12).should('have.attr', 'data-testid', 'viz-step-slot'); // aggregate slot for steps property
+        cy.isomorphicGet('.stepNode').eq(13).should('have.attr', 'data-testid', 'viz-step-activemq');
+        cy.isomorphicGet('.stepNode').eq(14).should('have.attr', 'data-testid', 'viz-step-filter');
         cy.isomorphicGet('[data-testid="viz-step-activemq"]').should('be.visible');
     });
 });
