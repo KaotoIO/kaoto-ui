@@ -3413,14 +3413,14 @@ __metadata:
     dagre: ^0.8.5
     dotenv: ^16.3.1
     eslint: 8.46.0
-    eslint-config-prettier: 8.9.0
+    eslint-config-prettier: 9.0.0
     eslint-plugin-import: ^2.27.5
     eslint-plugin-jest-dom: 5.0.1
     eslint-plugin-prettier: 5.0.0
     eslint-plugin-react: 7.33.1
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-storybook: ^0.6.12
-    eslint-plugin-testing-library: 5.11.0
+    eslint-plugin-testing-library: 6.0.0
     file-selector: ^0.6.0
     html-to-image: ^1.11.11
     html-webpack-plugin: 5.5.3
@@ -3508,7 +3508,7 @@ __metadata:
     "@typescript-eslint/parser": ^6.0.0
     "@vitejs/plugin-react": ^4.0.1
     eslint: 8.46.0
-    eslint-config-prettier: 8.9.0
+    eslint-config-prettier: 9.0.0
     eslint-plugin-react-hooks: ^4.6.0
     html-webpack-plugin: 5.5.3
     path-browserify: ^1.0.1
@@ -11994,14 +11994,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:8.9.0":
-  version: 8.9.0
-  resolution: "eslint-config-prettier@npm:8.9.0"
+"eslint-config-prettier@npm:9.0.0":
+  version: 9.0.0
+  resolution: "eslint-config-prettier@npm:9.0.0"
   peerDependencies:
     eslint: ">=7.0.0"
   bin:
     eslint-config-prettier: bin/cli.js
-  checksum: a675d0dabd76b700ef2d062b5ec6a634e105a8e8c070f95281fd2ccb614527fac60b4c758132058c50f0521fd19313f1f5be45ce9ebf081f2e5f77ae6eb7d8db
+  checksum: 362e991b6cb343f79362bada2d97c202e5303e6865888918a7445c555fb75e4c078b01278e90be98aa98ae22f8597d8e93d48314bec6824f540f7efcab3ce451
   languageName: node
   linkType: hard
 
@@ -12133,14 +12133,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-testing-library@npm:5.11.0":
-  version: 5.11.0
-  resolution: "eslint-plugin-testing-library@npm:5.11.0"
+"eslint-plugin-testing-library@npm:6.0.0":
+  version: 6.0.0
+  resolution: "eslint-plugin-testing-library@npm:6.0.0"
   dependencies:
     "@typescript-eslint/utils": ^5.58.0
   peerDependencies:
     eslint: ^7.5.0 || ^8.0.0
-  checksum: 7f19d3dedd7788b411ca3d9045de682feb26025b9c26d97d4e2f0bf62f5eaa276147d946bd5d0cd967b822e546a954330fdb7ef80485301264f646143f011a02
+  checksum: 35ca701bc7cd788b0a1505a191d5c00721ede4bbb6ffd126d6700713dc104397451edefbca52b7c6c3eae2d4b55174ea6630a28dc3642b8b73ee2e2ba997cde4
   languageName: node
   linkType: hard
 
