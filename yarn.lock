@@ -3431,7 +3431,7 @@ __metadata:
     lodash.clonedeep: ^4.5.0
     lodash.isequal: ^4.5.0
     mini-css-extract-plugin: 2.7.6
-    monaco-editor: ^0.40.0
+    monaco-editor: ^0.41.0
     monaco-editor-webpack-plugin: ^7.0.1
     monaco-yaml: ^4.0.4
     msw: ^1.2.2
@@ -17039,10 +17039,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"monaco-editor@npm:^0.40.0":
-  version: 0.40.0
-  resolution: "monaco-editor@npm:0.40.0"
-  checksum: 9f879c254bfb9907cc0b23d26bd4bcaaabf9a2cfbd9926574e06ea94f4b9e5807299db9cae1f35820da6242d5d13d9382cb9db48b1340c54ba06620c242c25c7
+"monaco-editor@npm:^0.41.0":
+  version: 0.41.0
+  resolution: "monaco-editor@npm:0.41.0"
+  checksum: 873a8b4eb98d789dffa7509dc0875b277127f14d2a53215b7fee9c49f394d52727bd97f8700858e1f9da323988882274e7110f718cf06e457b02aa16ec32f6c4
   languageName: node
   linkType: hard
 
