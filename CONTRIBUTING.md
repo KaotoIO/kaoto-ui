@@ -74,3 +74,10 @@ The commit contains the following structural elements, to communicate intent to 
 Additional types are not mandated by the Conventional Commits specification, and have no implicit effect in Semantic Versioning 
 (unless they include a BREAKING CHANGE). A scope may be provided to a commit’s type, to provide additional contextual information and 
 is contained within parenthesis, e.g., `feat(parser): add ability to parse arrays`.
+
+## How to release
+
+* Modify version in `packages/kaoto-ui/package.json` to use a version without `-dev` suffix
+* Provide Pull Request with the change
+* After PR is merged, create a release on GitHub based on the commit changing the version. The release name should have the format `v1.2.3`. it will trigger automatically jobs to publish npm package.
+* Modify version in `packages/kaoto-ui/package.json` to use an incremented version with a `-dev` suffix and provide a Pull Request
