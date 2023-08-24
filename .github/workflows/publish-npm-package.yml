@@ -17,6 +17,6 @@ jobs:
       - run: yarn workspace @kaoto/kaoto-ui run build
       - run: yarn workspace @kaoto/kaoto-ui run build:lib
       - name: 📦 Publish Package to npm
-        run: yarn workspace @kaoto/kaoto-ui run npm publish --access=public
+        run: yarn workspace @kaoto/kaoto-ui npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
