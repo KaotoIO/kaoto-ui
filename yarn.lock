@@ -3410,11 +3410,11 @@ __metadata:
     "@opentelemetry/resources": ^1.14.0
     "@opentelemetry/sdk-trace-web": ^1.14.0
     "@patternfly/patternfly": 4.224.5
-    "@patternfly/react-code-editor": 4.82.118
-    "@patternfly/react-core": 4.276.11
+    "@patternfly/react-code-editor": 4.82.119
+    "@patternfly/react-core": 4.276.12
     "@patternfly/react-icons": 4.93.7
     "@patternfly/react-log-viewer": 4.87.100
-    "@patternfly/react-table": 4.113.3
+    "@patternfly/react-table": 4.113.4
     "@rhoas/app-services-ui-shared": ^0.16.6
     "@storybook/addon-actions": ^7.0.8
     "@storybook/addon-essentials": ^7.0.23
@@ -3535,11 +3535,11 @@ __metadata:
     "@kie-tools/serverless-workflow-language-service": 0.31.0
     "@kie-tools/uniforms-patternfly": 0.31.0
     "@patternfly/patternfly": 4.224.5
-    "@patternfly/react-code-editor": 4.82.118
-    "@patternfly/react-core": 4.276.11
+    "@patternfly/react-code-editor": 4.82.119
+    "@patternfly/react-core": 4.276.12
     "@patternfly/react-icons": 4.93.7
     "@patternfly/react-log-viewer": 4.87.100
-    "@patternfly/react-table": 4.113.3
+    "@patternfly/react-table": 4.113.4
     "@rollup/plugin-replace": ^5.0.2
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
     "@types/react": ^18.2.14
@@ -4357,11 +4357,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-code-editor@npm:4.82.118":
-  version: 4.82.118
-  resolution: "@patternfly/react-code-editor@npm:4.82.118"
+"@patternfly/react-code-editor@npm:4.82.119":
+  version: 4.82.119
+  resolution: "@patternfly/react-code-editor@npm:4.82.119"
   dependencies:
-    "@patternfly/react-core": ^4.276.11
+    "@patternfly/react-core": ^4.276.12
     "@patternfly/react-icons": ^4.93.7
     "@patternfly/react-styles": ^4.92.8
     react-dropzone: 9.0.0
@@ -4370,13 +4370,13 @@ __metadata:
     react: ^16.8 || ^17 || ^18
     react-dom: ^16.8 || ^17 || ^18
     react-monaco-editor: ^0.51.0
-  checksum: 6a7e7541894b141ad5c59f08ae9400e6a501854698d19c4c9a1e582e3a38d20519dceef9763722ac3b5aa10fc72ce555ecf8b32b3f8ce57795667ae63630e130
+  checksum: b7dddbe325c5729ceb0504ceecede88621c4d891325fc55a82f740d3602eea36bcac66a2ca5c904eeada2da1f4b8643189d443ff386ac17c0d55e37e25d55abb
   languageName: node
   linkType: hard
 
-"@patternfly/react-core@npm:4.276.11, @patternfly/react-core@npm:^4.276.11":
-  version: 4.276.11
-  resolution: "@patternfly/react-core@npm:4.276.11"
+"@patternfly/react-core@npm:4.276.12, @patternfly/react-core@npm:^4.276.12":
+  version: 4.276.12
+  resolution: "@patternfly/react-core@npm:4.276.12"
   dependencies:
     "@patternfly/react-icons": ^4.93.7
     "@patternfly/react-styles": ^4.92.8
@@ -4388,7 +4388,7 @@ __metadata:
   peerDependencies:
     react: ^16.8 || ^17 || ^18
     react-dom: ^16.8 || ^17 || ^18
-  checksum: 1bacb8ba497ec3f3e8fe181192ee6af6ecad82e31b3462b13ba7a952583a1cd3caae51634a766dfa5f52cda162e61e9bb9520ae35f0721c0ab963a1e0164ca0f
+  checksum: e58f3538e53622bfab496af9d269446f1b09b1cdf86dfcfd1e62960090f1cc222a486972d53a60021e1faa7454807e57f021c0c0cc5c302b0b4ea3c00523cced
   languageName: node
   linkType: hard
 
@@ -4461,11 +4461,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-table@npm:4.113.3":
-  version: 4.113.3
-  resolution: "@patternfly/react-table@npm:4.113.3"
+"@patternfly/react-table@npm:4.113.4":
+  version: 4.113.4
+  resolution: "@patternfly/react-table@npm:4.113.4"
   dependencies:
-    "@patternfly/react-core": ^4.276.11
+    "@patternfly/react-core": ^4.276.12
     "@patternfly/react-icons": ^4.93.7
     "@patternfly/react-styles": ^4.92.8
     "@patternfly/react-tokens": ^4.94.7
@@ -4474,7 +4474,7 @@ __metadata:
   peerDependencies:
     react: ^16.8 || ^17 || ^18
     react-dom: ^16.8 || ^17 || ^18
-  checksum: 218d17a21d34132f5475cdcf077428dfc3af475689f948a5a5239b03bfda9fa85790bdb13c2795e96c0e703f1161f361b398268717462f7078f2e1540ab2eaad
+  checksum: 35c254a126e7f29abbe81b567c12e943cf9a68e4d79cbdc35ce6f1a28733c0b905a6a33ce547c3092490e1a45852be3829eaf166bbc9ccb895d2d5d4c027dd37
   languageName: node
   linkType: hard
 
