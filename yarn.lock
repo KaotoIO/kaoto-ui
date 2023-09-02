@@ -3464,7 +3464,7 @@ __metadata:
     "@patternfly/react-code-editor": 4.82.119
     "@patternfly/react-core": 4.276.12
     "@patternfly/react-icons": 4.93.7
-    "@patternfly/react-log-viewer": 4.87.100
+    "@patternfly/react-log-viewer": 4.87.101
     "@patternfly/react-table": 4.113.4
     "@rhoas/app-services-ui-shared": ^0.16.6
     "@storybook/addon-actions": ^7.0.8
@@ -3589,7 +3589,7 @@ __metadata:
     "@patternfly/react-code-editor": 4.82.119
     "@patternfly/react-core": 4.276.12
     "@patternfly/react-icons": 4.93.7
-    "@patternfly/react-log-viewer": 4.87.100
+    "@patternfly/react-log-viewer": 4.87.101
     "@patternfly/react-table": 4.113.4
     "@rollup/plugin-replace": ^5.0.2
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
@@ -4338,7 +4338,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-core@npm:^4.273.1, @patternfly/react-core@npm:^4.276.6":
+"@patternfly/react-core@npm:^4.276.6":
   version: 4.276.8
   resolution: "@patternfly/react-core@npm:4.276.8"
   dependencies:
@@ -4366,7 +4366,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-icons@npm:^4.93.4, @patternfly/react-icons@npm:^4.93.6":
+"@patternfly/react-icons@npm:^4.93.6":
   version: 4.93.6
   resolution: "@patternfly/react-icons@npm:4.93.6"
   peerDependencies:
@@ -4376,24 +4376,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-log-viewer@npm:4.87.100":
-  version: 4.87.100
-  resolution: "@patternfly/react-log-viewer@npm:4.87.100"
+"@patternfly/react-log-viewer@npm:4.87.101":
+  version: 4.87.101
+  resolution: "@patternfly/react-log-viewer@npm:4.87.101"
   dependencies:
-    "@patternfly/react-core": ^4.273.1
-    "@patternfly/react-icons": ^4.93.4
-    "@patternfly/react-styles": ^4.92.4
+    "@patternfly/react-core": ^4.276.6
+    "@patternfly/react-icons": ^4.93.6
+    "@patternfly/react-styles": ^4.92.6
     memoize-one: ^5.1.0
-    resize-observer-polyfill: ^1.5.1
-    tslib: ^2.0.0
+    monaco-editor: ^0.33.0
   peerDependencies:
     react: ^16.8 || ^17 || ^18
     react-dom: ^16.8 || ^17 || ^18
-  checksum: 3401e4a6c763c0b0dc7d4ffc6fc604fb9839c683a561dda785228b88d57cfdeb4175970cfb2e137423703e0c12401bc8e3159312bb54414ca7c1c97d15ac359e
+  checksum: 5a85cbaaea150737bc246874129bd7a36d1c2da98f306477ab50529dcd5d226b5918b130e65040db0348fa810f63bfa547149e68b6158adbe33db98f16577441
   languageName: node
   linkType: hard
 
-"@patternfly/react-styles@npm:^4.92.4, @patternfly/react-styles@npm:^4.92.6":
+"@patternfly/react-styles@npm:^4.92.6":
   version: 4.92.6
   resolution: "@patternfly/react-styles@npm:4.92.6"
   checksum: fef3317cf2c6f79afea3c1903372ac62a0e753b239f360c4c9896dbdbe98a2d72abd62e047cd29b6569a1c7d3654110cd3f3934a2268d01d1891855eeff2b72a
@@ -19933,13 +19932,6 @@ __metadata:
   version: 1.0.0
   resolution: "requires-port@npm:1.0.0"
   checksum: eee0e303adffb69be55d1a214e415cf42b7441ae858c76dfc5353148644f6fd6e698926fc4643f510d5c126d12a705e7c8ed7e38061113bdf37547ab356797ff
-  languageName: node
-  linkType: hard
-
-"resize-observer-polyfill@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "resize-observer-polyfill@npm:1.5.1"
-  checksum: 57e7f79489867b00ba43c9c051524a5c8f162a61d5547e99333549afc23e15c44fd43f2f318ea0261ea98c0eb3158cca261e6f48d66e1ed1cd1f340a43977094
   languageName: node
   linkType: hard
 
