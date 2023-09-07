@@ -27,7 +27,7 @@ jobs:
         id: should-we-record
 
       - name: 👩‍🏭 Cypress install
-        uses: cypress-io/github-action@v6.2.0
+        uses: cypress-io/github-action@v6.5.0
         with:
           runTests: false
           install-command: yarn install --immutable
@@ -76,7 +76,7 @@ jobs:
         run: echo "KAOTO_API=http://kaoto:8081" > packages/kaoto-ui/.env
 
       - name: 🔨 Cypress run
-        uses: cypress-io/github-action@v6.2.0
+        uses: cypress-io/github-action@v6.5.0
         with:
           browser: firefox
           # we have already installed all dependencies above
@@ -134,7 +134,7 @@ jobs:
         run: echo "KAOTO_API=http://kaoto:8081" > packages/kaoto-ui/.env
 
       - name: 🔨 Cypress run
-        uses: cypress-io/github-action@v6.2.0
+        uses: cypress-io/github-action@v6.5.0
         with:
           browser: chrome
           # we have already installed all dependencies above
@@ -192,7 +192,7 @@ jobs:
         run: echo "KAOTO_API=http://kaoto:8081" > packages/kaoto-ui/.env
 
       - name: 🔨 Cypress run
-        uses: cypress-io/github-action@v6.2.0
+        uses: cypress-io/github-action@v6.5.0
         with:
           browser: edge
           # we have already installed all dependencies above
