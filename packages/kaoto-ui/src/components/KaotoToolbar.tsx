@@ -65,7 +65,7 @@ export const KaotoToolbar = ({
       settings,
       setSettings,
       currentDsl: settings.dsl.name,
-      deployable: settings.dsl.deployable,
+      deployable: false, // Deployment disabled in the meantime: settings.dsl.deployable,
     }),
     shallow,
   );
