@@ -1,6 +1,6 @@
 {
   "name": "@kaoto/kaoto-ui",
-  "version": "1.3.0-dev",
+  "version": "1.3.0",
   "federatedModuleName": "kaoto",
   "engines": {
     "node": ">=16.x"
