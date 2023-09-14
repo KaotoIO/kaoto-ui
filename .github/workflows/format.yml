@@ -12,7 +12,7 @@ jobs:
     name: 💅 Format and Linter checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 🤹‍♀️ Install modules
         run: yarn
       - name: 💅 Run format check
