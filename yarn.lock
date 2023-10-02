@@ -3682,7 +3682,7 @@ __metadata:
     webpack-dev-server: 4.15.1
     webpack-merge: ^5.9.0
     whatwg-fetch: ^3.6.2
-    zundo: 2.0.0-beta.25
+    zundo: 2.0.0
     zustand: ^4.3.8
   peerDependencies:
     "@patternfly/patternfly": "*"
@@ -24501,12 +24501,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zundo@npm:2.0.0-beta.25":
-  version: 2.0.0-beta.25
-  resolution: "zundo@npm:2.0.0-beta.25"
+"zundo@npm:2.0.0":
+  version: 2.0.0
+  resolution: "zundo@npm:2.0.0"
   peerDependencies:
     zustand: ^4.3.0
-  checksum: 879e6c9affec002d8c6cc57389f87fb64a4eeec77be110c383d88a1569a4f7afe7d46140c0e016962964a22472b1fae0dd45a787439eb88d0dc97043ed29be26
+  checksum: 1bf4b188a2046126c5b4bd30078a1e7ed75cd85ed6bf6f7a48d2fe5b796bd766282c49b11e3a3a13c13b3d5f86a96ffad7e54e0b0991882c712943b60c2d4b74
   languageName: node
   linkType: hard
 
