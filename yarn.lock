@@ -7699,11 +7699,11 @@ __metadata:
   linkType: hard
 
 "@types/lodash.clonedeep@npm:^4.5.7":
-  version: 4.5.7
-  resolution: "@types/lodash.clonedeep@npm:4.5.7"
+  version: 4.5.9
+  resolution: "@types/lodash.clonedeep@npm:4.5.9"
   dependencies:
     "@types/lodash": "*"
-  checksum: 20d6a20970b3b54b3c10cf17ace1cea49c4905d7f7cae2575a98108466e8d4c9bea3b3449d11ccaac4da1fc9bab225f477f4c2dbea8ba877cc47f629455efb69
+  checksum: ef85512b7dce7a4f981a818ae44d11982907e1f26b5b26bedf0957c35e8591eb8e1d24fa31ca851d4b40e0a1ee88563853d762412691fe5f357e8335cead2325
   languageName: node
   linkType: hard
 
